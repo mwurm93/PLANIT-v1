@@ -1,0 +1,79 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "DCCC1947146420487C56DB282AA8DD6639BAE1E9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "DB33CBD4D80E1B1AD982034BCF4CA065484EA96E" : 9223372036854775807,
+    "DCCC1947146420487C56DB282AA8DD6639BAE1E9" : 9223372036854775807,
+    "D1BB63D501E0048981F00509C5A268D4AF5FEE4C" : 9223372036854775807,
+    "6EE8C3CD1205674099D0F29D1E5116B4056D84DF" : 9223372036854775807,
+    "3417D484EE489964993A77F8A0AAAE31FFC8EA92" : 9223372036854775807,
+    "0B217F6BC43ADD8D8303F2376C76B47B8B74CD9C" : 9223372036854775807,
+    "DBA6F8B12B84878540F44342C4772AC004D85ABD" : 9223372036854775807,
+    "9FF210C40B5F6FF575BA5DCEA5467BFAAB7EB8B0" : 9223372036854775807,
+    "04101981B66E318109934C9516F88D824BB96459" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "3E42EA8E-8A1A-4EDE-8468-166FD0791243",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "DB33CBD4D80E1B1AD982034BCF4CA065484EA96E" : "planit%20v0.2\/libs\/WhirlyGlobeMaply\/third-party\/libjson\/",
+    "DCCC1947146420487C56DB282AA8DD6639BAE1E9" : "planit%20v0.2\/",
+    "D1BB63D501E0048981F00509C5A268D4AF5FEE4C" : "planit%20v0.2\/libs\/WhirlyGlobeMaply\/third-party\/SMCalloutView\/",
+    "6EE8C3CD1205674099D0F29D1E5116B4056D84DF" : "planit%20v0.2\/libs\/WhirlyGlobeMaply\/third-party\/clipper\/",
+    "3417D484EE489964993A77F8A0AAAE31FFC8EA92" : "planit%20v0.2\/libs\/WhirlyGlobeMaply\/third-party\/proj-4\/",
+    "0B217F6BC43ADD8D8303F2376C76B47B8B74CD9C" : "planit%20v0.2\/libs\/WhirlyGlobeMaply\/third-party\/laszip\/",
+    "DBA6F8B12B84878540F44342C4772AC004D85ABD" : "planit%20v0.2\/libs\/WhirlyGlobeMaply\/third-party\/protobuf\/",
+    "9FF210C40B5F6FF575BA5DCEA5467BFAAB7EB8B0" : "planit%20v0.2\/libs\/WhirlyGlobeMaply\/third-party\/glues\/",
+    "04101981B66E318109934C9516F88D824BB96459" : "planit%20v0.2\/libs\/WhirlyGlobeMaply\/third-party\/fmdb\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "planit v0.2",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "planit v0.2.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ccgus\/fmdb.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "04101981B66E318109934C9516F88D824BB96459"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mousebird\/LASzip",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0B217F6BC43ADD8D8303F2376C76B47B8B74CD9C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mousebird\/proj-4.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3417D484EE489964993A77F8A0AAAE31FFC8EA92"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mousebird\/clipper",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6EE8C3CD1205674099D0F29D1E5116B4056D84DF"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mousebird\/glues.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9FF210C40B5F6FF575BA5DCEA5467BFAAB7EB8B0"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/nfarina\/calloutview.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D1BB63D501E0048981F00509C5A268D4AF5FEE4C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mousebird\/libjson.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DB33CBD4D80E1B1AD982034BCF4CA065484EA96E"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mousebird\/protobuf.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DBA6F8B12B84878540F44342C4772AC004D85ABD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mwurm93\/planit-v0.3",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DCCC1947146420487C56DB282AA8DD6639BAE1E9"
+    }
+  ]
+}
