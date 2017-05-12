@@ -50,7 +50,7 @@ class bucketListViewController: UIViewController  {
         // start up over Madrid, center of the old-world
         if let globeViewC = globeViewC {
             globeViewC.height = 1.2
-            globeViewC.keepNorthUp = true
+            globeViewC.keepNorthUp = false
             globeViewC.animate(toPosition: MaplyCoordinateMakeWithDegrees(-3.6704803, 40.5023056), time: 1.5)
         }
         
