@@ -8,7 +8,7 @@
 
 import UIKit
 
-class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDelegate, MaplyViewControllerDelegate  {
+class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDelegate  {
 
     @IBOutlet weak var backgroundView: UIImageView!
     @IBOutlet weak var backgroundBlurFilterView: UIVisualEffectView!
@@ -17,13 +17,44 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     private var loftedVectorFillDict: [String: AnyObject]?
     private var loftedVectorOutlineDict: [String: AnyObject]?
     private var vectorDict: [String: AnyObject]?
-    private var selectionColor = UIColor.green
-    private let onBucketListSelectionColor = UIColor.green
-    private let alreadyGoneSelectionColor = UIColor.red
-    private let tbdSelectionColor = UIColor.darkGray
+    private var selectionColor = UIColor()
+    private let cachedGrayColor = UIColor.darkGray
+    private let cachedWhiteColor = UIColor.white
 
+    //MARK: Outlets
+    @IBOutlet weak var TBDButton: UIButton!
+    @IBOutlet weak var bucketListButton: UIButton!
+    @IBOutlet weak var beenThereButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        selectionColor = UIColor(cgColor: bucketListButton.layer.backgroundColor!)
+        
+        TBDButton.layer.cornerRadius = 5
+        TBDButton.layer.borderColor = UIColor.white.cgColor
+        TBDButton.layer.borderWidth = 0
+        TBDButton.layer.shadowColor = UIColor.black.cgColor
+        TBDButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        TBDButton.layer.shadowRadius = 2
+        TBDButton.layer.shadowOpacity = 0.3
+
+        bucketListButton.layer.cornerRadius = 5
+        bucketListButton.layer.borderColor = UIColor.white.cgColor
+        bucketListButton.layer.borderWidth = 3
+        bucketListButton.layer.shadowColor = UIColor.black.cgColor
+        bucketListButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        bucketListButton.layer.shadowRadius = 2
+        bucketListButton.layer.shadowOpacity = 0.3
+
+        
+        beenThereButton.layer.cornerRadius = 5
+        beenThereButton.layer.borderColor = UIColor.white.cgColor
+        beenThereButton.layer.borderWidth = 0
+        beenThereButton.layer.shadowColor = UIColor.black.cgColor
+        beenThereButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        beenThereButton.layer.shadowRadius = 2
+        beenThereButton.layer.shadowOpacity = 0.3
         
         // add the countries
         addCountries()
@@ -66,7 +97,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         }
         
         loftedVectorFillDict = [
-            kMaplyColor: UIColor.darkGray,
+            kMaplyColor: cachedGrayColor,
             kMaplyLoftedPolyHeight: 0.008 as AnyObject,
             kMaplyLoftedPolySide: false as AnyObject
         ]
@@ -78,7 +109,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
 
         
         loftedVectorOutlineDict = [
-            kMaplyColor: UIColor.white,
+            kMaplyColor: cachedWhiteColor,
             kMaplyLoftedPolyHeight: 0.009 as AnyObject,
             kMaplyLoftedPolyTop: false as AnyObject,
         ]
@@ -92,10 +123,43 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         
         if let selectedObject = selectedObject as? MaplyVectorObject {
             let loc = selectedObject.centroid()
-            if selectedObject.attributes.value(forKey: "bucketListColorStatus") == nil {
+            var subtitle = ""
+            if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
+                subtitle = "Added to bucket list"
                 
+                loftedVectorFillDict = [
+                    kMaplyColor: UIColor(cgColor: bucketListButton.layer.backgroundColor!),
+                    kMaplyLoftedPolyHeight: 0.008 as AnyObject,
+                    kMaplyLoftedPolySide: false as AnyObject
+                ]
+                self.theViewC?.remove([selectedObject], mode: MaplyThreadMode.any)
+                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
+                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
+            } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!) {
+                subtitle = "Been there done that"
+                
+                loftedVectorFillDict = [
+                    kMaplyColor: UIColor(cgColor: beenThereButton.layer.backgroundColor!),
+                    kMaplyLoftedPolyHeight: 0.008 as AnyObject,
+                    kMaplyLoftedPolySide: false as AnyObject
+                ]
+                self.theViewC?.remove([selectedObject], mode: MaplyThreadMode.any)
+                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
+                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
+            } else if selectionColor == UIColor(cgColor: TBDButton.layer.backgroundColor!) {
+                subtitle = "Maybe in another life"
+                
+                loftedVectorFillDict = [
+                    kMaplyColor: UIColor(cgColor: TBDButton.layer.backgroundColor!),
+                    kMaplyLoftedPolyHeight: 0.008 as AnyObject,
+                    kMaplyLoftedPolySide: false as AnyObject
+                ]
+                self.theViewC?.remove([selectedObject], mode: MaplyThreadMode.any)
+                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
+                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
+
             }
-            addAnnotationWithTitle(title: "selected", subtitle: selectedObject.userObject as! String, loc: loc)
+            addAnnotationWithTitle(title: selectedObject.userObject as! String, subtitle: subtitle, loc: loc)
         }
         else if let selectedObject = selectedObject as? MaplyScreenMarker {
             addAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
@@ -117,8 +181,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         
         theViewC?.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
     }
-
-
     
     private func addCountries() {
         // handle this in another thread
@@ -141,10 +203,33 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                 }
             }
                     // add the outline and fill to our view
-                    self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
+            self.theViewC?.addVectors(vectorsToAdd, desc: self.vectorDict)
+
+            self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
                     self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
-                    self.theViewC?.addVectors(vectorsToAdd, desc: self.vectorDict)
         }
+    }
+    
+    //MARK: Actions
+    @IBAction func TBDButtonTouchedUpInside(_ sender: Any) {
+        TBDButton.layer.borderWidth = 3
+        bucketListButton.layer.borderWidth = 0
+        beenThereButton.layer.borderWidth = 0
+        selectionColor = UIColor(cgColor: TBDButton.layer.backgroundColor!)
+        
+    }
+    
+    @IBAction func bucketListButtonTouchedUpInside(_ sender: Any) {
+        TBDButton.layer.borderWidth = 0
+        bucketListButton.layer.borderWidth = 3
+        beenThereButton.layer.borderWidth = 0
+        selectionColor = UIColor(cgColor: bucketListButton.layer.backgroundColor!)
+    }
+    @IBAction func beenThereButtonTouchedUpInside(_ sender: Any) {
+        TBDButton.layer.borderWidth = 0
+        bucketListButton.layer.borderWidth = 0
+        beenThereButton.layer.borderWidth = 3
+        selectionColor = UIColor(cgColor: beenThereButton.layer.backgroundColor!)
     }
 
 }

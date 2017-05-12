@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TripListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
+class TripListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, WhirlyGlobeViewControllerDelegate {
     
     // MARK: Outlets
     @IBOutlet weak var existingTripsTable: UITableView!
@@ -16,18 +16,21 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var addAnotherTripButton: UIButton!
     @IBOutlet weak var myTripsTitleLabel: UILabel!
     @IBOutlet weak var createTripArrow: UIButton!
-    @IBOutlet weak var greyMap: UIImageView!
+    @IBOutlet weak var backgroundView: UIImageView!
+    @IBOutlet weak var backgroundBlurFilterView: UIVisualEffectView!
+    @IBOutlet weak var goToBucketListButton: UIButton!
     
     // Outlets for instructions
     @IBOutlet weak var instructionsTitleLabel: UILabel!
     @IBOutlet weak var destinationDecidedControlView: UIView!
     @IBOutlet weak var destinationDecidedControl: UISegmentedControl!
-    @IBOutlet weak var tbdColorView: UIView!
-    @IBOutlet weak var tbdLabel: UILabel!
-    @IBOutlet weak var bucketListColorView: UIView!
-    @IBOutlet weak var bucketListLabel: UILabel!
-    @IBOutlet weak var beenThereColorView: UIView!
-    @IBOutlet weak var beenThereLabel: UILabel!
+    
+    private var theViewC: MaplyBaseViewController?
+    private var loftedVectorFillDict: [String: AnyObject]?
+    private var loftedVectorOutlineDict: [String: AnyObject]?
+    private let cachedGrayColor = UIColor.darkGray
+    private let cachedWhiteColor = UIColor.white
+    
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     
     let sectionTitles = ["Still in the works...", "Booked"]
@@ -68,35 +71,27 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             myTripsTitleLabel.isHidden = true
             existingTripsTable.isHidden = true
             addAnotherTripButton.isHidden = true
+            goToBucketListButton.isHidden = true
             
             createTripButton.isHidden = false
             createTripArrow.isHidden = false
             instructionsTitleLabel.isHidden = false
-            greyMap.isHidden = false
-            tbdLabel.isHidden = false
-            tbdColorView.isHidden = false
-            bucketListLabel.isHidden = false
-            bucketListColorView.isHidden = false
-            beenThereLabel.isHidden = false
-            beenThereColorView.isHidden = false
-            }
+        
+        //WhirlyGLobe
+        loadWhirlyGlobe()
+        }
         else {
             existingTripsTable.isHidden = false
             existingTripsTable.tableFooterView = UIView()
             existingTripsTable.layer.cornerRadius = 5
             addAnotherTripButton.isHidden = false
+            goToBucketListButton.isHidden = false
             
             createTripButton.isHidden = true
             createTripArrow.isHidden = true
             instructionsTitleLabel.isHidden = true
-            greyMap.isHidden = true
-            tbdLabel.isHidden = true
-            tbdColorView.isHidden = true
-            bucketListLabel.isHidden = true
-            bucketListColorView.isHidden = true
-            beenThereLabel.isHidden = true
-            beenThereColorView.isHidden = true
         }
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -403,17 +398,14 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                         myTripsTitleLabel.isHidden = true
                         existingTripsTable.isHidden = true
                         addAnotherTripButton.isHidden = true
+                        goToBucketListButton.isHidden = true
                         
                         createTripButton.isHidden = false
                         createTripArrow.isHidden = false
                         instructionsTitleLabel.isHidden = false
-                        greyMap.isHidden = false
-                        tbdLabel.isHidden = false
-                        tbdColorView.isHidden = false
-                        bucketListLabel.isHidden = false
-                        bucketListColorView.isHidden = false
-                        beenThereLabel.isHidden = false
-                        beenThereColorView.isHidden = false
+                        
+                        //WhirlyGLobe
+                        loadWhirlyGlobe()
                     }
                     //Return if delete cell trip name found
                     return
@@ -426,4 +418,91 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         return "👋🏼"
     }
 
+    //MARK: Custom Functions
+    private func loadWhirlyGlobe() {
+        // add the countries
+        addCountries()
+        
+        // Create an empty globe and add it to the view
+        theViewC = WhirlyGlobeViewController()
+        self.view.addSubview(theViewC!.view)
+        theViewC!.view.frame = self.view.bounds
+        addChildViewController(theViewC!)
+        self.view.sendSubview(toBack: theViewC!.view)
+        self.view.sendSubview(toBack: backgroundBlurFilterView)
+        self.view.sendSubview(toBack: backgroundView)
+        
+        let globeViewC = theViewC as? WhirlyGlobeViewController
+        
+        theViewC!.clearColor = UIColor.clear
+        
+        // and thirty fps if we can get it ­ change this to 3 if you find your app is struggling
+        theViewC!.frameInterval = 2
+        
+        
+        // set up the data source
+        if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
+            let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
+            layer.handleEdges = (globeViewC != nil)
+            layer.coverPoles = (globeViewC != nil)
+            layer.requireElev = false
+            layer.waitLoad = false
+            layer.drawPriority = 0
+            layer.singleLevelLoading = false
+            theViewC!.add(layer)
+        }
+        
+        // start up over Madrid, center of the old-world
+        if let globeViewC = globeViewC {
+            globeViewC.height = 1.2
+            globeViewC.keepNorthUp = true
+            globeViewC.setZoomLimitsMin(1.2, max: 1.2)
+            globeViewC.animate(toPosition: MaplyCoordinateMakeWithDegrees(-3.6704803, 40.5023056), time: 1.5)
+            globeViewC.keepNorthUp = false
+            
+        }
+        
+        loftedVectorFillDict = [
+            kMaplyColor: cachedGrayColor,
+            kMaplyLoftedPolyHeight: 0.008 as AnyObject,
+            kMaplyLoftedPolySide: false as AnyObject
+        ]
+        
+        loftedVectorOutlineDict = [
+            kMaplyColor: cachedWhiteColor,
+            kMaplyLoftedPolyHeight: 0.009 as AnyObject,
+            kMaplyLoftedPolyTop: false as AnyObject,
+        ]
+        
+        if let globeViewC = globeViewC {
+            globeViewC.delegate = self
+        }
+    }
+    
+    private func addCountries() {
+        // handle this in another thread
+        let queue = DispatchQueue.global()
+        queue.async() {
+            let bundle = Bundle.main
+            let allOutlines = bundle.paths(forResourcesOfType: "geojson", inDirectory: "country_json_50m")
+            var vectorsToAdd = [AnyObject]()
+            for outline in allOutlines {
+                if let jsonData = NSData(contentsOfFile: outline),
+                    let wgVecObj = MaplyVectorObject(fromGeoJSON: jsonData as Data) {
+                    wgVecObj.selectable = true
+                    // the admin tag from the country outline geojson has the country name ­ save
+                    let attrs = wgVecObj.attributes
+                    if let vecName = attrs.object(forKey: "ADMIN") as? NSObject {
+                        wgVecObj.userObject = vecName
+                    }
+                    vectorsToAdd.append(wgVecObj)
+                }
+            }
+            
+            
+            // add the outline and fill to our view
+            self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
+            self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
+        }
+    }
 }

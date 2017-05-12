@@ -20,7 +20,6 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var readyToBookButton: UIButton!
     @IBOutlet weak var returnToSwipingButton: UIButton!
     @IBOutlet weak var tripNameLabel: UITextField!
-    @IBOutlet var popupFlightSearchView: UIView!
     @IBOutlet weak var popupBlurView: UIVisualEffectView!
     
     // viewDidLoad
@@ -49,38 +48,17 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         if tripNameValue != nil {
             self.tripNameLabel.text =  "\(tripNameValue!)"
         }
+        
+        let path = recommendationRankingTableView.indexPathForSelectedRow! as IndexPath
+        let cell = recommendationRankingTableView.cellForRow(at: path) as! rankedRecommendationsTableViewCell
+        let selectedDestination = cell.destinationLabel.text!
+        self.readyToBookButton.setTitle("Move forward with \(selectedDestination)", for: .normal)
     }
     
     // didReceiveMemoryWarning
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    //MARK: Custom functions
-    func animateOutPopupFlightSearchView() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.popupFlightSearchView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.popupBlurView.effect = nil
-            self.popupFlightSearchView.alpha = 0
-        }) { (Success:Bool) in
-            self.popupFlightSearchView.removeFromSuperview()
-        }
-    }
-    
-    func animateInPopupFlightSearchView(){
-        self.view.addSubview(popupFlightSearchView)
-        popupFlightSearchView.center = self.view.center
-        popupFlightSearchView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-        popupFlightSearchView.alpha = 0
-        
-        UIView.animate(withDuration: 0.4) {
-            self.popupBlurView.effect = self.effect
-            self.popupFlightSearchView.alpha = 1
-            self.popupFlightSearchView.transform = CGAffineTransform.identity
-        }
-    }
-
-
 
     // MARK: UITextFieldDelegate
     func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
@@ -206,6 +184,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 //            self.recommendationRankingTableView.cellForRow(at: IndexPath(row: 0, section: 0))?.layer.backgroundColor = UIColor.blue.cgColor
         }
         
+//        let path = recommendationRankingTableView.indexPathForSelectedRow! as IndexPath
+        let cell = recommendationRankingTableView.cellForRow(at: sourceIndexPath) as! rankedRecommendationsTableViewCell
+        let selectedDestination = cell.destinationLabel.text!
+        self.readyToBookButton.setTitle("Move forward with \(selectedDestination)", for: .normal)
+        
         alertController.addAction(cancelAction)
         alertController.addAction(continueAction)
         self.present(alertController, animated: true, completion: nil)
@@ -309,11 +292,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // MARK: Actions
     @IBAction func chooseFlightsButtonTouchedUpInside(_ sender: Any) {
-        animateInPopupFlightSearchView()
-    }
-    @IBAction func cancelPopupFlightSearchViewTouchedUpInside(_ sender: Any) {
-        animateOutPopupFlightSearchView()
-
+        
     }
     @IBAction func tripNameEditingChanged(_ sender: Any) {
         let tripNameValue = tripNameLabel.text as! NSString
