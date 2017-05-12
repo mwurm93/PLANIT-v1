@@ -2171,10 +2171,10 @@
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Heu-0f-mzk">
-                                                    <rect key="frame" x="244" y="24" width="99" height="30"/>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Heu-0f-mzk">
+                                                    <rect key="frame" x="286" y="28" width="16" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Choose flights"/>
+                                                    <state key="normal" image="change"/>
                                                     <connections>
                                                         <action selector="chooseFlightsButtonTouchedUpInside:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="nx0-dI-z0U"/>
                                                     </connections>
@@ -3886,6 +3886,7 @@
         <image name="bermudaSunset" width="1500" height="1125"/>
         <image name="bermudaSunsetTop" width="563" height="487"/>
         <image name="budgetICon" width="256" height="256"/>
+        <image name="change" width="1066" height="951"/>
         <image name="deleteButton" width="35" height="34"/>
         <image name="earth" width="256" height="256"/>
         <image name="emptyHeart" width="71" height="71"/>
@@ -3902,10 +3903,10 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="4hW-EN-T1K"/>
-        <segue reference="anE-cP-H4U"/>
+        <segue reference="lra-AY-k3U"/>
+        <segue reference="R8r-yB-rJ1"/>
+        <segue reference="isD-dZ-KwN"/>
         <segue reference="qH0-AO-962"/>
-        <segue reference="mN5-fO-Q8J"/>
         <segue reference="2ah-17-HDw"/>
         <segue reference="wiQ-22-XVg"/>
     </inferredMetricsTieBreakers>

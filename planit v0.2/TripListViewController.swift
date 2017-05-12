@@ -498,8 +498,6 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     vectorsToAdd.append(wgVecObj)
                 }
             }
-            
-            
             // add the outline and fill to our view
             self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
             self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
