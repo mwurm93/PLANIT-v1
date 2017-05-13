@@ -14,15 +14,15 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     @IBOutlet weak var backgroundBlurFilterView: UIVisualEffectView!
     
     private var theViewC: MaplyBaseViewController?
-    private var loftedVectorFillDict: [String: AnyObject]?
-    private var loftedVectorOutlineDict: [String: AnyObject]?
+    private var selectedVectorFillDict: [String: AnyObject]?
+    private var selectedVectorOutlineDict: [String: AnyObject]?
     private var vectorDict: [String: AnyObject]?
     private var selectionColor = UIColor()
     private let cachedGrayColor = UIColor.darkGray
     private let cachedWhiteColor = UIColor.white
+    private var useLocalTiles = false
 
     //MARK: Outlets
-    @IBOutlet weak var TBDButton: UIButton!
     @IBOutlet weak var bucketListButton: UIButton!
     @IBOutlet weak var beenThereButton: UIButton!
     
@@ -31,14 +31,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         
         selectionColor = UIColor(cgColor: bucketListButton.layer.backgroundColor!)
         
-        TBDButton.layer.cornerRadius = 5
-        TBDButton.layer.borderColor = UIColor.white.cgColor
-        TBDButton.layer.borderWidth = 0
-        TBDButton.layer.shadowColor = UIColor.black.cgColor
-        TBDButton.layer.shadowOffset = CGSize(width: 2, height: 2)
-        TBDButton.layer.shadowRadius = 2
-        TBDButton.layer.shadowOpacity = 0.3
-
         bucketListButton.layer.cornerRadius = 5
         bucketListButton.layer.borderColor = UIColor.white.cgColor
         bucketListButton.layer.borderWidth = 3
@@ -77,6 +69,8 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         
         
         // set up the data source
+        
+        if useLocalTiles {
         if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
             let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
             layer.handleEdges = (globeViewC != nil)
@@ -87,6 +81,32 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             layer.singleLevelLoading = false
             theViewC!.add(layer)
         }
+        } else {
+            // Because this is a remote tile set, we'll want a cache directory
+            let baseCacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
+            let tilesCacheDir = "\(baseCacheDir)/stamentiles/"
+            let maxZoom = Int32(18)
+            
+            // Stamen Terrain Tiles, courtesy of Stamen Design under the Creative Commons Attribution License.
+            // Data by OpenStreetMap under the Open Data Commons Open Database License.
+            guard let tileSource = MaplyRemoteTileSource(
+                baseURL: "http://tile.stamen.com/watercolor/",
+                ext: "png",
+                minZoom: 0,
+                maxZoom: maxZoom) else {
+                    // can't create remote tile source
+                    return
+            }
+            tileSource.cacheDir = tilesCacheDir
+            let layer = MaplyQuadImageTilesLayer(tileSource: tileSource)
+            layer?.handleEdges = (globeViewC != nil)
+            layer?.coverPoles = (globeViewC != nil)
+            layer?.requireElev = false
+            layer?.waitLoad = false
+            layer?.drawPriority = 0
+            layer?.singleLevelLoading = false
+            theViewC!.add(layer!)
+        }
         
         // start up over Madrid, center of the old-world
         if let globeViewC = globeViewC {
@@ -96,22 +116,26 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             globeViewC.keepNorthUp = false
         }
         
-        loftedVectorFillDict = [
-            kMaplyColor: cachedGrayColor,
-            kMaplyLoftedPolyHeight: 0.008 as AnyObject,
-            kMaplyLoftedPolySide: false as AnyObject
-        ]
 
         vectorDict = [
             kMaplySelectable: true as AnyObject,
-            kMaplyFilled: false as AnyObject
+            kMaplyFilled: false as AnyObject,
+            kMaplyColor: UIColor.white,
+            kMaplyVecWidth: 3.0 as AnyObject
         ]
 
+        selectedVectorFillDict = [
+            kMaplySelectable: true as AnyObject,
+            kMaplyFilled: true as AnyObject,
+            kMaplyColor: UIColor.white,
+            kMaplyVecWidth: 3.0 as AnyObject
+        ]
         
-        loftedVectorOutlineDict = [
-            kMaplyColor: cachedWhiteColor,
-            kMaplyLoftedPolyHeight: 0.009 as AnyObject,
-            kMaplyLoftedPolyTop: false as AnyObject,
+        selectedVectorOutlineDict = [
+            kMaplySelectable: true as AnyObject,
+            kMaplyFilled: false as AnyObject,
+            kMaplyColor: UIColor.white,
+            kMaplyVecWidth: 3.0 as AnyObject
         ]
 
         if let globeViewC = globeViewC {
@@ -124,52 +148,73 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         if let selectedObject = selectedObject as? MaplyVectorObject {
             let loc = selectedObject.centroid()
             var subtitle = ""
+            
+            
             if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
+            
+                if selectedObject.attributes["selectionStatus"] as! String != "bucketList" {
                 subtitle = "Added to bucket list"
                 
-                loftedVectorFillDict = [
+                selectedVectorFillDict = [
                     kMaplyColor: UIColor(cgColor: bucketListButton.layer.backgroundColor!),
-                    kMaplyLoftedPolyHeight: 0.008 as AnyObject,
-                    kMaplyLoftedPolySide: false as AnyObject
+                    kMaplySelectable: true as AnyObject,
+                    kMaplyFilled: true as AnyObject,
+                    kMaplyVecWidth: 3.0 as AnyObject
                 ]
-                self.theViewC?.remove([selectedObject], mode: MaplyThreadMode.any)
-                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
-                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
+                self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict)
+                self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict)
+                
+                selectedObject.attributes.setValue("bucketList", forKey: "selectionStatus")
+            } else {
+                selectedVectorFillDict = [
+                    kMaplySelectable: true as AnyObject,
+                    kMaplyFilled: false as AnyObject,
+                    kMaplyVecWidth: 3.0 as AnyObject
+                ]
+                self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict)
+                self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict)
+                
+                selectedObject.attributes.setValue("tbd", forKey: "selectionStatus")
+                }
+                
             } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!) {
+                if selectedObject.attributes["selectionStatus"] as! String != "bucketList" {
                 subtitle = "Been there done that"
                 
-                loftedVectorFillDict = [
+                selectedVectorFillDict = [
                     kMaplyColor: UIColor(cgColor: beenThereButton.layer.backgroundColor!),
-                    kMaplyLoftedPolyHeight: 0.008 as AnyObject,
-                    kMaplyLoftedPolySide: false as AnyObject
+                    kMaplySelectable: true as AnyObject,
+                    kMaplyFilled: true as AnyObject,
+                    kMaplyVecWidth: 3.0 as AnyObject
                 ]
-                self.theViewC?.remove([selectedObject], mode: MaplyThreadMode.any)
-                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
-                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
-            } else if selectionColor == UIColor(cgColor: TBDButton.layer.backgroundColor!) {
-                subtitle = "Maybe in another life"
                 
-                loftedVectorFillDict = [
-                    kMaplyColor: UIColor(cgColor: TBDButton.layer.backgroundColor!),
-                    kMaplyLoftedPolyHeight: 0.008 as AnyObject,
-                    kMaplyLoftedPolySide: false as AnyObject
-                ]
-                self.theViewC?.remove([selectedObject], mode: MaplyThreadMode.any)
-                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
-                self.theViewC?.addLoftedPolys([selectedObject], key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
-
+                self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict)
+                self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict)
+                
+                selectedObject.attributes.setValue("beenThere", forKey: "selectionStatus")
+                } else {
+                    selectedVectorFillDict = [
+                        kMaplySelectable: true as AnyObject,
+                        kMaplyFilled: false as AnyObject,
+                        kMaplyVecWidth: 3.0 as AnyObject
+                    ]
+                    self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict)
+                    self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict)
+                    
+                    selectedObject.attributes.setValue("tbd", forKey: "selectionStatus")
+                    
+                }
             }
+            
+            
             addAnnotationWithTitle(title: selectedObject.userObject as! String, subtitle: subtitle, loc: loc)
-        }
-        else if let selectedObject = selectedObject as? MaplyScreenMarker {
+        } else if let selectedObject = selectedObject as? MaplyScreenMarker {
             addAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
         }
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject) {
-        
         handleSelection(selectedObject: selectedObj)
-        
     }
     
     private func addAnnotationWithTitle(title: String, subtitle: String, loc:MaplyCoordinate) {
@@ -188,7 +233,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         queue.async() {
             let bundle = Bundle.main
             let allOutlines = bundle.paths(forResourcesOfType: "geojson", inDirectory: "country_json_50m")
-            var vectorsToAdd = [AnyObject]()
             for outline in allOutlines {
                 if let jsonData = NSData(contentsOfFile: outline),
                     let wgVecObj = MaplyVectorObject(fromGeoJSON: jsonData as Data) {
@@ -198,35 +242,21 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     if let vecName = attrs.object(forKey: "ADMIN") as? NSObject {
                         wgVecObj.userObject = vecName
                     }
-                    vectorsToAdd.append(wgVecObj)
                     
+                    attrs.setValue("tbd", forKey: "selectionStatus")
+                    self.theViewC?.addVectors([wgVecObj], desc: self.vectorDict)
                 }
             }
-                    // add the outline and fill to our view
-            self.theViewC?.addVectors(vectorsToAdd, desc: self.vectorDict)
-
-            self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
-                    self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
         }
     }
     
     //MARK: Actions
-    @IBAction func TBDButtonTouchedUpInside(_ sender: Any) {
-        TBDButton.layer.borderWidth = 3
-        bucketListButton.layer.borderWidth = 0
-        beenThereButton.layer.borderWidth = 0
-        selectionColor = UIColor(cgColor: TBDButton.layer.backgroundColor!)
-        
-    }
-    
     @IBAction func bucketListButtonTouchedUpInside(_ sender: Any) {
-        TBDButton.layer.borderWidth = 0
         bucketListButton.layer.borderWidth = 3
         beenThereButton.layer.borderWidth = 0
         selectionColor = UIColor(cgColor: bucketListButton.layer.backgroundColor!)
     }
     @IBAction func beenThereButtonTouchedUpInside(_ sender: Any) {
-        TBDButton.layer.borderWidth = 0
         bucketListButton.layer.borderWidth = 0
         beenThereButton.layer.borderWidth = 3
         selectionColor = UIColor(cgColor: beenThereButton.layer.backgroundColor!)

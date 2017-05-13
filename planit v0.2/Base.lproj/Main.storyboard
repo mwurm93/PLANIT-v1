@@ -3210,28 +3210,19 @@
                                     <segue destination="tCq-uR-8sF" kind="show" id="JMU-Ib-LZQ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cyi-52-b4q">
-                                <rect key="frame" x="17" y="620" width="100" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                <state key="normal" title="TBD"/>
-                                <connections>
-                                    <action selector="TBDButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="hNO-0P-sNg"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uyj-s2-4gI">
-                                <rect key="frame" x="258" y="620" width="100" height="30"/>
+                                <rect key="frame" x="202" y="620" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.69709708121827418" green="0.37376992596807707" blue="0.39410270692104277" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.69709708121827418" green="0.37376992596807707" blue="0.39410270692104277" alpha="0.65000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Been there"/>
                                 <connections>
                                     <action selector="beenThereButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="AxS-xO-gOM"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Ie-ki-88j">
-                                <rect key="frame" x="138" y="620" width="100" height="30"/>
+                                <rect key="frame" x="70" y="620" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.00077266624248039132" green="0.45897446065989855" blue="0.06354961154945972" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.00077266624248039132" green="0.45897446065989855" blue="0.06354961154945972" alpha="0.64752782534246578" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Bucket list"/>
                                 <connections>
                                     <action selector="bucketListButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="fJo-dI-Whj"/>
@@ -3252,7 +3243,6 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="TBDButton" destination="Cyi-52-b4q" id="5pa-Xn-c7y"/>
                         <outlet property="backgroundBlurFilterView" destination="APO-Sp-SPB" id="UOO-4e-5Pk"/>
                         <outlet property="backgroundView" destination="FNn-LX-ZiN" id="tbT-uQ-6kk"/>
                         <outlet property="beenThereButton" destination="Uyj-s2-4gI" id="aJB-JA-0iu"/>
@@ -3902,12 +3892,12 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="lra-AY-k3U"/>
-        <segue reference="R8r-yB-rJ1"/>
-        <segue reference="isD-dZ-KwN"/>
-        <segue reference="qH0-AO-962"/>
         <segue reference="2ah-17-HDw"/>
+        <segue reference="qH0-AO-962"/>
+        <segue reference="isD-dZ-KwN"/>
+        <segue reference="R8r-yB-rJ1"/>
+        <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="4hW-EN-T1K"/>
         <segue reference="wiQ-22-XVg"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

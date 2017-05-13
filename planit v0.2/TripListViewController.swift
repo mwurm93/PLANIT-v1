@@ -26,10 +26,10 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var destinationDecidedControl: UISegmentedControl!
     
     private var theViewC: MaplyBaseViewController?
-    private var loftedVectorFillDict: [String: AnyObject]?
-    private var loftedVectorOutlineDict: [String: AnyObject]?
     private let cachedGrayColor = UIColor.darkGray
     private let cachedWhiteColor = UIColor.white
+    private var vectorDict: [String: AnyObject]?
+    private var useLocalTiles = false
     
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     
@@ -441,15 +441,42 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         
         // set up the data source
-        if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
-            let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
-            layer.handleEdges = (globeViewC != nil)
-            layer.coverPoles = (globeViewC != nil)
-            layer.requireElev = false
-            layer.waitLoad = false
-            layer.drawPriority = 0
-            layer.singleLevelLoading = false
-            theViewC!.add(layer)
+        if useLocalTiles {
+            if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
+                let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
+                layer.handleEdges = (globeViewC != nil)
+                layer.coverPoles = (globeViewC != nil)
+                layer.requireElev = false
+                layer.waitLoad = false
+                layer.drawPriority = 0
+                layer.singleLevelLoading = false
+                theViewC!.add(layer)
+            }
+        } else {
+            // Because this is a remote tile set, we'll want a cache directory
+            let baseCacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
+            let tilesCacheDir = "\(baseCacheDir)/stamentiles/"
+            let maxZoom = Int32(18)
+            
+            // Stamen Terrain Tiles, courtesy of Stamen Design under the Creative Commons Attribution License.
+            // Data by OpenStreetMap under the Open Data Commons Open Database License.
+            guard let tileSource = MaplyRemoteTileSource(
+                baseURL: "http://tile.stamen.com/watercolor/",
+                ext: "png",
+                minZoom: 0,
+                maxZoom: maxZoom) else {
+                    // can't create remote tile source
+                    return
+            }
+            tileSource.cacheDir = tilesCacheDir
+            let layer = MaplyQuadImageTilesLayer(tileSource: tileSource)
+            layer?.handleEdges = (globeViewC != nil)
+            layer?.coverPoles = (globeViewC != nil)
+            layer?.requireElev = false
+            layer?.waitLoad = false
+            layer?.drawPriority = 0
+            layer?.singleLevelLoading = false
+            theViewC!.add(layer!)
         }
         
         // start up over Madrid, center of the old-world
@@ -462,30 +489,24 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             
         }
         
-        loftedVectorFillDict = [
-            kMaplyColor: cachedGrayColor,
-            kMaplyLoftedPolyHeight: 0.008 as AnyObject,
-            kMaplyLoftedPolySide: false as AnyObject
-        ]
-        
-        loftedVectorOutlineDict = [
-            kMaplyColor: cachedWhiteColor,
-            kMaplyLoftedPolyHeight: 0.009 as AnyObject,
-            kMaplyLoftedPolyTop: false as AnyObject,
-        ]
-        
         if let globeViewC = globeViewC {
             globeViewC.delegate = self
         }
     }
     
     private func addCountries() {
+        vectorDict = [
+            kMaplySelectable: false as AnyObject,
+            kMaplyFilled: false as AnyObject,
+            kMaplyColor: UIColor.white,
+            kMaplyVecWidth: 3.0 as AnyObject
+        ]
+        
         // handle this in another thread
         let queue = DispatchQueue.global()
         queue.async() {
             let bundle = Bundle.main
             let allOutlines = bundle.paths(forResourcesOfType: "geojson", inDirectory: "country_json_50m")
-            var vectorsToAdd = [AnyObject]()
             for outline in allOutlines {
                 if let jsonData = NSData(contentsOfFile: outline),
                     let wgVecObj = MaplyVectorObject(fromGeoJSON: jsonData as Data) {
@@ -495,12 +516,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     if let vecName = attrs.object(forKey: "ADMIN") as? NSObject {
                         wgVecObj.userObject = vecName
                     }
-                    vectorsToAdd.append(wgVecObj)
+                    
+                    attrs.setValue("tbd", forKey: "selectionStatus")
+                    self.theViewC?.addVectors([wgVecObj], desc: self.vectorDict)
                 }
             }
-            // add the outline and fill to our view
-            self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorFillDict, mode: MaplyThreadMode.any)
-            self.theViewC?.addLoftedPolys(vectorsToAdd, key: nil, cache: nil, desc: self.loftedVectorOutlineDict, mode: MaplyThreadMode.any)
         }
     }
 }
