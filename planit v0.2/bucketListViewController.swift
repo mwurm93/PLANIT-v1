@@ -21,6 +21,16 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     private let cachedGrayColor = UIColor.darkGray
     private let cachedWhiteColor = UIColor.white
     private var useLocalTiles = false
+    var AddedFillComponentObjs = [MaplyComponentObject]()
+    var AddedOutlineComponentObjs = [MaplyComponentObject]()
+    var AddedFillVectorObjs = [MaplyVectorObject]()
+    var AddedOutlineVectorObjs = [MaplyVectorObject]()
+    
+    var AddedFillComponentObjs_been = [MaplyComponentObject]()
+    var AddedOutlineComponentObjs_been = [MaplyComponentObject]()
+    var AddedFillVectorObjs_been = [MaplyVectorObject]()
+    var AddedOutlineVectorObjs_been = [MaplyVectorObject]()
+
 
     //MARK: Outlets
     @IBOutlet weak var bucketListButton: UIButton!
@@ -48,8 +58,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         beenThereButton.layer.shadowRadius = 2
         beenThereButton.layer.shadowOpacity = 0.3
         
-        // add the countries
-        addCountries()
         
         // Create an empty globe and add it to the view
         theViewC = WhirlyGlobeViewController()
@@ -141,18 +149,26 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         if let globeViewC = globeViewC {
             globeViewC.delegate = self
         }
+        
+        // add the countries
+        addCountries()
+
     }
 
     private func handleSelection(selectedObject: NSObject) {
         
+        var AddedFillComponentObj = MaplyComponentObject()
+        var AddedOutlineComponentObj = MaplyComponentObject()
+        var AddedFillComponentObj_been = MaplyComponentObject()
+        var AddedOutlineComponentObj_been = MaplyComponentObject()
+
         if let selectedObject = selectedObject as? MaplyVectorObject {
             let loc = selectedObject.centroid()
             var subtitle = ""
             
-            
             if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
             
-                if selectedObject.attributes["selectionStatus"] as! String != "bucketList" {
+                if selectedObject.attributes["selectionStatus"] as! String == "tbd"  {
                 subtitle = "Added to bucket list"
                 
                 selectedVectorFillDict = [
@@ -161,25 +177,68 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     kMaplyFilled: true as AnyObject,
                     kMaplyVecWidth: 3.0 as AnyObject
                 ]
-                self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict)
-                self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict)
-                
+                AddedFillComponentObj = (self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict))!
+                AddedOutlineComponentObj = (self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict))!
+                AddedFillComponentObjs.append(AddedFillComponentObj)
+                AddedOutlineComponentObjs.append(AddedOutlineComponentObj)
+                AddedFillVectorObjs.append(selectedObject)
+                AddedOutlineVectorObjs.append(selectedObject)
+                    
                 selectedObject.attributes.setValue("bucketList", forKey: "selectionStatus")
-            } else {
-                selectedVectorFillDict = [
-                    kMaplySelectable: true as AnyObject,
-                    kMaplyFilled: false as AnyObject,
-                    kMaplyVecWidth: 3.0 as AnyObject
-                ]
-                self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict)
-                self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict)
-                
+            } else if selectedObject.attributes["selectionStatus"] as! String == "bucketList" {
+                    subtitle = "Nevermind"
+                    var index = 0
+                    for vectorObject in AddedFillVectorObjs {
+                        if vectorObject.userObject as! String == selectedObject.userObject as! String {
+                            theViewC?.remove(AddedFillComponentObjs[index])
+                            theViewC?.remove(AddedOutlineComponentObjs[index])
+                            AddedFillComponentObjs.remove(at: index)
+                            AddedOutlineComponentObjs.remove(at: index)
+                            AddedFillVectorObjs.remove(at: index)
+                            AddedOutlineVectorObjs.remove(at: index)
+                        } else {
+                            index += 1
+                        }
+                    }
+                    
                 selectedObject.attributes.setValue("tbd", forKey: "selectionStatus")
+                } else {
+                    //Remove
+                    var index = 0
+                    for vectorObject in AddedFillVectorObjs_been {
+                        if vectorObject.userObject as! String == selectedObject.userObject as! String {
+                            theViewC?.remove(self.AddedFillComponentObjs_been[index])
+                            theViewC?.remove(self.AddedOutlineComponentObjs_been[index])
+                            AddedFillComponentObjs_been.remove(at: index)
+                            AddedOutlineComponentObjs_been.remove(at: index)
+                            AddedFillVectorObjs_been.remove(at: index)
+                            AddedOutlineVectorObjs_been.remove(at: index)
+                        } else {
+                            index += 1
+                        }
+                    }
+                    //Add
+                    subtitle = "Added to bucket list"
+                    
+                    selectedVectorFillDict = [
+                        kMaplyColor: UIColor(cgColor: bucketListButton.layer.backgroundColor!),
+                        kMaplySelectable: true as AnyObject,
+                        kMaplyFilled: true as AnyObject,
+                        kMaplyVecWidth: 3.0 as AnyObject
+                    ]
+                    AddedFillComponentObj = (self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict))!
+                    AddedOutlineComponentObj = (self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict))!
+                    AddedFillComponentObjs.append(AddedFillComponentObj)
+                    AddedOutlineComponentObjs.append(AddedOutlineComponentObj)
+                    AddedFillVectorObjs.append(selectedObject)
+                    AddedOutlineVectorObjs.append(selectedObject)
+                    
+                    selectedObject.attributes.setValue("bucketList", forKey: "selectionStatus")
                 }
                 
             } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!) {
-                if selectedObject.attributes["selectionStatus"] as! String != "bucketList" {
-                subtitle = "Been there done that"
+                if selectedObject.attributes["selectionStatus"] as! String == "tbd" {
+                subtitle = "Already been here"
                 
                 selectedVectorFillDict = [
                     kMaplyColor: UIColor(cgColor: beenThereButton.layer.backgroundColor!),
@@ -188,21 +247,63 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     kMaplyVecWidth: 3.0 as AnyObject
                 ]
                 
-                self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict)
-                self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict)
+                AddedFillComponentObj_been = (self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict))!
+                AddedOutlineComponentObj_been = (self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict))!
+                AddedFillComponentObjs_been.append(AddedFillComponentObj_been)
+                AddedOutlineComponentObjs_been.append(AddedOutlineComponentObj_been)
+                AddedFillVectorObjs_been.append(selectedObject)
+                AddedOutlineVectorObjs_been.append(selectedObject)
                 
                 selectedObject.attributes.setValue("beenThere", forKey: "selectionStatus")
+                } else if selectedObject.attributes["selectionStatus"] as! String == "beenThere" {
+                    subtitle = "Nevermind"
+                    var index = 0
+                    for vectorObject in AddedFillVectorObjs_been {
+                        if vectorObject.userObject as! String == selectedObject.userObject as! String {
+                            theViewC?.remove(self.AddedFillComponentObjs_been[index])
+                            theViewC?.remove(self.AddedOutlineComponentObjs_been[index])
+                            AddedFillComponentObjs_been.remove(at: index)
+                            AddedOutlineComponentObjs_been.remove(at: index)
+                            AddedFillVectorObjs_been.remove(at: index)
+                            AddedOutlineVectorObjs_been.remove(at: index)
+                        } else {
+                            index += 1
+                        }
+                    }
+                    selectedObject.attributes.setValue("tbd", forKey: "selectionStatus")
                 } else {
+                    subtitle = "Already been here"
+                    //Remove
+                    var index = 0
+                    for vectorObject in AddedFillVectorObjs {
+                        if vectorObject.userObject as! String == selectedObject.userObject as! String {
+                            theViewC?.remove(AddedFillComponentObjs[index])
+                            theViewC?.remove(AddedOutlineComponentObjs[index])
+                            AddedFillComponentObjs.remove(at: index)
+                            AddedOutlineComponentObjs.remove(at: index)
+                            AddedFillVectorObjs.remove(at: index)
+                            AddedOutlineVectorObjs.remove(at: index)
+                        } else {
+                            index += 1
+                        }
+                    }
+                    
+                    //Add
                     selectedVectorFillDict = [
+                        kMaplyColor: UIColor(cgColor: beenThereButton.layer.backgroundColor!),
                         kMaplySelectable: true as AnyObject,
-                        kMaplyFilled: false as AnyObject,
+                        kMaplyFilled: true as AnyObject,
                         kMaplyVecWidth: 3.0 as AnyObject
                     ]
-                    self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict)
-                    self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict)
                     
-                    selectedObject.attributes.setValue("tbd", forKey: "selectionStatus")
+                    AddedFillComponentObj_been = (self.theViewC?.addVectors([selectedObject], desc: selectedVectorFillDict))!
+                    AddedOutlineComponentObj_been = (self.theViewC?.addVectors([selectedObject], desc: selectedVectorOutlineDict))!
+                    AddedFillComponentObjs_been.append(AddedFillComponentObj_been)
+                    AddedOutlineComponentObjs_been.append(AddedOutlineComponentObj_been)
+                    AddedFillVectorObjs_been.append(selectedObject)
+                    AddedOutlineVectorObjs_been.append(selectedObject)
                     
+                    selectedObject.attributes.setValue("beenThere", forKey: "selectionStatus")
                 }
             }
             
@@ -211,6 +312,10 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         } else if let selectedObject = selectedObject as? MaplyScreenMarker {
             addAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
         }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+            self.theViewC?.clearAnnotations()
+        })
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject) {
@@ -227,7 +332,9 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         theViewC?.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
     }
     
-    private func addCountries() {
+    
+    
+    func addCountries() {
         // handle this in another thread
         let queue = DispatchQueue.global()
         queue.async() {
@@ -261,5 +368,4 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         beenThereButton.layer.borderWidth = 3
         selectionColor = UIColor(cgColor: beenThereButton.layer.backgroundColor!)
     }
-
 }
