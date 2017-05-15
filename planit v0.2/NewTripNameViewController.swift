@@ -1005,13 +1005,13 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         let cell = calendarView.cellStatus(for: mostRecentSelectedCellDate as Date)
         if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
             let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy MM dd"
+            formatter.dateFormat = "MM/dd/yyyy"
             let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
             leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
         }
         if cell?.selectedPosition() == .right {
             let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy MM dd"
+            formatter.dateFormat = "MM/dd/yyyy"
             let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
             rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
         }
@@ -1020,6 +1020,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["origin_departure_times"] = leftDateTimeArrays as NSDictionary
         SavedPreferencesForTrip["return_departure_times"] = rightDateTimeArrays as NSDictionary
+            
         //Save
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }

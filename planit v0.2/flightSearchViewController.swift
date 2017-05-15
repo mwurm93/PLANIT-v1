@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import JTAppleCalendar
 
-class flightSearchViewController: UIViewController, UITextFieldDelegate {
+class flightSearchViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     
     //MARK: Outlets
     @IBOutlet weak var underline: UIImageView!
@@ -21,13 +22,33 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var returnOriginLabel: UILabel!
     @IBOutlet weak var returnDestinationLabel: UILabel!
     @IBOutlet weak var returnDateLabel: UILabel!
+    @IBOutlet weak var popupBackgroundView: UIView!
+    @IBOutlet weak var subviewDoneButton: UIButton!
+    @IBOutlet weak var timeOfDayTableView: UITableView!
+    @IBOutlet weak var previousMonth: UIButton!
+    @IBOutlet weak var nextMonth: UIButton!
+    @IBOutlet weak var calendarView: JTAppleCalendarView!
+    @IBOutlet var popupSubview: UIView!
+    
+    //CalendarView vars
+    var firstDate: Date?
+    let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
+    
+    var leftDates = [Date]()
+    var rightDates = [Date]()
+    var fullDates = [Date]()
+    var lengthOfAvailabilitySegmentsArray = [Int]()
+    var leftDateTimeArrays = NSMutableDictionary()
+    var rightDateTimeArrays = NSMutableDictionary()
+    var mostRecentSelectedCellDate = NSDate()
+
     
     var searchMode = "roundtrip"
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        underline.layer.frame = CGRect(x: 139, y: 20, width: 98, height: 51)
+        underline.layer.frame = CGRect(x: 139, y: 49, width: 98, height: 51)
         returnOrigin.isHidden = true
         returnOriginLabel.isHidden = true
         returnDestination.isHidden = true
@@ -35,14 +56,26 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
         returnDate.isHidden = false
         returnDateLabel.isHidden = false
         
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        let departureDateTimeArray = SavedPreferencesForTrip["origin_departure_times"] as! NSDictionary
+        let returnDateTimeArray = SavedPreferencesForTrip["return_departure_times"] as! NSDictionary
+        let topTrips = SavedPreferencesForTrip["top_trips"] as! [String]
+        
+        let departureDictionary = departureDateTimeArray as Dictionary
+        let returnDictionary = returnDateTimeArray as Dictionary
+        let departureKeys = Array(departureDictionary.keys)
+        let returnKeys = Array(returnDictionary.keys)
+        
         //Textfield setup
         self.departureDate.delegate = self
         departureDate.layer.borderWidth = 1
         departureDate.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         departureDate.layer.masksToBounds = true
         departureDate.layer.cornerRadius = 5
-        let departureDateValue = "DATA MODEL PENDING"
-        departureDate.text =  "\(departureDateValue)"
+        if departureKeys.count != 0 {
+            let departureDateValue = departureKeys[0]
+            departureDate.text =  "\(departureDateValue)"
+        }
         let departureDateLabelPlaceholder = departureDate!.value(forKey: "placeholderLabel") as? UILabel
         departureDateLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
 
@@ -51,7 +84,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
         departureOrigin.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         departureOrigin.layer.masksToBounds = true
         departureOrigin.layer.cornerRadius = 5
-        let departureOriginValue = "DATA MODEL PENDING"
+        let departureOriginValue = DataContainerSingleton.sharedDataContainer.homeAirport ?? ""
         departureOrigin.text =  "\(departureOriginValue)"
         let departureOriginLabelPlaceholder = departureOrigin!.value(forKey: "placeholderLabel") as? UILabel
         departureOriginLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
@@ -61,7 +94,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
         departureDestination.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         departureDestination.layer.masksToBounds = true
         departureDestination.layer.cornerRadius = 5
-        let departureDestinationValue = "DATA MODEL PENDING"
+        let departureDestinationValue = topTrips[0]
         departureDestination.text =  "\(departureDestinationValue)"
         let departureDestinationLabelPlaceholder = departureDestination!.value(forKey: "placeholderLabel") as? UILabel
         departureDestinationLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
@@ -71,8 +104,10 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
         returnDate.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         returnDate.layer.masksToBounds = true
         returnDate.layer.cornerRadius = 5
-        let returnDateValue = "DATA MODEL PENDING"
-        returnDate.text =  "\(returnDateValue)"
+        if returnKeys.count != 0 {
+            let returnDateValue = returnKeys[0]
+            returnDate.text =  "\(returnDateValue)"
+        }
         let returnDateLabelPlaceholder = returnDate!.value(forKey: "placeholderLabel") as? UILabel
         returnDateLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
         
@@ -81,7 +116,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
         returnOrigin.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         returnOrigin.layer.masksToBounds = true
         returnOrigin.layer.cornerRadius = 5
-        let returnOriginValue = "DATA MODEL PENDING"
+        let returnOriginValue = topTrips[0]
         returnOrigin.text =  "\(returnOriginValue)"
         let returnOriginLabelPlaceholder = returnOrigin!.value(forKey: "placeholderLabel") as? UILabel
         returnOriginLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
@@ -91,11 +126,51 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
         returnDestination.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         returnDestination.layer.masksToBounds = true
         returnDestination.layer.cornerRadius = 5
-        let returnDestinationValue = "DATA MODEL PENDING"
+        let returnDestinationValue = DataContainerSingleton.sharedDataContainer.homeAirport ?? ""
         returnDestination.text =  "\(returnDestinationValue)"
         let returnDestinationLabelPlaceholder = returnDestination!.value(forKey: "placeholderLabel") as? UILabel
         returnDestinationLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)        
         
+        
+        //Calendar Setup
+        popupSubview.layer.cornerRadius = 10
+        subviewDoneButton.isHidden = true
+        
+        //Calendar subview
+        // Set up tap outside time of day table
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissPopup(touch:)))
+        tap.numberOfTapsRequired = 1
+        tap.delegate = self
+        popupBackgroundView.isHidden = true
+        self.popupBackgroundView.addGestureRecognizer(tap)
+        
+        //Time of Day
+        timeOfDayTableView.delegate = self
+        timeOfDayTableView.dataSource = self
+        timeOfDayTableView.layer.cornerRadius = 5
+        timeOfDayTableView.layer.isHidden = true
+        timeOfDayTableView.allowsMultipleSelection = true
+        
+        
+        // Calendar header setup
+        calendarView.registerHeaderView(xibFileNames: ["monthHeaderView"])
+        
+        // Calendar setup delegate and datasource
+        calendarView.dataSource = self as? JTAppleCalendarViewDataSource
+        calendarView.delegate = self as? JTAppleCalendarViewDelegate
+        calendarView.registerCellViewXib(file: "CellView")
+        calendarView.allowsMultipleSelection  = true
+        calendarView.rangeSelectionWillBeUsed = true
+        calendarView.cellInset = CGPoint(x: 0, y: 2)
+        calendarView.scrollingMode = .nonStopToSection(withResistance: 0.9)
+        calendarView.direction = .horizontal
+        
+        // Load trip preferences and install
+        let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [NSDate]
+        if (selectedDatesValue?.count)! > 0 {
+            self.calendarView.selectDates(selectedDatesValue! as [Date],triggerSelectionDelegate: false)
+        }
+
     }
     
     // MARK: UITextFieldDelegate
@@ -103,23 +178,108 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
         // Hide the keyboard.
         departureDestination.resignFirstResponder()
         departureOrigin.resignFirstResponder()
-        departureDate.resignFirstResponder()
+//        departureDate.resignFirstResponder()
 
         returnDestination.resignFirstResponder()
         returnOrigin.resignFirstResponder()
-        returnDate.resignFirstResponder()
         
         //SAVE TO DATA MODEL
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        
         
         return true
     }
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         return true
     }
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == departureDate || textField == returnDate {
+            return false
+        }
+        return true
+    }
+    
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        departureDate.resignFirstResponder()
+//        returnDate.resignFirstResponder()
+//    }
+    
+    // MARK: UITableviewdelegate
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var numberOfRows = 0
+        
+        if tableView == timeOfDayTableView {
+            numberOfRows = 7
+        }
+        return numberOfRows
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+            let cell = tableView.dequeueReusableCell(withIdentifier: "timeOfDayPrototypeCell", for: indexPath) as! timeOfDayTableViewCell
+            cell.timeOfDayTableLabel.text = timesOfDayArray[indexPath.row]
+            return cell
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == timeOfDayTableView {
+            let topRows = [IndexPath(row:0, section: 0),IndexPath(row:1, section: 0),IndexPath(row:2, section: 0),IndexPath(row:3, section: 0),IndexPath(row:4, section: 0),IndexPath(row:5, section: 0)]
+            if indexPath == IndexPath(row:6, section: 0) {
+                for rowIndex in topRows {
+                    self.timeOfDayTableView.deselectRow(at: rowIndex, animated: false)
+                }
+            }
+            if topRows.contains(indexPath) {
+                self.timeOfDayTableView.deselectRow(at: IndexPath(row:6, section:0), animated: false)
+            }
+            
+            let selectedTimesOfDay = timeOfDayTableView.indexPathsForSelectedRows
+            var availableTimeOfDayInCell = [String]()
+            for indexPath in selectedTimesOfDay! {
+                let cell = timeOfDayTableView.cellForRow(at: indexPath) as! timeOfDayTableViewCell
+                availableTimeOfDayInCell.append(cell.timeOfDayTableLabel.text!)
+            }
+            let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
+            
+            let cell = calendarView.cellStatus(for: mostRecentSelectedCellDate as Date)
+            if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MM/dd/yyyy"
+                let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+                leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                departureDate.text =  "\(mostRecentSelectedCellDateAsNSString)"
+            }
+            if cell?.selectedPosition() == .right {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MM/dd/yyyy"
+                let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+                rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                returnDate.text =  "\(mostRecentSelectedCellDateAsNSString)"
+            }
+            
+            //Update trip preferences in dictionary
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+            SavedPreferencesForTrip["return_departure_times"] = rightDateTimeArrays as NSDictionary
+            
+            //Save
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
+    }
     
     //MARK: Custom functions
+    func dismissPopup(touch: UITapGestureRecognizer) {
+        if timeOfDayTableView.indexPathsForSelectedRows != nil {
+            dismissTimeOfDayTableOut()
+            popupBackgroundView.isHidden = true
+            
+            let when = DispatchTime.now() + 0.6
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                if self.leftDateTimeArrays.count == self.rightDateTimeArrays.count {
+                }
+            }
+        }
+    }
+    
     func fetchSavedPreferencesForTrip() -> NSMutableDictionary {
         //Update preference vars if an existing trip
         //Trip status
@@ -161,11 +321,37 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
         DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
     }
 
+    func animateInSubview(){
+        //Animate In Subview
+        self.view.addSubview(popupSubview)
+        popupSubview.center = CGPoint(x: 188, y: 385)
+        popupSubview.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        popupSubview.alpha = 0
+        UIView.animate(withDuration: 0.2) {
+            self.popupSubview.alpha = 1
+            self.popupSubview.transform = CGAffineTransform.identity
+        }
+        
+        getLengthOfSelectedAvailabilities()
+        if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
+            self.subviewDoneButton.isHidden = false
+        }
+    }
+    
+    func animateOutSubview() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.popupSubview.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.popupSubview.alpha = 0
+            self.popupSubview.transform = CGAffineTransform.init(scaleX: 1, y: 1)
+        }) { (Success:Bool) in
+            self.popupSubview.removeFromSuperview()
+        }
+    }
     
     //MARK: Actions
     @IBAction func multiCityButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 247, y: 20, width: 98, height: 51)
+            self.underline.layer.frame = CGRect(x: 247, y: 49, width: 98, height: 51)
             self.returnOrigin.isHidden = false
             self.returnOriginLabel.isHidden = false
             self.returnDestination.isHidden = false
@@ -177,7 +363,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
     }
     @IBAction func roundtripButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 139, y: 20, width: 98, height: 51)
+            self.underline.layer.frame = CGRect(x: 139, y: 49, width: 98, height: 51)
             self.returnOrigin.isHidden = true
             self.returnOriginLabel.isHidden = true
             self.returnDestination.isHidden = true
@@ -188,7 +374,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
     }
     @IBAction func oneWayButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 30, y: 20, width: 98, height: 51)
+            self.underline.layer.frame = CGRect(x: 30, y: 49, width: 98, height: 51)
             self.returnOrigin.isHidden = true
             self.returnOriginLabel.isHidden = true
             self.returnDestination.isHidden = true
@@ -197,5 +383,297 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate {
             self.returnDateLabel.isHidden = true
         }
         searchMode = "oneWay"
+    }
+    
+    @IBAction func departureDateTextFieldTouchedDown(_ sender: Any) {
+        animateInSubview()
+    }
+    @IBAction func returnDateTextFieldTouchedDown(_ sender: Any) {
+        animateInSubview()
+        UIView.animate(withDuration: 0.2) {
+            self.popupSubview.center = CGPoint(x: 188, y: 460)
+        }
+    }
+    @IBAction func subviewDoneButtonTouchedUpInside(_ sender: Any) {
+        animateOutSubview()
+    }
+    @IBAction func previousMonthTouchedUpInside(_ sender: Any) {
+        calendarView.scrollToSegment(.previous)
+    }
+    @IBAction func nextMonthTouchedUpInside(_ sender: Any) {
+        calendarView.scrollToSegment(.next)
+    }
+}
+
+// MARK: JTCalendarView Extension
+extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCalendarViewDelegate {
+    
+    func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy MM dd"
+        
+        let startDate = Date()
+        let endDate = formatter.date(from: "2017 12 31")
+        let parameters = ConfigurationParameters(
+            startDate: startDate,
+            endDate: endDate!,
+            numberOfRows: 6, // Only 1, 2, 3, & 6 are allowed
+            calendar: Calendar.current,
+            generateInDates: .forAllMonths,
+            generateOutDates: .tillEndOfGrid,
+            firstDayOfWeek: .sunday)
+        return parameters
+    }
+    
+    func handleSelection(cell: JTAppleDayCellView?, cellState: CellState) {
+        let myCustomCell = cell as? CellView
+        
+        switch cellState.selectedPosition() {
+        case .full:
+            myCustomCell?.selectedView.isHidden = false
+            myCustomCell?.dayLabel.textColor = NewTripNameViewController.blackColor
+            myCustomCell?.selectedView.layer.backgroundColor = NewTripNameViewController.whiteColor.cgColor
+            myCustomCell?.selectedView.layer.cornerRadius =  ((myCustomCell?.selectedView.frame.height)!/2)
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.leftSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+        case .left:
+            myCustomCell?.selectedView.isHidden = false
+            myCustomCell?.dayLabel.textColor = NewTripNameViewController.blackColor
+            myCustomCell?.selectedView.layer.backgroundColor = NewTripNameViewController.whiteColor.cgColor
+            myCustomCell?.selectedView.layer.cornerRadius =  ((myCustomCell?.selectedView.frame.height)!/2)
+            myCustomCell?.rightSideConnector.isHidden = false
+            myCustomCell?.leftSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+            
+        case .right:
+            myCustomCell?.selectedView.isHidden = false
+            myCustomCell?.dayLabel.textColor = NewTripNameViewController.blackColor
+            myCustomCell?.selectedView.layer.backgroundColor = NewTripNameViewController.whiteColor.cgColor
+            myCustomCell?.selectedView.layer.cornerRadius =  ((myCustomCell?.selectedView.frame.height)!/2)
+            myCustomCell?.leftSideConnector.isHidden = false
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+            
+        case .middle:
+            myCustomCell?.selectedView.isHidden = true
+            myCustomCell?.middleConnector.isHidden = false
+            myCustomCell?.middleConnector.layer.backgroundColor = NewTripNameViewController.transparentWhiteColor
+            myCustomCell?.dayLabel.textColor = NewTripNameViewController.whiteColor
+            myCustomCell?.selectedView.layer.cornerRadius =  0
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.leftSideConnector.isHidden = true
+        default:
+            myCustomCell?.selectedView.isHidden = true
+            myCustomCell?.selectedView.layer.backgroundColor = NewTripNameViewController.transparentColor
+            myCustomCell?.leftSideConnector.isHidden = true
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+            myCustomCell?.dayLabel.textColor = NewTripNameViewController.whiteColor
+        }
+        if cellState.dateBelongsTo != .thisMonth {
+            myCustomCell?.dayLabel.textColor = NewTripNameViewController.darkGrayColor
+        }
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, willDisplayCell cell: JTAppleDayCellView, date: Date, cellState: CellState) {
+        let myCustomCell = cell as! CellView
+        myCustomCell.dayLabel.text = cellState.text
+        
+        handleSelection(cell: cell, cellState: cellState)
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleDayCellView?, cellState: CellState) {
+        
+        
+        if cellState.dateBelongsTo == .previousMonthWithinBoundary {
+            calendarView.scrollToSegment(.previous)
+        }
+        if cellState.dateBelongsTo == .followingMonthWithinBoundary {
+            calendarView.scrollToSegment(.next)
+        }
+        
+        //UNCOMMENT FOR TWO CLICK RANGE SELECTION
+        if firstDate != nil && firstDate! < date {
+            if calendarView.cellStatus(for: firstDate!)?.selectedPosition() == .full {
+                calendarView.selectDates(from: firstDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+                firstDate = nil
+            }
+        }
+        else {
+            firstDate = date
+        }
+        
+        //Spawn time of day selection
+        
+        let cellRow = cellState.row()
+        let cellCol = cellState.column()
+        var timeOfDayTable_X = cellCol * 50 + 39
+        let timeOfDayTable_Y = cellRow * 50 + 145 + 2 * (cellRow - 1)
+        if cellCol == 0 {
+            timeOfDayTable_X = (cellCol + 1) * 50 + 39
+        }
+        if cellCol == 6 {
+            timeOfDayTable_X = (cellCol - 1) * 50 + 39
+        }
+        
+        if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full {
+            
+            timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+            animateTimeOfDayTableIn()
+            
+        }
+        if cellState.selectedPosition() == .right {
+            
+            timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+            animateTimeOfDayTableIn()
+        }
+        
+        handleSelection(cell: cell, cellState: cellState)
+        
+        // Create array of selected dates
+        let selectedDates = calendarView.selectedDates as [NSDate]
+        getLengthOfSelectedAvailabilities()
+        
+        //Update trip preferences in dictionary
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["selected_dates"] = selectedDates
+        SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        mostRecentSelectedCellDate = date as NSDate
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleDayCellView?, cellState: CellState) {
+        handleSelection(cell: cell, cellState: cellState)
+        
+        if cellState.dateBelongsTo == .previousMonthWithinBoundary {
+            calendarView.scrollToSegment(.previous)
+        }
+        if cellState.dateBelongsTo == .followingMonthWithinBoundary {
+            calendarView.scrollToSegment(.next)
+        }
+        
+        // Create array of selected dates
+        let selectedDates = calendarView.selectedDates as [NSDate]
+        getLengthOfSelectedAvailabilities()
+        
+        //Update trip preferences in dictionary
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["selected_dates"] = selectedDates as [NSDate]
+        SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
+    // MARK custom func to get length of selected availability segments
+    func getLengthOfSelectedAvailabilities() {
+        let selectedDates = calendarView.selectedDates as [NSDate]
+        leftDates = []
+        rightDates = []
+        fullDates = []
+        lengthOfAvailabilitySegmentsArray = []
+        for date in selectedDates {
+            if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .left {
+                leftDates.append(date as Date)
+            }
+        }
+        for date in selectedDates {
+            if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .right {
+                rightDates.append(date as Date)
+            }
+        }
+        for date in selectedDates {
+            if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .full {
+                fullDates.append(date as Date)
+            }
+        }
+        if rightDates != [] {
+            for segment in 0...rightDates.count - 1 {
+                let segmentAvailability = rightDates[segment].timeIntervalSince(leftDates[segment]) / 86400 + 1
+                lengthOfAvailabilitySegmentsArray.append(Int(segmentAvailability))
+            }
+        } else {
+            lengthOfAvailabilitySegmentsArray = [1]
+        }
+    }
+    
+    // MARK: Calendar header functions
+    // Sets the height of your header
+    func calendar(_ calendar: JTAppleCalendarView, sectionHeaderSizeFor range: (start: Date, end: Date), belongingTo month: Int) -> CGSize {
+        return CGSize(width: 349, height: 50)
+    }
+    // This setups the display of your header
+    func calendar(_ calendar: JTAppleCalendarView, willDisplaySectionHeader header: JTAppleHeaderView, range: (start: Date, end: Date), identifier: String) {
+        let headerCell = (header as! monthHeaderView)
+        
+        // Create Year String
+        let yearDateFormatter = DateFormatter()
+        yearDateFormatter.dateFormat = "yyyy"
+        let YearHeader = yearDateFormatter.string(from: range.start)
+        
+        //Create Month String
+        let monthDateFormatter = DateFormatter()
+        monthDateFormatter.dateFormat = "MM"
+        let MonthHeader = monthDateFormatter.string(from: range.start)
+        
+        // Update header
+        if MonthHeader == "01" {
+            headerCell.monthLabel.text = "January " + YearHeader
+        } else if MonthHeader == "02" {
+            headerCell.monthLabel.text = "February " + YearHeader
+        } else if MonthHeader == "03" {
+            headerCell.monthLabel.text = "March " + YearHeader
+        } else if MonthHeader == "04" {
+            headerCell.monthLabel.text = "April " + YearHeader
+        } else if MonthHeader == "05" {
+            headerCell.monthLabel.text = "May " + YearHeader
+        } else if MonthHeader == "06" {
+            headerCell.monthLabel.text = "June " + YearHeader
+        } else if MonthHeader == "07" {
+            headerCell.monthLabel.text = "July " + YearHeader
+        } else if MonthHeader == "08" {
+            headerCell.monthLabel.text = "August " + YearHeader
+        } else if MonthHeader == "09" {
+            headerCell.monthLabel.text = "September " + YearHeader
+        } else if MonthHeader == "10" {
+            headerCell.monthLabel.text = "October " + YearHeader
+        } else if MonthHeader == "11" {
+            headerCell.monthLabel.text = "November " + YearHeader
+        } else if MonthHeader == "12" {
+            headerCell.monthLabel.text = "December " + YearHeader
+        }
+    }
+    
+    func animateTimeOfDayTableIn(){
+        timeOfDayTableView.isHidden = false
+        timeOfDayTableView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        timeOfDayTableView.alpha = 0
+        
+        UIView.animate(withDuration: 0.4) {
+            self.popupBackgroundView.isHidden = false
+            self.timeOfDayTableView.alpha = 1
+            self.timeOfDayTableView.transform = CGAffineTransform.identity
+        }
+    }
+    
+    func dismissTimeOfDayTableOut() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.timeOfDayTableView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.timeOfDayTableView.alpha = 0
+            let selectedRows = self.timeOfDayTableView.indexPathsForSelectedRows
+            self.popupBackgroundView.isHidden = true
+            for rowIndex in selectedRows! {
+                self.timeOfDayTableView.deselectRow(at: rowIndex, animated: false)
+            }
+            if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
+                self.subviewDoneButton.isHidden = false
+            }
+        }) { (Success:Bool) in
+            self.timeOfDayTableView.isHidden = true
+                UIView.animate(withDuration: 0.2) {
+                self.popupSubview.center = CGPoint(x: 188, y: 460)
+                }
+        }
     }
 }

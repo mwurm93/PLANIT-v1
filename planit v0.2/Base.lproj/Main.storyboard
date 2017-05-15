@@ -2172,7 +2172,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Heu-0f-mzk">
-                                                    <rect key="frame" x="286" y="28" width="16" height="22"/>
+                                                    <rect key="frame" x="258" y="28" width="44" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" image="change"/>
                                                     <connections>
@@ -3289,22 +3289,22 @@
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Traveling to..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bzK-Us-f1Q">
-                                <rect key="frame" x="129" y="109" width="114" height="48"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="To" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bzK-Us-f1Q">
+                                <rect key="frame" x="243" y="90" width="114" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Leaving from..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gg9-MJ-Hja">
-                                <rect key="frame" x="25" y="109" width="103" height="48"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="From" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gg9-MJ-Hja">
+                                <rect key="frame" x="146" y="90" width="103" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Departing on..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NRb-oR-PrM">
-                                <rect key="frame" x="250" y="109" width="101" height="48"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Departing" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NRb-oR-PrM">
+                                <rect key="frame" x="27" y="90" width="101" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -3345,7 +3345,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mTZ-MD-B0r">
-                                <rect key="frame" x="255" y="352" width="91" height="47"/>
+                                <rect key="frame" x="255" y="284" width="91" height="47"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <state key="normal" title="Search &gt;">
@@ -3356,7 +3356,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Airport" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yq1-vf-tnF">
-                                <rect key="frame" x="43" y="165" width="67" height="30"/>
+                                <rect key="frame" x="164" y="136" width="67" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -3368,7 +3368,7 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Airport" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zmQ-QG-QNU">
-                                <rect key="frame" x="152" y="165" width="67" height="30"/>
+                                <rect key="frame" x="266" y="136" width="67" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -3379,41 +3379,44 @@
                                     <action selector="homeAirportFieldEditingChanged:" destination="Cpd-I2-Ulf" eventType="editingChanged" id="cEQ-Kf-XAu"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Date" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="EIX-Ql-7u6">
-                                <rect key="frame" x="266" y="165" width="68" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Date" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EIX-Ql-7u6">
+                                <rect key="frame" x="29" y="136" width="97" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" returnKeyType="continue" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
+                                    <action selector="departureDateTextFieldTouchedDown:" destination="nd6-3o-Pa6" eventType="touchDown" id="wac-RB-A9w"/>
+                                    <action selector="departureDateTextFieldTouchedUpInside:" destination="nd6-3o-Pa6" eventType="touchUpInside" id="sFC-ef-AXk"/>
+                                    <action selector="departureDateTextFieldeEditingDidBegin:" destination="nd6-3o-Pa6" eventType="editingDidBegin" id="HJx-uY-8PY"/>
                                     <action selector="homeAirportEditingChanged:" destination="E8d-J0-NPc" eventType="editingChanged" id="dKp-Y2-oMK"/>
                                     <action selector="homeAirportFieldEditingChanged:" destination="Cpd-I2-Ulf" eventType="editingChanged" id="d12-G2-TRs"/>
                                 </connections>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Traveling to..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="96O-hg-r7x">
-                                <rect key="frame" x="129" y="230" width="114" height="48"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="To" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="96O-hg-r7x">
+                                <rect key="frame" x="243" y="176" width="114" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Leaving from..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rvL-WI-UBu">
-                                <rect key="frame" x="25" y="230" width="103" height="48"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="From" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rvL-WI-UBu">
+                                <rect key="frame" x="146" y="176" width="103" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Returning on..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BR5-jU-nw2">
-                                <rect key="frame" x="250" y="230" width="101" height="48"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Returning" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BR5-jU-nw2">
+                                <rect key="frame" x="27" y="176" width="101" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Airport" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="06O-yX-mtU">
-                                <rect key="frame" x="43" y="286" width="67" height="30"/>
+                                <rect key="frame" x="164" y="222" width="67" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -3425,7 +3428,7 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Airport" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="gg3-Jz-s8B">
-                                <rect key="frame" x="152" y="286" width="67" height="30"/>
+                                <rect key="frame" x="266" y="222" width="67" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -3436,8 +3439,8 @@
                                     <action selector="homeAirportFieldEditingChanged:" destination="Cpd-I2-Ulf" eventType="editingChanged" id="cPm-eo-C1a"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Date" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="h5r-ED-MIn">
-                                <rect key="frame" x="266" y="286" width="68" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Date" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="h5r-ED-MIn">
+                                <rect key="frame" x="29" y="222" width="97" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -3446,25 +3449,120 @@
                                 <connections>
                                     <action selector="homeAirportEditingChanged:" destination="E8d-J0-NPc" eventType="editingChanged" id="Kzo-Hy-Ruu"/>
                                     <action selector="homeAirportFieldEditingChanged:" destination="Cpd-I2-Ulf" eventType="editingChanged" id="Otx-sZ-mO2"/>
+                                    <action selector="returnDateTextFieldEditingDidBegin:" destination="nd6-3o-Pa6" eventType="editingDidBegin" id="gna-xj-SIE"/>
+                                    <action selector="returnDateTextFieldTouchedDown:" destination="nd6-3o-Pa6" eventType="touchDown" id="Plf-D4-dMB"/>
                                 </connections>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="calendarView" destination="0aI-Ke-5ac" id="FZi-vY-hzb"/>
                         <outlet property="departureDate" destination="EIX-Ql-7u6" id="WsS-Ds-i9H"/>
                         <outlet property="departureDestination" destination="zmQ-QG-QNU" id="HzE-t8-Csr"/>
                         <outlet property="departureOrigin" destination="Yq1-vf-tnF" id="ndp-Or-EUW"/>
+                        <outlet property="nextMonth" destination="nbV-l7-ydR" id="xXI-hd-Cit"/>
+                        <outlet property="popupBackgroundView" destination="rTJ-RV-14f" id="M5Y-kB-Dy9"/>
+                        <outlet property="popupSubview" destination="Jo9-GI-WSk" id="Vv0-Wj-7e3"/>
+                        <outlet property="previousMonth" destination="V5O-L6-0Tu" id="LZE-yv-tOe"/>
                         <outlet property="returnDate" destination="h5r-ED-MIn" id="Jip-8Y-f8p"/>
                         <outlet property="returnDateLabel" destination="BR5-jU-nw2" id="M3e-5K-77i"/>
                         <outlet property="returnDestination" destination="gg3-Jz-s8B" id="dpe-oh-juH"/>
                         <outlet property="returnDestinationLabel" destination="96O-hg-r7x" id="JRY-ZS-yAq"/>
                         <outlet property="returnOrigin" destination="06O-yX-mtU" id="dMa-jT-7k7"/>
                         <outlet property="returnOriginLabel" destination="rvL-WI-UBu" id="gXm-CY-aZF"/>
+                        <outlet property="subviewDoneButton" destination="UBc-KI-2p7" id="Bf5-e2-rde"/>
+                        <outlet property="timeOfDayTableView" destination="jz1-85-JKq" id="Rzw-oG-yVq"/>
                         <outlet property="underline" destination="WAA-Zm-dMD" id="INj-Gs-xBW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DCL-2P-jkU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="Jo9-GI-WSk">
+                    <rect key="frame" x="0.0" y="0.0" width="350" height="403"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0aI-Ke-5ac" customClass="JTAppleCalendarView" customModule="JTAppleCalendar">
+                            <rect key="frame" x="0.0" y="-1" width="350" height="374"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nbV-l7-ydR">
+                            <rect key="frame" x="290" y="-1" width="60" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                            <state key="normal" title="&gt;">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="nextMonthTouchedUpInside:" destination="nd6-3o-Pa6" eventType="touchUpInside" id="Hqq-gY-nQq"/>
+                                <action selector="nextMonthTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="XqC-a5-zCg"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V5O-L6-0Tu">
+                            <rect key="frame" x="0.0" y="-1" width="60" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                            <state key="normal" title="&lt;">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="previousMonthTouchedUpInside:" destination="nd6-3o-Pa6" eventType="touchUpInside" id="M2L-7s-TTV"/>
+                                <action selector="previousMonthTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="t8s-zi-W05"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rTJ-RV-14f">
+                            <rect key="frame" x="0.0" y="4" width="350" height="403"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.22209225169999999" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="20" sectionHeaderHeight="20" sectionFooterHeight="20" translatesAutoresizingMaskIntoConstraints="NO" id="jz1-85-JKq">
+                            <rect key="frame" x="83" y="58" width="158" height="140"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <prototypes>
+                                <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="timeOfDayPrototypeCell" rowHeight="20" id="L2Z-ws-Ope" customClass="timeOfDayTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="20" width="158" height="20"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="L2Z-ws-Ope" id="lTk-a0-ctB">
+                                        <rect key="frame" x="0.0" y="0.0" width="158" height="19.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Early morning (12am-5am)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iy2-gU-qHy">
+                                                <rect key="frame" x="0.0" y="0.0" width="158" height="20"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </tableViewCellContentView>
+                                    <color key="backgroundColor" white="1" alpha="0.94999999999999996" colorSpace="calibratedWhite"/>
+                                    <connections>
+                                        <outlet property="timeOfDayTableLabel" destination="iy2-gU-qHy" id="7yp-PK-PkS"/>
+                                    </connections>
+                                </tableViewCell>
+                            </prototypes>
+                            <connections>
+                                <outlet property="dataSource" destination="nd6-3o-Pa6" id="MvT-Dn-uH5"/>
+                                <outlet property="delegate" destination="nd6-3o-Pa6" id="Xcw-9y-ZmX"/>
+                            </connections>
+                        </tableView>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UBc-KI-2p7">
+                            <rect key="frame" x="290" y="367" width="60" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Done">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="subviewDoneButtonTouchedUpInside:" destination="nd6-3o-Pa6" eventType="touchUpInside" id="OOk-Aj-2cv"/>
+                                <action selector="subviewDoneButtonTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="d1q-8h-Hkg"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
             </objects>
             <point key="canvasLocation" x="845.60000000000002" y="1795.9520239880062"/>
         </scene>
@@ -4187,8 +4285,8 @@
         <segue reference="isD-dZ-KwN"/>
         <segue reference="R8r-yB-rJ1"/>
         <segue reference="lra-AY-k3U"/>
+        <segue reference="RAo-Nt-Dp1"/>
         <segue reference="2ah-17-HDw"/>
-        <segue reference="1VF-PM-MLD"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
