@@ -3210,17 +3210,25 @@
                                     <segue destination="tCq-uR-8sF" kind="show" id="JMU-Ib-LZQ"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xke-GL-mzw">
+                                <rect key="frame" x="301" y="620" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="paint bucket"/>
+                                <connections>
+                                    <action selector="modeButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="NEI-50-rEC"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uyj-s2-4gI">
-                                <rect key="frame" x="202" y="620" width="100" height="30"/>
+                                <rect key="frame" x="172" y="620" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.69709708121827418" green="0.37376992596807707" blue="0.39410270692104277" alpha="0.65000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Been there"/>
+                                <state key="normal" title="I've been"/>
                                 <connections>
                                     <action selector="beenThereButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="AxS-xO-gOM"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Ie-ki-88j">
-                                <rect key="frame" x="70" y="620" width="100" height="30"/>
+                                <rect key="frame" x="40" y="620" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.00077266624248039132" green="0.45897446065989855" blue="0.06354961154945972" alpha="0.64752782534246578" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Bucket list"/>
@@ -3247,6 +3255,7 @@
                         <outlet property="backgroundView" destination="FNn-LX-ZiN" id="tbT-uQ-6kk"/>
                         <outlet property="beenThereButton" destination="Uyj-s2-4gI" id="aJB-JA-0iu"/>
                         <outlet property="bucketListButton" destination="9Ie-ki-88j" id="yI6-I6-EWz"/>
+                        <outlet property="modeButton" destination="Xke-GL-mzw" id="Bnz-w0-6Yv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xhc-Kd-3pA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3886,6 +3895,7 @@
         <image name="map" width="256" height="256"/>
         <image name="messages transparent" width="256" height="256"/>
         <image name="moon" width="300" height="300"/>
+        <image name="paint bucket" width="718" height="678"/>
         <image name="person icon" width="1200" height="1200"/>
         <image name="settings" width="256" height="256"/>
         <image name="three_people" width="256" height="256"/>
@@ -3895,9 +3905,9 @@
         <segue reference="2ah-17-HDw"/>
         <segue reference="qH0-AO-962"/>
         <segue reference="isD-dZ-KwN"/>
-        <segue reference="R8r-yB-rJ1"/>
-        <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="anE-cP-H4U"/>
         <segue reference="4hW-EN-T1K"/>
+        <segue reference="RAo-Nt-Dp1"/>
         <segue reference="wiQ-22-XVg"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
