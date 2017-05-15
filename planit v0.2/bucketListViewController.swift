@@ -301,10 +301,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             
             
             addAnnotationWithTitle(title: selectedObject.userObject as! String, subtitle: subtitle, loc: loc)
-        } else if let selectedObject = selectedObject as? MaplyScreenMarker {
-            addAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
         }
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
             self.theViewC?.clearAnnotations()
         })
@@ -315,32 +312,36 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         if mode == "fill" {
             handleSelection(selectedObject: selectedObj)
         } else if mode == "pin" {
-        
-        let pinLocationSphere = [coord]
-        let pinLocationCylinder = [coord]
-        
-        // convert capitals into spheres. Let's do it functional!
-        let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
-            let sphere = MaplyShapeSphere()
-            sphere.center = location
-            sphere.radius = 0.007
-            sphere.height = 0.022
-            return sphere
-        }
-        let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
-            let cylinder = MaplyShapeCylinder()
-            cylinder.baseCenter = location
-            cylinder.baseHeight = 0
-            cylinder.radius = 0.003
-            cylinder.height = 0.015
-            return cylinder
+            if let selectedObj = selectedObj as? MaplyMarker {
+                addAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObj.loc)
+            } else {
+            let pinLocationSphere = [coord]
+            let pinLocationCylinder = [coord]
+            // convert capitals into spheres. Let's do it functional!
+            let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
+                let sphere = MaplyShapeSphere()
+                sphere.center = location
+                sphere.radius = 0.007
+                sphere.height = 0.022
+                sphere.selectable = true
+                return sphere
+            }
+            let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
+                let cylinder = MaplyShapeCylinder()
+                cylinder.baseCenter = location
+                cylinder.baseHeight = 0
+                cylinder.radius = 0.003
+                cylinder.height = 0.015
+                cylinder.selectable = true
+                return cylinder
         }
         
         self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: selectionColor])
         self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)])
         }
+        }
     }
-    
+        
     private func addAnnotationWithTitle(title: String, subtitle: String, loc:MaplyCoordinate) {
         theViewC?.clearAnnotations()
         
@@ -373,31 +374,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             }
         }
     }
-    
-    private func addSpheres() {
-        let capitals = [MaplyCoordinateMakeWithDegrees(-77.036667, 38.895111),
-                        MaplyCoordinateMakeWithDegrees(120.966667, 14.583333),
-                        MaplyCoordinateMakeWithDegrees(55.75, 37.616667),
-                        MaplyCoordinateMakeWithDegrees(-0.1275, 51.507222),
-                        MaplyCoordinateMakeWithDegrees(-66.916667, 10.5),
-                        MaplyCoordinateMakeWithDegrees(139.6917, 35.689506),
-                        MaplyCoordinateMakeWithDegrees(166.666667, -77.85),
-                        MaplyCoordinateMakeWithDegrees(-58.383333, -34.6),
-                        MaplyCoordinateMakeWithDegrees(-74.075833, 4.598056),
-                        MaplyCoordinateMakeWithDegrees(-79.516667, 8.983333)]
-        
-        // convert capitals into spheres. Let's do it functional!
-        let spheres = capitals.map { capital -> MaplyShapeSphere in
-            let sphere = MaplyShapeSphere()
-            sphere.center = capital
-            sphere.radius = 0.01
-            return sphere
-        }
-        
-        self.theViewC?.addShapes(spheres, desc: [
-            kMaplyColor: UIColor(red: 0.75, green: 0.0, blue: 0.0, alpha: 0.75)])
-    }
-
     
     //MARK: Actions
     @IBAction func bucketListButtonTouchedUpInside(_ sender: Any) {
