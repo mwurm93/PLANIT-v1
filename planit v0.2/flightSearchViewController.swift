@@ -31,9 +31,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     @IBOutlet var popupSubview: UIView!
     
     //CalendarView vars
-    var firstDate: Date?
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
-    
     var leftDates = [Date]()
     var rightDates = [Date]()
     var fullDates = [Date]()
@@ -56,12 +54,12 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         returnDateLabel.isHidden = false
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-        let departureDateTimeArray = SavedPreferencesForTrip["origin_departure_times"] as! NSDictionary
-        let returnDateTimeArray = SavedPreferencesForTrip["return_departure_times"] as! NSDictionary
+        leftDateTimeArrays = SavedPreferencesForTrip["origin_departure_times"] as! NSDictionary as! NSMutableDictionary
+        rightDateTimeArrays = SavedPreferencesForTrip["return_departure_times"] as! NSDictionary as! NSMutableDictionary
         let topTrips = SavedPreferencesForTrip["top_trips"] as! [String]
         
-        let departureDictionary = departureDateTimeArray as Dictionary
-        let returnDictionary = returnDateTimeArray as Dictionary
+        let departureDictionary = leftDateTimeArrays as Dictionary
+        let returnDictionary = rightDateTimeArrays as Dictionary
         let departureKeys = Array(departureDictionary.keys)
         let returnKeys = Array(returnDictionary.keys)
         
@@ -155,8 +153,8 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         calendarView.registerHeaderView(xibFileNames: ["monthHeaderView"])
         
         // Calendar setup delegate and datasource
-        calendarView.dataSource = self as? JTAppleCalendarViewDataSource
-        calendarView.delegate = self as? JTAppleCalendarViewDelegate
+        calendarView.dataSource = self
+        calendarView.delegate = self
         calendarView.registerCellViewXib(file: "CellView")
         calendarView.allowsMultipleSelection  = true
         calendarView.rangeSelectionWillBeUsed = true
@@ -492,18 +490,20 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         }
         
         //UNCOMMENT FOR TWO CLICK RANGE SELECTION
-        if firstDate != nil && firstDate! < date {
-            if calendarView.cellStatus(for: firstDate!)?.selectedPosition() == .full {
-                calendarView.selectDates(from: firstDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-                firstDate = nil
+        let leftKeys = leftDateTimeArrays.allKeys
+        let rightKeys = rightDateTimeArrays.allKeys
+        if leftKeys.count == 1 && rightKeys.count == 0 {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            let leftDate = dateFormatter.date(from: leftKeys[0] as! String)
+            if date > leftDate! {
+                calendarView.selectDates(from: leftDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+            } else {
+                calendarView.deselectAllDates(triggerSelectionDelegate: false)
+                rightDateTimeArrays.removeAllObjects()
+                leftDateTimeArrays.removeAllObjects()
+                calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
             }
-        }
-        else {
-            calendarView.deselectAllDates(triggerSelectionDelegate: false)
-            rightDateTimeArrays.removeAllObjects()
-            leftDateTimeArrays.removeAllObjects()
-            calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-            firstDate = date
         }
         
         //Spawn time of day selection
@@ -553,6 +553,7 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         
         //START COPY
         // Create array of selected dates
+        calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
         let selectedDates = calendarView.selectedDates as [NSDate]
         
         if selectedDates.count > 0 {
@@ -567,7 +568,7 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
             }
             if rightMostDate == nil {
                 rightMostDate = selectedDate as Date
-            } else if rightMostDate! > selectedDate as Date {
+            } else if selectedDate as Date > rightMostDate! {
                 rightMostDate = selectedDate as Date
             }
         }
@@ -583,22 +584,24 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         if cellCol == 6 {
             timeOfDayTable_X = (cellCol - 1) * 50 + 39
         }
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yyyy"
-        let leftMostDateAsString = formatter.string (from: leftMostDate!)
-        let rightMostDateAsString = formatter.string (from: rightMostDate!)
-        if leftDateTimeArrays[leftMostDateAsString] == nil {
-            mostRecentSelectedCellDate = leftMostDate! as NSDate
-            timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
-            animateTimeOfDayTableIn()
-
-        }
-        if rightDateTimeArrays[rightMostDateAsString] == nil {
-            mostRecentSelectedCellDate = rightMostDate! as NSDate
-            timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
-            animateTimeOfDayTableIn()
-        }
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            let leftMostDateAsString = formatter.string (from: leftMostDate!)
+            let rightMostDateAsString = formatter.string (from: rightMostDate!)
+            if leftDateTimeArrays[leftMostDateAsString] == nil {
+                mostRecentSelectedCellDate = leftMostDate! as NSDate
+                leftDateTimeArrays.removeAllObjects()
+                timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+                animateTimeOfDayTableIn()
+                
+            }
+            
+            if rightDateTimeArrays[rightMostDateAsString] == nil {
+                mostRecentSelectedCellDate = rightMostDate! as NSDate
+                rightDateTimeArrays.removeAllObjects()
+                timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+                animateTimeOfDayTableIn()
+            }
         //END COPY
         
         }
