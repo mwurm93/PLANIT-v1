@@ -1724,6 +1724,12 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
     
     func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleDayCellView?, cellState: CellState) {
         
+        if leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1 {
+            calendarView.deselectAllDates(triggerSelectionDelegate: false)
+            rightDateTimeArrays.removeAllObjects()
+            leftDateTimeArrays.removeAllObjects()
+            calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+        }
         
         if cellState.dateBelongsTo == .previousMonthWithinBoundary {
             calendarView.scrollToSegment(.previous)
@@ -1740,11 +1746,14 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             }
         }
         else {
+            calendarView.deselectAllDates(triggerSelectionDelegate: false)
+            rightDateTimeArrays.removeAllObjects()
+            leftDateTimeArrays.removeAllObjects()
+            calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
             firstDate = date
         }
         
         //Spawn time of day selection
-        
         let cellRow = cellState.row()
         let cellCol = cellState.column()
         var timeOfDayTable_X = cellCol * 50 + 39
@@ -1757,13 +1766,10 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         }
         
         if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full {
-            
             timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
             animateTimeOfDayTableIn()
-            
         }
         if cellState.selectedPosition() == .right {
-            
             timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
             animateTimeOfDayTableIn()
         }
@@ -1780,13 +1786,10 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
         //Save
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-        
         mostRecentSelectedCellDate = date as NSDate
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleDayCellView?, cellState: CellState) {
-        handleSelection(cell: cell, cellState: cellState)
-        
         if cellState.dateBelongsTo == .previousMonthWithinBoundary {
             calendarView.scrollToSegment(.previous)
         }
@@ -1794,8 +1797,59 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             calendarView.scrollToSegment(.next)
         }
         
+        //START COPY
         // Create array of selected dates
         let selectedDates = calendarView.selectedDates as [NSDate]
+        
+        if selectedDates.count > 0 {
+            
+            var leftMostDate: Date?
+            var rightMostDate: Date?
+            for selectedDate in selectedDates {
+                if leftMostDate == nil {
+                    leftMostDate = selectedDate as Date
+                } else if leftMostDate! > selectedDate as Date {
+                    leftMostDate = selectedDate as Date
+                }
+                if rightMostDate == nil {
+                    rightMostDate = selectedDate as Date
+                } else if rightMostDate! > selectedDate as Date {
+                    rightMostDate = selectedDate as Date
+                }
+            }
+            
+            //Spawn time of day selection
+            let cellRow = cellState.row()
+            let cellCol = cellState.column()
+            var timeOfDayTable_X = cellCol * 50 + 39
+            let timeOfDayTable_Y = cellRow * 50 + 145 + 2 * (cellRow - 1)
+            if cellCol == 0 {
+                timeOfDayTable_X = (cellCol + 1) * 50 + 39
+            }
+            if cellCol == 6 {
+                timeOfDayTable_X = (cellCol - 1) * 50 + 39
+            }
+            
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            let leftMostDateAsString = formatter.string (from: leftMostDate!)
+            let rightMostDateAsString = formatter.string (from: rightMostDate!)
+            if leftDateTimeArrays[leftMostDateAsString] == nil {
+                mostRecentSelectedCellDate = leftMostDate! as NSDate
+                timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+                animateTimeOfDayTableIn()
+                
+            }
+            if rightDateTimeArrays[rightMostDateAsString] == nil {
+                mostRecentSelectedCellDate = rightMostDate! as NSDate
+                timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+                animateTimeOfDayTableIn()
+            }
+            //END COPY
+            
+        }
+        
+        handleSelection(cell: cell, cellState: cellState)
         getLengthOfSelectedAvailabilities()
         
         //Update trip preferences in dictionary
@@ -1804,7 +1858,6 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
         //Save
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-        
     }
     
     // MARK custom func to get length of selected availability segments
@@ -1814,28 +1867,32 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         rightDates = []
         fullDates = []
         lengthOfAvailabilitySegmentsArray = []
-        for date in selectedDates {
-            if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .left {
-                leftDates.append(date as Date)
+        if selectedDates.count > 0 {
+            for date in selectedDates {
+                if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .left {
+                    leftDates.append(date as Date)
+                }
             }
-        }
-        for date in selectedDates {
-            if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .right {
-                rightDates.append(date as Date)
+            for date in selectedDates {
+                if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .right {
+                    rightDates.append(date as Date)
+                }
             }
-        }
-        for date in selectedDates {
-            if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .full {
-                fullDates.append(date as Date)
+            for date in selectedDates {
+                if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .full {
+                    fullDates.append(date as Date)
+                }
             }
-        }
-        if rightDates != [] {
-            for segment in 0...rightDates.count - 1 {
-                let segmentAvailability = rightDates[segment].timeIntervalSince(leftDates[segment]) / 86400 + 1
-                lengthOfAvailabilitySegmentsArray.append(Int(segmentAvailability))
+            if rightDates != [] {
+                for segment in 0...rightDates.count - 1 {
+                    let segmentAvailability = rightDates[segment].timeIntervalSince(leftDates[segment]) / 86400 + 1
+                    lengthOfAvailabilitySegmentsArray.append(Int(segmentAvailability))
+                }
+            } else {
+                lengthOfAvailabilitySegmentsArray = [1]
             }
         } else {
-            lengthOfAvailabilitySegmentsArray = [1]
+            lengthOfAvailabilitySegmentsArray = [0]
         }
     }
     

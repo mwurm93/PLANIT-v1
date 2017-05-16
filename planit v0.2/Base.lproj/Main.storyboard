@@ -3363,6 +3363,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" returnKeyType="continue" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
+                                    <action selector="departureOriginEditingChanged:" destination="nd6-3o-Pa6" eventType="editingChanged" id="5nL-cJ-9j5"/>
                                     <action selector="homeAirportEditingChanged:" destination="E8d-J0-NPc" eventType="editingChanged" id="e2P-BM-6HU"/>
                                     <action selector="homeAirportFieldEditingChanged:" destination="Cpd-I2-Ulf" eventType="editingChanged" id="1oe-Y1-AnL"/>
                                 </connections>
@@ -4281,7 +4282,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="wiQ-22-XVg"/>
-        <segue reference="qH0-AO-962"/>
+        <segue reference="Fe3-1x-Rbs"/>
         <segue reference="isD-dZ-KwN"/>
         <segue reference="R8r-yB-rJ1"/>
         <segue reference="lra-AY-k3U"/>
