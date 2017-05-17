@@ -1721,11 +1721,11 @@
                     <rect key="frame" x="0.0" y="0.0" width="350" height="468"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="PgE-34-gXv" customClass="JTAppleCalendarView" customModule="JTAppleCalendar">
-                            <rect key="frame" x="0.0" y="47" width="350" height="374"/>
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="PgE-34-gXv" customClass="JTAppleCalendarView" customModule="JTAppleCalendar">
+                            <rect key="frame" x="0.0" y="70" width="350" height="351"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="374" id="bQu-lC-c6Q"/>
+                                <constraint firstAttribute="height" constant="347" id="bQu-lC-c6Q"/>
                             </constraints>
                             <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="spw-dF-9jW">
                                 <size key="itemSize" width="50" height="50"/>
@@ -1880,47 +1880,6 @@
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f2T-RU-qgg">
-                            <rect key="frame" x="95" y="273" width="160" height="22"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <state key="normal" title="Solo for now">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="goingSoloButtonTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="o1c-VY-cqt"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uoZ-1l-yxx">
-                            <rect key="frame" x="101" y="173" width="148" height="22"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <state key="normal" title="Add from contacts">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="addFromContacts:" destination="E8d-J0-NPc" eventType="touchUpInside" id="nHy-Bt-1yC"/>
-                            </connections>
-                        </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Where are you leaving from?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xz9-BD-RIc">
-                            <rect key="frame" x="79" y="70" width="191" height="48"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Home airport" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="sXI-YY-Fjo">
-                            <rect key="frame" x="54" y="150" width="242" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" returnKeyType="continue" enablesReturnKeyAutomatically="YES"/>
-                            <connections>
-                                <action selector="homeAirportEditingChanged:" destination="E8d-J0-NPc" eventType="editingChanged" id="P8w-Ux-ewX"/>
-                                <action selector="homeAirportFieldEditingChanged:" destination="Cpd-I2-Ulf" eventType="editingChanged" id="Uwb-ca-9KV"/>
-                            </connections>
-                        </textField>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oEm-py-f71">
                             <rect key="frame" x="152" y="7" width="45" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2065,10 +2024,51 @@
                             <rect key="frame" x="79" y="158" width="192" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </slider>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f2T-RU-qgg">
+                            <rect key="frame" x="120" y="270" width="109" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Solo for now">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="goingSoloButtonTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="o1c-VY-cqt"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uoZ-1l-yxx">
+                            <rect key="frame" x="101" y="173" width="148" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Add from contacts">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="addFromContacts:" destination="E8d-J0-NPc" eventType="touchUpInside" id="nHy-Bt-1yC"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Where are you leaving from?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xz9-BD-RIc">
+                            <rect key="frame" x="79" y="70" width="191" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Home airport" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="sXI-YY-Fjo">
+                            <rect key="frame" x="54" y="150" width="242" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" returnKeyType="continue" enablesReturnKeyAutomatically="YES"/>
+                            <connections>
+                                <action selector="homeAirportEditingChanged:" destination="E8d-J0-NPc" eventType="editingChanged" id="P8w-Ux-ewX"/>
+                                <action selector="homeAirportFieldEditingChanged:" destination="Cpd-I2-Ulf" eventType="editingChanged" id="Uwb-ca-9KV"/>
+                            </connections>
+                        </textField>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="PgE-34-gXv" firstAttribute="top" secondItem="N4B-s3-vY2" secondAttribute="top" constant="47" id="Nwb-7u-DI5"/>
+                        <constraint firstItem="PgE-34-gXv" firstAttribute="top" secondItem="N4B-s3-vY2" secondAttribute="top" constant="70" id="Nwb-7u-DI5"/>
                         <constraint firstAttribute="trailing" secondItem="PgE-34-gXv" secondAttribute="trailing" id="U9j-Ve-H2L"/>
                         <constraint firstItem="PgE-34-gXv" firstAttribute="leading" secondItem="N4B-s3-vY2" secondAttribute="leading" id="qcU-aL-Hji"/>
                     </constraints>
@@ -3412,8 +3412,6 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" returnKeyType="continue" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <action selector="departureDateTextFieldTouchedDown:" destination="nd6-3o-Pa6" eventType="touchDown" id="wac-RB-A9w"/>
-                                    <action selector="departureDateTextFieldTouchedUpInside:" destination="nd6-3o-Pa6" eventType="touchUpInside" id="sFC-ef-AXk"/>
-                                    <action selector="departureDateTextFieldeEditingDidBegin:" destination="nd6-3o-Pa6" eventType="editingDidBegin" id="HJx-uY-8PY"/>
                                     <action selector="homeAirportEditingChanged:" destination="E8d-J0-NPc" eventType="editingChanged" id="dKp-Y2-oMK"/>
                                     <action selector="homeAirportFieldEditingChanged:" destination="Cpd-I2-Ulf" eventType="editingChanged" id="d12-G2-TRs"/>
                                 </connections>
@@ -3473,7 +3471,6 @@
                                 <connections>
                                     <action selector="homeAirportEditingChanged:" destination="E8d-J0-NPc" eventType="editingChanged" id="Kzo-Hy-Ruu"/>
                                     <action selector="homeAirportFieldEditingChanged:" destination="Cpd-I2-Ulf" eventType="editingChanged" id="Otx-sZ-mO2"/>
-                                    <action selector="returnDateTextFieldEditingDidBegin:" destination="nd6-3o-Pa6" eventType="editingDidBegin" id="gna-xj-SIE"/>
                                     <action selector="returnDateTextFieldTouchedDown:" destination="nd6-3o-Pa6" eventType="touchDown" id="Plf-D4-dMB"/>
                                 </connections>
                             </textField>
@@ -4451,6 +4448,7 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="RAo-Nt-Dp1"/>
         <segue reference="lra-AY-k3U"/>
         <segue reference="R8r-yB-rJ1"/>
         <segue reference="8MA-wa-IqS"/>
@@ -4458,7 +4456,6 @@
         <segue reference="Fe3-1x-Rbs"/>
         <segue reference="2ah-17-HDw"/>
         <segue reference="1Xg-d5-Dmi"/>
-        <segue reference="RAo-Nt-Dp1"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

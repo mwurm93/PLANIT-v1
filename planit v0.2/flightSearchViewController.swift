@@ -168,7 +168,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
             if selectedDatesValue.count > 0 {
                 self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
-                calendarView.scrollToDate(selectedDatesValue[0])
+                calendarView.scrollToDate(selectedDatesValue[0], animateScroll: false)
             }
         }
     }
@@ -723,7 +723,7 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
     // MARK: Calendar header functions
     // Sets the height of your header
     func calendarSizeForMonths(_ calendar: JTAppleCalendarView?) -> MonthSize? {
-        return MonthSize(defaultSize: 349)
+        return MonthSize(defaultSize: 47)
     }
     
     // This setups the display of your header

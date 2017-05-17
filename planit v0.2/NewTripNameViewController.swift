@@ -204,8 +204,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         
         calendarView.register(UINib(nibName: "monthHeaderView", bundle: nil), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "monthHeaderView")
         
-
-        
         // Calendar setup delegate and datasource
         calendarView.calendarDataSource = self
         calendarView.calendarDelegate = self
@@ -227,7 +225,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
             if selectedDatesValue.count > 0 {
                 self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
-                    calendarView.scrollToDate(selectedDatesValue[0])
+                    calendarView.scrollToDate(selectedDatesValue[0], animateScroll: false)
             }
         }
         
@@ -1295,6 +1293,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         noSpecificDatesButton.isHidden = true
         questionLabel.isHidden = true
         calendarView.isHidden = false
+        
+        getLengthOfSelectedAvailabilities()
+        if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
+            self.subviewNextButton.isHidden = false
+        }
     }
     @IBAction func noSpecificDatesButtonTouchedUpInside(_ sender: Any) {
         month1.isHidden = false
@@ -1976,7 +1979,7 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
     // MARK: Calendar header functions
     // Sets the height of your header
     func calendarSizeForMonths(_ calendar: JTAppleCalendarView?) -> MonthSize? {
-        return MonthSize(defaultSize: 349)
+        return MonthSize(defaultSize: 47)
     }
     
     // This setups the display of your header
