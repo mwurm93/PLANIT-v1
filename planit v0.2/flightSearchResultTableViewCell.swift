@@ -11,6 +11,15 @@ import UIKit
 class flightSearchResultTableViewCell: UITableViewCell {
     
     // MARK: Outlets
+    @IBOutlet weak var departureDepartureTime: UILabel!
+    @IBOutlet weak var departureOrigin: UILabel!
+    @IBOutlet weak var departureArrivalTime: UILabel!
+    @IBOutlet weak var departureDestination: UILabel!
+    @IBOutlet weak var returnDepartureTime: UILabel!
+    @IBOutlet weak var returnOrigin: UILabel!
+    @IBOutlet weak var returnArrivalTime: UILabel!
+    @IBOutlet weak var returnDestination: UILabel!
+    @IBOutlet weak var totalPrice: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

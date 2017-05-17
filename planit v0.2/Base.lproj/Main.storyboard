@@ -3646,7 +3646,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="flightSearchResultTableViewCell" rowHeight="52" id="Dku-hn-0lb" customClass="flightSearchResultTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="flightSearchResultTableViewPrototypeCell" rowHeight="52" id="Dku-hn-0lb" customClass="flightSearchResultTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dku-hn-0lb" id="sSX-bc-j45">
@@ -3727,6 +3727,17 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="departureArrivalTime" destination="gCw-Og-URe" id="y0l-jy-E5p"/>
+                                            <outlet property="departureDepartureTime" destination="CbI-wp-XAm" id="lgN-u1-zZR"/>
+                                            <outlet property="departureDestination" destination="Frh-lg-GcQ" id="Aev-rk-4XR"/>
+                                            <outlet property="departureOrigin" destination="PbZ-ef-4mk" id="pZm-mu-Gyj"/>
+                                            <outlet property="returnArrivalTime" destination="F0s-e0-aNJ" id="PCL-gs-iB5"/>
+                                            <outlet property="returnDepartureTime" destination="K7B-MG-YRq" id="Q7x-Gi-6Es"/>
+                                            <outlet property="returnDestination" destination="QSA-UW-hgy" id="tCa-0C-9fH"/>
+                                            <outlet property="returnOrigin" destination="9b5-PZ-Zkx" id="F9c-QE-sDv"/>
+                                            <outlet property="totalPrice" destination="bRT-bI-qPS" id="zKR-5X-Nmn"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -3790,15 +3801,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="departureArrivalTime" destination="gCw-Og-URe" id="kP4-Hc-kj5"/>
-                        <outlet property="departureDepartureTime" destination="CbI-wp-XAm" id="pQo-SW-4IH"/>
-                        <outlet property="departureDestination" destination="Frh-lg-GcQ" id="9nR-Y7-ifc"/>
-                        <outlet property="departureOrigin" destination="PbZ-ef-4mk" id="gXS-CW-RI1"/>
-                        <outlet property="returnArrivalTime" destination="F0s-e0-aNJ" id="oyc-nc-xtd"/>
-                        <outlet property="returnDepartureTime" destination="K7B-MG-YRq" id="Ib3-oM-m8d"/>
-                        <outlet property="returnDestination" destination="QSA-UW-hgy" id="SuL-uk-lsW"/>
-                        <outlet property="returnOrigin" destination="9b5-PZ-Zkx" id="5nf-Nh-k5r"/>
-                        <outlet property="totalPrice" destination="bRT-bI-qPS" id="TSQ-Dh-i1G"/>
+                        <outlet property="flightResultsTableView" destination="Upi-i4-7Fi" id="en7-oY-P4i"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YyM-ds-ZOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
