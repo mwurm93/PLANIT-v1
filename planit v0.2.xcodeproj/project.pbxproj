@@ -15,6 +15,7 @@
 		FA09A3EE1EB23694007F64A3 /* ToDoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */; };
 		FA09A3F11EB23894007F64A3 /* CardContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA09A3EF1EB23893007F64A3 /* CardContentView.xib */; };
 		FA09A3F21EB23894007F64A3 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA09A3F01EB23894007F64A3 /* CardView.swift */; };
+		FA16B3C51ECC7743005E4DEF /* flightSearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA16B3C41ECC7743005E4DEF /* flightSearchResultTableViewCell.swift */; };
 		FA187E451E37005200971D47 /* messageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA187E441E37005200971D47 /* messageComposer.swift */; };
 		FA25F1F91EBB6DA9005D29E5 /* exploreHotelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */; };
 		FA25F1FB1EBB7B9F005D29E5 /* hotelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */; };
@@ -120,6 +121,7 @@
 		FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCardView.swift; sourceTree = "<group>"; };
 		FA09A3EF1EB23893007F64A3 /* CardContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardContentView.xib; sourceTree = "<group>"; };
 		FA09A3F01EB23894007F64A3 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		FA16B3C41ECC7743005E4DEF /* flightSearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = flightSearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		FA187E441E37005200971D47 /* messageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = messageComposer.swift; sourceTree = "<group>"; };
 		FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = exploreHotelsViewController.swift; sourceTree = "<group>"; };
 		FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hotelTableViewCell.swift; sourceTree = "<group>"; };
@@ -409,6 +411,7 @@
 				FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */,
 				FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */,
 				FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */,
+				FA16B3C41ECC7743005E4DEF /* flightSearchResultTableViewCell.swift */,
 				FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */,
 			);
 			name = "Table View";
@@ -871,6 +874,7 @@
 				FA730B941EC9EEBA004F310A /* flightResultsViewController.swift in Sources */,
 				FAA8F29B1E351DDE00CD7337 /* contactsTableViewCell.swift in Sources */,
 				FAA8F26E1E351B9500CD7337 /* InstructionsViewController.swift in Sources */,
+				FA16B3C51ECC7743005E4DEF /* flightSearchResultTableViewCell.swift in Sources */,
 				FAA8F26A1E351B9500CD7337 /* BudgetViewController.swift in Sources */,
 				FAA8F2721E351B9500CD7337 /* RankingViewController.swift in Sources */,
 				FA2CFC0A1E3E57A200527405 /* UnbookedTripSummaryViewController.swift in Sources */,
