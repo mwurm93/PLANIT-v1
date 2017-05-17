@@ -481,11 +481,6 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         return myCustomCell
     }
     
-    func calendar(_ calendar: JTAppleCalendarView, didScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
-        let months = visibleDates.monthDates
-        
-    }
-    
     func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         
         if searchMode == "oneWay" || ((searchMode == "roundtrip" || searchMode == "multiCity") && leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1) {
