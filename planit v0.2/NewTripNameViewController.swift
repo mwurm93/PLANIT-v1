@@ -171,6 +171,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         tap.numberOfTapsRequired = 1
         tap.delegate = self
         popupBackgroundView.isHidden = true
+        popupBackgroundView.layer.cornerRadius = 10
         self.popupBackgroundView.addGestureRecognizer(tap)
         
         //Time of Day
@@ -216,6 +217,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [NSDate]
         if (selectedDatesValue?.count)! > 0 {
             self.calendarView.selectDates(selectedDatesValue! as [Date],triggerSelectionDelegate: false)
+                calendarView.scrollToDate(selectedDatesValue?[0] as! Date)
         }
         
         //COPY FOR CONTACTS
@@ -1709,7 +1711,10 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             myCustomCell?.middleConnector.isHidden = true
             myCustomCell?.dayLabel.textColor = NewTripNameViewController.whiteColor
         }
-        if cellState.dateBelongsTo != .thisMonth {
+        if cellState.dateBelongsTo != .thisMonth  {
+            myCustomCell?.dayLabel.textColor = NewTripNameViewController.darkGrayColor
+        }
+        if cellState.date < Date() {
             myCustomCell?.dayLabel.textColor = NewTripNameViewController.darkGrayColor
         }
     }
@@ -1723,18 +1728,25 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
     
     func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleDayCellView?, cellState: CellState) {
         
+        if cellState.dateBelongsTo == .previousMonthWithinBoundary {
+            calendarView.scrollToSegment(.previous)
+            calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
+            return
+        }
+        if cellState.dateBelongsTo == .followingMonthWithinBoundary {
+            calendarView.scrollToSegment(.next)
+            calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
+            return
+        }
         if leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1 {
             calendarView.deselectAllDates(triggerSelectionDelegate: false)
             rightDateTimeArrays.removeAllObjects()
             leftDateTimeArrays.removeAllObjects()
             calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
         }
-        
-        if cellState.dateBelongsTo == .previousMonthWithinBoundary {
-            calendarView.scrollToSegment(.previous)
-        }
-        if cellState.dateBelongsTo == .followingMonthWithinBoundary {
-            calendarView.scrollToSegment(.next)
+        if cellState.date < Date() {
+            calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
+            return
         }
         
         //UNCOMMENT FOR TWO CLICK RANGE SELECTION
@@ -1757,15 +1769,15 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         //Spawn time of day selection
         let cellRow = cellState.row()
         let cellCol = cellState.column()
-        var timeOfDayTable_X = cellCol * 50 + 39
-        let timeOfDayTable_Y = cellRow * 50 + 145 + 2 * (cellRow - 1)
+        var timeOfDayTable_X = cellCol * 50 + 25
+        let timeOfDayTable_Y = cellRow * 52 + 235 + 2 * (cellRow - 1)
         if cellCol == 0 {
-            timeOfDayTable_X = (cellCol + 1) * 50 + 39
+            timeOfDayTable_X = (cellCol + 1) * 50 + 36
         }
         if cellCol == 6 {
-            timeOfDayTable_X = (cellCol - 1) * 50 + 39
+            timeOfDayTable_X = (cellCol - 1) * 50 + 15
         }
-        
+
         if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full {
             timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
             animateTimeOfDayTableIn()
@@ -1793,12 +1805,26 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
     func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleDayCellView?, cellState: CellState) {
         if cellState.dateBelongsTo == .previousMonthWithinBoundary {
             calendarView.scrollToSegment(.previous)
+            calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+            return
         }
         if cellState.dateBelongsTo == .followingMonthWithinBoundary {
             calendarView.scrollToSegment(.next)
+            calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+            return
         }
         
-        //START COPY
+        handleSelection(cell: cell, cellState: cellState)
+        getLengthOfSelectedAvailabilities()
+        
+        if lengthOfAvailabilitySegmentsArray.count > 1 {
+            rightDateTimeArrays.removeAllObjects()
+            leftDateTimeArrays.removeAllObjects()
+            lengthOfAvailabilitySegmentsArray.removeAll()
+            calendarView.deselectAllDates(triggerSelectionDelegate: false)
+            return
+        }
+        
         // Create array of selected dates
         calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
         let selectedDates = calendarView.selectedDates as [NSDate]
@@ -1807,6 +1833,7 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             
             var leftMostDate: Date?
             var rightMostDate: Date?
+            
             for selectedDate in selectedDates {
                 if leftMostDate == nil {
                     leftMostDate = selectedDate as Date
@@ -1821,41 +1848,62 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             }
             
             //Spawn time of day selection
-            let cellRow = cellState.row()
-            let cellCol = cellState.column()
-            var timeOfDayTable_X = cellCol * 50 + 39
-            let timeOfDayTable_Y = cellRow * 50 + 145 + 2 * (cellRow - 1)
-            if cellCol == 0 {
-                timeOfDayTable_X = (cellCol + 1) * 50 + 39
-            }
-            if cellCol == 6 {
-                timeOfDayTable_X = (cellCol - 1) * 50 + 39
-            }
             
             let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/yyyy"
             let leftMostDateAsString = formatter.string (from: leftMostDate!)
             let rightMostDateAsString = formatter.string (from: rightMostDate!)
+            var cellRow = cellState.row()
+            var cellCol = cellState.column()
+
             if leftDateTimeArrays[leftMostDateAsString] == nil {
+                
+                if cellCol != 6 {
+                    cellCol += 1
+                } else {
+                    cellCol = 0
+                    cellRow += 1
+                }
+
                 mostRecentSelectedCellDate = leftMostDate! as NSDate
                 leftDateTimeArrays.removeAllObjects()
+                var timeOfDayTable_X = cellCol * 50 + 25
+                let timeOfDayTable_Y = cellRow * 52 + 235 + 2 * (cellRow - 1)
+                if cellCol == 0 {
+                    timeOfDayTable_X = (cellCol + 1) * 50 + 36
+                }
+                if cellCol == 6 {
+                    timeOfDayTable_X = (cellCol - 1) * 50 + 15
+                }
                 timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
                 animateTimeOfDayTableIn()
                 
             }
             
             if rightDateTimeArrays[rightMostDateAsString] == nil {
+                
+                if cellCol != 0 {
+                    cellCol -= 1
+                } else {
+                    cellCol = 6
+                    cellRow -= 1
+                }
+
                 mostRecentSelectedCellDate = rightMostDate! as NSDate
                 rightDateTimeArrays.removeAllObjects()
+                var timeOfDayTable_X = cellCol * 50 + 25
+                let timeOfDayTable_Y = cellRow * 52 + 235 + 2 * (cellRow - 1)
+                if cellCol == 0 {
+                    timeOfDayTable_X = (cellCol + 1) * 50 + 36
+                }
+                if cellCol == 6 {
+                    timeOfDayTable_X = (cellCol - 1) * 50 + 15
+                }
                 timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
                 animateTimeOfDayTableIn()
             }
-            //END COPY
             
         }
-        
-        handleSelection(cell: cell, cellState: cellState)
-        getLengthOfSelectedAvailabilities()
         
         //Update trip preferences in dictionary
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
