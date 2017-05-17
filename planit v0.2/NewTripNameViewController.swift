@@ -200,24 +200,35 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         homeAirportLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
         
         // Calendar header setup
-        calendarView.registerHeaderView(xibFileNames: ["monthHeaderView"])
+        
+        
+        calendarView.register(UINib(nibName: "monthHeaderView", bundle: nil), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "monthHeaderView")
+        
+
         
         // Calendar setup delegate and datasource
-        calendarView.dataSource = self
-        calendarView.delegate = self
-        calendarView.registerCellViewXib(file: "CellView")
+        calendarView.calendarDataSource = self
+        calendarView.calendarDelegate = self
+        
+        calendarView.register(UINib(nibName: "CellView", bundle: nil), forCellWithReuseIdentifier: "CellView")
+        
         calendarView.allowsMultipleSelection  = true
-        calendarView.rangeSelectionWillBeUsed = true
-        calendarView.cellInset = CGPoint(x: 0, y: 2)
+        calendarView.isRangeSelectionUsed = true
+        
+        calendarView.minimumLineSpacing = 0
+        calendarView.minimumInteritemSpacing = 2
+        
+        
         calendarView.scrollingMode = .nonStopToSection(withResistance: 0.9)
-        calendarView.direction = .horizontal
+        calendarView.scrollDirection = .horizontal
         
         // Load trip preferences and install
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [NSDate]
-        if (selectedDatesValue?.count)! > 0 {
-            self.calendarView.selectDates(selectedDatesValue! as [Date],triggerSelectionDelegate: false)
-                calendarView.scrollToDate(selectedDatesValue?[0] as! Date)
+        if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
+            if selectedDatesValue.count > 0 {
+                self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
+                    calendarView.scrollToDate(selectedDatesValue[0])
+            }
         }
         
         //COPY FOR CONTACTS
@@ -665,7 +676,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         return contactsCell
     }
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
+        if collectionView == contactsCollectionView {
+
         let visibleCells = self.contactsCollectionView.visibleCells
         
         if editModeEnabled == true {
@@ -675,11 +687,14 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 // Shake all of the collection view cells
                 visibleCell.shakeIcons()
             }
+        }
         }
     }
     
     // This function is fired when the collection view stop scrolling
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if collectionView == contactsCollectionView {
+        
         let visibleCells = self.contactsCollectionView.visibleCells
         
         if editModeEnabled == true {
@@ -690,14 +705,20 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 visibleCell.shakeIcons()
             }
         }
+        }
     }
 
     // MARK: - UICollectionViewFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        if collectionView == contactsCollectionView {
         let picDimension = 55
         return CGSize(width: picDimension, height: picDimension)
+        }
+        return CGSize(width: 50, height: 50)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
         
         return UIEdgeInsetsMake(0, 0, 0, 0)
     }
@@ -1665,7 +1686,7 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         return parameters
     }
     
-    func handleSelection(cell: JTAppleDayCellView?, cellState: CellState) {
+    func handleSelection(cell: JTAppleCell?, cellState: CellState) {
         let myCustomCell = cell as? CellView
         
         switch cellState.selectedPosition() {
@@ -1719,14 +1740,17 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         }
     }
     
-    func calendar(_ calendar: JTAppleCalendarView, willDisplayCell cell: JTAppleDayCellView, date: Date, cellState: CellState) {
-        let myCustomCell = cell as! CellView
+    func calendar(_ calendar: JTAppleCalendarView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTAppleCell {
+
+        let myCustomCell = calendarView.dequeueReusableJTAppleCell(withReuseIdentifier: "CellView", for: indexPath) as! CellView
         myCustomCell.dayLabel.text = cellState.text
         
-        handleSelection(cell: cell, cellState: cellState)
+        handleSelection(cell: myCustomCell, cellState: cellState)
+        
+        return myCustomCell
     }
     
-    func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleDayCellView?, cellState: CellState) {
+    func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         
         if cellState.dateBelongsTo == .previousMonthWithinBoundary {
             calendarView.scrollToSegment(.previous)
@@ -1802,7 +1826,7 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         mostRecentSelectedCellDate = date as NSDate
     }
     
-    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleDayCellView?, cellState: CellState) {
+    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         if cellState.dateBelongsTo == .previousMonthWithinBoundary {
             calendarView.scrollToSegment(.previous)
             calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
@@ -1951,12 +1975,14 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
     
     // MARK: Calendar header functions
     // Sets the height of your header
-    func calendar(_ calendar: JTAppleCalendarView, sectionHeaderSizeFor range: (start: Date, end: Date), belongingTo month: Int) -> CGSize {
-        return CGSize(width: 349, height: 50)
+    func calendarSizeForMonths(_ calendar: JTAppleCalendarView?) -> MonthSize? {
+        return MonthSize(defaultSize: 349)
     }
+    
     // This setups the display of your header
-    func calendar(_ calendar: JTAppleCalendarView, willDisplaySectionHeader header: JTAppleHeaderView, range: (start: Date, end: Date), identifier: String) {
-        let headerCell = (header as! monthHeaderView)
+    func calendar(_ calendar: JTAppleCalendarView, headerViewForDateRange range: (start: Date, end: Date), at indexPath: IndexPath) -> JTAppleCollectionReusableView {
+        
+        let headerCell = calendarView.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: "monthHeaderView", for: indexPath) as! monthHeaderView
         
         // Create Year String
         let yearDateFormatter = DateFormatter()
@@ -1969,6 +1995,8 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         let MonthHeader = monthDateFormatter.string(from: range.start)
         
         // Update header
+        
+
         if MonthHeader == "01" {
             headerCell.monthLabel.text = "January " + YearHeader
         } else if MonthHeader == "02" {
@@ -1994,6 +2022,8 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         } else if MonthHeader == "12" {
             headerCell.monthLabel.text = "December " + YearHeader
         }
+        
+        return headerCell
     }
     
     func animateTimeOfDayTableIn(){

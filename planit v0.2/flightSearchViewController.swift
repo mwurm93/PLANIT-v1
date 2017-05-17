@@ -151,24 +151,25 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         
         
         // Calendar header setup
-        calendarView.registerHeaderView(xibFileNames: ["monthHeaderView"])
+        calendarView.register(UINib(nibName: "monthHeaderView", bundle: nil), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "monthHeaderView")
         
         // Calendar setup delegate and datasource
-        calendarView.dataSource = self
-        calendarView.delegate = self
-        calendarView.registerCellViewXib(file: "CellView")
+        calendarView.calendarDataSource = self
+        calendarView.calendarDelegate = self
+        calendarView.register(UINib(nibName: "CellView", bundle: nil), forCellWithReuseIdentifier: "CellView")
         calendarView.allowsMultipleSelection  = true
-        calendarView.rangeSelectionWillBeUsed = true
-        calendarView.cellInset = CGPoint(x: 0, y: 2)
+        calendarView.isRangeSelectionUsed = true
+        calendarView.minimumLineSpacing = 0
+        calendarView.minimumInteritemSpacing = 2
         calendarView.scrollingMode = .nonStopToSection(withResistance: 0.9)
-        calendarView.direction = .horizontal
+        calendarView.scrollDirection = .horizontal
         
         // Load trip preferences and install
-        let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date]
-        if (selectedDatesValue?.count)! > 0 {
-            self.calendarView.selectDates(selectedDatesValue! as [Date],triggerSelectionDelegate: false)
-            let firstSelectedDate = selectedDatesValue?[0]
-            calendarView.scrollToDate(firstSelectedDate!, triggerScrollToDateDelegate: true, animateScroll: false, preferredScrollPosition: UICollectionViewScrollPosition.left, completionHandler: { (() -> Void).self})
+        if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
+            if selectedDatesValue.count > 0 {
+                self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
+                calendarView.scrollToDate(selectedDatesValue[0])
+            }
         }
     }
     
@@ -416,7 +417,7 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         return parameters
     }
     
-    func handleSelection(cell: JTAppleDayCellView?, cellState: CellState) {
+    func handleSelection(cell: JTAppleCell?, cellState: CellState) {
         let myCustomCell = cell as? CellView
         
         switch cellState.selectedPosition() {
@@ -470,11 +471,14 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         }
     }
     
-    func calendar(_ calendar: JTAppleCalendarView, willDisplayCell cell: JTAppleDayCellView, date: Date, cellState: CellState) {
-        let myCustomCell = cell as! CellView
+    func calendar(_ calendar: JTAppleCalendarView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTAppleCell {
+        
+        let myCustomCell = calendarView.dequeueReusableJTAppleCell(withReuseIdentifier: "CellView", for: indexPath) as! CellView
         myCustomCell.dayLabel.text = cellState.text
         
-        handleSelection(cell: cell, cellState: cellState)
+        handleSelection(cell: myCustomCell, cellState: cellState)
+        
+        return myCustomCell
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didScrollToDateSegmentWith visibleDates: DateSegmentInfo) {
@@ -482,7 +486,7 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         
     }
     
-    func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleDayCellView?, cellState: CellState) {
+    func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         
         if searchMode == "oneWay" || ((searchMode == "roundtrip" || searchMode == "multiCity") && leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1) {
             calendarView.deselectAllDates(triggerSelectionDelegate: false)
@@ -562,7 +566,7 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         mostRecentSelectedCellDate = date as NSDate
     }
     
-    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleDayCellView?, cellState: CellState) {
+    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         
         if cellState.dateBelongsTo == .previousMonthWithinBoundary {
             calendarView.scrollToSegment(.previous)
@@ -718,12 +722,14 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
     
     // MARK: Calendar header functions
     // Sets the height of your header
-    func calendar(_ calendar: JTAppleCalendarView, sectionHeaderSizeFor range: (start: Date, end: Date), belongingTo month: Int) -> CGSize {
-        return CGSize(width: 349, height: 50)
+    func calendarSizeForMonths(_ calendar: JTAppleCalendarView?) -> MonthSize? {
+        return MonthSize(defaultSize: 349)
     }
+    
     // This setups the display of your header
-    func calendar(_ calendar: JTAppleCalendarView, willDisplaySectionHeader header: JTAppleHeaderView, range: (start: Date, end: Date), identifier: String) {
-        let headerCell = (header as! monthHeaderView)
+    func calendar(_ calendar: JTAppleCalendarView, headerViewForDateRange range: (start: Date, end: Date), at indexPath: IndexPath) -> JTAppleCollectionReusableView {
+        
+        let headerCell = calendarView.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: "monthHeaderView", for: indexPath) as! monthHeaderView
         
         // Create Year String
         let yearDateFormatter = DateFormatter()
@@ -761,6 +767,8 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         } else if MonthHeader == "12" {
             headerCell.monthLabel.text = "December " + YearHeader
         }
+        
+        return headerCell
     }
     
     func animateTimeOfDayTableIn(){

@@ -1674,7 +1674,7 @@
                         <outlet property="addContactPlusIconMainVC" destination="eBS-CC-JRz" id="gKI-by-pR8"/>
                         <outlet property="addFromContactsButton" destination="uoZ-1l-yxx" id="g93-kJ-B1D"/>
                         <outlet property="addFromFacebookButton" destination="U7y-7c-V4B" id="kOQ-u0-oJc"/>
-                        <outlet property="calendarView" destination="FLp-jz-zNI" id="YCx-TS-S93"/>
+                        <outlet property="calendarView" destination="PgE-34-gXv" id="sPW-Ow-og2"/>
                         <outlet property="contactsCollectionView" destination="zAa-lr-Ha0" id="k3h-gJ-zZM"/>
                         <outlet property="detailedCardView" destination="ddx-cr-cdY" id="4Cr-LR-mvL"/>
                         <outlet property="groupMemberListTable" destination="nrJ-cj-pzr" id="tCv-ev-A0L"/>
@@ -1721,11 +1721,29 @@
                     <rect key="frame" x="0.0" y="0.0" width="350" height="468"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FLp-jz-zNI" customClass="JTAppleCalendarView" customModule="JTAppleCalendar">
-                            <rect key="frame" x="0.0" y="62" width="350" height="374"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="PgE-34-gXv" customClass="JTAppleCalendarView" customModule="JTAppleCalendar">
+                            <rect key="frame" x="0.0" y="47" width="350" height="374"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        </view>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="374" id="bQu-lC-c6Q"/>
+                            </constraints>
+                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="spw-dF-9jW">
+                                <size key="itemSize" width="50" height="50"/>
+                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </collectionViewFlowLayout>
+                            <cells>
+                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="vAb-zi-vns">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </view>
+                                </collectionViewCell>
+                            </cells>
+                        </collectionView>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMp-FL-1x2">
                             <rect key="frame" x="290" y="62" width="60" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2049,6 +2067,11 @@
                         </slider>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="PgE-34-gXv" firstAttribute="top" secondItem="N4B-s3-vY2" secondAttribute="top" constant="47" id="Nwb-7u-DI5"/>
+                        <constraint firstAttribute="trailing" secondItem="PgE-34-gXv" secondAttribute="trailing" id="U9j-Ve-H2L"/>
+                        <constraint firstItem="PgE-34-gXv" firstAttribute="leading" secondItem="N4B-s3-vY2" secondAttribute="leading" id="qcU-aL-Hji"/>
+                    </constraints>
                 </view>
             </objects>
             <point key="canvasLocation" x="40.799999999999997" y="892.80359820089961"/>
@@ -3467,7 +3490,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="calendarView" destination="0aI-Ke-5ac" id="FZi-vY-hzb"/>
+                        <outlet property="calendarView" destination="qSi-XS-3T1" id="Nv6-NL-RcL"/>
                         <outlet property="departureDate" destination="EIX-Ql-7u6" id="WsS-Ds-i9H"/>
                         <outlet property="departureDestination" destination="zmQ-QG-QNU" id="HzE-t8-Csr"/>
                         <outlet property="departureOrigin" destination="Yq1-vf-tnF" id="ndp-Or-EUW"/>
@@ -3491,11 +3514,27 @@
                     <rect key="frame" x="0.0" y="0.0" width="350" height="403"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0aI-Ke-5ac" customClass="JTAppleCalendarView" customModule="JTAppleCalendar">
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="qSi-XS-3T1" customClass="JTAppleCalendarView" customModule="JTAppleCalendar">
                             <rect key="frame" x="0.0" y="-1" width="350" height="374"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        </view>
+                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Y6m-qj-nhG">
+                                <size key="itemSize" width="50" height="50"/>
+                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </collectionViewFlowLayout>
+                            <cells>
+                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="jJZ-yA-zb3">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </view>
+                                </collectionViewCell>
+                            </cells>
+                        </collectionView>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nbV-l7-ydR">
                             <rect key="frame" x="290" y="-1" width="60" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -4290,12 +4329,12 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="1Xg-d5-Dmi"/>
-        <segue reference="2ah-17-HDw"/>
-        <segue reference="Fe3-1x-Rbs"/>
-        <segue reference="zWM-he-GTg"/>
-        <segue reference="8MA-wa-IqS"/>
         <segue reference="R8r-yB-rJ1"/>
+        <segue reference="8MA-wa-IqS"/>
+        <segue reference="1lt-od-qL5"/>
+        <segue reference="qH0-AO-962"/>
+        <segue reference="2ah-17-HDw"/>
+        <segue reference="1Xg-d5-Dmi"/>
         <segue reference="lra-AY-k3U"/>
         <segue reference="RAo-Nt-Dp1"/>
     </inferredMetricsTieBreakers>

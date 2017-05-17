@@ -8,7 +8,7 @@
 
 import JTAppleCalendar
 
-class monthHeaderView: JTAppleHeaderView {
+class monthHeaderView: JTAppleCollectionReusableView {
 
 // MARK: Outlets
     @IBOutlet weak var monthLabel: UILabel!

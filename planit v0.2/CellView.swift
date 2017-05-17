@@ -7,7 +7,7 @@
 //
 
 import JTAppleCalendar
-class CellView: JTAppleDayCellView {
+class CellView: JTAppleCell {
 
     // MARK: Outlets
     @IBOutlet weak var dayLabel: UILabel!
