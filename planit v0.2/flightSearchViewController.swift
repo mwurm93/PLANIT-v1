@@ -152,6 +152,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         // Calendar header setup
         calendarView.register(UINib(nibName: "monthHeaderView", bundle: nil), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "monthHeaderView")
         
+        
         // Calendar setup delegate and datasource
         calendarView.calendarDataSource = self
         calendarView.calendarDelegate = self
@@ -739,6 +740,8 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         let MonthHeader = monthDateFormatter.string(from: range.start)
         
         // Update header
+        
+        
         if MonthHeader == "01" {
             headerCell.monthLabel.text = "January " + YearHeader
         } else if MonthHeader == "02" {
