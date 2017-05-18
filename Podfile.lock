@@ -17,19 +17,29 @@ DEPENDENCIES:
   - Cartography
   - GoogleMaps
   - GooglePlaces
-  - JTAppleCalendar (~> 7)
+  - JTAppleCalendar (from `https://github.com/patchthecode/JTAppleCalendar.git`, branch `master`)
   - pop (~> 1.0)
   - UIColor+FlatColors
+
+EXTERNAL SOURCES:
+  JTAppleCalendar:
+    :branch: master
+    :git: https://github.com/patchthecode/JTAppleCalendar.git
+
+CHECKOUT OPTIONS:
+  JTAppleCalendar:
+    :commit: 12a2d3fe5ed0d444413c54386544cf4d9aa94443
+    :git: https://github.com/patchthecode/JTAppleCalendar.git
 
 SPEC CHECKSUMS:
   Apollo: 124ddbbca48acca75fd5f9ec5045454cb410bb31
   Cartography: 0538ccb4044acbbda2266335fc58cb4228794d90
   GoogleMaps: 104c418d61ab8a05dff06ed0784c25ea9d37da45
   GooglePlaces: bca867d5e9da15384c794b945e4226848bc6e9d9
-  JTAppleCalendar: c14685634064ef67a68209548ff3443208af48a3
+  JTAppleCalendar: 2928d0368ef9f5278d3fb56e599672482f46de7f
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   UIColor+FlatColors: 6c699df7a575281794c688c64cee6c44fd1f93b4
 
-PODFILE CHECKSUM: d8eacdeb5c332100a4e0ed068be8e9102bea99b7
+PODFILE CHECKSUM: 0c215bc09ad989b7be6b644b33e742f9d3936129
 
 COCOAPODS: 1.1.1

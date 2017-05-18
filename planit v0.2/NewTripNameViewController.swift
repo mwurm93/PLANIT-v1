@@ -79,8 +79,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBOutlet weak var subviewDoneButton: UIButton!
     @IBOutlet weak var homeAirportTextField: UITextField!
     @IBOutlet weak var questionLabel: UILabel!
-    @IBOutlet weak var nextMonth: UIButton!
-    @IBOutlet weak var previousMonth: UIButton!
     @IBOutlet weak var subviewNextButton: UIButton!
     @IBOutlet weak var month1: UIButton!
     @IBOutlet weak var month2: UIButton!
@@ -200,25 +198,18 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         homeAirportLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
         
         // Calendar header setup
-        
-        
         calendarView.register(UINib(nibName: "monthHeaderView", bundle: nil), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "monthHeaderView")
         
         // Calendar setup delegate and datasource
         calendarView.calendarDataSource = self
         calendarView.calendarDelegate = self
-        
         calendarView.register(UINib(nibName: "CellView", bundle: nil), forCellWithReuseIdentifier: "CellView")
-        
         calendarView.allowsMultipleSelection  = true
         calendarView.isRangeSelectionUsed = true
-        
         calendarView.minimumLineSpacing = 0
         calendarView.minimumInteritemSpacing = 2
-        
-        
-        calendarView.scrollingMode = .nonStopToSection(withResistance: 0.9)
-        calendarView.scrollDirection = .horizontal
+        calendarView.scrollingMode = .none
+        calendarView.scrollDirection = .vertical
         
         // Load trip preferences and install
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -1115,8 +1106,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         soloForNowButton.isHidden = true
         subviewNextButton.isHidden = true
         calendarView.isHidden = true
-        nextMonth.isHidden = true
-        previousMonth.isHidden = true
         popupBackgroundView.isHidden = true
         timeOfDayTableView.isHidden = true
         subviewDoneButton.isHidden = true
@@ -1148,8 +1137,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         soloForNowButton.isHidden = false
         subviewNextButton.isHidden = true
         calendarView.isHidden = true
-        nextMonth.isHidden = true
-        previousMonth.isHidden = true
         popupBackgroundView.isHidden = true
         timeOfDayTableView.isHidden = true
         subviewDoneButton.isHidden = true
@@ -1196,8 +1183,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         addFromFacebookButton.isHidden = true
         soloForNowButton.isHidden = true
         calendarView.isHidden = true
-        nextMonth.isHidden = true
-        previousMonth.isHidden = true
         popupBackgroundView.isHidden = true
         timeOfDayTableView.isHidden = true
         subviewDoneButton.isHidden = true
@@ -1258,6 +1243,9 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
 
     //MARK: Actions
+    @IBAction func numberDestinationsValueChanged(_ sender: Any) {
+        roundSlider()
+    }
     func deleteContactButtonTouchedUpInside(sender:UIButton) {
         let i: Int = (sender.layer.value(forKey: "index")) as! Int
         deleteContact(indexPath: IndexPath(row:i, section: 0))
@@ -1287,8 +1275,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         weekend.isHidden = true
         oneWeek.isHidden = true
         twoWeeks.isHidden = true
-        nextMonth.isHidden = false
-        previousMonth.isHidden = false
         specificDatesButton.isHidden = true
         noSpecificDatesButton.isHidden = true
         questionLabel.isHidden = true
@@ -1307,8 +1293,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         weekend.isHidden = false
         oneWeek.isHidden = false
         twoWeeks.isHidden = false
-        nextMonth.isHidden = true
-        previousMonth.isHidden = true
         specificDatesButton.isHidden = true
         noSpecificDatesButton.isHidden = true
         questionLabel.isHidden = false
@@ -1496,15 +1480,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         animateOutSubview()
     }
     
-    @IBAction func previousMonthTouchedUpInside(_ sender: Any) {
-        calendarView.scrollToSegment(.previous)
-    }
-    @IBAction func nextMonthTouchedUpInside(_ sender: Any) {
-        calendarView.scrollToSegment(.next)
-    }
-    
-    
-    
     func updateCompletionStatus(){
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["finished_entering_preferences_status"] = "Name_Contacts_Rooms" as NSString
@@ -1684,7 +1659,7 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             numberOfRows: 6, // Only 1, 2, 3, & 6 are allowed
             calendar: Calendar.current,
             generateInDates: .forAllMonths,
-            generateOutDates: .tillEndOfGrid,
+            generateOutDates: .tillEndOfRow,
             firstDayOfWeek: .sunday)
         return parameters
     }
@@ -1735,18 +1710,29 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             myCustomCell?.middleConnector.isHidden = true
             myCustomCell?.dayLabel.textColor = NewTripNameViewController.whiteColor
         }
-        if cellState.dateBelongsTo != .thisMonth  {
-            myCustomCell?.dayLabel.textColor = NewTripNameViewController.darkGrayColor
-        }
         if cellState.date < Date() {
             myCustomCell?.dayLabel.textColor = NewTripNameViewController.darkGrayColor
         }
+        
+        if cellState.dateBelongsTo != .thisMonth  {
+            myCustomCell?.dayLabel.textColor = UIColor(cgColor: NewTripNameViewController.transparentColor)
+            myCustomCell?.selectedView.isHidden = true
+            myCustomCell?.selectedView.layer.backgroundColor = NewTripNameViewController.transparentColor
+            myCustomCell?.leftSideConnector.isHidden = true
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+            return
+        }
+
     }
     
     func calendar(_ calendar: JTAppleCalendarView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTAppleCell {
 
         let myCustomCell = calendarView.dequeueReusableJTAppleCell(withReuseIdentifier: "CellView", for: indexPath) as! CellView
         myCustomCell.dayLabel.text = cellState.text
+        if cellState.dateBelongsTo == .previousMonthWithinBoundary || cellState.dateBelongsTo == .followingMonthWithinBoundary {
+            myCustomCell.isSelected = false
+        }
         
         handleSelection(cell: myCustomCell, cellState: cellState)
         
@@ -1754,26 +1740,13 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
+
         
-        if cellState.dateBelongsTo == .previousMonthWithinBoundary {
-            calendarView.scrollToSegment(.previous)
-            calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
-            return
-        }
-        if cellState.dateBelongsTo == .followingMonthWithinBoundary {
-            calendarView.scrollToSegment(.next)
-            calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
-            return
-        }
         if leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1 {
             calendarView.deselectAllDates(triggerSelectionDelegate: false)
             rightDateTimeArrays.removeAllObjects()
             leftDateTimeArrays.removeAllObjects()
             calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-        }
-        if cellState.date < Date() {
-            calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
-            return
         }
         
         //UNCOMMENT FOR TWO CLICK RANGE SELECTION
@@ -1792,6 +1765,10 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
             }
         }
+        
+        
+        let testPosition = cellState.selectedPosition()
+        let testSelectedDates = calendarView.selectedDates
         
         //Spawn time of day selection
         let cellRow = cellState.row()
@@ -1830,21 +1807,11 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
-        if cellState.dateBelongsTo == .previousMonthWithinBoundary {
-            calendarView.scrollToSegment(.previous)
-            calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-            return
-        }
-        if cellState.dateBelongsTo == .followingMonthWithinBoundary {
-            calendarView.scrollToSegment(.next)
-            calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-            return
-        }
         
         handleSelection(cell: cell, cellState: cellState)
         getLengthOfSelectedAvailabilities()
         
-        if lengthOfAvailabilitySegmentsArray.count > 1 {
+        if lengthOfAvailabilitySegmentsArray.count > 1 || (leftDates.count > 0 && rightDates.count > 0 && fullDates.count > 0) || fullDates.count > 1 {
             rightDateTimeArrays.removeAllObjects()
             leftDateTimeArrays.removeAllObjects()
             lengthOfAvailabilitySegmentsArray.removeAll()
@@ -1940,6 +1907,14 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
     
+    func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {
+        
+        if cellState.dateBelongsTo != .thisMonth || cellState.date < Date() {
+            return false
+        }            
+        return true
+    }
+    
     // MARK custom func to get length of selected availability segments
     func getLengthOfSelectedAvailabilities() {
         let selectedDates = calendarView.selectedDates as [NSDate]
@@ -1963,8 +1938,8 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
                     fullDates.append(date as Date)
                 }
             }
-            if rightDates != [] {
-                for segment in 0...rightDates.count - 1 {
+            if rightDates != [] && leftDates != [] {
+                for segment in 0...leftDates.count - 1 {
                     let segmentAvailability = rightDates[segment].timeIntervalSince(leftDates[segment]) / 86400 + 1
                     lengthOfAvailabilitySegmentsArray.append(Int(segmentAvailability))
                 }
@@ -1979,7 +1954,7 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
     // MARK: Calendar header functions
     // Sets the height of your header
     func calendarSizeForMonths(_ calendar: JTAppleCalendarView?) -> MonthSize? {
-        return MonthSize(defaultSize: 47)
+        return MonthSize(defaultSize: 21)
     }
     
     // This setups the display of your header
