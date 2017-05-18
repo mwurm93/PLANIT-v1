@@ -34,7 +34,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "flightSearchResultTableViewCell", for: indexPath) as! flightSearchResultTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "flightSearchResultTableViewPrototypeCell", for: indexPath) as! flightSearchResultTableViewCell
         
         var addedRow = indexPath.row
         if indexPath.section == 1 {

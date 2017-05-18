@@ -96,6 +96,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBOutlet weak var tripNameLabel: UITextField!
     @IBOutlet weak var popupBackgroundViewDeleteContacts: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundViewDeleteContactsWithinCollectionView: UIVisualEffectView!
+    @IBOutlet weak var dayOfWeekStackView: UIStackView!
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -1120,6 +1121,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         noSpecificDatesButton.isHidden = true
         numberDestinationsSlider.isHidden = true
         numberDestinationsStackView.isHidden = true
+        dayOfWeekStackView.isHidden = true
         UIView.animate(withDuration: 0.4) {
             self.underline.layer.frame = CGRect(x: 148, y: 30, width: 55, height: 51)
         }
@@ -1151,6 +1153,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         noSpecificDatesButton.isHidden = true
         numberDestinationsSlider.isHidden = true
         numberDestinationsStackView.isHidden = true
+        dayOfWeekStackView.isHidden = true
         
         if contacts != nil {
             addFromContactsButton.layer.frame = CGRect(x: 101, y: 140, width: 148, height: 22)
@@ -1198,6 +1201,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         noSpecificDatesButton.isHidden = false
         numberDestinationsSlider.isHidden = true
         numberDestinationsStackView.isHidden = true
+        dayOfWeekStackView.isHidden = true
     }
 
     func animateOutSubview() {
@@ -1279,6 +1283,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         noSpecificDatesButton.isHidden = true
         questionLabel.isHidden = true
         calendarView.isHidden = false
+        dayOfWeekStackView.isHidden = false
         
         getLengthOfSelectedAvailabilities()
         if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
@@ -1740,7 +1745,6 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
-
         
         if leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1 {
             calendarView.deselectAllDates(triggerSelectionDelegate: false)
@@ -1766,28 +1770,26 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             }
         }
         
-        
-        let testPosition = cellState.selectedPosition()
-        let testSelectedDates = calendarView.selectedDates
-        
         //Spawn time of day selection
-        let cellRow = cellState.row()
-        let cellCol = cellState.column()
-        var timeOfDayTable_X = cellCol * 50 + 25
-        let timeOfDayTable_Y = cellRow * 52 + 235 + 2 * (cellRow - 1)
-        if cellCol == 0 {
-            timeOfDayTable_X = (cellCol + 1) * 50 + 36
-        }
-        if cellCol == 6 {
-            timeOfDayTable_X = (cellCol - 1) * 50 + 15
-        }
-
-        if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full {
-            timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
-            animateTimeOfDayTableIn()
-        }
-        if cellState.selectedPosition() == .right {
-            timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+        let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+        var timeOfDayTableX = CGFloat()
+        var timeOfDayTableY = CGFloat()
+        if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full || cellState.selectedPosition() == .right {
+            if positionInSuperView.origin.y < 70 {
+                timeOfDayTableY = positionInSuperView.origin.y + 65
+            } else if positionInSuperView.origin.y < 350 {
+                timeOfDayTableY = positionInSuperView.origin.y + 30
+            } else {
+                timeOfDayTableY = positionInSuperView.origin.y - 170
+            }
+            if positionInSuperView.origin.x < 40 {
+                timeOfDayTableX = positionInSuperView.midX + 50
+            } else if positionInSuperView.origin.x < 310 {
+                timeOfDayTableX = positionInSuperView.midX - 12
+            } else {
+                timeOfDayTableX = positionInSuperView.midX - 77
+            }
+            timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
             animateTimeOfDayTableIn()
         }
         
@@ -1859,19 +1861,31 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
                     cellRow += 1
                 }
 
+                
+                //Spawn time of day selection
+                let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+                var timeOfDayTableX = CGFloat()
+                var timeOfDayTableY = CGFloat()
+                    if positionInSuperView.origin.y < 70 {
+                        timeOfDayTableY = positionInSuperView.origin.y + 65
+                    } else if positionInSuperView.origin.y < 350 {
+                        timeOfDayTableY = positionInSuperView.origin.y + 30
+                    } else {
+                        timeOfDayTableY = positionInSuperView.origin.y - 170
+                    }
+                    if positionInSuperView.origin.x < 40 {
+                        timeOfDayTableX = positionInSuperView.midX + 50
+                    } else if positionInSuperView.origin.x < 310 {
+                        timeOfDayTableX = positionInSuperView.midX - 12
+                    } else {
+                        timeOfDayTableX = positionInSuperView.midX - 200
+                    }
+                
                 mostRecentSelectedCellDate = leftMostDate! as NSDate
                 leftDateTimeArrays.removeAllObjects()
-                var timeOfDayTable_X = cellCol * 50 + 25
-                let timeOfDayTable_Y = cellRow * 52 + 235 + 2 * (cellRow - 1)
-                if cellCol == 0 {
-                    timeOfDayTable_X = (cellCol + 1) * 50 + 36
-                }
-                if cellCol == 6 {
-                    timeOfDayTable_X = (cellCol - 1) * 50 + 15
-                }
-                timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+
+                timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
                 animateTimeOfDayTableIn()
-                
             }
             
             if rightDateTimeArrays[rightMostDateAsString] == nil {
@@ -1883,17 +1897,28 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
                     cellRow -= 1
                 }
 
+                let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+                var timeOfDayTableX = CGFloat()
+                var timeOfDayTableY = CGFloat()
+                if positionInSuperView.origin.y < 70 {
+                    timeOfDayTableY = positionInSuperView.origin.y + 65
+                } else if positionInSuperView.origin.y < 350 {
+                    timeOfDayTableY = positionInSuperView.origin.y + 30
+                } else {
+                    timeOfDayTableY = positionInSuperView.origin.y - 170
+                }
+                if positionInSuperView.origin.x < 40 {
+                    timeOfDayTableX = positionInSuperView.midX + 180
+                } else if positionInSuperView.origin.x < 310 {
+                    timeOfDayTableX = positionInSuperView.midX - 12
+                } else {
+                    timeOfDayTableX = positionInSuperView.midX - 77
+                }
+                
                 mostRecentSelectedCellDate = rightMostDate! as NSDate
                 rightDateTimeArrays.removeAllObjects()
-                var timeOfDayTable_X = cellCol * 50 + 25
-                let timeOfDayTable_Y = cellRow * 52 + 235 + 2 * (cellRow - 1)
-                if cellCol == 0 {
-                    timeOfDayTable_X = (cellCol + 1) * 50 + 36
-                }
-                if cellCol == 6 {
-                    timeOfDayTable_X = (cellCol - 1) * 50 + 15
-                }
-                timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+                
+                timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
                 animateTimeOfDayTableIn()
             }
             

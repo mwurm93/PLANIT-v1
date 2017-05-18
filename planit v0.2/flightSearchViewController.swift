@@ -25,10 +25,9 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     @IBOutlet weak var popupBackgroundView: UIView!
     @IBOutlet weak var subviewDoneButton: UIButton!
     @IBOutlet weak var timeOfDayTableView: UITableView!
-    @IBOutlet weak var previousMonth: UIButton!
-    @IBOutlet weak var nextMonth: UIButton!
     @IBOutlet weak var calendarView: JTAppleCalendarView!
     @IBOutlet var popupSubview: UIView!
+    @IBOutlet weak var dayOfWeekStackView: UIStackView!
     
     //CalendarView vars
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
@@ -161,8 +160,8 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         calendarView.isRangeSelectionUsed = true
         calendarView.minimumLineSpacing = 0
         calendarView.minimumInteritemSpacing = 2
-        calendarView.scrollingMode = .nonStopToSection(withResistance: 0.9)
-        calendarView.scrollDirection = .horizontal
+        calendarView.scrollingMode = .none
+        calendarView.scrollDirection = .vertical
         
         // Load trip preferences and install
         if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
@@ -389,12 +388,6 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     @IBAction func subviewDoneButtonTouchedUpInside(_ sender: Any) {
         animateOutSubview()
     }
-    @IBAction func previousMonthTouchedUpInside(_ sender: Any) {
-        calendarView.scrollToSegment(.previous)
-    }
-    @IBAction func nextMonthTouchedUpInside(_ sender: Any) {
-        calendarView.scrollToSegment(.next)
-    }
 }
 
 // MARK: JTCalendarView Extension
@@ -463,11 +456,18 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
             myCustomCell?.middleConnector.isHidden = true
             myCustomCell?.dayLabel.textColor = NewTripNameViewController.whiteColor
         }
-        if cellState.dateBelongsTo != .thisMonth {
-            myCustomCell?.dayLabel.textColor = NewTripNameViewController.darkGrayColor
-        }
         if cellState.date < Date() {
             myCustomCell?.dayLabel.textColor = NewTripNameViewController.darkGrayColor
+        }
+        
+        if cellState.dateBelongsTo != .thisMonth  {
+            myCustomCell?.dayLabel.textColor = UIColor(cgColor: NewTripNameViewController.transparentColor)
+            myCustomCell?.selectedView.isHidden = true
+            myCustomCell?.selectedView.layer.backgroundColor = NewTripNameViewController.transparentColor
+            myCustomCell?.leftSideConnector.isHidden = true
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+            return
         }
     }
     
@@ -475,10 +475,14 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         
         let myCustomCell = calendarView.dequeueReusableJTAppleCell(withReuseIdentifier: "CellView", for: indexPath) as! CellView
         myCustomCell.dayLabel.text = cellState.text
+        if cellState.dateBelongsTo == .previousMonthWithinBoundary || cellState.dateBelongsTo == .followingMonthWithinBoundary {
+            myCustomCell.isSelected = false
+        }
         
         handleSelection(cell: myCustomCell, cellState: cellState)
         
         return myCustomCell
+
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
@@ -488,21 +492,6 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
             rightDateTimeArrays.removeAllObjects()
             leftDateTimeArrays.removeAllObjects()
             calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-        }
-        
-        if cellState.dateBelongsTo == .previousMonthWithinBoundary {
-            calendarView.scrollToSegment(.previous)
-            calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
-            return
-        }
-        if cellState.dateBelongsTo == .followingMonthWithinBoundary {
-            calendarView.scrollToSegment(.next)
-            calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
-            return
-        }
-        if cellState.date < Date() {
-            calendarView.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
-            return
         }
         
         //UNCOMMENT FOR TWO CLICK RANGE SELECTION
@@ -523,26 +512,25 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         }
         
         //Spawn time of day selection
-        let cellRow = cellState.row()
-        let cellCol = cellState.column()
-        var timeOfDayTable_X = cellCol * 50 + 25
-        var timeOfDayTable_Y = cellRow * 52 + 175 + 2 * (cellRow - 1)
-        if cellCol == 0 {
-            timeOfDayTable_X = (cellCol + 1) * 50 + 36
-        }
-        if cellCol == 6 {
-            timeOfDayTable_X = (cellCol - 1) * 50 + 15
-        }
-        if cellRow == 4 || cellRow == 5 {
-            timeOfDayTable_Y -= 193
-        }
-        
-        if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full {
-            timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
-            animateTimeOfDayTableIn()
-        }
-        if cellState.selectedPosition() == .right {
-            timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+        let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+        var timeOfDayTableX = CGFloat()
+        var timeOfDayTableY = CGFloat()
+        if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full || cellState.selectedPosition() == .right {
+            if positionInSuperView.origin.y < 70 {
+                timeOfDayTableY = positionInSuperView.origin.y + 65
+            } else if positionInSuperView.origin.y < 350 {
+                timeOfDayTableY = positionInSuperView.origin.y + 30
+            } else {
+                timeOfDayTableY = positionInSuperView.origin.y - 170
+            }
+            if positionInSuperView.origin.x < 40 {
+                timeOfDayTableX = positionInSuperView.midX + 50
+            } else if positionInSuperView.origin.x < 310 {
+                timeOfDayTableX = positionInSuperView.midX - 12
+            } else {
+                timeOfDayTableX = positionInSuperView.midX - 77
+            }
+            timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
             animateTimeOfDayTableIn()
         }
         
@@ -563,21 +551,10 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
     
     func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         
-        if cellState.dateBelongsTo == .previousMonthWithinBoundary {
-            calendarView.scrollToSegment(.previous)
-            calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-            return
-        }
-        if cellState.dateBelongsTo == .followingMonthWithinBoundary {
-            calendarView.scrollToSegment(.next)
-            calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-            return
-        }
-        
         handleSelection(cell: cell, cellState: cellState)
         getLengthOfSelectedAvailabilities()
         
-        if lengthOfAvailabilitySegmentsArray.count > 1 {
+        if lengthOfAvailabilitySegmentsArray.count > 1 || (leftDates.count > 0 && rightDates.count > 0 && fullDates.count > 0) || fullDates.count > 1 {
             rightDateTimeArrays.removeAllObjects()
             leftDateTimeArrays.removeAllObjects()
             lengthOfAvailabilitySegmentsArray.removeAll()
@@ -625,22 +602,31 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
                     cellRow += 1
                 }
                 
+                
+                //Spawn time of day selection
+                let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+                var timeOfDayTableX = CGFloat()
+                var timeOfDayTableY = CGFloat()
+                if positionInSuperView.origin.y < 70 {
+                    timeOfDayTableY = positionInSuperView.origin.y + 65
+                } else if positionInSuperView.origin.y < 350 {
+                    timeOfDayTableY = positionInSuperView.origin.y + 30
+                } else {
+                    timeOfDayTableY = positionInSuperView.origin.y - 170
+                }
+                if positionInSuperView.origin.x < 40 {
+                    timeOfDayTableX = positionInSuperView.midX + 50
+                } else if positionInSuperView.origin.x < 310 {
+                    timeOfDayTableX = positionInSuperView.midX - 12
+                } else {
+                    timeOfDayTableX = positionInSuperView.midX - 200
+                }
+                
                 mostRecentSelectedCellDate = leftMostDate! as NSDate
                 leftDateTimeArrays.removeAllObjects()
-                var timeOfDayTable_X = cellCol * 50 + 25
-                var timeOfDayTable_Y = cellRow * 52 + 175 + 2 * (cellRow - 1)
-                if cellCol == 0 {
-                    timeOfDayTable_X = (cellCol + 1) * 50 + 36
-                }
-                if cellCol == 6 {
-                    timeOfDayTable_X = (cellCol - 1) * 50 + 15
-                }
-                if cellRow == 4 || cellRow == 5 {
-                    timeOfDayTable_Y -= 193
-                }
-                timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
-                animateTimeOfDayTableIn()
                 
+                timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
+                animateTimeOfDayTableIn()
             }
             
             if rightDateTimeArrays[rightMostDateAsString] == nil {
@@ -652,20 +638,28 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
                     cellRow -= 1
                 }
                 
+                let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+                var timeOfDayTableX = CGFloat()
+                var timeOfDayTableY = CGFloat()
+                if positionInSuperView.origin.y < 70 {
+                    timeOfDayTableY = positionInSuperView.origin.y + 65
+                } else if positionInSuperView.origin.y < 350 {
+                    timeOfDayTableY = positionInSuperView.origin.y + 30
+                } else {
+                    timeOfDayTableY = positionInSuperView.origin.y - 170
+                }
+                if positionInSuperView.origin.x < 40 {
+                    timeOfDayTableX = positionInSuperView.midX + 180
+                } else if positionInSuperView.origin.x < 310 {
+                    timeOfDayTableX = positionInSuperView.midX - 12
+                } else {
+                    timeOfDayTableX = positionInSuperView.midX - 77
+                }
+                
                 mostRecentSelectedCellDate = rightMostDate! as NSDate
                 rightDateTimeArrays.removeAllObjects()
-                var timeOfDayTable_X = cellCol * 50 + 25
-                var timeOfDayTable_Y = cellRow * 52 + 175 + 2 * (cellRow - 1)
-                if cellCol == 0 {
-                    timeOfDayTable_X = (cellCol + 1) * 50 + 36
-                }
-                if cellCol == 6 {
-                    timeOfDayTable_X = (cellCol - 1) * 50 + 15
-                }
-                if cellRow == 4 || cellRow == 5 {
-                    timeOfDayTable_Y -= 193
-                }
-                timeOfDayTableView.center = CGPoint(x: timeOfDayTable_X, y: timeOfDayTable_Y)
+                
+                timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
                 animateTimeOfDayTableIn()
             }
             
@@ -679,6 +673,14 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
     
+    func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {
+        
+        if cellState.dateBelongsTo != .thisMonth || cellState.date < Date() {
+            return false
+        }
+        return true
+    }
+    
     // MARK custom func to get length of selected availability segments
     func getLengthOfSelectedAvailabilities() {
         let selectedDates = calendarView.selectedDates as [NSDate]
@@ -687,29 +689,29 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         fullDates = []
         lengthOfAvailabilitySegmentsArray = []
         if selectedDates.count > 0 {
-        for date in selectedDates {
-            if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .left {
-                leftDates.append(date as Date)
+            for date in selectedDates {
+                if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .left {
+                    leftDates.append(date as Date)
+                }
             }
-        }
-        for date in selectedDates {
-            if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .right {
-                rightDates.append(date as Date)
+            for date in selectedDates {
+                if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .right {
+                    rightDates.append(date as Date)
+                }
             }
-        }
-        for date in selectedDates {
-            if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .full {
-                fullDates.append(date as Date)
+            for date in selectedDates {
+                if calendarView.cellStatus(for: date as Date)?.selectedPosition() == .full {
+                    fullDates.append(date as Date)
+                }
             }
-        }
-        if rightDates != [] {
-            for segment in 0...rightDates.count - 1 {
-                let segmentAvailability = rightDates[segment].timeIntervalSince(leftDates[segment]) / 86400 + 1
-                lengthOfAvailabilitySegmentsArray.append(Int(segmentAvailability))
+            if rightDates != [] && leftDates != [] {
+                for segment in 0...leftDates.count - 1 {
+                    let segmentAvailability = rightDates[segment].timeIntervalSince(leftDates[segment]) / 86400 + 1
+                    lengthOfAvailabilitySegmentsArray.append(Int(segmentAvailability))
+                }
+            } else {
+                lengthOfAvailabilitySegmentsArray = [1]
             }
-        } else {
-            lengthOfAvailabilitySegmentsArray = [1]
-        }
         } else {
             lengthOfAvailabilitySegmentsArray = [0]
         }
@@ -718,7 +720,7 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
     // MARK: Calendar header functions
     // Sets the height of your header
     func calendarSizeForMonths(_ calendar: JTAppleCalendarView?) -> MonthSize? {
-        return MonthSize(defaultSize: 47)
+        return MonthSize(defaultSize: 21)
     }
     
     // This setups the display of your header
