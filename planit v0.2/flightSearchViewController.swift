@@ -35,8 +35,8 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     var rightDates = [Date]()
     var fullDates = [Date]()
     var lengthOfAvailabilitySegmentsArray = [Int]()
-    var leftDateTimeArrays: NSMutableDictionary?
-    var rightDateTimeArrays: NSMutableDictionary?
+    var leftDateTimeArrays = NSMutableDictionary()
+    var rightDateTimeArrays = NSMutableDictionary()
     var mostRecentSelectedCellDate = NSDate()
     
     var searchMode = "roundtrip"
@@ -236,25 +236,21 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
                 let formatter = DateFormatter()
                 formatter.dateFormat = "MM/dd/yyyy"
                 let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
-                leftDateTimeArrays?.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
                 departureDate.text =  "\(mostRecentSelectedCellDateAsNSString)"
             }
             if cell?.selectedPosition() == .right {
                 let formatter = DateFormatter()
                 formatter.dateFormat = "MM/dd/yyyy"
                 let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
-                rightDateTimeArrays?.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
                 returnDate.text =  "\(mostRecentSelectedCellDateAsNSString)"
             }
             
             //Update trip preferences in dictionary
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            if leftDateTimeArrays != nil {
-                SavedPreferencesForTrip["origin_departure_times"] = leftDateTimeArrays!
-            }
-            if rightDateTimeArrays != nil {
-                SavedPreferencesForTrip["return_departure_times"] = rightDateTimeArrays!
-            }
+            SavedPreferencesForTrip["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+            SavedPreferencesForTrip["return_departure_times"] = rightDateTimeArrays as NSDictionary
             
             //Save
             saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -269,7 +265,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
             
             let when = DispatchTime.now() + 0.6
             DispatchQueue.main.asyncAfter(deadline: when) {
-                if self.leftDateTimeArrays?.count == self.rightDateTimeArrays?.count {
+                if self.leftDateTimeArrays.count == self.rightDateTimeArrays.count {
                 }
             }
         }
@@ -493,30 +489,26 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
     
     func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         
-        if leftDateTimeArrays != nil && rightDateTimeArrays != nil {
-        
-            if searchMode == "oneWay" || ((searchMode == "roundtrip" || searchMode == "multiCity") && (leftDateTimeArrays?.count)! >= 1 && (rightDateTimeArrays?.count)! >= 1) {
-                calendarView.deselectAllDates(triggerSelectionDelegate: false)
-                rightDateTimeArrays?.removeAllObjects()
-                leftDateTimeArrays?.removeAllObjects()
-                calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-            }
+        if searchMode == "oneWay" || ((searchMode == "roundtrip" || searchMode == "multiCity") && leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1) {
+            calendarView.deselectAllDates(triggerSelectionDelegate: false)
+            rightDateTimeArrays.removeAllObjects()
+            leftDateTimeArrays.removeAllObjects()
+            calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
         }
         
         //UNCOMMENT FOR TWO CLICK RANGE SELECTION
-        let leftKeys = leftDateTimeArrays?.allKeys
-        let rightKeys = rightDateTimeArrays?.allKeys
-        
-        if leftKeys?.count == 1 && rightKeys?.count == 0 {
+        let leftKeys = leftDateTimeArrays.allKeys
+        let rightKeys = rightDateTimeArrays.allKeys
+        if leftKeys.count == 1 && rightKeys.count == 0 {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MM/dd/yyyy"
-            let leftDate = dateFormatter.date(from: leftKeys?[0] as! String)
+            let leftDate = dateFormatter.date(from: leftKeys[0] as! String)
             if date > leftDate! {
                 calendarView.selectDates(from: leftDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
             } else {
                 calendarView.deselectAllDates(triggerSelectionDelegate: false)
-                rightDateTimeArrays?.removeAllObjects()
-                leftDateTimeArrays?.removeAllObjects()
+                rightDateTimeArrays.removeAllObjects()
+                leftDateTimeArrays.removeAllObjects()
                 calendarView.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
             }
         }
@@ -565,8 +557,8 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         getLengthOfSelectedAvailabilities()
         
         if lengthOfAvailabilitySegmentsArray.count > 1 || (leftDates.count > 0 && rightDates.count > 0 && fullDates.count > 0) || fullDates.count > 1 {
-            rightDateTimeArrays?.removeAllObjects()
-            leftDateTimeArrays?.removeAllObjects()
+            rightDateTimeArrays.removeAllObjects()
+            leftDateTimeArrays.removeAllObjects()
             lengthOfAvailabilitySegmentsArray.removeAll()
             calendarView.deselectAllDates(triggerSelectionDelegate: false)
             return
@@ -603,7 +595,7 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
             var cellRow = cellState.row()
             var cellCol = cellState.column()
             
-            if leftDateTimeArrays?[leftMostDateAsString] == nil {
+            if leftDateTimeArrays[leftMostDateAsString] == nil {
                 
                 if cellCol != 6 {
                     cellCol += 1
@@ -633,13 +625,13 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
                 }
                 
                 mostRecentSelectedCellDate = leftMostDate! as NSDate
-                leftDateTimeArrays?.removeAllObjects()
+                leftDateTimeArrays.removeAllObjects()
                 
                 timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
                 animateTimeOfDayTableIn()
             }
             
-            if rightDateTimeArrays?[rightMostDateAsString] == nil {
+            if rightDateTimeArrays[rightMostDateAsString] == nil {
                 
                 if cellCol != 0 {
                     cellCol -= 1
@@ -667,7 +659,7 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
                 }
                 
                 mostRecentSelectedCellDate = rightMostDate! as NSDate
-                rightDateTimeArrays?.removeAllObjects()
+                rightDateTimeArrays.removeAllObjects()
                 
                 timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
                 animateTimeOfDayTableIn()
