@@ -53,6 +53,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         returnDateLabel.isHidden = false
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        
         leftDateTimeArrays = SavedPreferencesForTrip["origin_departure_times"] as! NSDictionary as! NSMutableDictionary
         rightDateTimeArrays = SavedPreferencesForTrip["return_departure_times"] as! NSDictionary as! NSMutableDictionary
         let topTrips = SavedPreferencesForTrip["top_trips"] as! [String]
@@ -151,7 +152,6 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         
         // Calendar header setup
         calendarView.register(UINib(nibName: "monthHeaderView", bundle: nil), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "monthHeaderView")
-        
         
         // Calendar setup delegate and datasource
         calendarView.calendarDataSource = self
@@ -406,7 +406,7 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
             numberOfRows: 6, // Only 1, 2, 3, & 6 are allowed
             calendar: Calendar.current,
             generateInDates: .forAllMonths,
-            generateOutDates: .tillEndOfGrid,
+            generateOutDates: .tillEndOfRow,
             firstDayOfWeek: .sunday)
         return parameters
     }
