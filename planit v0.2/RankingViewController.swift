@@ -12,8 +12,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // MARK: Class properties
     var sectionTitles = ["Top trip", "Alternatives"]
-    // Create visual effect variable
+    var pricesArray = ["$1,000","$950","$1,100","$1,000","$975"]
+    var percentagesSwipedRightArray = ["100","75","50","25","25"]
+    var destinationsLabelsArray = ["Miami", "San Diego", "Marina del Rey", "Panama City", "Ft. Lauderdale"]
     var effect:UIVisualEffect!
+    var flightResultsDictionary = [[String:String]()]
     
     // MARK: Outlets
     @IBOutlet weak var recommendationRankingTableView: UITableView!
@@ -22,9 +25,13 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var tripNameLabel: UITextField!
     @IBOutlet weak var popupBlurView: UIVisualEffectView!
     
+    
     // viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Load flight results from server
+        flightResultsDictionary = [["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"MIA","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"]]
         
         //Set up popupblurview
         effect = popupBlurView.effect
@@ -47,6 +54,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         //Install the value into the label.
         if tripNameValue != nil {
             self.tripNameLabel.text =  "\(tripNameValue!)"
+        }
+        
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if SavedPreferencesForTrip["top_trips"] != nil {
+            destinationsLabelsArray = SavedPreferencesForTrip["top_trips"] as! [String]
         }
         
         let path = recommendationRankingTableView.indexPathForSelectedRow! as IndexPath
@@ -84,14 +96,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [String]
-        
         var addedRow = indexPath.row
-        let destinationsLabelsArray = ["Miami", "San Diego", "Marina del Rey (LA)", "Panama City Beach", "Ft. Lauderdale"]
-        let pricesArray = ["$1,000","$950","$1,100","$1,000","$975"]
-        let percentagesSwipedRightArray = ["100","75","50","25","25"]
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "rankedRecommendationsPrototypeCell", for: indexPath) as! rankedRecommendationsTableViewCell
         
         if indexPath.section == 1 {
@@ -131,15 +136,25 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false
     }
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        if indexPath == IndexPath(row: 0, section: 0) {
+            return false
+        }
+        return true
+    }
+    
+    
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        
+        let visibleItems = self.recommendationRankingTableView.indexPathsForVisibleRows
         
         //Alt trip moved into top section but below top trip
         if destinationIndexPath.section == 0 && destinationIndexPath.row != 0 {
-            // NEED TO FIX
-            self.recommendationRankingTableView.reloadData()
+            tableView.reloadData()
         }
         
-        // Alternative trip moved above top trip
+    // Alternative trip moved above top trip
     if destinationIndexPath.section == 0  && sourceIndexPath.section != 0 && destinationIndexPath.row == 0 {
         // Spawn alert
         let alertController = UIAlertController(title: "You are changing your group's top trip", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
@@ -153,77 +168,64 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         let continueAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.default) {
             (result : UIAlertAction) -> Void in
             
-            let visibleItems = self.recommendationRankingTableView.indexPathsForVisibleRows
-            var destinationsLabelsArray = [NSString]()
-            
-            if destinationIndexPath == IndexPath(row: 0, section: 0) && sourceIndexPath.section == 1 {
-                
                 self.recommendationRankingTableView.moveRow(at: (visibleItems?[1])!, to: (visibleItems?[2])!)
                 self.recommendationRankingTableView.cellForRow(at: IndexPath(row: 0, section: 1))?.layer.backgroundColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
                 self.recommendationRankingTableView.selectRow(at: IndexPath(row: 0, section: 0)
                     , animated: true, scrollPosition: UITableViewScrollPosition.top)
                 self.recommendationRankingTableView.cellForRow(at: IndexPath(row: 0, section: 0))?.layer.backgroundColor = UIColor.blue.cgColor
             
-                for _ in visibleItems! {
-                    var row = 0
-                    let topCell = self.recommendationRankingTableView.cellForRow(at:IndexPath(row: 0, section: 0)) as! rankedRecommendationsTableViewCell
-                    let lowerRankedCell = self.recommendationRankingTableView.cellForRow(at:IndexPath(row: 0, section: 0)) as! rankedRecommendationsTableViewCell
-                    destinationsLabelsArray.append(topCell.destinationLabel.text! as NSString)
-                    destinationsLabelsArray.append(lowerRankedCell.destinationLabel.text! as NSString)
-                    row += 1
+            
+                let countOfAlternatives = self.destinationsLabelsArray.count - 2
+                self.destinationsLabelsArray.removeAll()
+                self.pricesArray.removeAll()
+                self.percentagesSwipedRightArray.removeAll()
+                let topCell = self.recommendationRankingTableView.cellForRow(at:IndexPath(row: 0, section: 0)) as! rankedRecommendationsTableViewCell
+                self.destinationsLabelsArray.append(topCell.destinationLabel.text!)
+                self.pricesArray.append(topCell.tripPrice.text!)
+                self.percentagesSwipedRightArray.append(topCell.percentSwipedRight.text!)
+            
+                for row in 0 ... countOfAlternatives {
+                    let lowerRankedCell = self.recommendationRankingTableView.cellForRow(at:IndexPath(row: row, section: 1)) as! rankedRecommendationsTableViewCell
+                    self.destinationsLabelsArray.append(lowerRankedCell.destinationLabel.text!)
+                    self.pricesArray.append(lowerRankedCell.tripPrice.text!)
+                    self.percentagesSwipedRightArray.append(lowerRankedCell.percentSwipedRight.text!)
                 }
             
+            self.readyToBookButton.setTitle("Move forward with \(self.destinationsLabelsArray[0])", for: .normal)
+            
             let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-            SavedPreferencesForTrip["top_trips"] = destinationsLabelsArray as [NSString]
+            SavedPreferencesForTrip["top_trips"] = self.destinationsLabelsArray as [NSString]
             //Save
             self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            }
-            
-//            self.recommendationRankingTableView.selectRow(at: IndexPath(row: 0, section: 0)
-//                , animated: true, scrollPosition: UITableViewScrollPosition.top)
-//            self.recommendationRankingTableView.cellForRow(at: IndexPath(row: 0, section: 0))?.layer.backgroundColor = UIColor.blue.cgColor
         }
-        
-//        let path = recommendationRankingTableView.indexPathForSelectedRow! as IndexPath
-        let cell = recommendationRankingTableView.cellForRow(at: sourceIndexPath) as! rankedRecommendationsTableViewCell
-        let selectedDestination = cell.destinationLabel.text!
-        self.readyToBookButton.setTitle("Move forward with \(selectedDestination)", for: .normal)
-        
         alertController.addAction(cancelAction)
         alertController.addAction(continueAction)
         self.present(alertController, animated: true, completion: nil)
         }
         
-        // Top trip moved down
-//        if sourceIndexPath.section == 0 && destinationIndexPath.section != 0 {
-//
-//            // Spawn alert
-//            let alertController2 = UIAlertController(title: "You are changing your group's top trip", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
-//            
-//            
-//            let cancelAction2 = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
-//                (result : UIAlertAction) -> Void in
-//                
-//                self.recommendationRankingTableView.moveRow(at: destinationIndexPath, to: sourceIndexPath)
-//                self.recommendationRankingTableView.cellForRow(at: sourceIndexPath)?.layer.backgroundColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
-//            }
-//            
-//            let continueAction2 = UIAlertAction(title: "Continue", style: UIAlertActionStyle.default) {
-//                (result : UIAlertAction) -> Void in
-//                
-//                let visibleItems = self.recommendationRankingTableView.indexPathsForVisibleRows
-//                self.recommendationRankingTableView.moveRow(at: (visibleItems?[1])!, to: IndexPath(row:0,section:0))
-//                self.recommendationRankingTableView.cellForRow(at: (visibleItems?[0])!)?.layer.backgroundColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
-//            }
-//            
-//            //present alert
-//            alertController2.addAction(cancelAction2)
-//            alertController2.addAction(continueAction2)
-//            self.present(alertController2, animated: true, completion: nil)
-//        }
-
+        if destinationIndexPath.section == 1 && sourceIndexPath.section == 1 {
+            let countOfAlternatives = self.destinationsLabelsArray.count - 2
+            self.destinationsLabelsArray.removeAll()
+            self.pricesArray.removeAll()
+            self.percentagesSwipedRightArray.removeAll()
+            let topCell = self.recommendationRankingTableView.cellForRow(at:IndexPath(row: 0, section: 0)) as! rankedRecommendationsTableViewCell
+            self.destinationsLabelsArray.append(topCell.destinationLabel.text!)
+            self.pricesArray.append(topCell.tripPrice.text!)
+            self.percentagesSwipedRightArray.append(topCell.percentSwipedRight.text!)
+            
+            for row in 0 ... countOfAlternatives {
+                let lowerRankedCell = self.recommendationRankingTableView.cellForRow(at:IndexPath(row: row, section: 1)) as! rankedRecommendationsTableViewCell
+                self.destinationsLabelsArray.append(lowerRankedCell.destinationLabel.text!)
+                self.pricesArray.append(lowerRankedCell.tripPrice.text!)
+                self.percentagesSwipedRightArray.append(lowerRankedCell.percentSwipedRight.text!)
+            }
+            let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["top_trips"] = self.destinationsLabelsArray as [NSString]
+            //Save
+            self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
+        
     }
-
 
     // MARK: Table Section Headers
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

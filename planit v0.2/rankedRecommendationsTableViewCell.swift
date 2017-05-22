@@ -14,6 +14,16 @@ class rankedRecommendationsTableViewCell: UITableViewCell {
     @IBOutlet weak var destinationLabel: UILabel!
     @IBOutlet weak var tripPrice: UILabel!
     @IBOutlet weak var percentSwipedRight: UILabel!
+    @IBOutlet weak var accomodationFrom: UILabel!
+    @IBOutlet weak var changeFlightsButton: UIButton!
+    @IBOutlet weak var departureDepartureTime: UILabel!
+    @IBOutlet weak var DepartureOrigin: UILabel!
+    @IBOutlet weak var departureArrivalTime: UILabel!
+    @IBOutlet weak var departureDestination: UILabel!
+    @IBOutlet weak var returnDepartureTime: UILabel!
+    @IBOutlet weak var returnOrigin: UILabel!
+    @IBOutlet weak var returnArrivalTime: UILabel!
+    @IBOutlet weak var returnDestination: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

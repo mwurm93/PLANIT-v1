@@ -107,6 +107,10 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             addAnotherTripButton.isHidden = true
             goToBucketListButton.isHidden = true
             
+            bucketListButton.isHidden = false
+            beenThereButton.isHidden = false
+            modeButton.isHidden = false
+            
             createTripButton.isHidden = false
             createTripArrow.isHidden = false
             instructionsTitleLabel.isHidden = false
@@ -120,6 +124,10 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             existingTripsTable.layer.cornerRadius = 5
             addAnotherTripButton.isHidden = false
             goToBucketListButton.isHidden = false
+            
+            bucketListButton.isHidden = true
+            beenThereButton.isHidden = true
+            modeButton.isHidden = true
             
             createTripButton.isHidden = true
             createTripArrow.isHidden = true
@@ -334,6 +342,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         // if  == nil {
             existingTripsTable.isHidden = true
+        
             return cell
     }
     
@@ -433,6 +442,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                         existingTripsTable.isHidden = true
                         addAnotherTripButton.isHidden = true
                         goToBucketListButton.isHidden = true
+                        
+                        
+                        bucketListButton.isHidden = true
+                        beenThereButton.isHidden = true
+                        modeButton.isHidden = true
                         
                         createTripButton.isHidden = false
                         createTripArrow.isHidden = false
@@ -735,6 +749,10 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                 self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)])
             }
         }
+    }
+    
+    func globeViewControllerDidStartMoving(_ viewC: WhirlyGlobeViewController, userMotion: Bool) {
+        //IF ZOOM > X THEN ADD LABELS
     }
     
     private func addAnnotationWithTitle(title: String, subtitle: String, loc:MaplyCoordinate) {
