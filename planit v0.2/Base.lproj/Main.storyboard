@@ -428,6 +428,35 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sPl-5P-CDc">
+                                <rect key="frame" x="301" y="620" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="paint bucket"/>
+                                <connections>
+                                    <action selector="modeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="Rha-aX-gJN"/>
+                                    <action selector="modeButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="z95-Oc-6Ib"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ir-KX-bmB">
+                                <rect key="frame" x="172" y="620" width="100" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.69709708120000002" green="0.37376992599999997" blue="0.39410270689999999" alpha="0.65000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="I've been"/>
+                                <connections>
+                                    <action selector="beenThereButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="VHa-a0-LcE"/>
+                                    <action selector="beenThereButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="Wl5-Ih-gXQ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TgD-WV-62k">
+                                <rect key="frame" x="40" y="620" width="100" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.00077266624249999998" green="0.45897446069999998" blue="0.063549611549999996" alpha="0.64752782529999997" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Bucket list"/>
+                                <connections>
+                                    <action selector="bucketListButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="00X-PD-oRx"/>
+                                    <action selector="bucketListButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="clq-NR-jzS"/>
+                                </connections>
+                            </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DrV-cf-9bD">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -501,6 +530,8 @@
                         <outlet property="addAnotherTripButton" destination="aXL-Zp-nBl" id="Vtu-bi-Tmd"/>
                         <outlet property="backgroundBlurFilterView" destination="TMF-81-slu" id="6zM-kU-Hay"/>
                         <outlet property="backgroundView" destination="ITK-bk-NGF" id="PqR-JH-13m"/>
+                        <outlet property="beenThereButton" destination="0ir-KX-bmB" id="1iS-Vf-ung"/>
+                        <outlet property="bucketListButton" destination="TgD-WV-62k" id="tNh-Vp-Xbs"/>
                         <outlet property="createTripArrow" destination="ZHg-bt-TMQ" id="NoT-Tb-hFp"/>
                         <outlet property="createTripButton" destination="KjX-ub-hvz" id="hLs-JC-zIJ"/>
                         <outlet property="destinationDecidedControl" destination="Fir-vh-ZCH" id="f3m-fI-mKV"/>
@@ -508,6 +539,7 @@
                         <outlet property="existingTripsTable" destination="Gra-2t-s2J" id="seK-KW-ZCb"/>
                         <outlet property="goToBucketListButton" destination="4qV-Ms-ae1" id="wmC-3v-gz0"/>
                         <outlet property="instructionsTitleLabel" destination="Fn7-dr-PHH" id="czC-cY-XLr"/>
+                        <outlet property="modeButton" destination="sPl-5P-CDc" id="XvM-tM-lgT"/>
                         <outlet property="myTripsTitleLabel" destination="FnC-Mh-kbn" id="QJp-4q-Tri"/>
                         <outlet property="popupBackgroundView" destination="DrV-cf-9bD" id="ckR-LH-Jsf"/>
                         <segue destination="E8d-J0-NPc" kind="show" identifier="unfinishedExistingTripsToSwiping" animates="NO" id="5Cy-Be-NXP"/>
@@ -3788,21 +3820,21 @@
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="JFK - MIA roundtrip" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IcQ-oE-Owt">
-                                <rect key="frame" x="97" y="50" width="180" height="21"/>
+                                <rect key="frame" x="97" y="63" width="180" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="12/31 - 12/31" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JkT-K0-fSy">
-                                <rect key="frame" x="97" y="72" width="180" height="21"/>
+                                <rect key="frame" x="97" y="85" width="180" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JCG-3h-J6X">
-                                <rect key="frame" x="100" y="0.0" width="50" height="50"/>
+                                <rect key="frame" x="100" y="9" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" image="filter"/>
@@ -3811,7 +3843,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZEF-nt-BDs">
-                                <rect key="frame" x="225" y="0.0" width="50" height="50"/>
+                                <rect key="frame" x="225" y="9" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" image="sort"/>
@@ -4493,14 +4525,14 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="1Xg-d5-Dmi"/>
-        <segue reference="2ah-17-HDw"/>
-        <segue reference="G1K-4d-MLp"/>
-        <segue reference="zWM-he-GTg"/>
-        <segue reference="8MA-wa-IqS"/>
-        <segue reference="R8r-yB-rJ1"/>
-        <segue reference="lra-AY-k3U"/>
+        <segue reference="isD-dZ-KwN"/>
+        <segue reference="anE-cP-H4U"/>
+        <segue reference="4hW-EN-T1K"/>
         <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="qH0-AO-962"/>
+        <segue reference="1lt-od-qL5"/>
+        <segue reference="2ah-17-HDw"/>
+        <segue reference="1Xg-d5-Dmi"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

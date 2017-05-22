@@ -366,6 +366,21 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     let attrs = wgVecObj.attributes
                     if let vecName = attrs.object(forKey: "ADMIN") as? NSObject {
                         wgVecObj.userObject = vecName
+                        
+                        if (vecName.description.characters.count) > 0 {
+                            let label = MaplyScreenLabel()
+                            label.text = vecName.description
+                            label.loc = wgVecObj.centroid()
+                            label.selectable = true
+                            label.layoutImportance = 10.0
+                            self.theViewC?.addScreenLabels([label],
+                                                           desc: [
+                                                            kMaplyFont: UIFont.boldSystemFont(ofSize: 14.0),
+                                                            kMaplyTextOutlineColor: UIColor.black,
+                                                            kMaplyTextOutlineSize: 2.0,
+                                                            kMaplyColor: UIColor.white
+                                ])
+                        }
                     }
                     
                     attrs.setValue("tbd", forKey: "selectionStatus")
@@ -374,7 +389,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             }
         }
     }
-    
+   
     //MARK: Actions
     @IBAction func bucketListButtonTouchedUpInside(_ sender: Any) {
         bucketListButton.layer.borderWidth = 3
