@@ -11,8 +11,8 @@ import UIKit
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     // MARK: Class properties
-    var sectionTitles = ["Top trip", "Alternatives"]
-    var pricesArray = ["$1,000","$950","$1,100","$1,000","$975"]
+    var sectionTitles = ["Group's top trip", "Alternatives"]
+    var pricesArray = ["$1,000","$???","$???","$???","$???"]
     var percentagesSwipedRightArray = ["100","75","50","25","25"]
     var destinationsLabelsArray = ["Miami", "San Diego", "Marina del Rey", "Panama City", "Ft. Lauderdale"]
     var effect:UIVisualEffect!
@@ -175,7 +175,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.recommendationRankingTableView.cellForRow(at: IndexPath(row: 0, section: 0))?.layer.backgroundColor = UIColor.blue.cgColor
             
             
-                let countOfAlternatives = self.destinationsLabelsArray.count - 2
+                let countOfAlternatives = (visibleItems?.count)! - 2
                 self.destinationsLabelsArray.removeAll()
                 self.pricesArray.removeAll()
                 self.percentagesSwipedRightArray.removeAll()
@@ -203,27 +203,27 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.present(alertController, animated: true, completion: nil)
         }
         
-        if destinationIndexPath.section == 1 && sourceIndexPath.section == 1 {
-            let countOfAlternatives = self.destinationsLabelsArray.count - 2
-            self.destinationsLabelsArray.removeAll()
-            self.pricesArray.removeAll()
-            self.percentagesSwipedRightArray.removeAll()
-            let topCell = self.recommendationRankingTableView.cellForRow(at:IndexPath(row: 0, section: 0)) as! rankedRecommendationsTableViewCell
-            self.destinationsLabelsArray.append(topCell.destinationLabel.text!)
-            self.pricesArray.append(topCell.tripPrice.text!)
-            self.percentagesSwipedRightArray.append(topCell.percentSwipedRight.text!)
-            
-            for row in 0 ... countOfAlternatives {
-                let lowerRankedCell = self.recommendationRankingTableView.cellForRow(at:IndexPath(row: row, section: 1)) as! rankedRecommendationsTableViewCell
-                self.destinationsLabelsArray.append(lowerRankedCell.destinationLabel.text!)
-                self.pricesArray.append(lowerRankedCell.tripPrice.text!)
-                self.percentagesSwipedRightArray.append(lowerRankedCell.percentSwipedRight.text!)
-            }
-            let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-            SavedPreferencesForTrip["top_trips"] = self.destinationsLabelsArray as [NSString]
-            //Save
-            self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-        }
+//        if destinationIndexPath.section == 1 && sourceIndexPath.section == 1 {
+//            let countOfAlternatives = self.destinationsLabelsArray.count - 2
+//            self.destinationsLabelsArray.removeAll()
+//            self.pricesArray.removeAll()
+//            self.percentagesSwipedRightArray.removeAll()
+//            let topCell = self.recommendationRankingTableView.cellForRow(at:IndexPath(row: 0, section: 0)) as! rankedRecommendationsTableViewCell
+//            self.destinationsLabelsArray.append(topCell.destinationLabel.text!)
+//            self.pricesArray.append(topCell.tripPrice.text!)
+//            self.percentagesSwipedRightArray.append(topCell.percentSwipedRight.text!)
+//            
+//            for row in 0 ... countOfAlternatives {
+//                let lowerRankedCell = self.recommendationRankingTableView.cellForRow(at:IndexPath(row: row, section: 1)) as! rankedRecommendationsTableViewCell
+//                self.destinationsLabelsArray.append(lowerRankedCell.destinationLabel.text!)
+//                self.pricesArray.append(lowerRankedCell.tripPrice.text!)
+//                self.percentagesSwipedRightArray.append(lowerRankedCell.percentSwipedRight.text!)
+//            }
+//            let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+//            SavedPreferencesForTrip["top_trips"] = self.destinationsLabelsArray as [NSString]
+//            //Save
+//            self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//        }
         
     }
 

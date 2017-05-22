@@ -61,8 +61,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         bucketListButton.layer.shadowColor = UIColor.black.cgColor
         bucketListButton.layer.shadowOffset = CGSize(width: 2, height: 2)
         bucketListButton.layer.shadowRadius = 2
-        bucketListButton.layer.shadowOpacity = 0.3
-        
+        bucketListButton.layer.shadowOpacity = 0.5
         
         beenThereButton.layer.cornerRadius = 5
         beenThereButton.layer.borderColor = UIColor.white.cgColor
@@ -70,7 +69,22 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         beenThereButton.layer.shadowColor = UIColor.black.cgColor
         beenThereButton.layer.shadowOffset = CGSize(width: 2, height: 2)
         beenThereButton.layer.shadowRadius = 2
-        beenThereButton.layer.shadowOpacity = 0.3
+        beenThereButton.layer.shadowOpacity = 0.5
+        
+        modeButton.layer.shadowColor = UIColor.black.cgColor
+        modeButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        modeButton.layer.shadowRadius = 2
+        modeButton.layer.shadowOpacity = 0.5
+
+        createTripArrow.layer.shadowColor = UIColor.black.cgColor
+        createTripArrow.layer.shadowOffset = CGSize(width: 2, height: 2)
+        createTripArrow.layer.shadowRadius = 2
+        createTripArrow.layer.shadowOpacity = 0.5
+        
+        createTripButton.layer.shadowColor = UIColor.black.cgColor
+        createTripButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        createTripButton.layer.shadowRadius = 2
+        createTripButton.layer.shadowOpacity = 0.5
         
         // Set up tap outside time of day table
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissPopup(touch:)))
@@ -168,11 +182,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         createTripArrow.isHighlighted = false
         popupBackgroundView.isHidden = false
         destinationDecidedControlView.isHidden = false
-        destinationDecidedControlView.frame = CGRect(x: 167, y: 430, width: 196, height: 135)
+        destinationDecidedControlView.frame = CGRect(x: 167, y: 71, width: 196, height: 135)
     }
     @IBAction func createFirstTripArrowTouchedUpInside(_ sender: Any) {
         destinationDecidedControlView.isHidden = false
-        destinationDecidedControlView.frame = CGRect(x: 167, y: 430, width: 196, height: 135)
+        destinationDecidedControlView.frame = CGRect(x: 167, y: 71, width: 196, height: 135)
     }
     
     @IBAction func destinationDecidedControlValueChanged(_ sender: Any) {
@@ -444,9 +458,9 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                         goToBucketListButton.isHidden = true
                         
                         
-                        bucketListButton.isHidden = true
-                        beenThereButton.isHidden = true
-                        modeButton.isHidden = true
+                        bucketListButton.isHidden = false
+                        beenThereButton.isHidden = false
+                        modeButton.isHidden = false
                         
                         createTripButton.isHidden = false
                         createTripArrow.isHidden = false
@@ -784,14 +798,13 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                             let label = MaplyScreenLabel()
                             label.text = vecName.description
                             label.loc = wgVecObj.centroid()
-                            label.selectable = true
                             label.layoutImportance = 10.0
                             self.theViewC?.addScreenLabels([label],
                                                            desc: [
                                                             kMaplyFont: UIFont.boldSystemFont(ofSize: 14.0),
-                                                            kMaplyTextOutlineColor: UIColor.black,
-                                                            kMaplyTextOutlineSize: 2.0,
-                                                            kMaplyColor: UIColor.white
+                                                            kMaplyMinVis: 0.005,
+                                                            kMaplyMaxVis: 0.6,
+                                                            kMaplyTextColor: UIColor.darkGray,
                                 ])
                         }
                     }

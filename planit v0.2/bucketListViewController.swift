@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import GooglePlaces
 
-class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDelegate  {
-
+class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UISearchControllerDelegate  {
+    
     @IBOutlet weak var backgroundView: UIImageView!
     @IBOutlet weak var backgroundBlurFilterView: UIVisualEffectView!
     
@@ -30,14 +31,51 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     var AddedFillVectorObjs_been = [MaplyVectorObject]()
     var AddedOutlineVectorObjs_been = [MaplyVectorObject]()
     var mode = "pin"
+    //GOOGLE PLACES SEARCH
+    var resultsViewController: GMSAutocompleteResultsViewController?
+    var searchController: UISearchController?
+    var resultView: UITextView?
+
 
     //MARK: Outlets
     @IBOutlet weak var bucketListButton: UIButton!
     @IBOutlet weak var beenThereButton: UIButton!
     @IBOutlet weak var modeButton: UIButton!
+    @IBOutlet weak var tripsButton: UIButton!
+    @IBOutlet weak var settingsButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //GOOGLE PLACES SEARCH
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self as GMSAutocompleteResultsViewControllerDelegate
+        searchController = UISearchController(searchResultsController: resultsViewController)
+        searchController?.searchResultsUpdater = resultsViewController
+        searchController?.searchBar.isTranslucent = true
+        searchController?.searchBar.layer.cornerRadius = 5
+        searchController?.searchBar.barStyle = .default
+        searchController?.searchBar.searchBarStyle = .minimal
+        searchController?.searchBar.showsCancelButton = false
+        let textFieldInsideSearchBar = searchController?.searchBar.value(forKey: "searchField") as? UITextField
+        textFieldInsideSearchBar?.textColor = UIColor.white
+        let textFieldInsideSearchBarLabel = textFieldInsideSearchBar!.value(forKey: "placeholderLabel") as? UILabel
+        textFieldInsideSearchBarLabel?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as! UIButton
+        clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
+        clearButton.tintColor = UIColor.white
+        let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView
+        glassIconView?.image = glassIconView?.image?.withRenderingMode(.alwaysTemplate)
+        glassIconView?.tintColor = UIColor.white
+        let subView = UIView(frame: CGRect(x: (self.view.frame.maxX - 4/5 * self.view.frame.maxX)/2, y: 65.0, width: 4/5 * self.view.frame.maxX, height: 45.0))
+        subView.addSubview((searchController?.searchBar)!)
+        view.addSubview(subView)
+        searchController?.searchBar.sizeToFit()
+        searchController?.hidesNavigationBarDuringPresentation = false
+        // When UISearchController presents the results view, present it in
+        // this view controller, not one further up the chain.
+        definesPresentationContext = true
+        
         
         selectionColor = UIColor(cgColor: bucketListButton.layer.backgroundColor!)
         
@@ -48,7 +86,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         bucketListButton.layer.shadowOffset = CGSize(width: 2, height: 2)
         bucketListButton.layer.shadowRadius = 2
         bucketListButton.layer.shadowOpacity = 0.3
-
         
         beenThereButton.layer.cornerRadius = 5
         beenThereButton.layer.borderColor = UIColor.white.cgColor
@@ -58,6 +95,20 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         beenThereButton.layer.shadowRadius = 2
         beenThereButton.layer.shadowOpacity = 0.3
         
+        modeButton.layer.shadowColor = UIColor.black.cgColor
+        modeButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        modeButton.layer.shadowRadius = 2
+        modeButton.layer.shadowOpacity = 0.5
+        
+        tripsButton.layer.shadowColor = UIColor.black.cgColor
+        tripsButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        tripsButton.layer.shadowRadius = 2
+        tripsButton.layer.shadowOpacity = 0.5
+        
+        settingsButton.layer.shadowColor = UIColor.black.cgColor
+        settingsButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        settingsButton.layer.shadowRadius = 2
+        settingsButton.layer.shadowOpacity = 0.5
         
         // Create an empty globe and add it to the view
         theViewC = WhirlyGlobeViewController()
@@ -307,6 +358,10 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         })
     }
     
+    func didPresentSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.showsCancelButton = false
+    }
+    
     func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject, atLoc coord: MaplyCoordinate, onScreen screenPt: CGPoint) {
         
         if mode == "fill" {
@@ -371,14 +426,13 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                             let label = MaplyScreenLabel()
                             label.text = vecName.description
                             label.loc = wgVecObj.centroid()
-                            label.selectable = true
                             label.layoutImportance = 10.0
                             self.theViewC?.addScreenLabels([label],
                                                            desc: [
                                                             kMaplyFont: UIFont.boldSystemFont(ofSize: 14.0),
-                                                            kMaplyTextOutlineColor: UIColor.black,
-                                                            kMaplyTextOutlineSize: 2.0,
-                                                            kMaplyColor: UIColor.white
+                                                            kMaplyTextColor: UIColor.darkGray,
+                                                            kMaplyMinVis: 0.005,
+                                                            kMaplyMaxVis: 0.6
                                 ])
                         }
                     }
@@ -409,5 +463,33 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             mode = "pin"
             modeButton.setImage(#imageLiteral(resourceName: "paint bucket"), for: .normal)
         }
+    }
+}
+
+// Handle the user's selection GOOGLE PLACES SEARCH
+extension bucketListViewController: GMSAutocompleteResultsViewControllerDelegate {
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
+                           didAutocompleteWith place: GMSPlace) {
+        searchController?.isActive = false
+        // Do something with the selected place.
+        print("Place name: \(place.name)")
+        print("location: \(place.coordinate)")
+        print("Place address: \(String(describing: place.formattedAddress))")
+        print("Place attributions: \(String(describing: place.attributions))")
+    }
+    
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
+                           didFailAutocompleteWithError error: Error){
+        // TODO: handle the error.
+        print("Error: ", error.localizedDescription)
+    }
+    
+    // Turn the network activity indicator on and off again.
+    func didRequestAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
 }
