@@ -434,7 +434,6 @@
                                 <state key="normal" image="paint bucket"/>
                                 <connections>
                                     <action selector="fillModeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="Kvg-1t-poK"/>
-                                    <action selector="modeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="Rha-aX-gJN"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="df7-PT-snJ">
@@ -442,7 +441,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="paint bucket"/>
                                 <connections>
-                                    <action selector="modeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="i81-hm-DKf"/>
                                     <action selector="pinModeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="1ho-b9-0I8"/>
                                 </connections>
                             </button>
@@ -549,7 +547,6 @@
                         <outlet property="fillModeButton" destination="sPl-5P-CDc" id="0rL-Et-Aqi"/>
                         <outlet property="goToBucketListButton" destination="4qV-Ms-ae1" id="wmC-3v-gz0"/>
                         <outlet property="instructionsTitleLabel" destination="Fn7-dr-PHH" id="czC-cY-XLr"/>
-                        <outlet property="modeButton" destination="sPl-5P-CDc" id="XvM-tM-lgT"/>
                         <outlet property="myTripsTitleLabel" destination="FnC-Mh-kbn" id="QJp-4q-Tri"/>
                         <outlet property="pinModeButton" destination="df7-PT-snJ" id="KNz-aA-PKw"/>
                         <outlet property="popupBackgroundView" destination="DrV-cf-9bD" id="ckR-LH-Jsf"/>

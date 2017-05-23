@@ -169,6 +169,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             beenThereButton.isHidden = false
             fillModeButton.isHidden = false
             pinModeButton.isHidden = false
+            searchController?.searchBar.isHidden = false
             
             createTripButton.isHidden = false
             createTripArrow.isHidden = false
@@ -188,6 +189,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             beenThereButton.isHidden = true
             fillModeButton.isHidden = true
             pinModeButton.isHidden = true
+            searchController?.searchBar.isHidden = true
             
             createTripButton.isHidden = true
             createTripArrow.isHidden = true
@@ -508,6 +510,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                         beenThereButton.isHidden = false
                         fillModeButton.isHidden = false
                         pinModeButton.isHidden = false
+                        searchController?.searchBar.isHidden = false
                         
                         createTripButton.isHidden = false
                         createTripArrow.isHidden = false
@@ -589,7 +592,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         if let globeViewC = globeViewC {
             globeViewC.height = 1.2
             globeViewC.keepNorthUp = true
-            globeViewC.animate(toPosition: MaplyCoordinateMakeWithDegrees(-3.6704803, 40.5023056), time: 1.5)
+            globeViewC.animate(toPosition: MaplyCoordinateMakeWithDegrees(-96.7970, 32.7767), time: 1.5)
             globeViewC.keepNorthUp = false
             globeViewC.setZoomLimitsMin(0.001, max: 1.2)
         }
@@ -816,7 +819,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     subtitle = "Already been here"
                 }
                 
-                addAnnotationWithTitle(title: "\(coord.x),\(coord.y)", subtitle: subtitle, loc: coord)
+                addAnnotationWithTitle(title: "Pin", subtitle: subtitle, loc: coord)
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
                 self.theViewC?.clearAnnotations()

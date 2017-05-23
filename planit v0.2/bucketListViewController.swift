@@ -404,7 +404,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     subtitle = "Already been here"
                 }
                 
-        addAnnotationWithTitle(title: "\(coord.x),\(coord.y)", subtitle: subtitle, loc: coord)
+        addAnnotationWithTitle(title: "Pin", subtitle: subtitle, loc: coord)
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
                 self.theViewC?.clearAnnotations()
