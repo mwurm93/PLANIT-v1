@@ -429,16 +429,25 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sPl-5P-CDc">
-                                <rect key="frame" x="301" y="620" width="30" height="30"/>
+                                <rect key="frame" x="311" y="620" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="paint bucket"/>
                                 <connections>
+                                    <action selector="fillModeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="Kvg-1t-poK"/>
                                     <action selector="modeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="Rha-aX-gJN"/>
-                                    <action selector="modeButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="z95-Oc-6Ib"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="df7-PT-snJ">
+                                <rect key="frame" x="266" y="620" width="27" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="paint bucket"/>
+                                <connections>
+                                    <action selector="modeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="i81-hm-DKf"/>
+                                    <action selector="pinModeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="1ho-b9-0I8"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ir-KX-bmB">
-                                <rect key="frame" x="172" y="620" width="100" height="30"/>
+                                <rect key="frame" x="136" y="620" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.69709708120000002" green="0.37376992599999997" blue="0.39410270689999999" alpha="0.65000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="I've been"/>
@@ -448,7 +457,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TgD-WV-62k">
-                                <rect key="frame" x="40" y="620" width="100" height="30"/>
+                                <rect key="frame" x="28" y="620" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.00077266624249999998" green="0.45897446069999998" blue="0.063549611549999996" alpha="0.64752782529999997" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Bucket list"/>
@@ -537,10 +546,12 @@
                         <outlet property="destinationDecidedControl" destination="Fir-vh-ZCH" id="f3m-fI-mKV"/>
                         <outlet property="destinationDecidedControlView" destination="fwo-up-aEh" id="J66-q8-3fh"/>
                         <outlet property="existingTripsTable" destination="Gra-2t-s2J" id="seK-KW-ZCb"/>
+                        <outlet property="fillModeButton" destination="sPl-5P-CDc" id="0rL-Et-Aqi"/>
                         <outlet property="goToBucketListButton" destination="4qV-Ms-ae1" id="wmC-3v-gz0"/>
                         <outlet property="instructionsTitleLabel" destination="Fn7-dr-PHH" id="czC-cY-XLr"/>
                         <outlet property="modeButton" destination="sPl-5P-CDc" id="XvM-tM-lgT"/>
                         <outlet property="myTripsTitleLabel" destination="FnC-Mh-kbn" id="QJp-4q-Tri"/>
+                        <outlet property="pinModeButton" destination="df7-PT-snJ" id="KNz-aA-PKw"/>
                         <outlet property="popupBackgroundView" destination="DrV-cf-9bD" id="ckR-LH-Jsf"/>
                         <segue destination="E8d-J0-NPc" kind="show" identifier="unfinishedExistingTripsToSwiping" animates="NO" id="5Cy-Be-NXP"/>
                         <segue destination="E8d-J0-NPc" kind="show" identifier="addTripDestinationUndecided" animates="NO" id="anE-cP-H4U"/>
@@ -3355,15 +3366,23 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xke-GL-mzw">
-                                <rect key="frame" x="301" y="620" width="30" height="30"/>
+                                <rect key="frame" x="311" y="620" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="paint bucket"/>
                                 <connections>
-                                    <action selector="modeButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="NEI-50-rEC"/>
+                                    <action selector="fillModeButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="jVk-iL-h2k"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdu-NA-Cey">
+                                <rect key="frame" x="266" y="620" width="37" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="map pin"/>
+                                <connections>
+                                    <action selector="pinModeButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="z1U-5c-BiB"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uyj-s2-4gI">
-                                <rect key="frame" x="172" y="620" width="100" height="30"/>
+                                <rect key="frame" x="136" y="620" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.69709708121827418" green="0.37376992596807707" blue="0.39410270692104277" alpha="0.65000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="I've been"/>
@@ -3372,7 +3391,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Ie-ki-88j">
-                                <rect key="frame" x="40" y="620" width="100" height="30"/>
+                                <rect key="frame" x="28" y="620" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.00077266624248039132" green="0.45897446065989855" blue="0.06354961154945972" alpha="0.64752782534246578" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Bucket list"/>
@@ -3399,14 +3418,15 @@
                         <outlet property="backgroundView" destination="FNn-LX-ZiN" id="tbT-uQ-6kk"/>
                         <outlet property="beenThereButton" destination="Uyj-s2-4gI" id="aJB-JA-0iu"/>
                         <outlet property="bucketListButton" destination="9Ie-ki-88j" id="yI6-I6-EWz"/>
-                        <outlet property="modeButton" destination="Xke-GL-mzw" id="Bnz-w0-6Yv"/>
+                        <outlet property="fillModeButton" destination="Xke-GL-mzw" id="sX1-X7-Uqt"/>
+                        <outlet property="pinModeButton" destination="vdu-NA-Cey" id="915-za-a9G"/>
                         <outlet property="settingsButton" destination="HCj-MB-Hsk" id="FcD-xj-WNd"/>
                         <outlet property="tripsButton" destination="UuD-nJ-HKW" id="hLe-Oe-l2G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xhc-Kd-3pA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1545" y="893"/>
+            <point key="canvasLocation" x="-1546.4000000000001" y="892.80359820089961"/>
         </scene>
         <!--Flight Search View Controller-->
         <scene sceneID="sQS-QP-WUt">
@@ -4576,6 +4596,7 @@
         <image name="filter" width="100" height="100"/>
         <image name="info icon" width="256" height="256"/>
         <image name="map" width="256" height="256"/>
+        <image name="map pin" width="800" height="800"/>
         <image name="messages transparent" width="256" height="256"/>
         <image name="moon" width="300" height="300"/>
         <image name="paint bucket" width="718" height="678"/>

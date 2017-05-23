@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import GooglePlaces
 
-class TripListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, WhirlyGlobeViewControllerDelegate {
+class TripListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, WhirlyGlobeViewControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate {
     
     // MARK: Outlets
     @IBOutlet weak var existingTripsTable: UITableView!
@@ -21,19 +22,20 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var goToBucketListButton: UIButton!
     @IBOutlet weak var bucketListButton: UIButton!
     @IBOutlet weak var beenThereButton: UIButton!
-    @IBOutlet weak var modeButton: UIButton!
+    @IBOutlet weak var fillModeButton: UIButton!
+    @IBOutlet weak var pinModeButton: UIButton!
     
     // Outlets for instructions
     @IBOutlet weak var instructionsTitleLabel: UILabel!
     @IBOutlet weak var destinationDecidedControlView: UIView!
     @IBOutlet weak var destinationDecidedControl: UISegmentedControl!
     
-    private var theViewC: MaplyBaseViewController?
+    var theViewC: MaplyBaseViewController?
     private let cachedGrayColor = UIColor.darkGray
     private let cachedWhiteColor = UIColor.white
     private var vectorDict: [String: AnyObject]?
     private var useLocalTiles = false
-    private var selectionColor = UIColor()
+    var selectionColor = UIColor()
     private var selectedVectorFillDict: [String: AnyObject]?
     private var selectedVectorOutlineDict: [String: AnyObject]?
     var AddedFillComponentObjs = [MaplyComponentObject]()
@@ -45,6 +47,12 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     var AddedFillVectorObjs_been = [MaplyVectorObject]()
     var AddedOutlineVectorObjs_been = [MaplyVectorObject]()
     var mode = "pin"
+    //GOOGLE PLACES SEARCH
+    var resultsViewController: GMSAutocompleteResultsViewController?
+    var searchController: UISearchController?
+    var resultView: UITextView?
+    var globeViewC: WhirlyGlobeViewController?
+
     
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     
@@ -52,6 +60,37 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //GOOGLE PLACES SEARCH
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self as GMSAutocompleteResultsViewControllerDelegate
+        searchController = UISearchController(searchResultsController: resultsViewController)
+        searchController?.searchResultsUpdater = resultsViewController
+        searchController?.searchBar.isTranslucent = true
+        searchController?.searchBar.layer.cornerRadius = 5
+        searchController?.searchBar.barStyle = .default
+        searchController?.searchBar.searchBarStyle = .minimal
+        searchController?.searchBar.setShowsCancelButton(false, animated: false)
+        searchController?.searchBar.delegate = self
+        let textFieldInsideSearchBar = searchController?.searchBar.value(forKey: "searchField") as? UITextField
+        textFieldInsideSearchBar?.textColor = UIColor.white
+        let textFieldInsideSearchBarLabel = textFieldInsideSearchBar!.value(forKey: "placeholderLabel") as? UILabel
+        textFieldInsideSearchBarLabel?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as! UIButton
+        clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
+        clearButton.tintColor = UIColor.white
+        let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView
+        glassIconView?.image = glassIconView?.image?.withRenderingMode(.alwaysTemplate)
+        glassIconView?.tintColor = UIColor.white
+        let subView = UIView(frame: CGRect(x: (self.view.frame.maxX - 4/5 * self.view.frame.maxX)/2, y: 65.0, width: 4/5 * self.view.frame.maxX, height: 45.0))
+        subView.addSubview((searchController?.searchBar)!)
+        view.addSubview(subView)
+        searchController?.searchBar.sizeToFit()
+        searchController?.hidesNavigationBarDuringPresentation = false
+        // When UISearchController presents the results view, present it in
+        // this view controller, not one further up the chain.
+        definesPresentationContext = true
+        handleModeButtonImages()
         
         selectionColor = UIColor(cgColor: bucketListButton.layer.backgroundColor!)
         
@@ -71,10 +110,15 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         beenThereButton.layer.shadowRadius = 2
         beenThereButton.layer.shadowOpacity = 0.5
         
-        modeButton.layer.shadowColor = UIColor.black.cgColor
-        modeButton.layer.shadowOffset = CGSize(width: 2, height: 2)
-        modeButton.layer.shadowRadius = 2
-        modeButton.layer.shadowOpacity = 0.5
+        fillModeButton.layer.shadowColor = UIColor.black.cgColor
+        fillModeButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        fillModeButton.layer.shadowRadius = 2
+        fillModeButton.layer.shadowOpacity = 0.5
+        
+        pinModeButton.layer.shadowColor = UIColor.black.cgColor
+        pinModeButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        pinModeButton.layer.shadowRadius = 2
+        pinModeButton.layer.shadowOpacity = 0.5
 
         createTripArrow.layer.shadowColor = UIColor.black.cgColor
         createTripArrow.layer.shadowOffset = CGSize(width: 2, height: 2)
@@ -123,7 +167,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             
             bucketListButton.isHidden = false
             beenThereButton.isHidden = false
-            modeButton.isHidden = false
+            fillModeButton.isHidden = false
+            pinModeButton.isHidden = false
             
             createTripButton.isHidden = false
             createTripArrow.isHidden = false
@@ -141,7 +186,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             
             bucketListButton.isHidden = true
             beenThereButton.isHidden = true
-            modeButton.isHidden = true
+            fillModeButton.isHidden = true
+            pinModeButton.isHidden = true
             
             createTripButton.isHidden = true
             createTripArrow.isHidden = true
@@ -460,7 +506,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                         
                         bucketListButton.isHidden = false
                         beenThereButton.isHidden = false
-                        modeButton.isHidden = false
+                        fillModeButton.isHidden = false
+                        pinModeButton.isHidden = false
                         
                         createTripButton.isHidden = false
                         createTripArrow.isHidden = false
@@ -761,15 +808,24 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                 
                 self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: selectionColor])
                 self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)])
+                
+                var subtitle = String()
+                if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
+                    subtitle = "Added to bucket list"
+                } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
+                    subtitle = "Already been here"
+                }
+                
+                addAnnotationWithTitle(title: "\(coord.x),\(coord.y)", subtitle: subtitle, loc: coord)
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                self.theViewC?.clearAnnotations()
+            })
+            
         }
     }
     
-    func globeViewControllerDidStartMoving(_ viewC: WhirlyGlobeViewController, userMotion: Bool) {
-        //IF ZOOM > X THEN ADD LABELS
-    }
-    
-    private func addAnnotationWithTitle(title: String, subtitle: String, loc:MaplyCoordinate) {
+    func addAnnotationWithTitle(title: String, subtitle: String, loc:MaplyCoordinate) {
         theViewC?.clearAnnotations()
         
         let a = MaplyAnnotation()
@@ -777,6 +833,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         a.subTitle = subtitle
         
         theViewC?.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
+        theViewC?.animate(toPosition: loc, onScreen: (theViewC?.view.center)!, time: 0.5)
     }
     
     private func addCountries() {
@@ -815,6 +872,17 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
     }
+    
+    func handleModeButtonImages() {
+        if mode == "pin" {
+            pinModeButton.setImage(#imageLiteral(resourceName: "map pin"), for: .normal)
+            fillModeButton.setImage(#imageLiteral(resourceName: "paint bucket_grey"), for: .normal)
+        } else if mode == "fill" {
+            pinModeButton.setImage(#imageLiteral(resourceName: "map pin_grey"), for: .normal)
+            fillModeButton.setImage(#imageLiteral(resourceName: "paint bucket"), for: .normal)
+        }
+    }
+
     @IBAction func bucketListButtonTouchedUpInside(_ sender: Any) {
         bucketListButton.layer.borderWidth = 3
         beenThereButton.layer.borderWidth = 0
@@ -826,13 +894,81 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         beenThereButton.layer.borderWidth = 3
         selectionColor = UIColor(cgColor: beenThereButton.layer.backgroundColor!)
     }
-    @IBAction func modeButtonTouchedUpInside(_ sender: Any) {
-        if modeButton.imageView?.image == #imageLiteral(resourceName: "paint bucket") {
-            mode = "fill"
-            modeButton.setImage(#imageLiteral(resourceName: "map pin"), for: .normal)
-        } else {
-            mode = "pin"
-            modeButton.setImage(#imageLiteral(resourceName: "paint bucket"), for: .normal)
+    
+    @IBAction func fillModeButtonTouchedUpInside(_ sender: Any) {
+        mode = "fill"
+        handleModeButtonImages()
+    }
+    @IBAction func pinModeButtonTouchedUpInside(_ sender: Any) {
+        mode = "pin"
+        handleModeButtonImages()
+    }
+}
+// Handle the user's selection GOOGLE PLACES SEARCH
+extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
+                           didAutocompleteWith place: GMSPlace) {
+        searchController?.isActive = false
+        // Do something with the selected place.
+        
+        mode = "pin"
+        handleModeButtonImages()
+        let pinLocationSphere = [WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))]
+        let pinLocationCylinder = [WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))]
+        // convert capitals into spheres. Let's do it functional!
+        let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
+            let sphere = MaplyShapeSphere()
+            sphere.center = WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))
+            sphere.radius = 0.007
+            sphere.height = 0.022
+            sphere.selectable = true
+            return sphere
         }
+        let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
+            let cylinder = MaplyShapeCylinder()
+            cylinder.baseCenter = WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))
+            cylinder.baseHeight = 0
+            cylinder.radius = 0.003
+            cylinder.height = 0.015
+            cylinder.selectable = true
+            return cylinder
+        }
+        
+        self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: selectionColor])
+        self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)])
+        
+        var subtitle = String()
+        if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
+            subtitle = "Added to bucket list"
+        } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
+            subtitle = "Already been here"
+        }
+        
+        addAnnotationWithTitle(title: "\(place.name)", subtitle: subtitle, loc: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))   )
+        
+        print("Place name: \(place.name)")
+        print("Place location: \(place.coordinate)")
+        print("Place address: \(String(describing: place.formattedAddress))")
+        print("Place attributions: \(String(describing: place.attributions))")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+            self.theViewC?.clearAnnotations()
+        })
+        
+    }
+    
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
+                           didFailAutocompleteWithError error: Error){
+        // TODO: handle the error.
+        print("Error: ", error.localizedDescription)
+    }
+    
+    // Turn the network activity indicator on and off again.
+    func didRequestAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
 }
