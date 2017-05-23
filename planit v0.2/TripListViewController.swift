@@ -84,7 +84,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         glassIconView?.tintColor = UIColor.white
         let subView = UIView(frame: CGRect(x: 15, y: 22, width: 3/5 * self.view.frame.maxX, height: 45.0))
         subView.addSubview((searchController?.searchBar)!)
-        view.addSubview(subView)
+        view.insertSubview(subView, belowSubview: popupBackgroundView)
         searchController?.searchBar.sizeToFit()
         searchController?.hidesNavigationBarDuringPresentation = false
         // When UISearchController presents the results view, present it in
@@ -834,7 +834,6 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         let a = MaplyAnnotation()
         a.title = title
         a.subTitle = subtitle
-        
         theViewC?.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
         theViewC?.animate(toPosition: loc, onScreen: (theViewC?.view.center)!, time: 0.5)
     }
@@ -913,7 +912,6 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
                            didAutocompleteWith place: GMSPlace) {
         searchController?.isActive = false
         // Do something with the selected place.
-        
         mode = "pin"
         handleModeButtonImages()
         let pinLocationSphere = [WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))]
@@ -957,6 +955,7 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
             self.theViewC?.clearAnnotations()
         })
+        
         
     }
     
