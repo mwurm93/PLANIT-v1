@@ -82,7 +82,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView
         glassIconView?.image = glassIconView?.image?.withRenderingMode(.alwaysTemplate)
         glassIconView?.tintColor = UIColor.white
-        let subView = UIView(frame: CGRect(x: (self.view.frame.maxX - 4/5 * self.view.frame.maxX)/2, y: 65.0, width: 4/5 * self.view.frame.maxX, height: 45.0))
+        let subView = UIView(frame: CGRect(x: 15, y: 22, width: 3/5 * self.view.frame.maxX, height: 45.0))
         subView.addSubview((searchController?.searchBar)!)
         view.addSubview(subView)
         searchController?.searchBar.sizeToFit()
