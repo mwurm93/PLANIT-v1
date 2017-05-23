@@ -413,21 +413,6 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4qV-Ms-ae1">
-                                <rect key="frame" x="16" y="28" width="24" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="earth"/>
-                                <connections>
-                                    <segue destination="O1b-cB-8Dj" kind="show" animates="NO" id="RAo-Nt-Dp1"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fn7-dr-PHH">
-                                <rect key="frame" x="33" y="67" width="309" height="48"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sPl-5P-CDc">
                                 <rect key="frame" x="311" y="620" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -462,6 +447,14 @@
                                 <connections>
                                     <action selector="bucketListButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="00X-PD-oRx"/>
                                     <action selector="bucketListButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="clq-NR-jzS"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4qV-Ms-ae1">
+                                <rect key="frame" x="16" y="28" width="24" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="earth"/>
+                                <connections>
+                                    <segue destination="O1b-cB-8Dj" kind="show" animates="NO" id="RAo-Nt-Dp1"/>
                                 </connections>
                             </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DrV-cf-9bD">
@@ -546,7 +539,6 @@
                         <outlet property="existingTripsTable" destination="Gra-2t-s2J" id="seK-KW-ZCb"/>
                         <outlet property="fillModeButton" destination="sPl-5P-CDc" id="0rL-Et-Aqi"/>
                         <outlet property="goToBucketListButton" destination="4qV-Ms-ae1" id="wmC-3v-gz0"/>
-                        <outlet property="instructionsTitleLabel" destination="Fn7-dr-PHH" id="czC-cY-XLr"/>
                         <outlet property="myTripsTitleLabel" destination="FnC-Mh-kbn" id="QJp-4q-Tri"/>
                         <outlet property="pinModeButton" destination="df7-PT-snJ" id="KNz-aA-PKw"/>
                         <outlet property="popupBackgroundView" destination="DrV-cf-9bD" id="ckR-LH-Jsf"/>
@@ -3766,7 +3758,7 @@
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </objects>
-            <point key="canvasLocation" x="845.60000000000002" y="1795.9520239880062"/>
+            <point key="canvasLocation" x="846" y="2096"/>
         </scene>
         <!--Flight Results View Controller-->
         <scene sceneID="Lvw-sP-N3u">
@@ -3959,7 +3951,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YyM-ds-ZOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628" y="1795.9520239880062"/>
+            <point key="canvasLocation" x="1628" y="2096"/>
         </scene>
         <!--Explore Hotels View Controller-->
         <scene sceneID="Xxe-zL-NcL">
@@ -4605,14 +4597,14 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="qH0-AO-962"/>
-        <segue reference="isD-dZ-KwN"/>
-        <segue reference="anE-cP-H4U"/>
-        <segue reference="4hW-EN-T1K"/>
-        <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="1lt-od-qL5"/>
+        <segue reference="zWM-he-GTg"/>
+        <segue reference="Fe3-1x-Rbs"/>
         <segue reference="2ah-17-HDw"/>
         <segue reference="1Xg-d5-Dmi"/>
+        <segue reference="8MA-wa-IqS"/>
+        <segue reference="lra-AY-k3U"/>
+        <segue reference="anE-cP-H4U"/>
+        <segue reference="RAo-Nt-Dp1"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

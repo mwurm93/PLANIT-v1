@@ -26,7 +26,6 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var pinModeButton: UIButton!
     
     // Outlets for instructions
-    @IBOutlet weak var instructionsTitleLabel: UILabel!
     @IBOutlet weak var destinationDecidedControlView: UIView!
     @IBOutlet weak var destinationDecidedControl: UISegmentedControl!
     
@@ -52,8 +51,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     var searchController: UISearchController?
     var resultView: UITextView?
     var globeViewC: WhirlyGlobeViewController?
+    var destinationDecidedResultBool = false
 
-    
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     
     let sectionTitles = ["Still in the works...", "Booked"]
@@ -84,13 +83,12 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         glassIconView?.tintColor = UIColor.white
         let subView = UIView(frame: CGRect(x: 15, y: 22, width: 3/5 * self.view.frame.maxX, height: 45.0))
         subView.addSubview((searchController?.searchBar)!)
-        view.insertSubview(subView, belowSubview: popupBackgroundView)
+        view.insertSubview(subView, belowSubview: goToBucketListButton)
         searchController?.searchBar.sizeToFit()
         searchController?.hidesNavigationBarDuringPresentation = false
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
         definesPresentationContext = true
-        handleModeButtonImages()
         
         selectionColor = UIColor(cgColor: bucketListButton.layer.backgroundColor!)
         
@@ -129,6 +127,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         createTripButton.layer.shadowOffset = CGSize(width: 2, height: 2)
         createTripButton.layer.shadowRadius = 2
         createTripButton.layer.shadowOpacity = 0.5
+        
+        handleModeButtonImages()
         
         // Set up tap outside time of day table
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissPopup(touch:)))
@@ -173,7 +173,6 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             
             createTripButton.isHidden = false
             createTripArrow.isHidden = false
-            instructionsTitleLabel.isHidden = false
         
         //WhirlyGLobe
         loadWhirlyGlobe()
@@ -193,7 +192,6 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             
             createTripButton.isHidden = true
             createTripArrow.isHidden = true
-            instructionsTitleLabel.isHidden = true
         }
 
     }
@@ -208,6 +206,15 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     func dismissPopup(touch: UITapGestureRecognizer) {
             popupBackgroundView.isHidden = true
             destinationDecidedControlView.isHidden = true
+        
+        searchController?.searchBar.resignFirstResponder()
+        let subView = UIView(frame: CGRect(x: 15, y: 22, width: 3/5 * self.view.frame.maxX, height: 45.0))
+        subView.addSubview((searchController?.searchBar)!)
+        self.view.insertSubview(subView, belowSubview: goToBucketListButton)
+        
+        if DataContainerSingleton.sharedDataContainer.usertrippreferences == nil || DataContainerSingleton.sharedDataContainer.usertrippreferences?.count == 0 {
+            self.view.insertSubview((self.theViewC?.view)!, belowSubview: fillModeButton)
+        }
     }
 
     
@@ -233,6 +240,9 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         destinationDecidedControlView.frame = CGRect(x: 167, y: 71, width: 196, height: 135)
     }
     @IBAction func createFirstTripArrowTouchedUpInside(_ sender: Any) {
+        DataContainerSingleton.sharedDataContainer.currenttrip = 0
+
+        popupBackgroundView.isHidden = false
         destinationDecidedControlView.isHidden = false
         destinationDecidedControlView.frame = CGRect(x: 167, y: 71, width: 196, height: 135)
     }
@@ -240,6 +250,17 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBAction func destinationDecidedControlValueChanged(_ sender: Any) {
         if destinationDecidedControl.selectedSegmentIndex == 0 {
             self.performSegue(withIdentifier: "addTripDestinationUndecided", sender: self)
+        } else if destinationDecidedControl.selectedSegmentIndex == 1 {
+            if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
+                loadWhirlyGlobe()
+            }
+            destinationDecidedControlView.isHidden = true
+            self.view.bringSubview(toFront: (self.theViewC?.view)!)
+            self.view.bringSubview(toFront: (searchController?.searchBar)!)
+            self.searchController?.searchBar.isHidden = false
+            searchController?.searchBar.becomeFirstResponder()
+            destinationDecidedResultBool = true
+            
         }
     }
     
@@ -514,7 +535,6 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                         
                         createTripButton.isHidden = false
                         createTripArrow.isHidden = false
-                        instructionsTitleLabel.isHidden = false
                         
                         //WhirlyGLobe
                         loadWhirlyGlobe()
@@ -830,12 +850,41 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func addAnnotationWithTitle(title: String, subtitle: String, loc:MaplyCoordinate) {
         theViewC?.clearAnnotations()
-        
         let a = MaplyAnnotation()
         a.title = title
         a.subTitle = subtitle
         theViewC?.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
         theViewC?.animate(toPosition: loc, onScreen: (theViewC?.view.center)!, time: 0.5)
+    }
+    
+    func bucketListButtonAnnotationClicked(sender:UIButton) {
+        //PERFORM SEGUE TO DESTINATION DECIDED FLOW
+    }
+    
+    func cancelButtonAnnotationClicked(sender:UIButton) {
+        reloadAfterDestinationDecidedCancelled()
+    }
+    
+    func reloadAfterDestinationDecidedCancelled() {
+        theViewC?.clearAnnotations()
+        popupBackgroundView.isHidden = true
+        destinationDecidedControlView.isHidden = true
+        destinationDecidedControl.selectedSegmentIndex = UISegmentedControlNoSegment
+        self.view.insertSubview((self.theViewC?.view)!, belowSubview: fillModeButton)
+        searchController?.searchBar.resignFirstResponder()
+        let subView = UIView(frame: CGRect(x: 15, y: 22, width: 3/5 * self.view.frame.maxX, height: 45.0))
+        subView.addSubview((searchController?.searchBar)!)
+        self.view.insertSubview(subView, belowSubview: goToBucketListButton)
+        destinationDecidedResultBool = false
+        
+        if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
+            theViewC?.view.isHidden = true
+            searchController?.searchBar.isHidden = true
+        }
+    }
+        
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        reloadAfterDestinationDecidedCancelled()
     }
     
     private func addCountries() {
@@ -878,10 +927,14 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     func handleModeButtonImages() {
         if mode == "pin" {
             pinModeButton.setImage(#imageLiteral(resourceName: "map pin"), for: .normal)
+            pinModeButton.layer.shadowOpacity = 0.6
             fillModeButton.setImage(#imageLiteral(resourceName: "paint bucket_grey"), for: .normal)
+            fillModeButton.layer.shadowOpacity = 0.2
         } else if mode == "fill" {
             pinModeButton.setImage(#imageLiteral(resourceName: "map pin_grey"), for: .normal)
+            pinModeButton.layer.shadowOpacity = 0.2
             fillModeButton.setImage(#imageLiteral(resourceName: "paint bucket"), for: .normal)
+            fillModeButton.layer.shadowOpacity = 0.6
         }
     }
 
@@ -910,7 +963,10 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
 extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
                            didAutocompleteWith place: GMSPlace) {
+        
         searchController?.isActive = false
+        
+        if destinationDecidedResultBool == false {
         // Do something with the selected place.
         mode = "pin"
         handleModeButtonImages()
@@ -954,8 +1010,41 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
             self.theViewC?.clearAnnotations()
-        })
+        }) }
         
+        else if destinationDecidedResultBool == true {
+            //ADD ANNOTATION WITH CREATE TRIP BUTTON
+            let a = MaplyAnnotation()
+            
+            let destinationDecidedButtonAnnotation = UIButton(frame: CGRect(x: 0, y: 0, width: 150, height: 20))
+            destinationDecidedButtonAnnotation.setTitle("Plan trip to \(place.name)", for: .normal)
+            destinationDecidedButtonAnnotation.sizeToFit()
+            destinationDecidedButtonAnnotation.setTitleColor(UIColor.white, for: .normal)
+            destinationDecidedButtonAnnotation.setTitleColor(UIColor.lightGray, for: .highlighted)
+            let currentSize = destinationDecidedButtonAnnotation.titleLabel?.font.pointSize
+            destinationDecidedButtonAnnotation.titleLabel?.font = UIFont.systemFont(ofSize: currentSize! - 1.5)
+            destinationDecidedButtonAnnotation.backgroundColor = UIColor(red: 79/255, green: 146/255, blue: 255/255, alpha: 1)
+            destinationDecidedButtonAnnotation.layer.cornerRadius = destinationDecidedButtonAnnotation.frame.height / 2
+            destinationDecidedButtonAnnotation.titleLabel?.textAlignment = .justified
+            destinationDecidedButtonAnnotation.addTarget(self, action: #selector(self.bucketListButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
+            
+            let cancelButtonAnnotation = UIButton(frame: CGRect(x: 0, y: destinationDecidedButtonAnnotation.frame.height + 5, width: destinationDecidedButtonAnnotation.frame.width, height: 15))
+            cancelButtonAnnotation.setTitle("Cancel", for: .normal)
+            cancelButtonAnnotation.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+            cancelButtonAnnotation.setTitleColor(UIColor.lightGray, for: .normal)
+            cancelButtonAnnotation.setTitleColor(UIColor.lightGray, for: .highlighted)
+            cancelButtonAnnotation.titleLabel?.textAlignment = .justified
+            cancelButtonAnnotation.addTarget(self, action: #selector(self.cancelButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
+            
+            let frameForAnnotationContentView = CGRect(x: 0, y: 0, width: destinationDecidedButtonAnnotation.frame.width, height: destinationDecidedButtonAnnotation.frame.height + cancelButtonAnnotation.frame.height + 5)
+            let annotationContentView = UIView(frame: frameForAnnotationContentView)
+            annotationContentView.addSubview(destinationDecidedButtonAnnotation)
+            annotationContentView.addSubview(cancelButtonAnnotation)
+            
+            a.contentView = annotationContentView
+            theViewC?.addAnnotation(a, forPoint: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude)), offset: CGPoint.zero)
+            theViewC?.animate(toPosition: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude)), onScreen: (theViewC?.view.center)!, time: 0.5)
+        }
         
     }
     

@@ -69,7 +69,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView
         glassIconView?.image = glassIconView?.image?.withRenderingMode(.alwaysTemplate)
         glassIconView?.tintColor = UIColor.white
-        let subView = UIView(frame: CGRect(x: (self.view.frame.maxX - 4/5 * self.view.frame.maxX)/2, y: 65.0, width: 4/5 * self.view.frame.maxX, height: 45.0))
+        let subView = UIView(frame: CGRect(x: (self.view.frame.maxX - 2/3 * self.view.frame.maxX)/2 - 19, y: 20.0, width: 2/3 * self.view.frame.maxX, height: 45.0))
         subView.addSubview((searchController?.searchBar)!)
         view.addSubview(subView)
         searchController?.searchBar.sizeToFit()
@@ -77,7 +77,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
         definesPresentationContext = true
-        handleModeButtonImages()
         
         selectionColor = UIColor(cgColor: bucketListButton.layer.backgroundColor!)
         
@@ -116,6 +115,8 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         settingsButton.layer.shadowOffset = CGSize(width: 2, height: 2)
         settingsButton.layer.shadowRadius = 2
         settingsButton.layer.shadowOpacity = 0.5
+        
+        handleModeButtonImages()
         
         // Create an empty globe and add it to the view
         theViewC = WhirlyGlobeViewController()
@@ -464,10 +465,14 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     func handleModeButtonImages() {
         if mode == "pin" {
             pinModeButton.setImage(#imageLiteral(resourceName: "map pin"), for: .normal)
+            pinModeButton.layer.shadowOpacity = 0.6
             fillModeButton.setImage(#imageLiteral(resourceName: "paint bucket_grey"), for: .normal)
+            fillModeButton.layer.shadowOpacity = 0.2
         } else if mode == "fill" {
             pinModeButton.setImage(#imageLiteral(resourceName: "map pin_grey"), for: .normal)
+            pinModeButton.layer.shadowOpacity = 0.2
             fillModeButton.setImage(#imageLiteral(resourceName: "paint bucket"), for: .normal)
+            fillModeButton.layer.shadowOpacity = 0.6
         }
     }
     
