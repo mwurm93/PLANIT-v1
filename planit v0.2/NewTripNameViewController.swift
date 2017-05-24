@@ -32,6 +32,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     var isTrackingPanLocation = false
     var panGestureRecognizer = UIPanGestureRecognizer()
     var countSwipes = 0
+    let totalDailySwipeAllotment = 14
     
     //Contacts vars COPY
     fileprivate var addressBookStore: CNContactStore!
@@ -297,6 +298,15 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
         swipeableView.didSwipe = {view, direction, vector in
             self.countSwipes += 1
+            
+            if self.totalDailySwipeAllotment - self.countSwipes > 8 {
+                self.swipeableView.numberOfActiveView = 8
+            } else {
+                self.swipeableView.numberOfActiveView = UInt(self.totalDailySwipeAllotment - self.countSwipes)
+            }
+            if self.swipeableView.numberOfActiveView == 0 {
+                self.performSegue(withIdentifier: "destinationSwipingToDestinationRanking", sender: self)
+            }
             
             if self.contactPhoneNumbers.count == 0 && self.countSwipes % 3 == 0 {
                 self.instructionsLabel.text = "Invite your friends to join you on your travels!"

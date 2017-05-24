@@ -1524,7 +1524,7 @@
                                 </state>
                                 <connections>
                                     <action selector="nextButtonTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="sb0-mK-F9d"/>
-                                    <segue destination="6Nf-ZD-7fF" kind="show" animates="NO" id="isD-dZ-KwN"/>
+                                    <segue destination="6Nf-ZD-7fF" kind="show" identifier="destinationSwipingToDestinationRanking" animates="NO" id="isD-dZ-KwN"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="New Trip" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hS5-VB-6Sx">
