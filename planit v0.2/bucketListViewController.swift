@@ -154,8 +154,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             layer.requireElev = false
             layer.waitLoad = false
             layer.drawPriority = 0
-//            layer.multiLevelLoads = 
-            layer.singleLevelLoading = false
+            layer.singleLevelLoading = true
             theViewC!.add(layer)
         }
         } else {
