@@ -54,6 +54,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     var destinationDecidedResultBool = false
 
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
+    @IBOutlet weak var popupBackgroundViewDestinationDecided: UIVisualEffectView!
     
     let sectionTitles = ["Still in the works...", "Booked"]
     
@@ -63,6 +64,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         //GOOGLE PLACES SEARCH
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self as GMSAutocompleteResultsViewControllerDelegate
+        resultsViewController?.tableCellBackgroundColor = UIColor.darkGray
+        resultsViewController?.tableCellSeparatorColor = UIColor.lightGray
+        resultsViewController?.primaryTextColor = UIColor.lightGray
+        resultsViewController?.secondaryTextColor = UIColor.lightGray
+        resultsViewController?.primaryTextHighlightColor = UIColor.white
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
         searchController?.searchBar.isTranslucent = true
@@ -71,6 +77,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         searchController?.searchBar.searchBarStyle = .minimal
         searchController?.searchBar.setShowsCancelButton(false, animated: false)
         searchController?.searchBar.delegate = self
+        let attributes = [
+            NSForegroundColorAttributeName : UIColor.white,
+            NSFontAttributeName : UIFont.systemFont(ofSize: 14)
+        ]
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
         let textFieldInsideSearchBar = searchController?.searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideSearchBar?.textColor = UIColor.white
         let textFieldInsideSearchBarLabel = textFieldInsideSearchBar!.value(forKey: "placeholderLabel") as? UILabel
@@ -137,6 +148,15 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         popupBackgroundView.isHidden = true
         popupBackgroundView.isUserInteractionEnabled = true
         self.popupBackgroundView.addGestureRecognizer(tap)
+        
+        // Set up tap outside time of day table
+        let tap2 = UITapGestureRecognizer(target: self, action: #selector(self.dismissDecidedDestination(touch:)))
+        tap2.numberOfTapsRequired = 1
+        tap2.delegate = self
+        popupBackgroundViewDestinationDecided.isHidden = true
+        popupBackgroundViewDestinationDecided.isUserInteractionEnabled = true
+        self.popupBackgroundViewDestinationDecided.addGestureRecognizer(tap2)
+
         
         //Rotate segmented control view
         destinationDecidedControl.transform =  CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
@@ -217,6 +237,9 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
 
+    func dismissDecidedDestination(touch: UITapGestureRecognizer) {
+        reloadAfterDestinationDecidedCancelled()
+    }
     
     // MARK: Actions
     @IBAction func addTrip(_ sender: Any) {
@@ -254,13 +277,14 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
                 loadWhirlyGlobe()
             }
+            popupBackgroundViewDestinationDecided.isHidden = false
             destinationDecidedControlView.isHidden = true
             self.view.bringSubview(toFront: (self.theViewC?.view)!)
             self.view.bringSubview(toFront: (searchController?.searchBar)!)
+            self.view.bringSubview(toFront: popupBackgroundViewDestinationDecided)
             self.searchController?.searchBar.isHidden = false
             searchController?.searchBar.becomeFirstResponder()
             destinationDecidedResultBool = true
-            
         }
     }
     
@@ -862,19 +886,21 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func cancelButtonAnnotationClicked(sender:UIButton) {
-        reloadAfterDestinationDecidedCancelled()
+            reloadAfterDestinationDecidedCancelled()
     }
     
     func reloadAfterDestinationDecidedCancelled() {
         theViewC?.clearAnnotations()
         popupBackgroundView.isHidden = true
+        popupBackgroundViewDestinationDecided.isHidden = true
         destinationDecidedControlView.isHidden = true
         destinationDecidedControl.selectedSegmentIndex = UISegmentedControlNoSegment
         self.view.insertSubview((self.theViewC?.view)!, belowSubview: fillModeButton)
-        searchController?.searchBar.resignFirstResponder()
-        let subView = UIView(frame: CGRect(x: 15, y: 22, width: 3/5 * self.view.frame.maxX, height: 45.0))
-        subView.addSubview((searchController?.searchBar)!)
-        self.view.insertSubview(subView, belowSubview: goToBucketListButton)
+//        searchController?.searchBar.resignFirstResponder()
+//        let subView = UIView(frame: CGRect(x: 15, y: 22, width: 3/5 * self.view.frame.maxX, height: 45.0))
+//        subView.addSubview((searchController?.searchBar)!)
+//        self.view.insertSubview(subView, belowSubview: goToBucketListButton)
+        
         destinationDecidedResultBool = false
         
         if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
@@ -884,8 +910,17 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
         
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        reloadAfterDestinationDecidedCancelled()
+        if destinationDecidedResultBool == true {
+            reloadAfterDestinationDecidedCancelled()
+        }
     }
+    
+//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+//        
+//        if searchBar.text == "" && resultsViewController?.isBeingDismissed
+//        reloadAfterDestinationDecidedCancelled()
+//
+//    }
     
     private func addCountries() {
         // handle this in another thread
@@ -965,6 +1000,7 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
                            didAutocompleteWith place: GMSPlace) {
         
         searchController?.isActive = false
+        popupBackgroundViewDestinationDecided.isHidden = true
         
         if destinationDecidedResultBool == false {
         // Do something with the selected place.

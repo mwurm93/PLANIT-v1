@@ -390,6 +390,13 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     @IBAction func subviewDoneButtonTouchedUpInside(_ sender: Any) {
         animateOutSubview()
     }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == departureOrigin || textField == returnOrigin || textField == departureDestination || textField == returnDestination {
+            animateOutSubview()
+        }
+    }
+    
 }
 
 // MARK: JTCalendarView Extension

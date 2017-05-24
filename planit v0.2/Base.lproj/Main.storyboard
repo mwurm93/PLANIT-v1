@@ -523,6 +523,17 @@
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                             </view>
+                            <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="byC-tZ-0h1">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="EfC-Ou-ewx">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <vibrancyEffect>
+                                    <blurEffect style="dark"/>
+                                </vibrancyEffect>
+                            </visualEffectView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -542,6 +553,7 @@
                         <outlet property="myTripsTitleLabel" destination="FnC-Mh-kbn" id="QJp-4q-Tri"/>
                         <outlet property="pinModeButton" destination="df7-PT-snJ" id="KNz-aA-PKw"/>
                         <outlet property="popupBackgroundView" destination="DrV-cf-9bD" id="ckR-LH-Jsf"/>
+                        <outlet property="popupBackgroundViewDestinationDecided" destination="byC-tZ-0h1" id="JtL-hO-em4"/>
                         <segue destination="E8d-J0-NPc" kind="show" identifier="unfinishedExistingTripsToSwiping" animates="NO" id="5Cy-Be-NXP"/>
                         <segue destination="E8d-J0-NPc" kind="show" identifier="addTripDestinationUndecided" animates="NO" id="anE-cP-H4U"/>
                     </connections>
@@ -1570,18 +1582,18 @@
                                 <blurEffect style="dark"/>
                             </visualEffectView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c88-6q-Oqb">
-                                <rect key="frame" x="68" y="530" width="239" height="110"/>
+                                <rect key="frame" x="68" y="530" width="239" height="80"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Swipe to discover where you might want to go!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nTA-yc-5EG">
-                                        <rect key="frame" x="0.0" y="1" width="239" height="77"/>
+                                        <rect key="frame" x="0.0" y="1" width="239" height="52"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wTZ-hO-SRA">
-                                        <rect key="frame" x="0.0" y="56" width="239" height="54"/>
+                                        <rect key="frame" x="0.0" y="49" width="239" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <state key="normal" title="Got it">
@@ -1687,16 +1699,16 @@
                                 </connections>
                             </collectionView>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qjA-FX-eDz">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="668"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="Iyl-Ox-rab">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="668"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="dark"/>
                             </visualEffectView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="ddx-cr-cdY">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="668"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </scrollView>
                         </subviews>
@@ -1713,6 +1725,8 @@
                         <outlet property="groupMemberListTable" destination="nrJ-cj-pzr" id="tCv-ev-A0L"/>
                         <outlet property="heartIcon" destination="Myc-ln-NPH" id="DUW-hk-4sv"/>
                         <outlet property="homeAirportTextField" destination="sXI-YY-Fjo" id="bf7-4f-9c1"/>
+                        <outlet property="instructionsGotItButton" destination="wTZ-hO-SRA" id="P6m-eH-VZy"/>
+                        <outlet property="instructionsLabel" destination="nTA-yc-5EG" id="tcS-gy-Sb2"/>
                         <outlet property="month1" destination="z8x-iy-zTQ" id="a3p-dx-0ZO"/>
                         <outlet property="month2" destination="Bui-xb-scp" id="Mn3-Dq-73O"/>
                         <outlet property="month3" destination="mux-cm-6IE" id="fi3-qB-4HT"/>
@@ -3787,7 +3801,7 @@
                                 <blurEffect style="light"/>
                             </visualEffectView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Upi-i4-7Fi">
-                                <rect key="frame" x="0.0" y="101" width="375" height="496"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="483"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -3951,7 +3965,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YyM-ds-ZOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628" y="2096"/>
+            <point key="canvasLocation" x="1628" y="2095.5022488755626"/>
         </scene>
         <!--Explore Hotels View Controller-->
         <scene sceneID="Xxe-zL-NcL">
@@ -4601,9 +4615,9 @@
         <segue reference="Fe3-1x-Rbs"/>
         <segue reference="2ah-17-HDw"/>
         <segue reference="1Xg-d5-Dmi"/>
-        <segue reference="8MA-wa-IqS"/>
-        <segue reference="lra-AY-k3U"/>
+        <segue reference="isD-dZ-KwN"/>
         <segue reference="anE-cP-H4U"/>
+        <segue reference="lra-AY-k3U"/>
         <segue reference="RAo-Nt-Dp1"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

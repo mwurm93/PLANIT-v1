@@ -51,6 +51,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         //GOOGLE PLACES SEARCH
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self as GMSAutocompleteResultsViewControllerDelegate
+        resultsViewController?.tableCellBackgroundColor = UIColor.darkGray
+        resultsViewController?.tableCellSeparatorColor = UIColor.lightGray
+        resultsViewController?.primaryTextColor = UIColor.lightGray
+        resultsViewController?.secondaryTextColor = UIColor.lightGray
+        resultsViewController?.primaryTextHighlightColor = UIColor.white
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
         searchController?.searchBar.isTranslucent = true
@@ -59,6 +64,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         searchController?.searchBar.searchBarStyle = .minimal
         searchController?.searchBar.setShowsCancelButton(false, animated: false)
         searchController?.searchBar.delegate = self
+        let attributes = [
+            NSForegroundColorAttributeName : UIColor.white,
+            NSFontAttributeName : UIFont.systemFont(ofSize: 14)
+        ]
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
         let textFieldInsideSearchBar = searchController?.searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideSearchBar?.textColor = UIColor.white
         let textFieldInsideSearchBarLabel = textFieldInsideSearchBar!.value(forKey: "placeholderLabel") as? UILabel
@@ -142,8 +152,9 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             layer.handleEdges = false
             layer.coverPoles = false
             layer.requireElev = false
-            layer.waitLoad = true
+            layer.waitLoad = false
             layer.drawPriority = 0
+//            layer.multiLevelLoads = 
             layer.singleLevelLoading = false
             theViewC!.add(layer)
         }

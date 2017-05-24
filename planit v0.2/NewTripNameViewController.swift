@@ -97,6 +97,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBOutlet weak var popupBackgroundViewDeleteContacts: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundViewDeleteContactsWithinCollectionView: UIVisualEffectView!
     @IBOutlet weak var dayOfWeekStackView: UIStackView!
+    @IBOutlet weak var instructionsLabel: UILabel!
+    @IBOutlet weak var instructionsGotItButton: UIButton!
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -294,12 +296,20 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             print("Did end swiping view at location: \(location)")
         }
         swipeableView.didSwipe = {view, direction, vector in
-                    self.countSwipes += 1
-                    if self.countSwipes == 1 && self.NewOrAddedTripFromSegue == 1 {
-                        self.animateInSubview()
-                    }
+            self.countSwipes += 1
+            
+            if self.contactPhoneNumbers.count == 0 && self.countSwipes % 3 == 0 {
+                self.instructionsLabel.text = "Invite your friends to join you on your travels!"
+                self.swipingInstructionsView.sizeToFit()
+                self.contactsCollectionView.isHidden = true
+                self.animateInstructionsIn()
+            }
+            
+            if self.countSwipes == 1 && self.NewOrAddedTripFromSegue == 1 {
+                self.animateInSubview()
+            }
 
-                    let when = DispatchTime.now() + 0.8
+            let when = DispatchTime.now() + 0.8
 
             if direction == .Right {
                 self.heartIcon.isHighlighted = true
@@ -575,6 +585,10 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             self.swipingInstructionsView.alpha = 0
             self.popupBackgroundViewMainVC.isHidden = true
             self.swipeableView.isUserInteractionEnabled = true
+            if self.countSwipes > 1 {
+                self.contactsCollectionView.isHidden = false
+            }
+            
         }) { (Success:Bool) in
             self.swipingInstructionsView.layer.isHidden = true
         }
@@ -1254,7 +1268,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         let i: Int = (sender.layer.value(forKey: "index")) as! Int
         deleteContact(indexPath: IndexPath(row:i, section: 0))
     }
-        @IBAction func instructionsGotItTouchedUpInside(_ sender: Any) {
+    @IBAction func instructionsGotItTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.3, animations: {
             self.swipingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             self.swipingInstructionsView.alpha = 0
