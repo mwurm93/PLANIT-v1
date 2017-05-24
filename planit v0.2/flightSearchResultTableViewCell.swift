@@ -20,6 +20,10 @@ class flightSearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var returnArrivalTime: UILabel!
     @IBOutlet weak var returnDestination: UILabel!
     @IBOutlet weak var totalPrice: UILabel!
+    @IBOutlet weak var defaultView: UIView!
+    @IBOutlet weak var expandedView: UIView!
+    @IBOutlet weak var expandedViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var additionalDetailsExpandedView: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,6 +34,12 @@ class flightSearchResultTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         
         // Configure the view for the selected state
+    }
+    
+    var showDetails = false {
+        didSet {
+            expandedViewHeightConstraint.priority = showDetails ? 250 :999
+        }
     }
 
 }

@@ -12,6 +12,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     
     //MARK: Class vars
     var flightResultsDictionary = [[String:String]()]
+    var selectedIndex = -1
     
     //MARK: Outlets
     @IBOutlet weak var flightResultsTableView: UITableView!
@@ -32,6 +33,14 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         let numberOfRows = flightResultsDictionary.count
         return numberOfRows
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (selectedIndex == indexPath.row) {
+            return 104
+        } else {
+            return 52
+        }
+    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "flightSearchResultTableViewPrototypeCell", for: indexPath) as! flightSearchResultTableViewCell
@@ -51,12 +60,16 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCell = tableView.cellForRow(at: indexPath)
-        selectedCell?.contentView.backgroundColor = UIColor.blue
+        if selectedIndex == indexPath.row {
+            selectedIndex = -1
+        } else {
+            selectedIndex = indexPath.row
+        }
+        
+        self.flightResultsTableView.beginUpdates()
+        self.flightResultsTableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+        self.flightResultsTableView.endUpdates()
     }
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let deSelectedCell = tableView.cellForRow(at: indexPath)
-        deSelectedCell?.contentView.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25)
     }
-
 }

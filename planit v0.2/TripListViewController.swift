@@ -603,6 +603,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                 layer.waitLoad = true
                 layer.drawPriority = 0
                 layer.singleLevelLoading = false
+                
                 theViewC!.add(layer)
             }
         } else {
