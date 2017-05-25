@@ -163,7 +163,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             let alertController = UIAlertController(title: "You are changing your group's destionation to \(String(describing: self.destinationsResultsDictionary[sourceIndexPath.row + 1]["destination"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
                 (result : UIAlertAction) -> Void in
-                self.recommendationRankingTableView.moveRow(at: destinationIndexPath, to: sourceIndexPath)
+                tableView.reloadData()
             }
             let continueAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.default) {
                 (result : UIAlertAction) -> Void in
@@ -182,7 +182,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             let alertController = UIAlertController(title: "You are changing your group's destionation to \(String(describing: self.destinationsResultsDictionary[destinationIndexPath.row]["destination"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
                 (result : UIAlertAction) -> Void in
-                self.recommendationRankingTableView.moveRow(at: destinationIndexPath, to: sourceIndexPath)
+                tableView.reloadData()
             }
             let continueAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.default) {
                 (result : UIAlertAction) -> Void in
