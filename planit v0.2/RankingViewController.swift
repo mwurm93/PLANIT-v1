@@ -13,11 +13,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Class properties
     //Load flight results from server
     var destinationsResultsDictionary = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami"],["price":"$???","percentSwipedRight":"75","destination":"San Diego"],["price":"$???","percentSwipedRight":"75","destination":"Cabo"],["price":"$???","percentSwipedRight":"50","destination":"Denver"],["price":"$???","percentSwipedRight":"50","destination":"New York"]]
-
     var sectionTitles = ["Group's top trip", "Alternatives"]
-    var pricesArray = ["$1,000","$???","$???","$???","$???"]
-    var percentagesSwipedRightArray = ["100","75","50","25","25"]
-    var destinationsLabelsArray = ["Miami", "San Diego", "Marina del Rey", "Panama City", "Ft. Lauderdale"]
     var effect:UIVisualEffect!
     
     // MARK: Outlets
@@ -52,9 +48,6 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-        if SavedPreferencesForTrip["top_trips"] != nil {
-            destinationsLabelsArray = SavedPreferencesForTrip["top_trips"] as! [String]
-        }
         
         self.readyToBookButton.setTitle("Review flights to \(String(describing: destinationsResultsDictionary[0]["destination"]!))", for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.white, for: .normal)
@@ -160,7 +153,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         if destinationIndexPath == IndexPath(row: 0, section: 0) {
-            let alertController = UIAlertController(title: "You are changing your group's destionation to \(String(describing: self.destinationsResultsDictionary[sourceIndexPath.row + 1]["destination"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
+            let alertController = UIAlertController(title: "You are changing your group's destination to \(String(describing: self.destinationsResultsDictionary[sourceIndexPath.row + 1]["destination"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
                 (result : UIAlertAction) -> Void in
                 tableView.reloadData()
@@ -179,7 +172,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             alertController.addAction(continueAction)
             self.present(alertController, animated: true, completion: nil)
         } else if sourceIndexPath == IndexPath(row: 0, section: 0) {
-            let alertController = UIAlertController(title: "You are changing your group's destionation to \(String(describing: self.destinationsResultsDictionary[destinationIndexPath.row]["destination"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
+            let alertController = UIAlertController(title: "You are changing your group's destination to \(String(describing: self.destinationsResultsDictionary[destinationIndexPath.row]["destination"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
                 (result : UIAlertAction) -> Void in
                 tableView.reloadData()

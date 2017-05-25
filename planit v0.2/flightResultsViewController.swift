@@ -95,18 +95,14 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
         if selectedIndex == indexPath {
             selectedIndex = IndexPath(row: 0, section: 0)
         } else {
             selectedIndex = indexPath
         }
-        
-//        if indexPath != IndexPath(row: 0, section: 0) {
             self.flightResultsTableView.beginUpdates()
             self.flightResultsTableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
             self.flightResultsTableView.endUpdates()
-//        }
     }
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
     }
