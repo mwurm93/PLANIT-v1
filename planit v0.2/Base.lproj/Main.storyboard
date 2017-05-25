@@ -2193,20 +2193,24 @@
                                     <action selector="tripNameEditingChanged:" destination="6Nf-ZD-7fF" eventType="editingChanged" id="yhC-IR-hbv"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Iw-Aq-JG0">
-                                <rect key="frame" x="0.0" y="583" width="375" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Iw-Aq-JG0">
+                                <rect key="frame" x="41.5" y="597" width="292" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="hi9-ZV-7l2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" title="Move forward with this destination"/>
                                 <connections>
                                     <action selector="nextButtonPressed:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="lOw-dr-379"/>
                                     <action selector="readyToBookButtonPressed:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="9mG-mb-BcC"/>
-                                    <segue destination="82w-9h-a2p" kind="show" animates="NO" id="qH0-AO-962"/>
+                                    <segue destination="nd6-3o-Pa6" kind="show" id="frc-Ur-IXR"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="se9-wg-6Zg">
-                                <rect key="frame" x="102" y="629" width="170" height="28"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="se9-wg-6Zg">
+                                <rect key="frame" x="126" y="632" width="122" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="JWX-dO-QdA"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Swipe some more"/>
                                 <connections>
@@ -2260,7 +2264,7 @@
                                                     <state key="normal" image="change"/>
                                                     <connections>
                                                         <action selector="chooseFlightsButtonTouchedUpInside:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="nx0-dI-z0U"/>
-                                                        <segue destination="nd6-3o-Pa6" kind="show" id="1lt-od-qL5"/>
+                                                        <segue destination="nd6-3o-Pa6" kind="show" animates="NO" id="1lt-od-qL5"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="WWW" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Gm-3T-l7X">
@@ -2363,6 +2367,12 @@
                             </visualEffectView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="se9-wg-6Zg" firstAttribute="centerX" secondItem="0GS-Wz-dUx" secondAttribute="centerX" id="g3c-kL-REK"/>
+                            <constraint firstItem="0Iw-Aq-JG0" firstAttribute="centerX" secondItem="0GS-Wz-dUx" secondAttribute="centerX" id="ky5-MS-sfa"/>
+                            <constraint firstItem="1SV-OV-f4p" firstAttribute="top" secondItem="se9-wg-6Zg" secondAttribute="bottom" constant="15" id="mXv-CF-KvZ"/>
+                            <constraint firstItem="se9-wg-6Zg" firstAttribute="top" secondItem="0Iw-Aq-JG0" secondAttribute="bottom" constant="10" id="yRU-Ju-VEo"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="popupBlurView" destination="SuK-q8-6tf" id="Xuf-Ne-yjp"/>
@@ -4674,7 +4684,7 @@
         <segue reference="R8r-yB-rJ1"/>
         <segue reference="lra-AY-k3U"/>
         <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="qH0-AO-962"/>
+        <segue reference="G1K-4d-MLp"/>
         <segue reference="2ah-17-HDw"/>
         <segue reference="1Xg-d5-Dmi"/>
     </inferredMetricsTieBreakers>

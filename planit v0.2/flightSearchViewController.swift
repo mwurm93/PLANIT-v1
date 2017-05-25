@@ -116,7 +116,8 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         returnOrigin.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         returnOrigin.layer.masksToBounds = true
         returnOrigin.layer.cornerRadius = 5
-        let returnOriginValue = topTrips[0]
+        //PLACEHODLER UNTIL DATA MODEL
+        let returnOriginValue = "MIA"
         returnOrigin.text =  "\(returnOriginValue)"
         let returnOriginLabelPlaceholder = returnOrigin!.value(forKey: "placeholderLabel") as? UILabel
         returnOriginLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)

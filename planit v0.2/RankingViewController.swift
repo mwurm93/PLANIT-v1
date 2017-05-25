@@ -56,13 +56,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             destinationsLabelsArray = SavedPreferencesForTrip["top_trips"] as! [String]
         }
         
-        self.readyToBookButton.setTitle("Move forward with \(String(describing: destinationsResultsDictionary[0]["destination"]))", for: .normal)
-        self.readyToBookButton.sizeToFit()
+        self.readyToBookButton.setTitle("Review flights to \(String(describing: destinationsResultsDictionary[0]["destination"]!))", for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.white, for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.lightGray, for: .highlighted)
-        let currentSize = self.readyToBookButton.titleLabel?.font.pointSize
-        self.readyToBookButton.titleLabel?.font = UIFont.systemFont(ofSize: currentSize! - 1.5)
-        self.readyToBookButton.backgroundColor = UIColor(red: 79/255, green: 146/255, blue: 255/255, alpha: 1)
+        self.readyToBookButton.backgroundColor = UIColor.blue
         self.readyToBookButton.layer.cornerRadius = self.readyToBookButton.frame.height / 2
         self.readyToBookButton.titleLabel?.textAlignment = .center
 
@@ -115,7 +112,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         if indexPath == IndexPath(row: 0, section: 0) {
-            cell.backgroundColor = UIColor(red: 79/255, green: 146/255, blue: 255/255, alpha: 1)
+            cell.backgroundColor = UIColor.blue
         } else {
             cell.backgroundColor = UIColor.clear
         }
@@ -131,7 +128,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         cell.destinationLabel.text = destinationsForRow["destination"]
         cell.tripPrice.text = destinationsForRow["price"]
-        cell.percentSwipedRight.text = "\(String(describing: destinationsForRow["percentSwipedRight"]))% swiped right"
+        cell.percentSwipedRight.text = "\(String(describing: destinationsForRow["percentSwipedRight"]!))% swiped right"
         
         return cell
     }
@@ -163,7 +160,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         if destinationIndexPath == IndexPath(row: 0, section: 0) {
-            let alertController = UIAlertController(title: "You are changing your group's top trip", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
+            let alertController = UIAlertController(title: "You are changing your group's destionation to \(String(describing: self.destinationsResultsDictionary[sourceIndexPath.row + 1]["destination"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
                 (result : UIAlertAction) -> Void in
                 self.recommendationRankingTableView.moveRow(at: destinationIndexPath, to: sourceIndexPath)
@@ -174,14 +171,15 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 let movedRowDictionary = self.destinationsResultsDictionary[sourceIndexPath.row + 1]
                 self.destinationsResultsDictionary.remove(at: sourceIndexPath.row + 1)
                 self.destinationsResultsDictionary.insert(movedRowDictionary, at: 0)
+                tableView.reloadData()
                 
-                self.readyToBookButton.setTitle("Move forward with \(String(describing: self.destinationsResultsDictionary[0]["destination"]))", for: .normal)
+                self.readyToBookButton.setTitle("Review flights to \(String(describing: self.destinationsResultsDictionary[0]["destination"]!))", for: .normal)
             }
             alertController.addAction(cancelAction)
             alertController.addAction(continueAction)
             self.present(alertController, animated: true, completion: nil)
         } else if sourceIndexPath == IndexPath(row: 0, section: 0) {
-            let alertController = UIAlertController(title: "You are changing your group's top trip", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
+            let alertController = UIAlertController(title: "You are changing your group's destionation to \(String(describing: self.destinationsResultsDictionary[destinationIndexPath.row]["destination"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
                 (result : UIAlertAction) -> Void in
                 self.recommendationRankingTableView.moveRow(at: destinationIndexPath, to: sourceIndexPath)
@@ -192,8 +190,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 let movedRowDictionary = self.destinationsResultsDictionary[sourceIndexPath.row]
                 self.destinationsResultsDictionary.remove(at: sourceIndexPath.row)
                 self.destinationsResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row)
+                tableView.reloadData()
                 
-                self.readyToBookButton.setTitle("Move forward with \(String(describing: self.destinationsResultsDictionary[0]["destination"]))", for: .normal)
+                self.readyToBookButton.setTitle("Review flights to \(String(describing: self.destinationsResultsDictionary[0]["destination"]!))", for: .normal)
             }
             alertController.addAction(cancelAction)
             alertController.addAction(continueAction)
