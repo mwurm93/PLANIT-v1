@@ -1062,7 +1062,7 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
             destinationDecidedButtonAnnotation.titleLabel?.font = UIFont.systemFont(ofSize: currentSize! - 1.5)
             destinationDecidedButtonAnnotation.backgroundColor = UIColor(red: 79/255, green: 146/255, blue: 255/255, alpha: 1)
             destinationDecidedButtonAnnotation.layer.cornerRadius = destinationDecidedButtonAnnotation.frame.height / 2
-            destinationDecidedButtonAnnotation.titleLabel?.textAlignment = .justified
+            destinationDecidedButtonAnnotation.titleLabel?.textAlignment = .center
             destinationDecidedButtonAnnotation.addTarget(self, action: #selector(self.bucketListButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
             
             let cancelButtonAnnotation = UIButton(frame: CGRect(x: 0, y: destinationDecidedButtonAnnotation.frame.height + 5, width: destinationDecidedButtonAnnotation.frame.width, height: 15))
