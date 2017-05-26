@@ -17,7 +17,6 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
     @IBOutlet weak var expandedView: UIView!
     @IBOutlet weak var hotelName: UILabel!
     @IBOutlet weak var defaultStackView: UIStackView!
-    @IBOutlet weak var googleMapsView: GMSMapView!
     @IBOutlet weak var expandedViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var photosButton: UIButton!
     @IBOutlet private weak var photosCollectionView: UICollectionView!
@@ -33,7 +32,6 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        //        super.init(style: .default , reuseIdentifier: "hotelReviewTableViewCell")
         setUpTable()
     }
 
@@ -58,7 +56,7 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
     func showHotelOnMap() {
         
         let camera = GMSCameraPosition.camera(withLatitude: 25.7617, longitude: -80.1918, zoom: 12.0)
-        self.googleMaps = GMSMapView.map(withFrame: CGRect(x: 0,y: 100, width: self.googleMapsView.frame.size.width, height: self.googleMapsView.frame.height), camera: camera)
+        self.googleMaps = GMSMapView.map(withFrame: CGRect(x: 0,y: 100, width: 187.5, height: 187.5), camera: camera)
         // Creates a marker in the center of the map.
         let marker = GMSMarker()
         marker.position = CLLocationCoordinate2D(latitude: 25.7617, longitude: -80.1918)
@@ -99,12 +97,13 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
     }
     
     //For reviews tableview
-    func setUpTable(){
-        let hotelReviewsTableView = UITableView(frame: CGRect.zero, style: .plain)
-        hotelReviewsTableView.delegate = self
-        hotelReviewsTableView.dataSource = self
-        hotelReviewsTableView.separatorColor = UIColor.white
-        self.addSubview(hotelReviewsTableView)
+    func setUpTable() {
+        hotelReviewsTableView = UITableView(frame: CGRect.zero, style: .plain)
+        hotelReviewsTableView?.delegate = self
+        hotelReviewsTableView?.dataSource = self
+        hotelReviewsTableView?.separatorColor = UIColor.white
+        self.addSubview(hotelReviewsTableView!)
+//        expandedViewPhotos()
     }
     
     override func layoutSubviews() {
@@ -116,17 +115,21 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
         return reviewsArray.count
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "hotelReviewTableViewCell", for: indexPath) as! hotelReviewTableViewCell
+        var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "cellID")
         
-        cell.textLabel?.text = reviewsArray[indexPath.row]
+        if cell == nil {
+            cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
+        }
         
-        return cell
+        cell?.textLabel?.text = reviewsArray[indexPath.row]
+        
+        return cell!
     }
 
     //MARK: custom functions for managing expanded view

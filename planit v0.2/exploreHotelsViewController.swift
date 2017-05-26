@@ -97,7 +97,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         let cell = tableView.dequeueReusableCell(withIdentifier: "hotelResultPrototypeCell", for: indexPath) as! hotelTableViewCell
         cell.selectionStyle = .none
         cell.showHotelOnMap()
-        cell.expandedViewPhotos()
+//        cell.expandedViewPhotos()
         
         //Change hamburger icon
         for view in cell.subviews as [UIView] {
