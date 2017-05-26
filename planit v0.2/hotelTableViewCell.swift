@@ -14,14 +14,12 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate {
     
     // MARK: Outlets
     @IBOutlet weak var defaultView: UIView!
+    @IBOutlet weak var expandedView: UIView!
     @IBOutlet weak var hotelName: UILabel!
     @IBOutlet weak var defaultStackView: UIStackView!
-    @IBOutlet weak var expandedView: UIView!
     @IBOutlet weak var googleMapsView: GMSMapView!
     @IBOutlet weak var expandedViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mapButton: UIButton!
-    @IBOutlet weak var selectionButton: UIButton!
-    
     
     var googleMaps: GMSMapView!
     var camera = GMSCameraPosition()
@@ -47,7 +45,7 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate {
             NSLog("The style definition could not be loaded: \(error)")
         }
         
-        self.expandedView.addSubview(self.googleMaps)
+        self.addSubview(self.googleMaps)
         self.googleMaps.camera = camera
     }
 

@@ -52,7 +52,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         
-        self.readyToBookButton.setTitle("Review flights to \(String(describing: hotelResultsDictionary[0]["hotelName"]!))", for: .normal)
+        self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.white, for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.lightGray, for: .highlighted)
         self.readyToBookButton.backgroundColor = UIColor.blue
@@ -93,8 +93,9 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "rankedRecommendationsPrototypeCell", for: indexPath) as! rankedRecommendationsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "hotelResultPrototypeCell", for: indexPath) as! hotelTableViewCell
         cell.selectionStyle = .none
+        cell.showHotelOnMap()
         
         //Change hamburger icon
         for view in cell.subviews as [UIView] {
@@ -122,11 +123,19 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
             addedRow += 1
         }
         
-        cell.destinationLabel.text = hotelsForRow["hotelName"]
+        cell.hotelName.text = hotelsForRow["hotelName"]
         
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if selectedIndex == indexPath {
+            selectedIndex = IndexPath(row: 0, section: 0)
+        } else {
+            selectedIndex = indexPath
+        }
+        self.recommendationRankingTableView.beginUpdates()
+        self.recommendationRankingTableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+        self.recommendationRankingTableView.endUpdates()
     }
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
     }
@@ -167,13 +176,13 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                 self.hotelResultsDictionary.insert(movedRowDictionary, at: 0)
                 tableView.reloadData()
                 
-                self.readyToBookButton.setTitle("Review flights to \(String(describing: self.hotelResultsDictionary[0]["hotelName"]!))", for: .normal)
+                self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
             }
             alertController.addAction(cancelAction)
             alertController.addAction(continueAction)
             self.present(alertController, animated: true, completion: nil)
         } else if sourceIndexPath == IndexPath(row: 0, section: 0) {
-            let alertController = UIAlertController(title: "You are changing your group's hotel to \(String(describing: self.hotelResultsDictionary[destinationIndexPath.row]["hotelName"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
+            let alertController = UIAlertController(title: "You are changing your group's hotel to \(String(describing: self.hotelResultsDictionary[1]["hotelName"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
                 (result : UIAlertAction) -> Void in
                 tableView.reloadData()
@@ -186,7 +195,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                 self.hotelResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row)
                 tableView.reloadData()
                 
-                self.readyToBookButton.setTitle("Review flights to \(String(describing: self.hotelResultsDictionary[0]["hotelName"]!))", for: .normal)
+                self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
             }
             alertController.addAction(cancelAction)
             alertController.addAction(continueAction)
@@ -202,7 +211,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if (selectedIndex == indexPath) {
-            return 346
+            return 287.5
         } else {
             return 46
         }
@@ -219,7 +228,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         header.layer.cornerRadius = 5
         
         let title = UILabel()
-        title.frame = CGRect(x: 10, y: header.frame.minY, width: header.frame.width, height: header.frame.height)
+        title.frame = CGRect(x: 5, y: header.frame.minY, width: header.frame.width, height: header.frame.height)
         title.textAlignment = .left
         title.font = UIFont.boldSystemFont(ofSize: 20)
         title.textColor = UIColor.white

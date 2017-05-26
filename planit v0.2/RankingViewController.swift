@@ -172,7 +172,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             alertController.addAction(continueAction)
             self.present(alertController, animated: true, completion: nil)
         } else if sourceIndexPath == IndexPath(row: 0, section: 0) {
-            let alertController = UIAlertController(title: "You are changing your group's destination to \(String(describing: self.destinationsResultsDictionary[destinationIndexPath.row]["destination"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
+            let alertController = UIAlertController(title: "You are changing your group's destination to \(String(describing: self.destinationsResultsDictionary[1]["destination"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
                 (result : UIAlertAction) -> Void in
                 tableView.reloadData()
