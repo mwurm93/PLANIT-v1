@@ -1798,6 +1798,10 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
         var timeOfDayTableX = CGFloat()
         var timeOfDayTableY = CGFloat()
+        
+        let testY = positionInSuperView.origin.y
+        let testX = positionInSuperView.origin.x
+        
         if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full || cellState.selectedPosition() == .right {
             if positionInSuperView.origin.y < 70 {
                 timeOfDayTableY = positionInSuperView.origin.y + 65

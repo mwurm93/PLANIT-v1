@@ -17,10 +17,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     // MARK: Outlets
 
     @IBOutlet weak var contactsCollectionView: UICollectionView!
-    @IBOutlet var adjustLogisticsView: UIView!
-    @IBOutlet weak var popupBlurView: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundView: UIView!
-    @IBOutlet weak var editTextBox: UITextView!
     @IBOutlet weak var topItineraryTable: UITableView!
     @IBOutlet weak var tripNameLabel: UILabel!
     @IBOutlet weak var firstName: UITextField!
@@ -38,8 +35,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     @IBOutlet weak var adjustTravelLogisticsButton: UIButton!
     @IBOutlet weak var bookThisTripButton: UIButton!
     @IBOutlet weak var bookOnlyIfTheyDoInfoButton: UIButton!
-    // Create visual effect variable
-    var effect:UIVisualEffect!
     
     // Set up vars for Contacts - COPY
     var contacts: [CNContact]?
@@ -90,11 +85,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         self.redressNumber.delegate = self
         self.birthdate.delegate = self
         
-        effect = popupBlurView.effect
-        popupBlurView.effect = nil
-        
-        adjustLogisticsView.layer.cornerRadius = 5
-        editTextBox.layer.cornerRadius = 5
         topItineraryTable.layer.cornerRadius = 5
         
         // Set appearance of textfield
@@ -249,42 +239,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         DataContainerSingleton.sharedDataContainer.redressNumber = redressNumber.text
         DataContainerSingleton.sharedDataContainer.birthdate = birthdate.text
         return true
-    }
-
-
-    //Functions for adjusting logistics
-    
-    func animateAdjustLogisticsIn(){
-        self.view.addSubview(adjustLogisticsView)
-        adjustLogisticsView.center = self.view.center
-        adjustLogisticsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-        adjustLogisticsView.alpha = 0
-        
-        UIView.animate(withDuration: 0.4) {
-            self.popupBlurView.effect = self.effect
-            self.adjustLogisticsView.alpha = 1
-            self.adjustLogisticsView.transform = CGAffineTransform.identity
-        }
-    }
-    
-    func dismissAdjustLogisticsOut() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.adjustLogisticsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.popupBlurView.effect = nil
-            self.adjustLogisticsView.alpha = 0
-        }) { (Success:Bool) in
-            self.adjustLogisticsView.removeFromSuperview()
-        }
-    }
-    
-    func cancelAdjustLogisticsOut() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.adjustLogisticsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.popupBlurView.effect = nil
-            self.adjustLogisticsView.alpha = 0
-        }) { (Success:Bool) in
-            self.adjustLogisticsView.removeFromSuperview()
-        }
     }
 
     // UITableViewDataSource
@@ -481,24 +435,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         animateInfoViewIn()
     }
     
-    @IBAction func adjustMyTravelLogistics(_ sender: AnyObject) {
-    animateAdjustLogisticsIn()
-        
-        // Disable main view buttons
-        adjustTravelLogisticsButton.isEnabled = false
-    }
-    @IBAction func cancelAdjustLogistics(_ sender: AnyObject) {
-    cancelAdjustLogisticsOut()
-     
-        // Enable main view buttons
-        adjustTravelLogisticsButton.isEnabled = true
-    }
-    @IBAction func dismissAdjustLogistics(_ sender: AnyObject) {
-    dismissAdjustLogisticsOut()
-        
-        // Enable main view buttons
-        adjustTravelLogisticsButton.isEnabled = true
-    }
     @IBAction func bookButtonPressed(_ sender: Any) {
         handleBookingStatus()
     }

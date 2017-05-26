@@ -2729,7 +2729,6 @@
                                 <state key="normal" title="Change flights"/>
                                 <connections>
                                     <action selector="adjustMyTravelLogistics:" destination="9Zf-or-QAX" eventType="touchUpInside" id="wYj-DC-rUr"/>
-                                    <segue destination="nd6-3o-Pa6" kind="show" animates="NO" id="Jua-aX-jlt"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="72" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hUQ-1W-Psq">
@@ -5009,13 +5008,13 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="R8r-yB-rJ1"/>
-        <segue reference="isD-dZ-KwN"/>
+        <segue reference="8MA-wa-IqS"/>
+        <segue reference="zWM-he-GTg"/>
+        <segue reference="Fe3-1x-Rbs"/>
         <segue reference="RAo-Nt-Dp1"/>
         <segue reference="cWA-9L-HdA"/>
         <segue reference="MNW-06-TUF"/>
         <segue reference="Ey3-rB-KPz"/>
-        <segue reference="zWM-he-GTg"/>
-        <segue reference="Fe3-1x-Rbs"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

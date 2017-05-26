@@ -38,7 +38,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     var leftDateTimeArrays = NSMutableDictionary()
     var rightDateTimeArrays = NSMutableDictionary()
     var mostRecentSelectedCellDate = NSDate()
-    
+    var dateEditing = "departureDate"
     var searchMode = "roundtrip"
     
     override func viewDidLoad() {
@@ -318,7 +318,12 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     func animateInSubview(){
         //Animate In Subview
         self.view.addSubview(popupSubview)
-        popupSubview.center = CGPoint(x: 188, y: 385)
+        
+        if dateEditing == "departureDate" {
+            popupSubview.center = CGPoint(x: 188, y: 385)
+        } else if dateEditing == "returnDate" {
+            popupSubview.center = CGPoint(x: 188, y: 460)
+        }
         popupSubview.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
         popupSubview.alpha = 0
         UIView.animate(withDuration: 0.2) {
@@ -383,9 +388,11 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     }
     
     @IBAction func departureDateTextFieldTouchedDown(_ sender: Any) {
+        dateEditing = "departureDate"
         animateInSubview()
     }
     @IBAction func returnDateTextFieldTouchedDown(_ sender: Any) {
+        dateEditing = "returnDate"
         animateInSubview()
         UIView.animate(withDuration: 0.2) {
         }
@@ -527,13 +534,25 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
         var timeOfDayTableX = CGFloat()
         var timeOfDayTableY = CGFloat()
+        
+        let testY = positionInSuperView.origin.y
+        let testX = positionInSuperView.origin.x
+        
+        
+        var adjustmentY = CGFloat(0)
+        if dateEditing == "departureDate" {
+            adjustmentY = CGFloat(26.5 + 73)
+        } else if dateEditing == "returnDate" {
+            adjustmentY = CGFloat(101.5 + 73)
+        }
+        
         if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full || cellState.selectedPosition() == .right {
-            if positionInSuperView.origin.y < 70 {
-                timeOfDayTableY = positionInSuperView.origin.y + 65
-            } else if positionInSuperView.origin.y < 350 {
-                timeOfDayTableY = positionInSuperView.origin.y + 30
+            if positionInSuperView.origin.y - adjustmentY < 70 {
+                timeOfDayTableY = positionInSuperView.origin.y + 65 - adjustmentY
+            } else if positionInSuperView.origin.y - adjustmentY < 350 {
+                timeOfDayTableY = positionInSuperView.origin.y + 30 - adjustmentY
             } else {
-                timeOfDayTableY = positionInSuperView.origin.y - 170
+                timeOfDayTableY = positionInSuperView.origin.y - 170 + adjustmentY
             }
             if positionInSuperView.origin.x < 40 {
                 timeOfDayTableX = positionInSuperView.midX + 50
@@ -787,6 +806,10 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         timeOfDayTableView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
         timeOfDayTableView.alpha = 0
         
+        if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
+            self.subviewDoneButton.isHidden = false
+        }
+        
         UIView.animate(withDuration: 0.4) {
             self.popupBackgroundView.isHidden = false
             self.timeOfDayTableView.alpha = 1
@@ -808,8 +831,9 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
             }
         }) { (Success:Bool) in
             self.timeOfDayTableView.isHidden = true
+            self.dateEditing = "returnDate"
                 UIView.animate(withDuration: 0.2) {
-                self.popupSubview.center = CGPoint(x: 188, y: 460)
+                    self.popupSubview.center = CGPoint(x: 188, y: 460)
                 }
         }
     }
