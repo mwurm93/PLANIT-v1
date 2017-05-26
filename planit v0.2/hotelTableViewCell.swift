@@ -24,11 +24,17 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
     @IBOutlet weak var reviewsButton: UIButton!
     @IBOutlet weak var amenitiesButton: UIButton!
     @IBOutlet weak var whiteLine: UIImageView!
+    @IBOutlet weak var expandedViewLabelOne: UILabel!
+    @IBOutlet weak var expandedViewLabelTwo: UILabel!
+    @IBOutlet weak var cancellationPolicyLabel: UILabel!
     
     var googleMaps: GMSMapView!
     var camera = GMSCameraPosition()
     var hotelReviewsTableView : UITableView?
-    var reviewsArray : [String] = ["I loved this hotel!", "Fantastic service and pillowtop mattresses"]
+    var reviewsArray : [String] = [String("I loved this hotel! Would highly recommend!"), String("Fantastic service and pillowtop mattresses"),  String("This trip was perfect. My children had a blast at the beautiful pool all day and my husband and I were able to escape to the spa where we got the best massages ever")]
+    var distancesArray : [String] = [String("Airport: 10-15 minute drive"), String("Miami Seaquarium: 5 minute drive"),  String("Club Liv: 20 minute drive")]
+    var amenitiesArray : [String] = [String("Free Wifi"), String("Fitness center"),  String("Pool"), String("Pet friendly")]
+    var tableMode = String()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -80,7 +86,7 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
     
     // For Photos Collection View
     func setCollectionViewDataSourceDelegate
-        <D: UICollectionViewDataSource & UICollectionViewDelegate>
+        <D: UICollectionViewDataSource & UICollectionViewDelegate & UICollectionViewDelegateFlowLayout>
         (dataSourceDelegate: D, forRow row: Int) {
         
         photosCollectionView.delegate = dataSourceDelegate
@@ -92,7 +98,8 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
     //For expanding cells
     var showDetails = false {
         didSet {
-            expandedViewHeightConstraint.priority = showDetails ? 250 :999
+            expandedViewHeightConstraint.priority = showDetails ? 250 : 999
+            self.expandedViewPhotos()
         }
     }
     
@@ -102,17 +109,30 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
         hotelReviewsTableView?.delegate = self
         hotelReviewsTableView?.dataSource = self
         hotelReviewsTableView?.separatorColor = UIColor.white
+        hotelReviewsTableView?.backgroundColor = UIColor.clear
+        hotelReviewsTableView?.layer.backgroundColor = UIColor.clear.cgColor
+        hotelReviewsTableView?.allowsSelection = false
         self.addSubview(hotelReviewsTableView!)
-//        expandedViewPhotos()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        hotelReviewsTableView?.frame = CGRect(x: 0, y: 101, width: 375, height: 186)
+        if tableMode == "reviews" {
+            hotelReviewsTableView?.frame = CGRect(x: 0, y: 121, width: 322, height: 186)
+        } else if tableMode == "amenities" {
+            hotelReviewsTableView?.frame = CGRect(x: 0, y: 121, width: 124.5, height: 166)
+        } else if tableMode == "distances" {
+            hotelReviewsTableView?.frame = CGRect(x: 187.5, y: 121, width: 124.5, height: 166)
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return reviewsArray.count
+        if tableMode == "reviews" {
+            return reviewsArray.count
+        } else if tableMode == "amenities" {
+            return amenitiesArray.count
+        }
+        return distancesArray.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -127,7 +147,18 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
             cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
         }
         
-        cell?.textLabel?.text = reviewsArray[indexPath.row]
+        if tableMode == "reviews" {
+            cell?.textLabel?.text = reviewsArray[indexPath.row]
+        } else if tableMode == "distances" {
+            cell?.textLabel?.text = distancesArray[indexPath.row]
+        } else if tableMode == "amenities" {
+            cell?.textLabel?.text = amenitiesArray[indexPath.row]
+        }
+        
+        cell?.textLabel?.textColor = UIColor.white
+        cell?.textLabel?.font = UIFont.systemFont(ofSize: 15)
+        cell?.textLabel?.numberOfLines = 0
+        cell?.backgroundColor = UIColor.clear
         
         return cell!
     }
@@ -138,36 +169,69 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
         photosCollectionView.isHidden = false
         googleMaps.isHidden = true
         hotelReviewsTableView?.isHidden = true
+        expandedViewLabelOne.isHidden = true
+        expandedViewLabelTwo.isHidden = true
+        cancellationPolicyLabel.isHidden = true
         
         UIView.animate(withDuration: 0.4) {
-            self.whiteLine.layer.frame = CGRect(x: 33, y: 69, width: 55, height: 51)
+            self.whiteLine.layer.frame = CGRect(x: 6
+                , y: 69, width: 55, height: 51)
         }
     }
     func expandedViewMap() {
+        tableMode = "distances"
         photosCollectionView.isHidden = true
         googleMaps.isHidden = false
-        hotelReviewsTableView?.isHidden = true
+        hotelReviewsTableView?.isHidden = false
+        hotelReviewsTableView?.frame = CGRect(x: 187.5, y: 121, width: 124.5, height: 166)
+        hotelReviewsTableView?.reloadData()
+        expandedViewLabelOne.isHidden = false
+        expandedViewLabelOne.frame = CGRect(x: 197.5, y: 101, width: 125, height: 21)
+        expandedViewLabelOne.text = "Distance to..."
+        expandedViewLabelTwo.isHidden = true
+        cancellationPolicyLabel.isHidden = true
         
         UIView.animate(withDuration: 0.4) {
-            self.whiteLine.layer.frame = CGRect(x: 117, y: 69, width: 55, height: 51)
+            self.whiteLine.layer.frame = CGRect(x: 90, y: 69, width: 55, height: 51)
         }
     }
     func expandedViewReviews() {
+        tableMode = "reviews"
         photosCollectionView.isHidden = true
         googleMaps.isHidden = true
         hotelReviewsTableView?.isHidden = false
+        hotelReviewsTableView?.frame = CGRect(x: 0, y: 121, width: 322, height: 166)
+        hotelReviewsTableView?.reloadData()
+        expandedViewLabelOne.isHidden = false
+        expandedViewLabelOne.frame = CGRect(x: 10, y: 101, width: 125, height: 21)
+        expandedViewLabelOne.text = "Reviews"
+        expandedViewLabelTwo.isHidden = true
+        cancellationPolicyLabel.isHidden = true
         
         UIView.animate(withDuration: 0.4) {
-            self.whiteLine.layer.frame = CGRect(x: 201, y: 69, width: 55, height: 51)
+            self.whiteLine.layer.frame = CGRect(x: 174, y: 69, width: 55, height: 51)
         }
     }
     func expandedViewAmenities() {
+        tableMode = "amenities"
         photosCollectionView.isHidden = true
         googleMaps.isHidden = true
-        hotelReviewsTableView?.isHidden = true
+        hotelReviewsTableView?.isHidden = false
+        hotelReviewsTableView?.frame = CGRect(x: 0, y: 121, width: 124.5, height: 166)
+        hotelReviewsTableView?.reloadData()
+        expandedViewLabelOne.isHidden = false
+        expandedViewLabelOne.frame = CGRect(x: 170, y: 101, width: 175, height: 21)
+        expandedViewLabelOne.text = "Cancellation Policy"
+        expandedViewLabelTwo.isHidden = false
+        expandedViewLabelTwo.frame = CGRect(x: 10, y: 101, width: 150, height: 21)
+        expandedViewLabelTwo.text = "Amenities"
+        cancellationPolicyLabel.isHidden = false
+        cancellationPolicyLabel.text = "Free cancellation up to 24 hours before your stay."
+        cancellationPolicyLabel.numberOfLines = 0
+        cancellationPolicyLabel.sizeToFit()
         
         UIView.animate(withDuration: 0.4) {
-            self.whiteLine.layer.frame = CGRect(x: 285, y: 69, width: 55, height: 51)
+            self.whiteLine.layer.frame = CGRect(x: 260, y: 69, width: 55, height: 51)
         }
     }
 

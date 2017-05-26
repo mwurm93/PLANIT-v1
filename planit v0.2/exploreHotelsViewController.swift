@@ -97,7 +97,6 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         let cell = tableView.dequeueReusableCell(withIdentifier: "hotelResultPrototypeCell", for: indexPath) as! hotelTableViewCell
         cell.selectionStyle = .none
         cell.showHotelOnMap()
-//        cell.expandedViewPhotos()
         
         //Change hamburger icon
         for view in cell.subviews as [UIView] {
@@ -131,7 +130,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if selectedIndex == indexPath {
-            selectedIndex = IndexPath(row: 0, section: 0)
+            selectedIndex = IndexPath()
         } else {
             selectedIndex = indexPath
         }
@@ -224,6 +223,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         guard let tableViewCell = cell as? hotelTableViewCell else { return }
         
         tableViewCell.setCollectionViewDataSourceDelegate(dataSourceDelegate: self, forRow: indexPath.row)
+        tableViewCell.expandedViewPhotos()
     }
     
     // MARK: Table Section Headers
@@ -312,9 +312,6 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     
     
     // MARK: Actions
-    @IBAction func chooseFlightsButtonTouchedUpInside(_ sender: Any) {
-        
-    }
     @IBAction func tripNameEditingChanged(_ sender: Any) {
         let tripNameValue = tripNameLabel.text as! NSString
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -332,7 +329,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
 
 }
 
-extension exploreHotelsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension exploreHotelsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return hotelStockPhotos.count
     }
@@ -340,8 +337,7 @@ extension exploreHotelsViewController: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "hotelPhotosCollectionViewCell",
-                                                      for: indexPath) as! hotelPhotosCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "hotelPhotosCollectionViewCell", for: indexPath) as! hotelPhotosCollectionViewCell
         
         cell.hotelStockPhotoVIew.image = hotelStockPhotos[indexPath.item]
         
