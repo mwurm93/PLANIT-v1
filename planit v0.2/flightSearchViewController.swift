@@ -549,10 +549,10 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full || cellState.selectedPosition() == .right {
             if positionInSuperView.origin.y - adjustmentY < 70 {
                 timeOfDayTableY = positionInSuperView.origin.y + 65 - adjustmentY
-            } else if positionInSuperView.origin.y - adjustmentY < 350 {
+            } else if positionInSuperView.origin.y - adjustmentY < 300 {
                 timeOfDayTableY = positionInSuperView.origin.y + 30 - adjustmentY
             } else {
-                timeOfDayTableY = positionInSuperView.origin.y - 170 + adjustmentY
+                timeOfDayTableY = positionInSuperView.origin.y - 170 - adjustmentY
             }
             if positionInSuperView.origin.x < 40 {
                 timeOfDayTableX = positionInSuperView.midX + 50
