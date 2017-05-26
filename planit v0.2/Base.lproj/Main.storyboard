@@ -2539,7 +2539,7 @@
                                                                 <constraint firstAttribute="width" constant="45" id="OTK-NZ-hVJ"/>
                                                                 <constraint firstAttribute="height" constant="45" id="P4J-nD-eaZ"/>
                                                             </constraints>
-                                                            <state key="normal" title="Button" image="map"/>
+                                                            <state key="normal" title="Button" image="camera"/>
                                                         </button>
                                                         <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RAp-ef-8Un">
                                                             <rect key="frame" x="85" y="0.0" width="45" height="45"/>
@@ -2555,7 +2555,7 @@
                                                                 <constraint firstAttribute="width" constant="45" id="6do-0V-Xcb"/>
                                                                 <constraint firstAttribute="height" constant="45" id="zkE-Tz-g1o"/>
                                                             </constraints>
-                                                            <state key="normal" title="Button" image="map"/>
+                                                            <state key="normal" title="Button" image="review"/>
                                                         </button>
                                                         <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="evr-u3-6o5">
                                                             <rect key="frame" x="255" y="0.0" width="45" height="45"/>
@@ -2563,10 +2563,15 @@
                                                                 <constraint firstAttribute="height" constant="45" id="3U3-vT-LFA"/>
                                                                 <constraint firstAttribute="width" constant="45" id="63t-1U-kxb"/>
                                                             </constraints>
-                                                            <state key="normal" title="Button" image="map"/>
+                                                            <state key="normal" title="Button" image="amenites"/>
                                                         </button>
                                                     </subviews>
                                                 </stackView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="white line" translatesAutoresizingMaskIntoConstraints="NO" id="Wc7-lr-ANS">
+                                                    <rect key="frame" x="33" y="72" width="55" height="51"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="tintColor" red="0.97649024210000002" green="0.98120349279999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="H6y-6u-atb" firstAttribute="top" secondItem="AlF-aA-wVH" secondAttribute="top" id="6v8-T5-lGB"/>
@@ -4959,10 +4964,12 @@
         <image name="4" width="71" height="71"/>
         <image name="5" width="71" height="71"/>
         <image name="Calendar-Time" width="256" height="256"/>
+        <image name="amenites" width="179" height="169"/>
         <image name="bed icon" width="128" height="128"/>
         <image name="bermudaSunset" width="1500" height="1125"/>
         <image name="bermudaSunsetTop" width="563" height="487"/>
         <image name="budgetICon" width="256" height="256"/>
+        <image name="camera" width="256" height="256"/>
         <image name="change" width="1066" height="951"/>
         <image name="deleteButton" width="35" height="34"/>
         <image name="earth" width="256" height="256"/>
@@ -4977,6 +4984,7 @@
         <image name="moon" width="300" height="300"/>
         <image name="paint bucket" width="718" height="678"/>
         <image name="person icon" width="1200" height="1200"/>
+        <image name="review" width="72" height="73"/>
         <image name="settings" width="256" height="256"/>
         <image name="small arrow" width="87" height="30"/>
         <image name="sort" width="100" height="100"/>
