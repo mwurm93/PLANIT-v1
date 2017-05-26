@@ -10,6 +10,7 @@ PODS:
     - GoogleMaps/Base (= 2.2.0)
   - JTAppleCalendar (7.0.2)
   - pop (1.0.9)
+  - SMCalloutView (2.1.5)
   - UIColor+FlatColors (0.0.2)
 
 DEPENDENCIES:
@@ -19,6 +20,7 @@ DEPENDENCIES:
   - GooglePlaces
   - JTAppleCalendar (~> 7)
   - pop (~> 1.0)
+  - SMCalloutView (~> 2.1)
   - UIColor+FlatColors
 
 SPEC CHECKSUMS:
@@ -28,8 +30,9 @@ SPEC CHECKSUMS:
   GooglePlaces: bca867d5e9da15384c794b945e4226848bc6e9d9
   JTAppleCalendar: c14685634064ef67a68209548ff3443208af48a3
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
+  SMCalloutView: 5c0ee363dc8e7204b2fda17dfad38c93e9e23481
   UIColor+FlatColors: 6c699df7a575281794c688c64cee6c44fd1f93b4
 
-PODFILE CHECKSUM: d8eacdeb5c332100a4e0ed068be8e9102bea99b7
+PODFILE CHECKSUM: d1ead399b88dd5117a3b0f8bcc3b6fcd4a561778
 
 COCOAPODS: 1.1.1
