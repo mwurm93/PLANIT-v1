@@ -535,10 +535,6 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
         var timeOfDayTableX = CGFloat()
         var timeOfDayTableY = CGFloat()
         
-        let testY = positionInSuperView.origin.y
-        let testX = positionInSuperView.origin.x
-        
-        
         var adjustmentY = CGFloat(0)
         if dateEditing == "departureDate" {
             adjustmentY = CGFloat(26.5 + 73)
@@ -636,14 +632,22 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
                 
                 //Spawn time of day selection
                 let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+                
+                var adjustmentY = CGFloat(0)
+                if dateEditing == "departureDate" {
+                    adjustmentY = CGFloat(26.5 + 73)
+                } else if dateEditing == "returnDate" {
+                    adjustmentY = CGFloat(101.5 + 73)
+                }
+                
                 var timeOfDayTableX = CGFloat()
                 var timeOfDayTableY = CGFloat()
-                if positionInSuperView.origin.y < 70 {
-                    timeOfDayTableY = positionInSuperView.origin.y + 65
-                } else if positionInSuperView.origin.y < 350 {
-                    timeOfDayTableY = positionInSuperView.origin.y + 30
+                if positionInSuperView.origin.y - adjustmentY < 70 {
+                    timeOfDayTableY = positionInSuperView.origin.y + 65 - adjustmentY
+                } else if positionInSuperView.origin.y - adjustmentY < 300 {
+                    timeOfDayTableY = positionInSuperView.origin.y + 30 - adjustmentY
                 } else {
-                    timeOfDayTableY = positionInSuperView.origin.y - 170
+                    timeOfDayTableY = positionInSuperView.origin.y - 170 - adjustmentY
                 }
                 if positionInSuperView.origin.x < 40 {
                     timeOfDayTableX = positionInSuperView.midX + 50
@@ -670,14 +674,22 @@ extension flightSearchViewController: JTAppleCalendarViewDataSource, JTAppleCale
                 }
                 
                 let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+                
+                var adjustmentY = CGFloat(0)
+                if dateEditing == "departureDate" {
+                    adjustmentY = CGFloat(26.5 + 73)
+                } else if dateEditing == "returnDate" {
+                    adjustmentY = CGFloat(101.5 + 73)
+                }
+                
                 var timeOfDayTableX = CGFloat()
                 var timeOfDayTableY = CGFloat()
-                if positionInSuperView.origin.y < 70 {
-                    timeOfDayTableY = positionInSuperView.origin.y + 65
-                } else if positionInSuperView.origin.y < 350 {
-                    timeOfDayTableY = positionInSuperView.origin.y + 30
+                if positionInSuperView.origin.y - adjustmentY < 70 {
+                    timeOfDayTableY = positionInSuperView.origin.y + 65 - adjustmentY
+                } else if positionInSuperView.origin.y - adjustmentY < 300 {
+                    timeOfDayTableY = positionInSuperView.origin.y + 30 - adjustmentY
                 } else {
-                    timeOfDayTableY = positionInSuperView.origin.y - 170
+                    timeOfDayTableY = positionInSuperView.origin.y - 170 - adjustmentY
                 }
                 if positionInSuperView.origin.x < 40 {
                     timeOfDayTableX = positionInSuperView.midX + 180
