@@ -13,11 +13,12 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     
     // MARK: Class properties
     //Load flight results from server
-    var selectedIndex = IndexPath(row: 0, section: 0)
+    var selectedIndex = IndexPath()
     var hotelResultsDictionary = [["hotelName":"The W"],["hotelName":"Hilton"],["hotelName":"Marriott"],["hotelName":"Holiday Inn"],["hotelName":"VRBO"]]
     
     var sectionTitles = ["Group's top hotel", "Alternatives"]
     var effect:UIVisualEffect!
+    var hotelStockPhotos = [#imageLiteral(resourceName: "hotelPoolStockPhoto"),#imageLiteral(resourceName: "hotelRoomStockPhoto")]
     
     // MARK: Outlets
     @IBOutlet weak var recommendationRankingTableView: UITableView!
@@ -96,6 +97,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         let cell = tableView.dequeueReusableCell(withIdentifier: "hotelResultPrototypeCell", for: indexPath) as! hotelTableViewCell
         cell.selectionStyle = .none
         cell.showHotelOnMap()
+        cell.expandedViewPhotos()
         
         //Change hamburger icon
         for view in cell.subviews as [UIView] {
@@ -217,6 +219,13 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        guard let tableViewCell = cell as? hotelTableViewCell else { return }
+        
+        tableViewCell.setCollectionViewDataSourceDelegate(dataSourceDelegate: self, forRow: indexPath.row)
+    }
+    
     // MARK: Table Section Headers
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionTitles[section]
@@ -321,4 +330,21 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
 
+}
+
+extension exploreHotelsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return hotelStockPhotos.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "hotelPhotosCollectionViewCell",
+                                                      for: indexPath) as! hotelPhotosCollectionViewCell
+        
+        cell.hotelStockPhotoVIew.image = hotelStockPhotos[indexPath.item]
+        
+        return cell
+    }
 }

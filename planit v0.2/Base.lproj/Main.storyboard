@@ -2461,11 +2461,11 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="hotelResultPrototypeCell" rowHeight="104" id="RLd-tH-86H" customClass="hotelTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="104"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="hotelResultPrototypeCell" rowHeight="287" id="RLd-tH-86H" customClass="hotelTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="287"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RLd-tH-86H" id="AlF-aA-wVH">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="103.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="286.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H6y-6u-atb">
@@ -2540,6 +2540,9 @@
                                                                 <constraint firstAttribute="height" constant="45" id="P4J-nD-eaZ"/>
                                                             </constraints>
                                                             <state key="normal" title="Button" image="camera"/>
+                                                            <connections>
+                                                                <action selector="photosButtonIsTouchedUpInside:" destination="RLd-tH-86H" eventType="touchUpInside" id="wP7-OW-4GL"/>
+                                                            </connections>
                                                         </button>
                                                         <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RAp-ef-8Un">
                                                             <rect key="frame" x="85" y="0.0" width="45" height="45"/>
@@ -2548,6 +2551,9 @@
                                                                 <constraint firstAttribute="height" constant="45" id="wvk-6G-0Gc"/>
                                                             </constraints>
                                                             <state key="normal" title="Button" image="map"/>
+                                                            <connections>
+                                                                <action selector="mapButtonTouchedUpInside:" destination="RLd-tH-86H" eventType="touchUpInside" id="MRO-nt-a25"/>
+                                                            </connections>
                                                         </button>
                                                         <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fZH-CG-zx8">
                                                             <rect key="frame" x="170" y="0.0" width="45" height="45"/>
@@ -2556,6 +2562,9 @@
                                                                 <constraint firstAttribute="height" constant="45" id="zkE-Tz-g1o"/>
                                                             </constraints>
                                                             <state key="normal" title="Button" image="review"/>
+                                                            <connections>
+                                                                <action selector="reviewsButtonTouchedUpInside:" destination="RLd-tH-86H" eventType="touchUpInside" id="LRZ-qF-zyb"/>
+                                                            </connections>
                                                         </button>
                                                         <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="evr-u3-6o5">
                                                             <rect key="frame" x="255" y="0.0" width="45" height="45"/>
@@ -2564,14 +2573,81 @@
                                                                 <constraint firstAttribute="width" constant="45" id="63t-1U-kxb"/>
                                                             </constraints>
                                                             <state key="normal" title="Button" image="amenites"/>
+                                                            <connections>
+                                                                <action selector="amenitiesButtonTouchedUpInside:" destination="RLd-tH-86H" eventType="touchUpInside" id="eY9-Ad-cMW"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                 </stackView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="white line" translatesAutoresizingMaskIntoConstraints="NO" id="Wc7-lr-ANS">
-                                                    <rect key="frame" x="33" y="72" width="55" height="51"/>
+                                                    <rect key="frame" x="201" y="69" width="55" height="51"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="tintColor" red="0.97649024210000002" green="0.98120349279999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </imageView>
+                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="wNQ-E8-Wvu">
+                                                    <rect key="frame" x="0.0" y="101" width="375" height="186"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="E9R-lW-MsA">
+                                                        <size key="itemSize" width="375" height="186"/>
+                                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    </collectionViewFlowLayout>
+                                                    <cells>
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="hotelPhotosCollectionViewCell" id="yQy-6Z-JTr" customClass="hotelPhotosCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="186"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="186"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <subviews>
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rTQ-8E-WuZ">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="186"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    </imageView>
+                                                                </subviews>
+                                                            </view>
+                                                            <connections>
+                                                                <outlet property="hotelStockPhotoVIew" destination="rTQ-8E-WuZ" id="qWw-5k-Ya9"/>
+                                                            </connections>
+                                                        </collectionViewCell>
+                                                    </cells>
+                                                    <connections>
+                                                        <outlet property="dataSource" destination="LVk-lO-4Cs" id="cLO-FX-LkU"/>
+                                                        <outlet property="delegate" destination="LVk-lO-4Cs" id="PkY-Zb-Hko"/>
+                                                    </connections>
+                                                </collectionView>
+                                                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="HgL-jb-vBF">
+                                                    <rect key="frame" x="0.0" y="101" width="375" height="186"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <prototypes>
+                                                        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="hotelReviewTableViewCell" id="Sty-zN-cqh" customClass="hotelReviewTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Sty-zN-cqh" id="8Cm-kT-jK0">
+                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Review text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AIE-8d-ANv">
+                                                                        <rect key="frame" x="19" y="-10" width="348" height="54"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                                <variation key="default">
+                                                                    <mask key="subviews">
+                                                                        <exclude reference="AIE-8d-ANv"/>
+                                                                    </mask>
+                                                                </variation>
+                                                            </tableViewCellContentView>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        </tableViewCell>
+                                                    </prototypes>
+                                                </tableView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="H6y-6u-atb" firstAttribute="top" secondItem="AlF-aA-wVH" secondAttribute="top" id="6v8-T5-lGB"/>
@@ -2583,13 +2659,18 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
+                                            <outlet property="amenitiesButton" destination="evr-u3-6o5" id="Czs-E5-sFa"/>
                                             <outlet property="defaultStackView" destination="A8b-eq-UJ9" id="7fc-2s-CBP"/>
                                             <outlet property="defaultView" destination="H6y-6u-atb" id="6Dp-4y-VIJ"/>
                                             <outlet property="expandedView" destination="Z8v-7F-v16" id="hEz-CT-jUC"/>
                                             <outlet property="expandedViewHeightConstraint" destination="3h7-JV-ZIm" id="eSy-B4-LLM"/>
                                             <outlet property="googleMapsView" destination="Dco-qW-oPy" id="RBG-8Z-xXh"/>
                                             <outlet property="hotelName" destination="8DR-Yf-4Mh" id="lrJ-rl-Ids"/>
-                                            <outlet property="mapButton" destination="1ye-d1-wIt" id="pFE-e7-LB7"/>
+                                            <outlet property="mapButton" destination="RAp-ef-8Un" id="Aon-5f-z1y"/>
+                                            <outlet property="photosButton" destination="1ye-d1-wIt" id="r7W-4S-E2R"/>
+                                            <outlet property="photosCollectionView" destination="wNQ-E8-Wvu" id="gGD-io-Q5u"/>
+                                            <outlet property="reviewsButton" destination="fZH-CG-zx8" id="bGr-dV-iXb"/>
+                                            <outlet property="whiteLine" destination="Wc7-lr-ANS" id="BBW-VQ-Xa8"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -2599,10 +2680,10 @@
                                 </connections>
                             </tableView>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rD3-hw-1ez">
-                                <rect key="frame" x="0.0" y="340" width="375" height="327"/>
+                                <rect key="frame" x="0.0" y="530" width="375" height="137"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="I6R-zX-lNl">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="327"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="137"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="dark"/>

@@ -74,6 +74,8 @@
 		FAC1BD2F1EAE7707008AB7C4 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1BD2B1EAE7707008AB7C4 /* Scheduler.swift */; };
 		FAC1BD301EAE7707008AB7C4 /* ViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1BD2C1EAE7707008AB7C4 /* ViewManager.swift */; };
 		FAC1BD311EAE7707008AB7C4 /* ZLSwipeableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1BD2D1EAE7707008AB7C4 /* ZLSwipeableView.swift */; };
+		FADF09FD1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADF09FC1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift */; };
+		FADF0A011ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADF0A001ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -187,6 +189,8 @@
 		FAC1BD2B1EAE7707008AB7C4 /* Scheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		FAC1BD2C1EAE7707008AB7C4 /* ViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewManager.swift; sourceTree = "<group>"; };
 		FAC1BD2D1EAE7707008AB7C4 /* ZLSwipeableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLSwipeableView.swift; sourceTree = "<group>"; };
+		FADF09FC1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hotelPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
+		FADF0A001ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hotelReviewTableViewCell.swift; sourceTree = "<group>"; };
 		FF99F8DC1EC030B0E3C827B0 /* Pods_planit_v0_2Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_planit_v0_2Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -413,6 +417,7 @@
 				FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */,
 				FA16B3C41ECC7743005E4DEF /* flightSearchResultTableViewCell.swift */,
 				FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */,
+				FADF0A001ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift */,
 			);
 			name = "Table View";
 			sourceTree = "<group>";
@@ -423,6 +428,7 @@
 				FAA8F2901E351DCD00CD7337 /* ActivitiesCollectionViewCell.swift */,
 				FAA8F2911E351DCD00CD7337 /* ActivityItem.swift */,
 				FAA8F2921E351DCD00CD7337 /* contactsCollectionViewCell.swift */,
+				FADF09FC1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift */,
 			);
 			name = "Collection View";
 			sourceTree = "<group>";
@@ -848,6 +854,7 @@
 				FAA8F29C1E351DDE00CD7337 /* ExistingTripTableViewCell.swift in Sources */,
 				FA09A3EA1EB110A6007F64A3 /* ToDoViewController.swift in Sources */,
 				FA09A3F21EB23894007F64A3 /* CardView.swift in Sources */,
+				FADF0A011ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift in Sources */,
 				FA9E39811EBBD2A900F6CB0B /* bucketListViewController.swift in Sources */,
 				FAA8F26C1E351B9500CD7337 /* EmailViewController.swift in Sources */,
 				FAA8F2711E351B9500CD7337 /* PasswordViewController.swift in Sources */,
@@ -863,6 +870,7 @@
 				FAA8F2951E351DCD00CD7337 /* contactsCollectionViewCell.swift in Sources */,
 				FAA8F2231E35194100CD7337 /* AppDelegate.swift in Sources */,
 				FAA8F2681E351B9500CD7337 /* ActivitiesViewController.swift in Sources */,
+				FADF09FD1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift in Sources */,
 				FAC1BD301EAE7707008AB7C4 /* ViewManager.swift in Sources */,
 				FA4E922B1E3526DD00231C72 /* API.swift in Sources */,
 				FA25F1F91EBB6DA9005D29E5 /* exploreHotelsViewController.swift in Sources */,
