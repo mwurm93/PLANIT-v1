@@ -16,14 +16,18 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     var flightResultsDictionary = [["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"AAA","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"BBB","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"CCC","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"DDD","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"EEE","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"FFF","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"GGG","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"HHH","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"]]
     var selectedIndex = IndexPath(row: 0, section: 0)
     var sectionTitles = ["Selected flight", "Alternatives"]
-    var sortFlightsCalloutView = SMCalloutView()
-    var filterFlightsCalloutView = SMCalloutView()
+    var sortFilterFlightsCalloutView = SMCalloutView()
     
     //MARK: Outlets
     @IBOutlet weak var flightResultsTableView: UITableView!
+    @IBOutlet weak var filterButton: UIButton!
+    @IBOutlet weak var sortButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.sortFilterFlightsCalloutView.delegate = self
+        self.sortFilterFlightsCalloutView.isHidden = true
         
         //Set up table
         flightResultsTableView.tableFooterView = UIView()
@@ -179,6 +183,21 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     
     //MARK: Actions
     @IBAction func filterFlightsButtonTouchedUpInside(_ sender: Any) {
+        
+        if self.sortFilterFlightsCalloutView.isHidden == true {
+        self.sortFilterFlightsCalloutView.title = "Filter results"
+        self.sortFilterFlightsCalloutView.isHidden = false
+        self.sortFilterFlightsCalloutView.animation(withType: .stretch, presenting: true)
+        self.sortFilterFlightsCalloutView.permittedArrowDirection = .up
+        var calloutRect: CGRect = CGRect.zero
+        calloutRect.origin = CGPoint(x: filterButton.frame.midX, y: CGFloat(59))
+        
+        calloutRect.size = CGSize.zero
+        self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+        } else {
+            self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
+            self.sortFilterFlightsCalloutView.isHidden = true
+        }
     }
     @IBAction func sortFlightsButtonTouchedUpInside(_ sender: Any) {
     }

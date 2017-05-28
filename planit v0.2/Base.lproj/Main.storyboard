@@ -4285,7 +4285,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="filterButton" destination="JCG-3h-J6X" id="3v3-Tg-Be0"/>
                         <outlet property="flightResultsTableView" destination="Upi-i4-7Fi" id="en7-oY-P4i"/>
+                        <outlet property="sortButton" destination="ZEF-nt-BDs" id="9Eg-8q-Pcf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YyM-ds-ZOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
