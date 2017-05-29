@@ -2429,6 +2429,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" image="filter"/>
                                 <connections>
+                                    <action selector="filterButtonTouchedUpInsider:" destination="LVk-lO-4Cs" eventType="touchUpInside" id="qGw-7g-eAs"/>
                                     <action selector="filterFlightsButtonTouchedUpInside:" destination="pop-1B-VO6" eventType="touchUpInside" id="OE3-1i-s6A"/>
                                     <action selector="subviewWhereButtonTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="qlK-VJ-3xt"/>
                                 </connections>
@@ -2439,6 +2440,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" image="sort"/>
                                 <connections>
+                                    <action selector="sortButtonTouchedUpInside:" destination="LVk-lO-4Cs" eventType="touchUpInside" id="FDU-iD-OxO"/>
                                     <action selector="sortFlightsButtonTouchedUpInside:" destination="pop-1B-VO6" eventType="touchUpInside" id="doT-pF-chY"/>
                                     <action selector="subviewWhoButtonTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="YMB-LX-vmR"/>
                                 </connections>
@@ -2698,10 +2700,12 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="filterButton" destination="H6t-8H-HOn" id="neP-SM-VMI"/>
                         <outlet property="popupBlurView" destination="rD3-hw-1ez" id="TbM-kJ-rvK"/>
                         <outlet property="readyToBookButton" destination="PLC-ds-5nR" id="vpx-d0-eP9"/>
                         <outlet property="recommendationRankingTableView" destination="hCM-L6-AVq" id="rJz-i1-JIg"/>
                         <outlet property="returnToSwipingButton" destination="xVL-nk-bs7" id="FNc-xh-IQ0"/>
+                        <outlet property="sortButton" destination="gAy-Kb-CF1" id="n0i-OA-Ag2"/>
                         <outlet property="tripNameLabel" destination="TTO-0F-EHv" id="snv-oE-T9h"/>
                     </connections>
                 </viewController>
@@ -5021,14 +5025,14 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="MNW-06-TUF"/>
+        <segue reference="Ey3-rB-KPz"/>
+        <segue reference="G1K-4d-MLp"/>
+        <segue reference="cWA-9L-HdA"/>
+        <segue reference="RAo-Nt-Dp1"/>
         <segue reference="R8r-yB-rJ1"/>
         <segue reference="8MA-wa-IqS"/>
         <segue reference="zWM-he-GTg"/>
-        <segue reference="Fe3-1x-Rbs"/>
-        <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="cWA-9L-HdA"/>
-        <segue reference="MNW-06-TUF"/>
-        <segue reference="Ey3-rB-KPz"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

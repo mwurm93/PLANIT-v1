@@ -33,6 +33,8 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var returnToSwipingButton: UIButton!
     @IBOutlet weak var tripNameLabel: UITextField!
     @IBOutlet weak var popupBlurView: UIVisualEffectView!
+    @IBOutlet weak var filterButton: UIButton!
+    @IBOutlet weak var sortButton: UIButton!
     
     // viewDidLoad
     override func viewDidLoad() {
@@ -403,6 +405,42 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
 
+    @IBAction func sortButtonTouchedUpInside(_ sender: Any) {
+        if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "sort") {
+            calloutTableViewMode = "filter"
+            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 100, height: 22 * filterFirstLevelOptions.count)
+            sortFilterFlightsCalloutTableView.reloadData()
+            self.sortFilterFlightsCalloutView.contentView = sortFilterFlightsCalloutTableView
+            self.sortFilterFlightsCalloutView.isHidden = false
+            self.sortFilterFlightsCalloutView.animation(withType: .stretch, presenting: true)
+            self.sortFilterFlightsCalloutView.permittedArrowDirection = .up
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: filterButton.frame.midX, y: CGFloat(59))
+            self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+        } else {
+            self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
+            self.sortFilterFlightsCalloutView.isHidden = true
+        }
+    }
+    @IBAction func filterButtonTouchedUpInsider(_ sender: Any) {
+        if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "filter"){
+            calloutTableViewMode = "sort"
+            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 140, height: 22 * sortFirstLevelOptions.count)
+            sortFilterFlightsCalloutTableView.reloadData()
+            self.sortFilterFlightsCalloutView.contentView = sortFilterFlightsCalloutTableView
+            self.sortFilterFlightsCalloutView.isHidden = false
+            self.sortFilterFlightsCalloutView.animation(withType: .stretch, presenting: true)
+            self.sortFilterFlightsCalloutView.permittedArrowDirection = .up
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: sortButton.frame.midX, y: CGFloat(59))
+            self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+        } else {
+            self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
+            self.sortFilterFlightsCalloutView.isHidden = true
+        }
+    }
 }
 
 extension exploreHotelsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
