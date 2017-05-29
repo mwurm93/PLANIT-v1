@@ -135,6 +135,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                     for subview in view.subviews as! [UIImageView] {
                         if subview.isKind(of: UIImageView.self) {
                             subview.image = UIImage(named: "hamburger")
+                            subview.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
                         }
                     }
                 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     // MARK: Class properties
     //Load flight results from server
@@ -22,6 +22,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var returnToSwipingButton: UIButton!
     @IBOutlet weak var tripNameLabel: UITextField!
     @IBOutlet weak var popupBlurView: UIVisualEffectView!
+    @IBOutlet weak var rankingInstructionsView: UIView!
+    @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
+    @IBOutlet weak var instructionsLabel: UILabel!
     
     // viewDidLoad
     override func viewDidLoad() {
@@ -55,7 +58,40 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.readyToBookButton.backgroundColor = UIColor.blue
         self.readyToBookButton.layer.cornerRadius = self.readyToBookButton.frame.height / 2
         self.readyToBookButton.titleLabel?.textAlignment = .center
-
+        
+        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        if existing_trips?.count == 1 {
+            let when = DispatchTime.now() + 0.6
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.animateInstructionsIn()
+                self.readyToBookButton.alpha =  0
+                self.returnToSwipingButton.alpha =  0
+            }
+        } else {
+            recommendationRankingTableView.frame = CGRect(x: 0, y: 75, width: 375, height: 500)
+        }
+        
+        let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
+        atap.numberOfTapsRequired = 1
+        atap.delegate = self
+        self.popupBackgroundView.addGestureRecognizer(atap)
+        popupBackgroundView.isHidden = true
+        popupBackgroundView.isUserInteractionEnabled = true
+        rankingInstructionsView.isHidden = true
+        rankingInstructionsView.layer.cornerRadius = 10
+        let hamburgerAttachment = NSTextAttachment()
+        hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_black")
+        hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
+        let changeAttachment = NSTextAttachment()
+        changeAttachment.image = #imageLiteral(resourceName: "change_black")
+        changeAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 15)
+        let stringForLabel = NSMutableAttributedString(string: "Time to choose a destination! Change your group's trip with ")
+        let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
+        let attachment2 = NSAttributedString(attachment: changeAttachment)
+        stringForLabel.append(attachment1)
+        stringForLabel.append(NSAttributedString(string:", and look at flights with "))
+        stringForLabel.append(attachment2)
+        instructionsLabel.attributedText = stringForLabel
     }
     
     // didReceiveMemoryWarning
@@ -99,6 +135,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 for subview in view.subviews as! [UIImageView] {
                     if subview.isKind(of: UIImageView.self) {
                         subview.image = UIImage(named: "hamburger")
+                        subview.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
                     }
                 }
             }
@@ -284,8 +321,46 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
     }
     
+    func animateInstructionsIn(){
+        rankingInstructionsView.layer.isHidden = false
+        rankingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        rankingInstructionsView.alpha = 0
+        recommendationRankingTableView.isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.4) {
+            self.popupBackgroundView.isHidden = false
+            self.rankingInstructionsView.alpha = 1
+            self.rankingInstructionsView.transform = CGAffineTransform.identity
+        }
+    }
+    
+    func dismissInstructions(touch: UITapGestureRecognizer) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.rankingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.rankingInstructionsView.alpha = 0
+            self.popupBackgroundView.isHidden = true
+            self.returnToSwipingButton.alpha = 1
+            self.readyToBookButton.alpha = 1
+            self.recommendationRankingTableView.isUserInteractionEnabled = true
+            self.recommendationRankingTableView.frame = CGRect(x: 0, y: 75, width: 375, height: 500)
+        }) { (Success:Bool) in
+            self.rankingInstructionsView.layer.isHidden = true
+        }
+    }
     
     // MARK: Actions
+    @IBAction func instructionsGotItButtonTouchedUpInsider(_ sender: Any) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.rankingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.rankingInstructionsView.alpha = 0
+            self.popupBackgroundView.isHidden = true
+            self.returnToSwipingButton.alpha = 1
+            self.readyToBookButton.alpha = 1
+            self.recommendationRankingTableView.isUserInteractionEnabled = true
+            self.recommendationRankingTableView.frame = CGRect(x: 0, y: 75, width: 375, height: 500)
+        }) { (Success:Bool) in
+            self.rankingInstructionsView.layer.isHidden = true
+        }
+    }
     @IBAction func chooseFlightsButtonTouchedUpInside(_ sender: Any) {
         
     }
