@@ -254,7 +254,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     @IBAction func filterFlightsButtonTouchedUpInside(_ sender: Any) {
         if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "sort") {
             calloutTableViewMode = "filter"
-            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 100, height: 22 * filterFirstLevelOptions.count)
+            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
             sortFilterFlightsCalloutTableView.reloadData()
             self.sortFilterFlightsCalloutView.contentView = sortFilterFlightsCalloutTableView
             self.sortFilterFlightsCalloutView.isHidden = false
