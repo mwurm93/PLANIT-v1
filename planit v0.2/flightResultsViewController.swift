@@ -18,10 +18,9 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     var sectionTitles = ["Selected flight", "Alternatives"]
     var sortFilterFlightsCalloutView = SMCalloutView()
     let sortFilterFlightsCalloutTableView = UITableView(frame: CGRect.zero, style: .plain)
-
     var calloutTableViewMode = "sort"
     let sortFirstLevelOptions = ["Price","Duration","Landing Time", "Departure Time"]
-    let filterFirstLevelOptions = ["Stops","Airlines"]
+    let filterFirstLevelOptions = ["Stops","Airlines","Clear filters"]
     
     //MARK: Outlets
     @IBOutlet weak var flightResultsTableView: UITableView!

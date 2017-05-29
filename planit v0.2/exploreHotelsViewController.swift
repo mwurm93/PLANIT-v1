@@ -8,8 +8,9 @@
 
 import UIKit
 import GoogleMaps
+import SMCalloutView
 
-class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, GMSMapViewDelegate {
+class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, GMSMapViewDelegate, SMCalloutViewDelegate {
     
     // MARK: Class properties
     //Load flight results from server
@@ -19,6 +20,12 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     var sectionTitles = ["Group's top hotel", "Alternatives"]
     var effect:UIVisualEffect!
     var hotelStockPhotos = [#imageLiteral(resourceName: "hotelPoolStockPhoto"),#imageLiteral(resourceName: "hotelRoomStockPhoto")]
+    
+    var sortFilterFlightsCalloutView = SMCalloutView()
+    let sortFilterFlightsCalloutTableView = UITableView(frame: CGRect.zero, style: .plain)
+    var calloutTableViewMode = "sort"
+    let sortFirstLevelOptions = ["Price","Rating"]
+    let filterFirstLevelOptions = ["Amenities","Rating","Clear filters"]
     
     // MARK: Outlets
     @IBOutlet weak var recommendationRankingTableView: UITableView!
@@ -30,6 +37,18 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     // viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Set up sort and filter callout views
+        self.sortFilterFlightsCalloutView.delegate = self
+        self.sortFilterFlightsCalloutView.isHidden = true
+        
+        sortFilterFlightsCalloutTableView.delegate = self
+        sortFilterFlightsCalloutTableView.dataSource = self
+        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 100, height: 100)
+        sortFilterFlightsCalloutTableView.isEditing = false
+        sortFilterFlightsCalloutTableView.allowsMultipleSelection = false
+        sortFilterFlightsCalloutTableView.backgroundColor = UIColor.clear
+        sortFilterFlightsCalloutTableView.layer.backgroundColor = UIColor.clear.cgColor
         
         //Set up popupblurview
         effect = popupBlurView.effect
@@ -80,55 +99,86 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     
     // MARK: UITableviewdelegate
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        if tableView == recommendationRankingTableView {
+            return 2
+        }
+        // else if tableView == sortFilterFlightsCalloutTableView
+        return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
+        if tableView == recommendationRankingTableView {
+            if section == 0 {
+                return 1
+            }
+            // if section == 1
+            let numberOfRows = hotelResultsDictionary.count
+            return numberOfRows - 1
         }
-        // if section == 1
-        let numberOfRows = hotelResultsDictionary.count
-        return numberOfRows - 1
+        // else if tableView == sortFilterFlightsCalloutTableView
+        else if calloutTableViewMode == "sort" {
+            return sortFirstLevelOptions.count
+        }
+        return filterFirstLevelOptions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "hotelResultPrototypeCell", for: indexPath) as! hotelTableViewCell
-        cell.selectionStyle = .none
-        cell.showHotelOnMap()
-        
-        //Change hamburger icon
-        for view in cell.subviews as [UIView] {
-            if type(of: view).description().range(of: "Reorder") != nil {
-                for subview in view.subviews as! [UIImageView] {
-                    if subview.isKind(of: UIImageView.self) {
-                        subview.image = UIImage(named: "hamburger")
+        if tableView == recommendationRankingTableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "hotelResultPrototypeCell", for: indexPath) as! hotelTableViewCell
+            cell.selectionStyle = .none
+            cell.showHotelOnMap()
+            
+            //Change hamburger icon
+            for view in cell.subviews as [UIView] {
+                if type(of: view).description().range(of: "Reorder") != nil {
+                    for subview in view.subviews as! [UIImageView] {
+                        if subview.isKind(of: UIImageView.self) {
+                            subview.image = UIImage(named: "hamburger")
+                        }
                     }
                 }
             }
+            
+            if indexPath == IndexPath(row: 0, section: 0) {
+                cell.backgroundColor = UIColor.blue
+            } else {
+                cell.backgroundColor = UIColor.clear
+            }
+            
+            var hotelsForRow = hotelResultsDictionary[0]
+            
+            
+            var addedRow = indexPath.row + 1
+            if indexPath.section == 1 {
+                hotelsForRow = hotelResultsDictionary[addedRow]
+                addedRow += 1
+            }
+            
+            cell.hotelName.text = hotelsForRow["hotelName"]
+            
+            return cell
+        }
+        // else if tableView == sortFilterFlightsCalloutTableView
+        var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "cellID")
+        
+        if cell == nil {
+            cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
         }
         
-        if indexPath == IndexPath(row: 0, section: 0) {
-            cell.backgroundColor = UIColor.blue
-        } else {
-            cell.backgroundColor = UIColor.clear
+        if calloutTableViewMode == "filter" {
+            cell?.textLabel?.text = filterFirstLevelOptions[indexPath.row]
+        } else if calloutTableViewMode == "sort" {
+            cell?.textLabel?.text = sortFirstLevelOptions[indexPath.row]
         }
         
-        var hotelsForRow = hotelResultsDictionary[0]
+        cell?.textLabel?.textColor = UIColor.black
+        cell?.textLabel?.font = UIFont.systemFont(ofSize: 15)
+        cell?.textLabel?.numberOfLines = 0
+        cell?.backgroundColor = UIColor.clear
         
-        
-        var addedRow = indexPath.row + 1
-        if indexPath.section == 1 {
-            hotelsForRow = hotelResultsDictionary[addedRow]
-            addedRow += 1
-        }
-        
-        cell.hotelName.text = hotelsForRow["hotelName"]
-        
-        return cell
+        return cell!
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == recommendationRankingTableView {
         if selectedIndex == indexPath {
             selectedIndex = IndexPath()
         } else {
@@ -137,7 +187,15 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.recommendationRankingTableView.beginUpdates()
         self.recommendationRankingTableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         self.recommendationRankingTableView.endUpdates()
+        } else if tableView == sortFilterFlightsCalloutTableView {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
+                self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
+                self.sortFilterFlightsCalloutView.isHidden = true
+                //HANDLE SORT / FILTER SELECTION
+            })
+        }
     }
+    
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
     }
     
@@ -151,7 +209,11 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true
+        if tableView == recommendationRankingTableView {
+            return true
+        }
+        // else if tableView == sortFilterFlightsCalloutTableView
+        return false
     }
     
     func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
@@ -161,6 +223,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         
         return proposedDestinationIndexPath
     }
+    
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         if destinationIndexPath == IndexPath(row: 0, section: 0) {
@@ -211,11 +274,15 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         tableView.reloadData()
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if (selectedIndex == indexPath) {
-            return 287.5
-        } else {
-            return 46
+        if tableView == recommendationRankingTableView {
+            if (selectedIndex == indexPath) {
+                return 287.5
+            } else {
+                return 46
+            }
         }
+        // else if tableView == sortFilterFlightsCalloutTableView
+        return 22
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -228,27 +295,36 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     
     // MARK: Table Section Headers
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionTitles[section]
+        if tableView == recommendationRankingTableView {
+            return sectionTitles[section]
+        }
+        // else if tableView == sortFilterFlightsCalloutTableView
+        return nil
     }
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
-    {
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: recommendationRankingTableView.bounds.size.width, height: 30))
-        header.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
-        header.layer.cornerRadius = 5
-        
-        let title = UILabel()
-        title.frame = CGRect(x: 5, y: header.frame.minY, width: header.frame.width, height: header.frame.height)
-        title.textAlignment = .left
-        title.font = UIFont.boldSystemFont(ofSize: 20)
-        title.textColor = UIColor.white
-        title.text = sectionTitles[section]
-        header.addSubview(title)
-        
-        return header
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if tableView == recommendationRankingTableView {
+            let header = UIView(frame: CGRect(x: 0, y: 0, width: recommendationRankingTableView.bounds.size.width, height: 30))
+            header.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
+            header.layer.cornerRadius = 5
+            
+            let title = UILabel()
+            title.frame = CGRect(x: 5, y: header.frame.minY, width: header.frame.width, height: header.frame.height)
+            title.textAlignment = .left
+            title.font = UIFont.boldSystemFont(ofSize: 20)
+            title.textColor = UIColor.white
+            title.text = sectionTitles[section]
+            header.addSubview(title)
+            
+            return header
+        }
+        return nil
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
+        if tableView == recommendationRankingTableView {
+            return 30
+        }
+        return CGFloat.leastNormalMagnitude
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
