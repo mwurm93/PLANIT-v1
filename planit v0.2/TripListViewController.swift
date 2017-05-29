@@ -24,6 +24,9 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var beenThereButton: UIButton!
     @IBOutlet weak var fillModeButton: UIButton!
     @IBOutlet weak var pinModeButton: UIButton!
+    @IBOutlet weak var instructionsView: UIView!
+    @IBOutlet weak var popupBackgroundViewForInstructions: UIVisualEffectView!
+    @IBOutlet weak var instructionsLabel: UILabel!
     
     // Outlets for instructions
     @IBOutlet weak var destinationDecidedControlView: UIView!
@@ -213,7 +216,37 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             createTripButton.isHidden = true
             createTripArrow.isHidden = true
         }
-
+        
+        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        if existing_trips == nil || existing_trips?.count == 0 {
+            let when = DispatchTime.now() + 0.6
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.animateInstructionsIn()
+            }
+        }
+        
+//        let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
+//        atap.numberOfTapsRequired = 1
+//        atap.delegate = self
+//        self.popupBackgroundViewForInstructions.addGestureRecognizer(atap)
+        popupBackgroundViewForInstructions.isHidden = true
+//        popupBackgroundViewForInstructions.isUserInteractionEnabled = true
+        instructionsView.isHidden = true
+        instructionsView.layer.cornerRadius = 10
+        let pinAttachment = NSTextAttachment()
+        pinAttachment.image = #imageLiteral(resourceName: "mapPin_black")
+        pinAttachment.bounds = CGRect(x: 0, y: 0, width: 15, height: 15)
+        let fillAttachment = NSTextAttachment()
+        fillAttachment.image = #imageLiteral(resourceName: "paintBucket_black")
+        fillAttachment.bounds = CGRect(x: 0, y: 0, width: 15, height: 15)
+        let stringForLabel = NSMutableAttributedString(string: "Start planning a trip above, or mark where you've been and what's on your bucket list with ")
+        let attachment1 = NSAttributedString(attachment: pinAttachment)
+        let attachment2 = NSAttributedString(attachment: fillAttachment)
+        stringForLabel.append(attachment1)
+        stringForLabel.append(NSAttributedString(string:" or "))
+        stringForLabel.append(attachment2)
+        stringForLabel.append(NSAttributedString(string:" below"))
+        instructionsLabel.attributedText = stringForLabel
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -973,6 +1006,60 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             fillModeButton.layer.shadowOpacity = 0.6
         }
     }
+    
+    func animateInstructionsIn(){
+        instructionsView.layer.isHidden = false
+        searchController?.searchBar.isHidden = true
+        instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        instructionsView.alpha = 0
+        self.view.insertSubview((self.theViewC?.view)!, belowSubview: self.instructionsView)
+        self.fillModeButton.isUserInteractionEnabled = false
+        self.pinModeButton.isUserInteractionEnabled = false
+        self.bucketListButton.isUserInteractionEnabled = false
+        self.beenThereButton.isUserInteractionEnabled = false
+        self.createTripButton.isUserInteractionEnabled = false
+        self.createTripArrow.isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.4) {
+            self.popupBackgroundViewForInstructions.isHidden = false
+            self.instructionsView.alpha = 1
+            self.instructionsView.transform = CGAffineTransform.identity
+        }
+    }
+    
+//    func dismissInstructions(touch: UITapGestureRecognizer) {
+//        UIView.animate(withDuration: 0.3, animations: {
+//            self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+//            self.instructionsView.alpha = 0
+//            self.popupBackgroundViewForInstructions.isHidden = true
+//            self.view.insertSubview((self.theViewC?.view)!, belowSubview: self.fillModeButton)
+//            self.fillModeButton.isUserInteractionEnabled = true
+//            self.pinModeButton.isUserInteractionEnabled = true
+//            self.bucketListButton.isUserInteractionEnabled = true
+//            self.beenThereButton.isUserInteractionEnabled = true
+//            self.createTripButton.isUserInteractionEnabled = false
+//            self.createTripArrow.isUserInteractionEnabled = true
+//        }) { (Success:Bool) in
+//            self.instructionsView.layer.isHidden = true
+//        }
+//    }
+
+    @IBAction func instructionsViewGotItButtonTouchedUpInside(_ sender: Any) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView.alpha = 0
+            self.searchController?.searchBar.isHidden = false
+            self.popupBackgroundViewForInstructions.isHidden = true
+            self.view.insertSubview((self.theViewC?.view)!, belowSubview: self.fillModeButton)
+            self.fillModeButton.isUserInteractionEnabled = true
+            self.pinModeButton.isUserInteractionEnabled = true
+            self.bucketListButton.isUserInteractionEnabled = true
+            self.beenThereButton.isUserInteractionEnabled = true
+            self.createTripButton.isUserInteractionEnabled = true
+            self.createTripArrow.isUserInteractionEnabled = true
+        }) { (Success:Bool) in
+            self.instructionsView.layer.isHidden = true
+        }
+    }
 
     @IBAction func bucketListButtonTouchedUpInside(_ sender: Any) {
         bucketListButton.layer.borderWidth = 3
@@ -1004,7 +1091,6 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
         popupBackgroundViewDestinationDecided.isHidden = true
         
         if destinationDecidedResultBool == false {
-        // Do something with the selected place.
         mode = "pin"
         handleModeButtonImages()
         let pinLocationSphere = [WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))]
@@ -1037,8 +1123,8 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
         } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
             subtitle = "Already been here"
         }
-        
         addAnnotationWithTitle(title: "\(place.name)", subtitle: subtitle, loc: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))   )
+        globeViewC?.heading = 0
         
         print("Place name: \(place.name)")
         print("Place location: \(place.coordinate)")
@@ -1081,6 +1167,7 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
             a.contentView = annotationContentView
             theViewC?.addAnnotation(a, forPoint: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude)), offset: CGPoint.zero)
             theViewC?.animate(toPosition: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude)), onScreen: (theViewC?.view.center)!, time: 0.5)
+            globeViewC?.heading = 0
         }
         
     }
