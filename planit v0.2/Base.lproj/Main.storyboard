@@ -607,7 +607,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R3s-V1-O6L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-663.20000000000005" y="892.80359820089961"/>
+            <point key="canvasLocation" x="-754" y="893"/>
         </scene>
         <!--Budget View Controller-->
         <scene sceneID="Vgz-mF-ryT">
@@ -1143,7 +1143,6 @@
         <!--Activities View Controller-->
         <scene sceneID="1uc-8z-bqx">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Dec-YA-DIz" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="oN0-zx-La3" customClass="ActivitiesViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Jin-ez-joX"/>
@@ -1178,8 +1177,8 @@
                                     <segue destination="6Nf-ZD-7fF" kind="show" animates="NO" id="Ezz-Ly-XFT"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="What do you want to do?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XuI-02-Ryt">
-                                <rect key="frame" x="64" y="103" width="247" height="48"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="What do you like to do when you travel?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XuI-02-Ryt">
+                                <rect key="frame" x="64" y="75" width="247" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -1233,10 +1232,10 @@
                                 <blurEffect style="dark"/>
                             </visualEffectView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q6F-5Q-nIB">
-                                <rect key="frame" x="30" y="37" width="315" height="100"/>
+                                <rect key="frame" x="30" y="530" width="315" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Let's figure out the best areas to stay based on what you like to do when you travel. Pick at least three!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Goe-46-QC3">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Let's figure out the best areas to stay in based on what you like to do when you travel. Pick at least three!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Goe-46-QC3">
                                         <rect key="frame" x="4" y="1" width="307" height="72"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -1252,6 +1251,7 @@
                                         </state>
                                         <connections>
                                             <action selector="gotItButtonTouchedUpInside:" destination="pop-1B-VO6" eventType="touchUpInside" id="aW3-P4-bbI"/>
+                                            <action selector="gotItButtonTouchedUpInside:" destination="oN0-zx-La3" eventType="touchUpInside" id="bNf-Hf-DG9"/>
                                             <action selector="instructionsGotItButtonTouchedUpInsider:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="Ina-om-ZhT"/>
                                             <action selector="instructionsGotItTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="Lay-x0-FEd"/>
                                         </connections>
@@ -1260,7 +1260,7 @@
                                 <color key="backgroundColor" white="1" alpha="0.94999999999999996" colorSpace="calibratedWhite"/>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" pagingEnabled="YES" indicatorStyle="white" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ogM-jJ-i1x">
-                                <rect key="frame" x="17" y="207" width="340" height="392"/>
+                                <rect key="frame" x="17" y="196" width="340" height="309"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="PbA-OD-zaA">
@@ -1317,7 +1317,7 @@
                                 </connections>
                             </collectionView>
                             <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" placeholder="Search for activities" translatesAutoresizingMaskIntoConstraints="NO" id="Khs-nd-VMA">
-                                <rect key="frame" x="34" y="163" width="307" height="44"/>
+                                <rect key="frame" x="34" y="140" width="307" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -1338,8 +1338,9 @@
                         <outlet property="tripRecommendationsLabel" destination="bdD-FI-8B3" id="IhA-zz-72B"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dec-YA-DIz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628" y="893"/>
+            <point key="canvasLocation" x="1628" y="892.80359820089961"/>
         </scene>
         <!--Birthday Gender View Controller-->
         <scene sceneID="UlY-Wb-rfk">
@@ -2558,7 +2559,7 @@
                                 <blurEffect style="dark"/>
                             </visualEffectView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="buS-aG-PaO">
-                                <rect key="frame" x="30" y="25" width="315" height="73"/>
+                                <rect key="frame" x="30" y="575" width="315" height="73"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="See your flight options below.      You can change your flight with" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cpq-Pb-w2Y">
@@ -2586,7 +2587,7 @@
                                 <color key="backgroundColor" white="1" alpha="0.94999999999999996" colorSpace="calibratedWhite"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="104" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="hCM-L6-AVq">
-                                <rect key="frame" x="0.0" y="131" width="375" height="483"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="447"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2829,7 +2830,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uTE-AC-aKu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2382" y="893"/>
+            <point key="canvasLocation" x="2381.5999999999999" y="892.80359820089961"/>
         </scene>
         <!--Review And Book View Controller-->
         <scene sceneID="oXU-ux-Xys">
@@ -4294,7 +4295,7 @@
                                 <blurEffect style="dark"/>
                             </visualEffectView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Gb-qw-i0n">
-                                <rect key="frame" x="30" y="27" width="315" height="73"/>
+                                <rect key="frame" x="30" y="575" width="315" height="73"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="See your flight options below.      You can change your flight with" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6y-JP-KPy">
@@ -4321,7 +4322,7 @@
                                 <color key="backgroundColor" white="1" alpha="0.94999999999999996" colorSpace="calibratedWhite"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="52" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Upi-i4-7Fi">
-                                <rect key="frame" x="0.0" y="114" width="375" height="483"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="440"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -5033,8 +5034,8 @@
         <segue reference="cWA-9L-HdA"/>
         <segue reference="RAo-Nt-Dp1"/>
         <segue reference="anE-cP-H4U"/>
+        <segue reference="isD-dZ-KwN"/>
         <segue reference="zWM-he-GTg"/>
-        <segue reference="Ezz-Ly-XFT"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

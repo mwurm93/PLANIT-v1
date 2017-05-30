@@ -187,10 +187,10 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
             
         // Change label for continuing
         if selectedActivities.count > 0 {
-            tripRecommendationsLabel.text = "Recommendations"
+            tripRecommendationsLabel.text = "Hotels"
         }
         if selectedActivities.count == 0 {
-            tripRecommendationsLabel.text = "Skip to recommendations"
+            tripRecommendationsLabel.text = "Skip to hotels"
         }
     }
        
@@ -318,12 +318,24 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
             self.instructionsView.alpha = 0
             self.popupBackgroundView.isHidden = true
             self.activitiesCollectionView.isUserInteractionEnabled = true
+            self.activitiesCollectionView.frame = CGRect(x: 17, y: 196, width: 340, height: 403)
         }) { (Success:Bool) in
             self.instructionsView.layer.isHidden = true
         }
     }
     
     //MARK: Actions
+    @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView.alpha = 0
+            self.popupBackgroundView.isHidden = true
+            self.activitiesCollectionView.isUserInteractionEnabled = true
+            self.activitiesCollectionView.frame = CGRect(x: 17, y: 196, width: 340, height: 403)
+        }) { (Success:Bool) in
+            self.instructionsView.layer.isHidden = true
+        }
+    }
     @IBAction func nextButtonPressed(_ sender: Any) {
         // Change preferences finished status
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()

@@ -211,6 +211,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         bookOnlyIfTheyDoInfoView.layer.isHidden = false
         bookOnlyIfTheyDoInfoView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
         bookOnlyIfTheyDoInfoView.alpha = 0
+        bookThisTripButton.isUserInteractionEnabled = false
         
         UIView.animate(withDuration: 0.4) {
             self.popupBackgroundView.isHidden = false
@@ -224,6 +225,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
             self.bookOnlyIfTheyDoInfoView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             self.bookOnlyIfTheyDoInfoView.alpha = 0
             self.popupBackgroundView.isHidden = true
+            self.bookThisTripButton.isUserInteractionEnabled = true
         }) { (Success:Bool) in
             self.bookOnlyIfTheyDoInfoView.layer.isHidden = true
         }

@@ -42,10 +42,22 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     var selectionColor = UIColor()
     private var selectedVectorFillDict: [String: AnyObject]?
     private var selectedVectorOutlineDict: [String: AnyObject]?
+
+    var AddedSphereComponentObjs = [MaplyComponentObject]()
+    var AddedCylinderComponentObjs = [MaplyComponentObject]()
+    var AddedSphereMaplyShapeObjs = [MaplyShape]()
+    var AddedCylinderMaplyShapeObjs = [MaplyShape]()
+    
+    var AddedSphereComponentObjs_been = [MaplyComponentObject]()
+    var AddedCylinderComponentObjs_been = [MaplyComponentObject]()
+    var AddedSphereMaplyShapeObjs_been = [MaplyShape]()
+    var AddedCylinderMaplyShapeObjs_been = [MaplyShape]()
+    
     var AddedFillComponentObjs = [MaplyComponentObject]()
     var AddedOutlineComponentObjs = [MaplyComponentObject]()
     var AddedFillVectorObjs = [MaplyVectorObject]()
     var AddedOutlineVectorObjs = [MaplyVectorObject]()
+    
     var AddedFillComponentObjs_been = [MaplyComponentObject]()
     var AddedOutlineComponentObjs_been = [MaplyComponentObject]()
     var AddedFillVectorObjs_been = [MaplyVectorObject]()
@@ -58,6 +70,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     var globeViewC: WhirlyGlobeViewController?
     var destinationDecidedResultBool = false
     var instructionsState = "globe"
+    var currentSelectedShape = [String: AnyObject]()
 
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundViewDestinationDecided: UIVisualEffectView!
@@ -615,7 +628,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         self.view.sendSubview(toBack: backgroundBlurFilterView)
         self.view.sendSubview(toBack: backgroundView)
         
-        let globeViewC = theViewC as? WhirlyGlobeViewController
+        globeViewC = theViewC as? WhirlyGlobeViewController
         
         theViewC!.clearColor = UIColor.clear
         
@@ -856,6 +869,57 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject, atLoc coord: MaplyCoordinate, onScreen screenPt: CGPoint) {
+        if let selectedObj = selectedObj as? MaplyShape {
+            let a = MaplyAnnotation()
+            let destinationDecidedButtonAnnotation = UIButton(frame: CGRect(x: 0, y: 0, width: 150, height: 20))
+            destinationDecidedButtonAnnotation.setTitle("Plan trip here", for: .normal)
+            destinationDecidedButtonAnnotation.sizeToFit()
+            destinationDecidedButtonAnnotation.setTitleColor(UIColor.white, for: .normal)
+            destinationDecidedButtonAnnotation.setTitleColor(UIColor.lightGray, for: .highlighted)
+            let currentSize = destinationDecidedButtonAnnotation.titleLabel?.font.pointSize
+            destinationDecidedButtonAnnotation.titleLabel?.font = UIFont.systemFont(ofSize: currentSize! - 1.5)
+            destinationDecidedButtonAnnotation.backgroundColor = UIColor(red: 79/255, green: 146/255, blue: 255/255, alpha: 1)
+            destinationDecidedButtonAnnotation.layer.cornerRadius = destinationDecidedButtonAnnotation.frame.height / 2
+            destinationDecidedButtonAnnotation.titleLabel?.textAlignment = .center
+            destinationDecidedButtonAnnotation.addTarget(self, action: #selector(self.bucketListButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
+            
+            let removePinButtonAnnotation = UIButton(frame: CGRect(x: 0, y: destinationDecidedButtonAnnotation.frame.height + 5, width: 150, height: 20))
+            removePinButtonAnnotation.setTitle("Remove pin", for: .normal)
+            removePinButtonAnnotation.sizeToFit()
+            removePinButtonAnnotation.frame.origin = CGPoint(x: destinationDecidedButtonAnnotation.frame.midX - removePinButtonAnnotation.frame.width / 2, y: destinationDecidedButtonAnnotation.frame.height + 5)
+            removePinButtonAnnotation.setTitleColor(UIColor.white, for: .normal)
+            removePinButtonAnnotation.setTitleColor(UIColor.lightGray, for: .highlighted)
+            let removePinCurrentSize = destinationDecidedButtonAnnotation.titleLabel?.font.pointSize
+            removePinButtonAnnotation.titleLabel?.font = UIFont.systemFont(ofSize: removePinCurrentSize! - 1.5)
+            removePinButtonAnnotation.backgroundColor = UIColor.gray
+            removePinButtonAnnotation.layer.cornerRadius = destinationDecidedButtonAnnotation.frame.height / 2
+            removePinButtonAnnotation.titleLabel?.textAlignment = .center
+            currentSelectedShape["selectedShapeLocation"] = selectedObj.userObject as AnyObject
+            currentSelectedShape["selectedShapeColor"] = selectedObj.color as AnyObject
+            removePinButtonAnnotation.addTarget(self, action: #selector(self.removePinButtonAnnotationButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
+
+            
+            let cancelButtonAnnotation = UIButton(frame: CGRect(x: 0, y: removePinButtonAnnotation.frame.maxY + 5, width: destinationDecidedButtonAnnotation.frame.width, height: 15))
+            cancelButtonAnnotation.setTitle("Cancel", for: .normal)
+            cancelButtonAnnotation.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+            cancelButtonAnnotation.setTitleColor(UIColor.gray, for: .normal)
+            cancelButtonAnnotation.setTitleColor(UIColor.lightGray, for: .highlighted)
+            cancelButtonAnnotation.titleLabel?.textAlignment = .justified
+            cancelButtonAnnotation.addTarget(self, action: #selector(self.cancelButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
+            
+            let frameForAnnotationContentView = CGRect(x: 0, y: 0, width: destinationDecidedButtonAnnotation.frame.width, height: destinationDecidedButtonAnnotation.frame.height + removePinButtonAnnotation.frame.height + 5 + cancelButtonAnnotation.frame.height + 5)
+            let annotationContentView = UIView(frame: frameForAnnotationContentView)
+            annotationContentView.addSubview(destinationDecidedButtonAnnotation)
+            annotationContentView.addSubview(removePinButtonAnnotation)
+            annotationContentView.addSubview(cancelButtonAnnotation)
+            
+            a.contentView = annotationContentView
+            theViewC?.addAnnotation(a, forPoint: coord, offset: CGPoint.zero)
+            globeViewC?.keepNorthUp = true
+            globeViewC?.animate(toPosition: coord, onScreen: (theViewC?.view.center)!, time: 1)
+            globeViewC?.keepNorthUp = false
+            return
+        }
         
         if mode == "fill" {
             handleSelection(selectedObject: selectedObj)
@@ -872,6 +936,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     sphere.radius = 0.007
                     sphere.height = 0.022
                     sphere.selectable = true
+                    sphere.userObject = location
                     return sphere
                 }
                 let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
@@ -881,11 +946,23 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     cylinder.radius = 0.003
                     cylinder.height = 0.015
                     cylinder.selectable = true
+                    cylinder.userObject = location
                     return cylinder
                 }
                 
-                self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: selectionColor])
-                self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)])
+                let AddedSphereComponentObj = (self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: selectionColor]))!
+                let AddedCylinderComponentObj = (self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)]))!
+                if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
+                    AddedSphereComponentObjs.append(AddedSphereComponentObj)
+                    AddedCylinderComponentObjs.append(AddedCylinderComponentObj)
+                    AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
+                    AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
+                } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
+                    AddedSphereComponentObjs_been.append(AddedSphereComponentObj)
+                    AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj)
+                    AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
+                    AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
+                }
                 
                 var subtitle = String()
                 if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
@@ -910,12 +987,49 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         a.subTitle = subtitle
         theViewC?.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
         globeViewC?.keepNorthUp = true
-        theViewC?.animate(toPosition: loc, onScreen: (theViewC?.view.center)!, time: 0.5)
+        globeViewC?.animate(toPosition: loc, onScreen: (theViewC?.view.center)!, time: 1)
         globeViewC?.keepNorthUp = false
     }
     
     func bucketListButtonAnnotationClicked(sender:UIButton) {
         //PERFORM SEGUE TO DESTINATION DECIDED FLOW
+    }
+    
+    func removePinButtonAnnotationButtonAnnotationClicked(sender:UIButton) {
+        var index = 0
+        for addedSphere in AddedSphereMaplyShapeObjs {
+            let sphereInArray = addedSphere.userObject as! MaplyCoordinate
+            let selectedSphere = currentSelectedShape["selectedShapeLocation"] as! MaplyCoordinate
+            
+            if sphereInArray.x == selectedSphere.x && sphereInArray.y == selectedSphere.y {
+                theViewC?.remove(AddedCylinderComponentObjs[index])
+                theViewC?.remove(AddedSphereComponentObjs[index])
+                AddedSphereComponentObjs.remove(at: index)
+                AddedCylinderComponentObjs.remove(at: index)
+                AddedSphereMaplyShapeObjs.remove(at: index)
+                AddedCylinderMaplyShapeObjs.remove(at: index)
+                theViewC?.clearAnnotations()
+            } else {
+                index += 1
+            }
+        }
+        index = 0
+        for addedSphere in AddedSphereMaplyShapeObjs_been {
+            let sphereInArray = addedSphere.userObject as! MaplyCoordinate
+            let selectedSphere = currentSelectedShape["selectedShapeLocation"] as! MaplyCoordinate
+            
+            if sphereInArray.x == selectedSphere.x && sphereInArray.y == selectedSphere.y {
+                theViewC?.remove(AddedCylinderComponentObjs_been[index])
+                theViewC?.remove(AddedSphereComponentObjs_been[index])
+                AddedSphereComponentObjs_been.remove(at: index)
+                AddedCylinderComponentObjs_been.remove(at: index)
+                AddedSphereMaplyShapeObjs_been.remove(at: index)
+                AddedCylinderMaplyShapeObjs_been.remove(at: index)
+                theViewC?.clearAnnotations()
+            } else {
+                index += 1
+            }
+        }
     }
     
     func cancelButtonAnnotationClicked(sender:UIButton) {
@@ -929,11 +1043,6 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         destinationDecidedControlView.isHidden = true
         destinationDecidedControl.selectedSegmentIndex = UISegmentedControlNoSegment
         self.view.insertSubview((self.theViewC?.view)!, belowSubview: fillModeButton)
-//        searchController?.searchBar.resignFirstResponder()
-//        let subView = UIView(frame: CGRect(x: 15, y: 22, width: 3/5 * self.view.frame.maxX, height: 45.0))
-//        subView.addSubview((searchController?.searchBar)!)
-//        self.view.insertSubview(subView, belowSubview: goToBucketListButton)
-        
         destinationDecidedResultBool = false
         
         if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
@@ -947,13 +1056,6 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             reloadAfterDestinationDecidedCancelled()
         }
     }
-    
-//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-//        
-//        if searchBar.text == "" && resultsViewController?.isBeingDismissed
-//        reloadAfterDestinationDecidedCancelled()
-//
-//    }
     
     private func addCountries() {
         // handle this in another thread
@@ -1025,23 +1127,6 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-//    func dismissInstructions(touch: UITapGestureRecognizer) {
-//        UIView.animate(withDuration: 0.3, animations: {
-//            self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-//            self.instructionsView.alpha = 0
-//            self.popupBackgroundViewForInstructions.isHidden = true
-//            self.view.insertSubview((self.theViewC?.view)!, belowSubview: self.fillModeButton)
-//            self.fillModeButton.isUserInteractionEnabled = true
-//            self.pinModeButton.isUserInteractionEnabled = true
-//            self.bucketListButton.isUserInteractionEnabled = true
-//            self.beenThereButton.isUserInteractionEnabled = true
-//            self.createTripButton.isUserInteractionEnabled = false
-//            self.createTripArrow.isUserInteractionEnabled = true
-//        }) { (Success:Bool) in
-//            self.instructionsView.layer.isHidden = true
-//        }
-//    }
-
     @IBAction func instructionsViewGotItButtonTouchedUpInside(_ sender: Any) {
         if instructionsState == "newTrip" {
             UIView.animate(withDuration: 0.3, animations: {
@@ -1107,13 +1192,13 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
         handleModeButtonImages()
         let pinLocationSphere = [WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))]
         let pinLocationCylinder = [WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))]
-        // convert capitals into spheres. Let's do it functional!
         let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
             let sphere = MaplyShapeSphere()
             sphere.center = WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))
             sphere.radius = 0.007
             sphere.height = 0.022
             sphere.selectable = true
+            sphere.userObject = location
             return sphere
         }
         let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
@@ -1123,12 +1208,25 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
             cylinder.radius = 0.003
             cylinder.height = 0.015
             cylinder.selectable = true
+            cylinder.userObject = location
             return cylinder
         }
+            
+        let AddedSphereComponentObj = self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: selectionColor])
+        let AddedCylinderComponentObj = self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)])
         
-        self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: selectionColor])
-        self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)])
-        
+            if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
+                AddedSphereComponentObjs.append(AddedSphereComponentObj!)
+                AddedCylinderComponentObjs.append(AddedCylinderComponentObj!)
+                AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
+                AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
+            } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
+                AddedSphereComponentObjs_been.append(AddedSphereComponentObj!)
+                AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj!)
+                AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
+                AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
+            }
+            
         var subtitle = String()
         if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
             subtitle = "Added to bucket list"
@@ -1178,10 +1276,9 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
             a.contentView = annotationContentView
             theViewC?.addAnnotation(a, forPoint: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude)), offset: CGPoint.zero)
             globeViewC?.keepNorthUp = true
-            theViewC?.animate(toPosition: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude)), onScreen: (theViewC?.view.center)!, time: 0.5)
+            globeViewC?.animate(toPosition: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude)), onScreen: (theViewC?.view.center)!, time: 1)
             globeViewC?.keepNorthUp = false
         }
-        
     }
     
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,

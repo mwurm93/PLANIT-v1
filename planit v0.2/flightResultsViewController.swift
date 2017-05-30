@@ -74,7 +74,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         let hamburgerAttachment = NSTextAttachment()
         hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_black")
         hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
-        let stringForLabel = NSMutableAttributedString(string: "See your flight options below. Drag the ")
+        let stringForLabel = NSMutableAttributedString(string: "See your flight options above. Drag the ")
         let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
         stringForLabel.append(attachment1)
         stringForLabel.append(NSAttributedString(string: " to change your flight"))
