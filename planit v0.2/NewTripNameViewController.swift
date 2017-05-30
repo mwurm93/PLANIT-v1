@@ -1185,7 +1185,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             soloForNowButton.isHidden = true
             groupMemberListTable.isHidden = false
             groupMemberListTable.layer.frame = CGRect(x: 29, y: 200, width: 292, height: 221)
-            subviewNextButton.isHidden = false
+            subviewNextButton.isHidden = true
+            subviewDoneButton.isHidden = false
         } else {
             addFromContactsButton.layer.frame = CGRect(x: 101, y: 150, width: 148, height: 22)
             addFromFacebookButton.layer.frame = CGRect(x: 95, y: 199, width: 160, height: 22)
@@ -1259,6 +1260,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             soloForNowButton.layer.frame = CGRect(x: 101, y: 248, width: 148, height: 22)
             groupMemberListTable.isHidden = true
             subviewNextButton.isHidden = true
+            subviewDoneButton.isHidden = true
             dismissDeleteContactsMode()
         }
         

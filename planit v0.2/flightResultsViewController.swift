@@ -9,7 +9,7 @@
 import UIKit
 import SMCalloutView
 
-class flightResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SMCalloutViewDelegate {
+class flightResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SMCalloutViewDelegate, UIGestureRecognizerDelegate {
     
     //MARK: Class vars
     //Load flight results from server
@@ -26,6 +26,12 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var flightResultsTableView: UITableView!
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var sortButton: UIButton!
+    @IBOutlet weak var instructionsView: UIView!
+    @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
+    @IBOutlet weak var instructionsLabel: UILabel!
+    @IBOutlet weak var gotItButton: UIButton!
+    @IBOutlet weak var selectFlightButton: UIButton!
+    @IBOutlet weak var backButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +52,32 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         flightResultsTableView.isEditing = true
         flightResultsTableView.allowsSelectionDuringEditing = true
         flightResultsTableView.separatorColor = UIColor.white
+        
+        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        if existing_trips?.count == 1 {
+            let when = DispatchTime.now() + 0.6
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.animateInstructionsIn()
+                self.backButton.alpha =  0
+                self.selectFlightButton.alpha =  0
+            }
+        }
+        
+        let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
+        atap.numberOfTapsRequired = 1
+        atap.delegate = self
+        self.popupBackgroundView.addGestureRecognizer(atap)
+        popupBackgroundView.isHidden = true
+        popupBackgroundView.isUserInteractionEnabled = true
+        instructionsView.isHidden = true
+        instructionsView.layer.cornerRadius = 10
+        let hamburgerAttachment = NSTextAttachment()
+        hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_black")
+        hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
+        let stringForLabel = NSMutableAttributedString(string: "See your flight options below. You can change your flight with ")
+        let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
+        stringForLabel.append(attachment1)
+        instructionsLabel.attributedText = stringForLabel
 
     }
     
@@ -250,8 +282,46 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return CGFloat.leastNormalMagnitude
     }
+    func animateInstructionsIn(){
+        instructionsView.layer.isHidden = false
+        instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        instructionsView.alpha = 0
+        flightResultsTableView.isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.4) {
+            self.popupBackgroundView.isHidden = false
+            self.instructionsView.alpha = 1
+            self.instructionsView.transform = CGAffineTransform.identity
+        }
+    }
+    
+    func dismissInstructions(touch: UITapGestureRecognizer) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView.alpha = 0
+            self.popupBackgroundView.isHidden = true
+            self.backButton.alpha = 1
+            self.selectFlightButton.alpha = 1
+            self.flightResultsTableView.isUserInteractionEnabled = true
+            self.flightResultsTableView.frame = CGRect(x: 0, y: 114, width: 375, height: 483)
+        }) { (Success:Bool) in
+            self.instructionsView.layer.isHidden = true
+        }
+    }
     
     //MARK: Actions
+    @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView.alpha = 0
+            self.popupBackgroundView.isHidden = true
+            self.backButton.alpha = 1
+            self.selectFlightButton.alpha = 1
+            self.flightResultsTableView.isUserInteractionEnabled = true
+            self.flightResultsTableView.frame = CGRect(x: 0, y: 114, width: 375, height: 483)
+        }) { (Success:Bool) in
+            self.instructionsView.layer.isHidden = true
+        }
+    }
     @IBAction func filterFlightsButtonTouchedUpInside(_ sender: Any) {
         if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "sort") {
             calloutTableViewMode = "filter"

@@ -85,7 +85,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         let changeAttachment = NSTextAttachment()
         changeAttachment.image = #imageLiteral(resourceName: "change_black")
         changeAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 15)
-        let stringForLabel = NSMutableAttributedString(string: "Time to choose a destination! Change your group's trip with ")
+        let stringForLabel = NSMutableAttributedString(string: "See your group's favorites below! Change your group's trip with ")
         let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
         let attachment2 = NSAttributedString(attachment: changeAttachment)
         stringForLabel.append(attachment1)

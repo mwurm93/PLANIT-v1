@@ -58,6 +58,14 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         // Center booking button text
         bookThisTripButton.titleLabel?.textAlignment = .center
         
+        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        if existing_trips?.count == 1 {
+            let when = DispatchTime.now() + 0.6
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.animateInfoViewIn()
+            }
+        }
+        
         // Set up tap outside info view
         popupBackgroundView.isHidden = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissPopup(touch:)))
@@ -430,6 +438,9 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
 
     
     // MARK: Actions
+    @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
+        dismissInfoViewOut()
+    }
     
     @IBAction func infoButtonPressed(_ sender: Any) {
         animateInfoViewIn()

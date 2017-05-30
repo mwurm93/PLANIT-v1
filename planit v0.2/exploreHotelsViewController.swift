@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 import SMCalloutView
 
-class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, GMSMapViewDelegate, SMCalloutViewDelegate {
+class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, GMSMapViewDelegate, SMCalloutViewDelegate, UIGestureRecognizerDelegate {
     
     // MARK: Class properties
     //Load flight results from server
@@ -25,16 +25,19 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     let sortFilterFlightsCalloutTableView = UITableView(frame: CGRect.zero, style: .plain)
     var calloutTableViewMode = "sort"
     let sortFirstLevelOptions = ["Price","Rating"]
-    let filterFirstLevelOptions = ["Amenities","Rating","Clear filters"]
+    let filterFirstLevelOptions = ["Vicinity to...","Amenities","Rating","Clear filters"]
     
     // MARK: Outlets
     @IBOutlet weak var recommendationRankingTableView: UITableView!
     @IBOutlet weak var readyToBookButton: UIButton!
     @IBOutlet weak var returnToSwipingButton: UIButton!
-    @IBOutlet weak var tripNameLabel: UITextField!
     @IBOutlet weak var popupBlurView: UIVisualEffectView!
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var sortButton: UIButton!
+    @IBOutlet weak var instructionsView: UIView!
+    @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
+    @IBOutlet weak var instructionsLabel: UILabel!
+    @IBOutlet weak var gotItButton: UIButton!
     
     // viewDidLoad
     override func viewDidLoad() {
@@ -57,20 +60,12 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         popupBlurView.effect = nil
         
         //        hideKeyboardWhenTappedAround()
-        self.tripNameLabel.delegate = self
         
         //Set up table
         recommendationRankingTableView.tableFooterView = UIView()
         recommendationRankingTableView.isEditing = true
         recommendationRankingTableView.allowsSelectionDuringEditing = true
         recommendationRankingTableView.separatorColor = UIColor.white
-        
-        //Load the values from our shared data container singleton
-        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
-        //Install the value into the label.
-        if tripNameValue != nil {
-            self.tripNameLabel.text =  "\(tripNameValue!)"
-        }
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         
@@ -81,24 +76,38 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.readyToBookButton.layer.cornerRadius = self.readyToBookButton.frame.height / 2
         self.readyToBookButton.titleLabel?.textAlignment = .center
         
+        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        if existing_trips?.count == 1 {
+            let when = DispatchTime.now() + 0.6
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.animateInstructionsIn()
+                self.returnToSwipingButton.alpha =  0
+                self.readyToBookButton.alpha =  0
+            }
+        }
+        
+        let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
+        atap.numberOfTapsRequired = 1
+        atap.delegate = self
+        self.popupBackgroundView.addGestureRecognizer(atap)
+        popupBackgroundView.isHidden = true
+        popupBackgroundView.isUserInteractionEnabled = true
+        instructionsView.isHidden = true
+        instructionsView.layer.cornerRadius = 10
+        let hamburgerAttachment = NSTextAttachment()
+        hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_black")
+        hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
+        let stringForLabel = NSMutableAttributedString(string: "See your hotel options below. You can change your hotel with ")
+        let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
+        stringForLabel.append(attachment1)
+        instructionsLabel.attributedText = stringForLabel
     }
     
     // didReceiveMemoryWarning
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    // MARK: UITextFieldDelegate
-    func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
-        // Hide the keyboard.
-        tripNameLabel.resignFirstResponder()
-        return true
-    }
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         
-        return true
-    }
-    
     // MARK: UITableviewdelegate
     func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == recommendationRankingTableView {
@@ -388,17 +397,46 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         existing_trips?[currentTripIndex] = SavedPreferencesForTrip as NSDictionary
         DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
     }
-    
-    
-    // MARK: Actions
-    @IBAction func tripNameEditingChanged(_ sender: Any) {
-        let tripNameValue = tripNameLabel.text as! NSString
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["trip_name"] = tripNameValue
-        //Save
-        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    func animateInstructionsIn(){
+        instructionsView.layer.isHidden = false
+        instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        instructionsView.alpha = 0
+        recommendationRankingTableView.isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.4) {
+            self.popupBackgroundView.isHidden = false
+            self.instructionsView.alpha = 1
+            self.instructionsView.transform = CGAffineTransform.identity
+        }
     }
     
+    func dismissInstructions(touch: UITapGestureRecognizer) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView.alpha = 0
+            self.popupBackgroundView.isHidden = true
+            self.readyToBookButton.alpha = 1
+            self.returnToSwipingButton.alpha = 1
+            self.recommendationRankingTableView.isUserInteractionEnabled = true
+            self.recommendationRankingTableView.frame = CGRect(x: 0, y: 114, width: 375, height: 483)
+        }) { (Success:Bool) in
+            self.instructionsView.layer.isHidden = true
+        }
+    }
+    
+    // MARK: Actions
+    @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView.alpha = 0
+            self.popupBackgroundView.isHidden = true
+            self.readyToBookButton.alpha = 1
+            self.returnToSwipingButton.alpha = 1
+            self.recommendationRankingTableView.isUserInteractionEnabled = true
+            self.recommendationRankingTableView.frame = CGRect(x: 0, y: 114, width: 375, height: 483)
+        }) { (Success:Bool) in
+            self.instructionsView.layer.isHidden = true
+        }
+    }
     @IBAction func nextButtonPressed(_ sender: Any) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["finished_entering_preferences_status"] = "Ranking" as NSString
