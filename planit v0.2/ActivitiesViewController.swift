@@ -7,43 +7,33 @@
 //
 
 import UIKit
-import Contacts
 
-class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate {
     
     //MARK: Outlets
-    @IBOutlet weak var tripNameLabel: UILabel!
     @IBOutlet weak var activitiesSearchBar: UISearchBar!
     @IBOutlet weak var tripRecommendationsLabel: UILabel!
     @IBOutlet weak var rightArrowButton: UIButton!
     @IBOutlet weak var buttonBeneathLabel: UIButton!
-    @IBOutlet weak var contactsCollectionView: UICollectionView!
     @IBOutlet weak var activitiesCollectionView: UICollectionView!
-    @IBOutlet weak var chatButton: UIButton!
+    @IBOutlet weak var tripNameLabel: UITextField!
     
-    let messageComposer = MessageComposer()
     var activityItems: [ActivityItem] = []
-
-    // Set up vars for Contacts - COPY
-    var contacts: [CNContact]?
-    var contactIDs: [NSString]?
-    fileprivate var addressBookStore: CNContactStore!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Load the values from our shared data container singleton
+        self.tripNameLabel.delegate = self
+        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
+        //Install the value into the label.
+        if tripNameValue != nil {
+            self.tripNameLabel.text =  "\(tripNameValue!)"
+        }
+        
         hideKeyboardWhenTappedAround()
         
-        //add shadow to button
-        chatButton.layer.shadowColor = UIColor.black.cgColor
-        chatButton.layer.shadowOffset = CGSize(width: 2, height: 2)
-        chatButton.layer.shadowRadius = 2
-        chatButton.layer.shadowOpacity = 0.3
-        
-        // Initialize address book - COPY
-        addressBookStore = CNContactStore()
-
-        tripRecommendationsLabel.text = "Skip to recommendations"
+        tripRecommendationsLabel.text = "Skip to hotels"
         
         // Call collection initializer
         initActivityItems()
@@ -66,34 +56,6 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
         let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView
         glassIconView?.image = glassIconView?.image?.withRenderingMode(.alwaysTemplate)
         glassIconView?.tintColor = UIColor.white
-        
-        //Load the values from our shared data container singleton
-        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
-        //Install the value into the label.
-        if tripNameValue != nil {
-            self.tripNameLabel.text =  "\(tripNameValue!)"
-        }
-        
-        //Uncomment for testing on Simulator
-    //    chatButton.isHidden = true
-    //    tripRecommendationsLabel.isHidden = false
-    //    buttonBeneathLabel.isHidden = false
-    //    rightArrowButton.isHidden = false
-        
-        let contactsInGroup = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contacts_in_group") as? [NSString]
-        
-        //Uncomment for testing on iPhone
-        if (contactsInGroup?.count)! > 0 {
-            chatButton.isHidden = false
-            tripRecommendationsLabel.isHidden = true
-            buttonBeneathLabel.isHidden = true
-            rightArrowButton.isHidden = true
-        } else {
-            chatButton.isHidden = true
-            tripRecommendationsLabel.isHidden = false
-            buttonBeneathLabel.isHidden = false
-            rightArrowButton.isHidden = false
-        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -122,9 +84,20 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
         // Change label for continuing
         if selectedActivities != nil {
             if (selectedActivities?.count)! > 0 {
-            tripRecommendationsLabel.text = "Recommendations"
+            tripRecommendationsLabel.text = "Hotels"
             }
         }
+    }
+    
+    // MARK: UITextFieldDelegate
+    func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
+        // Hide the keyboard.
+        tripNameLabel.resignFirstResponder()
+        return true
+    }
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        
+        return true
     }
     
     // MARK: Activities collection View item init
@@ -147,152 +120,23 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
         return 1
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == activitiesCollectionView {
+//        if collectionView == activitiesCollectionView {
             return activityItems.count
-        }
-        // if collectionView == contactsCollectionView
-        let contactIDs = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contacts_in_group") as? [NSString]
-        if (contactIDs?.count)! > 0 {
-            return (contactIDs?.count)!
-        }
-        return 0
-
+//        }
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == activitiesCollectionView {
+//        if collectionView == activitiesCollectionView {
             activitiesCollectionView.allowsMultipleSelection = true
             let cell = activitiesCollectionView.dequeueReusableCell(withReuseIdentifier: "activitiesViewPrototypeCell", for: indexPath) as! ActivitiesCollectionViewCell
             cell.setActivityItem(activityItems[indexPath.row])
             cell.activityImage.image = cell.activityImage.image?.withRenderingMode(.alwaysTemplate)
 
             return cell
-        }
-
-        let contactsCell = contactsCollectionView.dequeueReusableCell(withReuseIdentifier: "contactsCollectionPrototypeCell", for: indexPath) as! contactsCollectionViewCell
-        
-        retrieveContactsWithStore(store: addressBookStore)
-        let contact = contacts?[indexPath.row]
-        if (contact?.imageDataAvailable)! {
-            contactsCell.thumbnailImage.image = UIImage(data: (contact?.thumbnailImageData!)!)
-            contactsCell.thumbnailImage.contentMode = .scaleToFill
-            let reCenter = contactsCell.thumbnailImage.center
-            contactsCell.thumbnailImage.layer.frame = CGRect(x: contactsCell.thumbnailImage.layer.frame.minX
-                , y: contactsCell.thumbnailImage.layer.frame.minY, width: contactsCell.thumbnailImage.layer.frame.width * 0.91, height: contactsCell.thumbnailImage.layer.frame.height * 0.91)
-            contactsCell.thumbnailImage.center = reCenter
-            contactsCell.thumbnailImage.layer.cornerRadius = contactsCell.thumbnailImage.frame.height / 2
-            contactsCell.thumbnailImage.layer.masksToBounds = true
-            contactsCell.initialsLabel.isHidden = true
-            contactsCell.thumbnailImageFilter.isHidden = false
-            contactsCell.thumbnailImageFilter.image = UIImage(named: "no_contact_image_selected")!
-            contactsCell.thumbnailImageFilter.alpha = 0.5
-        } else {
-            contactsCell.thumbnailImage.image = UIImage(named: "no_contact_image")!
-            contactsCell.thumbnailImageFilter.isHidden = true
-            contactsCell.initialsLabel.isHidden = false
-            let firstInitial = contact?.givenName[0]
-            let secondInitial = contact?.familyName[0]
-            contactsCell.initialsLabel.text = firstInitial! + secondInitial!
-        }
-        
-        return contactsCell
+//        }
     }
     
     // MARK: - UICollectionViewDelegate
     // Item DEselected: update border color and save data when
-    
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        if collectionView == contactsCollectionView {
-            retrieveContactsWithStore(store: addressBookStore)
-
-            // Create activity lists and color array
-            let sampleContactActivityList_1 = ["Scuba", "Surf"]
-            let sampleContactActivityList_2 = ["Sun", "Ski", "Theater"]
-            let sampleContactActivityList_3 = ["Ski", "Theater"]
-            let sampleContactActivityList_4 = ["Sun", "Museum", "Theater"]
-            let sampleContactActivityList_5 = ["Drink"]
-            let sampleContactActivityList_6 = ["Shop"]
-            let sampleContactActivityList_7 = ["Fine dining"]
-            let sampleContactActivityLists = [sampleContactActivityList_1, sampleContactActivityList_2, sampleContactActivityList_3, sampleContactActivityList_4, sampleContactActivityList_5, sampleContactActivityList_6, sampleContactActivityList_7]
-            let colors = [UIColor.purple, UIColor.gray, UIColor.red, UIColor.green, UIColor.orange, UIColor.yellow, UIColor.brown, UIColor.black]
-            
-            // Change color of thumbnail image
-            let contact = contacts?[indexPath.row]
-            let SelectedContact = contactsCollectionView.cellForItem(at: indexPath) as! contactsCollectionViewCell
-            
-            if (contact?.imageDataAvailable)! {
-                SelectedContact.thumbnailImageFilter.alpha = 0
-            } else {
-                SelectedContact.thumbnailImage.image = UIImage(named: "no_contact_image_selected")!
-                //                SelectedContact.initialsLabel.textColor = UIColor(red: 132/255, green: 137/255, blue: 147/255, alpha: 1)
-                SelectedContact.initialsLabel.textColor = colors[indexPath.row]
-            }
-
-
-            // Select activities on highlight
-            let visibleCellIndices = self.activitiesCollectionView.indexPathsForVisibleItems
-            for visibleCellIndex in visibleCellIndices {
-                let visibleCell = activitiesCollectionView.cellForItem(at: visibleCellIndex) as! ActivitiesCollectionViewCell
-                if sampleContactActivityLists[indexPath.row] != [""] {
-                    if (sampleContactActivityLists[indexPath.row].contains(visibleCell.activityLabel.text!)) {
-                        visibleCell.activityImage.image = visibleCell.activityImage.image?.withRenderingMode(.alwaysTemplate)
-                        visibleCell.tintColor = colors[indexPath.row]
-                        activitiesCollectionView.selectItem(at: visibleCellIndex, animated: true, scrollPosition: .top)
-                    }
-                    else {
-                        visibleCell.tintColor = UIColor.white
-                        activitiesCollectionView.deselectItem(at: visibleCellIndex, animated: true)
-                    }
-                }
-                else {
-                    visibleCell.tintColor = UIColor.white
-                    activitiesCollectionView.deselectItem(at: visibleCellIndex, animated: true)
-                }
-            }
-
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        if collectionView == contactsCollectionView {
-            retrieveContactsWithStore(store: addressBookStore)
-            
-            let contact = contacts?[indexPath.row]
-            let DeSelectedContact = contactsCollectionView.cellForItem(at: indexPath) as! contactsCollectionViewCell
-            
-            if (contact?.imageDataAvailable)! {
-                DeSelectedContact.thumbnailImageFilter.alpha = 0.5
-            } else {
-                DeSelectedContact.thumbnailImage.image = UIImage(named: "no_contact_image")!
-                DeSelectedContact.initialsLabel.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-            }
-            
-            
-            // Update cell border color to blue if saved as a selected activity
-            let selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [String]
-            
-            let visibleCellIndices = self.activitiesCollectionView.indexPathsForVisibleItems
-            for visibleCellIndex in visibleCellIndices {
-                let visibleCell = activitiesCollectionView.cellForItem(at: visibleCellIndex) as! ActivitiesCollectionViewCell
-                if selectedActivities != nil {
-                    if (selectedActivities?.contains(visibleCell.activityLabel.text!))! {
-                        visibleCell.tintColor = UIColor.blue
-                        activitiesCollectionView.selectItem(at: visibleCellIndex, animated: true, scrollPosition: .top)
-                    }
-                    else {
-                        visibleCell.tintColor = UIColor.white
-                        activitiesCollectionView.deselectItem(at: visibleCellIndex, animated: true)
-                    }
-                }
-                else {
-                    visibleCell.tintColor = UIColor.white
-
-                    activitiesCollectionView.deselectItem(at: visibleCellIndex, animated: true)
-                }
-            }
-            
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if collectionView == activitiesCollectionView {
 
@@ -371,49 +215,16 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
     
     // MARK: - UICollectionViewFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == activitiesCollectionView {
+//        if collectionView == activitiesCollectionView {
             let picDimension = self.view.frame.size.width / 4.2
             return CGSize(width: picDimension, height: picDimension)
-        }
-        // if collectionView == contactsCollectionView
-            let picDimension = 55
-            return CGSize(width: picDimension, height: picDimension)
+//        }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        if collectionView == activitiesCollectionView {
+//        if collectionView == activitiesCollectionView {
             let leftRightInset = self.view.frame.size.width / 18.0
             return UIEdgeInsetsMake(0, leftRightInset, 0, leftRightInset)
-        }
-        // if collectionView == contactsCollectionView
-        let contactIDs = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contacts_in_group") as? [NSString]
-        
-        let spacing = 10
-        if (contactIDs?.count)! > 0 {
-            var leftRightInset = (self.contactsCollectionView.frame.size.width / 2.0) - CGFloat((contactIDs?.count)!) * 27.5 - CGFloat(spacing / 2 * ((contactIDs?.count)! - 1))
-            if (contactIDs?.count)! > 4 {
-                leftRightInset = 30
-            }
-            return UIEdgeInsetsMake(0, leftRightInset, 0, 0)
-        }
-        return UIEdgeInsetsMake(0, 0, 0, 0)
-
-    }
-    // Fetch Contacts
-    func retrieveContactsWithStore(store: CNContactStore) {
-        contactIDs = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contacts_in_group") as? [NSString]
-        do {
-            if (contactIDs?.count)! > 0 {
-                let predicate = CNContact.predicateForContacts(withIdentifiers: contactIDs as! [String])
-                let keysToFetch = [CNContactFormatter.descriptorForRequiredKeys(for: .fullName), CNContactPhoneNumbersKey, CNContactThumbnailImageDataKey, CNContactImageDataAvailableKey] as [Any]
-                contacts = try store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
-            } else {
-                contacts = nil
-            }
-            DispatchQueue.main.async (execute: { () -> Void in
-            })
-        } catch {
-            print(error)
-        }
+//        }
     }
     
     ////// ADD NEW TRIP VARS (NS ONLY) HERE ///////////////////////////////////////////////////////////////////////////
@@ -470,44 +281,6 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     //MARK: Actions
-    
-    @IBAction func chatButtonPressed(_ sender: Any) {
-        // Change preferences finished status
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["finished_entering_preferences_status"] = "Activities" as NSString
-        //Save
-        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-        
-        // Make sure the device can send text messages
-        if (messageComposer.canSendText()) {
-            // Obtain a configured MFMessageComposeViewController
-            let messageComposeVC = messageComposer.configuredMessageComposeViewController()
-            
-            // Present the configured MFMessageComposeViewController instance
-            present(messageComposeVC, animated: true, completion: nil)
-            
-            chatButton.isHidden = true
-            tripRecommendationsLabel.isHidden = false
-            buttonBeneathLabel.isHidden = false
-            rightArrowButton.isHidden = false
-
-        } else {
-            // Let the user know if his/her device isn't able to send text messages
-            let errorAlert = UIAlertController(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", preferredStyle: UIAlertControllerStyle.alert)
-            let cancelAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.destructive) {
-                (result : UIAlertAction) -> Void in
-            }
-            
-            errorAlert.addAction(cancelAction)
-            self.present(errorAlert, animated: true, completion: nil)
-            
-            chatButton.isHidden = false
-            tripRecommendationsLabel.isHidden = true
-            buttonBeneathLabel.isHidden = true
-            rightArrowButton.isHidden = true
-
-        }
-    }
     @IBAction func nextButtonPressed(_ sender: Any) {
         // Change preferences finished status
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -516,5 +289,4 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
     }
-    
 }

@@ -15,6 +15,8 @@ import Cartography
 
 class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     
+    let messageComposer = MessageComposer()
+    
     //Slider vars
     let sliderStep: Float = 1
     
@@ -100,6 +102,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBOutlet weak var dayOfWeekStackView: UIStackView!
     @IBOutlet weak var instructionsLabel: UILabel!
     @IBOutlet weak var instructionsGotItButton: UIButton!
+    @IBOutlet weak var chatButton: UIButton!
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -110,6 +113,13 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //add shadow to button
+        chatButton.layer.shadowColor = UIColor.black.cgColor
+        chatButton.layer.shadowOffset = CGSize(width: 2, height: 2)
+        chatButton.layer.shadowRadius = 2
+        chatButton.layer.shadowOpacity = 0.3
+        chatButton.isHidden = true
         
         //        self.hideKeyboardWhenTappedAround()
         
@@ -581,7 +591,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             dismissTimeOfDayTableOut()
             popupBackgroundView.isHidden = true
             
-            let when = DispatchTime.now() + 0.6
+            let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 if self.leftDateTimeArrays.count == self.rightDateTimeArrays.count {
                 }
@@ -877,7 +887,46 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             soloForNowButton.isHidden = true
             groupMemberListTable.isHidden = false
             groupMemberListTable.layer.frame = CGRect(x: 29, y: 200, width: 292, height: 221)
+        
+        //Uncomment for testing on Simulator
+//        chatButton.isHidden = true
+//        subviewDoneButton.isHidden = false
+        
+        //Uncomment for testing on iPhone
+        if (contacts?.count)! > 0 {
+            chatButton.isHidden = false
+            subviewDoneButton.isHidden = true
+            
+        } else {
+            chatButton.isHidden = true
             subviewDoneButton.isHidden = false
+        }
+        if popupBlurView.alpha == 0 {
+            let when = DispatchTime.now() + 0.6
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.spawnMessages()
+            }
+        }
+    }
+    
+    func spawnMessages() {
+        // Make sure the device can send text messages
+        if (messageComposer.canSendText()) {
+            // Obtain a configured MFMessageComposeViewController
+            let messageComposeVC = messageComposer.configuredMessageComposeViewController()
+            
+            // Present the configured MFMessageComposeViewController instance
+            present(messageComposeVC, animated: true, completion: nil)
+        } else {
+            // Let the user know if his/her device isn't able to send text messages
+            let errorAlert = UIAlertController(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.destructive) {
+                (result : UIAlertAction) -> Void in
+            }
+            
+            errorAlert.addAction(cancelAction)
+            self.present(errorAlert, animated: true, completion: nil)
+        }
     }
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
@@ -927,7 +976,26 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         soloForNowButton.isHidden = true
         groupMemberListTable.isHidden = false
         groupMemberListTable.layer.frame = CGRect(x: 29, y: 200, width: 292, height: 221)
-        subviewDoneButton.isHidden = false
+
+        //Uncomment for testing on Simulator
+//        chatButton.isHidden = true
+//        subviewDoneButton.isHidden = false
+        
+        //Uncomment for testing on iPhone
+        if (contacts?.count)! > 0 {
+            chatButton.isHidden = false
+            subviewDoneButton.isHidden = true
+            
+        } else {
+            chatButton.isHidden = true
+            subviewDoneButton.isHidden = false
+        }
+        if popupBlurView.alpha == 0 {
+            let when = DispatchTime.now() + 0.6
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.spawnMessages()
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -1261,6 +1329,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             groupMemberListTable.isHidden = true
             subviewNextButton.isHidden = true
             subviewDoneButton.isHidden = true
+            chatButton.isHidden = true
             dismissDeleteContactsMode()
         }
         
@@ -1509,6 +1578,32 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         contactsCollectionView.alpha = 1
         addContactPlusIconMainVC.alpha = 1
         animateOutSubview()
+    }
+    @IBAction func chatButtonIsTouchedUpInside(_ sender: Any) {
+        // Make sure the device can send text messages
+        if (messageComposer.canSendText()) {
+            // Obtain a configured MFMessageComposeViewController
+            let messageComposeVC = messageComposer.configuredMessageComposeViewController()
+            
+            // Present the configured MFMessageComposeViewController instance
+            present(messageComposeVC, animated: true, completion: nil)
+            
+            chatButton.isHidden = true
+            subviewDoneButton.isHidden = false
+            
+        } else {
+            // Let the user know if his/her device isn't able to send text messages
+            let errorAlert = UIAlertController(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.destructive) {
+                (result : UIAlertAction) -> Void in
+            }
+            
+            errorAlert.addAction(cancelAction)
+            self.present(errorAlert, animated: true, completion: nil)
+            
+            chatButton.isHidden = false
+            subviewDoneButton.isHidden = true
+        }
     }
     
     func updateCompletionStatus(){

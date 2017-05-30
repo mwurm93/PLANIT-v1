@@ -14,7 +14,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     
     // MARK: Class properties
     //Load flight results from server
-    var selectedIndex = IndexPath()
+    var selectedIndex = IndexPath(row: 0, section: 0)
     var hotelResultsDictionary = [["hotelName":"The W"],["hotelName":"Hilton"],["hotelName":"Marriott"],["hotelName":"Holiday Inn"],["hotelName":"VRBO"]]
     
     var sectionTitles = ["Group's top hotel", "Alternatives"]
@@ -78,7 +78,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         
         let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
         if existing_trips?.count == 1 {
-            let when = DispatchTime.now() + 0.6
+            let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
                 self.returnToSwipingButton.alpha =  0
@@ -97,9 +97,10 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         let hamburgerAttachment = NSTextAttachment()
         hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_black")
         hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
-        let stringForLabel = NSMutableAttributedString(string: "See your hotel options below. You can change your hotel with ")
+        let stringForLabel = NSMutableAttributedString(string: "See your hotel options below. Drag the ")
         let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
         stringForLabel.append(attachment1)
+        stringForLabel.append(NSAttributedString(string: " to change your hotel"))
         instructionsLabel.attributedText = stringForLabel
     }
     
@@ -447,7 +448,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     @IBAction func sortButtonTouchedUpInside(_ sender: Any) {
         if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "filter"){
             calloutTableViewMode = "sort"
-            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 140, height: 22 * sortFirstLevelOptions.count)
+            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 109, width: 140, height: 22 * sortFirstLevelOptions.count)
             sortFilterFlightsCalloutTableView.reloadData()
             self.sortFilterFlightsCalloutView.contentView = sortFilterFlightsCalloutTableView
             self.sortFilterFlightsCalloutView.isHidden = false
@@ -465,7 +466,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     @IBAction func filterButtonTouchedUpInsider(_ sender: Any) {
         if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "sort") {
             calloutTableViewMode = "filter"
-            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
+            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 109, width: 120, height: 22 * filterFirstLevelOptions.count)
             sortFilterFlightsCalloutTableView.reloadData()
             self.sortFilterFlightsCalloutView.contentView = sortFilterFlightsCalloutTableView
             self.sortFilterFlightsCalloutView.isHidden = false

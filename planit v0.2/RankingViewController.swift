@@ -35,7 +35,6 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         popupBlurView.effect = nil
         
 //        hideKeyboardWhenTappedAround()
-        self.tripNameLabel.delegate = self
         
         //Set up table
         recommendationRankingTableView.tableFooterView = UIView()
@@ -44,6 +43,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         recommendationRankingTableView.separatorColor = UIColor.white
 
         //Load the values from our shared data container singleton
+        self.tripNameLabel.delegate = self
         let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
         //Install the value into the label.
         if tripNameValue != nil {
@@ -61,7 +61,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
         if existing_trips?.count == 1 {
-            let when = DispatchTime.now() + 0.6
+            let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
                 self.readyToBookButton.alpha =  0
@@ -85,12 +85,13 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         let changeAttachment = NSTextAttachment()
         changeAttachment.image = #imageLiteral(resourceName: "change_black")
         changeAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 15)
-        let stringForLabel = NSMutableAttributedString(string: "See your group's favorites below! Change your group's trip with ")
-        let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
-        let attachment2 = NSAttributedString(attachment: changeAttachment)
+        let stringForLabel = NSMutableAttributedString(string: "See your group's favorite trips below! Tap ")
+        let attachment1 = NSAttributedString(attachment: changeAttachment)
+        let attachment2 = NSAttributedString(attachment: hamburgerAttachment)
         stringForLabel.append(attachment1)
-        stringForLabel.append(NSAttributedString(string:", and look at flights with "))
+        stringForLabel.append(NSAttributedString(string:" to look at flights, and drag the "))
         stringForLabel.append(attachment2)
+        stringForLabel.append(NSAttributedString(string: " to change your trip"))
         instructionsLabel.attributedText = stringForLabel
     }
     

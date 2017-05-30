@@ -55,7 +55,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         
         let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
         if existing_trips?.count == 1 {
-            let when = DispatchTime.now() + 0.6
+            let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
                 self.backButton.alpha =  0
@@ -74,9 +74,10 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         let hamburgerAttachment = NSTextAttachment()
         hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_black")
         hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
-        let stringForLabel = NSMutableAttributedString(string: "See your flight options below. You can change your flight with ")
+        let stringForLabel = NSMutableAttributedString(string: "See your flight options below. Drag the ")
         let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
         stringForLabel.append(attachment1)
+        stringForLabel.append(NSAttributedString(string: " to change your flight"))
         instructionsLabel.attributedText = stringForLabel
 
     }
@@ -332,7 +333,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             self.sortFilterFlightsCalloutView.animation(withType: .stretch, presenting: true)
             self.sortFilterFlightsCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: filterButton.frame.midX, y: CGFloat(59))
+            calloutRect.origin = CGPoint(x: filterButton.frame.midX, y: CGFloat(109))
             self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
 
         } else {
@@ -350,7 +351,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             self.sortFilterFlightsCalloutView.animation(withType: .stretch, presenting: true)
             self.sortFilterFlightsCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: sortButton.frame.midX, y: CGFloat(59))
+            calloutRect.origin = CGPoint(x: sortButton.frame.midX, y: CGFloat(109))
             self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
             
         } else {

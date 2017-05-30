@@ -17,7 +17,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     // MARK: Outlets
 
     @IBOutlet weak var contactsCollectionView: UICollectionView!
-    @IBOutlet weak var popupBackgroundView: UIView!
     @IBOutlet weak var topItineraryTable: UITableView!
     @IBOutlet weak var tripNameLabel: UILabel!
     @IBOutlet weak var firstName: UITextField!
@@ -30,6 +29,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     @IBOutlet weak var redressNumber: UITextField!
     @IBOutlet weak var birthdate: UITextField!
     @IBOutlet weak var bookOnlyIfTheyDoInfoView: UIView!
+    @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     
     // Outlets for buttons
     @IBOutlet weak var adjustTravelLogisticsButton: UIButton!
@@ -58,13 +58,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         // Center booking button text
         bookThisTripButton.titleLabel?.textAlignment = .center
         
-        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 {
-            let when = DispatchTime.now() + 0.6
-            DispatchQueue.main.asyncAfter(deadline: when) {
-                self.animateInfoViewIn()
-            }
-        }
         
         // Set up tap outside info view
         popupBackgroundView.isHidden = true
@@ -72,6 +65,14 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         tap.numberOfTapsRequired = 1
         tap.delegate = self
         popupBackgroundView.addGestureRecognizer(tap)
+        
+        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        if existing_trips?.count == 1 {
+            let when = DispatchTime.now() + 0.4
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.animateInfoViewIn()
+            }
+        }
 
         //Set up notifications for moving VC up when keyboard presented
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -179,7 +180,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         
         //Install the value into the text field.
         if tripNameValue != nil {
-        self.tripNameLabel.text =  "Book \(tripNameValue!)!"
+            self.tripNameLabel.text =  "\(tripNameValue!)"
         }
         self.firstName.text =  "\(firstNameValue)"
         self.lastName.text =  "\(lastNameValue)"

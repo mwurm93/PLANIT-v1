@@ -222,7 +222,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
         if existing_trips == nil || existing_trips?.count == 0 {
-            let when = DispatchTime.now() + 0.6
+            let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
             }
