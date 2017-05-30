@@ -162,7 +162,6 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         popupBackgroundViewDestinationDecided.isHidden = true
         popupBackgroundViewDestinationDecided.isUserInteractionEnabled = true
         self.popupBackgroundViewDestinationDecided.addGestureRecognizer(tap2)
-
         
         //Rotate segmented control view
         destinationDecidedControl.transform =  CGAffineTransform(rotationAngle: CGFloat(Double.pi / 2))
@@ -228,12 +227,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         
-//        let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
-//        atap.numberOfTapsRequired = 1
-//        atap.delegate = self
-//        self.popupBackgroundViewForInstructions.addGestureRecognizer(atap)
         popupBackgroundViewForInstructions.isHidden = true
-//        popupBackgroundViewForInstructions.isUserInteractionEnabled = true
         instructionsView.isHidden = true
         instructionsView.layer.cornerRadius = 10
         let pinAttachment = NSTextAttachment()
@@ -607,7 +601,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "👋🏼"
+        return "Leave trip"
     }
 
     //MARK: Custom Functions
@@ -915,7 +909,9 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         a.title = title
         a.subTitle = subtitle
         theViewC?.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
+        globeViewC?.keepNorthUp = true
         theViewC?.animate(toPosition: loc, onScreen: (theViewC?.view.center)!, time: 0.5)
+        globeViewC?.keepNorthUp = false
     }
     
     func bucketListButtonAnnotationClicked(sender:UIButton) {
@@ -1181,7 +1177,9 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
             
             a.contentView = annotationContentView
             theViewC?.addAnnotation(a, forPoint: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude)), offset: CGPoint.zero)
+            globeViewC?.keepNorthUp = true
             theViewC?.animate(toPosition: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude)), onScreen: (theViewC?.view.center)!, time: 0.5)
+            globeViewC?.keepNorthUp = false
         }
         
     }
