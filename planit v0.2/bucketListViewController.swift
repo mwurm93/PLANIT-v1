@@ -23,11 +23,18 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     private let cachedWhiteColor = UIColor.white
     private var useLocalTiles = false
     
+    //COPY
+    var bucketListPinLocations = [[String: AnyObject]]()
+    var beenTherePinLocations = [[String: AnyObject]]()
+    var bucketListCountries = [String]()
+    var beenThereCountries = [String]()
+    
+    //bucket list pins
     var AddedSphereComponentObjs = [MaplyComponentObject]()
     var AddedCylinderComponentObjs = [MaplyComponentObject]()
     var AddedSphereMaplyShapeObjs = [MaplyShape]()
     var AddedCylinderMaplyShapeObjs = [MaplyShape]()
-    
+    //been there pins
     var AddedSphereComponentObjs_been = [MaplyComponentObject]()
     var AddedCylinderComponentObjs_been = [MaplyComponentObject]()
     var AddedSphereMaplyShapeObjs_been = [MaplyShape]()
@@ -35,16 +42,19 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     
     var currentSelectedShape = [String: AnyObject]()
 
+    //bucket list countries
     var AddedFillComponentObjs = [MaplyComponentObject]()
     var AddedOutlineComponentObjs = [MaplyComponentObject]()
     var AddedFillVectorObjs = [MaplyVectorObject]()
     var AddedOutlineVectorObjs = [MaplyVectorObject]()
     
+    //been there countries
     var AddedFillComponentObjs_been = [MaplyComponentObject]()
     var AddedOutlineComponentObjs_been = [MaplyComponentObject]()
     var AddedFillVectorObjs_been = [MaplyVectorObject]()
     var AddedOutlineVectorObjs_been = [MaplyVectorObject]()
     var mode = "pin"
+    
     //GOOGLE PLACES SEARCH
     var resultsViewController: GMSAutocompleteResultsViewController?
     var searchController: UISearchController?
@@ -219,6 +229,59 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         
         // add the countries
         addCountries()
+        
+        //COPY
+        //Load previously placed pins and countries
+        bucketListPinLocations = DataContainerSingleton.sharedDataContainer.bucketListPinLocations as? [[String : AnyObject]] ?? [[String : AnyObject]]()
+        beenTherePinLocations = DataContainerSingleton.sharedDataContainer.beenTherePinLocations as? [[String : AnyObject]] ?? [[String : AnyObject]]()
+        bucketListCountries = DataContainerSingleton.sharedDataContainer.bucketListCountries ?? [String]()
+        beenThereCountries = DataContainerSingleton.sharedDataContainer.beenThereCountries ?? [String]()
+        
+        if bucketListPinLocations.count != 0 {
+            //Install bucket list pin locations
+            var pinLocationSphere = [MaplyCoordinate]()
+            var pinLocationCylinder = [MaplyCoordinate]()
+            for bucketListPinLocation in bucketListPinLocations {
+                pinLocationSphere.append(MaplyCoordinate(x: bucketListPinLocation["x"] as! Float, y: bucketListPinLocation["y"] as! Float))
+                pinLocationCylinder.append(MaplyCoordinate(x: bucketListPinLocation["x"] as! Float, y: bucketListPinLocation["y"] as! Float))
+            }
+            
+            // convert capitals into spheres. Let's do it functional!
+            let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
+                let sphere = MaplyShapeSphere()
+                sphere.center = location
+                sphere.radius = 0.007
+                sphere.height = 0.022
+                sphere.selectable = true
+                sphere.userObject = location
+                return sphere
+            }
+            let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
+                let cylinder = MaplyShapeCylinder()
+                cylinder.baseCenter = location
+                cylinder.baseHeight = 0
+                cylinder.radius = 0.003
+                cylinder.height = 0.015
+                cylinder.selectable = true
+                cylinder.userObject = location
+                return cylinder
+            }
+            
+            let AddedSphereComponentObj = (self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: UIColor(cgColor: bucketListButton.layer.backgroundColor!)]))!
+            let AddedCylinderComponentObj = (self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)]))!
+            //        if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
+            AddedSphereComponentObjs.append(AddedSphereComponentObj)
+            AddedCylinderComponentObjs.append(AddedCylinderComponentObj)
+            AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
+            AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
+            //        } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
+            //            AddedSphereComponentObjs_been.append(AddedSphereComponentObj)
+            //            AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj)
+            //            AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
+            //            AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
+            //            beenTherePinLocations.append(["x": coord.x as AnyObject,"y": coord.y as AnyObject])
+            //        }
+        }
     }
 
     private func handleSelection(selectedObject: NSObject) {
@@ -479,11 +542,21 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     AddedCylinderComponentObjs.append(AddedCylinderComponentObj)
                     AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
                     AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
+                    
+                    //COPY
+                    bucketListPinLocations.append(["x": coord.x as AnyObject,"y": coord.y as AnyObject])
+                    //Save to singleton
+                    DataContainerSingleton.sharedDataContainer.bucketListPinLocations = bucketListPinLocations as [NSDictionary]
                 } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
                     AddedSphereComponentObjs_been.append(AddedSphereComponentObj)
                     AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj)
                     AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
                     AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
+                    
+                    //COPY
+                    beenTherePinLocations.append(["x": coord.x as AnyObject,"y": coord.y as AnyObject])
+                    //Save to singleton
+                    DataContainerSingleton.sharedDataContainer.beenTherePinLocations = beenTherePinLocations as [NSDictionary]
                 }
                 
                 var subtitle = String()
@@ -576,6 +649,12 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                 AddedCylinderComponentObjs.remove(at: index)
                 AddedSphereMaplyShapeObjs.remove(at: index)
                 AddedCylinderMaplyShapeObjs.remove(at: index)
+
+                //COPY
+                bucketListPinLocations.remove(at: index)
+                //Save to singleton
+                DataContainerSingleton.sharedDataContainer.bucketListPinLocations = bucketListPinLocations as [NSDictionary]
+                
                 theViewC?.clearAnnotations()
             } else {
                 index += 1
@@ -593,6 +672,12 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                 AddedCylinderComponentObjs_been.remove(at: index)
                 AddedSphereMaplyShapeObjs_been.remove(at: index)
                 AddedCylinderMaplyShapeObjs_been.remove(at: index)
+                
+                //COPY
+                beenTherePinLocations.remove(at: index)
+                //Save to singleton
+                DataContainerSingleton.sharedDataContainer.bucketListPinLocations = bucketListPinLocations as [NSDictionary]
+                
                 theViewC?.clearAnnotations()
             } else {
                 index += 1
@@ -668,11 +753,21 @@ extension bucketListViewController: GMSAutocompleteResultsViewControllerDelegate
             AddedCylinderComponentObjs.append(AddedCylinderComponentObj!)
             AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
             AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
+            
+            //COPY
+            bucketListPinLocations.append(["x": pinLocationSphere[0].x as AnyObject,"y": pinLocationSphere[0].y as AnyObject])
+            //Save to singleton
+            DataContainerSingleton.sharedDataContainer.bucketListPinLocations = bucketListPinLocations as [NSDictionary]
         } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
             AddedSphereComponentObjs_been.append(AddedSphereComponentObj!)
             AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj!)
             AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
             AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
+            
+            //COPY
+            beenTherePinLocations.append(["x": pinLocationSphere[0].x as AnyObject,"y": pinLocationSphere[0].y as AnyObject])
+            //Save to singleton
+            DataContainerSingleton.sharedDataContainer.beenTherePinLocations = beenTherePinLocations as [NSDictionary]
         }
         
         var subtitle = String()

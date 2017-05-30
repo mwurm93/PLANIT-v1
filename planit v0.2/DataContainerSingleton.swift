@@ -23,6 +23,11 @@ struct DefaultKeys {
         static let birthdate = "birthdate"
         static let usertrippreferences = "usertrippreferences"
         static let currenttrip = "currenttrip"
+        static let bucketListPinLocations = "bucketListPinLocations"
+        static let beenTherePinLocations = "beenTherePinLocations"
+        static let bucketListCountries = "bucketListCountries"
+        static let beenThereCountries = "beenThereCountries"
+    
     }
 
 class DataContainerSingleton {
@@ -42,6 +47,10 @@ class DataContainerSingleton {
     var birthdate: String?
     var usertrippreferences: [NSDictionary]?
     var currenttrip: Int?
+    var bucketListPinLocations: [NSDictionary]?
+    var beenTherePinLocations: [NSDictionary]?
+    var bucketListCountries: [String]?
+    var beenThereCountries: [String]?
     
     var goToBackgroundObserver: AnyObject?
     
@@ -63,6 +72,10 @@ class DataContainerSingleton {
         birthdate = defaults.object(forKey: DefaultKeys.birthdate) as! String?
         usertrippreferences = defaults.object(forKey: DefaultKeys.usertrippreferences) as! [NSDictionary]?
         currenttrip = defaults.object(forKey: DefaultKeys.currenttrip) as! Int?
+        bucketListPinLocations = defaults.object(forKey: DefaultKeys.bucketListPinLocations) as! [NSDictionary]?
+        beenTherePinLocations = defaults.object(forKey: DefaultKeys.beenTherePinLocations) as! [NSDictionary]?
+        bucketListCountries = defaults.object(forKey: DefaultKeys.bucketListCountries) as! [String]?
+        beenThereCountries = defaults.object(forKey: DefaultKeys.beenThereCountries) as! [String]?
         
         //-----------------------------------------------------------------------------
         
@@ -90,6 +103,10 @@ class DataContainerSingleton {
             defaults.set( self.birthdate, forKey: DefaultKeys.birthdate)
             defaults.set( self.usertrippreferences, forKey: DefaultKeys.usertrippreferences)
             defaults.set( self.currenttrip, forKey: DefaultKeys.currenttrip)
+            defaults.set( self.bucketListPinLocations, forKey: DefaultKeys.bucketListPinLocations)
+            defaults.set( self.beenTherePinLocations, forKey: DefaultKeys.beenTherePinLocations)
+            defaults.set( self.bucketListCountries, forKey: DefaultKeys.bucketListCountries)
+            defaults.set( self.beenThereCountries, forKey: DefaultKeys.beenThereCountries)
 
             //-----------------------------------------------------------------------------
             //Tell NSUserDefaults to save to disk now.
