@@ -18,7 +18,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
 
     @IBOutlet weak var contactsCollectionView: UICollectionView!
     @IBOutlet weak var topItineraryTable: UITableView!
-    @IBOutlet weak var tripNameLabel: UILabel!
     @IBOutlet weak var firstName: UITextField!
     @IBOutlet weak var lastName: UITextField!
     @IBOutlet weak var emailAddress: UITextField!
@@ -30,6 +29,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     @IBOutlet weak var birthdate: UITextField!
     @IBOutlet weak var bookOnlyIfTheyDoInfoView: UIView!
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
+    @IBOutlet weak var tripNameLabel: UITextField!
     
     // Outlets for buttons
     @IBOutlet weak var adjustTravelLogisticsButton: UIButton!
@@ -43,6 +43,14 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Load the values from our shared data container singleton
+        self.tripNameLabel.delegate = self
+        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
+        //Install the value into the label.
+        if tripNameValue != nil {
+            self.tripNameLabel.text =  "\(tripNameValue!)"
+        }
         
         //Appearance of booking buttons
         bookThisTripButton.layer.borderWidth = 1
@@ -234,6 +242,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         knownTravelerNumber.resignFirstResponder()
         redressNumber.resignFirstResponder()
         birthdate.resignFirstResponder()
+        tripNameLabel.resignFirstResponder()
         return true
     }
     

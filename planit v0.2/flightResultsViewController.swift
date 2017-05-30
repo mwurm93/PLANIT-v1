@@ -310,6 +310,13 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     //MARK: Actions
+    @IBAction func selectFlightButtonTouchedUpInside(_ sender: Any) {
+        performSegue(withIdentifier: "flightResultsToActivities", sender: self)
+        // if destination != topDestination {
+//        performSegue(withIdentifier: "flightResultsToRanking", sender: self)
+//    }
+    }
+    
     @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.3, animations: {
             self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
