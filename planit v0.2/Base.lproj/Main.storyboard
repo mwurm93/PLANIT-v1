@@ -3137,7 +3137,7 @@
                                 <rect key="frame" x="37.5" y="401" width="300" height="150"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="We'll automatically cancel your reservation if your group does not commit within 24 hours" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bb3-Kr-afD">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="We'll automatically cancel your reservation if everyone in your group does not commit within 24 hours" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bb3-Kr-afD">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -5030,12 +5030,12 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MNW-06-TUF"/>
+        <segue reference="b3w-20-3wQ"/>
+        <segue reference="zWM-he-GTg"/>
+        <segue reference="Ezz-Ly-XFT"/>
         <segue reference="cWA-9L-HdA"/>
         <segue reference="RAo-Nt-Dp1"/>
         <segue reference="anE-cP-H4U"/>
-        <segue reference="isD-dZ-KwN"/>
-        <segue reference="zWM-he-GTg"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

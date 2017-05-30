@@ -237,16 +237,14 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         bucketListCountries = DataContainerSingleton.sharedDataContainer.bucketListCountries ?? [String]()
         beenThereCountries = DataContainerSingleton.sharedDataContainer.beenThereCountries ?? [String]()
         
+        //Install bucket list pins
         if bucketListPinLocations.count != 0 {
-            //Install bucket list pin locations
             var pinLocationSphere = [MaplyCoordinate]()
             var pinLocationCylinder = [MaplyCoordinate]()
             for bucketListPinLocation in bucketListPinLocations {
                 pinLocationSphere.append(MaplyCoordinate(x: bucketListPinLocation["x"] as! Float, y: bucketListPinLocation["y"] as! Float))
                 pinLocationCylinder.append(MaplyCoordinate(x: bucketListPinLocation["x"] as! Float, y: bucketListPinLocation["y"] as! Float))
             }
-            
-            // convert capitals into spheres. Let's do it functional!
             let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
                 let sphere = MaplyShapeSphere()
                 sphere.center = location
@@ -269,19 +267,54 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             
             let AddedSphereComponentObj = (self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: UIColor(cgColor: bucketListButton.layer.backgroundColor!)]))!
             let AddedCylinderComponentObj = (self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)]))!
-            //        if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
             AddedSphereComponentObjs.append(AddedSphereComponentObj)
             AddedCylinderComponentObjs.append(AddedCylinderComponentObj)
             AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
             AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
-            //        } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
-            //            AddedSphereComponentObjs_been.append(AddedSphereComponentObj)
-            //            AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj)
-            //            AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
-            //            AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
-            //            beenTherePinLocations.append(["x": coord.x as AnyObject,"y": coord.y as AnyObject])
-            //        }
         }
+        //Install been there pins
+        if beenTherePinLocations.count != 0 {
+            var pinLocationSphere = [MaplyCoordinate]()
+            var pinLocationCylinder = [MaplyCoordinate]()
+            for beenTherePinLocation in beenTherePinLocations {
+                pinLocationSphere.append(MaplyCoordinate(x: beenTherePinLocation["x"] as! Float, y: beenTherePinLocation["y"] as! Float))
+                pinLocationCylinder.append(MaplyCoordinate(x: beenTherePinLocation["x"] as! Float, y: beenTherePinLocation["y"] as! Float))
+            }
+            let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
+                let sphere = MaplyShapeSphere()
+                sphere.center = location
+                sphere.radius = 0.007
+                sphere.height = 0.022
+                sphere.selectable = true
+                sphere.userObject = location
+                return sphere
+            }
+            let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
+                let cylinder = MaplyShapeCylinder()
+                cylinder.baseCenter = location
+                cylinder.baseHeight = 0
+                cylinder.radius = 0.003
+                cylinder.height = 0.015
+                cylinder.selectable = true
+                cylinder.userObject = location
+                return cylinder
+            }
+            
+            let AddedSphereComponentObj = (self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: UIColor(cgColor: beenThereButton.layer.backgroundColor!)]))!
+            let AddedCylinderComponentObj = (self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)]))!
+            AddedSphereComponentObjs_been.append(AddedSphereComponentObj)
+            AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj)
+            AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
+            AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
+        }
+        
+        if bucketListCountries.count != 0 {
+
+        }
+        if beenThereCountries.count != 0 {
+            
+        }
+
     }
 
     private func handleSelection(selectedObject: NSObject) {
@@ -315,8 +348,14 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                 AddedOutlineComponentObjs.append(AddedOutlineComponentObj)
                 AddedFillVectorObjs.append(selectedObject)
                 AddedOutlineVectorObjs.append(selectedObject)
+                
+                //COPY
+                bucketListCountries.append(selectedObject.userObject as! String)
+                //Save to singleton
+                DataContainerSingleton.sharedDataContainer.bucketListCountries = bucketListCountries as [String]
                     
                 selectedObject.attributes.setValue("bucketList", forKey: "selectionStatus")
+                    
             } else if selectedObject.attributes["selectionStatus"] as! String == "bucketList" {
                     subtitle = "Nevermind"
                     var index = 0
@@ -328,6 +367,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                             AddedOutlineComponentObjs.remove(at: index)
                             AddedFillVectorObjs.remove(at: index)
                             AddedOutlineVectorObjs.remove(at: index)
+                            
+                            //COPY
+                            bucketListCountries.remove(at: index)
+                            //Save to singleton
+                            DataContainerSingleton.sharedDataContainer.bucketListCountries = bucketListCountries as [String]
                         } else {
                             index += 1
                         }
@@ -345,6 +389,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                             AddedOutlineComponentObjs_been.remove(at: index)
                             AddedFillVectorObjs_been.remove(at: index)
                             AddedOutlineVectorObjs_been.remove(at: index)
+                            
+                            //COPY
+                            beenThereCountries.remove(at: index)
+                            //Save to singleton
+                            DataContainerSingleton.sharedDataContainer.beenThereCountries = beenThereCountries as [String]
                         } else {
                             index += 1
                         }
@@ -366,6 +415,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     AddedOutlineComponentObjs.append(AddedOutlineComponentObj)
                     AddedFillVectorObjs.append(selectedObject)
                     AddedOutlineVectorObjs.append(selectedObject)
+                    
+                    //COPY
+                    bucketListCountries.append(selectedObject.userObject as! String)
+                    //Save to singleton
+                    DataContainerSingleton.sharedDataContainer.bucketListCountries = bucketListCountries as [String]
                     
                     selectedObject.attributes.setValue("bucketList", forKey: "selectionStatus")
                 }
@@ -389,8 +443,14 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                 AddedOutlineComponentObjs_been.append(AddedOutlineComponentObj_been)
                 AddedFillVectorObjs_been.append(selectedObject)
                 AddedOutlineVectorObjs_been.append(selectedObject)
+                    
+                //COPY
+                beenThereCountries.append(selectedObject.userObject as! String)
+                //Save to singleton
+                DataContainerSingleton.sharedDataContainer.beenThereCountries = beenThereCountries as [String]
                 
                 selectedObject.attributes.setValue("beenThere", forKey: "selectionStatus")
+                    
                 } else if selectedObject.attributes["selectionStatus"] as! String == "beenThere" {
                     subtitle = "Nevermind"
                     var index = 0
@@ -402,6 +462,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                             AddedOutlineComponentObjs_been.remove(at: index)
                             AddedFillVectorObjs_been.remove(at: index)
                             AddedOutlineVectorObjs_been.remove(at: index)
+                            
+                            //COPY
+                            beenThereCountries.remove(at: index)
+                            //Save to singleton
+                            DataContainerSingleton.sharedDataContainer.beenThereCountries = beenThereCountries as [String]
                         } else {
                             index += 1
                         }
@@ -419,6 +484,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                             AddedOutlineComponentObjs.remove(at: index)
                             AddedFillVectorObjs.remove(at: index)
                             AddedOutlineVectorObjs.remove(at: index)
+                            
+                            //COPY
+                            bucketListCountries.remove(at: index)
+                            //Save to singleton
+                            DataContainerSingleton.sharedDataContainer.bucketListCountries = bucketListCountries as [String]
                         } else {
                             index += 1
                         }
@@ -440,6 +510,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     AddedOutlineComponentObjs_been.append(AddedOutlineComponentObj_been)
                     AddedFillVectorObjs_been.append(selectedObject)
                     AddedOutlineVectorObjs_been.append(selectedObject)
+                    
+                    //COPY
+                    beenThereCountries.append(selectedObject.userObject as! String)
+                    //Save to singleton
+                    DataContainerSingleton.sharedDataContainer.beenThereCountries = beenThereCountries as [String]
                     
                     selectedObject.attributes.setValue("beenThere", forKey: "selectionStatus")
                 }
@@ -514,7 +589,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             } else {
                 let pinLocationSphere = [coord]
                 let pinLocationCylinder = [coord]
-                // convert capitals into spheres. Let's do it functional!
                 let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
                     let sphere = MaplyShapeSphere()
                     sphere.center = location
@@ -724,7 +798,6 @@ extension bucketListViewController: GMSAutocompleteResultsViewControllerDelegate
         handleModeButtonImages()
                 let pinLocationSphere = [WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))]
                 let pinLocationCylinder = [WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))]
-                // convert capitals into spheres. Let's do it functional!
                 let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
                     let sphere = MaplyShapeSphere()
                     sphere.center = WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))
