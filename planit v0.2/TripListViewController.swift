@@ -43,6 +43,12 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     private var selectedVectorFillDict: [String: AnyObject]?
     private var selectedVectorOutlineDict: [String: AnyObject]?
 
+    //COPY
+    var bucketListPinLocations = [[String: AnyObject]]()
+    var beenTherePinLocations = [[String: AnyObject]]()
+    var bucketListCountries = [String]()
+    var beenThereCountries = [String]()
+    
     var AddedSphereComponentObjs = [MaplyComponentObject]()
     var AddedCylinderComponentObjs = [MaplyComponentObject]()
     var AddedSphereMaplyShapeObjs = [MaplyShape]()
@@ -257,6 +263,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         stringForLabel.append(attachment2)
         stringForLabel.append(NSAttributedString(string:" where you've been and what's on your bucket list..."))
         instructionsLabel.attributedText = stringForLabel
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -697,6 +704,83 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // add the countries
         addCountries()
+        
+        //Load previously placed pins and countries
+        bucketListPinLocations = DataContainerSingleton.sharedDataContainer.bucketListPinLocations as? [[String : AnyObject]] ?? [[String : AnyObject]]()
+        beenTherePinLocations = DataContainerSingleton.sharedDataContainer.beenTherePinLocations as? [[String : AnyObject]] ?? [[String : AnyObject]]()
+        bucketListCountries = DataContainerSingleton.sharedDataContainer.bucketListCountries ?? [String]()
+        beenThereCountries = DataContainerSingleton.sharedDataContainer.beenThereCountries ?? [String]()
+        
+        //Install bucket list pins
+        if bucketListPinLocations.count != 0 {
+            var pinLocationSphere = [MaplyCoordinate]()
+            var pinLocationCylinder = [MaplyCoordinate]()
+            for bucketListPinLocation in bucketListPinLocations {
+                pinLocationSphere.append(MaplyCoordinate(x: bucketListPinLocation["x"] as! Float, y: bucketListPinLocation["y"] as! Float))
+                pinLocationCylinder.append(MaplyCoordinate(x: bucketListPinLocation["x"] as! Float, y: bucketListPinLocation["y"] as! Float))
+            }
+            let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
+                let sphere = MaplyShapeSphere()
+                sphere.center = location
+                sphere.radius = 0.007
+                sphere.height = 0.022
+                sphere.selectable = true
+                sphere.userObject = location
+                return sphere
+            }
+            let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
+                let cylinder = MaplyShapeCylinder()
+                cylinder.baseCenter = location
+                cylinder.baseHeight = 0
+                cylinder.radius = 0.003
+                cylinder.height = 0.015
+                cylinder.selectable = true
+                cylinder.userObject = location
+                return cylinder
+            }
+            
+            let AddedSphereComponentObj = (self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: UIColor(cgColor: bucketListButton.layer.backgroundColor!)]))!
+            let AddedCylinderComponentObj = (self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)]))!
+            AddedSphereComponentObjs.append(AddedSphereComponentObj)
+            AddedCylinderComponentObjs.append(AddedCylinderComponentObj)
+            AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
+            AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
+        }
+        //Install been there pins
+        if beenTherePinLocations.count != 0 {
+            var pinLocationSphere = [MaplyCoordinate]()
+            var pinLocationCylinder = [MaplyCoordinate]()
+            for beenTherePinLocation in beenTherePinLocations {
+                pinLocationSphere.append(MaplyCoordinate(x: beenTherePinLocation["x"] as! Float, y: beenTherePinLocation["y"] as! Float))
+                pinLocationCylinder.append(MaplyCoordinate(x: beenTherePinLocation["x"] as! Float, y: beenTherePinLocation["y"] as! Float))
+            }
+            let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
+                let sphere = MaplyShapeSphere()
+                sphere.center = location
+                sphere.radius = 0.007
+                sphere.height = 0.022
+                sphere.selectable = true
+                sphere.userObject = location
+                return sphere
+            }
+            let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
+                let cylinder = MaplyShapeCylinder()
+                cylinder.baseCenter = location
+                cylinder.baseHeight = 0
+                cylinder.radius = 0.003
+                cylinder.height = 0.015
+                cylinder.selectable = true
+                cylinder.userObject = location
+                return cylinder
+            }
+            
+            let AddedSphereComponentObj = (self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: UIColor(cgColor: beenThereButton.layer.backgroundColor!)]))!
+            let AddedCylinderComponentObj = (self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)]))!
+            AddedSphereComponentObjs_been.append(AddedSphereComponentObj)
+            AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj)
+            AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
+            AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
+        }
     }
     
     private func handleSelection(selectedObject: NSObject) {
@@ -731,7 +815,13 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     AddedFillVectorObjs.append(selectedObject)
                     AddedOutlineVectorObjs.append(selectedObject)
                     
+                    //COPY
+                    bucketListCountries.append(selectedObject.userObject as! String)
+                    //Save to singleton
+                    DataContainerSingleton.sharedDataContainer.bucketListCountries = bucketListCountries as [String]
+                    
                     selectedObject.attributes.setValue("bucketList", forKey: "selectionStatus")
+                    
                 } else if selectedObject.attributes["selectionStatus"] as! String == "bucketList" {
                     subtitle = "Nevermind"
                     var index = 0
@@ -743,6 +833,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                             AddedOutlineComponentObjs.remove(at: index)
                             AddedFillVectorObjs.remove(at: index)
                             AddedOutlineVectorObjs.remove(at: index)
+                            
+                            //COPY
+                            bucketListCountries.remove(at: index)
+                            //Save to singleton
+                            DataContainerSingleton.sharedDataContainer.bucketListCountries = bucketListCountries as [String]
                         } else {
                             index += 1
                         }
@@ -760,6 +855,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                             AddedOutlineComponentObjs_been.remove(at: index)
                             AddedFillVectorObjs_been.remove(at: index)
                             AddedOutlineVectorObjs_been.remove(at: index)
+                            
+                            //COPY
+                            beenThereCountries.remove(at: index)
+                            //Save to singleton
+                            DataContainerSingleton.sharedDataContainer.beenThereCountries = beenThereCountries as [String]
                         } else {
                             index += 1
                         }
@@ -781,6 +881,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     AddedOutlineComponentObjs.append(AddedOutlineComponentObj)
                     AddedFillVectorObjs.append(selectedObject)
                     AddedOutlineVectorObjs.append(selectedObject)
+                    
+                    //COPY
+                    bucketListCountries.append(selectedObject.userObject as! String)
+                    //Save to singleton
+                    DataContainerSingleton.sharedDataContainer.bucketListCountries = bucketListCountries as [String]
                     
                     selectedObject.attributes.setValue("bucketList", forKey: "selectionStatus")
                 }
@@ -805,6 +910,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     AddedFillVectorObjs_been.append(selectedObject)
                     AddedOutlineVectorObjs_been.append(selectedObject)
                     
+                    //COPY
+                    beenThereCountries.append(selectedObject.userObject as! String)
+                    //Save to singleton
+                    DataContainerSingleton.sharedDataContainer.beenThereCountries = beenThereCountries as [String]
+                    
                     selectedObject.attributes.setValue("beenThere", forKey: "selectionStatus")
                 } else if selectedObject.attributes["selectionStatus"] as! String == "beenThere" {
                     subtitle = "Nevermind"
@@ -817,6 +927,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                             AddedOutlineComponentObjs_been.remove(at: index)
                             AddedFillVectorObjs_been.remove(at: index)
                             AddedOutlineVectorObjs_been.remove(at: index)
+                            
+                            //COPY
+                            beenThereCountries.remove(at: index)
+                            //Save to singleton
+                            DataContainerSingleton.sharedDataContainer.beenThereCountries = beenThereCountries as [String]
                         } else {
                             index += 1
                         }
@@ -834,6 +949,12 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                             AddedOutlineComponentObjs.remove(at: index)
                             AddedFillVectorObjs.remove(at: index)
                             AddedOutlineVectorObjs.remove(at: index)
+                            
+                            //COPY
+                            bucketListCountries.remove(at: index)
+                            //Save to singleton
+                            DataContainerSingleton.sharedDataContainer.bucketListCountries = bucketListCountries as [String]
+
                         } else {
                             index += 1
                         }
@@ -855,6 +976,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     AddedOutlineComponentObjs_been.append(AddedOutlineComponentObj_been)
                     AddedFillVectorObjs_been.append(selectedObject)
                     AddedOutlineVectorObjs_been.append(selectedObject)
+                    
+                    //COPY
+                    beenThereCountries.append(selectedObject.userObject as! String)
+                    //Save to singleton
+                    DataContainerSingleton.sharedDataContainer.beenThereCountries = beenThereCountries as [String]
                     
                     selectedObject.attributes.setValue("beenThere", forKey: "selectionStatus")
                 }
@@ -957,11 +1083,21 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     AddedCylinderComponentObjs.append(AddedCylinderComponentObj)
                     AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
                     AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
+                    
+                    //COPY
+                    bucketListPinLocations.append(["x": coord.x as AnyObject,"y": coord.y as AnyObject])
+                    //Save to singleton
+                    DataContainerSingleton.sharedDataContainer.bucketListPinLocations = bucketListPinLocations as [NSDictionary]
                 } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
                     AddedSphereComponentObjs_been.append(AddedSphereComponentObj)
                     AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj)
                     AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
                     AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
+                    
+                    //COPY
+                    beenTherePinLocations.append(["x": coord.x as AnyObject,"y": coord.y as AnyObject])
+                    //Save to singleton
+                    DataContainerSingleton.sharedDataContainer.beenTherePinLocations = beenTherePinLocations as [NSDictionary]
                 }
                 
                 var subtitle = String()
@@ -1008,6 +1144,12 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                 AddedCylinderComponentObjs.remove(at: index)
                 AddedSphereMaplyShapeObjs.remove(at: index)
                 AddedCylinderMaplyShapeObjs.remove(at: index)
+                
+                //COPY
+                bucketListPinLocations.remove(at: index)
+                //Save to singleton
+                DataContainerSingleton.sharedDataContainer.bucketListPinLocations = bucketListPinLocations as [NSDictionary]
+
                 theViewC?.clearAnnotations()
             } else {
                 index += 1
@@ -1025,6 +1167,12 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                 AddedCylinderComponentObjs_been.remove(at: index)
                 AddedSphereMaplyShapeObjs_been.remove(at: index)
                 AddedCylinderMaplyShapeObjs_been.remove(at: index)
+                
+                //COPY
+                beenTherePinLocations.remove(at: index)
+                //Save to singleton
+                DataContainerSingleton.sharedDataContainer.bucketListPinLocations = bucketListPinLocations as [NSDictionary]
+
                 theViewC?.clearAnnotations()
             } else {
                 index += 1
@@ -1061,6 +1209,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         // handle this in another thread
         let queue = DispatchQueue.global()
         queue.async() {
+            
+            //COPY
+            var alphabeticalBucketListCountries = [String]()
+            var alphabeticalBeenThereCountries = [String]()
+            
             let bundle = Bundle.main
             let allOutlines = bundle.paths(forResourcesOfType: "geojson", inDirectory: "country_json_50m")
             for outline in allOutlines {
@@ -1080,17 +1233,77 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                             self.theViewC?.addScreenLabels([label],
                                                            desc: [
                                                             kMaplyFont: UIFont.boldSystemFont(ofSize: 14.0),
-                                                            kMaplyMinVis: 0.005,
-                                                            kMaplyMaxVis: 0.6,
                                                             kMaplyTextColor: UIColor.darkGray,
+                                                            kMaplyMinVis: 0.005,
+                                                            kMaplyMaxVis: 0.6
                                 ])
                         }
+                        attrs.setValue("tbd", forKey: "selectionStatus")
+                        self.theViewC?.addVectors([wgVecObj], desc: self.vectorDict)
+                        
+                        //COPY
+                        if self.bucketListCountries.count != 0 {
+                            if self.bucketListCountries.contains(vecName as! String) {
+                                if (vecName.description.characters.count) > 0 {
+                                    self.selectedVectorFillDict = [
+                                        kMaplyColor: UIColor(cgColor: self.bucketListButton.layer.backgroundColor!),
+                                        kMaplySelectable: true as AnyObject,
+                                        kMaplyFilled: true as AnyObject,
+                                        kMaplyVecWidth: 3.0 as AnyObject,
+                                        kMaplySubdivType: kMaplySubdivGrid as AnyObject,
+                                        kMaplySubdivEpsilon: 0.15 as AnyObject
+                                    ]
+                                    var AddedFillComponentObj = MaplyComponentObject()
+                                    var AddedOutlineComponentObj = MaplyComponentObject()
+                                    
+                                    attrs.setValue("bucketList", forKey: "selectionStatus")
+                                    
+                                    AddedFillComponentObj = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorFillDict))!
+                                    AddedOutlineComponentObj = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorOutlineDict))!
+                                    self.AddedFillComponentObjs.append(AddedFillComponentObj)
+                                    self.AddedOutlineComponentObjs.append(AddedOutlineComponentObj)
+                                    self.AddedFillVectorObjs.append(wgVecObj)
+                                    self.AddedOutlineVectorObjs.append(wgVecObj)
+                                    alphabeticalBucketListCountries.append(wgVecObj.userObject as! String)
+                                }
+                            }
+                        }
+                        if self.beenThereCountries.count != 0 {
+                            if self.beenThereCountries.contains(vecName as! String) {
+                                if (vecName.description.characters.count) > 0 {
+                                    self.selectedVectorFillDict = [
+                                        kMaplyColor: UIColor(cgColor: self.beenThereButton.layer.backgroundColor!),
+                                        kMaplySelectable: true as AnyObject,
+                                        kMaplyFilled: true as AnyObject,
+                                        kMaplyVecWidth: 3.0 as AnyObject,
+                                        kMaplySubdivType: kMaplySubdivGrid as AnyObject,
+                                        kMaplySubdivEpsilon: 0.15 as AnyObject
+                                    ]
+                                    var AddedFillComponentObj_been = MaplyComponentObject()
+                                    var AddedOutlineComponentObj_been = MaplyComponentObject()
+                                    
+                                    attrs.setValue("beenThere", forKey: "selectionStatus")
+                                    
+                                    AddedFillComponentObj_been = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorFillDict))!
+                                    AddedOutlineComponentObj_been = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorOutlineDict))!
+                                    self.AddedFillComponentObjs_been.append(AddedFillComponentObj_been)
+                                    self.AddedOutlineComponentObjs_been.append(AddedOutlineComponentObj_been)
+                                    self.AddedFillVectorObjs_been.append(wgVecObj)
+                                    self.AddedOutlineVectorObjs_been.append(wgVecObj)
+                                    alphabeticalBeenThereCountries.append(wgVecObj.userObject as! String)
+                                }
+                            }
+                        }
                     }
-                    
-                    attrs.setValue("tbd", forKey: "selectionStatus")
-                    self.theViewC?.addVectors([wgVecObj], desc: self.vectorDict)
                 }
             }
+            
+            //COPY
+            //Save alphabetically reordered countries to singleton
+            DataContainerSingleton.sharedDataContainer.bucketListCountries = alphabeticalBucketListCountries
+            DataContainerSingleton.sharedDataContainer.beenThereCountries = alphabeticalBeenThereCountries
+            self.bucketListCountries = alphabeticalBucketListCountries
+            self.beenThereCountries = alphabeticalBeenThereCountries
         }
     }
     
@@ -1220,11 +1433,21 @@ extension TripListViewController: GMSAutocompleteResultsViewControllerDelegate {
                 AddedCylinderComponentObjs.append(AddedCylinderComponentObj!)
                 AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
                 AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
+                
+                //COPY
+                bucketListPinLocations.append(["x": pinLocationSphere[0].x as AnyObject,"y": pinLocationSphere[0].y as AnyObject])
+                //Save to singleton
+                DataContainerSingleton.sharedDataContainer.bucketListPinLocations = bucketListPinLocations as [NSDictionary]
             } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
                 AddedSphereComponentObjs_been.append(AddedSphereComponentObj!)
                 AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj!)
                 AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
                 AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
+
+                //COPY
+                beenTherePinLocations.append(["x": pinLocationSphere[0].x as AnyObject,"y": pinLocationSphere[0].y as AnyObject])
+                //Save to singleton
+                DataContainerSingleton.sharedDataContainer.beenTherePinLocations = beenTherePinLocations as [NSDictionary]
             }
             
         var subtitle = String()

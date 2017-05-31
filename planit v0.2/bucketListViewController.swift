@@ -307,8 +307,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
             AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
         }
-        
-
     }
     private func handleSelection(selectedObject: NSObject) {
         
@@ -656,6 +654,8 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         // handle this in another thread
         let queue = DispatchQueue.global()
         queue.async() {
+            
+            //COPY
             var alphabeticalBucketListCountries = [String]()
             var alphabeticalBeenThereCountries = [String]()
 
@@ -682,7 +682,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                                                             kMaplyMinVis: 0.005,
                                                             kMaplyMaxVis: 0.6
                                 ])
-                        }                                        
+                        }
                         attrs.setValue("tbd", forKey: "selectionStatus")
                         self.theViewC?.addVectors([wgVecObj], desc: self.vectorDict)
                     
@@ -742,6 +742,8 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     }
                 }
             }
+            
+            //COPY
             //Save alphabetically reordered countries to singleton
             DataContainerSingleton.sharedDataContainer.bucketListCountries = alphabeticalBucketListCountries
             DataContainerSingleton.sharedDataContainer.beenThereCountries = alphabeticalBeenThereCountries
