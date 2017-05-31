@@ -126,6 +126,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         popupBlurView.isUserInteractionEnabled = true
         
         //Load the values from our shared data container singleton
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if NewOrAddedTripFromSegue != 1 {
         let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
         //Install the value into the label.
@@ -197,7 +198,10 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         numberDestinationsSlider.isContinuous = false
         numberDestinationsSlider.isHidden = true
         numberDestinationsStackView.isHidden = true
-        
+        if let numberDestinationsValue = SavedPreferencesForTrip["numberDestinations"] as? Float {
+            numberDestinationsSlider.setValue(numberDestinationsValue, animated: false)
+        }
+                
         //Trip Name textField
         self.tripNameLabel.delegate = self
         
@@ -226,7 +230,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         calendarView.scrollDirection = .vertical
         
         // Load trip preferences and install
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
             if selectedDatesValue.count > 0 {
                 self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
@@ -413,14 +416,14 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
     
     func roundSlider() {
-        let numberDestinationsValue = [NSNumber(value: (round(numberDestinationsSlider.value / sliderStep)))]
-        numberDestinationsSlider.setValue(Float(numberDestinationsValue[0]), animated: true)
+        let numberDestinationsValue = NSNumber(value: (round(numberDestinationsSlider.value / sliderStep)))
+        numberDestinationsSlider.setValue(Float(numberDestinationsValue), animated: true)
         
-//        //Update trip preferences dictionary
-//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//        SavedPreferencesForTrip["hotel_rooms"] = hotelRoomsValue
-//        //Save updated trip preferences dictionary
-//        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        //Update trip preferences dictionary
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["numberDestinations"] = numberDestinationsValue
+        //Save updated trip preferences dictionary
+        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
 
     
@@ -552,6 +555,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             sender.backgroundColor = UIColor.darkGray
             sender.titleLabel?.textColor = UIColor.white
         }
+        updateNonSpecificDatesDictionary()
     }
     
     func getMonth(Month: Int) -> String {
@@ -1010,7 +1014,18 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let segmentLengthValue = SavedPreferencesForTrip["Availability_segment_lengths"] as! [NSNumber]
-        if segmentLengthValue.count > 0 {
+        let nonSpecificDatesValue = SavedPreferencesForTrip["nonSpecificDates"] as! NSDictionary
+        if let nonSpecificDuration = nonSpecificDatesValue["duration"] as? String  {
+            if nonSpecificDuration != "weekend" {
+                numberDestinationsStackView.isHidden = false
+                numberDestinationsSlider.isHidden = false
+                homeAirportTextField.isHidden = true
+                questionLabel.text = "How many destinations?"
+                subviewNextButton.isHidden = false
+            } else {
+                subviewWho()
+            }
+        } else if segmentLengthValue.count > 0 {
             var maxSegmentLength = 0
             for segmentIndex in 0...(segmentLengthValue.count-1) {
                 if (Int(segmentLengthValue[segmentIndex])) > maxSegmentLength {
@@ -1380,6 +1395,9 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         calendarView.isHidden = false
         dayOfWeekStackView.isHidden = false
         
+        let currentDate = Date(timeIntervalSinceNow: 86400)
+        calendarView.scrollToDate(currentDate, triggerScrollToDateDelegate: true, animateScroll: true, preferredScrollPosition: UICollectionViewScrollPosition.top)
+        
         getLengthOfSelectedAvailabilities()
         if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
             self.subviewNextButton.isHidden = false
@@ -1412,6 +1430,37 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 subviewNextButton.isHidden = true
             }
         }
+    }
+    
+    func updateNonSpecificDatesDictionary() {
+        var nonSpecificDatesDictionary = NSMutableDictionary()
+        var duration = String()
+        var month = String()
+        if oneWeek.backgroundColor == UIColor.white {
+            duration = "oneWeek"
+        } else if twoWeeks.backgroundColor == UIColor.white {
+            duration = "twoWeeks"
+        } else if weekend.backgroundColor == UIColor.white {
+            duration = "weekend"
+        }
+        
+        if month1.backgroundColor == UIColor.white {
+            month = month1.currentTitle!
+        } else if month2.backgroundColor == UIColor.white {
+            month = month2.currentTitle!
+        } else if month3.backgroundColor == UIColor.white {
+            month = month3.currentTitle!
+        } else if month4.backgroundColor == UIColor.white {
+            month = month4.currentTitle!
+        }
+        
+        nonSpecificDatesDictionary["duration"] = duration
+        nonSpecificDatesDictionary["month"] = month
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["nonSpecificDates"] = nonSpecificDatesDictionary
+        //Save
+        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
     
     @IBAction func oneWeekTouchedUpInside(_ sender: Any) {
@@ -1628,16 +1677,17 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         var contacts = [NSString]()
         var contactPhoneNumbers =  [NSString]()
         var hotelRoomsValue =  [NSNumber]()
-        //Calendar VC
         var segmentLengthValue = [NSNumber]()
         var selectedDates = [NSDate]()
         var leftDateTimeArrays = NSDictionary()
         var rightDateTimeArrays = NSDictionary()
-        //Budget VC
+        var numberDestinations = NSNumber(value: 1)
+        var nonSpecificDates = NSDictionary()
+        //Budget VC DEPRICATED
         var budgetValue = NSString()
         var expectedRoundtripFare = NSString()
         var expectedNightlyRate = NSString()
-        //Suggested Destination VC
+        //Suggested Destination VC DEPRICATED
         var decidedOnDestinationControlValue = NSString()
         var decidedOnDestinationValue = NSString()
         var suggestDestinationControlValue = NSString()
@@ -1658,11 +1708,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         contacts = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contacts_in_group") as? [NSString] ?? [NSString]()
         contactPhoneNumbers = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contact_phone_numbers") as? [NSString] ?? [NSString]()
         hotelRoomsValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "hotel_rooms") as? [NSNumber] ?? [NSNumber]()
-        //Calendar VC
         segmentLengthValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "Availability_segment_lengths") as? [NSNumber] ?? [NSNumber]()
         selectedDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_dates") as? [NSDate] ?? [NSDate]()
         leftDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "origin_departure_times") as? NSDictionary ?? NSDictionary()
         rightDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "return_departure_times") as? NSDictionary ?? NSDictionary()
+        numberDestinations = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "numberDestinations") as? NSNumber ?? NSNumber()
+        nonSpecificDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "nonSpecificDates") as? NSDictionary ?? NSDictionary()
         //Budget VC
         budgetValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "budget") as? NSString ?? NSString()
         expectedRoundtripFare = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_roundtrip_fare") as? NSString ?? NSString()
@@ -1679,7 +1730,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
