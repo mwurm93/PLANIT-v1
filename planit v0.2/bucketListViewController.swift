@@ -656,6 +656,9 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         // handle this in another thread
         let queue = DispatchQueue.global()
         queue.async() {
+            var alphabeticalBucketListCountries = [String]()
+            var alphabeticalBeenThereCountries = [String]()
+
             let bundle = Bundle.main
             let allOutlines = bundle.paths(forResourcesOfType: "geojson", inDirectory: "country_json_50m")
             for outline in allOutlines {
@@ -679,70 +682,71 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                                                             kMaplyMinVis: 0.005,
                                                             kMaplyMaxVis: 0.6
                                 ])
-                        }
+                        }                                        
+                        attrs.setValue("tbd", forKey: "selectionStatus")
+                        self.theViewC?.addVectors([wgVecObj], desc: self.vectorDict)
                     
-                    
-                    attrs.setValue("tbd", forKey: "selectionStatus")
-                    self.theViewC?.addVectors([wgVecObj], desc: self.vectorDict)
-                    
-                    if self.bucketListCountries.count != 0 {
-//                        var bucketListCountriesAsMaplyVectorObjects = [MaplyVectorObject]()
-                                        if self.bucketListCountries.contains(vecName as! String) {
-//                                            bucketListCountriesAsMaplyVectorObjects.append(wgVecObj)
-                                            if (vecName.description.characters.count) > 0 {
-                                                self.selectedVectorFillDict = [
-                                                    kMaplyColor: UIColor(cgColor: self.bucketListButton.layer.backgroundColor!),
-                                                    kMaplySelectable: true as AnyObject,
-                                                    kMaplyFilled: true as AnyObject,
-                                                    kMaplyVecWidth: 3.0 as AnyObject,
-                                                    kMaplySubdivType: kMaplySubdivGrid as AnyObject,
-                                                    kMaplySubdivEpsilon: 0.15 as AnyObject
-                                                ]
-                                                var AddedFillComponentObj = MaplyComponentObject()
-                                                var AddedOutlineComponentObj = MaplyComponentObject()
-                                                
-                                                attrs.setValue("bucketList", forKey: "selectionStatus")
-                                                
-                                                AddedFillComponentObj = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorFillDict))!
-                                                AddedOutlineComponentObj = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorOutlineDict))!
-                                                self.AddedFillComponentObjs.append(AddedFillComponentObj)
-                                                self.AddedOutlineComponentObjs.append(AddedOutlineComponentObj)
-                                                self.AddedFillVectorObjs.append(wgVecObj)
-                                                self.AddedOutlineVectorObjs.append(wgVecObj)
-                                            }
+                        //COPY
+                        if self.bucketListCountries.count != 0 {
+                            if self.bucketListCountries.contains(vecName as! String) {
+                                if (vecName.description.characters.count) > 0 {
+                                    self.selectedVectorFillDict = [
+                                        kMaplyColor: UIColor(cgColor: self.bucketListButton.layer.backgroundColor!),
+                                        kMaplySelectable: true as AnyObject,
+                                        kMaplyFilled: true as AnyObject,
+                                        kMaplyVecWidth: 3.0 as AnyObject,
+                                        kMaplySubdivType: kMaplySubdivGrid as AnyObject,
+                                        kMaplySubdivEpsilon: 0.15 as AnyObject
+                                    ]
+                                    var AddedFillComponentObj = MaplyComponentObject()
+                                    var AddedOutlineComponentObj = MaplyComponentObject()
+                                    
+                                    attrs.setValue("bucketList", forKey: "selectionStatus")
+                                    
+                                    AddedFillComponentObj = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorFillDict))!
+                                    AddedOutlineComponentObj = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorOutlineDict))!
+                                    self.AddedFillComponentObjs.append(AddedFillComponentObj)
+                                    self.AddedOutlineComponentObjs.append(AddedOutlineComponentObj)
+                                    self.AddedFillVectorObjs.append(wgVecObj)
+                                    self.AddedOutlineVectorObjs.append(wgVecObj)
+                                    alphabeticalBucketListCountries.append(wgVecObj.userObject as! String)
+                                }
+                            }
                         }
-                    }
-                    if self.beenThereCountries.count != 0 {
-//                        var beenThereCountriesAsMaplyVectorObjects = [MaplyVectorObject]()
-                                        if self.beenThereCountries.contains(vecName as! String) {
-//                                            beenThereCountriesAsMaplyVectorObjects.append(wgVecObj)
-                                            if (vecName.description.characters.count) > 0 {
-                                                self.selectedVectorFillDict = [
-                                                    kMaplyColor: UIColor(cgColor: self.beenThereButton.layer.backgroundColor!),
-                                                    kMaplySelectable: true as AnyObject,
-                                                    kMaplyFilled: true as AnyObject,
-                                                    kMaplyVecWidth: 3.0 as AnyObject,
-                                                    kMaplySubdivType: kMaplySubdivGrid as AnyObject,
-                                                    kMaplySubdivEpsilon: 0.15 as AnyObject
-                                                ]
-                                                var AddedFillComponentObj_been = MaplyComponentObject()
-                                                var AddedOutlineComponentObj_been = MaplyComponentObject()
-                                                
-                                                attrs.setValue("beenThere", forKey: "selectionStatus")
-                                                
-                                                AddedFillComponentObj_been = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorFillDict))!
-                                                AddedOutlineComponentObj_been = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorOutlineDict))!
-                                                self.AddedFillComponentObjs_been.append(AddedFillComponentObj_been)
-                                                self.AddedOutlineComponentObjs_been.append(AddedOutlineComponentObj_been)
-                                                self.AddedFillVectorObjs_been.append(wgVecObj)
-                                                self.AddedOutlineVectorObjs_been.append(wgVecObj)
-                                                
-                                            }
+                        if self.beenThereCountries.count != 0 {
+                            if self.beenThereCountries.contains(vecName as! String) {
+                                if (vecName.description.characters.count) > 0 {
+                                    self.selectedVectorFillDict = [
+                                        kMaplyColor: UIColor(cgColor: self.beenThereButton.layer.backgroundColor!),
+                                        kMaplySelectable: true as AnyObject,
+                                        kMaplyFilled: true as AnyObject,
+                                        kMaplyVecWidth: 3.0 as AnyObject,
+                                        kMaplySubdivType: kMaplySubdivGrid as AnyObject,
+                                        kMaplySubdivEpsilon: 0.15 as AnyObject
+                                    ]
+                                    var AddedFillComponentObj_been = MaplyComponentObject()
+                                    var AddedOutlineComponentObj_been = MaplyComponentObject()
+                                    
+                                    attrs.setValue("beenThere", forKey: "selectionStatus")
+                                    
+                                    AddedFillComponentObj_been = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorFillDict))!
+                                    AddedOutlineComponentObj_been = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorOutlineDict))!
+                                    self.AddedFillComponentObjs_been.append(AddedFillComponentObj_been)
+                                    self.AddedOutlineComponentObjs_been.append(AddedOutlineComponentObj_been)
+                                    self.AddedFillVectorObjs_been.append(wgVecObj)
+                                    self.AddedOutlineVectorObjs_been.append(wgVecObj)
+                                    alphabeticalBeenThereCountries.append(wgVecObj.userObject as! String)
+                                }
+                            }
                         }
-                    }
                     }
                 }
             }
+            //Save alphabetically reordered countries to singleton
+            DataContainerSingleton.sharedDataContainer.bucketListCountries = alphabeticalBucketListCountries
+            DataContainerSingleton.sharedDataContainer.beenThereCountries = alphabeticalBeenThereCountries
+            self.bucketListCountries = alphabeticalBucketListCountries
+            self.beenThereCountries = alphabeticalBeenThereCountries
         }
     }
     
