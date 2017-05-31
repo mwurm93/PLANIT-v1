@@ -1013,6 +1013,13 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         tripNameLabel.resignFirstResponder()
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        
+        if textField == tripNameLabel {
+            SavedPreferencesForTrip["trip_name"] = tripNameLabel.text
+            //Save
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
+        
         let segmentLengthValue = SavedPreferencesForTrip["Availability_segment_lengths"] as! [NSNumber]
         let nonSpecificDatesValue = SavedPreferencesForTrip["nonSpecificDates"] as! NSDictionary
         if let nonSpecificDuration = nonSpecificDatesValue["duration"] as? String  {

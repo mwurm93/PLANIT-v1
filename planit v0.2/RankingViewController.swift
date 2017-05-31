@@ -104,6 +104,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
         // Hide the keyboard.
         tripNameLabel.resignFirstResponder()
+        if textField == tripNameLabel {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["trip_name"] = tripNameLabel.text
+            //Save
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
         return true
     }
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {

@@ -249,6 +249,14 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        //Save trip name
+        if textField == tripNameLabel {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["trip_name"] = tripNameLabel.text
+            //Save
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
+        
         DataContainerSingleton.sharedDataContainer.firstName = firstName.text
         DataContainerSingleton.sharedDataContainer.lastName = lastName.text
         DataContainerSingleton.sharedDataContainer.emailAddress = emailAddress.text
