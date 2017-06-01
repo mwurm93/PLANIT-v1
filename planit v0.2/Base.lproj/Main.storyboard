@@ -4206,7 +4206,7 @@
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </objects>
-            <point key="canvasLocation" x="846" y="2096"/>
+            <point key="canvasLocation" x="876" y="2096"/>
         </scene>
         <!--Flight Results View Controller-->
         <scene sceneID="Lvw-sP-N3u">
@@ -4254,7 +4254,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                 <state key="normal" title="&lt;"/>
                                 <connections>
-                                    <segue destination="nd6-3o-Pa6" kind="show" animates="NO" id="zWM-he-GTg"/>
+                                    <action selector="backButtonTouchedUpInside:" destination="pop-1B-VO6" eventType="touchUpInside" id="tf2-CB-XBP"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DER-ep-qYl">
@@ -4501,11 +4501,12 @@
                         <outlet property="sortButton" destination="ZEF-nt-BDs" id="9Eg-8q-Pcf"/>
                         <segue destination="oN0-zx-La3" kind="show" identifier="flightResultsToActivities" animates="NO" id="dLl-AA-fAi"/>
                         <segue destination="6Nf-ZD-7fF" kind="show" identifier="flightResultsToRanking" animates="NO" id="aww-Ip-yzO"/>
+                        <segue destination="nd6-3o-Pa6" kind="show" identifier="flightResultsToFlightSearch" animates="NO" id="XIs-yD-L7P"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YyM-ds-ZOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628" y="2095.5022488755626"/>
+            <point key="canvasLocation" x="1628" y="2096"/>
         </scene>
         <!--Hotel Preferences View Controller-->
         <scene sceneID="Boy-fV-DLn">
@@ -5035,7 +5036,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="b3w-20-3wQ"/>
         <segue reference="dLl-AA-fAi"/>
-        <segue reference="zWM-he-GTg"/>
+        <segue reference="XIs-yD-L7P"/>
         <segue reference="aww-Ip-yzO"/>
         <segue reference="R8r-yB-rJ1"/>
         <segue reference="cWA-9L-HdA"/>

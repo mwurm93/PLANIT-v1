@@ -13,19 +13,20 @@ import SMCalloutView
 class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, GMSMapViewDelegate, SMCalloutViewDelegate, UIGestureRecognizerDelegate {
     
     // MARK: Class properties
-    //Load flight results from server
     var selectedIndex = IndexPath(row: 0, section: 0)
-    var hotelResultsDictionary = [["hotelName":"The W"],["hotelName":"Hilton"],["hotelName":"Marriott"],["hotelName":"Holiday Inn"],["hotelName":"VRBO"]]
     
     var sectionTitles = ["Group's top hotel", "Alternatives"]
     var effect:UIVisualEffect!
     var hotelStockPhotos = [#imageLiteral(resourceName: "hotelPoolStockPhoto"),#imageLiteral(resourceName: "hotelRoomStockPhoto")]
     
-    var sortFilterFlightsCalloutView = SMCalloutView()
-    let sortFilterFlightsCalloutTableView = UITableView(frame: CGRect.zero, style: .plain)
+    var sortFilterHotelsCalloutView = SMCalloutView()
+    let sortFilterHotelsCalloutTableView = UITableView(frame: CGRect.zero, style: .plain)
     var calloutTableViewMode = "sort"
     let sortFirstLevelOptions = ["Price","Rating"]
     let filterFirstLevelOptions = ["Vicinity to...","Amenities","Rating","Clear filters"]
+    var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
+    var hotelResultsDictionary = [Dictionary<String, Any>]()
+    let rankedPotentialTripsDictionaryArrayIndex = 0
     
     // MARK: Outlets
     @IBOutlet weak var recommendationRankingTableView: UITableView!
@@ -43,17 +44,38 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
+                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[rankedPotentialTripsDictionaryArrayIndex] as? Dictionary<String, AnyObject> {
+                    if let thisTripHotelResults = thisTripDict["hotelOptions"] {
+                        if thisTripHotelResults.count > 0 {
+                            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = thisTripHotelResults
+                        } else {
+                            //Load from server
+                            let hotelOptionsDictionaryFromServer = [["hotelName":"The W"],["hotelName":"Hilton"],["hotelName":"Marriott"],["hotelName":"Holiday Inn"],["hotelName":"VRBO"]]
+                            
+                            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = hotelOptionsDictionaryFromServer
+                        }
+                    }
+                }
+            }
+        }
+        //Create shorter name
+        hotelResultsDictionary = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] as! [Dictionary<String, Any>]
+
         //Set up sort and filter callout views
-        self.sortFilterFlightsCalloutView.delegate = self
-        self.sortFilterFlightsCalloutView.isHidden = true
+        self.sortFilterHotelsCalloutView.delegate = self
+        self.sortFilterHotelsCalloutView.isHidden = true
         
-        sortFilterFlightsCalloutTableView.delegate = self
-        sortFilterFlightsCalloutTableView.dataSource = self
-        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 100, height: 100)
-        sortFilterFlightsCalloutTableView.isEditing = false
-        sortFilterFlightsCalloutTableView.allowsMultipleSelection = false
-        sortFilterFlightsCalloutTableView.backgroundColor = UIColor.clear
-        sortFilterFlightsCalloutTableView.layer.backgroundColor = UIColor.clear.cgColor
+        sortFilterHotelsCalloutTableView.delegate = self
+        sortFilterHotelsCalloutTableView.dataSource = self
+        sortFilterHotelsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 100, height: 100)
+        sortFilterHotelsCalloutTableView.isEditing = false
+        sortFilterHotelsCalloutTableView.allowsMultipleSelection = false
+        sortFilterHotelsCalloutTableView.backgroundColor = UIColor.clear
+        sortFilterHotelsCalloutTableView.layer.backgroundColor = UIColor.clear.cgColor
         
         //Set up popupblurview
         effect = popupBlurView.effect
@@ -66,8 +88,6 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         recommendationRankingTableView.isEditing = true
         recommendationRankingTableView.allowsSelectionDuringEditing = true
         recommendationRankingTableView.separatorColor = UIColor.white
-        
-        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         
         self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.white, for: .normal)
@@ -114,7 +134,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         if tableView == recommendationRankingTableView {
             return 2
         }
-        // else if tableView == sortFilterFlightsCalloutTableView
+        // else if tableView == sortFilterHotelsCalloutTableView
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -126,7 +146,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
             let numberOfRows = hotelResultsDictionary.count
             return numberOfRows - 1
         }
-        // else if tableView == sortFilterFlightsCalloutTableView
+        // else if tableView == sortFilterHotelsCalloutTableView
         else if calloutTableViewMode == "sort" {
             return sortFirstLevelOptions.count
         }
@@ -166,11 +186,11 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                 addedRow += 1
             }
             
-            cell.hotelName.text = hotelsForRow["hotelName"]
+            cell.hotelName.text = hotelsForRow["hotelName"] as! String
             
             return cell
         }
-        // else if tableView == sortFilterFlightsCalloutTableView
+        // else if tableView == sortFilterHotelsCalloutTableView
         var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "cellID")
         
         if cell == nil {
@@ -200,10 +220,10 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.recommendationRankingTableView.beginUpdates()
         self.recommendationRankingTableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         self.recommendationRankingTableView.endUpdates()
-        } else if tableView == sortFilterFlightsCalloutTableView {
+        } else if tableView == sortFilterHotelsCalloutTableView {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
-                self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
-                self.sortFilterFlightsCalloutView.isHidden = true
+                self.sortFilterHotelsCalloutView.dismissCallout(animated: true)
+                self.sortFilterHotelsCalloutView.isHidden = true
                 //HANDLE SORT / FILTER SELECTION
             })
         }
@@ -225,7 +245,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         if tableView == recommendationRankingTableView {
             return true
         }
-        // else if tableView == sortFilterFlightsCalloutTableView
+        // else if tableView == sortFilterHotelsCalloutTableView
         return false
     }
     
@@ -251,6 +271,13 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                 let movedRowDictionary = self.hotelResultsDictionary[sourceIndexPath.row + 1]
                 self.hotelResultsDictionary.remove(at: sourceIndexPath.row + 1)
                 self.hotelResultsDictionary.insert(movedRowDictionary, at: 0)
+                
+                let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+                self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = self.hotelResultsDictionary
+                SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
+                //Save
+                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+
                 tableView.reloadData()
                 
                 self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
@@ -270,6 +297,13 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                 let movedRowDictionary = self.hotelResultsDictionary[sourceIndexPath.row]
                 self.hotelResultsDictionary.remove(at: sourceIndexPath.row)
                 self.hotelResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row)
+                
+                let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+                self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = self.hotelResultsDictionary
+                SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
+                //Save
+                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+
                 tableView.reloadData()
                 
                 self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
@@ -283,6 +317,12 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
             let movedRowDictionary = hotelResultsDictionary[sourceIndexPath.row + 1]
             hotelResultsDictionary.remove(at: sourceIndexPath.row + 1)
             hotelResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row + 1)
+            
+            let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = hotelResultsDictionary
+            SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
+            //Save
+            self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         }
         tableView.reloadData()
     }
@@ -294,7 +334,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                 return 46
             }
         }
-        // else if tableView == sortFilterFlightsCalloutTableView
+        // else if tableView == sortFilterHotelsCalloutTableView
         return 22
     }
     
@@ -311,7 +351,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         if tableView == recommendationRankingTableView {
             return sectionTitles[section]
         }
-        // else if tableView == sortFilterFlightsCalloutTableView
+        // else if tableView == sortFilterHotelsCalloutTableView
         return nil
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -448,39 +488,39 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     }
 
     @IBAction func sortButtonTouchedUpInside(_ sender: Any) {
-        if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "filter"){
+        if self.sortFilterHotelsCalloutView.isHidden == true || (self.sortFilterHotelsCalloutView.isHidden == false && calloutTableViewMode == "filter"){
             calloutTableViewMode = "sort"
-            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 109, width: 140, height: 22 * sortFirstLevelOptions.count)
-            sortFilterFlightsCalloutTableView.reloadData()
-            self.sortFilterFlightsCalloutView.contentView = sortFilterFlightsCalloutTableView
-            self.sortFilterFlightsCalloutView.isHidden = false
-            self.sortFilterFlightsCalloutView.animation(withType: .stretch, presenting: true)
-            self.sortFilterFlightsCalloutView.permittedArrowDirection = .up
+            sortFilterHotelsCalloutTableView.frame = CGRect(x: 0, y: 109, width: 140, height: 22 * sortFirstLevelOptions.count)
+            sortFilterHotelsCalloutTableView.reloadData()
+            self.sortFilterHotelsCalloutView.contentView = sortFilterHotelsCalloutTableView
+            self.sortFilterHotelsCalloutView.isHidden = false
+            self.sortFilterHotelsCalloutView.animation(withType: .stretch, presenting: true)
+            self.sortFilterHotelsCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: sortButton.frame.midX, y: CGFloat(125))
-            self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            calloutRect.origin = CGPoint(x: sortButton.frame.midX, y: CGFloat(109))
+            self.sortFilterHotelsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
             
         } else {
-            self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
-            self.sortFilterFlightsCalloutView.isHidden = true
+            self.sortFilterHotelsCalloutView.dismissCallout(animated: true)
+            self.sortFilterHotelsCalloutView.isHidden = true
         }
     }
     @IBAction func filterButtonTouchedUpInsider(_ sender: Any) {
-        if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "sort") {
+        if self.sortFilterHotelsCalloutView.isHidden == true || (self.sortFilterHotelsCalloutView.isHidden == false && calloutTableViewMode == "sort") {
             calloutTableViewMode = "filter"
-            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 109, width: 120, height: 22 * filterFirstLevelOptions.count)
-            sortFilterFlightsCalloutTableView.reloadData()
-            self.sortFilterFlightsCalloutView.contentView = sortFilterFlightsCalloutTableView
-            self.sortFilterFlightsCalloutView.isHidden = false
-            self.sortFilterFlightsCalloutView.animation(withType: .stretch, presenting: true)
-            self.sortFilterFlightsCalloutView.permittedArrowDirection = .up
+            sortFilterHotelsCalloutTableView.frame = CGRect(x: 0, y: 109, width: 120, height: 22 * filterFirstLevelOptions.count)
+            sortFilterHotelsCalloutTableView.reloadData()
+            self.sortFilterHotelsCalloutView.contentView = sortFilterHotelsCalloutTableView
+            self.sortFilterHotelsCalloutView.isHidden = false
+            self.sortFilterHotelsCalloutView.animation(withType: .stretch, presenting: true)
+            self.sortFilterHotelsCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: filterButton.frame.midX, y: CGFloat(125))
-            self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            calloutRect.origin = CGPoint(x: filterButton.frame.midX, y: CGFloat(109))
+            self.sortFilterHotelsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
             
         } else {
-            self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
-            self.sortFilterFlightsCalloutView.isHidden = true
+            self.sortFilterHotelsCalloutView.dismissCallout(animated: true)
+            self.sortFilterHotelsCalloutView.isHidden = true
         }
     }
 }

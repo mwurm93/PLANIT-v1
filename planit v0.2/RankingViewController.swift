@@ -61,6 +61,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
             }
         }
+        SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
+        //Save
+        self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+
         
         self.readyToBookButton.setTitle("Review flights to \(String(describing: rankedPotentialTripsDictionary[0]["destination"]!))", for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.white, for: .normal)
