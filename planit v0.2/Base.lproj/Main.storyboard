@@ -3230,16 +3230,23 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="addressCity" destination="AQ4-EO-EJ8" id="hNj-hf-th3"/>
+                        <outlet property="addressLineOne" destination="493-cT-6Cg" id="vr8-9d-2My"/>
+                        <outlet property="addressLineTwo" destination="l8a-oh-bWw" id="LMH-7p-Wjb"/>
+                        <outlet property="addressState" destination="NeD-St-XML" id="SBU-sx-4Ts"/>
+                        <outlet property="addressZipCode" destination="uI8-3C-Xpw" id="dG0-js-xa6"/>
                         <outlet property="birthdate" destination="fW5-pv-a9m" id="mCC-2M-AcN"/>
                         <outlet property="bookOnlyIfTheyDoInfoButton" destination="js9-Ot-WYO" id="6Bl-wQ-pJR"/>
                         <outlet property="bookOnlyIfTheyDoInfoView" destination="Ldb-9Z-cE4" id="i6S-fW-z9f"/>
                         <outlet property="bookThisTripButton" destination="Dcc-Bx-hVv" id="r7e-f3-bkN"/>
+                        <outlet property="cardNumber" destination="AQU-hZ-M35" id="f31-nI-A8c"/>
                         <outlet property="contactsCollectionView" destination="5PN-hy-72c" id="cCT-aR-6rk"/>
                         <outlet property="emailAddress" destination="XC2-T1-pLz" id="tfZ-Rq-7Ai"/>
                         <outlet property="firstName" destination="ZKF-r5-GQw" id="mii-cP-ncH"/>
                         <outlet property="gender" destination="J9M-DQ-oNn" id="89N-cr-RLs"/>
                         <outlet property="knownTravelerNumber" destination="3ch-2R-HiA" id="8Oh-K6-2ZW"/>
                         <outlet property="lastName" destination="QSd-fW-llU" id="XjV-ZQ-OTy"/>
+                        <outlet property="nameOnCard" destination="PRY-d8-ZVe" id="1RQ-ZC-iAL"/>
                         <outlet property="passportNumber" destination="6hw-ht-fQ6" id="tzi-qc-6Pb"/>
                         <outlet property="phone" destination="LSV-l5-xlH" id="LVy-tI-qbU"/>
                         <outlet property="popupBackgroundView" destination="ETa-su-EtM" id="9n9-3Y-48i"/>

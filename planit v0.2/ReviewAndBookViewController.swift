@@ -11,9 +11,6 @@ import Contacts
 
 class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource,UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
 
-    var destinationLabelViaSegue: String?
-    var tripPriceViaSegue: String?
-    
     // MARK: Outlets
 
     @IBOutlet weak var contactsCollectionView: UICollectionView!
@@ -30,19 +27,33 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     @IBOutlet weak var bookOnlyIfTheyDoInfoView: UIView!
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     @IBOutlet weak var tripNameLabel: UITextField!
+    @IBOutlet weak var nameOnCard: UITextField!
+    @IBOutlet weak var cardNumber: UITextField!
     
     // Outlets for buttons
-    @IBOutlet weak var adjustTravelLogisticsButton: UIButton!
     @IBOutlet weak var bookThisTripButton: UIButton!
     @IBOutlet weak var bookOnlyIfTheyDoInfoButton: UIButton!
+    @IBOutlet weak var addressLineOne: UITextField!
+    @IBOutlet weak var addressLineTwo: UITextField!
+    @IBOutlet weak var addressCity: UITextField!
+    @IBOutlet weak var addressState: UITextField!
+    @IBOutlet weak var addressZipCode: UITextField!
     
     // Set up vars for Contacts - COPY
     var contacts: [CNContact]?
     var contactIDs: [NSString]?
     fileprivate var addressBookStore: CNContactStore!
+    var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
+            }
+        }
         
         //Load the values from our shared data container singleton
         self.tripNameLabel.delegate = self
@@ -170,6 +181,56 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         let birthdateLabelPlaceholder = birthdate!.value(forKey: "placeholderLabel") as? UILabel
         birthdateLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
         
+        nameOnCard.layer.borderWidth = 0.5
+        nameOnCard.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
+        nameOnCard.layer.masksToBounds = true
+        nameOnCard.layer.cornerRadius = 5
+        let nameOnCardLabelPlaceholder = nameOnCard!.value(forKey: "placeholderLabel") as? UILabel
+        nameOnCardLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+
+        cardNumber.layer.borderWidth = 0.5
+        cardNumber.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
+        cardNumber.layer.masksToBounds = true
+        cardNumber.layer.cornerRadius = 5
+        let cardNumberLabelPlaceholder = cardNumber!.value(forKey: "placeholderLabel") as? UILabel
+        cardNumberLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+
+        addressLineOne.layer.borderWidth = 0.5
+        addressLineOne.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
+        addressLineOne.layer.masksToBounds = true
+        addressLineOne.layer.cornerRadius = 5
+        let addressLineOneLabelPlaceholder = addressLineOne!.value(forKey: "placeholderLabel") as? UILabel
+        addressLineOneLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+
+        addressLineTwo.layer.borderWidth = 0.5
+        addressLineTwo.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
+        addressLineTwo.layer.masksToBounds = true
+        addressLineTwo.layer.cornerRadius = 5
+        let addressLineTwoLabelPlaceholder = addressLineTwo!.value(forKey: "placeholderLabel") as? UILabel
+        addressLineTwoLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+
+        addressCity.layer.borderWidth = 0.5
+        addressCity.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
+        addressCity.layer.masksToBounds = true
+        addressCity.layer.cornerRadius = 5
+        let addressCityLabelPlaceholder = addressCity!.value(forKey: "placeholderLabel") as? UILabel
+        addressCityLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+
+        addressState.layer.borderWidth = 0.5
+        addressState.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
+        addressState.layer.masksToBounds = true
+        addressState.layer.cornerRadius = 5
+        let addressStateLabelPlaceholder = addressState!.value(forKey: "placeholderLabel") as? UILabel
+        addressStateLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+
+        addressZipCode.layer.borderWidth = 0.5
+        addressZipCode.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
+        addressZipCode.layer.masksToBounds = true
+        addressZipCode.layer.cornerRadius = 5
+        let addressZipCodeLabelPlaceholder = addressZipCode!.value(forKey: "placeholderLabel") as? UILabel
+        addressZipCodeLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+
+        
     }
     
     override func viewWillAppear(_ animated: Bool)
@@ -245,6 +306,14 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         redressNumber.resignFirstResponder()
         birthdate.resignFirstResponder()
         tripNameLabel.resignFirstResponder()
+        nameOnCard.resignFirstResponder()
+        cardNumber.resignFirstResponder()
+        addressLineOne.resignFirstResponder()
+        addressLineTwo.resignFirstResponder()
+        addressCity.resignFirstResponder()
+        addressState.resignFirstResponder()
+        addressZipCode.resignFirstResponder()
+
         return true
     }
     
@@ -278,11 +347,13 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "itemizedItineraryPrototypeCell", for: indexPath) as! itemizedItineraryTableViewCell
         
-        cell.destinationLabel.text = destinationLabelViaSegue
-        cell.totalPriceLabel.text = tripPriceViaSegue
-        cell.accomodationLabel.text = "5 nights at the Westin"
+        let topTrip = rankedPotentialTripsDictionary[0] 
+        
+        cell.destinationLabel.text = topTrip["destination"] as? String
+        cell.totalPriceLabel.text = "$1,000"
+        cell.accomodationLabel.text = "5 nights"
         cell.accomodationPriceLabel.text = "$700"
-        cell.TravelLabel.text = "Roundtrip on Southwest"
+        cell.TravelLabel.text = "Roundtrip flights"
         cell.travelPriceLabel.text = "$300"
         
         cell.layer.cornerRadius = 5
