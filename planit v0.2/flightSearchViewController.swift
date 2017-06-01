@@ -11,6 +11,9 @@ import JTAppleCalendar
 
 class flightSearchViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     
+    //Vars passed from segue
+    var rankedPotentialTripsDictionaryArrayIndex: Int?
+    
     //MARK: Outlets
     @IBOutlet weak var underline: UIImageView!
     @IBOutlet weak var departureOrigin: UITextField!
@@ -40,9 +43,17 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     var mostRecentSelectedCellDate = NSDate()
     var dateEditing = "departureDate"
     var searchMode = "roundtrip"
+    var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
+            }
+        }
     
         underline.layer.frame = CGRect(x: 139, y: 49, width: 98, height: 51)
         returnOrigin.isHidden = true
@@ -52,8 +63,6 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         returnDate.isHidden = false
         returnDateLabel.isHidden = false
         
-        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-        let topTrips = SavedPreferencesForTrip["top_trips"] as! [String]
         if let leftDateTimeArrays = SavedPreferencesForTrip["origin_departure_times"]  as? NSMutableDictionary {
             if let rightDateTimeArrays = SavedPreferencesForTrip["return_departure_times"] as? NSMutableDictionary {
                     let departureDictionary = leftDateTimeArrays as Dictionary
@@ -97,8 +106,8 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         departureDestination.layer.masksToBounds = true
         departureDestination.layer.cornerRadius = 5
         
-        //PLACEHODLER UNTIL DATA MODEL
-        let departureDestinationValue = "MIA"
+        
+        let departureDestinationValue = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as! String
         departureDestination.text =  "\(departureDestinationValue)"
         let departureDestinationLabelPlaceholder = departureDestination!.value(forKey: "placeholderLabel") as? UILabel
         departureDestinationLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
@@ -116,8 +125,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         returnOrigin.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         returnOrigin.layer.masksToBounds = true
         returnOrigin.layer.cornerRadius = 5
-        //PLACEHODLER UNTIL DATA MODEL
-        let returnOriginValue = "MIA"
+        let returnOriginValue = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as! String
         returnOrigin.text =  "\(returnOriginValue)"
         let returnOriginLabelPlaceholder = returnOrigin!.value(forKey: "placeholderLabel") as? UILabel
         returnOriginLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
@@ -176,6 +184,15 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
             }
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "searchFlightsToFlightResults" {
+            let destination = segue.destination as? flightResultsViewController
+            destination?.rankedPotentialTripsDictionaryArrayIndex = rankedPotentialTripsDictionaryArrayIndex
+        }
+    }
+
+    
     
     // MARK: UITextFieldDelegate
     func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
@@ -303,9 +320,10 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         let selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [NSString] ?? [NSString]()
         //Ranking VC
         let topTrips = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "top_trips") as? [NSString] ?? [NSString]()
+        let rankedPotentialTripsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionary") as? [NSDictionary] ?? [NSDictionary]()
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
     }
@@ -400,6 +418,9 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     }
     @IBAction func subviewDoneButtonTouchedUpInside(_ sender: Any) {
         animateOutSubview()
+    }
+    @IBAction func searchFlightsButtonTouchedUpInside(_ sender: Any) {
+        super.performSegue(withIdentifier: "searchFlightsToFlightResults", sender: self)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {

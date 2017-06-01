@@ -11,9 +11,11 @@ import SMCalloutView
 
 class flightResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SMCalloutViewDelegate, UIGestureRecognizerDelegate {
     
+    //Vars passed from segue
+    var rankedPotentialTripsDictionaryArrayIndex: Int?
+    
     //MARK: Class vars
     //Load flight results from server
-    var flightResultsDictionary = [["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"AAA","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"BBB","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"CCC","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"DDD","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"EEE","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"FFF","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"GGG","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"],["departureDepartureTime":"12:00a","departureOrigin":"JFK","departureArrivalTime":"12:00","departureDestination":"HHH","returnDepartureTime":"12:00a","returnOrigin":"JFK","returnArrivalTime":"12:00","returnDestination":"MIA","totalPrice":"8,888"]]
     var selectedIndex = IndexPath(row: 0, section: 0)
     var sectionTitles = ["Selected flight", "Alternatives"]
     var sortFilterFlightsCalloutView = SMCalloutView()
@@ -21,6 +23,9 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     var calloutTableViewMode = "sort"
     let sortFirstLevelOptions = ["Price","Duration","Landing Time", "Departure Time"]
     let filterFirstLevelOptions = ["Stops","Airlines","Clear filters"]
+    var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
+    var flightResultsDictionary = [Dictionary<String, Any>]()
+
     
     //MARK: Outlets
     @IBOutlet weak var flightResultsTableView: UITableView!
@@ -35,6 +40,26 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
+            }
+        }
+        
+        var flightOptionsDictionary = [["departureDepartureTime":"1:00a","departureOrigin":"JFK","departureArrivalTime":"2:00a","departureDestination":"AAA","returnDepartureTime":"1:00a","returnOrigin":"JFK","returnArrivalTime":"2:00a","returnDestination":"MIA","totalPrice":"1,000"],["departureDepartureTime":"2:00a","departureOrigin":"JFK","departureArrivalTime":"3:00a","departureDestination":"BBB","returnDepartureTime":"2:00a","returnOrigin":"JFK","returnArrivalTime":"3:00a","returnDestination":"MIA","totalPrice":"1,100"],["departureDepartureTime":"3:00a","departureOrigin":"JFK","departureArrivalTime":"4:00a","departureDestination":"CCC","returnDepartureTime":"3:00a","returnOrigin":"JFK","returnArrivalTime":"4:00a","returnDestination":"MIA","totalPrice":"1,200"],["departureDepartureTime":"4:00a","departureOrigin":"JFK","departureArrivalTime":"5:00a","departureDestination":"DDD","returnDepartureTime":"4:00a","returnOrigin":"JFK","returnArrivalTime":"5:00a","returnDestination":"MIA","totalPrice":"1,300"],["departureDepartureTime":"5:00a","departureOrigin":"JFK","departureArrivalTime":"6:00a","departureDestination":"EEE","returnDepartureTime":"5:00a","returnOrigin":"JFK","returnArrivalTime":"6:00a","returnDestination":"MIA","totalPrice":"1,400"],["departureDepartureTime":"6:00a","departureOrigin":"JFK","departureArrivalTime":"7:00a","departureDestination":"FFF","returnDepartureTime":"6:00a","returnOrigin":"JFK","returnArrivalTime":"7:00a","returnDestination":"MIA","totalPrice":"1,500"],["departureDepartureTime":"7:00a","departureOrigin":"JFK","departureArrivalTime":"8:00a","departureDestination":"GGG","returnDepartureTime":"7:00a","returnOrigin":"JFK","returnArrivalTime":"8:00a","returnDestination":"MIA","totalPrice":"1,600"],["departureDepartureTime":"8:00a","departureOrigin":"JFK","departureArrivalTime":"9:00a","departureDestination":"HHH","returnDepartureTime":"8:00a","returnOrigin":"JFK","returnArrivalTime":"9:00a","returnDestination":"MIA","totalPrice":"1,700"]]
+        
+        for index in 0 ... flightOptionsDictionary.count - 1 {
+            flightOptionsDictionary[index]["departureOrigin"] = DataContainerSingleton.sharedDataContainer.homeAirport
+            flightOptionsDictionary[index]["departureDestination"] = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as? String
+            flightOptionsDictionary[index]["returnDestination"] = DataContainerSingleton.sharedDataContainer.homeAirport
+            flightOptionsDictionary[index]["returnOrigin"] = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as? String
+        }
+
+        rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["flightOptions"] = flightOptionsDictionary
+        
+        flightResultsDictionary = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["flightOptions"] as! [Dictionary<String, Any>]
         
         self.sortFilterFlightsCalloutView.delegate = self
         self.sortFilterFlightsCalloutView.isHidden = true
@@ -150,15 +175,15 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
                 addedRow += 1
             }
             
-            cell.departureOrigin.text = flightsForRow["departureOrigin"]
-            cell.departureDestination.text = flightsForRow["departureDestination"]
-            cell.departureDepartureTime.text = flightsForRow["departureDepartureTime"]
-            cell.departureArrivalTime.text = flightsForRow["departureArrivalTime"]
-            cell.returnDepartureTime.text = flightsForRow["returnDepartureTime"]
-            cell.returnOrigin.text = flightsForRow["returnOrigin"]
-            cell.returnArrivalTime.text = flightsForRow["returnArrivalTime"]
-            cell.returnDestination.text = flightsForRow["returnDestination"]
-            cell.totalPrice.text = flightsForRow["totalPrice"]
+            cell.departureOrigin.text = flightsForRow["departureOrigin"] as? String
+            cell.departureDestination.text = flightsForRow["departureDestination"] as? String
+            cell.departureDepartureTime.text = flightsForRow["departureDepartureTime"] as? String
+            cell.departureArrivalTime.text = flightsForRow["departureArrivalTime"] as? String
+            cell.returnDepartureTime.text = flightsForRow["returnDepartureTime"] as? String
+            cell.returnOrigin.text = flightsForRow["returnOrigin"] as? String
+            cell.returnArrivalTime.text = flightsForRow["returnArrivalTime"] as? String
+            cell.returnDestination.text = flightsForRow["returnDestination"] as? String
+            cell.totalPrice.text = flightsForRow["totalPrice"] as? String
             
             return cell
         }
@@ -233,14 +258,41 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             let movedRowDictionary = flightResultsDictionary[sourceIndexPath.row + 1]
             flightResultsDictionary.remove(at: sourceIndexPath.row + 1)
             flightResultsDictionary.insert(movedRowDictionary, at: 0)
+            
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+                var thisTripDict = rankedPotentialTripsDictionaryFromSingleton[rankedPotentialTripsDictionaryArrayIndex!] as! Dictionary<String, AnyObject>
+                thisTripDict["flightOptions"] = flightResultsDictionary as AnyObject
+                //Save
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            }
+            tableView.reloadData()
         } else if sourceIndexPath == IndexPath(row: 0, section: 0) {
             let movedRowDictionary = flightResultsDictionary[sourceIndexPath.row]
             flightResultsDictionary.remove(at: sourceIndexPath.row)
             flightResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row)
+            
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+                var thisTripDict = rankedPotentialTripsDictionaryFromSingleton[rankedPotentialTripsDictionaryArrayIndex!] as! Dictionary<String, AnyObject>
+                thisTripDict["flightOptions"] = flightResultsDictionary as AnyObject
+                //Save
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            }
+            tableView.reloadData()
         } else {
             let movedRowDictionary = flightResultsDictionary[sourceIndexPath.row + 1]
             flightResultsDictionary.remove(at: sourceIndexPath.row + 1)
             flightResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row + 1)
+            
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+                var thisTripDict = rankedPotentialTripsDictionaryFromSingleton[rankedPotentialTripsDictionaryArrayIndex!] as! Dictionary<String, AnyObject>
+                thisTripDict["flightOptions"] = flightResultsDictionary as AnyObject
+                //Save
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            }
+            tableView.reloadData()
         }
         tableView.reloadData()
     }
@@ -309,12 +361,56 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+    func fetchSavedPreferencesForTrip() -> NSMutableDictionary {
+        //Update preference vars if an existing trip
+        //Trip status
+        let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? 0 as NSNumber
+        let finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
+        //New Trip VC
+        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? NSString ?? NSString()
+        let contacts = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contacts_in_group") as? [NSString] ?? [NSString]()
+        let contactPhoneNumbers = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contact_phone_numbers") as? [NSString] ?? [NSString]()
+        let hotelRoomsValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "hotel_rooms") as? [NSNumber] ?? [NSNumber]()
+        let segmentLengthValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "Availability_segment_lengths") as? [NSNumber] ?? [NSNumber]()
+        let selectedDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_dates") as? [NSDate] ?? [NSDate]()
+        let leftDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "origin_departure_times") as? NSDictionary ?? NSDictionary()
+        let rightDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "return_departure_times") as? NSDictionary ?? NSDictionary()
+        let numberDestinations = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "numberDestinations") as? NSNumber ?? NSNumber()
+        let nonSpecificDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "nonSpecificDates") as? NSDictionary ?? NSDictionary()
+        //Budget VC
+        let budgetValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "budget") as? NSString ?? NSString()
+        let expectedRoundtripFare = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_roundtrip_fare") as? NSString ?? NSString()
+        let expectedNightlyRate = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_nightly_rate") as? NSString ?? NSString()
+        //Suggested Destination VC
+        let decidedOnDestinationControlValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "decided_destination_control") as? NSString ?? NSString()
+        let decidedOnDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "decided_destination_value") as? NSString ?? NSString()
+        let suggestDestinationControlValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggest_destination_control") as? NSString ?? NSString()
+        let suggestedDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggested_destination") as? NSString ?? NSString()
+        //Activities VC
+        let selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [NSString] ?? [NSString]()
+        //Ranking VC
+        let topTrips = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "top_trips") as? [NSString] ?? [NSString]()
+        let rankedPotentialTripsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionary") as? [NSDictionary] ?? [NSDictionary]()
+        
+        //SavedPreferences
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary] as NSMutableDictionary
+        
+        return fetchedSavedPreferencesForTrip
+    }
+    func saveUpdatedExistingTrip(SavedPreferencesForTrip: NSMutableDictionary) {
+        var existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        let currentTripIndex = DataContainerSingleton.sharedDataContainer.currenttrip!
+        existing_trips?[currentTripIndex] = SavedPreferencesForTrip as NSDictionary
+        DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
+    }
+    
     //MARK: Actions
     @IBAction func selectFlightButtonTouchedUpInside(_ sender: Any) {
-        performSegue(withIdentifier: "flightResultsToActivities", sender: self)
-        // if destination != topDestination {
-//        performSegue(withIdentifier: "flightResultsToRanking", sender: self)
-//    }
+        if rankedPotentialTripsDictionaryArrayIndex == 0 {
+            super.performSegue(withIdentifier: "flightResultsToActivities", sender: self)
+        } else {
+            super.performSegue(withIdentifier: "flightResultsToRanking", sender: self)
+        }
     }
     
     @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {

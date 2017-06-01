@@ -2253,9 +2253,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" title="Move forward with [destination]"/>
                                 <connections>
+                                    <action selector="moveForwardButtonTouchedUpInside:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="maB-p9-xZn"/>
                                     <action selector="nextButtonPressed:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="lOw-dr-379"/>
-                                    <action selector="readyToBookButtonPressed:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="9mG-mb-BcC"/>
-                                    <segue destination="nd6-3o-Pa6" kind="show" animates="NO" id="frc-Ur-IXR"/>
                                 </connections>
                             </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2kF-cG-IG6">
@@ -2340,7 +2339,6 @@
                                                     <state key="normal" image="change"/>
                                                     <connections>
                                                         <action selector="chooseFlightsButtonTouchedUpInside:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="nx0-dI-z0U"/>
-                                                        <segue destination="nd6-3o-Pa6" kind="show" animates="NO" id="1lt-od-qL5"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="WWW" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Gm-3T-l7X">
@@ -2459,6 +2457,7 @@
                         <outlet property="recommendationRankingTableView" destination="s8X-dS-Z6n" id="gut-bg-e4G"/>
                         <outlet property="returnToSwipingButton" destination="se9-wg-6Zg" id="f5B-77-4XD"/>
                         <outlet property="tripNameLabel" destination="hyB-Sf-eHs" id="gaI-Ml-xnf"/>
+                        <segue destination="nd6-3o-Pa6" kind="show" identifier="changeFlightsButtonToFlightSearch" animates="NO" id="cNU-Li-sIA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="efk-CD-lGv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2548,6 +2547,9 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                 <state key="normal" title="&lt;"/>
+                                <connections>
+                                    <segue destination="oN0-zx-La3" kind="show" animates="NO" action="showDetailViewController:sender:" id="RCw-KN-yMV"/>
+                                </connections>
                             </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nEI-Ar-bPd">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -3951,11 +3953,11 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="pop-1B-VO6" kind="show" animates="NO" id="0g5-3R-EHQ"/>
+                                    <action selector="searchFlightsButtonTouchedUpInside:" destination="nd6-3o-Pa6" eventType="touchUpInside" id="KFc-Bm-oNJ"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Airport" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yq1-vf-tnF">
-                                <rect key="frame" x="164" y="136" width="67" height="30"/>
+                                <rect key="frame" x="164" y="136" width="75" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -3967,7 +3969,7 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Airport" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zmQ-QG-QNU">
-                                <rect key="frame" x="266" y="136" width="67" height="30"/>
+                                <rect key="frame" x="266" y="136" width="75" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -4011,7 +4013,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Airport" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="06O-yX-mtU">
-                                <rect key="frame" x="164" y="222" width="67" height="30"/>
+                                <rect key="frame" x="164" y="222" width="75" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -4022,7 +4024,7 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Airport" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="gg3-Jz-s8B">
-                                <rect key="frame" x="266" y="222" width="67" height="30"/>
+                                <rect key="frame" x="266" y="222" width="75" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -4073,6 +4075,7 @@
                         <outlet property="subviewDoneButton" destination="UBc-KI-2p7" id="Bf5-e2-rde"/>
                         <outlet property="timeOfDayTableView" destination="jz1-85-JKq" id="Rzw-oG-yVq"/>
                         <outlet property="underline" destination="WAA-Zm-dMD" id="INj-Gs-xBW"/>
+                        <segue destination="pop-1B-VO6" kind="show" identifier="searchFlightsToFlightResults" animates="NO" id="rwx-9f-mbt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DCL-2P-jkU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4262,7 +4265,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="selectFlightButtonTouchedUpInside:" destination="pop-1B-VO6" eventType="touchUpInside" id="7pa-UB-L51"/>
+                                    <action selector="selectFlightButtonTouchedUpInside:" destination="pop-1B-VO6" eventType="touchUpInside" id="8QN-PB-n9r"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="left" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JCG-3h-J6X">
@@ -5031,11 +5034,12 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="b3w-20-3wQ"/>
+        <segue reference="dLl-AA-fAi"/>
         <segue reference="zWM-he-GTg"/>
-        <segue reference="Ezz-Ly-XFT"/>
+        <segue reference="aww-Ip-yzO"/>
+        <segue reference="R8r-yB-rJ1"/>
         <segue reference="cWA-9L-HdA"/>
         <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="anE-cP-H4U"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
