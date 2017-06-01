@@ -193,7 +193,12 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         }
     }
 
-    
+    func updateCompletionStatus() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["finished_entering_preferences_status"] = "flightSearch" as NSString
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
     
     // MARK: UITextFieldDelegate
     func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
@@ -421,6 +426,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         animateOutSubview()
     }
     @IBAction func searchFlightsButtonTouchedUpInside(_ sender: Any) {
+        updateCompletionStatus()
         super.performSegue(withIdentifier: "searchFlightsToFlightResults", sender: self)
     }
     

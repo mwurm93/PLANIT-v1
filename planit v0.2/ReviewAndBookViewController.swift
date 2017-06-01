@@ -547,9 +547,11 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     }
     
     @IBAction func bookButtonPressed(_ sender: Any) {
+        updateCompletionStatus()
         handleBookingStatus()
     }
     @IBAction func bookLaterButtonPressed(_ sender: Any) {
+        updateCompletionStatus()
     }
     
     override func didReceiveMemoryWarning() {
@@ -561,6 +563,13 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         let bookingStatusValue = 1 as NSNumber
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["booking_status"] = bookingStatusValue as NSNumber
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
+    func updateCompletionStatus() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["finished_entering_preferences_status"] = "booking" as NSString
         //Save
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }

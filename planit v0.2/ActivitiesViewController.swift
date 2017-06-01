@@ -61,8 +61,9 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
         glassIconView?.image = glassIconView?.image?.withRenderingMode(.alwaysTemplate)
         glassIconView?.tintColor = UIColor.white
         
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 {
+        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"] as! String == "flightResults" {
             let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
@@ -335,6 +336,13 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
         }
     }
     
+    func updateCompletionStatus() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["finished_entering_preferences_status"] = "activities" as NSString
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
     //MARK: Actions
     @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.3, animations: {
@@ -348,11 +356,6 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
         }
     }
     @IBAction func nextButtonPressed(_ sender: Any) {
-        // Change preferences finished status
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["finished_entering_preferences_status"] = "Activities" as NSString
-        //Save
-        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-
+        updateCompletionStatus()
     }
 }

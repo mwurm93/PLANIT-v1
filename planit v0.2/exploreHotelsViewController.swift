@@ -73,7 +73,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
         //Update search summary title
-        searchSummaryTitle.text = "Accomodation in \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as? String))"
+        searchSummaryTitle.text = "Accomodation in \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as! String))"
 
         
         //Set up sort and filter callout views
@@ -108,7 +108,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.readyToBookButton.titleLabel?.textAlignment = .center
         
         let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 {
+        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"] as! String == "activities" {
             let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
@@ -477,6 +477,13 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
     
+    func updateCompletionStatus() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["finished_entering_preferences_status"] = "hotelResults" as NSString
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
     // MARK: Actions
     @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.3, animations: {
@@ -492,10 +499,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
     @IBAction func nextButtonPressed(_ sender: Any) {
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["finished_entering_preferences_status"] = "Ranking" as NSString
-        //Save
-        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        updateCompletionStatus()
     }
 
     @IBAction func sortButtonTouchedUpInside(_ sender: Any) {

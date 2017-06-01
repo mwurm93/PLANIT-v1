@@ -603,6 +603,10 @@
                         <outlet property="welcomeToPlanitLabel" destination="mEQ-nb-c4r" id="NnC-2B-K33"/>
                         <segue destination="E8d-J0-NPc" kind="show" identifier="unfinishedExistingTripsToSwiping" animates="NO" id="5Cy-Be-NXP"/>
                         <segue destination="E8d-J0-NPc" kind="show" identifier="addTripDestinationUndecided" animates="NO" id="anE-cP-H4U"/>
+                        <segue destination="6Nf-ZD-7fF" kind="show" identifier="unbookedTripToRanking" animates="NO" id="upa-Nb-p7J"/>
+                        <segue destination="oN0-zx-La3" kind="show" identifier="unbookedTripToActivities" animates="NO" id="Li0-0J-Rva"/>
+                        <segue destination="LVk-lO-4Cs" kind="show" identifier="unbookedTripToExploreHotels" animates="NO" id="bKD-fw-94P"/>
+                        <segue destination="9Zf-or-QAX" kind="show" identifier="unbookedTripToBooking" animates="NO" id="UAc-ww-JX6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R3s-V1-O6L" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2254,7 +2258,6 @@
                                 <state key="normal" title="Move forward with [destination]"/>
                                 <connections>
                                     <action selector="moveForwardButtonTouchedUpInside:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="maB-p9-xZn"/>
-                                    <action selector="nextButtonPressed:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="lOw-dr-379"/>
                                 </connections>
                             </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2kF-cG-IG6">
@@ -2552,10 +2555,10 @@
                                 </connections>
                             </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nEI-Ar-bPd">
-                                <rect key="frame" x="0.0" y="114" width="375" height="553"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="Daw-TB-PxA">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="553"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="dark"/>
@@ -2799,10 +2802,10 @@
                                 </connections>
                             </tableView>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rD3-hw-1ez">
-                                <rect key="frame" x="0.0" y="148" width="375" height="519"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="I6R-zX-lNl">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="519"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="dark"/>
@@ -3187,25 +3190,32 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ldb-9Z-cE4">
-                                <rect key="frame" x="37.5" y="401" width="300" height="150"/>
+                                <rect key="frame" x="35" y="301" width="310" height="180"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="We'll automatically cancel your reservation if everyone in your group does not commit within 24 hours" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bb3-Kr-afD">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="65"/>
+                                        <rect key="frame" x="0.0" y="35" width="310" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TIme to book! A few important notes:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OWl-Z4-WUr">
+                                        <rect key="frame" x="0.0" y="0.0" width="310" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="We also will only charge you for your share of your group's accomodation" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5YJ-cw-RsM">
-                                        <rect key="frame" x="-0.5" y="69" width="300" height="45"/>
+                                        <rect key="frame" x="0.0" y="104" width="310" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J97-XV-eJj">
-                                        <rect key="frame" x="0.0" y="116" width="300" height="27"/>
+                                        <rect key="frame" x="0.0" y="151" width="310" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <state key="normal" title="Got it">
@@ -4292,7 +4302,7 @@
                                 <blurEffect style="light"/>
                             </visualEffectView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="JFK - MIA roundtrip" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IcQ-oE-Owt">
-                                <rect key="frame" x="97" y="21" width="180" height="21"/>
+                                <rect key="frame" x="0.0" y="21" width="375" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -5093,13 +5103,14 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="cWA-9L-HdA"/>
-        <segue reference="MNW-06-TUF"/>
-        <segue reference="RCw-KN-yMV"/>
-        <segue reference="anE-cP-H4U"/>
+        <segue reference="cNU-Li-sIA"/>
+        <segue reference="isD-dZ-KwN"/>
+        <segue reference="R8r-yB-rJ1"/>
+        <segue reference="lra-AY-k3U"/>
         <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="XIs-yD-L7P"/>
-        <segue reference="aww-Ip-yzO"/>
+        <segue reference="bKD-fw-94P"/>
+        <segue reference="xKR-5f-fmw"/>
+        <segue reference="RCw-KN-yMV"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

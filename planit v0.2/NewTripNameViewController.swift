@@ -325,6 +325,9 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 self.instructionsLabel.text = "Invite your friends to join you on your travels!"
                 self.swipingInstructionsView.sizeToFit()
                 self.contactsCollectionView.isHidden = true
+                let newFrame = CGRect(x: self.swipingInstructionsView.frame.minX, y: 500, width: self.swipingInstructionsView.frame.width, height: self.swipingInstructionsView.frame.height)
+                self.swipingInstructionsView.frame = newFrame
+                self.view.bringSubview(toFront: self.swipingInstructionsView)
                 self.animateInstructionsIn()
             }
             
@@ -535,6 +538,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             self.addContactPlusIconMainVC.setTitle("+", for: .normal)
             self.addContactPlusIconMainVC.titleLabel?.font = UIFont.systemFont(ofSize: 39)
             self.addContactPlusIconMainVC.frame = CGRect(x: 271, y: 611, width: 43, height: 47)
+            self.view.bringSubview(toFront: self.addContactPlusIconMainVC)
+        } else {
+            self.addContactPlusIconMainVC.setTitle("Invite friends", for: .normal)
+            self.addContactPlusIconMainVC.titleLabel?.font = UIFont.systemFont(ofSize: 21)
+            self.addContactPlusIconMainVC.frame = CGRect(x: 87, y: 611, width: 201, height: 47)
             self.view.bringSubview(toFront: self.addContactPlusIconMainVC)
         }
     }
@@ -1681,7 +1689,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     func updateCompletionStatus(){
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["finished_entering_preferences_status"] = "Name_Contacts_Rooms" as NSString
+        SavedPreferencesForTrip["finished_entering_preferences_status"] = "swiping" as NSString
         //Save
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }

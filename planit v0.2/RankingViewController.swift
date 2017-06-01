@@ -74,7 +74,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.readyToBookButton.titleLabel?.textAlignment = .center
         
         let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 {
+        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"]  as! String == "swiping"{
             let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
@@ -415,6 +415,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             self.rankingInstructionsView.layer.isHidden = true
         }
     }
+    func updateCompletionStatus(){
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["finished_entering_preferences_status"] = "ranking" as NSString
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
     
     // MARK: Actions
     @IBAction func instructionsGotItButtonTouchedUpInsider(_ sender: Any) {
@@ -431,11 +437,14 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     @IBAction func chooseFlightsButtonTouchedUpInside(_ sender: Any) {
+        updateCompletionStatus()
         let UIButtonPressed = sender as! UIButton
         rankedPotentialTripsDictionaryArrayIndexForSegue = UIButtonPressed.tag
         super.performSegue(withIdentifier: "changeFlightsButtonToFlightSearch", sender: self)
+        
     }
     @IBAction func moveForwardButtonTouchedUpInside(_ sender: Any) {
+        updateCompletionStatus()
         rankedPotentialTripsDictionaryArrayIndexForSegue = 0
         super.performSegue(withIdentifier: "changeFlightsButtonToFlightSearch", sender: self)
     }
@@ -446,13 +455,4 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         //Save
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
-    
-    
-    @IBAction func nextButtonPressed(_ sender: Any) {
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["finished_entering_preferences_status"] = "Ranking" as NSString
-        //Save
-        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-    }
-
 }

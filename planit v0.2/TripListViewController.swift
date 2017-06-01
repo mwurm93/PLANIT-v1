@@ -488,7 +488,9 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                 if bookingStatuses[bookedIndex] == 1 && bookedIndex > lastBookedStatusIndexAddedToTable!{
                     let addedRowInBookedSection = bookedIndex
                     cell.layer.cornerRadius = 5
-                    cell.existingTripTableViewImage.image = #imageLiteral(resourceName: "NYE")
+                    cell.layer.borderWidth = 2
+                    cell.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:1).cgColor
+                    cell.layer.masksToBounds = true
                     cell.existingTripTableViewLabel.text = DataContainerSingleton.sharedDataContainer.usertrippreferences?[addedRowInBookedSection].object(forKey: "trip_name") as? String
                     existingTripsTable.isHidden = false
                     lastBookedStatusIndexAddedToTable = bookedIndex
@@ -514,23 +516,26 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         
-//        let finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
-//        let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? NSNumber()
+        let finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
+        let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? NSNumber()
 
-//        if finishedEnteringPreferencesStatus == "Name_Contacts_Rooms" && bookingStatus == 0 {
-//            self.performSegue(withIdentifier: "unfinishedExistingTripsToCalendar", sender: self)
-//        } else if finishedEnteringPreferencesStatus == "Calendar"  && bookingStatus == 0 {
-//            self.performSegue(withIdentifier: "unfinishedExistingTripsToDestination", sender: self)
-//        } else if finishedEnteringPreferencesStatus == "Destination"  && bookingStatus == 0 {
-//            self.performSegue(withIdentifier: "unfinishedExistingTripsToBudget", sender: self)
-//        } else if finishedEnteringPreferencesStatus == "Budget"  && bookingStatus == 0 {
-//            self.performSegue(withIdentifier: "unfinishedExistingTripsToActivities", sender: self)
-//        } else if (finishedEnteringPreferencesStatus == "Activities" || finishedEnteringPreferencesStatus == "Swiping" || finishedEnteringPreferencesStatus == "Ranking")  && bookingStatus == 0 {
-//            self.performSegue(withIdentifier: "FinishedExistingTripsToUnbookedSummary", sender: self)
-//        } else {
-            self.performSegue(withIdentifier: "unfinishedExistingTripsToSwiping", sender: self)
-//        }
-        
+        if finishedEnteringPreferencesStatus == "swiping" && bookingStatus == 0 {
+            super.performSegue(withIdentifier: "unbookedTripToRanking", sender: self)
+        } else if finishedEnteringPreferencesStatus == "ranking"  && bookingStatus == 0 {
+            super.performSegue(withIdentifier: "unbookedTripToRanking", sender: self)
+        } else if finishedEnteringPreferencesStatus == "flightSearch"  && bookingStatus == 0 {
+            super.performSegue(withIdentifier: "unbookedTripToRanking", sender: self)
+        } else if finishedEnteringPreferencesStatus == "flightResults"  && bookingStatus == 0 {
+            super.performSegue(withIdentifier: "unbookedTripToActivities", sender: self)
+        } else if finishedEnteringPreferencesStatus == "activities"  && bookingStatus == 0 {
+            super.performSegue(withIdentifier: "unbookedTripToExploreHotels", sender: self)
+        } else if finishedEnteringPreferencesStatus == "hotelResults"  && bookingStatus == 0 {
+            super.performSegue(withIdentifier: "unbookedTripToBooking", sender: self)
+        } else if finishedEnteringPreferencesStatus == "booking"  && bookingStatus == 0 {
+            super.performSegue(withIdentifier: "unbookedTripToBooking", sender: self)
+        } else {
+            super.performSegue(withIdentifier: "addTripDestinationUndecided", sender: self)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

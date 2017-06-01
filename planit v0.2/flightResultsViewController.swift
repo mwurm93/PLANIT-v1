@@ -79,7 +79,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         //Update search summary title
-        searchSummaryTitle.text = "\(String(describing: DataContainerSingleton.sharedDataContainer.homeAirport)) - \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as? String)) \(String(describing: searchMode))"
+        searchSummaryTitle.text = "\(String(describing: DataContainerSingleton.sharedDataContainer.homeAirport!)) - \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as! String)) \(String(describing: searchMode!))"
         
         self.sortFilterFlightsCalloutView.delegate = self
         self.sortFilterFlightsCalloutView.isHidden = true
@@ -99,7 +99,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         flightResultsTableView.separatorColor = UIColor.white
         
         let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 {
+        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"] as! String == "flightSearch"{
             let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
@@ -425,11 +425,20 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+    func updateCompletionStatus() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["finished_entering_preferences_status"] = "flightResults" as NSString
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+
+    
     //MARK: Actions
     @IBAction func backButtonTouchedUpInside(_ sender: Any) {
         super.performSegue(withIdentifier: "flightResultsToFlightSearch", sender: self)
     }
     @IBAction func selectFlightButtonTouchedUpInside(_ sender: Any) {
+        updateCompletionStatus()
         if rankedPotentialTripsDictionaryArrayIndex == 0 {
             super.performSegue(withIdentifier: "flightResultsToActivities", sender: self)
         } else {
