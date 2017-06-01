@@ -531,6 +531,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if self.contacts?.count != 0 && self.contacts != nil {
+            self.addContactPlusIconMainVC.setTitle("+", for: .normal)
+            self.addContactPlusIconMainVC.titleLabel?.font = UIFont.systemFont(ofSize: 39)
+            self.addContactPlusIconMainVC.frame = CGRect(x: 271, y: 611, width: 43, height: 47)
+            self.view.bringSubview(toFront: self.addContactPlusIconMainVC)
+        }
     }
     
     func animateInstructionsIn(){
@@ -1320,6 +1326,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
 
     func animateOutSubview() {
+        if self.contacts?.count == 0 || self.contacts == nil {
+            self.addContactPlusIconMainVC.setTitle("Invite friends", for: .normal)
+            self.addContactPlusIconMainVC.titleLabel?.font = UIFont.systemFont(ofSize: 21)
+            self.addContactPlusIconMainVC.frame = CGRect(x: 87, y: 611, width: 201, height: 47)
+            self.view.bringSubview(toFront: self.addContactPlusIconMainVC)
+        }
         UIView.animate(withDuration: 0.3, animations: {
             self.popupSubview.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             self.popupBlurView.alpha = 0
@@ -1352,6 +1364,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             subviewNextButton.isHidden = true
             subviewDoneButton.isHidden = true
             chatButton.isHidden = true
+            addContactPlusIconMainVC.setTitle("Invite friends", for: .normal)
+            addContactPlusIconMainVC.titleLabel?.font = UIFont.systemFont(ofSize: 21)
+            addContactPlusIconMainVC.frame = CGRect(x: 87, y: 611, width: 201, height: 47)
+            self.view.bringSubview(toFront: self.addContactPlusIconMainVC)
+
             dismissDeleteContactsMode()
         }
         

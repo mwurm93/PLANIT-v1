@@ -47,7 +47,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
                 if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[rankedPotentialTripsDictionaryArrayIndex!] as? Dictionary<String, AnyObject> {
                     if let thisTripFlightResults = thisTripDict["flightOptions"] {
-                        if thisTripFlightResults.count > 0 {
+                        if thisTripFlightResults.count > 1 {
                             rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["flightOptions"] = thisTripFlightResults
                         } else {
                             //Load from server
@@ -64,10 +64,16 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
                         }
                     }
                 }
-            }         }
-        
+            }
+        }
         //Create shorter name
         flightResultsDictionary = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["flightOptions"] as! [Dictionary<String, Any>]
+        
+        //Save for retrieval from rankings page
+        rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["flightOptions"] = flightResultsDictionary
+        SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = rankedPotentialTripsDictionary
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         self.sortFilterFlightsCalloutView.delegate = self
         self.sortFilterFlightsCalloutView.isHidden = true

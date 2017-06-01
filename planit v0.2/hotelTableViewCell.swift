@@ -120,7 +120,7 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSou
         if tableMode == "reviews" {
             hotelReviewsTableView?.frame = CGRect(x: 0, y: 121, width: 322, height: 186)
         } else if tableMode == "amenities" {
-            hotelReviewsTableView?.frame = CGRect(x: 0, y: 121, width: 124.5, height: 166)
+            hotelReviewsTableView?.frame = CGRect(x: 0, y: 121, width: 140, height: 166)
         } else if tableMode == "distances" {
             hotelReviewsTableView?.frame = CGRect(x: 187.5, y: 121, width: 124.5, height: 166)
         }

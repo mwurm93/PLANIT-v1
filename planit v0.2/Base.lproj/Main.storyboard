@@ -2431,10 +2431,10 @@
                                 </connections>
                             </tableView>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SuK-q8-6tf">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="86Y-p7-LyI">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="480"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="dark"/>
@@ -2872,7 +2872,7 @@
                                 </connections>
                             </textField>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="72" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hUQ-1W-Psq">
-                                <rect key="frame" x="17" y="58" width="343" height="99"/>
+                                <rect key="frame" x="17" y="74" width="343" height="99"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -5089,13 +5089,13 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MNW-06-TUF"/>
-        <segue reference="RCw-KN-yMV"/>
-        <segue reference="cWA-9L-HdA"/>
-        <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="aww-Ip-yzO"/>
-        <segue reference="XIs-yD-L7P"/>
+        <segue reference="lra-AY-k3U"/>
         <segue reference="R8r-yB-rJ1"/>
+        <segue reference="isD-dZ-KwN"/>
+        <segue reference="cNU-Li-sIA"/>
+        <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="RCw-KN-yMV"/>
+        <segue reference="MNW-06-TUF"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

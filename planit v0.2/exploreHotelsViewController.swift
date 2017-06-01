@@ -50,7 +50,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
                 if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[rankedPotentialTripsDictionaryArrayIndex] as? Dictionary<String, AnyObject> {
                     if let thisTripHotelResults = thisTripDict["hotelOptions"] {
-                        if thisTripHotelResults.count > 0 {
+                        if thisTripHotelResults.count > 1 {
                             rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = thisTripHotelResults
                         } else {
                             //Load from server
@@ -64,7 +64,14 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         }
         //Create shorter name
         hotelResultsDictionary = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] as! [Dictionary<String, Any>]
+        //Save for retrieval from rankings page
+        self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = self.hotelResultsDictionary
+        SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
+        //Save
+        self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
+        
+        
         //Set up sort and filter callout views
         self.sortFilterHotelsCalloutView.delegate = self
         self.sortFilterHotelsCalloutView.isHidden = true

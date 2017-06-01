@@ -105,7 +105,7 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
         // Change label for continuing
         if selectedActivities != nil {
             if (selectedActivities?.count)! > 0 {
-            tripRecommendationsLabel.text = "Hotels"
+            tripRecommendationsLabel.text = "Explore hotels"
             }
         }
     }
@@ -196,7 +196,7 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
             
         // Change label for continuing
         if selectedActivities.count > 0 {
-            tripRecommendationsLabel.text = "Hotels"
+            tripRecommendationsLabel.text = "Explore hotels"
         }
         if selectedActivities.count == 0 {
             tripRecommendationsLabel.text = "Skip to hotels"
@@ -234,10 +234,10 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
             
         // Change label for continuing
         if selectedActivities.count > 0 {
-            tripRecommendationsLabel.text = "Recommendations"
+            tripRecommendationsLabel.text = "Explore hotels"
         }
         if selectedActivities.count == 0 {
-            tripRecommendationsLabel.text = "Skip to recommendations"
+            tripRecommendationsLabel.text = "Skip to hotels"
         }
     }
     }

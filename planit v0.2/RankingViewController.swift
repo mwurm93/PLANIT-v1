@@ -57,7 +57,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
             } else {
                 //Load from server
-                let rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":NSDictionary(),"hotelOptions":NSDictionary()],["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":NSDictionary(),"hotelOptions":NSDictionary()],["price":"$???","percentSwipedRight":"75","destination":"Cabo","flightOptions":NSDictionary(),"hotelOptions":NSDictionary()],["price":"$???","percentSwipedRight":"50","destination":"Denver","flightOptions":NSDictionary(),"hotelOptions":NSDictionary()],["price":"$???","percentSwipedRight":"50","destination":"New York","flightOptions":NSDictionary(),"hotelOptions":NSDictionary()]]
+                let rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"75","destination":"Cabo","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"50","destination":"Denver","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"50","destination":"New York","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]]]
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
             }
         }
@@ -169,21 +169,55 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.changeFlightsButton.tag = indexPath.row + 1
         }
         
-        var destinationsForRow = rankedPotentialTripsDictionary[0]
-        
-        
-        var addedRow = indexPath.row + 1
-        if indexPath.section == 1 {
-            destinationsForRow = rankedPotentialTripsDictionary[addedRow]
-            addedRow += 1
+        var nextRowToAdd = Int()
+        if indexPath.section == 0 {
+            nextRowToAdd = 0
+        } else if indexPath.section == 1 {
+            nextRowToAdd = indexPath.row + 1
         }
-        
+        let destinationsForRow = rankedPotentialTripsDictionary[nextRowToAdd]
+
         cell.destinationLabel.text = destinationsForRow["destination"] as! String
         cell.tripPrice.text = destinationsForRow["price"] as! String
         cell.percentSwipedRight.text = "\(String(describing: destinationsForRow["percentSwipedRight"]!))% swiped right"
+        cell.accomodationFrom.text = "Accommodation from $??? per night"
+        
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[nextRowToAdd] as? Dictionary<String, AnyObject> {
+                    if let thisTripFlightResults = thisTripDict["flightOptions"] as? [Dictionary<String, AnyObject>] {
+                        if thisTripFlightResults.count > 1 {
+                            if let topFlightOption = thisTripFlightResults[0] as? Dictionary<String,Any> {
+                                cell.DepartureOrigin.text = topFlightOption["departureOrigin"] as? String
+                                cell.departureDestination.text = topFlightOption["departureDestination"] as? String
+                                cell.departureDepartureTime.text = topFlightOption["departureDepartureTime"] as? String
+                                cell.departureArrivalTime.text = topFlightOption["departureArrivalTime"] as? String
+                                cell.returnDepartureTime.text = topFlightOption["returnDepartureTime"] as? String
+                                cell.returnOrigin.text = topFlightOption["returnOrigin"] as? String
+                                cell.returnArrivalTime.text = topFlightOption["returnArrivalTime"] as? String
+                                cell.returnDestination.text = topFlightOption["returnDestination"] as? String
+                                cell.tripPrice.text = topFlightOption["totalPrice"] as? String
+                            }
+                        } else {
+                            cell.DepartureOrigin.text = "???"
+                            cell.departureDestination.text = "???"
+                            cell.departureDepartureTime.text = "??:??"
+                            cell.departureArrivalTime.text = "??:??"
+                            cell.returnDepartureTime.text = "??:??"
+                            cell.returnOrigin.text = "???"
+                            cell.returnArrivalTime.text = "??:??"
+                            cell.returnDestination.text = "???"
+                            cell.tripPrice.text = "$???"
+                        }
+                    }
+                }
+            }
+        }
         
         return cell
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

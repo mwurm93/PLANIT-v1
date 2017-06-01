@@ -112,6 +112,13 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         self.knownTravelerNumber.delegate = self
         self.redressNumber.delegate = self
         self.birthdate.delegate = self
+        self.nameOnCard.delegate = self
+        self.cardNumber.delegate = self
+        self.addressLineOne.delegate = self
+        self.addressLineTwo.delegate = self
+        self.addressCity.delegate = self
+        self.addressState.delegate = self
+        self.addressZipCode.delegate = self
         
         topItineraryTable.layer.cornerRadius = 5
         
