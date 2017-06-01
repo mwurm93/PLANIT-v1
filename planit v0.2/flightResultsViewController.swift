@@ -13,6 +13,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     
     //Vars passed from segue
     var rankedPotentialTripsDictionaryArrayIndex: Int?
+    var searchMode: String?
     
     //MARK: Class vars
     //Load flight results from server
@@ -37,6 +38,8 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var gotItButton: UIButton!
     @IBOutlet weak var selectFlightButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var searchSummaryTitle: UILabel!
+    @IBOutlet weak var searchSummaryDates: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +77,9 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = rankedPotentialTripsDictionary
         //Save
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+        //Update search summary title
+        searchSummaryTitle.text = "\(String(describing: DataContainerSingleton.sharedDataContainer.homeAirport)) - \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as? String)) \(String(describing: searchMode))"
         
         self.sortFilterFlightsCalloutView.delegate = self
         self.sortFilterFlightsCalloutView.isHidden = true

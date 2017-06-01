@@ -39,6 +39,8 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     @IBOutlet weak var instructionsLabel: UILabel!
     @IBOutlet weak var gotItButton: UIButton!
+    @IBOutlet weak var searchSummaryTitle: UILabel!
+    @IBOutlet weak var searchSummaryDates: UILabel!
     
     // viewDidLoad
     override func viewDidLoad() {
@@ -70,7 +72,9 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         //Save
         self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
-        
+        //Update search summary title
+        searchSummaryTitle.text = "Accomodation in \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as? String))"
+
         
         //Set up sort and filter callout views
         self.sortFilterHotelsCalloutView.delegate = self

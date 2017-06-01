@@ -189,6 +189,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         if segue.identifier == "searchFlightsToFlightResults" {
             let destination = segue.destination as? flightResultsViewController
             destination?.rankedPotentialTripsDictionaryArrayIndex = rankedPotentialTripsDictionaryArrayIndex
+            destination?.searchMode = self.searchMode
         }
     }
 
