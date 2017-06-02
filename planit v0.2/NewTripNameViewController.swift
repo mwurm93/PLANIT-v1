@@ -12,8 +12,17 @@ import Contacts
 import JTAppleCalendar
 import UIColor_FlatColors
 import Cartography
+import SMCalloutView
 
-class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
+class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout, SMCalloutViewDelegate {
+    
+    //City dict
+    var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
+    
+    //SMCallout
+    var sortFilterFlightsCalloutView = SMCalloutView()
+    let sortFilterFlightsCalloutTableView = UITableView(frame: CGRect.zero, style: .plain)
+    let filterFirstLevelOptions = ["Activities","Int'l vs. Domestic","Temperature", "Clear fliters"]
     
     //Messaging var
     let messageComposer = MessageComposer()
@@ -104,6 +113,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBOutlet weak var instructionsLabel: UILabel!
     @IBOutlet weak var instructionsGotItButton: UIButton!
     @IBOutlet weak var chatButton: UIButton!
+    @IBOutlet weak var filterButton: UIButton!
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -114,6 +124,73 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Create trip and trip data model
+        if tripNameLabel.text == "New Trip" {
+            var tripNameValue = "Trip created \(Date().description.substring(to: 10))"
+            //Check if trip name used already
+            if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
+                var countTripsMadeToday = 0
+                for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+                    if (DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String)!.substring(to: 23) == tripNameValue {
+                        countTripsMadeToday += 1
+                    }
+                }
+                if countTripsMadeToday != 0 {
+                    tripNameValue = "Trip " + ("#\(countTripsMadeToday+1) ") + tripNameValue.substring(from: 5)
+                }
+            }
+            
+            tripNameLabel.text = tripNameValue
+            
+            //Update trip preferences in dictionary
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["trip_name"] = tripNameValue as NSString
+            //Save
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
+
+        
+        
+        //City data
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
+            } else {
+                //Load from server
+                var rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "miami_1"),#imageLiteral(resourceName: "miami_2")],"topThingsToDo":["Vizcaya Museum and Gardens", "American Airlines Arena", "Wynwood Walls", "Boat tours","Zoological Wildlife Foundation"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]]]
+                
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Washington DC","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "washingtonDC_1"),#imageLiteral(resourceName: "washingtonDC_2"),#imageLiteral(resourceName: "washingtonDC_3"),#imageLiteral(resourceName: "washingtonDC_4")],"topThingsToDo":["National Mall", "Smithsonian Air and Space Museum" ,"Logan Circle"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "sanDiego_1"),#imageLiteral(resourceName: "sanDiego_2"),#imageLiteral(resourceName: "sanDiego_3"),#imageLiteral(resourceName: "sanDiego_4")],"topThingsToDo":["Sunset Cliffs", "San Diego Zoo" ,"Petco Park"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Nashville","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "nashville_1"),#imageLiteral(resourceName: "nashville_2"),#imageLiteral(resourceName: "nashville_3"),#imageLiteral(resourceName: "nashville_4")],"topThingsToDo":["Grand Ole Opry", "Broadway" ,"Country Music Hall of Fame"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"New Orleans","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "newOrleans_1"),#imageLiteral(resourceName: "newOrleans_2"),#imageLiteral(resourceName: "newOrleans_3"),#imageLiteral(resourceName: "newOrleans_4")],"topThingsToDo":["Bourbon Street", "National WWII Museum" ,"Jackson Square"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"Austin","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "austin_1"),#imageLiteral(resourceName: "austin_2"),#imageLiteral(resourceName: "austin_3"),#imageLiteral(resourceName: "austin_4")],"topThingsToDo":["Zilker Park", "6th Street" ,"University of Texas"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                
+                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
+            }
+        }
+        SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
+        //Save
+        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+
+        
+        //SMCalloutView
+        self.sortFilterFlightsCalloutView.delegate = self
+        self.sortFilterFlightsCalloutView.isHidden = true
+        
+        sortFilterFlightsCalloutTableView.delegate = self
+        sortFilterFlightsCalloutTableView.dataSource = self
+        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 100, height: 100)
+        sortFilterFlightsCalloutTableView.isEditing = false
+        sortFilterFlightsCalloutTableView.allowsMultipleSelection = false
+        sortFilterFlightsCalloutTableView.backgroundColor = UIColor.clear
+        sortFilterFlightsCalloutTableView.layer.backgroundColor = UIColor.clear.cgColor
+
         
         //add shadow to button
         chatButton.layer.shadowColor = UIColor.black.cgColor
@@ -127,7 +204,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         popupBlurView.isUserInteractionEnabled = true
         
         //Load the values from our shared data container singleton
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if NewOrAddedTripFromSegue != 1 {
         let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
         //Install the value into the label.
@@ -378,6 +454,9 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 view1.height == self.detailedCardView.bounds.height
             }
             self.swipeableView.isUserInteractionEnabled = false
+            for subview in contentView.subviews {
+                subview.frame.size.width = width
+            }
         }
         swipeableView.didDisappear = { view in
             print("Did disappear swiping view")
@@ -1086,42 +1165,69 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 numberOfRows += contacts!.count
             }
         }
+        if tableView == sortFilterFlightsCalloutTableView {
+            numberOfRows = filterFirstLevelOptions.count
+        }
         return numberOfRows
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView == groupMemberListTable {
+            return 55
+        }
+        if tableView == timeOfDayTableView {
+            return 20
+        }
+        // else if tableView == sortFilterFlightsCalloutTableView
+        return 22
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if tableView == timeOfDayTableView {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "timeOfDayPrototypeCell", for: indexPath) as! timeOfDayTableViewCell
-        cell.timeOfDayTableLabel.text = timesOfDayArray[indexPath.row]
-        return cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "timeOfDayPrototypeCell", for: indexPath) as! timeOfDayTableViewCell
+            cell.timeOfDayTableLabel.text = timesOfDayArray[indexPath.row]
+            return cell
         }
-//        else if tableView == groupMemberListTable {
+        else if tableView == groupMemberListTable {
         let cell = tableView.dequeueReusableCell(withIdentifier: "contactsPrototypeCell", for: indexPath) as! contactsTableViewCell
         
         if contacts != nil {
-        let contact = contacts?[indexPath.row]
-        cell.nameLabel.text = (contact?.givenName)! + " " + (contact?.familyName)!
-        
-        if (contact?.imageDataAvailable)! {
-            cell.thumbnailImage.image = UIImage(data: (contact?.thumbnailImageData!)!)
-            cell.thumbnailImage.contentMode = .scaleToFill
-            let reCenter = cell.thumbnailImage.center
-            cell.thumbnailImage.layer.frame = CGRect(x: cell.thumbnailImage.layer.frame.minX
-                , y: cell.thumbnailImage.layer.frame.minY, width: cell.thumbnailImage.layer.frame.width * 0.96, height: cell.thumbnailImage.layer.frame.height * 0.96)
-            cell.thumbnailImage.center = reCenter
-            cell.thumbnailImage.layer.cornerRadius = cell.thumbnailImage.frame.height / 2
-            cell.thumbnailImage.layer.masksToBounds = true
-            cell.initialsLabel.isHidden = true
-        } else {
-            cell.thumbnailImage.image = UIImage(named: "no_contact_image")!
-            cell.initialsLabel.isHidden = false
-            let firstInitial = contact?.givenName[0]
-            let secondInitial = contact?.familyName[0]
-            cell.initialsLabel.text = firstInitial! + secondInitial!
+            let contact = contacts?[indexPath.row]
+            cell.nameLabel.text = (contact?.givenName)! + " " + (contact?.familyName)!
+            
+            if (contact?.imageDataAvailable)! {
+                cell.thumbnailImage.image = UIImage(data: (contact?.thumbnailImageData!)!)
+                cell.thumbnailImage.contentMode = .scaleToFill
+                let reCenter = cell.thumbnailImage.center
+                cell.thumbnailImage.layer.frame = CGRect(x: cell.thumbnailImage.layer.frame.minX
+                    , y: cell.thumbnailImage.layer.frame.minY, width: cell.thumbnailImage.layer.frame.width * 0.96, height: cell.thumbnailImage.layer.frame.height * 0.96)
+                cell.thumbnailImage.center = reCenter
+                cell.thumbnailImage.layer.cornerRadius = cell.thumbnailImage.frame.height / 2
+                cell.thumbnailImage.layer.masksToBounds = true
+                cell.initialsLabel.isHidden = true
+            } else {
+                cell.thumbnailImage.image = UIImage(named: "no_contact_image")!
+                cell.initialsLabel.isHidden = false
+                let firstInitial = contact?.givenName[0]
+                let secondInitial = contact?.familyName[0]
+                cell.initialsLabel.text = firstInitial! + secondInitial!
+            }
+            }
+            
+            return cell
         }
+        // else if tableView == sortFilterFlightsCalloutTableView
+        var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "cellID")
+        if cell == nil {
+            cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
         }
         
-        return cell
+        cell?.textLabel?.text = filterFirstLevelOptions[indexPath.row]
+        cell?.textLabel?.textColor = UIColor.black
+        cell?.textLabel?.font = UIFont.systemFont(ofSize: 15)
+        cell?.textLabel?.numberOfLines = 0
+        cell?.backgroundColor = UIColor.clear
+        
+        return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -1165,7 +1271,13 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             
         //Save
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-    }
+        } else if tableView == sortFilterFlightsCalloutTableView {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
+                self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
+                self.sortFilterFlightsCalloutView.isHidden = true
+                //HANDLE SORT / FILTER SELECTION
+            })
+        }
     }
 
     
@@ -1199,30 +1311,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         underline.layer.frame = CGRect(x: 50, y: 30, width: 55, height: 51)
         subviewWhen()
         
-        //Create trip name
-        if tripNameLabel.text == "New Trip"{
-        var tripNameValue = "Trip created \(Date().description.substring(to: 10))"
-        //Check if trip name used already
-        if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
-            var countTripsMadeToday = 0
-            for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
-                if (DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String)!.substring(to: 23) == tripNameValue {
-                    countTripsMadeToday += 1
-                }
-            }
-            if countTripsMadeToday != 0 {
-                tripNameValue = "Trip " + ("#\(countTripsMadeToday+1) ") + tripNameValue.substring(from: 5)
-            }
-        }
-        
-        tripNameLabel.text = tripNameValue
-        
-        //Update trip preferences in dictionary
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["trip_name"] = tripNameValue as NSString
-        //Save
-        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-        }
     }
     
     func subviewWhere() {
@@ -1391,6 +1479,23 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
 
     //MARK: Actions
+    @IBAction func filterButtonTouchedUpInside(_ sender: Any) {
+        if self.sortFilterFlightsCalloutView.isHidden == true {
+            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 539, width: 170, height: 22 * filterFirstLevelOptions.count)
+            sortFilterFlightsCalloutTableView.reloadData()
+            self.sortFilterFlightsCalloutView.contentView = sortFilterFlightsCalloutTableView
+            self.sortFilterFlightsCalloutView.isHidden = false
+            self.sortFilterFlightsCalloutView.animation(withType: .stretch, presenting: true)
+            self.sortFilterFlightsCalloutView.permittedArrowDirection = .down
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: filterButton.frame.midX, y: CGFloat(539))
+            self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+        } else {
+            self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
+            self.sortFilterFlightsCalloutView.isHidden = true
+        }
+    }
     @IBAction func numberDestinationsValueChanged(_ sender: Any) {
         roundSlider()
     }

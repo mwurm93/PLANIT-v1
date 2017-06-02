@@ -1614,6 +1614,17 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="left" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dgI-ft-Stx">
+                                <rect key="frame" x="36" y="539" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <state key="normal" title="Filter" image="filter"/>
+                                <connections>
+                                    <action selector="filterButtonTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="Ah7-wy-8GR"/>
+                                    <action selector="filterFlightsButtonTouchedUpInside:" destination="pop-1B-VO6" eventType="touchUpInside" id="BBl-9L-aGN"/>
+                                    <action selector="subviewWhereButtonTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="wfq-Ap-3o7"/>
+                                </connections>
+                            </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13f-uh-sFc">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1765,6 +1776,7 @@
                         <outlet property="contactsCollectionView" destination="zAa-lr-Ha0" id="k3h-gJ-zZM"/>
                         <outlet property="dayOfWeekStackView" destination="urZ-LO-obS" id="96t-we-bqr"/>
                         <outlet property="detailedCardView" destination="ddx-cr-cdY" id="4Cr-LR-mvL"/>
+                        <outlet property="filterButton" destination="dgI-ft-Stx" id="O5r-45-8yw"/>
                         <outlet property="groupMemberListTable" destination="nrJ-cj-pzr" id="tCv-ev-A0L"/>
                         <outlet property="heartIcon" destination="Myc-ln-NPH" id="DUW-hk-4sv"/>
                         <outlet property="homeAirportTextField" destination="sXI-YY-Fjo" id="bf7-4f-9c1"/>
@@ -5104,13 +5116,13 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="XIs-yD-L7P"/>
-        <segue reference="aww-Ip-yzO"/>
-        <segue reference="R8r-yB-rJ1"/>
-        <segue reference="lra-AY-k3U"/>
+        <segue reference="dLl-AA-fAi"/>
         <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="lra-AY-k3U"/>
+        <segue reference="anE-cP-H4U"/>
+        <segue reference="isD-dZ-KwN"/>
+        <segue reference="UAc-ww-JX6"/>
         <segue reference="bKD-fw-94P"/>
-        <segue reference="xKR-5f-fmw"/>
-        <segue reference="RCw-KN-yMV"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

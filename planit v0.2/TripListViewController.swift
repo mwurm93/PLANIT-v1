@@ -1332,6 +1332,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
         instructionsView.alpha = 0
         self.view.insertSubview((self.theViewC?.view)!, belowSubview: self.instructionsView)
+        
         self.fillModeButton.isUserInteractionEnabled = false
         self.pinModeButton.isUserInteractionEnabled = false
         self.bucketListButton.isUserInteractionEnabled = false

@@ -13,8 +13,9 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
     //Class vars
     var topThingsToDoTableView: UITableView?
     var destinationPhotosCollectionView: UICollectionView?
-    var destinationStockPhotos = [#imageLiteral(resourceName: "miami_1"),#imageLiteral(resourceName: "miami_2")]
+    var destinationStockPhotos = [UIImage()]
     var topThingsToDoText = ["Vizcaya Museum and Gardens", "American Airlines Arena", "Wynwood Walls", "Boat tours","Zoological Wildlife Foundation"]
+    var cardToLoad = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,7 +50,20 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
         
         let destinationLabel = UILabel(frame: CGRect(x: 0, y: 0, width: bounds.width, height: 50))
         //Add from data model
-        destinationLabel.text = " Miami"
+        //Load photos
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
+                    if let thisTripDestination = thisTripDict["destination"] as? String {
+                        destinationLabel.text = thisTripDestination
+                    }
+                }
+            }
+        }
+        
+//        cardToLoad += 1
+        
         destinationLabel.font = UIFont.boldSystemFont(ofSize: 31)
         destinationLabel.textColor = UIColor.white
         self.addSubview(destinationLabel)
@@ -91,7 +105,20 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return topThingsToDoText.count
+        var numberOfRows = 0
+        
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
+                    if let thisTripDestinationTopThingsToDo = thisTripDict["topThingsToDo"] as? [String] {
+                        numberOfRows = thisTripDestinationTopThingsToDo.count
+                    }
+                }
+            }
+        }
+        
+        return numberOfRows
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -106,7 +133,16 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
             cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
         }
         
-        cell?.textLabel?.text = topThingsToDoText[indexPath.row]
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
+                    if let thisTripDestinationTopThingsToDo = thisTripDict["topThingsToDo"] as? [String] {
+                        cell?.textLabel?.text = thisTripDestinationTopThingsToDo[indexPath.row]
+                    }
+                }
+            }
+        }
         
         cell?.textLabel?.textColor = UIColor.white
         cell?.textLabel?.font = UIFont.systemFont(ofSize: 15)
@@ -155,7 +191,18 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
         self.addSubview(destinationPhotosCollectionView!)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return destinationStockPhotos.count
+        var numberOfItems = 0
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
+                    if let thisTripDestinationPhotos = thisTripDict["destinationPhotos"] {
+                        numberOfItems = thisTripDestinationPhotos.count
+                    }
+                }
+            }
+        }
+        return numberOfItems
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -163,9 +210,61 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "destinationPhotosCollectionViewCell", for: indexPath) as! destinationPhotosCollectionViewCell
         cell.addViews()
-        cell.destinationImageView.image = destinationStockPhotos[indexPath.item]
         
+        //Load photos
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
+                    if let thisTripDestinationPhotos = thisTripDict["destinationPhotos"] as? [UIImage] {
+                        cell.destinationImageView.image = thisTripDestinationPhotos[indexPath.item]
+                    }
+                }
+            }
+        }
         return cell
     }
 
+    func fetchSavedPreferencesForTrip() -> NSMutableDictionary {
+        //Update preference vars if an existing trip
+        //Trip status
+        let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? 0 as NSNumber
+        let finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
+        //New Trip VC
+        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? NSString ?? NSString()
+        let contacts = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contacts_in_group") as? [NSString] ?? [NSString]()
+        let contactPhoneNumbers = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contact_phone_numbers") as? [NSString] ?? [NSString]()
+        let hotelRoomsValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "hotel_rooms") as? [NSNumber] ?? [NSNumber]()
+        let segmentLengthValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "Availability_segment_lengths") as? [NSNumber] ?? [NSNumber]()
+        let selectedDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_dates") as? [NSDate] ?? [NSDate]()
+        let leftDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "origin_departure_times") as? NSDictionary ?? NSDictionary()
+        let rightDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "return_departure_times") as? NSDictionary ?? NSDictionary()
+        let numberDestinations = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "numberDestinations") as? NSNumber ?? NSNumber()
+        let nonSpecificDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "nonSpecificDates") as? NSDictionary ?? NSDictionary()
+        //Budget VC
+        let budgetValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "budget") as? NSString ?? NSString()
+        let expectedRoundtripFare = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_roundtrip_fare") as? NSString ?? NSString()
+        let expectedNightlyRate = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_nightly_rate") as? NSString ?? NSString()
+        //Suggested Destination VC
+        let decidedOnDestinationControlValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "decided_destination_control") as? NSString ?? NSString()
+        let decidedOnDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "decided_destination_value") as? NSString ?? NSString()
+        let suggestDestinationControlValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggest_destination_control") as? NSString ?? NSString()
+        let suggestedDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggested_destination") as? NSString ?? NSString()
+        //Activities VC
+        let selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [NSString] ?? [NSString]()
+        //Ranking VC
+        let topTrips = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "top_trips") as? [NSString] ?? [NSString]()
+        let rankedPotentialTripsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionary") as? [NSDictionary] ?? [NSDictionary]()
+        
+        //SavedPreferences
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary] as NSMutableDictionary
+        
+        return fetchedSavedPreferencesForTrip
+    }
+    func saveUpdatedExistingTrip(SavedPreferencesForTrip: NSMutableDictionary) {
+        var existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        let currentTripIndex = DataContainerSingleton.sharedDataContainer.currenttrip!
+        existing_trips?[currentTripIndex] = SavedPreferencesForTrip as NSDictionary
+        DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
+    }
 }
