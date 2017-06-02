@@ -40,11 +40,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     //ZLSwipeableView vars
     var colors = ["Turquoise", "Green Sea", "Emerald", "Nephritis", "Peter River", "Belize Hole", "Amethyst", "Wisteria", "Wet Asphalt", "Midnight Blue", "Sun Flower", "Orange", "Carrot", "Pumpkin", "Alizarin", "Pomegranate", "Silver", "Concrete", "Asbestos"]
     var colorIndex = 0
+    var cardToLoadIndex = 0
     var loadCardsFromXib = true
     var isTrackingPanLocation = false
     var panGestureRecognizer = UIPanGestureRecognizer()
     var countSwipes = 0
-    let totalDailySwipeAllotment = 14
+    var totalDailySwipeAllotment = 6
     
     //Contacts vars COPY
     fileprivate var addressBookStore: CNContactStore!
@@ -172,8 +173,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"Austin","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "austin_1"),#imageLiteral(resourceName: "austin_2"),#imageLiteral(resourceName: "austin_3"),#imageLiteral(resourceName: "austin_4")],"topThingsToDo":["Zilker Park", "6th Street" ,"University of Texas"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
                 
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
+                
             }
         }
+        
+        totalDailySwipeAllotment = rankedPotentialTripsDictionary.count
+
         SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
         //Save
         self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -410,6 +415,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             
             if self.countSwipes == 1 && self.NewOrAddedTripFromSegue == 1 {
                 self.animateInSubview()
+                self.swipeableView.rewind()
             }
 
             let when = DispatchTime.now() + 0.8
@@ -441,11 +447,14 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             let height = bounds.size.height
             self.detailedCardView.frame = CGRect(x: 0, y: 0, width: width, height: height)
             
-            let contentView = Bundle.main.loadNibNamed("CardContentView", owner: self, options: nil)?.first! as! UIView
+            let contentView = Bundle.main.loadNibNamed("CardContentView", owner: self, options: nil)?.first! as! CardView
             contentView.translatesAutoresizingMaskIntoConstraints = false
             contentView.backgroundColor = self.swipeableView.topView()?.backgroundColor
             contentView.layer.cornerRadius = 0
             contentView.layer.shadowOpacity = 0
+            contentView.cardToLoad = self.countSwipes
+            contentView.cardMode = "detailed"
+            
             self.detailedCardView.addSubview(contentView)
             constrain(contentView, self.detailedCardView) { view1, view2 in
                 view1.left == view2.left
@@ -483,7 +492,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 view.transform = transform
             }, completion: nil)
         }
-        swipeableView.numberOfActiveView = 8
+        swipeableView.numberOfActiveView = UInt(totalDailySwipeAllotment)
         swipeableView.animateView = {(view: UIView, index: Int, views: [UIView], swipeableView: ZLSwipeableView) in
             let degree = CGFloat(sin(0.5*Double(index)))
             let offset = CGPoint(x: 0, y: swipeableView.bounds.height*0.3)
@@ -579,15 +588,22 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         if colorIndex >= colors.count {
             colorIndex = 0
         }
+
+        if cardToLoadIndex > rankedPotentialTripsDictionary.count - 1 {
+            cardToLoadIndex = 0
+        }
+
         
         let cardView = CardView(frame: swipeableView.bounds)
         cardView.backgroundColor = colorForName(colors[colorIndex])
         colorIndex += 1
         
         if loadCardsFromXib {
-            let contentView = Bundle.main.loadNibNamed("CardContentView", owner: self, options: nil)?.first! as! UIView
+            let contentView = Bundle.main.loadNibNamed("CardContentView", owner: self, options: nil)?.first! as! CardView
             contentView.translatesAutoresizingMaskIntoConstraints = false
             contentView.backgroundColor = cardView.backgroundColor
+            contentView.cardToLoad = cardToLoadIndex
+            contentView.cardMode = "card"
             cardView.addSubview(contentView)
             
             // This is important:
@@ -605,6 +621,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 view1.height == cardView.bounds.height
             }
         }
+        cardToLoadIndex += 1
         return cardView
     }
     

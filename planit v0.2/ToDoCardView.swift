@@ -13,9 +13,8 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
     //Class vars
     var topThingsToDoTableView: UITableView?
     var destinationPhotosCollectionView: UICollectionView?
-    var destinationStockPhotos = [UIImage()]
-    var topThingsToDoText = ["Vizcaya Museum and Gardens", "American Airlines Arena", "Wynwood Walls", "Boat tours","Zoological Wildlife Foundation"]
-    var cardToLoad = 0
+    var cardToLoad = Int()
+    var cardMode = String()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,6 +30,8 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
         super.awakeFromNib()
         // Initialization code
         setup()
+        setUpTable()
+        setUpCollectionView()
     }
 
     func setup() {
@@ -45,28 +46,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
         // Corner Radius
         layer.cornerRadius = 10.0;
 
-        setUpTable()
-        setUpCollectionView()
         
-        let destinationLabel = UILabel(frame: CGRect(x: 0, y: 0, width: bounds.width, height: 50))
-        //Add from data model
-        //Load photos
-        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
-            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
-                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
-                    if let thisTripDestination = thisTripDict["destination"] as? String {
-                        destinationLabel.text = thisTripDestination
-                    }
-                }
-            }
-        }
-        
-//        cardToLoad += 1
-        
-        destinationLabel.font = UIFont.boldSystemFont(ofSize: 31)
-        destinationLabel.textColor = UIColor.white
-        self.addSubview(destinationLabel)
 
         let averageWeatherLabel_High = UILabel(frame: CGRect(x: 0, y: 335 + 10, width: bounds.width, height: 23))
         averageWeatherLabel_High.text = " Average high in June: 83°F"
@@ -101,7 +81,12 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
         frame?.size.height = 170
         self.topThingsToDoTableView?.frame = frame!
         
-        destinationPhotosCollectionView?.frame = CGRect(x: 0, y: 0, width: 315, height: 150)
+        if cardMode == "card" {
+            destinationPhotosCollectionView?.frame = CGRect(x: 0, y: 0, width: 315, height: 150)
+        } else if cardMode == "detailed" {
+            destinationPhotosCollectionView?.frame = CGRect(x: 0, y: 0, width: 375, height: 150)
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -127,13 +112,30 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        //Add destination label from data model
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
+                    if let thisTripDestination = thisTripDict["destination"] as? String {
+                        let destinationLabel = UILabel(frame: CGRect(x: 0, y: 0, width: bounds.width, height: 50))
+                        destinationLabel.font = UIFont.boldSystemFont(ofSize: 31)
+                        destinationLabel.textColor = UIColor.white
+                        destinationLabel.text = thisTripDestination
+                        self.addSubview(destinationLabel)
+                    }
+                }
+            }
+        }
+
+        
+        
         var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "cellID")
         
         if cell == nil {
             cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
         }
         
-        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
                 if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
@@ -164,12 +166,28 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
         let title = UILabel()
         title.frame = header.frame
         title.textAlignment = .left
-        title.font = UIFont.boldSystemFont(ofSize: 20)
+        title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textColor = UIColor.white
-        title.text = "Top things to do"
+        
+        //Add destination label from data model
+        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
+                    if let thisTripDestination = thisTripDict["destination"] as? String {
+                        title.text = "Top things to do in \(thisTripDestination)"
+                        self.addSubview(title)
+                    }
+                }
+            }
+        }
         header.addSubview(title)
         
         return header
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(25)
     }
     
     func setUpCollectionView() {
@@ -180,6 +198,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
         layout.itemSize = CGSize(width: 315, height: 150)
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
+        
 
         destinationPhotosCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         destinationPhotosCollectionView?.layer.cornerRadius = 10
