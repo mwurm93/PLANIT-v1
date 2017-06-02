@@ -368,7 +368,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             addContactPlusIconMainVC.alpha = 0
             
             let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-            if existing_trips == nil || existing_trips?.count == 0 {
+            if existing_trips?.count == 1 {
                 let when = DispatchTime.now() + 0.6
                 DispatchQueue.main.asyncAfter(deadline: when) {
                     self.animateInstructionsIn()
