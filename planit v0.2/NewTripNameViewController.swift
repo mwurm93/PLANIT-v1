@@ -15,6 +15,7 @@ import Cartography
 
 class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     
+    //Messaging var
     let messageComposer = MessageComposer()
     
     //Slider vars
@@ -30,7 +31,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     //ZLSwipeableView vars
     var colors = ["Turquoise", "Green Sea", "Emerald", "Nephritis", "Peter River", "Belize Hole", "Amethyst", "Wisteria", "Wet Asphalt", "Midnight Blue", "Sun Flower", "Orange", "Carrot", "Pumpkin", "Alizarin", "Pomegranate", "Silver", "Concrete", "Asbestos"]
     var colorIndex = 0
-    var loadCardsFromXib = false
+    var loadCardsFromXib = true
     var isTrackingPanLocation = false
     var panGestureRecognizer = UIPanGestureRecognizer()
     var countSwipes = 0
@@ -355,6 +356,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
         swipeableView.didTap = {view, location in
             self.detailedCardView.isHidden = false
+            self.view.bringSubview(toFront: self.detailedCardView)
             self.detailedCardView.alpha = 1
             self.detailedCardView.backgroundColor = self.swipeableView.topView()?.backgroundColor
 
@@ -384,7 +386,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         constrain(swipeableView, view) { view1, view2 in
             view1.left == view2.left+30
             view1.right == view2.right-30
-            view1.top == view2.top + 120
+            view1.top == view2.top + 105
             view1.bottom == view2.bottom - 150
         }
         

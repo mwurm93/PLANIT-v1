@@ -21,6 +21,7 @@
 		FA25F1FB1EBB7B9F005D29E5 /* hotelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */; };
 		FA2CFC0A1E3E57A200527405 /* UnbookedTripSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2CFC091E3E57A200527405 /* UnbookedTripSummaryViewController.swift */; };
 		FA35EF311EA5506D0029E462 /* HotelPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA35EF301EA5506D0029E462 /* HotelPreferencesViewController.swift */; };
+		FA4E36201EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4E361F1EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift */; };
 		FA4E922B1E3526DD00231C72 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4E922A1E3526DD00231C72 /* API.swift */; };
 		FA5201061EC4CE6F001EA849 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201051EC4CE6F001EA849 /* CoreLocation.framework */; };
 		FA5201081EC4CE84001EA849 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201071EC4CE84001EA849 /* libc++.tbd */; };
@@ -129,6 +130,7 @@
 		FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hotelTableViewCell.swift; sourceTree = "<group>"; };
 		FA2CFC091E3E57A200527405 /* UnbookedTripSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnbookedTripSummaryViewController.swift; sourceTree = "<group>"; };
 		FA35EF301EA5506D0029E462 /* HotelPreferencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HotelPreferencesViewController.swift; sourceTree = "<group>"; };
+		FA4E361F1EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = destinationPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		FA4E922A1E3526DD00231C72 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		FA5200F91EC4CE2E001EA849 /* WhirlyGlobeMaplyComponent.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WhirlyGlobeMaplyComponent.xcodeproj; path = "libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/WhirlyGlobeMaplyComponent.xcodeproj"; sourceTree = "<group>"; };
 		FA5201031EC4CE65001EA849 /* libWhirlyGlobeLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWhirlyGlobeLib.a; path = "libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobeLib/build/Debug-iphoneos/libWhirlyGlobeLib.a"; sourceTree = "<group>"; };
@@ -425,6 +427,7 @@
 			isa = PBXGroup;
 			children = (
 				FAA8F2901E351DCD00CD7337 /* ActivitiesCollectionViewCell.swift */,
+				FA4E361F1EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift */,
 				FAA8F2911E351DCD00CD7337 /* ActivityItem.swift */,
 				FAA8F2921E351DCD00CD7337 /* contactsCollectionViewCell.swift */,
 				FADF09FC1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift */,
@@ -506,9 +509,9 @@
 			isa = PBXGroup;
 			children = (
 				FA09A3EF1EB23893007F64A3 /* CardContentView.xib */,
+				FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */,
 				FA09A3F01EB23894007F64A3 /* CardView.swift */,
 				FA09A3EB1EB23694007F64A3 /* ToDoCardContentView.xib */,
-				FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */,
 				FAC1BD2A1EAE7707008AB7C4 /* Direction.swift */,
 				FAC1BD2B1EAE7707008AB7C4 /* Scheduler.swift */,
 				FAC1BD2C1EAE7707008AB7C4 /* ViewManager.swift */,
@@ -892,6 +895,7 @@
 				FAA8F2741E351B9500CD7337 /* ReviewAndBookViewController.swift in Sources */,
 				FAA8F28C1E351DBF00CD7337 /* CellView.swift in Sources */,
 				FAA8F2941E351DCD00CD7337 /* ActivityItem.swift in Sources */,
+				FA4E36201EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

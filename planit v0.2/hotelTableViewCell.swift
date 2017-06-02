@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 
 
-class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate,UITableViewDataSource,UITableViewDelegate {
+class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: Outlets
     @IBOutlet weak var defaultView: UIView!

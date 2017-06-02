@@ -2802,10 +2802,10 @@
                                 </connections>
                             </tableView>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rD3-hw-1ez">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="480" width="375" height="187"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="I6R-zX-lNl">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="187"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="dark"/>
@@ -4273,7 +4273,7 @@
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </objects>
-            <point key="canvasLocation" x="876" y="2096"/>
+            <point key="canvasLocation" x="876" y="1796"/>
         </scene>
         <!--Flight Results View Controller-->
         <scene sceneID="Lvw-sP-N3u">
@@ -4575,7 +4575,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YyM-ds-ZOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628" y="2095.5022488755626"/>
+            <point key="canvasLocation" x="1628" y="1796"/>
         </scene>
         <!--Hotel Preferences View Controller-->
         <scene sceneID="Boy-fV-DLn">
@@ -5103,8 +5103,8 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="cNU-Li-sIA"/>
-        <segue reference="isD-dZ-KwN"/>
+        <segue reference="XIs-yD-L7P"/>
+        <segue reference="aww-Ip-yzO"/>
         <segue reference="R8r-yB-rJ1"/>
         <segue reference="lra-AY-k3U"/>
         <segue reference="RAo-Nt-Dp1"/>
