@@ -66,9 +66,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
         
-        self.readyToBookButton.setTitle("Review flights to \(String(describing: rankedPotentialTripsDictionary[0]["destination"]!))", for: .normal)
+        self.readyToBookButton.setTitle("Book trip to \(String(describing: rankedPotentialTripsDictionary[0]["destination"]!))", for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.white, for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.lightGray, for: .highlighted)
+        self.readyToBookButton.titleLabel?.adjustsFontSizeToFitWidth = true
         self.readyToBookButton.backgroundColor = UIColor.blue
         self.readyToBookButton.layer.cornerRadius = self.readyToBookButton.frame.height / 2
         self.readyToBookButton.titleLabel?.textAlignment = .center
@@ -99,7 +100,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         let changeAttachment = NSTextAttachment()
         changeAttachment.image = #imageLiteral(resourceName: "change_black")
         changeAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 15)
-        let stringForLabel = NSMutableAttributedString(string: "See your group's top trip and alternatives! Tap ")
+        let stringForLabel = NSMutableAttributedString(string: "Time to price out your group's options! Tap ")
         let attachment1 = NSAttributedString(attachment: changeAttachment)
         let attachment2 = NSAttributedString(attachment: hamburgerAttachment)
         stringForLabel.append(attachment1)
@@ -343,6 +344,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             let destination = segue.destination as? flightSearchViewController
             destination?.rankedPotentialTripsDictionaryArrayIndex = rankedPotentialTripsDictionaryArrayIndexForSegue
         }
+        if segue.identifier == "changeHotelButtonToExploreHotels" {
+            let destination = segue.destination as? exploreHotelsViewController
+            destination?.rankedPotentialTripsDictionaryArrayIndex = rankedPotentialTripsDictionaryArrayIndexForSegue
+        }
     }
     
     ////// ADD NEW TRIP VARS (NS ONLY) HERE ///////////////////////////////////////////////////////////////////////////
@@ -443,10 +448,18 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         super.performSegue(withIdentifier: "changeFlightsButtonToFlightSearch", sender: self)
         
     }
+    @IBAction func chooseHotelButtonTouchedUpInside(_ sender: Any) {
+        updateCompletionStatus()
+        let UIButtonPressed = sender as! UIButton
+        rankedPotentialTripsDictionaryArrayIndexForSegue = UIButtonPressed.tag
+        super.performSegue(withIdentifier: "changeHotelButtonToExploreHotels", sender: self)
+    }
+    
+    
     @IBAction func moveForwardButtonTouchedUpInside(_ sender: Any) {
         updateCompletionStatus()
         rankedPotentialTripsDictionaryArrayIndexForSegue = 0
-        super.performSegue(withIdentifier: "changeFlightsButtonToFlightSearch", sender: self)
+        super.performSegue(withIdentifier: "rankingToBooking", sender: self)
     }
     @IBAction func tripNameEditingChanged(_ sender: Any) {
         let tripNameValue = tripNameLabel.text as! NSString

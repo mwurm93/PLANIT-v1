@@ -526,9 +526,9 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         } else if finishedEnteringPreferencesStatus == "flightSearch"  && bookingStatus == 0 {
             super.performSegue(withIdentifier: "unbookedTripToRanking", sender: self)
         } else if finishedEnteringPreferencesStatus == "flightResults"  && bookingStatus == 0 {
-            super.performSegue(withIdentifier: "unbookedTripToActivities", sender: self)
-        } else if finishedEnteringPreferencesStatus == "activities"  && bookingStatus == 0 {
             super.performSegue(withIdentifier: "unbookedTripToExploreHotels", sender: self)
+//        } else if finishedEnteringPreferencesStatus == "activities"  && bookingStatus == 0 {
+//            super.performSegue(withIdentifier: "unbookedTripToExploreHotels", sender: self)
         } else if finishedEnteringPreferencesStatus == "hotelResults"  && bookingStatus == 0 {
             super.performSegue(withIdentifier: "unbookedTripToBooking", sender: self)
         } else if finishedEnteringPreferencesStatus == "booking"  && bookingStatus == 0 {

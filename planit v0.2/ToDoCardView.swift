@@ -46,19 +46,44 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
         // Corner Radius
         layer.cornerRadius = 10.0;
 
+        var homeAirport = String()
+        var price = String()
+                
+        if  DataContainerSingleton.sharedDataContainer.homeAirport != nil && DataContainerSingleton.sharedDataContainer.homeAirport != "" {
+            homeAirport = DataContainerSingleton.sharedDataContainer.homeAirport!
+            price = "$350"
+        } else {
+            homeAirport = "???"
+            price = "$350"
+        }
         
+        let flightsFromLabel = UILabel(frame: CGRect(x: 0, y: 335 + 10, width: 315, height: 23))
+        flightsFromLabel.text = " Roundtrip flights from \(homeAirport) starting at \(price) "
+        flightsFromLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        flightsFromLabel.textColor = UIColor.white
+        flightsFromLabel.adjustsFontSizeToFitWidth = true
+        self.addSubview(flightsFromLabel)
+        
+        let accomodationFromLabel = UILabel(frame: CGRect(x: 0, y: flightsFromLabel.frame.maxY + 5, width: 315, height: 23))
+        accomodationFromLabel.text = " Accomodation starting at \(price) a night"
+        accomodationFromLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        accomodationFromLabel.adjustsFontSizeToFitWidth = true
+        accomodationFromLabel.textColor = UIColor.white
+        self.addSubview(accomodationFromLabel)
 
-        let averageWeatherLabel_High = UILabel(frame: CGRect(x: 0, y: 335 + 10, width: bounds.width, height: 23))
-        averageWeatherLabel_High.text = " Average high in June: 83°F"
-        averageWeatherLabel_High.font = UIFont.boldSystemFont(ofSize: 20)
-        averageWeatherLabel_High.textColor = UIColor.white
-        self.addSubview(averageWeatherLabel_High)
-
-        let averageWeatherLabel_Low = UILabel(frame: CGRect(x: 0, y: averageWeatherLabel_High.frame.maxY + 5, width: bounds.width, height: 23))
-        averageWeatherLabel_Low.text = " Average low in June: 70°F"
-        averageWeatherLabel_Low.font = UIFont.boldSystemFont(ofSize: 20)
-        averageWeatherLabel_Low.textColor = UIColor.white
-        self.addSubview(averageWeatherLabel_Low)
+        if cardMode == "detailed" {
+            let averageWeatherLabel_High = UILabel(frame: CGRect(x: 0, y: accomodationFromLabel.frame.maxY + 10, width: 315, height: 23))
+            averageWeatherLabel_High.text = " Average high in June: 83°F"
+            averageWeatherLabel_High.font = UIFont.boldSystemFont(ofSize: 20)
+            averageWeatherLabel_High.textColor = UIColor.white
+            self.addSubview(averageWeatherLabel_High)
+            
+            let averageWeatherLabel_Low = UILabel(frame: CGRect(x: 0, y: averageWeatherLabel_High.frame.maxY + 5, width: 315, height: 23))
+            averageWeatherLabel_Low.text = " Average low in June: 70°F"
+            averageWeatherLabel_Low.font = UIFont.boldSystemFont(ofSize: 20)
+            averageWeatherLabel_Low.textColor = UIColor.white
+            self.addSubview(averageWeatherLabel_Low)
+        }
     }
  
     func setUpTable() {
@@ -121,7 +146,7 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
                         let destinationLabel = UILabel(frame: CGRect(x: 0, y: 0, width: bounds.width, height: 50))
                         destinationLabel.font = UIFont.boldSystemFont(ofSize: 31)
                         destinationLabel.textColor = UIColor.white
-                        destinationLabel.text = thisTripDestination
+                        destinationLabel.text = " " + thisTripDestination
                         self.addSubview(destinationLabel)
                     }
                 }
@@ -235,8 +260,8 @@ class CardView: UIView, UITableViewDelegate, UITableViewDataSource, UICollection
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
                 if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
-                    if let thisTripDestinationPhotos = thisTripDict["destinationPhotos"] as? [UIImage] {
-                        cell.destinationImageView.image = thisTripDestinationPhotos[indexPath.item]
+                    if let thisTripDestinationPhotos = thisTripDict["destinationPhotos"] as? [String] {
+                        cell.destinationImageView.image = UIImage(named: thisTripDestinationPhotos[indexPath.item])
                     }
                 }
             }

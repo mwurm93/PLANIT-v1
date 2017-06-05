@@ -12,6 +12,9 @@ import SMCalloutView
 
 class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, GMSMapViewDelegate, SMCalloutViewDelegate, UIGestureRecognizerDelegate {
     
+    //Vars passed from segue
+    var rankedPotentialTripsDictionaryArrayIndex: Int?
+    
     // MARK: Class properties
     var selectedIndex = IndexPath(row: 0, section: 0)
     
@@ -26,7 +29,6 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     let filterFirstLevelOptions = ["Vicinity to...","Amenities","Rating","Clear filters"]
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     var hotelResultsDictionary = [Dictionary<String, Any>]()
-    let rankedPotentialTripsDictionaryArrayIndex = 0
     
     // MARK: Outlets
     @IBOutlet weak var recommendationRankingTableView: UITableView!
@@ -50,30 +52,30 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
-                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[rankedPotentialTripsDictionaryArrayIndex] as? Dictionary<String, AnyObject> {
+                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[rankedPotentialTripsDictionaryArrayIndex!] as? Dictionary<String, AnyObject> {
                     if let thisTripHotelResults = thisTripDict["hotelOptions"] {
                         if thisTripHotelResults.count > 1 {
-                            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = thisTripHotelResults
+                            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = thisTripHotelResults
                         } else {
                             //Load from server
                             let hotelOptionsDictionaryFromServer = [["hotelName":"The W"],["hotelName":"Hilton"],["hotelName":"Marriott"],["hotelName":"Holiday Inn"],["hotelName":"VRBO"]]
                             
-                            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = hotelOptionsDictionaryFromServer
+                            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = hotelOptionsDictionaryFromServer
                         }
                     }
                 }
             }
         }
         //Create shorter name
-        hotelResultsDictionary = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] as! [Dictionary<String, Any>]
+        hotelResultsDictionary = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] as! [Dictionary<String, Any>]
         //Save for retrieval from rankings page
-        self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = self.hotelResultsDictionary
+        self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = self.hotelResultsDictionary
         SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
         //Save
         self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
         //Update search summary title
-        searchSummaryTitle.text = "Accomodation in \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as! String))"
+        searchSummaryTitle.text = "Accomodation in \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as! String))"
 
         
         //Set up sort and filter callout views
@@ -284,7 +286,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                 self.hotelResultsDictionary.insert(movedRowDictionary, at: 0)
                 
                 let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-                self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = self.hotelResultsDictionary
+                self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = self.hotelResultsDictionary
                 SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
                 //Save
                 self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -310,7 +312,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                 self.hotelResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row)
                 
                 let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-                self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = self.hotelResultsDictionary
+                self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = self.hotelResultsDictionary
                 SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
                 //Save
                 self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -330,7 +332,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
             hotelResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row + 1)
             
             let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["hotelOptions"] = hotelResultsDictionary
+            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = hotelResultsDictionary
             SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
             //Save
             self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)

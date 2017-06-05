@@ -126,33 +126,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Create trip and trip data model
-        if tripNameLabel.text == "New Trip" {
-            var tripNameValue = "Trip created \(Date().description.substring(to: 10))"
-            //Check if trip name used already
-            if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
-                var countTripsMadeToday = 0
-                for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
-                    if (DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String)!.substring(to: 23) == tripNameValue {
-                        countTripsMadeToday += 1
-                    }
-                }
-                if countTripsMadeToday != 0 {
-                    tripNameValue = "Trip " + ("#\(countTripsMadeToday+1) ") + tripNameValue.substring(from: 5)
-                }
-            }
-            
-            tripNameLabel.text = tripNameValue
-            
-            //Update trip preferences in dictionary
-            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            SavedPreferencesForTrip["trip_name"] = tripNameValue as NSString
-            //Save
-            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-        }
-
-        
-        
         //City data
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -160,17 +133,17 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
             } else {
                 //Load from server
-                var rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "miami_1"),#imageLiteral(resourceName: "miami_2")],"topThingsToDo":["Vizcaya Museum and Gardens", "American Airlines Arena", "Wynwood Walls", "Boat tours","Zoological Wildlife Foundation"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]]]
+                var rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["miami_1","miami_2"],"topThingsToDo":["Vizcaya Museum and Gardens", "American Airlines Arena", "Wynwood Walls", "Boat tours","Zoological Wildlife Foundation"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]]]
                 
-                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Washington DC","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "washingtonDC_1"),#imageLiteral(resourceName: "washingtonDC_2"),#imageLiteral(resourceName: "washingtonDC_3"),#imageLiteral(resourceName: "washingtonDC_4")],"topThingsToDo":["National Mall", "Smithsonian Air and Space Museum" ,"Logan Circle"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Washington DC","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["washingtonDC_1","washingtonDC_2","washingtonDC_3","washingtonDC_4"],"topThingsToDo":["National Mall", "Smithsonian Air and Space Museum" ,"Logan Circle"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
                 
-                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "sanDiego_1"),#imageLiteral(resourceName: "sanDiego_2"),#imageLiteral(resourceName: "sanDiego_3"),#imageLiteral(resourceName: "sanDiego_4")],"topThingsToDo":["Sunset Cliffs", "San Diego Zoo" ,"Petco Park"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["sanDiego_1","sanDiego_2","sanDiego_3","sanDiego_4"],"topThingsToDo":["Sunset Cliffs", "San Diego Zoo" ,"Petco Park"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
                 
-                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Nashville","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "nashville_1"),#imageLiteral(resourceName: "nashville_2"),#imageLiteral(resourceName: "nashville_3"),#imageLiteral(resourceName: "nashville_4")],"topThingsToDo":["Grand Ole Opry", "Broadway" ,"Country Music Hall of Fame"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Nashville","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["nashville_1","nashville_2","nashville_3","nashville_4"],"topThingsToDo":["Grand Ole Opry", "Broadway" ,"Country Music Hall of Fame"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
                 
-                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"New Orleans","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "newOrleans_1"),#imageLiteral(resourceName: "newOrleans_2"),#imageLiteral(resourceName: "newOrleans_3"),#imageLiteral(resourceName: "newOrleans_4")],"topThingsToDo":["Bourbon Street", "National WWII Museum" ,"Jackson Square"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"New Orleans","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["newOrleans_1","newOrleans_2","newOrleans_3","newOrleans_4"],"topThingsToDo":["Bourbon Street", "National WWII Museum" ,"Jackson Square"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
                 
-                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"Austin","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":[#imageLiteral(resourceName: "austin_1"),#imageLiteral(resourceName: "austin_2"),#imageLiteral(resourceName: "austin_3"),#imageLiteral(resourceName: "austin_4")],"topThingsToDo":["Zilker Park", "6th Street" ,"University of Texas"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"Austin","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["austin_1","austin_2","austin_3","austin_4"],"topThingsToDo":["Zilker Park", "6th Street" ,"University of Texas"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
                 
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
                 
@@ -369,6 +342,33 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             
             let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
             if existing_trips?.count == 1 {
+                
+                //Create trip and trip data model
+                if tripNameLabel.text == "New Trip" {
+                    var tripNameValue = "Trip created \(Date().description.substring(to: 10))"
+                    //Check if trip name used already
+                    if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
+                        var countTripsMadeToday = 0
+                        for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+                            if (DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String)!.substring(to: 23) == tripNameValue {
+                                countTripsMadeToday += 1
+                            }
+                        }
+                        if countTripsMadeToday != 0 {
+                            tripNameValue = "Trip " + ("#\(countTripsMadeToday+1) ") + tripNameValue.substring(from: 5)
+                        }
+                    }
+                    
+                    tripNameLabel.text = tripNameValue
+                    
+                    //Update trip preferences in dictionary
+                    let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                    SavedPreferencesForTrip["trip_name"] = tripNameValue as NSString
+                    //Save
+                    saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                }
+                
+                
                 let when = DispatchTime.now() + 0.6
                 DispatchQueue.main.asyncAfter(deadline: when) {
                     self.animateInstructionsIn()
@@ -416,6 +416,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             if self.countSwipes == 1 && self.NewOrAddedTripFromSegue == 1 {
                 self.animateInSubview()
                 self.swipeableView.rewind()
+                self.countSwipes -= 1
+                self.NewOrAddedTripFromSegue = 0
             }
 
             let when = DispatchTime.now() + 0.8
