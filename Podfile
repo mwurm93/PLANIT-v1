@@ -21,6 +21,9 @@ target 'planit v0.2' do
     pod 'GoogleMaps'
     pod 'GooglePlaces'
     
+    # Pods for Messages
+    pod 'JSQMessagesViewController'
+
   target 'planit v0.2Tests' do
     inherit! :search_paths
     # Pods for testing
