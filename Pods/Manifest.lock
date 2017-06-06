@@ -8,6 +8,9 @@ PODS:
     - GoogleMaps/Base
   - GooglePlaces (2.2.0):
     - GoogleMaps/Base (= 2.2.0)
+  - JSQMessagesViewController (7.3.4):
+    - JSQSystemSoundPlayer (~> 2.0.1)
+  - JSQSystemSoundPlayer (2.0.1)
   - JTAppleCalendar (7.0.2)
   - pop (1.0.9)
   - SMCalloutView (2.1.5)
@@ -18,6 +21,7 @@ DEPENDENCIES:
   - Cartography
   - GoogleMaps
   - GooglePlaces
+  - JSQMessagesViewController
   - JTAppleCalendar (~> 7)
   - pop (~> 1.0)
   - SMCalloutView (~> 2.1)
@@ -28,11 +32,13 @@ SPEC CHECKSUMS:
   Cartography: 0538ccb4044acbbda2266335fc58cb4228794d90
   GoogleMaps: 104c418d61ab8a05dff06ed0784c25ea9d37da45
   GooglePlaces: bca867d5e9da15384c794b945e4226848bc6e9d9
+  JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
+  JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   JTAppleCalendar: c14685634064ef67a68209548ff3443208af48a3
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
   SMCalloutView: 5c0ee363dc8e7204b2fda17dfad38c93e9e23481
   UIColor+FlatColors: 6c699df7a575281794c688c64cee6c44fd1f93b4
 
-PODFILE CHECKSUM: d1ead399b88dd5117a3b0f8bcc3b6fcd4a561778
+PODFILE CHECKSUM: 25938cccf2e459025ca5f7e3fa2a6ef2a8d2451c
 
 COCOAPODS: 1.1.1

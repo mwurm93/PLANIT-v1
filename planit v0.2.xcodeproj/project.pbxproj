@@ -34,6 +34,7 @@
 		FA730B901EC9E88E004F310A /* flightSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA730B8F1EC9E88E004F310A /* flightSearchViewController.swift */; };
 		FA730B941EC9EEBA004F310A /* flightResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA730B931EC9EEBA004F310A /* flightResultsViewController.swift */; };
 		FA97A3721EC530F4006E68EC /* country_json_50m in Resources */ = {isa = PBXBuildFile; fileRef = FA97A3711EC530F4006E68EC /* country_json_50m */; };
+		FA97F84B1EE66A8B008358EF /* chatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97F84A1EE66A8B008358EF /* chatViewController.swift */; };
 		FA9E39811EBBD2A900F6CB0B /* bucketListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */; };
 		FAA8F2231E35194100CD7337 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2221E35194100CD7337 /* AppDelegate.swift */; };
 		FAA8F22A1E35194100CD7337 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2291E35194100CD7337 /* Assets.xcassets */; };
@@ -57,7 +58,6 @@
 		FAA8F2771E351B9500CD7337 /* TripListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2671E351B9500CD7337 /* TripListViewController.swift */; };
 		FAA8F2831E351D8D00CD7337 /* DataContainerSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2821E351D8D00CD7337 /* DataContainerSingleton.swift */; };
 		FAA8F2851E351DA300CD7337 /* CreateNewUser.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2841E351DA300CD7337 /* CreateNewUser.graphql */; };
-		FAA8F2871E351DAC00CD7337 /* GetTrip.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2861E351DAC00CD7337 /* GetTrip.graphql */; };
 		FAA8F28C1E351DBF00CD7337 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2881E351DBF00CD7337 /* CellView.swift */; };
 		FAA8F28D1E351DBF00CD7337 /* CellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2891E351DBF00CD7337 /* CellView.xib */; };
 		FAA8F28E1E351DBF00CD7337 /* monthHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F28A1E351DBF00CD7337 /* monthHeaderView.swift */; };
@@ -144,6 +144,7 @@
 		FA730B8F1EC9E88E004F310A /* flightSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = flightSearchViewController.swift; sourceTree = "<group>"; };
 		FA730B931EC9EEBA004F310A /* flightResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = flightResultsViewController.swift; sourceTree = "<group>"; };
 		FA97A3711EC530F4006E68EC /* country_json_50m */ = {isa = PBXFileReference; lastKnownFileType = folder; path = country_json_50m; sourceTree = "<group>"; };
+		FA97F84A1EE66A8B008358EF /* chatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatViewController.swift; sourceTree = "<group>"; };
 		FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bucketListViewController.swift; sourceTree = "<group>"; };
 		FAA8F21F1E35194100CD7337 /* planit v0.2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "planit v0.2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAA8F2221E35194100CD7337 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -173,7 +174,6 @@
 		FAA8F2671E351B9500CD7337 /* TripListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripListViewController.swift; sourceTree = "<group>"; };
 		FAA8F2821E351D8D00CD7337 /* DataContainerSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataContainerSingleton.swift; sourceTree = "<group>"; };
 		FAA8F2841E351DA300CD7337 /* CreateNewUser.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CreateNewUser.graphql; sourceTree = "<group>"; };
-		FAA8F2861E351DAC00CD7337 /* GetTrip.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GetTrip.graphql; sourceTree = "<group>"; };
 		FAA8F2881E351DBF00CD7337 /* CellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
 		FAA8F2891E351DBF00CD7337 /* CellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellView.xib; sourceTree = "<group>"; };
 		FAA8F28A1E351DBF00CD7337 /* monthHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = monthHeaderView.swift; sourceTree = "<group>"; };
@@ -368,6 +368,7 @@
 				FAA8F2581E351B9500CD7337 /* ActivitiesViewController.swift */,
 				FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */,
 				FAA8F2641E351B9500CD7337 /* ReviewAndBookViewController.swift */,
+				FA97F84A1EE66A8B008358EF /* chatViewController.swift */,
 				FAAE62611E3A423200A2A6B7 /* View Controllers (unused) */,
 			);
 			name = "View Controllers";
@@ -458,7 +459,6 @@
 		FAA8F27F1E351C4A00CD7337 /* Queries */ = {
 			isa = PBXGroup;
 			children = (
-				FAA8F2861E351DAC00CD7337 /* GetTrip.graphql */,
 			);
 			name = Queries;
 			sourceTree = "<group>";
@@ -670,7 +670,6 @@
 				FAA8F28F1E351DBF00CD7337 /* monthHeaderView.xib in Resources */,
 				FA09A3F11EB23894007F64A3 /* CardContentView.xib in Resources */,
 				FAA8F28D1E351DBF00CD7337 /* CellView.xib in Resources */,
-				FAA8F2871E351DAC00CD7337 /* GetTrip.graphql in Resources */,
 				FA5201171EC4DC4C001EA849 /* geography-class_medres.mbtiles in Resources */,
 				FAA8F2A11E351DEB00CD7337 /* items.plist in Resources */,
 			);
@@ -867,6 +866,7 @@
 				FAA8F2761E351B9500CD7337 /* SuggestDestinationViewController.swift in Sources */,
 				FAA8F29F1E351DDE00CD7337 /* timeOfDayTableViewCell.swift in Sources */,
 				FAA8F28E1E351DBF00CD7337 /* monthHeaderView.swift in Sources */,
+				FA97F84B1EE66A8B008358EF /* chatViewController.swift in Sources */,
 				FAA8F2691E351B9500CD7337 /* BirthdayGenderViewController.swift in Sources */,
 				FA187E451E37005200971D47 /* messageComposer.swift in Sources */,
 				FA35EF311EA5506D0029E462 /* HotelPreferencesViewController.swift in Sources */,

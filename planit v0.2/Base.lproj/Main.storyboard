@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="c7O-w7-no5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bhU-Qo-H8O">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -66,6 +66,9 @@
                                 <state key="normal" title="Login">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <segue destination="c7O-w7-no5" kind="show" id="Gdf-S5-bvE"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-rU-q1b">
                                 <rect key="frame" x="54" y="600" width="41" height="30"/>
@@ -85,6 +88,7 @@
                                 </state>
                                 <connections>
                                     <action selector="createAccountButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fPH-Nl-3oZ"/>
+                                    <segue destination="c7O-w7-no5" kind="show" id="9BV-HU-g4n"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -100,7 +104,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6466" y="-598"/>
+            <point key="canvasLocation" x="-2460" y="198"/>
         </scene>
         <!--Email View Controller-->
         <scene sceneID="4X5-PG-FNp">
@@ -166,7 +170,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="syq-wo-COZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5625" y="-598"/>
+            <point key="canvasLocation" x="-3222" y="198"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="gdT-jW-UcN">
@@ -3890,6 +3894,24 @@
             </objects>
             <point key="canvasLocation" x="-532" y="-600"/>
         </scene>
+        <!--Chat View Controller-->
+        <scene sceneID="peh-YB-6Fe">
+            <objects>
+                <viewController id="h7F-f1-4qO" customClass="chatViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lTw-pH-QJ4"/>
+                        <viewControllerLayoutGuide type="bottom" id="szH-06-mCz"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="muh-SH-dVk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ym6-jt-5bp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-793" y="122"/>
+        </scene>
         <!--Bucket List View Controller-->
         <scene sceneID="h8J-t7-W0G">
             <objects>
@@ -5159,13 +5181,13 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="R8r-yB-rJ1"/>
-        <segue reference="isD-dZ-KwN"/>
-        <segue reference="Cjv-x4-gBd"/>
-        <segue reference="chs-U5-EMN"/>
-        <segue reference="cNU-Li-sIA"/>
-        <segue reference="lra-AY-k3U"/>
+        <segue reference="9BV-HU-g4n"/>
+        <segue reference="bKD-fw-94P"/>
+        <segue reference="UAc-ww-JX6"/>
         <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="anE-cP-H4U"/>
+        <segue reference="upa-Nb-p7J"/>
+        <segue reference="cNU-Li-sIA"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

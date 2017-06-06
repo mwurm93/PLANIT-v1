@@ -92,8 +92,9 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
     // MARK: Actions
     @IBAction func createAccountButtonPressed(_ sender: Any) {
         DataContainerSingleton.sharedDataContainer.password = Password.text
-        apollo.perform(mutation: CreateAUserMutation(newUser: CreateUserInput(username: DataContainerSingleton.sharedDataContainer.emailAddress!,password: DataContainerSingleton.sharedDataContainer.password!))) { (result, error) in
-            }
+        
+        apollo.perform(mutation: CreateUserMutation(user: CreateUserInput(password: DataContainerSingleton.sharedDataContainer.password!, username: DataContainerSingleton.sharedDataContainer.emailAddress!)), resultHandler: { (result, error) in
+        })
     }
     
 }

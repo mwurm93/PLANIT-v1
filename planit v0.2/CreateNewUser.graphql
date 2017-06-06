@@ -1,10 +1,8 @@
-mutation CreateAUser($newUser: CreateUserInput!) {
-createUser(input: $newUser) {
-token
+mutation CreateUser($user: CreateUserInput!) {
+createUser(input: $user) {
 changedUser {
 id
 username
-createdAt
 }
 }
 }
