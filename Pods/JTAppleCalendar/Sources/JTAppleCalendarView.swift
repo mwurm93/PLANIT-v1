@@ -164,7 +164,7 @@ open class JTAppleCalendarView: UICollectionView {
         
         if calendarViewLayout.thereAreHeaders && scrollDirection == .vertical {
             let indexPath = IndexPath(item: 0, section: sectionIndexPath.section)
-            guard let attributes = calendarViewLayout.layoutAttributesForSupplementaryView(ofKind: UICollectionElementKindSectionHeader, at: indexPath) else { return retval }
+            guard let attributes = self.layoutAttributesForSupplementaryElement(ofKind: UICollectionElementKindSectionHeader, at: indexPath) else { return retval }
             
             let maxYCalendarOffset = max(0, self.contentSize.height - self.frame.size.height)
             retval = CGPoint(x: attributes.frame.origin.x,y: min(maxYCalendarOffset, attributes.frame.origin.y))

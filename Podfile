@@ -7,22 +7,22 @@ use_frameworks!
 
 target 'planit v0.2' do
 
-  # Pods for planit v0.2
-    pod 'pop', '~> 1.0'
-    pod "Apollo"
-    pod 'JTAppleCalendar', '~> 7’
-    pod 'SMCalloutView', '~> 2.1'
+# Pods for planit v0.2
+pod 'pop', '~> 1.0'
+pod "Apollo"
+pod 'JTAppleCalendar', '~> 7’
+pod 'SMCalloutView', '~> 2.1'
 
-    # Pods for ZLswipeableview
-    pod 'UIColor+FlatColors'
-    pod 'Cartography'
-    
-    # Pods for GoogleMaps
-    pod 'GoogleMaps'
-    pod 'GooglePlaces'
-    
-    # Pods for Messages
-    pod 'JSQMessagesViewController'
+# Pods for ZLswipeableview
+pod 'UIColor+FlatColors'
+pod 'Cartography'
+
+# Pods for GoogleMaps
+pod 'GoogleMaps'
+pod 'GooglePlaces'
+
+# Pods for Messages
+pod 'JSQMessagesViewController'
 
   target 'planit v0.2Tests' do
     inherit! :search_paths

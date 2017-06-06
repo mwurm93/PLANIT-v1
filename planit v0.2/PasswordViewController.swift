@@ -94,7 +94,22 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         DataContainerSingleton.sharedDataContainer.password = Password.text
         
         apollo.perform(mutation: CreateUserMutation(user: CreateUserInput(password: DataContainerSingleton.sharedDataContainer.password!, username: DataContainerSingleton.sharedDataContainer.emailAddress!)), resultHandler: { (result, error) in
+            guard let data = result?.data else { return }
+            let token = data.createUser?.token
+            
+            apollo = {
+                let configuration = URLSessionConfiguration.default
+                // Add additional headers as needed
+                configuration.httpAdditionalHeaders = ["Authorization": "\(String(describing: token))"]
+                
+                let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
+                
+                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+            }()
+
+            
         })
     }
+    
     
 }

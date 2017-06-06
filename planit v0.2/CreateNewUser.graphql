@@ -4,5 +4,6 @@ changedUser {
 id
 username
 }
+token
 }
 }

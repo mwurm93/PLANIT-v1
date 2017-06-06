@@ -12,7 +12,7 @@ import GoogleMaps
 import GooglePlaces
 
 
-let apollo = ApolloClient(url: URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!)
+var apollo = ApolloClient(url: URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!)
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

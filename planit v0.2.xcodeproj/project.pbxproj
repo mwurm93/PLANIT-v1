@@ -358,6 +358,8 @@
 		FAA8F2561E351AB100CD7337 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				FAA8F25C1E351B9500CD7337 /* EmailViewController.swift */,
+				FAA8F2611E351B9500CD7337 /* PasswordViewController.swift */,
 				FAA8F2651E351B9500CD7337 /* SettingsViewController.swift */,
 				FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */,
 				FAA8F2671E351B9500CD7337 /* TripListViewController.swift */,
@@ -496,11 +498,9 @@
 				FAA8F2591E351B9500CD7337 /* BirthdayGenderViewController.swift */,
 				FA09A3E91EB110A6007F64A3 /* ToDoViewController.swift */,
 				FA35EF301EA5506D0029E462 /* HotelPreferencesViewController.swift */,
-				FAA8F25C1E351B9500CD7337 /* EmailViewController.swift */,
 				FAA8F25D1E351B9500CD7337 /* HomeAirportViewController.swift */,
 				FAA8F25E1E351B9500CD7337 /* InstructionsViewController.swift */,
 				FAA8F25F1E351B9500CD7337 /* InternationalViewController.swift */,
-				FAA8F2611E351B9500CD7337 /* PasswordViewController.swift */,
 			);
 			name = "View Controllers (unused)";
 			sourceTree = "<group>";

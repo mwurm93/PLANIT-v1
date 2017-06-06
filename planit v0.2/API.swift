@@ -20,6 +20,7 @@ public final class CreateUserMutation: GraphQLMutation {
     "      id" +
     "      username" +
     "    }" +
+    "    token" +
     "  }" +
     "}"
 
@@ -45,10 +46,15 @@ public final class CreateUserMutation: GraphQLMutation {
       public let __typename: String
       /// The mutated User.
       public let changedUser: ChangedUser?
+      /// The user's authentication token. Embed this under the
+      /// 'Authorization' header with the format 'Bearer <token>'
+      /// 
+      public let token: String?
 
       public init(reader: GraphQLResultReader) throws {
         __typename = try reader.value(for: Field(responseName: "__typename"))
         changedUser = try reader.optionalValue(for: Field(responseName: "changedUser"))
+        token = try reader.optionalValue(for: Field(responseName: "token"))
       }
 
       public struct ChangedUser: GraphQLMappable {
