@@ -1,0 +1,5 @@
+query GetTripName ($id: ID!) {
+getTrip(id: $id) {
+tripName
+}
+}

@@ -8,6 +8,7 @@
 
 import UIKit
 import Apollo
+import Firebase
 
 class PasswordViewController: UIViewController, UITextFieldDelegate {
 
@@ -78,16 +79,16 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
                 guard let data = result?.data else { return }
                 let token = data.createUser?.token
                 
-                //Authenticate
-                apollo = {
-                    let configuration = URLSessionConfiguration.default
-                    // Add additional headers as needed
-                    configuration.httpAdditionalHeaders = ["Authorization": "\(String(describing: token))"]
-                    
-                    let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
-                    
-                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-                }()
+//                //Authenticate
+//                apollo = {
+//                    let configuration = URLSessionConfiguration.default
+//                    // Add additional headers as needed
+//                    configuration.httpAdditionalHeaders = ["Authorization": "Bearer <\(token)>"]
+//                    
+//                    let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
+//                    
+//                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+//                }()
                 
                 //Save token to singleton
                 DataContainerSingleton.sharedDataContainer.token = token
@@ -100,7 +101,7 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
             } else if existingUser == true {
                 
                 apollo.perform(mutation: LoginUserMutation(user: LoginUserInput(username: DataContainerSingleton.sharedDataContainer.emailAddress!, password: DataContainerSingleton.sharedDataContainer.password!)), resultHandler: { (result, error) in
-                                        
+                    
                     guard let data = result?.data else { return }
                     
                     var token: String?
@@ -117,17 +118,17 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
                         return
                     } else {
                         
-                        //Authenticate
-                        apollo = {
-                            let configuration = URLSessionConfiguration.default
-                            // Add additional headers as needed
-                            configuration.httpAdditionalHeaders = ["Authorization": "\(String(describing: token))"]
-                            
-                            let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
-                            
-                            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-                        }()
-
+//                        //Authenticate
+//                        apollo = {
+//                            let configuration = URLSessionConfiguration.default
+//                            // Add additional headers as needed
+//                            configuration.httpAdditionalHeaders = ["Authorization": "Bearer <\(token)>"]
+//                            
+//                            let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
+//                            
+//                            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+//                        }()
+//
                         //Save token to singleton
                         DataContainerSingleton.sharedDataContainer.token = token
                         
@@ -147,6 +148,17 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         }
         
         return true
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        FIRAuth.auth()?.signInAnonymously(completion: { (user, error) in // 2
+            if let err = error { // 3
+                print(err.localizedDescription)
+                return
+            }
+            
+        })
+
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {

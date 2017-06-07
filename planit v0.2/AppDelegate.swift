@@ -10,6 +10,7 @@ import UIKit
 import Apollo
 import GoogleMaps
 import GooglePlaces
+import Firebase
 
 
 var apollo = ApolloClient(url: URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!)
@@ -37,7 +38,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey("AIzaSyDBeoCYKCWap5Ivpv_zTMkH1eVORKrjX8A")
         GMSPlacesClient.provideAPIKey("AIzaSyDBeoCYKCWap5Ivpv_zTMkH1eVORKrjX8A")
 
-        // Override point for customization after application launch.
+        // Use Firebase library to configure APIs
+        FIRApp.configure()
+        
         return true
     }
     

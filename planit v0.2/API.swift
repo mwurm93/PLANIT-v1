@@ -10,6 +10,14 @@ public struct CreateUserInput: GraphQLMapConvertible {
   }
 }
 
+public struct CreateTripInput: GraphQLMapConvertible {
+  public var graphQLMap: GraphQLMap
+
+  public init(tripName: String, clientMutationId: GraphQLID? = nil) {
+    graphQLMap = ["tripName": tripName, "clientMutationId": clientMutationId]
+  }
+}
+
 /// Where filter arguments for the User type
 public struct UserWhereArgs: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
@@ -381,6 +389,64 @@ public final class CreateUserMutation: GraphQLMutation {
   }
 }
 
+public final class CreateTripMutation: GraphQLMutation {
+  public static let operationDefinition =
+    "mutation CreateTrip($trip: CreateTripInput!) {" +
+    "  createTrip(input: $trip) {" +
+    "    __typename" +
+    "    clientMutationId" +
+    "    changedTrip {" +
+    "      __typename" +
+    "      id" +
+    "    }" +
+    "  }" +
+    "}"
+
+  public let trip: CreateTripInput
+
+  public init(trip: CreateTripInput) {
+    self.trip = trip
+  }
+
+  public var variables: GraphQLMap? {
+    return ["trip": trip]
+  }
+
+  public struct Data: GraphQLMappable {
+    /// Create objects of type Trip.
+    public let createTrip: CreateTrip?
+
+    public init(reader: GraphQLResultReader) throws {
+      createTrip = try reader.optionalValue(for: Field(responseName: "createTrip", arguments: ["input": reader.variables["trip"]]))
+    }
+
+    public struct CreateTrip: GraphQLMappable {
+      public let __typename: String
+      /// An opaque string used by frontend frameworks like relay to track requests and responses.
+      public let clientMutationId: String?
+      /// The mutated Trip.
+      public let changedTrip: ChangedTrip?
+
+      public init(reader: GraphQLResultReader) throws {
+        __typename = try reader.value(for: Field(responseName: "__typename"))
+        clientMutationId = try reader.optionalValue(for: Field(responseName: "clientMutationId"))
+        changedTrip = try reader.optionalValue(for: Field(responseName: "changedTrip"))
+      }
+
+      public struct ChangedTrip: GraphQLMappable {
+        public let __typename: String
+        /// A globally unique ID.
+        public let id: GraphQLID
+
+        public init(reader: GraphQLResultReader) throws {
+          __typename = try reader.value(for: Field(responseName: "__typename"))
+          id = try reader.value(for: Field(responseName: "id"))
+        }
+      }
+    }
+  }
+}
+
 public final class GetAllUsersQuery: GraphQLQuery {
   public static let operationDefinition =
     "query GetAllUsers($where: UserWhereArgs) {" +
@@ -456,6 +522,193 @@ public final class GetAllUsersQuery: GraphQLQuery {
               username = try reader.value(for: Field(responseName: "username"))
             }
           }
+        }
+      }
+    }
+  }
+}
+
+public final class GetTripMessagesQuery: GraphQLQuery {
+  public static let operationDefinition =
+    "query GetTripMessages($id: ID!) {" +
+    "  getTrip(id: $id) {" +
+    "    __typename" +
+    "    messages {" +
+    "      __typename" +
+    "      edges {" +
+    "        __typename" +
+    "        node {" +
+    "          __typename" +
+    "          author {" +
+    "            __typename" +
+    "            id" +
+    "            username" +
+    "          }" +
+    "          contentString" +
+    "        }" +
+    "      }" +
+    "    }" +
+    "  }" +
+    "}"
+
+  public let id: GraphQLID
+
+  public init(id: GraphQLID) {
+    self.id = id
+  }
+
+  public var variables: GraphQLMap? {
+    return ["id": id]
+  }
+
+  public struct Data: GraphQLMappable {
+    /// Get objects of type Trip by id.
+    public let getTrip: GetTrip?
+
+    public init(reader: GraphQLResultReader) throws {
+      getTrip = try reader.optionalValue(for: Field(responseName: "getTrip", arguments: ["id": reader.variables["id"]]))
+    }
+
+    public struct GetTrip: GraphQLMappable {
+      public let __typename: String
+      /// The reverse field of 'trip' in 1:M connection
+      /// with type 'undefined'.
+      public let messages: Message?
+
+      public init(reader: GraphQLResultReader) throws {
+        __typename = try reader.value(for: Field(responseName: "__typename"))
+        messages = try reader.optionalValue(for: Field(responseName: "messages"))
+      }
+
+      public struct Message: GraphQLMappable {
+        public let __typename: String
+        /// The set of edges in this page.
+        public let edges: [Edge?]?
+
+        public init(reader: GraphQLResultReader) throws {
+          __typename = try reader.value(for: Field(responseName: "__typename"))
+          edges = try reader.optionalList(for: Field(responseName: "edges"))
+        }
+
+        public struct Edge: GraphQLMappable {
+          public let __typename: String
+          /// The node value for the edge.
+          public let node: Node
+
+          public init(reader: GraphQLResultReader) throws {
+            __typename = try reader.value(for: Field(responseName: "__typename"))
+            node = try reader.value(for: Field(responseName: "node"))
+          }
+
+          public struct Node: GraphQLMappable {
+            public let __typename: String
+            public let author: Author?
+            public let contentString: String
+
+            public init(reader: GraphQLResultReader) throws {
+              __typename = try reader.value(for: Field(responseName: "__typename"))
+              author = try reader.optionalValue(for: Field(responseName: "author"))
+              contentString = try reader.value(for: Field(responseName: "contentString"))
+            }
+
+            public struct Author: GraphQLMappable {
+              public let __typename: String
+              /// A globally unique ID.
+              public let id: GraphQLID
+              /// The user's username.
+              public let username: String
+
+              public init(reader: GraphQLResultReader) throws {
+                __typename = try reader.value(for: Field(responseName: "__typename"))
+                id = try reader.value(for: Field(responseName: "id"))
+                username = try reader.value(for: Field(responseName: "username"))
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class GetTripNameQuery: GraphQLQuery {
+  public static let operationDefinition =
+    "query GetTripName($id: ID!) {" +
+    "  getTrip(id: $id) {" +
+    "    __typename" +
+    "    tripName" +
+    "  }" +
+    "}"
+
+  public let id: GraphQLID
+
+  public init(id: GraphQLID) {
+    self.id = id
+  }
+
+  public var variables: GraphQLMap? {
+    return ["id": id]
+  }
+
+  public struct Data: GraphQLMappable {
+    /// Get objects of type Trip by id.
+    public let getTrip: GetTrip?
+
+    public init(reader: GraphQLResultReader) throws {
+      getTrip = try reader.optionalValue(for: Field(responseName: "getTrip", arguments: ["id": reader.variables["id"]]))
+    }
+
+    public struct GetTrip: GraphQLMappable {
+      public let __typename: String
+      public let tripName: String
+
+      public init(reader: GraphQLResultReader) throws {
+        __typename = try reader.value(for: Field(responseName: "__typename"))
+        tripName = try reader.value(for: Field(responseName: "tripName"))
+      }
+    }
+  }
+}
+
+public final class GetUserIdQuery: GraphQLQuery {
+  public static let operationDefinition =
+    "query GetUserID {" +
+    "  viewer {" +
+    "    __typename" +
+    "    user {" +
+    "      __typename" +
+    "      id" +
+    "    }" +
+    "  }" +
+    "}"
+  public init() {
+  }
+
+  public struct Data: GraphQLMappable {
+    public let viewer: Viewer?
+
+    public init(reader: GraphQLResultReader) throws {
+      viewer = try reader.optionalValue(for: Field(responseName: "viewer"))
+    }
+
+    public struct Viewer: GraphQLMappable {
+      public let __typename: String
+      /// Returns the currently logged in user and is also the entry point for queries that leverage RELATION scoped permissions.
+      public let user: User?
+
+      public init(reader: GraphQLResultReader) throws {
+        __typename = try reader.value(for: Field(responseName: "__typename"))
+        user = try reader.optionalValue(for: Field(responseName: "user"))
+      }
+
+      public struct User: GraphQLMappable {
+        public let __typename: String
+        /// A globally unique ID.
+        public let id: GraphQLID
+
+        public init(reader: GraphQLResultReader) throws {
+          __typename = try reader.value(for: Field(responseName: "__typename"))
+          id = try reader.value(for: Field(responseName: "id"))
         }
       }
     }

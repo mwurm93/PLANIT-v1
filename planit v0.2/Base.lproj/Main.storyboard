@@ -1725,6 +1725,14 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IyT-wc-aIe">
+                                <rect key="frame" x="10" y="10" width="45" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="Message"/>
+                                <connections>
+                                    <segue destination="h7F-f1-4qO" kind="show" animates="NO" id="aaX-Gb-b3x"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -3859,7 +3867,7 @@
         <!--Chat View Controller-->
         <scene sceneID="peh-YB-6Fe">
             <objects>
-                <viewController id="h7F-f1-4qO" customClass="chatViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="h7F-f1-4qO" customClass="ChatViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="lTw-pH-QJ4"/>
                         <viewControllerLayoutGuide type="bottom" id="szH-06-mCz"/>
@@ -3872,7 +3880,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ym6-jt-5bp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-793" y="122"/>
+            <point key="canvasLocation" x="41" y="128"/>
         </scene>
         <!--Bucket List View Controller-->
         <scene sceneID="h8J-t7-W0G">
@@ -5143,13 +5151,13 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="UAc-ww-JX6"/>
-        <segue reference="GNg-b7-XVH"/>
-        <segue reference="upa-Nb-p7J"/>
-        <segue reference="anE-cP-H4U"/>
-        <segue reference="bKD-fw-94P"/>
-        <segue reference="RAo-Nt-Dp1"/>
         <segue reference="cNU-Li-sIA"/>
+        <segue reference="isD-dZ-KwN"/>
+        <segue reference="anE-cP-H4U"/>
+        <segue reference="lra-AY-k3U"/>
+        <segue reference="UAc-ww-JX6"/>
+        <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="bKD-fw-94P"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

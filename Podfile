@@ -23,6 +23,11 @@ pod 'GooglePlaces'
 
 # Pods for Messages
 pod 'JSQMessagesViewController'
+pod 'Firebase/Core'
+pod 'Firebase/Storage'
+pod 'Firebase/Auth'
+pod 'Firebase/Database'
+pod 'SwiftGifOrigin', '~> 1.6.1'
 
   target 'planit v0.2Tests' do
     inherit! :search_paths

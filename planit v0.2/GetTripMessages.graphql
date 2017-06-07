@@ -1,0 +1,15 @@
+query GetTripMessages ($id: ID!) {
+getTrip(id: $id) {
+messages {
+edges {
+node {
+author {
+id
+username
+}
+contentString
+}
+}
+}
+}
+}
