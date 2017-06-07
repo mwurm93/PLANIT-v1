@@ -1730,7 +1730,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="Message"/>
                                 <connections>
-                                    <segue destination="h7F-f1-4qO" kind="show" animates="NO" id="aaX-Gb-b3x"/>
+                                    <segue destination="0NW-dQ-30A" kind="show" animates="NO" id="aaX-Gb-b3x"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -2870,7 +2870,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uTE-AC-aKu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="876" y="199"/>
+            <point key="canvasLocation" x="1815.2" y="198.35082458770617"/>
         </scene>
         <!--Review And Book View Controller-->
         <scene sceneID="oXU-ux-Xys">
@@ -3877,10 +3877,21 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="4rx-LH-3bo">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="Did-m0-EIa">
+                            <color key="tintColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="doneButtonTouchedUpInside:" destination="h7F-f1-4qO" id="zaX-j7-a5i"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="E8d-J0-NPc" kind="show" identifier="chatToNewTrip" animates="NO" id="YJh-b0-V47"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ym6-jt-5bp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="41" y="128"/>
+            <point key="canvasLocation" x="778" y="127"/>
         </scene>
         <!--Bucket List View Controller-->
         <scene sceneID="h8J-t7-W0G">
@@ -5114,6 +5125,24 @@
             </objects>
             <point key="canvasLocation" x="7278" y="-600"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="EHi-Y8-lkT">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0NW-dQ-30A" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" backIndicatorImage="Museum" id="qTT-Lr-iVa">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="h7F-f1-4qO" kind="relationship" relationship="rootViewController" id="gAr-p8-Vuf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kev-pd-TNi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="40.799999999999997" y="127.28635682158921"/>
+        </scene>
     </scenes>
     <resources>
         <image name="1" width="71" height="71"/>
@@ -5123,6 +5152,7 @@
         <image name="5" width="71" height="71"/>
         <image name="Calendar-Time" width="256" height="256"/>
         <image name="Message" width="256" height="256"/>
+        <image name="Museum" width="128" height="128"/>
         <image name="amenites" width="179" height="169"/>
         <image name="bed icon" width="128" height="128"/>
         <image name="bermudaSunset" width="1500" height="1125"/>
@@ -5151,13 +5181,13 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="cNU-Li-sIA"/>
-        <segue reference="isD-dZ-KwN"/>
-        <segue reference="anE-cP-H4U"/>
-        <segue reference="lra-AY-k3U"/>
-        <segue reference="UAc-ww-JX6"/>
         <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="lra-AY-k3U"/>
+        <segue reference="YJh-b0-V47"/>
+        <segue reference="isD-dZ-KwN"/>
+        <segue reference="cNU-Li-sIA"/>
         <segue reference="bKD-fw-94P"/>
+        <segue reference="UAc-ww-JX6"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

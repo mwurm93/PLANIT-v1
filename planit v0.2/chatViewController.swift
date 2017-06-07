@@ -20,7 +20,7 @@ final class ChatViewController: JSQMessagesViewController {
     private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     
     private lazy var messageRef: FIRDatabaseReference = self.channelRef.child("messages")
-    fileprivate lazy var storageRef: FIRStorageReference = FIRStorage.storage().reference(forURL: "gs://chatchat-rw-cf107.appspot.com")
+    fileprivate lazy var storageRef: FIRStorageReference = FIRStorage.storage().reference(forURL: "gs://planit-1493915149567.appspot.com")
     private lazy var userIsTypingRef: FIRDatabaseReference = self.channelRef.child("typingIndicator").child(self.senderId)
     private lazy var usersTypingQuery: FIRDatabaseQuery = self.channelRef.child("typingIndicator").queryOrderedByValue().queryEqual(toValue: true)
     
@@ -65,6 +65,8 @@ final class ChatViewController: JSQMessagesViewController {
         }
         self.senderDisplayName = DataContainerSingleton.sharedDataContainer.emailAddress
         self.senderId = FIRAuth.auth()?.currentUser?.uid
+        
+        
         
         observeMessages()
         
@@ -372,6 +374,13 @@ final class ChatViewController: JSQMessagesViewController {
         existing_trips?[currentTripIndex] = SavedPreferencesForTrip as NSDictionary
         DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
     }
+    
+    //MARK: Actions
+    @IBAction func doneButtonTouchedUpInside(_ sender: Any) {
+        super.performSegue(withIdentifier: "chatToNewTrip", sender: self)
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    
 }
 
 // MARK: Image Picker Delegate

@@ -341,8 +341,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             addContactPlusIconMainVC.alpha = 0
             
             let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-            if existing_trips?.count == 1 {
-                
+            
                 //Create trip and trip data model
                 if tripNameLabel.text == "New Trip" {
                     var tripNameValue = "Trip created \(Date().description.substring(to: 10))"
@@ -350,12 +349,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                     if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
                         var countTripsMadeToday = 0
                         for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
-                            if (DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String)!.substring(to: 23) == tripNameValue {
+                            if (DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String)!.contains("\(Date().description.substring(to: 10))") {
                                 countTripsMadeToday += 1
                             }
                         }
                         if countTripsMadeToday != 0 {
-                            tripNameValue = "Trip " + ("#\(countTripsMadeToday+1) ") + tripNameValue.substring(from: 5)
+                            tripNameValue = "Trip " + ("#\(countTripsMadeToday + 1) ") + tripNameValue.substring(from: 5)
                         }
                     }
                     
@@ -385,7 +384,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 let when = DispatchTime.now() + 0.6
                 DispatchQueue.main.asyncAfter(deadline: when) {
                     self.animateInstructionsIn()
-                }
             }
         }
         else {
