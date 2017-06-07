@@ -56,14 +56,6 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ALy-7Q-Dql">
-                                <rect key="frame" x="282" y="600" width="44" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                <state key="normal" title="Login">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-rU-q1b">
                                 <rect key="frame" x="54" y="600" width="41" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -73,23 +65,13 @@
                                     <segue destination="bhU-Qo-H8O" kind="show" animates="NO" id="pmu-6r-Sks"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wJY-61-MdB">
-                                <rect key="frame" x="202" y="600" width="124" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                <state key="normal" title="Create Account">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <connections>
                         <outlet property="Password" destination="EgK-jy-RMs" id="OW6-fT-e62"/>
-                        <outlet property="createAccountButton" destination="wJY-61-MdB" id="ggz-K4-bq2"/>
                         <outlet property="createPasswordLabel" destination="b6y-Y7-2Ts" id="2ol-Bw-IWD"/>
                         <outlet property="enterPasswordLabel" destination="mZJ-rV-QuP" id="TcE-Zu-zKr"/>
-                        <outlet property="loginButton" destination="ALy-7Q-Dql" id="ROW-N3-XWM"/>
                         <segue destination="c7O-w7-no5" kind="show" identifier="passwordToTripList" animates="NO" id="GNg-b7-XVH"/>
                     </connections>
                 </viewController>

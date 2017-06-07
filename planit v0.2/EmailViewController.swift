@@ -63,6 +63,7 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
         } else {
             UIView.animate(withDuration: 0.5) {
                 self.pleaseEnterEmail.text = "Please enter a valid email address"
+                self.emailAddress.becomeFirstResponder()
             }
         }
         return true

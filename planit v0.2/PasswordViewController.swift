@@ -16,8 +16,6 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: Outlets
     @IBOutlet weak var Password: UITextField!
-    @IBOutlet weak var createAccountButton: UIButton!
-    @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var createPasswordLabel: UILabel!
     @IBOutlet weak var enterPasswordLabel: UILabel!
 
@@ -35,10 +33,6 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         let passwordLabelPlaceholder = Password!.value(forKey: "placeholderLabel") as? UILabel
         passwordLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
 
-        createAccountButton.isHidden = true
-        createAccountButton.isEnabled = false
-        loginButton.isHidden = true
-        loginButton.isEnabled = false
         createPasswordLabel.isHidden = true
         enterPasswordLabel.isHidden = true
         
@@ -74,14 +68,17 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        DataContainerSingleton.sharedDataContainer.password = Password.text
+        
         if (Password.text?.characters.count)! >= 6 {
             if existingUser == false {
+            
             //Create account and authenticate instance
-            DataContainerSingleton.sharedDataContainer.password = Password.text
             apollo.perform(mutation: CreateUserMutation(user: CreateUserInput(password: DataContainerSingleton.sharedDataContainer.password!, username: DataContainerSingleton.sharedDataContainer.emailAddress!)), resultHandler: { (result, error) in
                 guard let data = result?.data else { return }
                 let token = data.createUser?.token
                 
+                //Authenticate
                 apollo = {
                     let configuration = URLSessionConfiguration.default
                     // Add additional headers as needed
@@ -101,18 +98,36 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
                 
             })
             } else if existingUser == true {
+                
                 apollo.perform(mutation: LoginUserMutation(user: LoginUserInput(username: DataContainerSingleton.sharedDataContainer.emailAddress!, password: DataContainerSingleton.sharedDataContainer.password!)), resultHandler: { (result, error) in
+                                        
                     guard let data = result?.data else { return }
-                    let token = data.loginUser?.token
+                    
+                    var token: String?
+                    if data.loginUser?.token != nil {
+                        token = data.loginUser?.token
+                    }
                     
                     if token == nil {
                         UIView.animate(withDuration: 0.5) {
                             self.createPasswordLabel.text = "Invalid password, please try again"
                             self.enterPasswordLabel.text = "Invalid password, please try again"
-                            self.createPasswordLabel.font = UIFont.boldSystemFont(ofSize: 18)
-                            self.enterPasswordLabel.font = UIFont.boldSystemFont(ofSize: 18)
+                            self.Password.becomeFirstResponder()
                         }
+                        return
                     } else {
+                        
+                        //Authenticate
+                        apollo = {
+                            let configuration = URLSessionConfiguration.default
+                            // Add additional headers as needed
+                            configuration.httpAdditionalHeaders = ["Authorization": "\(String(describing: token))"]
+                            
+                            let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
+                            
+                            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+                        }()
+
                         //Save token to singleton
                         DataContainerSingleton.sharedDataContainer.token = token
                         
@@ -127,6 +142,7 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
             UIView.animate(withDuration: 0.5) {
                 self.createPasswordLabel.text = "Your password must be longer than 6 characters"
                 self.enterPasswordLabel.text = "Your password must be longer than 6 characters"
+                self.Password.becomeFirstResponder()
             }
         }
         
