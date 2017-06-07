@@ -1,0 +1,11 @@
+query GetAllUsers($where: UserWhereArgs) {
+viewer {
+allUsers(where: $where) {
+edges {
+node {
+username
+}
+}
+}
+}
+}

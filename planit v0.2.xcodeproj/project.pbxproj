@@ -31,6 +31,8 @@
 		FA52010F1EC4D2FB001EA849 /* WhirlyGlobeMaplyComponent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201001EC4CE2E001EA849 /* WhirlyGlobeMaplyComponent.framework */; };
 		FA5201171EC4DC4C001EA849 /* geography-class_medres.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = FA5201161EC4DC4C001EA849 /* geography-class_medres.mbtiles */; };
 		FA5F13AB1EB92E310003A992 /* amenityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */; };
+		FA647D3D1EE7666E00B36138 /* LoginUser.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FA647D3C1EE7666E00B36138 /* LoginUser.graphql */; };
+		FA647D3F1EE775A100B36138 /* GetAllUsers.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FA647D3E1EE775A100B36138 /* GetAllUsers.graphql */; };
 		FA730B901EC9E88E004F310A /* flightSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA730B8F1EC9E88E004F310A /* flightSearchViewController.swift */; };
 		FA730B941EC9EEBA004F310A /* flightResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA730B931EC9EEBA004F310A /* flightResultsViewController.swift */; };
 		FA97A3721EC530F4006E68EC /* country_json_50m in Resources */ = {isa = PBXBuildFile; fileRef = FA97A3711EC530F4006E68EC /* country_json_50m */; };
@@ -141,6 +143,8 @@
 		FA52010D1EC4CEA9001EA849 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		FA5201161EC4DC4C001EA849 /* geography-class_medres.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class_medres.mbtiles"; sourceTree = "<group>"; };
 		FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = amenityTableViewCell.swift; sourceTree = "<group>"; };
+		FA647D3C1EE7666E00B36138 /* LoginUser.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LoginUser.graphql; sourceTree = "<group>"; };
+		FA647D3E1EE775A100B36138 /* GetAllUsers.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GetAllUsers.graphql; sourceTree = "<group>"; };
 		FA730B8F1EC9E88E004F310A /* flightSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = flightSearchViewController.swift; sourceTree = "<group>"; };
 		FA730B931EC9EEBA004F310A /* flightResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = flightResultsViewController.swift; sourceTree = "<group>"; };
 		FA97A3711EC530F4006E68EC /* country_json_50m */ = {isa = PBXFileReference; lastKnownFileType = folder; path = country_json_50m; sourceTree = "<group>"; };
@@ -469,6 +473,8 @@
 			isa = PBXGroup;
 			children = (
 				FAA8F2841E351DA300CD7337 /* CreateNewUser.graphql */,
+				FA647D3C1EE7666E00B36138 /* LoginUser.graphql */,
+				FA647D3E1EE775A100B36138 /* GetAllUsers.graphql */,
 			);
 			name = Mutations;
 			sourceTree = "<group>";
@@ -663,7 +669,9 @@
 			files = (
 				FAA8F2551E351A2700CD7337 /* Main.storyboard in Resources */,
 				FAA8F22A1E35194100CD7337 /* Assets.xcassets in Resources */,
+				FA647D3D1EE7666E00B36138 /* LoginUser.graphql in Resources */,
 				FA97A3721EC530F4006E68EC /* country_json_50m in Resources */,
+				FA647D3F1EE775A100B36138 /* GetAllUsers.graphql in Resources */,
 				FAA8F2541E351A2700CD7337 /* LaunchScreen.storyboard in Resources */,
 				FA09A3ED1EB23694007F64A3 /* ToDoCardContentView.xib in Resources */,
 				FAA8F2851E351DA300CD7337 /* CreateNewUser.graphql in Resources */,

@@ -13,21 +13,13 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
     // MARK: Outlets
     @IBOutlet weak var emailAddress: UITextField!
     @IBOutlet weak var pleaseEnterEmail: UILabel!
-    @IBOutlet weak var nextButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.emailAddress.delegate = self
         
         self.hideKeyboardWhenTappedAround()
-        
-        // apollo.fetch(query: GetTripQuery(id: "VHJpcDox")) { (result, error) in
-        //    guard let data = result?.data else { return }
-        //    self.emailAddress.text = data.getTrip?.name;
-        // }
-        
-        nextButton.isHidden = true
-        nextButton.isEnabled = false
+        emailAddress.becomeFirstResponder()
         
         emailAddress.layer.borderWidth = 1
         emailAddress.layer.cornerRadius = 5
@@ -47,10 +39,6 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
         
         //Install the value into the text field.
         self.emailAddress.text =  "\(emailAddressValue)"
-        if (emailAddress.text?.contains("@"))! {
-            nextButton.isHidden = false
-            nextButton.isEnabled = true
-        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,9 +47,24 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: UITextFieldDelegate for firstName
     
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        UIView.animate(withDuration: 0.4) {
+            self.emailAddress.frame.origin.y = 408
+            self.pleaseEnterEmail.frame.origin.y = 372
+        }
+        
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
-        // Hide the keyboard.
-        emailAddress.resignFirstResponder()
+        if (emailAddress.text?.contains("@"))! {
+            emailAddress.resignFirstResponder()
+            super.performSegue(withIdentifier: "emailToPassword", sender: self)
+        } else {
+            UIView.animate(withDuration: 0.5) {
+                self.pleaseEnterEmail.text = "Please enter a valid email address"
+            }
+        }
         return true
     }
     
@@ -70,17 +73,8 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func EmailFieldEditingChanged(_ sender: Any) {
+        DataContainerSingleton.sharedDataContainer.emailAddress = emailAddress.text
         
-        if (emailAddress.text?.contains("@"))! {
-            DataContainerSingleton.sharedDataContainer.emailAddress = emailAddress.text
-        
-            nextButton.isHidden = false
-            nextButton.isEnabled = true
-        }
-        else if (emailAddress.text?.contains("@"))! == false {
-                nextButton.isHidden = true
-                nextButton.isEnabled = false
-        }
     }
     
 }

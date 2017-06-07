@@ -27,6 +27,7 @@ struct DefaultKeys {
         static let beenTherePinLocations = "beenTherePinLocations"
         static let bucketListCountries = "bucketListCountries"
         static let beenThereCountries = "beenThereCountries"
+        static let token = "token"
     
     }
 
@@ -51,6 +52,7 @@ class DataContainerSingleton {
     var beenTherePinLocations: [NSDictionary]?
     var bucketListCountries: [String]?
     var beenThereCountries: [String]?
+    var token: String?
     
     var goToBackgroundObserver: AnyObject?
     
@@ -76,6 +78,8 @@ class DataContainerSingleton {
         beenTherePinLocations = defaults.object(forKey: DefaultKeys.beenTherePinLocations) as! [NSDictionary]?
         bucketListCountries = defaults.object(forKey: DefaultKeys.bucketListCountries) as! [String]?
         beenThereCountries = defaults.object(forKey: DefaultKeys.beenThereCountries) as! [String]?
+        token = defaults.object(forKey: DefaultKeys.token) as! String?
+
         
         //-----------------------------------------------------------------------------
         
@@ -107,6 +111,7 @@ class DataContainerSingleton {
             defaults.set( self.beenTherePinLocations, forKey: DefaultKeys.beenTherePinLocations)
             defaults.set( self.bucketListCountries, forKey: DefaultKeys.bucketListCountries)
             defaults.set( self.beenThereCountries, forKey: DefaultKeys.beenThereCountries)
+            defaults.set( self.token, forKey: DefaultKeys.token)
 
             //-----------------------------------------------------------------------------
             //Tell NSUserDefaults to save to disk now.

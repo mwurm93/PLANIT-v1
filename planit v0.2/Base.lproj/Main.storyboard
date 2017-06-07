@@ -12,7 +12,7 @@
         <!--Password View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="LoginViewController" id="BYZ-38-t0r" customClass="PasswordViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PasswordViewController" id="BYZ-38-t0r" customClass="PasswordViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -48,9 +48,6 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
-                                <connections>
-                                    <action selector="passwordFieldEditingChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="Zd2-IX-Bbf"/>
-                                </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="PLANiT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="27G-aq-pXe">
                                 <rect key="frame" x="97" y="90" width="181" height="58"/>
@@ -66,9 +63,6 @@
                                 <state key="normal" title="Login">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
-                                <connections>
-                                    <segue destination="c7O-w7-no5" kind="show" id="Gdf-S5-bvE"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-rU-q1b">
                                 <rect key="frame" x="54" y="600" width="41" height="30"/>
@@ -86,10 +80,6 @@
                                 <state key="normal" title="Create Account">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
-                                <connections>
-                                    <action selector="createAccountButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fPH-Nl-3oZ"/>
-                                    <segue destination="c7O-w7-no5" kind="show" id="9BV-HU-g4n"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -100,6 +90,7 @@
                         <outlet property="createPasswordLabel" destination="b6y-Y7-2Ts" id="2ol-Bw-IWD"/>
                         <outlet property="enterPasswordLabel" destination="mZJ-rV-QuP" id="TcE-Zu-zKr"/>
                         <outlet property="loginButton" destination="ALy-7Q-Dql" id="ROW-N3-XWM"/>
+                        <segue destination="c7O-w7-no5" kind="show" identifier="passwordToTripList" animates="NO" id="GNg-b7-XVH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -109,7 +100,7 @@
         <!--Email View Controller-->
         <scene sceneID="4X5-PG-FNp">
             <objects>
-                <viewController storyboardIdentifier="SignUpViewController" id="bhU-Qo-H8O" customClass="EmailViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EmailViewController" id="bhU-Qo-H8O" customClass="EmailViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5xe-Ql-1yC"/>
                         <viewControllerLayoutGuide type="bottom" id="kP1-SU-YCA"/>
@@ -131,23 +122,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Please enter your email address" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EID-6x-10R">
-                                <rect key="frame" x="48" y="412" width="220" height="39"/>
+                                <rect key="frame" x="48" y="412" width="278" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GKm-gM-5h9">
-                                <rect key="frame" x="282" y="600" width="44" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                <state key="normal" title="Next">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="BYZ-38-t0r" kind="show" animates="NO" id="qdC-CD-JAz"/>
-                                </connections>
-                            </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dnx-qn-eUU">
                                 <rect key="frame" x="48" y="448" width="278" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
@@ -164,13 +144,13 @@
                     </view>
                     <connections>
                         <outlet property="emailAddress" destination="dnx-qn-eUU" id="r2c-zZ-NaH"/>
-                        <outlet property="nextButton" destination="GKm-gM-5h9" id="9SJ-NN-Zad"/>
                         <outlet property="pleaseEnterEmail" destination="EID-6x-10R" id="hWg-aM-en4"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="emailToPassword" animates="NO" id="A7j-hj-dzs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="syq-wo-COZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3222" y="198"/>
+            <point key="canvasLocation" x="-3223.1999999999998" y="197.45127436281859"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="gdT-jW-UcN">
@@ -5181,12 +5161,12 @@
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="9BV-HU-g4n"/>
-        <segue reference="bKD-fw-94P"/>
         <segue reference="UAc-ww-JX6"/>
-        <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="anE-cP-H4U"/>
+        <segue reference="GNg-b7-XVH"/>
         <segue reference="upa-Nb-p7J"/>
+        <segue reference="anE-cP-H4U"/>
+        <segue reference="bKD-fw-94P"/>
+        <segue reference="RAo-Nt-Dp1"/>
         <segue reference="cNU-Li-sIA"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

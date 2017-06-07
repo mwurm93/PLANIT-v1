@@ -27,6 +27,7 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         
         self.hideKeyboardWhenTappedAround()
         
+        Password.becomeFirstResponder()
         Password.layer.borderWidth = 1
         Password.layer.cornerRadius = 5
         Password.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
@@ -38,15 +39,25 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         createAccountButton.isEnabled = false
         loginButton.isHidden = true
         loginButton.isEnabled = false
+        createPasswordLabel.isHidden = true
+        enterPasswordLabel.isHidden = true
         
-        if existingUser == true {
-            createPasswordLabel.isHidden = true
-            enterPasswordLabel.isHidden = false
+        apollo.fetch(query: GetAllUsersQuery(where: UserWhereArgs(username: UserUsernameWhereArgs(eq: DataContainerSingleton.sharedDataContainer.emailAddress)))) { (result, error) in
+            guard let data = result?.data else { return }
+            
+            let matchingUsersCount = data.viewer?.allUsers?.edges?.count
+            if matchingUsersCount == 1 {
+                self.existingUser = true
+            }
+            if self.existingUser == true {
+                self.enterPasswordLabel.isHidden = false
+            }
+            else {
+                self.createPasswordLabel.isHidden = false
+            }
         }
-        else {
-            createPasswordLabel.isHidden = false
-            enterPasswordLabel.isHidden = true
-        }
+        
+        
         
     }
     
@@ -63,53 +74,72 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if (Password.text?.characters.count)! >= 6 {
+            if existingUser == false {
+            //Create account and authenticate instance
+            DataContainerSingleton.sharedDataContainer.password = Password.text
+            apollo.perform(mutation: CreateUserMutation(user: CreateUserInput(password: DataContainerSingleton.sharedDataContainer.password!, username: DataContainerSingleton.sharedDataContainer.emailAddress!)), resultHandler: { (result, error) in
+                guard let data = result?.data else { return }
+                let token = data.createUser?.token
+                
+                apollo = {
+                    let configuration = URLSessionConfiguration.default
+                    // Add additional headers as needed
+                    configuration.httpAdditionalHeaders = ["Authorization": "\(String(describing: token))"]
+                    
+                    let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
+                    
+                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+                }()
+                
+                //Save token to singleton
+                DataContainerSingleton.sharedDataContainer.token = token
+                
+                //resign first responder and seque
+                self.Password.resignFirstResponder()
+                super.performSegue(withIdentifier: "passwordToTripList", sender: self)
+                
+            })
+            } else if existingUser == true {
+                apollo.perform(mutation: LoginUserMutation(user: LoginUserInput(username: DataContainerSingleton.sharedDataContainer.emailAddress!, password: DataContainerSingleton.sharedDataContainer.password!)), resultHandler: { (result, error) in
+                    guard let data = result?.data else { return }
+                    let token = data.loginUser?.token
+                    
+                    if token == nil {
+                        UIView.animate(withDuration: 0.5) {
+                            self.createPasswordLabel.text = "Invalid password, please try again"
+                            self.enterPasswordLabel.text = "Invalid password, please try again"
+                            self.createPasswordLabel.font = UIFont.boldSystemFont(ofSize: 18)
+                            self.enterPasswordLabel.font = UIFont.boldSystemFont(ofSize: 18)
+                        }
+                    } else {
+                        //Save token to singleton
+                        DataContainerSingleton.sharedDataContainer.token = token
+                        
+                        //resign first responder and seque
+                        self.Password.resignFirstResponder()
+                        super.performSegue(withIdentifier: "passwordToTripList", sender: self)
+                    }
+                })
+            }
+            
+        } else {
+            UIView.animate(withDuration: 0.5) {
+                self.createPasswordLabel.text = "Your password must be longer than 6 characters"
+                self.enterPasswordLabel.text = "Your password must be longer than 6 characters"
+            }
+        }
+        
         return true
     }
     
-    @IBAction func passwordFieldEditingChanged(_ sender: Any) {
-        if (Password.text?.characters.count)! >= 6 {
-            DataContainerSingleton.sharedDataContainer.password = Password.text
-            if existingUser == true {
-                createAccountButton.isHidden = true
-                createAccountButton.isEnabled = false
-                loginButton.isHidden = false
-                loginButton.isEnabled = true
-            }
-            else if existingUser == false {
-                createAccountButton.isHidden = false
-                createAccountButton.isEnabled = true
-                loginButton.isHidden = true
-                loginButton.isEnabled = false
-            }
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        UIView.animate(withDuration: 0.4) {
+            self.Password.frame.origin.y = 408
+            self.enterPasswordLabel.frame.origin.y = 363
+            self.createPasswordLabel.frame.origin.y = 363
         }
-        if (Password.text?.characters.count)! < 6 {
-            createAccountButton.isHidden = true
-            createAccountButton.isEnabled = false
-            loginButton.isHidden = true
-            loginButton.isEnabled = false
-        }
-    }
-    // MARK: Actions
-    @IBAction func createAccountButtonPressed(_ sender: Any) {
-        DataContainerSingleton.sharedDataContainer.password = Password.text
         
-        apollo.perform(mutation: CreateUserMutation(user: CreateUserInput(password: DataContainerSingleton.sharedDataContainer.password!, username: DataContainerSingleton.sharedDataContainer.emailAddress!)), resultHandler: { (result, error) in
-            guard let data = result?.data else { return }
-            let token = data.createUser?.token
-            
-            apollo = {
-                let configuration = URLSessionConfiguration.default
-                // Add additional headers as needed
-                configuration.httpAdditionalHeaders = ["Authorization": "\(String(describing: token))"]
-                
-                let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
-                
-                return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-            }()
-
-            
-        })
+        return true
     }
-    
-    
 }

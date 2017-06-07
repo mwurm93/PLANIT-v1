@@ -21,6 +21,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        //Set root VC
+        if DataContainerSingleton.sharedDataContainer.token == nil {
+            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let emailViewController = mainStoryboard.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
+            self.window?.rootViewController = emailViewController
+        } else {
+            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let TripListViewController = mainStoryboard.instantiateViewController(withIdentifier: "TripListViewController") as! TripListViewController
+            self.window?.rootViewController = TripListViewController
+        }
 
         //Google Maps and Google Places API keys
         GMSServices.provideAPIKey("AIzaSyDBeoCYKCWap5Ivpv_zTMkH1eVORKrjX8A")
