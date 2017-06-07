@@ -13,9 +13,14 @@ import JTAppleCalendar
 import UIColor_FlatColors
 import Cartography
 import SMCalloutView
+import Firebase
 
 class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout, SMCalloutViewDelegate {
     
+    //Firebase channel
+    private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
+    var newChannelRef: FIRDatabaseReference?
+
     //City dict
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     
@@ -344,12 +349,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             
                 //Create trip and trip data model
                 if tripNameLabel.text == "New Trip" {
-                    var tripNameValue = "Trip created \(Date().description.substring(to: 10))"
+                    var tripNameValue = "Trip started \(Date().description.substring(to: 10).substring(from: 5))"
                     //Check if trip name used already
                     if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
                         var countTripsMadeToday = 0
                         for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
-                            if (DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String)!.contains("\(Date().description.substring(to: 10))") {
+                            if (DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String)!.contains("\(Date().description.substring(to: 10).substring(from: 5))") {
                                 countTripsMadeToday += 1
                             }
                         }
@@ -378,6 +383,15 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
 
                         print(error ?? "no error message")
                     })
+                    
+                    //Create new firebase channel
+                    if let name = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String {
+                        newChannelRef = channelRef.childByAutoId()
+                        let channelItem = [
+                            "name": name
+                        ]
+                        newChannelRef?.setValue(channelItem)
+                    }
                 }
                 
                 
@@ -519,6 +533,16 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         self.swipeableView.discardViews()
         self.swipeableView.loadViews()
 
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        if segue.identifier == "newTripToChat" {
+            let destinationVc = segue.destination as! UINavigationController
+            
+            let chatVc = destinationVc.topViewController as! ChatViewController
+            chatVc.channelRef = newChannelRef
+        }
     }
     
     func roundSlider() {

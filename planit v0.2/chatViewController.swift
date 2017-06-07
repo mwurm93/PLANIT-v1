@@ -17,12 +17,12 @@ final class ChatViewController: JSQMessagesViewController {
     // MARK: Properties
     private let imageURLNotSetKey = "NOTSET"
     
-    private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
+    var channelRef: FIRDatabaseReference?
     
-    private lazy var messageRef: FIRDatabaseReference = self.channelRef.child("messages")
+    private lazy var messageRef: FIRDatabaseReference = self.channelRef!.child("messages")
     fileprivate lazy var storageRef: FIRStorageReference = FIRStorage.storage().reference(forURL: "gs://planit-1493915149567.appspot.com")
-    private lazy var userIsTypingRef: FIRDatabaseReference = self.channelRef.child("typingIndicator").child(self.senderId)
-    private lazy var usersTypingQuery: FIRDatabaseQuery = self.channelRef.child("typingIndicator").queryOrderedByValue().queryEqual(toValue: true)
+    private lazy var userIsTypingRef: FIRDatabaseReference = self.channelRef!.child("typingIndicator").child(self.senderId)
+    private lazy var usersTypingQuery: FIRDatabaseQuery = self.channelRef!.child("typingIndicator").queryOrderedByValue().queryEqual(toValue: true)
     
     private var newMessageRefHandle: FIRDatabaseHandle?
     private var updatedMessageRefHandle: FIRDatabaseHandle?
@@ -55,14 +55,6 @@ final class ChatViewController: JSQMessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //Create new channel
-        if let name = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String {
-            let newChannelRef = channelRef.childByAutoId()
-            let channelItem = [
-                "name": name
-            ]
-            newChannelRef.setValue(channelItem)
-        }
         self.senderDisplayName = DataContainerSingleton.sharedDataContainer.emailAddress
         self.senderId = FIRAuth.auth()?.currentUser?.uid
         
@@ -78,6 +70,14 @@ final class ChatViewController: JSQMessagesViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         observeTyping()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        if segue.identifier == "chatToNewTrip" {
+            let destinationVc = segue.destination as! NewTripNameViewController
+            destinationVc.newChannelRef = channelRef
+        }
     }
     
     deinit {
@@ -147,7 +147,7 @@ final class ChatViewController: JSQMessagesViewController {
     // MARK: Firebase related methods
     
     private func observeMessages() {
-        messageRef = channelRef.child("messages")
+        messageRef = (channelRef?.child("messages"))!
         let messageQuery = messageRef.queryLimited(toLast:25)
         
         // We can use the observe method to listen for new
@@ -218,10 +218,10 @@ final class ChatViewController: JSQMessagesViewController {
     }
     
     private func observeTyping() {
-        let typingIndicatorRef = channelRef.child("typingIndicator")
-        userIsTypingRef = typingIndicatorRef.child(senderId)
+        let typingIndicatorRef = channelRef?.child("typingIndicator")
+        userIsTypingRef = (typingIndicatorRef?.child(senderId))!
         userIsTypingRef.onDisconnectRemoveValue()
-        usersTypingQuery = typingIndicatorRef.queryOrderedByValue().queryEqual(toValue: true)
+        usersTypingQuery = (typingIndicatorRef?.queryOrderedByValue().queryEqual(toValue: true))!
         
         usersTypingQuery.observe(.value) { (data: FIRDataSnapshot) in
             

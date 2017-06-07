@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import Firebase
 
 class TripListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, WhirlyGlobeViewControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate {
     
@@ -34,6 +35,12 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var destinationDecidedControlView: UIView!
     @IBOutlet weak var destinationDecidedControl: UISegmentedControl!
     
+    //Firebase channels
+    private var channelRefHandle: FIRDatabaseHandle?
+    private var channels: [Channel] = []
+    private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
+    
+    //Maply
     var theViewC: MaplyBaseViewController?
     private let cachedGrayColor = UIColor.darkGray
     private let cachedWhiteColor = UIColor.white
@@ -85,6 +92,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        observeChannels()
         
         //GOOGLE PLACES SEARCH
         resultsViewController = GMSAutocompleteResultsViewController()
@@ -509,6 +518,9 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
         let searchForTitle = cell.existingTripTableViewLabel.text
+        
+        let channel = channels[(indexPath as NSIndexPath).row]
+        channelRef = channelRef.child(channel.id)
 
         for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
             if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
@@ -520,21 +532,21 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? NSNumber()
 
         if finishedEnteringPreferencesStatus == "swiping" && bookingStatus == 0 {
-            super.performSegue(withIdentifier: "unbookedTripToRanking", sender: self)
+            super.performSegue(withIdentifier: "unbookedTripToRanking", sender: channel)
         } else if finishedEnteringPreferencesStatus == "ranking"  && bookingStatus == 0 {
-            super.performSegue(withIdentifier: "unbookedTripToRanking", sender: self)
+            super.performSegue(withIdentifier: "unbookedTripToRanking", sender: channel)
         } else if finishedEnteringPreferencesStatus == "flightSearch"  && bookingStatus == 0 {
-            super.performSegue(withIdentifier: "unbookedTripToRanking", sender: self)
+            super.performSegue(withIdentifier: "unbookedTripToRanking", sender: channel)
         } else if finishedEnteringPreferencesStatus == "flightResults"  && bookingStatus == 0 {
-            super.performSegue(withIdentifier: "unbookedTripToExploreHotels", sender: self)
+            super.performSegue(withIdentifier: "unbookedTripToExploreHotels", sender: channel)
 //        } else if finishedEnteringPreferencesStatus == "activities"  && bookingStatus == 0 {
 //            super.performSegue(withIdentifier: "unbookedTripToExploreHotels", sender: self)
         } else if finishedEnteringPreferencesStatus == "hotelResults"  && bookingStatus == 0 {
-            super.performSegue(withIdentifier: "unbookedTripToBooking", sender: self)
+            super.performSegue(withIdentifier: "unbookedTripToBooking", sender: channel)
         } else if finishedEnteringPreferencesStatus == "booking"  && bookingStatus == 0 {
-            super.performSegue(withIdentifier: "unbookedTripToBooking", sender: self)
+            super.performSegue(withIdentifier: "unbookedTripToBooking", sender: channel)
         } else {
-            super.performSegue(withIdentifier: "addTripDestinationUndecided", sender: self)
+            super.performSegue(withIdentifier: "addTripDestinationUndecided", sender: channel)
         }
     }
     
@@ -560,10 +572,24 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             destination?.NewOrAddedTripFromSegue = NewOrAddedTripForSegue
+            destination?.newChannelRef = channelRef
         }
     }
 
-    
+    private func observeChannels() {
+        // We can use the observe method to listen for new
+        // channels being written to the Firebase DB
+        channelRefHandle = channelRef.observe(.childAdded, with: { (snapshot) -> Void in
+            let channelData = snapshot.value as! Dictionary<String, AnyObject>
+            let id = snapshot.key
+            if let name = channelData["name"] as! String!, name.characters.count > 0 {
+                self.channels.append(Channel(id: id, name: name))
+            } else {
+                print("Error! Could not decode channel data")
+            }
+        })
+    }
+
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
