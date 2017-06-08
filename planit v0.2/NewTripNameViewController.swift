@@ -122,6 +122,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBOutlet weak var instructionsGotItButton: UIButton!
     @IBOutlet weak var chatButton: UIButton!
     @IBOutlet weak var filterButton: UIButton!
+    @IBOutlet weak var inviteFriendsGotItButton: UIButton!
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -136,9 +137,10 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
 
         //Setup instructions collection view
         instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
-        instructionsView?.frame.origin.y = 500
+        instructionsView?.frame.origin.y = 475
         self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundViewMainVC)
         instructionsView?.isHidden = true
+        instructionsGotItButton.isHidden = true
         
         //City data
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
@@ -203,6 +205,9 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             self.tripNameLabel.text =  "\(tripNameValue!)"
         }
         }
+        tripNameLabel.adjustsFontSizeToFitWidth = true
+        tripNameLabel.minimumFontSize = 10
+        
         detailedCardView.isHidden = true
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panRecognized(recognizer:)))
         panGestureRecognizer.delegate = self
@@ -444,7 +449,17 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 let newFrame = CGRect(x: self.swipingInstructionsView.frame.minX, y: 500, width: self.swipingInstructionsView.frame.width, height: self.swipingInstructionsView.frame.height)
                 self.swipingInstructionsView.frame = newFrame
                 self.view.bringSubview(toFront: self.swipingInstructionsView)
-                self.animateInstructionsIn()
+                self.swipingInstructionsView.frame.size.height = 77
+                self.swipingInstructionsView.frame.origin.y = 530
+                self.swipingInstructionsView.isHidden = false
+                self.swipingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+                self.swipingInstructionsView.alpha = 0
+                self.swipeableView.isUserInteractionEnabled = false
+                UIView.animate(withDuration: 0.4) {
+                    self.popupBackgroundViewMainVC.isHidden = false
+                    self.swipingInstructionsView.alpha = 1
+                    self.swipingInstructionsView.transform = CGAffineTransform.identity
+                }
             }
             
             if self.countSwipes == 1 && self.NewOrAddedTripFromSegue == 1 {
@@ -692,17 +707,20 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
     
     func animateInstructionsIn(){
-        
         instructionsView?.isHidden = false
-        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 0,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+        
         instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
         instructionsView?.alpha = 0
         swipeableView.isUserInteractionEnabled = false
+        addContactPlusIconMainVC.isHidden = true
+        contactsCollectionView.isHidden = true
         UIView.animate(withDuration: 0.4) {
             self.popupBackgroundViewMainVC.isHidden = false
             self.instructionsView?.alpha = 1
             self.instructionsView?.transform = CGAffineTransform.identity
-        }
+            self.instructionsGotItButton.isHidden = false
+        }        
     }
 
     func buttonClicked(sender:UIButton)
@@ -772,7 +790,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             if self.countSwipes > 1 {
                 self.contactsCollectionView.isHidden = false
             }
-            
+            self.instructionsGotItButton.isHidden = true
+            self.addContactPlusIconMainVC.isHidden = false
         }) { (Success:Bool) in
             self.instructionsView?.layer.isHidden = true
         }
@@ -1544,6 +1563,9 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
 
     //MARK: Actions
+    @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
+        animateInstructionsIn()
+    }
     @IBAction func filterButtonTouchedUpInside(_ sender: Any) {
         if self.sortFilterFlightsCalloutView.isHidden == true {
             sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 539, width: 170, height: 22 * filterFirstLevelOptions.count)
@@ -1577,11 +1599,29 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             if self.countSwipes > 1 {
                 self.contactsCollectionView.isHidden = false
             }
-            
+            self.instructionsGotItButton.isHidden = true
+            self.addContactPlusIconMainVC.isHidden = false
         }) { (Success:Bool) in
             self.instructionsView?.layer.isHidden = true
         }
+        
     }
+    @IBAction func inviteFriendsGotItButtonTouchedUpInside(_ sender: Any) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.swipingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.swipingInstructionsView.alpha = 0
+            self.popupBackgroundViewMainVC.isHidden = true
+            self.swipeableView.isUserInteractionEnabled = true
+            if self.countSwipes > 1 {
+                self.contactsCollectionView.isHidden = false
+            }
+            
+        }) { (Success:Bool) in
+            self.swipingInstructionsView.layer.isHidden = true
+        }
+    }
+    
+    
     @IBAction func tripNameLabelEditingChanged(_ sender: Any) {
         let tripNameValue = tripNameLabel.text! as NSString
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
