@@ -63,8 +63,8 @@ final class ChatViewController: JSQMessagesViewController {
         observeMessages()
         
         // No avatars
-        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
-        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
+//        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
+//        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -151,6 +151,15 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        FIRAuth.auth()?.createUser(withEmail: DataContainerSingleton.sharedDataContainer.emailAddress!, password: DataContainerSingleton.sharedDataContainer.password!) { (user, error) in
+            
+            if error == nil {
+                print("You have successfully signed up")
+            } else {
+                print(error ?? "no error message")
+            }
+        }
+        
         FIRAuth.auth()?.signInAnonymously(completion: { (user, error) in // 2
             if let err = error { // 3
                 print(err.localizedDescription)

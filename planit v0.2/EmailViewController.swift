@@ -45,8 +45,7 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: UITextFieldDelegate for firstName
-    
+    // MARK: UITextFieldDelegate
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         UIView.animate(withDuration: 0.4) {
             self.emailAddress.frame.origin.y = 408

@@ -72,7 +72,9 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     var leftDateTimeArrays = NSMutableDictionary()
     var rightDateTimeArrays = NSMutableDictionary()
     var mostRecentSelectedCellDate = NSDate()
-
+    
+    var instructionsView: instructionsView?
+    
     // MARK: Outlets
     @IBOutlet weak var rejectIcon: UIButton!
     @IBOutlet weak var heartIcon: UIButton!
@@ -127,9 +129,16 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             return self.nextCardView()
         }
     }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        //Setup instructions collection view
+        instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
+        instructionsView?.frame.origin.y = 500
+        self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundViewMainVC)
+        instructionsView?.isHidden = true
         
         //City data
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
@@ -683,14 +692,16 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
     
     func animateInstructionsIn(){
-        swipingInstructionsView.layer.isHidden = false
-        swipingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-        swipingInstructionsView.alpha = 0
+        
+        instructionsView?.isHidden = false
+        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+        instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        instructionsView?.alpha = 0
         swipeableView.isUserInteractionEnabled = false
         UIView.animate(withDuration: 0.4) {
             self.popupBackgroundViewMainVC.isHidden = false
-            self.swipingInstructionsView.alpha = 1
-            self.swipingInstructionsView.transform = CGAffineTransform.identity
+            self.instructionsView?.alpha = 1
+            self.instructionsView?.transform = CGAffineTransform.identity
         }
     }
 
@@ -754,8 +765,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     func dismissInstructions(touch: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.3, animations: {
-            self.swipingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.swipingInstructionsView.alpha = 0
+            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView?.alpha = 0
             self.popupBackgroundViewMainVC.isHidden = true
             self.swipeableView.isUserInteractionEnabled = true
             if self.countSwipes > 1 {
@@ -763,7 +774,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             }
             
         }) { (Success:Bool) in
-            self.swipingInstructionsView.layer.isHidden = true
+            self.instructionsView?.layer.isHidden = true
         }
     }
     
@@ -1559,12 +1570,16 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
     @IBAction func instructionsGotItTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.3, animations: {
-            self.swipingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.swipingInstructionsView.alpha = 0
+            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView?.alpha = 0
             self.popupBackgroundViewMainVC.isHidden = true
             self.swipeableView.isUserInteractionEnabled = true
+            if self.countSwipes > 1 {
+                self.contactsCollectionView.isHidden = false
+            }
+            
         }) { (Success:Bool) in
-            self.swipingInstructionsView.layer.isHidden = true
+            self.instructionsView?.layer.isHidden = true
         }
     }
     @IBAction func tripNameLabelEditingChanged(_ sender: Any) {
