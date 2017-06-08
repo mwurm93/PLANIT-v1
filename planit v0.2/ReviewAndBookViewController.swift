@@ -62,6 +62,8 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         if tripNameValue != nil {
             self.tripNameLabel.text =  "\(tripNameValue!)"
         }
+        tripNameLabel.adjustsFontSizeToFitWidth = true
+        tripNameLabel.minimumFontSize = 10
         
         //Appearance of booking buttons
         bookThisTripButton.layer.borderWidth = 1

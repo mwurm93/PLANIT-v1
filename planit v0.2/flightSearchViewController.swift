@@ -31,6 +31,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     @IBOutlet weak var calendarView: JTAppleCalendarView!
     @IBOutlet var popupSubview: UIView!
     @IBOutlet weak var dayOfWeekStackView: UIStackView!
+    @IBOutlet weak var tripNameLabel: UITextField!
     
     //CalendarView vars
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
@@ -54,6 +55,16 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
             }
         }
+        
+        //Load the values from our shared data container singleton
+        self.tripNameLabel.delegate = self
+        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
+        //Install the value into the label.
+        if tripNameValue != nil {
+            self.tripNameLabel.text =  "\(tripNameValue!)"
+        }
+        tripNameLabel.adjustsFontSizeToFitWidth = true
+        tripNameLabel.minimumFontSize = 10
     
         underline.layer.frame = CGRect(x: 139, y: 49, width: 98, height: 51)
         returnOrigin.isHidden = true
@@ -208,6 +219,15 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
 
         returnDestination.resignFirstResponder()
         returnOrigin.resignFirstResponder()
+        
+        // Hide the keyboard.
+        tripNameLabel.resignFirstResponder()
+        if textField == tripNameLabel {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["trip_name"] = tripNameLabel.text
+            //Save
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
         
         return true
     }
@@ -379,7 +399,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     }
     @IBAction func multiCityButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 247, y: 49, width: 98, height: 51)
+            self.underline.layer.frame = CGRect(x: 247, y: 92, width: 98, height: 51)
             self.returnOrigin.isHidden = false
             self.returnOriginLabel.isHidden = false
             self.returnDestination.isHidden = false
@@ -391,7 +411,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     }
     @IBAction func roundtripButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 139, y: 49, width: 98, height: 51)
+            self.underline.layer.frame = CGRect(x: 139, y: 92, width: 98, height: 51)
             self.returnOrigin.isHidden = true
             self.returnOriginLabel.isHidden = true
             self.returnDestination.isHidden = true
@@ -402,7 +422,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     }
     @IBAction func oneWayButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 30, y: 49, width: 98, height: 51)
+            self.underline.layer.frame = CGRect(x: 30, y: 92, width: 98, height: 51)
             self.returnOrigin.isHidden = true
             self.returnOriginLabel.isHidden = true
             self.returnDestination.isHidden = true

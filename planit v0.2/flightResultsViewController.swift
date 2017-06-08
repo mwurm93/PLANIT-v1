@@ -92,7 +92,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         } else {
             homeAirportValue = ""
         }        
-        searchSummaryTitle.text = "\(homeAirportValue)) - \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as! String)) \(String(describing: searchMode!))"
+        searchSummaryTitle.text = "\(homeAirportValue) - \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as! String)) \(String(describing: searchMode!))"
         
         self.sortFilterFlightsCalloutView.delegate = self
         self.sortFilterFlightsCalloutView.isHidden = true

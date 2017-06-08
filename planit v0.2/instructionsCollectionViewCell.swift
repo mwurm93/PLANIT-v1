@@ -22,7 +22,6 @@ class instructionsCollectionViewCell: UICollectionViewCell {
     let instructionsLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 225, height: 105))
         label.translatesAutoresizingMaskIntoConstraints = false
-//        label.textColor = UIColor.white
         label.numberOfLines = 0
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
@@ -34,13 +33,21 @@ class instructionsCollectionViewCell: UICollectionViewCell {
         outlineView.backgroundColor = UIColor.clear
         outlineView.layer.backgroundColor = UIColor.clear.cgColor
         outlineView.layer.cornerRadius = 10
-//        outlineView.layer.borderColor = UIColor.white.cgColor
         outlineView.layer.borderWidth = 3
         return outlineView
     }()
     
+    let checkmarkImageView: UIImageView = {
+        let checkmarkIV = UIImageView(frame: CGRect(x: 230, y: -5, width: 25, height: 25))
+        checkmarkIV.image = #imageLiteral(resourceName: "checkmark")
+        return checkmarkIV
+    }()
+
+    
     func addViews() {
         self.addSubview(instructionsOutlineView)
         self.addSubview(instructionsLabel)
+        self.addSubview(checkmarkImageView)
+
     }
 }

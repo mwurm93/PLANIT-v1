@@ -159,15 +159,15 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         if indexPath.item < whiteInstructionIndex {
             cell.instructionsLabel.textColor = UIColor.green
             cell.instructionsOutlineView.layer.borderColor = UIColor.green.cgColor
-            cell.tintColor = UIColor.green
+            cell.checkmarkImageView.isHidden = false
         } else if indexPath.item == whiteInstructionIndex {
             cell.instructionsLabel.textColor = UIColor.white
             cell.instructionsOutlineView.layer.borderColor = UIColor.white.cgColor
-            cell.tintColor = UIColor.white
+            cell.checkmarkImageView.isHidden = true
         } else if indexPath.item > whiteInstructionIndex {
             cell.instructionsLabel.textColor = UIColor.gray
             cell.instructionsOutlineView.layer.borderColor = UIColor.gray.cgColor
-            cell.tintColor = UIColor.gray
+            cell.checkmarkImageView.isHidden = true
         }
 
         return cell

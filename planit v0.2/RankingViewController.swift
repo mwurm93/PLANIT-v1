@@ -50,6 +50,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         if tripNameValue != nil {
             self.tripNameLabel.text =  "\(tripNameValue!)"
         }
+        tripNameLabel.adjustsFontSizeToFitWidth = true
+        tripNameLabel.minimumFontSize = 10
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {

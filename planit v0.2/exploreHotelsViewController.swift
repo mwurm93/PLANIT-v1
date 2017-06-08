@@ -34,7 +34,6 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var recommendationRankingTableView: UITableView!
     @IBOutlet weak var readyToBookButton: UIButton!
     @IBOutlet weak var returnToSwipingButton: UIButton!
-    @IBOutlet weak var popupBlurView: UIVisualEffectView!
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var sortButton: UIButton!
     @IBOutlet weak var instructionsView: UIView!
@@ -90,10 +89,6 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         sortFilterHotelsCalloutTableView.backgroundColor = UIColor.clear
         sortFilterHotelsCalloutTableView.layer.backgroundColor = UIColor.clear.cgColor
         
-        //Set up popupblurview
-        effect = popupBlurView.effect
-        popupBlurView.effect = nil
-        
         //        hideKeyboardWhenTappedAround()
         
         //Set up table
@@ -102,7 +97,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         recommendationRankingTableView.allowsSelectionDuringEditing = true
         recommendationRankingTableView.separatorColor = UIColor.white
         
-        self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
+        self.readyToBookButton.setTitle("Select hotel", for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.white, for: .normal)
         self.readyToBookButton.setTitleColor(UIColor.lightGray, for: .highlighted)
         self.readyToBookButton.backgroundColor = UIColor.blue
