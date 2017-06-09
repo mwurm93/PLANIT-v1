@@ -3865,7 +3865,7 @@
                         <segue destination="LVk-lO-4Cs" kind="show" identifier="chatToExploreHotels" animates="NO" id="XG6-b2-gcD"/>
                         <segue destination="9Zf-or-QAX" kind="show" identifier="chatToBooking" animates="NO" id="uxT-Gz-li3"/>
                         <segue destination="nd6-3o-Pa6" kind="show" identifier="chatToFlightSearch" animates="NO" id="sNQ-RT-YBj"/>
-                        <segue destination="pop-1B-VO6" kind="show" animates="NO" id="AiS-CM-kbO"/>
+                        <segue destination="pop-1B-VO6" kind="show" identifier="chatToFlightResults" animates="NO" id="AiS-CM-kbO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ym6-jt-5bp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -9630,10 +9630,10 @@ AAAAAAAAAAAABApgA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="chs-U5-EMN"/>
-        <segue reference="aww-Ip-yzO"/>
-        <segue reference="rwx-9f-mbt"/>
-        <segue reference="XIs-yD-L7P"/>
-        <segue reference="tCn-S3-Xzy"/>
+        <segue reference="8MA-wa-IqS"/>
+        <segue reference="sNQ-RT-YBj"/>
+        <segue reference="lZM-T8-rES"/>
+        <segue reference="AiS-CM-kbO"/>
         <segue reference="R8r-yB-rJ1"/>
         <segue reference="Cjv-x4-gBd"/>
         <segue reference="cWA-9L-HdA"/>
