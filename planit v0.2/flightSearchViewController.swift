@@ -25,13 +25,14 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     @IBOutlet weak var returnOriginLabel: UILabel!
     @IBOutlet weak var returnDestinationLabel: UILabel!
     @IBOutlet weak var returnDateLabel: UILabel!
-    @IBOutlet weak var popupBackgroundView: UIView!
     @IBOutlet weak var subviewDoneButton: UIButton!
     @IBOutlet weak var timeOfDayTableView: UITableView!
     @IBOutlet weak var calendarView: JTAppleCalendarView!
     @IBOutlet var popupSubview: UIView!
     @IBOutlet weak var dayOfWeekStackView: UIStackView!
     @IBOutlet weak var tripNameLabel: UITextField!
+    @IBOutlet weak var instructionsGotItButton: UIButton!
+    @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     
     //CalendarView vars
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
@@ -46,8 +47,26 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     var searchMode = "roundtrip"
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     
+    //Instructions
+    var instructionsView: instructionsView?
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Setup instructions collection view
+        instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
+        instructionsView?.frame.origin.y = 435
+        self.view.addSubview(instructionsView!)
+        instructionsView?.isHidden = true
+        instructionsGotItButton.isHidden = true
+        
+        let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
+        atap.numberOfTapsRequired = 1
+        atap.delegate = self
+        self.popupBackgroundView.addGestureRecognizer(atap)
+        popupBackgroundView.isHidden = true
+        popupBackgroundView.isUserInteractionEnabled = true
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -393,7 +412,40 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         }
     }
     
+    func animateInstructionsIn(){
+        instructionsView?.isHidden = false
+        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 2,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+        
+        instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        instructionsView?.alpha = 0
+        UIView.animate(withDuration: 0.4) {
+            self.popupBackgroundView.isHidden = false
+            self.instructionsView?.alpha = 1
+            self.instructionsView?.transform = CGAffineTransform.identity
+            self.instructionsGotItButton.isHidden = false
+        }
+    }
+    
+    func animateInstructionsOut(){
+        UIView.animate(withDuration: 0.3, animations: {
+            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView?.alpha = 0
+            self.instructionsGotItButton.isHidden = true
+            self.popupBackgroundView.isHidden = true
+        }) { (Success:Bool) in
+            self.instructionsView?.layer.isHidden = true
+        }
+    }
+    
+    func dismissInstructions(touch: UITapGestureRecognizer) {
+        animateInstructionsOut()
+    }
+
+    
     //MARK: Actions
+    @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
+        animateInstructionsOut()
+    }
     @IBAction func departureOriginEditingChanged(_ sender: Any) {
         DataContainerSingleton.sharedDataContainer.homeAirport = departureOrigin.text
     }

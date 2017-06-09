@@ -30,22 +30,31 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     var hotelResultsDictionary = [Dictionary<String, Any>]()
     
+    //Instructions
+    var instructionsView: instructionsView?
+
+    
     // MARK: Outlets
     @IBOutlet weak var recommendationRankingTableView: UITableView!
     @IBOutlet weak var readyToBookButton: UIButton!
     @IBOutlet weak var returnToSwipingButton: UIButton!
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var sortButton: UIButton!
-    @IBOutlet weak var instructionsView: UIView!
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
-    @IBOutlet weak var instructionsLabel: UILabel!
-    @IBOutlet weak var gotItButton: UIButton!
     @IBOutlet weak var searchSummaryTitle: UILabel!
     @IBOutlet weak var searchSummaryDates: UILabel!
+    @IBOutlet weak var instructionsGotItButton: UIButton!
     
     // viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Setup instructions collection view
+        instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
+        instructionsView?.frame.origin.y = 435
+        self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
+        instructionsView?.isHidden = true
+        instructionsGotItButton.isHidden = true
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -120,16 +129,6 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.popupBackgroundView.addGestureRecognizer(atap)
         popupBackgroundView.isHidden = true
         popupBackgroundView.isUserInteractionEnabled = true
-        instructionsView.isHidden = true
-        instructionsView.layer.cornerRadius = 10
-        let hamburgerAttachment = NSTextAttachment()
-        hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_black")
-        hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
-        let stringForLabel = NSMutableAttributedString(string: "See your hotel options above. Drag the ")
-        let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
-        stringForLabel.append(attachment1)
-        stringForLabel.append(NSAttributedString(string: " to change your hotel"))
-        instructionsLabel.attributedText = stringForLabel
     }
     
     // didReceiveMemoryWarning
@@ -449,31 +448,6 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         existing_trips?[currentTripIndex] = SavedPreferencesForTrip as NSDictionary
         DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
     }
-    func animateInstructionsIn(){
-        instructionsView.layer.isHidden = false
-        instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-        instructionsView.alpha = 0
-        recommendationRankingTableView.isUserInteractionEnabled = false
-        UIView.animate(withDuration: 0.4) {
-            self.popupBackgroundView.isHidden = false
-            self.instructionsView.alpha = 1
-            self.instructionsView.transform = CGAffineTransform.identity
-        }
-    }
-    
-    func dismissInstructions(touch: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.instructionsView.alpha = 0
-            self.popupBackgroundView.isHidden = true
-            self.readyToBookButton.alpha = 1
-            self.returnToSwipingButton.alpha = 1
-            self.recommendationRankingTableView.isUserInteractionEnabled = true
-            self.recommendationRankingTableView.frame = CGRect(x: 0, y: 114, width: 375, height: 483)
-        }) { (Success:Bool) in
-            self.instructionsView.layer.isHidden = true
-        }
-    }
     
     func updateCompletionStatus() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -482,19 +456,38 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
     
-    // MARK: Actions
-    @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.instructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.instructionsView.alpha = 0
-            self.popupBackgroundView.isHidden = true
-            self.readyToBookButton.alpha = 1
-            self.returnToSwipingButton.alpha = 1
-            self.recommendationRankingTableView.isUserInteractionEnabled = true
-            self.recommendationRankingTableView.frame = CGRect(x: 0, y: 114, width: 375, height: 483)
-        }) { (Success:Bool) in
-            self.instructionsView.layer.isHidden = true
+    func animateInstructionsIn(){
+        instructionsView?.isHidden = false
+        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+        
+        instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        instructionsView?.alpha = 0
+        UIView.animate(withDuration: 0.4) {
+            self.popupBackgroundView.isHidden = false
+            self.instructionsView?.alpha = 1
+            self.instructionsView?.transform = CGAffineTransform.identity
+            self.instructionsGotItButton.isHidden = false
         }
+    }
+    
+    func animateInstructionsOut(){
+        UIView.animate(withDuration: 0.3, animations: {
+            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView?.alpha = 0
+            self.instructionsGotItButton.isHidden = true
+            self.popupBackgroundView.isHidden = true
+        }) { (Success:Bool) in
+            self.instructionsView?.layer.isHidden = true
+        }
+    }
+    
+    func dismissInstructions(touch: UITapGestureRecognizer) {
+        animateInstructionsOut()
+    }
+    
+    // MARK: Actions
+    @IBAction func instructionsGotItButtonTouchedUpInside(_ sender: Any) {
+        animateInstructionsOut()
     }
     @IBAction func nextButtonPressed(_ sender: Any) {
         updateCompletionStatus()

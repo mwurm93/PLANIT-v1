@@ -17,23 +17,27 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     var effect:UIVisualEffect!
     var rankedPotentialTripsDictionaryArrayIndexForSegue: Int?
     
+    //Instructions
+    var instructionsView: instructionsView?
+    
     // MARK: Outlets
     @IBOutlet weak var recommendationRankingTableView: UITableView!
     @IBOutlet weak var readyToBookButton: UIButton!
     @IBOutlet weak var returnToSwipingButton: UIButton!
     @IBOutlet weak var tripNameLabel: UITextField!
-    @IBOutlet weak var popupBlurView: UIVisualEffectView!
-    @IBOutlet weak var rankingInstructionsView: UIView!
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
-    @IBOutlet weak var instructionsLabel: UILabel!
+    @IBOutlet weak var instructionsGotItButton: UIButton!
     
     // viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Set up popupblurview
-        effect = popupBlurView.effect
-        popupBlurView.effect = nil
+        //Setup instructions collection view
+        instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
+        instructionsView?.frame.origin.y = 435
+        self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
+        instructionsView?.isHidden = true
+        instructionsGotItButton.isHidden = true
         
 //        hideKeyboardWhenTappedAround()
         
@@ -94,28 +98,6 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.popupBackgroundView.addGestureRecognizer(atap)
         popupBackgroundView.isHidden = true
         popupBackgroundView.isUserInteractionEnabled = true
-        rankingInstructionsView.isHidden = true
-        rankingInstructionsView.layer.cornerRadius = 10
-        let hamburgerAttachment = NSTextAttachment()
-        hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_black")
-        hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
-        let changeAttachment = NSTextAttachment()
-        changeAttachment.image = #imageLiteral(resourceName: "changeFlight_black")
-        changeAttachment.bounds = CGRect(x: 0, y: 0, width: 15, height: 15)
-        let changeHotelAttachment = NSTextAttachment()
-        changeHotelAttachment.image = #imageLiteral(resourceName: "changeHotel_black")
-        changeHotelAttachment.bounds = CGRect(x: 0, y: 0, width: 15, height: 15)
-        let stringForLabel = NSMutableAttributedString(string: "Time to price out your group's options! Tap ")
-        let attachment1 = NSAttributedString(attachment: changeAttachment)
-        let attachment2 = NSAttributedString(attachment: hamburgerAttachment)
-        let attachment3 = NSAttributedString(attachment: changeHotelAttachment)
-        stringForLabel.append(attachment1)
-        stringForLabel.append(NSAttributedString(string:" to look at flights, "))
-        stringForLabel.append(attachment3)
-        stringForLabel.append(NSAttributedString(string:" to look at hotels, and drag the "))
-        stringForLabel.append(attachment2)
-        stringForLabel.append(NSAttributedString(string: " to change your top trip"))
-        instructionsLabel.attributedText = stringForLabel
     }
     
     // didReceiveMemoryWarning
@@ -405,29 +387,32 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func animateInstructionsIn(){
-        rankingInstructionsView.layer.isHidden = false
-        rankingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-        rankingInstructionsView.alpha = 0
-        recommendationRankingTableView.isUserInteractionEnabled = false
+        instructionsView?.isHidden = false
+        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 1,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+        
+        instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        instructionsView?.alpha = 0
         UIView.animate(withDuration: 0.4) {
             self.popupBackgroundView.isHidden = false
-            self.rankingInstructionsView.alpha = 1
-            self.rankingInstructionsView.transform = CGAffineTransform.identity
+            self.instructionsView?.alpha = 1
+            self.instructionsView?.transform = CGAffineTransform.identity
+            self.instructionsGotItButton.isHidden = false
         }
     }
     
-    func dismissInstructions(touch: UITapGestureRecognizer) {
+    func animateInstructionsOut(){
         UIView.animate(withDuration: 0.3, animations: {
-            self.rankingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.rankingInstructionsView.alpha = 0
+            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView?.alpha = 0
+            self.instructionsGotItButton.isHidden = true
             self.popupBackgroundView.isHidden = true
-            self.returnToSwipingButton.alpha = 1
-            self.readyToBookButton.alpha = 1
-            self.recommendationRankingTableView.isUserInteractionEnabled = true
-            self.recommendationRankingTableView.frame = CGRect(x: 0, y: 75, width: 375, height: 500)
         }) { (Success:Bool) in
-            self.rankingInstructionsView.layer.isHidden = true
-        }
+            self.instructionsView?.layer.isHidden = true
+        }        
+    }
+    
+    func dismissInstructions(touch: UITapGestureRecognizer) {
+        animateInstructionsOut()
     }
     func updateCompletionStatus(){
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -437,18 +422,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // MARK: Actions
-    @IBAction func instructionsGotItButtonTouchedUpInsider(_ sender: Any) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.rankingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.rankingInstructionsView.alpha = 0
-            self.popupBackgroundView.isHidden = true
-            self.returnToSwipingButton.alpha = 1
-            self.readyToBookButton.alpha = 1
-            self.recommendationRankingTableView.isUserInteractionEnabled = true
-            self.recommendationRankingTableView.frame = CGRect(x: 0, y: 75, width: 375, height: 500)
-        }) { (Success:Bool) in
-            self.rankingInstructionsView.layer.isHidden = true
-        }
+    @IBAction func instructionsGotItButtonTouchedUpInside(_ sender: Any) {
+        animateInstructionsOut()
     }
     @IBAction func chooseFlightsButtonTouchedUpInside(_ sender: Any) {
         updateCompletionStatus()

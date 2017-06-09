@@ -73,6 +73,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     var rightDateTimeArrays = NSMutableDictionary()
     var mostRecentSelectedCellDate = NSDate()
     
+    //Instructions
     var instructionsView: instructionsView?
     
     // MARK: Outlets
@@ -92,7 +93,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBOutlet weak var calendarView: JTAppleCalendarView!
     @IBOutlet weak var popupBackgroundViewMainVC: UIVisualEffectView!
     @IBOutlet var popupSubview: UIView!
-    @IBOutlet weak var swipingInstructionsView: UIView!
+    @IBOutlet weak var addFriendsInstructionsView: UIView!
     @IBOutlet weak var subviewWhereButton: UIButton!
     @IBOutlet weak var subviewWhoButton: UIButton!
     @IBOutlet weak var subviewWhenButton: UIButton!
@@ -118,7 +119,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBOutlet weak var popupBackgroundViewDeleteContacts: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundViewDeleteContactsWithinCollectionView: UIVisualEffectView!
     @IBOutlet weak var dayOfWeekStackView: UIStackView!
-    @IBOutlet weak var instructionsLabel: UILabel!
     @IBOutlet weak var instructionsGotItButton: UIButton!
     @IBOutlet weak var chatButton: UIButton!
     @IBOutlet weak var filterButton: UIButton!
@@ -137,7 +137,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
 
         //Setup instructions collection view
         instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
-        instructionsView?.frame.origin.y = 475
+        instructionsView?.frame.origin.y = 435
         self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundViewMainVC)
         instructionsView?.isHidden = true
         instructionsGotItButton.isHidden = true
@@ -326,8 +326,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         self.popupBackgroundViewMainVC.addGestureRecognizer(atap)
         popupBackgroundViewMainVC.isHidden = true
         popupBackgroundViewMainVC.isUserInteractionEnabled = true
-        swipingInstructionsView.isHidden = true
-        swipingInstructionsView.layer.cornerRadius = 10
+        addFriendsInstructionsView.isHidden = true
+        addFriendsInstructionsView.layer.cornerRadius = 10
         //
         let tapOutsideContacts = UITapGestureRecognizer(target: self, action: #selector(self.leaveDeleteContactsMode(touch:)))
         tapOutsideContacts.numberOfTapsRequired = 1
@@ -443,22 +443,21 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             }
             
             if self.contactPhoneNumbers.count == 0 && self.countSwipes % 3 == 0 {
-                self.instructionsLabel.text = "Invite your friends to join you on your travels!"
-                self.swipingInstructionsView.sizeToFit()
+                self.addFriendsInstructionsView.sizeToFit()
                 self.contactsCollectionView.isHidden = true
-                let newFrame = CGRect(x: self.swipingInstructionsView.frame.minX, y: 500, width: self.swipingInstructionsView.frame.width, height: self.swipingInstructionsView.frame.height)
-                self.swipingInstructionsView.frame = newFrame
-                self.view.bringSubview(toFront: self.swipingInstructionsView)
-                self.swipingInstructionsView.frame.size.height = 77
-                self.swipingInstructionsView.frame.origin.y = 530
-                self.swipingInstructionsView.isHidden = false
-                self.swipingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-                self.swipingInstructionsView.alpha = 0
+                let newFrame = CGRect(x: self.addFriendsInstructionsView.frame.minX, y: 500, width: self.addFriendsInstructionsView.frame.width, height: self.addFriendsInstructionsView.frame.height)
+                self.addFriendsInstructionsView.frame = newFrame
+                self.view.bringSubview(toFront: self.addFriendsInstructionsView)
+                self.addFriendsInstructionsView.frame.size.height = 77
+                self.addFriendsInstructionsView.frame.origin.y = 530
+                self.addFriendsInstructionsView.isHidden = false
+                self.addFriendsInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+                self.addFriendsInstructionsView.alpha = 0
                 self.swipeableView.isUserInteractionEnabled = false
                 UIView.animate(withDuration: 0.4) {
                     self.popupBackgroundViewMainVC.isHidden = false
-                    self.swipingInstructionsView.alpha = 1
-                    self.swipingInstructionsView.transform = CGAffineTransform.identity
+                    self.addFriendsInstructionsView.alpha = 1
+                    self.addFriendsInstructionsView.transform = CGAffineTransform.identity
                 }
             }
             
@@ -722,6 +721,23 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             self.instructionsGotItButton.isHidden = false
         }        
     }
+    
+    func animateInstructionsOut(){
+        UIView.animate(withDuration: 0.3, animations: {
+            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView?.alpha = 0
+            self.popupBackgroundViewMainVC.isHidden = true
+            self.swipeableView.isUserInteractionEnabled = true
+            if self.countSwipes > 1 {
+                self.contactsCollectionView.isHidden = false
+            }
+            self.instructionsGotItButton.isHidden = true
+            self.addContactPlusIconMainVC.isHidden = false
+        }) { (Success:Bool) in
+            self.instructionsView?.layer.isHidden = true
+        }
+
+    }
 
     func buttonClicked(sender:UIButton)
     {
@@ -782,19 +798,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
     
     func dismissInstructions(touch: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.instructionsView?.alpha = 0
-            self.popupBackgroundViewMainVC.isHidden = true
-            self.swipeableView.isUserInteractionEnabled = true
-            if self.countSwipes > 1 {
-                self.contactsCollectionView.isHidden = false
-            }
-            self.instructionsGotItButton.isHidden = true
-            self.addContactPlusIconMainVC.isHidden = false
-        }) { (Success:Bool) in
-            self.instructionsView?.layer.isHidden = true
-        }
+        animateInstructionsOut()
     }
     
     // COPY for Contacts
@@ -1591,25 +1595,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         deleteContact(indexPath: IndexPath(row:i, section: 0))
     }
     @IBAction func instructionsGotItTouchedUpInside(_ sender: Any) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.instructionsView?.alpha = 0
-            self.popupBackgroundViewMainVC.isHidden = true
-            self.swipeableView.isUserInteractionEnabled = true
-            if self.countSwipes > 1 {
-                self.contactsCollectionView.isHidden = false
-            }
-            self.instructionsGotItButton.isHidden = true
-            self.addContactPlusIconMainVC.isHidden = false
-        }) { (Success:Bool) in
-            self.instructionsView?.layer.isHidden = true
-        }
-        
+        animateInstructionsOut()
     }
     @IBAction func inviteFriendsGotItButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.3, animations: {
-            self.swipingInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.swipingInstructionsView.alpha = 0
+            self.addFriendsInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.addFriendsInstructionsView.alpha = 0
             self.popupBackgroundViewMainVC.isHidden = true
             self.swipeableView.isUserInteractionEnabled = true
             if self.countSwipes > 1 {
@@ -1617,7 +1608,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             }
             
         }) { (Success:Bool) in
-            self.swipingInstructionsView.layer.isHidden = true
+            self.addFriendsInstructionsView.layer.isHidden = true
         }
     }
     

@@ -24,7 +24,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     @IBOutlet weak var knownTravelerNumber: UITextField!
     @IBOutlet weak var redressNumber: UITextField!
     @IBOutlet weak var birthdate: UITextField!
-    @IBOutlet weak var bookOnlyIfTheyDoInfoView: UIView!
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     @IBOutlet weak var tripNameLabel: UITextField!
     @IBOutlet weak var nameOnCard: UITextField!
@@ -32,12 +31,12 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     
     // Outlets for buttons
     @IBOutlet weak var bookThisTripButton: UIButton!
-    @IBOutlet weak var bookOnlyIfTheyDoInfoButton: UIButton!
     @IBOutlet weak var addressLineOne: UITextField!
     @IBOutlet weak var addressLineTwo: UITextField!
     @IBOutlet weak var addressCity: UITextField!
     @IBOutlet weak var addressState: UITextField!
     @IBOutlet weak var addressZipCode: UITextField!
+    @IBOutlet weak var instructionsGotItButton: UIButton!
     
     // Set up vars for Contacts - COPY
     var contacts: [CNContact]?
@@ -45,8 +44,18 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     fileprivate var addressBookStore: CNContactStore!
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     
+    //Instructions
+    var instructionsView: instructionsView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Setup instructions collection view
+        instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
+        instructionsView?.frame.origin.y = 435
+        self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
+        instructionsView?.isHidden = true
+        instructionsGotItButton.isHidden = true
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -71,11 +80,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         bookThisTripButton.layer.cornerRadius = 5
         bookThisTripButton.layer.backgroundColor = UIColor(red:1,green:1,blue:1,alpha:0.18).cgColor
         
-        // book info view appearance
-        bookOnlyIfTheyDoInfoView.layer.cornerRadius = 5
-        bookOnlyIfTheyDoInfoView.alpha = 0
-        bookOnlyIfTheyDoInfoView.layer.isHidden = true
-        
         // Center booking button text
         bookThisTripButton.titleLabel?.textAlignment = .center
         
@@ -91,7 +95,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         if existing_trips?.count == 1 {
             let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
-                self.animateInfoViewIn()
+                self.animateInstructionsIn()
             }
         }
 
@@ -274,33 +278,9 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     
     //UITapGestureRecognizer
     func dismissPopup(touch: UITapGestureRecognizer) {
-            dismissInfoViewOut()
+        animateInstructionsOut()
     }
     
-    func animateInfoViewIn(){
-        bookOnlyIfTheyDoInfoView.layer.isHidden = false
-        bookOnlyIfTheyDoInfoView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-        bookOnlyIfTheyDoInfoView.alpha = 0
-        bookThisTripButton.isUserInteractionEnabled = false
-        
-        UIView.animate(withDuration: 0.4) {
-            self.popupBackgroundView.isHidden = false
-            self.bookOnlyIfTheyDoInfoView.alpha = 1
-            self.bookOnlyIfTheyDoInfoView.transform = CGAffineTransform.identity
-        }
-    }
-    
-    func dismissInfoViewOut() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.bookOnlyIfTheyDoInfoView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.bookOnlyIfTheyDoInfoView.alpha = 0
-            self.popupBackgroundView.isHidden = true
-            self.bookThisTripButton.isUserInteractionEnabled = true
-        }) { (Success:Bool) in
-            self.bookOnlyIfTheyDoInfoView.layer.isHidden = true
-        }
-    }
-
     // MARK: UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
@@ -538,15 +518,38 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         existing_trips?[currentTripIndex] = SavedPreferencesForTrip as NSDictionary
         DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
     }
-
-    
-    // MARK: Actions
-    @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
-        dismissInfoViewOut()
+    func animateInstructionsIn(){
+        instructionsView?.isHidden = false
+        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+        
+        instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        instructionsView?.alpha = 0
+        UIView.animate(withDuration: 0.4) {
+            self.popupBackgroundView.isHidden = false
+            self.instructionsView?.alpha = 1
+            self.instructionsView?.transform = CGAffineTransform.identity
+            self.instructionsGotItButton.isHidden = false
+        }
     }
     
-    @IBAction func infoButtonPressed(_ sender: Any) {
-        animateInfoViewIn()
+    func animateInstructionsOut(){
+        UIView.animate(withDuration: 0.3, animations: {
+            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.instructionsView?.alpha = 0
+            self.instructionsGotItButton.isHidden = true
+            self.popupBackgroundView.isHidden = true
+        }) { (Success:Bool) in
+            self.instructionsView?.layer.isHidden = true
+        }
+    }
+    
+    func dismissInstructions(touch: UITapGestureRecognizer) {
+        animateInstructionsOut()
+    }
+    
+    // MARK: Actions
+    @IBAction func instructionsGotItButtonTouchedUpInside(_ sender: Any) {
+        animateInstructionsOut()
     }
     
     @IBAction func bookButtonPressed(_ sender: Any) {
