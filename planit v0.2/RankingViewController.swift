@@ -435,7 +435,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     @IBAction func chooseHotelButtonTouchedUpInside(_ sender: Any) {
-        updateCompletionStatus()
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["finished_entering_preferences_status"] = "flightResults" as NSString
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         let UIButtonPressed = sender as! UIButton
         rankedPotentialTripsDictionaryArrayIndexForSegue = UIButtonPressed.tag
         super.performSegue(withIdentifier: "changeHotelButtonToExploreHotels", sender: self)
@@ -443,7 +446,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     @IBAction func moveForwardButtonTouchedUpInside(_ sender: Any) {
-        updateCompletionStatus()
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["finished_entering_preferences_status"] = "hotelResults" as NSString
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+
         rankedPotentialTripsDictionaryArrayIndexForSegue = 0
         super.performSegue(withIdentifier: "rankingToBooking", sender: self)
     }

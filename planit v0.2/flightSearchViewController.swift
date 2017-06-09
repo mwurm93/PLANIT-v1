@@ -53,6 +53,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         
         //Setup instructions collection view
         instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
@@ -72,6 +73,14 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
+            }
+        }
+        
+        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"] as! String == "ranking" {
+            let when = DispatchTime.now() + 0.4
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.animateInstructionsIn()
             }
         }
         

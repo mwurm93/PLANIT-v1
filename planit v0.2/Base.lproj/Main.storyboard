@@ -2828,6 +2828,9 @@
                                 <state key="normal" title="Got it">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="instructionsGotItButtonTouchedUpInside:" destination="LVk-lO-4Cs" eventType="touchUpInside" id="Bct-Zv-SUi"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -9610,9 +9613,9 @@ AAAAAAAAAAAABApgA
         <segue reference="chs-U5-EMN"/>
         <segue reference="cWA-9L-HdA"/>
         <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="cNU-Li-sIA"/>
         <segue reference="Cjv-x4-gBd"/>
         <segue reference="R8r-yB-rJ1"/>
-        <segue reference="XIs-yD-L7P"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

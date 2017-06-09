@@ -49,6 +49,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         instructionsCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         instructionsCollectionView?.delegate = self
         instructionsCollectionView?.dataSource = self
+        instructionsCollectionView?.showsHorizontalScrollIndicator = false
 //        instructionsCollectionView?.isPagingEnabled = true
         instructionsCollectionView?.register(instructionsCollectionViewCell.self, forCellWithReuseIdentifier: "instructionsCollectionViewCell")
         instructionsCollectionView?.backgroundColor = UIColor.clear
@@ -132,7 +133,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             } else if indexPath.item > whiteInstructionIndex {
                 hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_grey")
             }
-            let stringForLabel = NSMutableAttributedString(string: "Explore your flight options. Drag the ")
+            let stringForLabel = NSMutableAttributedString(string: "Explore your flight options drag the ")
             let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
             stringForLabel.append(attachment1)
             stringForLabel.append(NSAttributedString(string: " to change your flight"))
@@ -146,13 +147,13 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             } else if indexPath.item > whiteInstructionIndex {
                 hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_grey")
             }
-            let stringForLabel = NSMutableAttributedString(string: "Explore your hotel options above. Drag the ")
+            let stringForLabel = NSMutableAttributedString(string: "Explore your hotel options and drag the ")
             let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
             stringForLabel.append(attachment1)
             stringForLabel.append(NSAttributedString(string: " to change your group's hotel"))
             cell.instructionsLabel.attributedText = stringForLabel
         } else if indexPath.item == 5 {
-        cell.instructionsLabel.text = "Time to book! You only pay for your share of the accomodation, and can automatically cancel your reservation if others don't commit in 24 hours."
+        cell.instructionsLabel.text = "Time to book! You only pay for your share of the accomodation, and can automatically cancel your reservation if others don't commit in 24 hours"
         }
         
         

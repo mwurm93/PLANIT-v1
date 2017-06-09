@@ -114,12 +114,10 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.readyToBookButton.titleLabel?.textAlignment = .center
         
         let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"] as! String == "activities" {
+        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"] as! String == "flightResults" {
             let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
-                self.returnToSwipingButton.alpha =  0
-                self.readyToBookButton.alpha =  0
             }
         }
         
