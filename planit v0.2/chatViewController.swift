@@ -14,6 +14,8 @@ import SwiftGifOrigin
 
 final class ChatViewController: JSQMessagesViewController {
     
+    
+    
     //Passed via segue
     var searchMode: String?
     
@@ -39,15 +41,15 @@ final class ChatViewController: JSQMessagesViewController {
         }
     }
     
-//    var isTyping: Bool {
-//        get {
-//            return localTyping
-//        }
-//        set {
-//            localTyping = newValue
-//            userIsTypingRef?.setValue(newValue)
-//        }
-//    }
+    var isTyping: Bool {
+        get {
+            return localTyping
+        }
+        set {
+            localTyping = newValue
+            userIsTypingRef?.setValue(newValue)
+        }
+    }
     
     
     lazy var outgoingBubbleImageView: JSQMessagesBubbleImage = self.setupOutgoingBubble()
@@ -232,10 +234,10 @@ final class ChatViewController: JSQMessagesViewController {
         
         usersTypingQuery?.observe(.value) { (data: FIRDataSnapshot) in
             
-            // You're the only typing, don't show the indicator
-//            if data.childrenCount == 1 && self.isTyping {
-//                return
-//            }
+             //You're the only typing, don't show the indicator
+            if data.childrenCount == 1 && self.isTyping {
+                return
+            }
             
             // Are there others typing?
             self.showTypingIndicator = data.childrenCount > 0
@@ -262,7 +264,7 @@ final class ChatViewController: JSQMessagesViewController {
         
         // 5
         finishSendingMessage()
-//        isTyping = false
+        isTyping = false
     }
     
     func sendPhotoMessage() -> String? {
