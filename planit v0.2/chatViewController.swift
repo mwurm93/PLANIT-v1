@@ -19,11 +19,10 @@ final class ChatViewController: JSQMessagesViewController {
     
     var channelRef: FIRDatabaseReference?
     
-    private lazy var messageRef: FIRDatabaseReference = self.channelRef!.child("messages")
+    private var messageRef: FIRDatabaseReference?
     fileprivate lazy var storageRef: FIRStorageReference = FIRStorage.storage().reference(forURL: "gs://planit-1493915149567.appspot.com")
-    private lazy var userIsTypingRef: FIRDatabaseReference = self.channelRef!.child("typingIndicator").child(self.senderId)
-    private lazy var usersTypingQuery: FIRDatabaseQuery = self.channelRef!.child("typingIndicator").queryOrderedByValue().queryEqual(toValue: true)
-    
+    private var userIsTypingRef: FIRDatabaseReference?
+    private var usersTypingQuery: FIRDatabaseQuery?
     private var newMessageRefHandle: FIRDatabaseHandle?
     private var updatedMessageRefHandle: FIRDatabaseHandle?
     
@@ -37,15 +36,16 @@ final class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    var isTyping: Bool {
-        get {
-            return localTyping
-        }
-        set {
-            localTyping = newValue
-            userIsTypingRef.setValue(newValue)
-        }
-    }
+//    var isTyping: Bool {
+//        get {
+//            return localTyping
+//        }
+//        set {
+//            localTyping = newValue
+//            userIsTypingRef?.setValue(newValue)
+//        }
+//    }
+    
     
     lazy var outgoingBubbleImageView: JSQMessagesBubbleImage = self.setupOutgoingBubble()
     lazy var incomingBubbleImageView: JSQMessagesBubbleImage = self.setupIncomingBubble()
@@ -54,17 +54,22 @@ final class ChatViewController: JSQMessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.senderDisplayName = DataContainerSingleton.sharedDataContainer.emailAddress
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let channelRefKey = SavedPreferencesForTrip["firebaseChannelKey"] as! String
+        let channelsRef = FIRDatabase.database().reference().child("channels")
+        channelRef = channelsRef.child(channelRefKey)
+        messageRef  = self.channelRef?.child("messages")
         self.senderId = FIRAuth.auth()?.currentUser?.uid
-        
-        
+        userIsTypingRef = self.channelRef?.child("typingIndicator").child(self.senderId)
+        usersTypingQuery = self.channelRef?.child("typingIndicator").queryOrderedByValue().queryEqual(toValue: true)
+        self.senderDisplayName = DataContainerSingleton.sharedDataContainer.emailAddress
         
         observeMessages()
         
         // No avatars
-//        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
-//        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
+        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
+        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -74,18 +79,22 @@ final class ChatViewController: JSQMessagesViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-        if segue.identifier == "chatToNewTrip" {
-            let destinationVc = segue.destination as! NewTripNameViewController
-            destinationVc.newChannelRef = channelRef
-        }
+//        if segue.identifier == "chatToNewTrip" {
+//            let destinationVc = segue.destination as! NewTripNameViewController
+//            destinationVc.newChannelRef = channelRef
+//        }
+//        if segue.identifier == "chatToRanking" {
+//            let destinationVc = segue.destination as! RankingViewController
+//            destinationVc.channelRef = channelRef
+//        }
     }
     
     deinit {
         if let refHandle = newMessageRefHandle {
-            messageRef.removeObserver(withHandle: refHandle)
+            messageRef?.removeObserver(withHandle: refHandle)
         }
         if let refHandle = updatedMessageRefHandle {
-            messageRef.removeObserver(withHandle: refHandle)
+            messageRef?.removeObserver(withHandle: refHandle)
         }
     }
     
@@ -148,11 +157,11 @@ final class ChatViewController: JSQMessagesViewController {
     
     private func observeMessages() {
         messageRef = (channelRef?.child("messages"))!
-        let messageQuery = messageRef.queryLimited(toLast:25)
+        let messageQuery = messageRef?.queryLimited(toLast:25)
         
         // We can use the observe method to listen for new
         // messages being written to the Firebase DB
-        newMessageRefHandle = messageQuery.observe(.childAdded, with: { (snapshot) -> Void in
+        newMessageRefHandle = messageQuery?.observe(.childAdded, with: { (snapshot) -> Void in
             let messageData = snapshot.value as! Dictionary<String, String>
             
             if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, let text = messageData["text"] as String!, text.characters.count > 0 {
@@ -175,7 +184,7 @@ final class ChatViewController: JSQMessagesViewController {
         // changes to existing messages.
         // We use this to be notified when a photo has been stored
         // to the Firebase Storage, so we can update the message data
-        updatedMessageRefHandle = messageRef.observe(.childChanged, with: { (snapshot) in
+        updatedMessageRefHandle = messageRef?.observe(.childChanged, with: { (snapshot) in
             let key = snapshot.key
             let messageData = snapshot.value as! Dictionary<String, String>
             
@@ -220,15 +229,15 @@ final class ChatViewController: JSQMessagesViewController {
     private func observeTyping() {
         let typingIndicatorRef = channelRef?.child("typingIndicator")
         userIsTypingRef = (typingIndicatorRef?.child(senderId))!
-        userIsTypingRef.onDisconnectRemoveValue()
+        userIsTypingRef?.onDisconnectRemoveValue()
         usersTypingQuery = (typingIndicatorRef?.queryOrderedByValue().queryEqual(toValue: true))!
         
-        usersTypingQuery.observe(.value) { (data: FIRDataSnapshot) in
+        usersTypingQuery?.observe(.value) { (data: FIRDataSnapshot) in
             
             // You're the only typing, don't show the indicator
-            if data.childrenCount == 1 && self.isTyping {
-                return
-            }
+//            if data.childrenCount == 1 && self.isTyping {
+//                return
+//            }
             
             // Are there others typing?
             self.showTypingIndicator = data.childrenCount > 0
@@ -238,7 +247,7 @@ final class ChatViewController: JSQMessagesViewController {
     
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
         // 1
-        let itemRef = messageRef.childByAutoId()
+        let itemRef = messageRef?.childByAutoId()
         
         // 2
         let messageItem = [
@@ -248,35 +257,35 @@ final class ChatViewController: JSQMessagesViewController {
             ]
         
         // 3
-        itemRef.setValue(messageItem)
+        itemRef?.setValue(messageItem)
         
         // 4
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
         // 5
         finishSendingMessage()
-        isTyping = false
+//        isTyping = false
     }
     
     func sendPhotoMessage() -> String? {
-        let itemRef = messageRef.childByAutoId()
+        let itemRef = messageRef?.childByAutoId()
         
         let messageItem = [
             "photoURL": imageURLNotSetKey,
             "senderId": senderId!,
             ]
         
-        itemRef.setValue(messageItem)
+        itemRef?.setValue(messageItem)
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
         finishSendingMessage()
-        return itemRef.key
+        return itemRef?.key
     }
     
     func setImageURL(_ url: String, forPhotoMessageWithKey key: String) {
-        let itemRef = messageRef.child(key)
-        itemRef.updateChildValues(["photoURL": url])
+        let itemRef = messageRef?.child(key)
+        itemRef?.updateChildValues(["photoURL": url])
     }
     
     // MARK: UI and User Interaction
@@ -326,7 +335,7 @@ final class ChatViewController: JSQMessagesViewController {
     override func textViewDidChange(_ textView: UITextView) {
         super.textViewDidChange(textView)
         // If the text is not empty, the user is typing
-        isTyping = textView.text != ""
+//        isTyping = textView.text != ""
     }
     
     ////// ADD NEW TRIP VARS (NS ONLY) HERE ///////////////////////////////////////////////////////////////////////////
@@ -336,6 +345,7 @@ final class ChatViewController: JSQMessagesViewController {
         //Trip status
         let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? 0 as NSNumber
         let finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
+        let lastVC = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastVC") as? NSString ?? NSString()
         //New Trip VC
         let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? NSString ?? NSString()
         let tripID = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "tripID") as? NSString ?? NSString()
@@ -348,6 +358,8 @@ final class ChatViewController: JSQMessagesViewController {
         let rightDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "return_departure_times") as? NSDictionary ?? NSDictionary()
         let numberDestinations = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "numberDestinations") as? NSNumber ?? NSNumber()
         let nonSpecificDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "nonSpecificDates") as? NSDictionary ?? NSDictionary()
+        let firebaseChannelKey = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "firebaseChannelKey") as? NSString ?? NSString()
+
         //Budget VC
         let budgetValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "budget") as? NSString ?? NSString()
         let expectedRoundtripFare = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_roundtrip_fare") as? NSString ?? NSString()
@@ -364,7 +376,7 @@ final class ChatViewController: JSQMessagesViewController {
         let rankedPotentialTripsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionary") as? [NSDictionary] ?? [NSDictionary]()
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus, "finished_entering_preferences_status": finishedEnteringPreferencesStatus,"trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus, "finished_entering_preferences_status": finishedEnteringPreferencesStatus,"trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
     }
@@ -377,7 +389,22 @@ final class ChatViewController: JSQMessagesViewController {
     
     //MARK: Actions
     @IBAction func doneButtonTouchedUpInside(_ sender: Any) {
-        super.performSegue(withIdentifier: "chatToNewTrip", sender: self)
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if SavedPreferencesForTrip["lastVC"] as! String == "swiping" {
+            super.performSegue(withIdentifier: "chatToNewTrip", sender: self)
+        } else if SavedPreferencesForTrip["lastVC"] as! String == "ranking" {
+            super.performSegue(withIdentifier: "chatToRanking", sender: self)
+        } else if SavedPreferencesForTrip["lastVC"] as! String == "hotelResults" {
+            super.performSegue(withIdentifier: "chatToExploreHotels", sender: self)
+        } else if SavedPreferencesForTrip["lastVC"] as! String == "booking" {
+            super.performSegue(withIdentifier: "chatToBooking", sender: self)
+        } else if SavedPreferencesForTrip["lastVC"] as! String == "flightSearch" {
+            super.performSegue(withIdentifier: "chatToFlightSearch", sender: self)
+        } else if SavedPreferencesForTrip["lastVC"] as! String == "flightResults" {
+            super.performSegue(withIdentifier: "chatToFlightResults", sender: self)
+        }
+        
         self.navigationController?.isNavigationBarHidden = true
     }
     

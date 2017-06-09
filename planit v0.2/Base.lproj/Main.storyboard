@@ -2242,7 +2242,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                 <state key="normal" title="&lt;"/>
                                 <connections>
-                                    <segue destination="E8d-J0-NPc" kind="show" animates="NO" id="R8r-yB-rJ1"/>
+                                    <segue destination="E8d-J0-NPc" kind="show" identifier="rankingToSwiping" animates="NO" id="R8r-yB-rJ1"/>
                                 </connections>
                             </button>
                             <button autoresizesSubviews="NO" opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Iw-Aq-JG0">
@@ -2448,6 +2448,9 @@
                                 <rect key="frame" x="325" y="26" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="Message"/>
+                                <connections>
+                                    <segue destination="0NW-dQ-30A" kind="show" identifier="rankingToChat" animates="NO" id="mtv-1X-7Th"/>
+                                </connections>
                             </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2kF-cG-IG6">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -2803,6 +2806,9 @@
                                 <rect key="frame" x="325" y="26" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="Message"/>
+                                <connections>
+                                    <segue destination="0NW-dQ-30A" kind="show" identifier="exploreHotelsToChat" animates="NO" id="ylU-8y-Slg"/>
+                                </connections>
                             </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nEI-Ar-bPd">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -3138,6 +3144,9 @@
                                 <rect key="frame" x="325" y="26" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="Message"/>
+                                <connections>
+                                    <segue destination="0NW-dQ-30A" kind="show" identifier="bookingToChat" animates="NO" id="kPA-Nl-bI1"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Dcc-Bx-hVv">
                                 <rect key="frame" x="113" y="501" width="154" height="59"/>
@@ -3852,6 +3861,11 @@
                     </navigationItem>
                     <connections>
                         <segue destination="E8d-J0-NPc" kind="show" identifier="chatToNewTrip" animates="NO" id="YJh-b0-V47"/>
+                        <segue destination="6Nf-ZD-7fF" kind="show" identifier="chatToRanking" animates="NO" id="JbU-KK-pA3"/>
+                        <segue destination="LVk-lO-4Cs" kind="show" identifier="chatToExploreHotels" animates="NO" id="XG6-b2-gcD"/>
+                        <segue destination="9Zf-or-QAX" kind="show" identifier="chatToBooking" animates="NO" id="uxT-Gz-li3"/>
+                        <segue destination="nd6-3o-Pa6" kind="show" identifier="chatToFlightSearch" animates="NO" id="sNQ-RT-YBj"/>
+                        <segue destination="pop-1B-VO6" kind="show" animates="NO" id="AiS-CM-kbO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ym6-jt-5bp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4160,6 +4174,9 @@
                                 <rect key="frame" x="325" y="26" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="Message"/>
+                                <connections>
+                                    <segue destination="0NW-dQ-30A" kind="show" identifier="flightSearchToChat" animates="NO" id="lZM-T8-rES"/>
+                                </connections>
                             </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Cb-GH-lfK">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -4590,6 +4607,9 @@
                                 <rect key="frame" x="325" y="26" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="Message"/>
+                                <connections>
+                                    <segue destination="0NW-dQ-30A" kind="show" identifier="flightResultsToChat" animates="NO" id="tCn-S3-Xzy"/>
+                                </connections>
                             </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G5K-vS-aTv">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -5135,7 +5155,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0NW-dQ-30A" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" backIndicatorImage="Museum" id="qTT-Lr-iVa">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="Museum" id="qTT-Lr-iVa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -9609,13 +9629,15 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="RmY-wW-62S"/>
         <segue reference="chs-U5-EMN"/>
+        <segue reference="aww-Ip-yzO"/>
+        <segue reference="rwx-9f-mbt"/>
+        <segue reference="XIs-yD-L7P"/>
+        <segue reference="tCn-S3-Xzy"/>
+        <segue reference="R8r-yB-rJ1"/>
+        <segue reference="Cjv-x4-gBd"/>
         <segue reference="cWA-9L-HdA"/>
         <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="cNU-Li-sIA"/>
-        <segue reference="Cjv-x4-gBd"/>
-        <segue reference="R8r-yB-rJ1"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

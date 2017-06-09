@@ -16,9 +16,9 @@ import SMCalloutView
 import Firebase
 
 class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout, SMCalloutViewDelegate {
-    
+
     //Firebase channel
-    private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
+    var channelsRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     var newChannelRef: FIRDatabaseReference?
 
     //City dict
@@ -134,6 +134,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        updateLastVC()
 
         //Setup instructions collection view
         instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
@@ -400,11 +402,16 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                     
                     //Create new firebase channel
                     if let name = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String {
-                        newChannelRef = channelRef.childByAutoId()
+                        newChannelRef = channelsRef.childByAutoId()
                         let channelItem = [
                             "name": name
                         ]
                         newChannelRef?.setValue(channelItem)
+                        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                        SavedPreferencesForTrip["firebaseChannelKey"] = newChannelRef?.key as! NSString
+                        //Save
+                        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                        
                     }
                 }
                 
@@ -560,12 +567,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-        if segue.identifier == "newTripToChat" {
-            let destinationVc = segue.destination as! UINavigationController
-            
-            let chatVc = destinationVc.topViewController as! ChatViewController
-            chatVc.channelRef = newChannelRef
-        }
     }
     
     func roundSlider() {
@@ -1653,7 +1654,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         specificDatesButton.isHidden = true
         noSpecificDatesButton.isHidden = true
         questionLabel.isHidden = false
-        calendarView.isHidden = true
+        calendarView.isHidden = true        
     }
     @IBAction func weekendTouchedUpInside(_ sender: Any) {
         if weekend.backgroundColor == UIColor.darkGray {
@@ -1894,6 +1895,13 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
     }
     
+    func updateLastVC(){
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["lastVC"] = "swiping" as NSString
+        //Save
+        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
     func updateCompletionStatus(){
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["finished_entering_preferences_status"] = "swiping" as NSString
@@ -1911,6 +1919,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         //Trip status
         var bookingStatus = NSNumber(value: 0)
         var finishedEnteringPreferencesStatus = NSString()
+        var lastVC = NSString()
         //New Trip VC
         var tripNameValue = NSString()
         var tripID = NSString()
@@ -1923,6 +1932,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         var rightDateTimeArrays = NSDictionary()
         var numberDestinations = NSNumber(value: 1)
         var nonSpecificDates = NSDictionary()
+        var firebaseChannelKey = NSString()
         //Budget VC DEPRICATED
         var budgetValue = NSString()
         var expectedRoundtripFare = NSString()
@@ -1943,6 +1953,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         //Trip status
         bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? 0 as NSNumber
         finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
+        lastVC = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastVC") as? NSString ?? NSString()
         //New Trip VC
         tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? NSString ?? NSString()
         tripID = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "tripID") as? NSString ?? NSString()
@@ -1956,6 +1967,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         rightDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "return_departure_times") as? NSDictionary ?? NSDictionary()
         numberDestinations = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "numberDestinations") as? NSNumber ?? NSNumber()
         nonSpecificDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "nonSpecificDates") as? NSDictionary ?? NSDictionary()
+        firebaseChannelKey = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "firebaseChannelKey") as? NSString ?? NSString()
         //Budget VC
         budgetValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "budget") as? NSString ?? NSString()
         expectedRoundtripFare = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_roundtrip_fare") as? NSString ?? NSString()
@@ -1973,7 +1985,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
