@@ -52,7 +52,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         
         //Setup instructions collection view
         instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
-        instructionsView?.frame.origin.y = 435
+        instructionsView?.frame.origin.y = 200
         self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
         instructionsView?.isHidden = true
         instructionsGotItButton.isHidden = true
@@ -86,7 +86,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         
         // Set up tap outside info view
         popupBackgroundView.isHidden = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissPopup(touch:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
         tap.numberOfTapsRequired = 1
         tap.delegate = self
         popupBackgroundView.addGestureRecognizer(tap)
@@ -273,12 +273,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         self.knownTravelerNumber.text =  "\(knownTravelerNumberValue)"
         self.redressNumber.text =  "\(redressNumberValue)"
         self.birthdate.text =  "\(birthdateValue)"
-    }
-    
-    
-    //UITapGestureRecognizer
-    func dismissPopup(touch: UITapGestureRecognizer) {
-        animateInstructionsOut()
     }
     
     // MARK: UITextFieldDelegate
@@ -548,6 +542,9 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     }
     
     // MARK: Actions
+    @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
+        animateInstructionsIn()
+    }
     @IBAction func instructionsGotItButtonTouchedUpInside(_ sender: Any) {
         animateInstructionsOut()
     }

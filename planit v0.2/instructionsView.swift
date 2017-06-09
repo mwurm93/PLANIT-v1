@@ -34,7 +34,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        instructionsCollectionView?.frame = CGRect(x: 0, y: 46, width: 375, height: 120)
+        instructionsCollectionView?.frame = CGRect(x: 0, y: 46, width: 375, height: 170)
     }
     
     
@@ -43,7 +43,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 65, bottom: 0, right: 65)
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 245, height: 109)
+        layout.itemSize = CGSize(width: 245, height: 159)
         layout.minimumLineSpacing = 50
         
         instructionsCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
@@ -152,7 +152,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             stringForLabel.append(NSAttributedString(string: " to change your group's hotel"))
             cell.instructionsLabel.attributedText = stringForLabel
         } else if indexPath.item == 5 {
-        cell.instructionsLabel.text = "Time to book! You only pay for your share of the accomodation, and can automatically cancel your reservation if [choose here] doesn't commit in 24 hours."
+        cell.instructionsLabel.text = "Time to book! You only pay for your share of the accomodation, and can automatically cancel your reservation if others don't commit in 24 hours."
         }
         
         

@@ -47,7 +47,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         
         //Setup instructions collection view
         instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
-        instructionsView?.frame.origin.y = 435
+        instructionsView?.frame.origin.y = 200
         self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
         instructionsView?.isHidden = true
         instructionsGotItButton.isHidden = true
@@ -124,8 +124,6 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
-                self.backButton.alpha =  0
-                self.selectFlightButton.alpha =  0
             }
         }
         
@@ -448,6 +446,9 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     //MARK: Actions
+    @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
+        animateInstructionsIn()
+    }
     @IBAction func instructionsGotItButtonTouchedUpInside(_ sender: Any) {
         animateInstructionsOut()
     }

@@ -34,7 +34,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         //Setup instructions collection view
         instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
-        instructionsView?.frame.origin.y = 435
+        instructionsView?.frame.origin.y = 200
         self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
         instructionsView?.isHidden = true
         instructionsGotItButton.isHidden = true
@@ -85,8 +85,6 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
-                self.readyToBookButton.alpha =  0
-                self.returnToSwipingButton.alpha =  0
             }
         } else {
             recommendationRankingTableView.frame = CGRect(x: 0, y: 75, width: 375, height: 500)
@@ -406,6 +404,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             self.instructionsView?.alpha = 0
             self.instructionsGotItButton.isHidden = true
             self.popupBackgroundView.isHidden = true
+            
         }) { (Success:Bool) in
             self.instructionsView?.layer.isHidden = true
         }        
@@ -422,6 +421,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // MARK: Actions
+    @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
+        animateInstructionsIn()
+    }
     @IBAction func instructionsGotItButtonTouchedUpInside(_ sender: Any) {
         animateInstructionsOut()
     }

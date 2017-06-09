@@ -20,16 +20,17 @@ class instructionsCollectionViewCell: UICollectionViewCell {
     }
     
     let instructionsLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 225, height: 105))
+        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 225, height: 155))
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 19)
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
     let instructionsOutlineView: UIView = {
-        let outlineView = UIView(frame: CGRect(x: 0, y: 0, width: 245, height: 105))
+        let outlineView = UIView(frame: CGRect(x: 0, y: 0, width: 245, height: 155))
         outlineView.backgroundColor = UIColor.clear
         outlineView.layer.backgroundColor = UIColor.clear.cgColor
         outlineView.layer.cornerRadius = 10

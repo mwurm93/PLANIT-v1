@@ -137,7 +137,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
 
         //Setup instructions collection view
         instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
-        instructionsView?.frame.origin.y = 435
+        instructionsView?.frame.origin.y = 200
         self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundViewMainVC)
         instructionsView?.isHidden = true
         instructionsGotItButton.isHidden = true

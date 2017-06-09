@@ -1616,7 +1616,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wTZ-hO-SRA">
-                                <rect key="frame" x="68" y="600" width="239" height="27"/>
+                                <rect key="frame" x="68" y="420" width="239" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                 <state key="normal" title="Got it">
@@ -2257,7 +2257,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="169" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="s8X-dS-Z6n">
-                                <rect key="frame" x="0.0" y="75" width="375" height="460"/>
+                                <rect key="frame" x="0.0" y="75" width="375" height="524"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2462,9 +2462,12 @@
                                 <rect key="frame" x="15" y="18" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="info icon"/>
+                                <connections>
+                                    <action selector="infoButtonTouchedUpInside:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="8oY-zo-HC1"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dSg-Wp-ciz">
-                                <rect key="frame" x="68" y="600" width="239" height="27"/>
+                                <rect key="frame" x="68" y="420" width="239" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                 <state key="normal" title="Got it">
@@ -2814,9 +2817,12 @@
                                 <rect key="frame" x="15" y="18" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="info icon"/>
+                                <connections>
+                                    <action selector="infoButtonTouchedUpInside:" destination="LVk-lO-4Cs" eventType="touchUpInside" id="eGp-9e-66p"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Cg-LJ-hDC">
-                                <rect key="frame" x="68" y="600" width="239" height="27"/>
+                                <rect key="frame" x="68" y="420" width="239" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                 <state key="normal" title="Got it">
@@ -3124,9 +3130,6 @@
                                 <rect key="frame" x="273" y="515" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="button:js9-Ot-WYO:image"/>
-                                <connections>
-                                    <action selector="infoButtonPressed:" destination="9Zf-or-QAX" eventType="touchUpInside" id="dwm-pB-maz"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PB9-Pd-t3O">
                                 <rect key="frame" x="325" y="26" width="24" height="24"/>
@@ -3208,14 +3211,20 @@
                                 <rect key="frame" x="15" y="18" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="info icon"/>
+                                <connections>
+                                    <action selector="infoButtonTouchedUpInside:" destination="9Zf-or-QAX" eventType="touchUpInside" id="AgW-bd-OgH"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8f3-V7-S7c">
-                                <rect key="frame" x="68" y="600" width="239" height="27"/>
+                                <rect key="frame" x="68" y="420" width="239" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                 <state key="normal" title="Got it">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="instructionsGotItButtonTouchedUpInside:" destination="9Zf-or-QAX" eventType="touchUpInside" id="ftK-CB-iNU"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -3227,7 +3236,6 @@
                         <outlet property="addressState" destination="NeD-St-XML" id="SBU-sx-4Ts"/>
                         <outlet property="addressZipCode" destination="uI8-3C-Xpw" id="dG0-js-xa6"/>
                         <outlet property="birthdate" destination="fW5-pv-a9m" id="mCC-2M-AcN"/>
-                        <outlet property="bookOnlyIfTheyDoInfoButton" destination="js9-Ot-WYO" id="6Bl-wQ-pJR"/>
                         <outlet property="bookThisTripButton" destination="Dcc-Bx-hVv" id="r7e-f3-bkN"/>
                         <outlet property="cardNumber" destination="AQU-hZ-M35" id="f31-nI-A8c"/>
                         <outlet property="contactsCollectionView" destination="5PN-hy-72c" id="cCT-aR-6rk"/>
@@ -3759,7 +3767,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="info icon"/>
                                 <connections>
-                                    <action selector="infoButtonPressed:" destination="9Zf-or-QAX" eventType="touchUpInside" id="EbK-0o-iEt"/>
                                     <action selector="infoButtonPressed:" destination="9Q5-Bs-FEW" eventType="touchUpInside" id="MUL-0A-dQa"/>
                                 </connections>
                             </button>
@@ -4164,9 +4171,12 @@
                                 <rect key="frame" x="15" y="18" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="info icon"/>
+                                <connections>
+                                    <action selector="infoButtonTouchedUpInside:" destination="nd6-3o-Pa6" eventType="touchUpInside" id="bhT-tj-y46"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hNs-Sf-xpQ">
-                                <rect key="frame" x="68" y="600" width="239" height="27"/>
+                                <rect key="frame" x="68" y="420" width="239" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                 <state key="normal" title="Got it">
@@ -4381,7 +4391,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DER-ep-qYl">
-                                <rect key="frame" x="265" y="605" width="110" height="62"/>
+                                <rect key="frame" x="265" y="617" width="110" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <state key="normal" title="Select &gt;">
@@ -4412,7 +4422,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="52" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Upi-i4-7Fi">
-                                <rect key="frame" x="0.0" y="114" width="375" height="440"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="483"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -4591,9 +4601,12 @@
                                 <rect key="frame" x="15" y="18" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="info icon"/>
+                                <connections>
+                                    <action selector="infoButtonTouchedUpInside:" destination="pop-1B-VO6" eventType="touchUpInside" id="SLu-Aj-Xmx"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9bM-In-M0e">
-                                <rect key="frame" x="68" y="600" width="239" height="27"/>
+                                <rect key="frame" x="68" y="420" width="239" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                 <state key="normal" title="Got it">
@@ -4622,7 +4635,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YyM-ds-ZOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628" y="1796"/>
+            <point key="canvasLocation" x="1628" y="1795.9520239880062"/>
         </scene>
         <!--Hotel Preferences View Controller-->
         <scene sceneID="Boy-fV-DLn">

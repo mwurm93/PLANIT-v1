@@ -56,7 +56,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         
         //Setup instructions collection view
         instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
-        instructionsView?.frame.origin.y = 435
+        instructionsView?.frame.origin.y = 200
         self.view.addSubview(instructionsView!)
         instructionsView?.isHidden = true
         instructionsGotItButton.isHidden = true
@@ -443,6 +443,9 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
 
     
     //MARK: Actions
+    @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
+        animateInstructionsIn()
+    }
     @IBAction func gotItButtonTouchedUpInside(_ sender: Any) {
         animateInstructionsOut()
     }
