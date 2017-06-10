@@ -68,13 +68,13 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
         @IBOutlet weak var popupBackgroundViewMainVC: UIVisualEffectView!
         @IBOutlet weak var addFriendsInstructionsView: UIView!
         @IBOutlet weak var detailedCardView: UIScrollView!
-        @IBOutlet weak var swipeableView: ZLSwipeableView!
         @IBOutlet weak var tripNameLabel: UITextField!
         @IBOutlet weak var popupBackgroundViewDeleteContacts: UIVisualEffectView!
         @IBOutlet weak var popupBackgroundViewDeleteContactsWithinCollectionView: UIVisualEffectView!
         @IBOutlet weak var instructionsGotItButton: UIButton!
         @IBOutlet weak var filterButton: UIButton!
         @IBOutlet weak var inviteFriendsGotItButton: UIButton!
+    @IBOutlet weak var swipeableView: ZLSwipeableView!
         
         override func viewDidLayoutSubviews() {
             super.viewDidLayoutSubviews()
@@ -553,7 +553,7 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
         
         func animateInstructionsIn(){
             instructionsView?.isHidden = false
-            instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 0,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+            instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 1,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
             
             instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             instructionsView?.alpha = 0

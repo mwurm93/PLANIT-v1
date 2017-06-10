@@ -555,7 +555,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
             groupMemberListTable.insertRows(at: addedRowIndexPath, with: .left)
         }
-            addFromContactsButton.layer.frame = CGRect(x: 189, y: 330, width: 198, height: 22)
+            addFromContactsButton.layer.frame = CGRect(x: 89, y: 330, width: 198, height: 22)
             addFromFacebookButton.layer.frame = CGRect(x: 88, y: 375, width: 200, height: 22)
             soloForNowButton.isHidden = true
             groupMemberListTable.isHidden = false
@@ -636,7 +636,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             groupMemberListTable.insertRows(at: addedRowIndexPath, with: .left)
         }
         
-        addFromContactsButton.layer.frame = CGRect(x: 189, y: 330, width: 198, height: 22)
+        addFromContactsButton.layer.frame = CGRect(x: 89, y: 330, width: 198, height: 22)
         addFromFacebookButton.layer.frame = CGRect(x: 88, y: 375, width: 200, height: 22)
         soloForNowButton.isHidden = true
         groupMemberListTable.isHidden = false
@@ -884,14 +884,14 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         dayOfWeekStackView.isHidden = true
         
         if contacts != nil {
-            addFromContactsButton.layer.frame = CGRect(x: 189, y: 280, width: 198, height: 22)
+            addFromContactsButton.layer.frame = CGRect(x: 89, y: 280, width: 198, height: 22)
             addFromFacebookButton.layer.frame = CGRect(x: 88, y: 310, width: 200, height: 22)
             soloForNowButton.isHidden = true
             groupMemberListTable.isHidden = false
             groupMemberListTable.layer.frame = CGRect(x: 29, y: 200, width: 292, height: 221)
             subviewDoneButton.isHidden = false
         } else {
-            addFromContactsButton.layer.frame = CGRect(x: 189, y: 290, width: 198, height: 22)
+            addFromContactsButton.layer.frame = CGRect(x: 89, y: 290, width: 198, height: 22)
             addFromFacebookButton.layer.frame = CGRect(x: 88, y: 339, width: 200, height: 22)
             soloForNowButton.isHidden = false
             soloForNowButton.layer.frame = CGRect(x: 133, y: 388, width: 109, height: 22)
@@ -936,13 +936,13 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         groupMemberListTable.deleteRows(at: [indexPath], with: .left)
         
         if contacts?.count == 0 || contacts == nil {
-            addFromContactsButton.layer.frame = CGRect(x: 189, y: 290, width: 198, height: 22)
+            addFromContactsButton.layer.frame = CGRect(x: 89, y: 290, width: 198, height: 22)
             addFromFacebookButton.layer.frame = CGRect(x: 88, y: 339, width: 200, height: 22)
             soloForNowButton.isHidden = false
             soloForNowButton.layer.frame = CGRect(x: 133, y: 388, width: 109, height: 22)
             groupMemberListTable.isHidden = true
         } else {
-            addFromContactsButton.layer.frame = CGRect(x: 189, y: 150, width: 198, height: 22)
+            addFromContactsButton.layer.frame = CGRect(x: 89, y: 150, width: 198, height: 22)
             addFromFacebookButton.layer.frame = CGRect(x: 88, y: 199, width: 200, height: 22)
             soloForNowButton.isHidden = true
             soloForNowButton.layer.frame = CGRect(x: 101, y: 248, width: 109, height: 22)

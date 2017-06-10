@@ -56,7 +56,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         self.addSubview(instructionsCollectionView!)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return 7
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -87,10 +87,11 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             whiteInstructionIndex = 0
         }
 
-        
         if indexPath.item == 0 {
-            cell.instructionsLabel.text = "Swipe to discover where you might want to go, and invite your friends to do the same!"
+            cell.instructionsLabel.text = "Add your dates, home airport, and travel mates!"
         } else if indexPath.item == 1 {
+            cell.instructionsLabel.text = "Swipe to discover where you might want to go, and invite your friends to do the same!"
+        } else if indexPath.item == 2 {
             let hamburgerAttachment = NSTextAttachment()
             hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
             hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
@@ -122,9 +123,9 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             stringForLabel.append(attachment2)
             stringForLabel.append(NSAttributedString(string: " to change your group's top trip"))
             cell.instructionsLabel.attributedText = stringForLabel
-        } else if indexPath.item == 2 {
-            cell.instructionsLabel.text = "Search flights to this destination to price it out"
         } else if indexPath.item == 3 {
+            cell.instructionsLabel.text = "Search flights to this destination to price it out"
+        } else if indexPath.item == 4 {
             let hamburgerAttachment = NSTextAttachment()
             hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
             hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
@@ -138,7 +139,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             stringForLabel.append(attachment1)
             stringForLabel.append(NSAttributedString(string: " to change your flight"))
             cell.instructionsLabel.attributedText = stringForLabel
-        } else if indexPath.item == 4 {
+        } else if indexPath.item == 5 {
             let hamburgerAttachment = NSTextAttachment()
             hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
             hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
@@ -152,7 +153,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             stringForLabel.append(attachment1)
             stringForLabel.append(NSAttributedString(string: " to change your group's hotel"))
             cell.instructionsLabel.attributedText = stringForLabel
-        } else if indexPath.item == 5 {
+        } else if indexPath.item == 6 {
         cell.instructionsLabel.text = "Time to book! You only pay for your share of the accomodation, and can automatically cancel your reservation if others don't commit in 24 hours"
         }
         

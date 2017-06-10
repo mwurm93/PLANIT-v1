@@ -2043,7 +2043,7 @@
                                     <action selector="filterFlightsButtonTouchedUpInside:" destination="pop-1B-VO6" eventType="touchUpInside" id="6wS-aT-BZM"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YTX-m1-IZ8" customClass="ZLSwipeableView" customModule="planit_v0_2" customModuleProvider="target">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q29-x3-ZD2" customClass="ZLSwipeableView" customModule="planit_v0_2" customModuleProvider="target">
                                 <rect key="frame" x="28" y="69" width="320" height="422"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2225,7 +2225,7 @@
                         <outlet property="popupBlurView" destination="jmN-Z5-yyb" id="hxS-HI-v28"/>
                         <outlet property="ranOutOfSwipesLabel" destination="WFz-7g-ATR" id="zGs-yG-6QC"/>
                         <outlet property="rejectIcon" destination="fnH-bI-Z6X" id="3fi-H3-xQZ"/>
-                        <outlet property="swipeableView" destination="YTX-m1-IZ8" id="bQ7-3q-YxB"/>
+                        <outlet property="swipeableView" destination="Q29-x3-ZD2" id="tDP-7u-cUG"/>
                         <outlet property="tripNameLabel" destination="qAQ-KQ-mR8" id="lPJ-9q-Nw6"/>
                     </connections>
                 </viewController>
@@ -9667,15 +9667,15 @@ AAAAAAAAAAAABApgA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="AiS-CM-kbO"/>
-        <segue reference="aaX-Gb-b3x"/>
-        <segue reference="rG8-GZ-vPL"/>
+        <segue reference="BRb-kg-zV2"/>
         <segue reference="0XT-HI-iDA"/>
+        <segue reference="rG8-GZ-vPL"/>
+        <segue reference="lra-AY-k3U"/>
+        <segue reference="RAo-Nt-Dp1"/>
         <segue reference="t9O-2u-fWL"/>
         <segue reference="chs-U5-EMN"/>
         <segue reference="Cjv-x4-gBd"/>
         <segue reference="cNU-Li-sIA"/>
-        <segue reference="lra-AY-k3U"/>
-        <segue reference="RAo-Nt-Dp1"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
