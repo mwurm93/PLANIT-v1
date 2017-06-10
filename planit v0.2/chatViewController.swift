@@ -392,8 +392,10 @@ final class ChatViewController: JSQMessagesViewController {
     @IBAction func doneButtonTouchedUpInside(_ sender: Any) {
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        if SavedPreferencesForTrip["lastVC"] as! String == "swiping" {
+        if SavedPreferencesForTrip["lastVC"] as! String == "newTrip" {
             super.performSegue(withIdentifier: "chatToNewTrip", sender: self)
+        } else if SavedPreferencesForTrip["lastVC"] as! String == "swiping" {
+            super.performSegue(withIdentifier: "chatToSwiping", sender: self)
         } else if SavedPreferencesForTrip["lastVC"] as! String == "ranking" {
             super.performSegue(withIdentifier: "chatToRanking", sender: self)
         } else if SavedPreferencesForTrip["lastVC"] as! String == "hotelResults" {

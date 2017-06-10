@@ -10,12 +10,10 @@ import UIKit
 import ContactsUI
 import Contacts
 import JTAppleCalendar
-import UIColor_FlatColors
 import Cartography
-import SMCalloutView
 import Firebase
 
-class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout, SMCalloutViewDelegate {
+class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
 
     //Firebase channel
     var channelsRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
@@ -23,11 +21,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
 
     //City dict
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
-    
-    //SMCallout
-    var sortFilterFlightsCalloutView = SMCalloutView()
-    let sortFilterFlightsCalloutTableView = UITableView(frame: CGRect.zero, style: .plain)
-    let filterFirstLevelOptions = ["Activities","Int'l vs. Domestic","Temperature", "Clear fliters"]
     
     //Messaging var
     let messageComposer = MessageComposer()
@@ -42,16 +35,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     static let darkGrayColor = UIColor(colorWithHexValue: 0x656565, alpha: 1)
     static let blackColor = UIColor(colorWithHexValue: 0x000000, alpha: 1)
     
-    //ZLSwipeableView vars
-    var colors = ["Turquoise", "Green Sea", "Emerald", "Nephritis", "Peter River", "Belize Hole", "Amethyst", "Wisteria", "Wet Asphalt", "Midnight Blue", "Sun Flower", "Orange", "Carrot", "Pumpkin", "Alizarin", "Pomegranate", "Silver", "Concrete", "Asbestos"]
-    var colorIndex = 0
-    var cardToLoadIndex = 0
-    var loadCardsFromXib = true
-    var isTrackingPanLocation = false
-    var panGestureRecognizer = UIPanGestureRecognizer()
-    var countSwipes = 0
-    var totalDailySwipeAllotment = 6
-    
     //Contacts vars COPY
     fileprivate var addressBookStore: CNContactStore!
     let picker = CNContactPickerViewController()
@@ -63,8 +46,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     //Popup subview vars
     var homeAirportValue = DataContainerSingleton.sharedDataContainer.homeAirport ?? ""
-    let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
-        
     var leftDates = [Date]()
     var rightDates = [Date]()
     var fullDates = [Date]()
@@ -77,31 +58,18 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     var instructionsView: instructionsView?
     
     // MARK: Outlets
-    @IBOutlet weak var rejectIcon: UIButton!
-    @IBOutlet weak var heartIcon: UIButton!
     @IBOutlet weak var groupMemberListTable: UITableView!
-    @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var addFromContactsButton: UIButton!
     @IBOutlet weak var addFromFacebookButton: UIButton!
     @IBOutlet weak var soloForNowButton: UIButton!
-    @IBOutlet weak var ranOutOfSwipesLabel: UILabel!
-    @IBOutlet weak var contactsCollectionView: UICollectionView!
-    @IBOutlet weak var popupBlurView: UIVisualEffectView!
-    @IBOutlet weak var addContactPlusIconMainVC: UIButton!
-    @IBOutlet weak var timeOfDayTableView: UITableView!
-    @IBOutlet weak var popupBackgroundView: UIView!
     @IBOutlet weak var calendarView: JTAppleCalendarView!
     @IBOutlet weak var popupBackgroundViewMainVC: UIVisualEffectView!
-    @IBOutlet var popupSubview: UIView!
-    @IBOutlet weak var addFriendsInstructionsView: UIView!
     @IBOutlet weak var subviewWhereButton: UIButton!
     @IBOutlet weak var subviewWhoButton: UIButton!
     @IBOutlet weak var subviewWhenButton: UIButton!
-    @IBOutlet weak var underline: UIImageView!
     @IBOutlet weak var subviewDoneButton: UIButton!
     @IBOutlet weak var homeAirportTextField: UITextField!
     @IBOutlet weak var questionLabel: UILabel!
-    @IBOutlet weak var subviewNextButton: UIButton!
     @IBOutlet weak var month1: UIButton!
     @IBOutlet weak var month2: UIButton!
     @IBOutlet weak var month3: UIButton!
@@ -111,29 +79,21 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBOutlet weak var oneWeek: UIButton!
     @IBOutlet weak var twoWeeks: UIButton!
     @IBOutlet weak var noSpecificDatesButton: UIButton!
-    @IBOutlet weak var swipeableView: ZLSwipeableView!
-    @IBOutlet weak var detailedCardView: UIScrollView!
     @IBOutlet weak var numberDestinationsSlider: UISlider!
     @IBOutlet weak var numberDestinationsStackView: UIStackView!
     @IBOutlet weak var tripNameLabel: UITextField!
-    @IBOutlet weak var popupBackgroundViewDeleteContacts: UIVisualEffectView!
-    @IBOutlet weak var popupBackgroundViewDeleteContactsWithinCollectionView: UIVisualEffectView!
     @IBOutlet weak var dayOfWeekStackView: UIStackView!
     @IBOutlet weak var instructionsGotItButton: UIButton!
     @IBOutlet weak var chatButton: UIButton!
-    @IBOutlet weak var filterButton: UIButton!
-    @IBOutlet weak var inviteFriendsGotItButton: UIButton!
+    @IBOutlet weak var whiteLine: UIImageView!
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        swipeableView.nextView = {
-            return self.nextCardView()
-        }
-    }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Set to when
+        whiteLine.layer.frame = CGRect(x: 61, y: 104, width: 55, height: 51)
+        subviewWhen()
         
         updateLastVC()
 
@@ -168,36 +128,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             }
         }
         
-        totalDailySwipeAllotment = rankedPotentialTripsDictionary.count
 
         SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
         //Save
         self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-
-        
-        //SMCalloutView
-        self.sortFilterFlightsCalloutView.delegate = self
-        self.sortFilterFlightsCalloutView.isHidden = true
-        
-        sortFilterFlightsCalloutTableView.delegate = self
-        sortFilterFlightsCalloutTableView.dataSource = self
-        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 100, height: 100)
-        sortFilterFlightsCalloutTableView.isEditing = false
-        sortFilterFlightsCalloutTableView.allowsMultipleSelection = false
-        sortFilterFlightsCalloutTableView.backgroundColor = UIColor.clear
-        sortFilterFlightsCalloutTableView.layer.backgroundColor = UIColor.clear.cgColor
-
-        
-        //add shadow to button
-        chatButton.layer.shadowColor = UIColor.black.cgColor
-        chatButton.layer.shadowOffset = CGSize(width: 2, height: 2)
-        chatButton.layer.shadowRadius = 2
-        chatButton.layer.shadowOpacity = 0.3
-        chatButton.isHidden = true
         
         //        self.hideKeyboardWhenTappedAround()
-        
-        popupBlurView.isUserInteractionEnabled = true
         
         //Load the values from our shared data container singleton
         if NewOrAddedTripFromSegue != 1 {
@@ -209,12 +145,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
         tripNameLabel.adjustsFontSizeToFitWidth = true
         tripNameLabel.minimumFontSize = 10
-        
-        detailedCardView.isHidden = true
-        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panRecognized(recognizer:)))
-        panGestureRecognizer.delegate = self
-        detailedCardView.addGestureRecognizer(panGestureRecognizer)
-        detailedCardView.layer.cornerRadius = 15
         
         weekend.layer.cornerRadius = 15
         oneWeek.layer.cornerRadius = 15
@@ -251,24 +181,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         oneWeek.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         twoWeeks.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         
-        popupSubview.layer.cornerRadius = 10
         subviewDoneButton.isHidden = true
-        
-        //Calendar subview
-        // Set up tap outside time of day table
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissPopup(touch:)))
-        tap.numberOfTapsRequired = 1
-        tap.delegate = self
-        popupBackgroundView.isHidden = true
-        popupBackgroundView.layer.cornerRadius = 10
-        self.popupBackgroundView.addGestureRecognizer(tap)
-        
-        //Time of Day
-        timeOfDayTableView.delegate = self
-        timeOfDayTableView.dataSource = self
-        timeOfDayTableView.layer.cornerRadius = 5
-        timeOfDayTableView.layer.isHidden = true
-        timeOfDayTableView.allowsMultipleSelection = true
         
         //Number Destinations Slider
         numberDestinationsSlider.isContinuous = false
@@ -316,11 +229,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         //COPY FOR CONTACTS
         addressBookStore = CNContactStore()
         
-        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongPress(gestureReconizer:)))
-        lpgr.minimumPressDuration = 0.5
-        lpgr.delaysTouchesBegan = true
-        lpgr.delegate = self
-        self.contactsCollectionView.addGestureRecognizer(lpgr)
         //
         let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
         atap.numberOfTapsRequired = 1
@@ -328,39 +236,15 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         self.popupBackgroundViewMainVC.addGestureRecognizer(atap)
         popupBackgroundViewMainVC.isHidden = true
         popupBackgroundViewMainVC.isUserInteractionEnabled = true
-        addFriendsInstructionsView.isHidden = true
-        addFriendsInstructionsView.layer.cornerRadius = 10
         //
-        let tapOutsideContacts = UITapGestureRecognizer(target: self, action: #selector(self.leaveDeleteContactsMode(touch:)))
-        tapOutsideContacts.numberOfTapsRequired = 1
-        tapOutsideContacts.delegate = self
-        self.popupBackgroundViewDeleteContacts.addGestureRecognizer(tapOutsideContacts)
-        popupBackgroundViewDeleteContacts.isHidden = true
-        popupBackgroundViewDeleteContacts.isUserInteractionEnabled = true
-        //
-        let tapOutsideContact = UITapGestureRecognizer(target: self, action: #selector(self.leaveDeleteContactsMode2(touch:)))
-        tapOutsideContact.numberOfTapsRequired = 1
-        tapOutsideContact.delegate = self
-        self.popupBackgroundViewDeleteContactsWithinCollectionView.addGestureRecognizer(tapOutsideContact)
-        popupBackgroundViewDeleteContactsWithinCollectionView.isHidden = true
-        popupBackgroundViewDeleteContactsWithinCollectionView.isUserInteractionEnabled = true
-
-        popupBlurView.alpha = 0
         
         self.modalTransitionStyle = UIModalTransitionStyle.flipHorizontal
         
-        heartIcon.setImage(#imageLiteral(resourceName: "fullHeart"), for: .highlighted)
-        rejectIcon.setImage(#imageLiteral(resourceName: "fullX"), for: .highlighted)
-        ranOutOfSwipesLabel.isHidden = true
         
         view.autoresizingMask = .flexibleTopMargin
         view.sizeToFit()
         
         if NewOrAddedTripFromSegue == 1 {
-            nextButton.alpha =  0
-            contactsCollectionView.alpha = 0
-            addContactPlusIconMainVC.alpha = 0
-            
             let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
             
                 //Create trip and trip data model
@@ -424,145 +308,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         else {
             retrieveContactsWithStore(store: addressBookStore)
         }
-        
-        //ZLSwipeableview
-        swipeableView.allowedDirection = .Horizontal
-        
-        swipeableView.didStart = {view, location in
-            print("Did start swiping view at location: \(location)")
-        }
-        swipeableView.swiping = {view, location, translation in
-            print("Swiping at view location: \(location) translation: \(translation)")
-        }
-        swipeableView.didEnd = {view, location in
-            print("Did end swiping view at location: \(location)")
-        }
-        swipeableView.didSwipe = {view, direction, vector in
-            self.countSwipes += 1
-            
-            if self.totalDailySwipeAllotment - self.countSwipes > 8 {
-                self.swipeableView.numberOfActiveView = 8
-            } else {
-                self.swipeableView.numberOfActiveView = UInt(self.totalDailySwipeAllotment - self.countSwipes)
-            }
-            if self.swipeableView.numberOfActiveView == 0 {
-                self.performSegue(withIdentifier: "destinationSwipingToDestinationRanking", sender: self)
-            }
-            
-            if self.contactPhoneNumbers.count == 0 && self.countSwipes % 3 == 0 {
-                self.addFriendsInstructionsView.sizeToFit()
-                self.contactsCollectionView.isHidden = true
-                let newFrame = CGRect(x: self.addFriendsInstructionsView.frame.minX, y: 500, width: self.addFriendsInstructionsView.frame.width, height: self.addFriendsInstructionsView.frame.height)
-                self.addFriendsInstructionsView.frame = newFrame
-                self.view.bringSubview(toFront: self.addFriendsInstructionsView)
-                self.addFriendsInstructionsView.frame.size.height = 77
-                self.addFriendsInstructionsView.frame.origin.y = 530
-                self.addFriendsInstructionsView.isHidden = false
-                self.addFriendsInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-                self.addFriendsInstructionsView.alpha = 0
-                self.swipeableView.isUserInteractionEnabled = false
-                UIView.animate(withDuration: 0.4) {
-                    self.popupBackgroundViewMainVC.isHidden = false
-                    self.addFriendsInstructionsView.alpha = 1
-                    self.addFriendsInstructionsView.transform = CGAffineTransform.identity
-                }
-            }
-            
-            if self.countSwipes == 1 && self.NewOrAddedTripFromSegue == 1 {
-                self.animateInSubview()
-                self.swipeableView.rewind()
-                self.countSwipes -= 1
-                self.NewOrAddedTripFromSegue = 0
-            }
-
-            let when = DispatchTime.now() + 0.8
-
-            if direction == .Right {
-                self.heartIcon.isHighlighted = true
-                DispatchQueue.main.asyncAfter(deadline: when) {
-                    self.heartIcon.isHighlighted = false
-                }
-            }
-            if direction == .Left {
-                    self.rejectIcon.isHighlighted = true
-                    DispatchQueue.main.asyncAfter(deadline: when) {
-                        self.rejectIcon.isHighlighted = false
-                    }
-            }
-        }
-        swipeableView.didCancel = {view in
-            print("Did cancel swiping view")
-        }
-        swipeableView.didTap = {view, location in
-            self.detailedCardView.isHidden = false
-            self.view.bringSubview(toFront: self.detailedCardView)
-            self.detailedCardView.alpha = 1
-            self.detailedCardView.backgroundColor = self.swipeableView.topView()?.backgroundColor
-
-            let bounds = UIScreen.main.bounds
-            let width = bounds.size.width
-            let height = bounds.size.height
-            self.detailedCardView.frame = CGRect(x: 0, y: 0, width: width, height: height)
-            
-            let contentView = Bundle.main.loadNibNamed("CardContentView", owner: self, options: nil)?.first! as! CardView
-            contentView.translatesAutoresizingMaskIntoConstraints = false
-            contentView.backgroundColor = self.swipeableView.topView()?.backgroundColor
-            contentView.layer.cornerRadius = 0
-            contentView.layer.shadowOpacity = 0
-            contentView.cardToLoad = self.countSwipes
-            contentView.cardMode = "detailed"
-            
-            self.detailedCardView.addSubview(contentView)
-            constrain(contentView, self.detailedCardView) { view1, view2 in
-                view1.left == view2.left
-                view1.top == view2.top + 70
-                view1.width == self.detailedCardView.bounds.width
-                view1.height == self.detailedCardView.bounds.height
-            }
-            self.swipeableView.isUserInteractionEnabled = false
-            for subview in contentView.subviews {
-                subview.frame.size.width = width
-            }
-        }
-        swipeableView.didDisappear = { view in
-            print("Did disappear swiping view")
-        }
-        
-        constrain(swipeableView, view) { view1, view2 in
-            view1.left == view2.left+30
-            view1.right == view2.right-30
-            view1.top == view2.top + 105
-            view1.bottom == view2.bottom - 150
-        }
-        
-        //Custom animation
-        func toRadian(_ degree: CGFloat) -> CGFloat {
-            return degree * CGFloat(Double.pi/180)
-        }
-        func rotateAndTranslateView(_ view: UIView, forDegree degree: CGFloat, translation: CGPoint, duration: TimeInterval, offsetFromCenter offset: CGPoint, swipeableView: ZLSwipeableView) {
-            UIView.animate(withDuration: duration, delay: 0, options: .allowUserInteraction, animations: {
-                view.center = swipeableView.convert(swipeableView.center, from: swipeableView.superview)
-                var transform = CGAffineTransform(translationX: offset.x, y: offset.y)
-                transform = transform.rotated(by: toRadian(degree))
-                transform = transform.translatedBy(x: -offset.x, y: -offset.y)
-                transform = transform.translatedBy(x: translation.x, y: translation.y)
-                view.transform = transform
-            }, completion: nil)
-        }
-        swipeableView.numberOfActiveView = UInt(totalDailySwipeAllotment)
-        swipeableView.animateView = {(view: UIView, index: Int, views: [UIView], swipeableView: ZLSwipeableView) in
-            let degree = CGFloat(sin(0.5*Double(index)))
-            let offset = CGPoint(x: 0, y: swipeableView.bounds.height*0.3)
-            let translation = CGPoint(x: degree*10, y: CGFloat(-index*5))
-            let duration = 0.4
-            rotateAndTranslateView(view, forDegree: degree, translation: translation, duration: duration, offsetFromCenter: offset, swipeableView: swipeableView)
-        }
-        
-        self.loadCardsFromXib = true
-        self.colorIndex = 0
-        self.swipeableView.discardViews()
-        self.swipeableView.loadViews()
-
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -581,130 +326,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
 
     
-    //Dismissing detailed card view
-    public func panRecognized(recognizer:UIPanGestureRecognizer) {
-        let bounds = UIScreen.main.bounds
-        let width = bounds.size.width
-        let height = bounds.size.height
-        let dismissTriggerOffset = height/5
-        
-        if recognizer.state == .began && detailedCardView.contentOffset.y == 0 {
-            recognizer.setTranslation(CGPoint.zero, in: detailedCardView)
-            isTrackingPanLocation = true
-        } else if recognizer.state == .cancelled || recognizer.state == .ended && isTrackingPanLocation {
-            let panOffset = recognizer.translation(in: detailedCardView)
-            if panOffset.y < dismissTriggerOffset {
-                UIView.animate(withDuration: 0.4) {
-                    self.detailedCardView.frame = CGRect(x: 0, y: 0, width: width, height: height)
-                }
-            }
-            isTrackingPanLocation = false
-        } else if recognizer.state != .ended && recognizer.state != .cancelled &&
-            recognizer.state != .failed && isTrackingPanLocation {
-            let panOffset = recognizer.translation(in: detailedCardView)
-            if panOffset.y < 0 {
-                isTrackingPanLocation = false
-            } else if panOffset.y < dismissTriggerOffset {
-                let panOffset = recognizer.translation(in: detailedCardView)
-                self.detailedCardView.frame = CGRect(x: 0, y: panOffset.y, width: width, height: height)
-            } else {
-                recognizer.isEnabled = false
-                recognizer.isEnabled = true
-                swipeableView.isUserInteractionEnabled = true
-                UIView.animate(withDuration: 0.3, animations: { () -> Void in
-                    self.detailedCardView.frame = self.swipeableView.frame
-                    self.detailedCardView.alpha = 0.6}, completion: { (finished: Bool) in
-                        self.detailedCardView.alpha = 0.0}
-                )
-            }
-        } else {
-            isTrackingPanLocation = false
-            }
-    }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
         otherGestureRecognizer : UIGestureRecognizer)->Bool {
         return true
     }
     
-    //ZLFunctions
-    func leftButtonAction() {
-        self.swipeableView.swipeTopView(inDirection: .Left)
-    }
-    
-    func upButtonAction() {
-        self.swipeableView.swipeTopView(inDirection: .Up)
-    }
-    
-    func rightButtonAction() {
-        self.swipeableView.swipeTopView(inDirection: .Right)
-    }
-    
-    func downButtonAction() {
-        self.swipeableView.swipeTopView(inDirection: .Down)
-    }
-    
-    // MARK: ()
-    func nextCardView() -> UIView? {
-        if colorIndex >= colors.count {
-            colorIndex = 0
-        }
-
-        if cardToLoadIndex > rankedPotentialTripsDictionary.count - 1 {
-            cardToLoadIndex = 0
-        }
-
-        
-        let cardView = CardView(frame: swipeableView.bounds)
-        cardView.backgroundColor = colorForName(colors[colorIndex])
-        colorIndex += 1
-        
-        if loadCardsFromXib {
-            let contentView = Bundle.main.loadNibNamed("CardContentView", owner: self, options: nil)?.first! as! CardView
-            contentView.translatesAutoresizingMaskIntoConstraints = false
-            contentView.backgroundColor = cardView.backgroundColor
-            contentView.cardToLoad = cardToLoadIndex
-            contentView.cardMode = "card"
-            cardView.addSubview(contentView)
-            
-            // This is important:
-            // https://github.com/zhxnlai/ZLSwipeableView/issues/9
-            /*// Alternative:
-             let metrics = ["width":cardView.bounds.width, "height": cardView.bounds.height]
-             let views = ["contentView": contentView, "cardView": cardView]
-             cardView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[contentView(width)]", options: .AlignAllLeft, metrics: metrics, views: views))
-             cardView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[contentView(height)]", options: .AlignAllLeft, metrics: metrics, views: views))
-             */
-            constrain(contentView, cardView) { view1, view2 in
-                view1.left == view2.left
-                view1.top == view2.top
-                view1.width == cardView.bounds.width
-                view1.height == cardView.bounds.height
-            }
-        }
-        cardToLoadIndex += 1
-        return cardView
-    }
-    
-    func colorForName(_ name: String) -> UIColor {
-        let sanitizedName = name.replacingOccurrences(of: " ", with: "")
-        let selector = "flat\(sanitizedName)Color"
-        return UIColor.perform(Selector(selector)).takeUnretainedValue() as! UIColor
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        if self.contacts?.count != 0 && self.contacts != nil {
-            self.addContactPlusIconMainVC.setTitle("+", for: .normal)
-            self.addContactPlusIconMainVC.titleLabel?.font = UIFont.systemFont(ofSize: 39)
-            self.addContactPlusIconMainVC.frame = CGRect(x: 271, y: 611, width: 43, height: 47)
-            self.view.bringSubview(toFront: self.addContactPlusIconMainVC)
-        } else {
-            self.addContactPlusIconMainVC.setTitle("Invite friends", for: .normal)
-            self.addContactPlusIconMainVC.titleLabel?.font = UIFont.systemFont(ofSize: 21)
-            self.addContactPlusIconMainVC.frame = CGRect(x: 87, y: 611, width: 201, height: 47)
-            self.view.bringSubview(toFront: self.addContactPlusIconMainVC)
-        }
-    }
     
     func animateInstructionsIn(){
         instructionsView?.isHidden = false
@@ -712,9 +339,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         
         instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
         instructionsView?.alpha = 0
-        swipeableView.isUserInteractionEnabled = false
-        addContactPlusIconMainVC.isHidden = true
-        contactsCollectionView.isHidden = true
         UIView.animate(withDuration: 0.4) {
             self.popupBackgroundViewMainVC.isHidden = false
             self.instructionsView?.alpha = 1
@@ -728,12 +352,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             self.instructionsView?.alpha = 0
             self.popupBackgroundViewMainVC.isHidden = true
-            self.swipeableView.isUserInteractionEnabled = true
-            if self.countSwipes > 1 {
-                self.contactsCollectionView.isHidden = false
-            }
             self.instructionsGotItButton.isHidden = true
-            self.addContactPlusIconMainVC.isHidden = false
         }) { (Success:Bool) in
             self.instructionsView?.layer.isHidden = true
         }
@@ -785,155 +404,23 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
     
     //UITapGestureRecognizer
-    func dismissPopup(touch: UITapGestureRecognizer) {
-        if timeOfDayTableView.indexPathsForSelectedRows != nil {
-            dismissTimeOfDayTableOut()
-            popupBackgroundView.isHidden = true
-            
-            let when = DispatchTime.now() + 0.4
-            DispatchQueue.main.asyncAfter(deadline: when) {
-                if self.leftDateTimeArrays.count == self.rightDateTimeArrays.count {
-                }
-            }
-        }
-    }
+//    func dismissPopup(touch: UITapGestureRecognizer) {
+//        if timeOfDayTableView.indexPathsForSelectedRows != nil {
+//            dismissTimeOfDayTableOut()
+//            popupBackgroundView.isHidden = true
+//            
+//            let when = DispatchTime.now() + 0.4
+//            DispatchQueue.main.asyncAfter(deadline: when) {
+//                if self.leftDateTimeArrays.count == self.rightDateTimeArrays.count {
+//                }
+//            }
+//        }
+//    }
     
     func dismissInstructions(touch: UITapGestureRecognizer) {
         animateInstructionsOut()
     }
     
-    // COPY for Contacts
-    func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
-        if gestureReconizer.state == UIGestureRecognizerState.began {
-            editModeEnabled = true
-            popupBackgroundViewDeleteContacts.isHidden = false
-            popupBackgroundViewDeleteContactsWithinCollectionView.isHidden = false
-            
-            for item in self.contactsCollectionView!.visibleCells as! [contactsCollectionViewCell] {
-                let indexPath: IndexPath = self.contactsCollectionView!.indexPath(for: item as contactsCollectionViewCell)!
-                let cell: contactsCollectionViewCell = self.contactsCollectionView!.cellForItem(at: indexPath) as! contactsCollectionViewCell!
-                cell.deleteButton.isHidden = false
-                cell.shakeIcons()
-            }
-        }
-    }
-    
-    func leaveDeleteContactsMode(touch: UITapGestureRecognizer) {
-        dismissDeleteContactsMode()
-    }
-    
-    func leaveDeleteContactsMode2(touch: UITapGestureRecognizer) {
-        dismissDeleteContactsMode()
-    }
-
-    func dismissDeleteContactsMode(){
-        self.popupBackgroundViewDeleteContactsWithinCollectionView.isHidden = true
-        self.popupBackgroundViewDeleteContacts.isHidden = true
-        for item in self.contactsCollectionView!.visibleCells as! [contactsCollectionViewCell] {
-            let indexPath: IndexPath = self.contactsCollectionView!.indexPath(for: item as contactsCollectionViewCell)!
-            let cell: contactsCollectionViewCell = self.contactsCollectionView!.cellForItem(at: indexPath) as! contactsCollectionViewCell!
-            cell.deleteButton.isHidden = true
-            cell.stopShakingIcons()
-        }
-        editModeEnabled = false
-    }
-    
-    // MARK: - UICollectionViewDataSource
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        var numberOfContacts = 0
-        if contacts != nil {
-            numberOfContacts += contacts!.count
-        }
-        
-        return numberOfContacts
-    }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let contactsCell = contactsCollectionView.dequeueReusableCell(withReuseIdentifier: "contactsCollectionPrototypeCell", for: indexPath) as! contactsCollectionViewCell
-        
-        let contact = contacts?[indexPath.row]
-        
-        if (contact?.imageDataAvailable)! {
-            contactsCell.thumbnailImage.image = UIImage(data: (contact?.thumbnailImageData!)!)
-            contactsCell.thumbnailImage.contentMode = .scaleToFill
-            let reCenter = contactsCell.thumbnailImage.center
-            contactsCell.thumbnailImage.layer.frame = CGRect(x: contactsCell.thumbnailImage.layer.frame.minX
-                , y: contactsCell.thumbnailImage.layer.frame.minY, width: contactsCell.thumbnailImage.layer.frame.width * 0.91, height: contactsCell.thumbnailImage.layer.frame.height * 0.91)
-            contactsCell.thumbnailImage.center = reCenter
-            contactsCell.thumbnailImage.layer.cornerRadius = contactsCell.thumbnailImage.frame.height / 2
-            contactsCell.thumbnailImage.layer.masksToBounds = true
-            contactsCell.initialsLabel.isHidden = true
-            contactsCell.thumbnailImageFilter.isHidden = false
-            contactsCell.thumbnailImageFilter.image = UIImage(named: "no_contact_image_selected")!
-            contactsCell.thumbnailImageFilter.alpha = 0.5
-        } else {
-            contactsCell.thumbnailImage.image = UIImage(named: "no_contact_image")!
-            contactsCell.thumbnailImageFilter.isHidden = true
-            contactsCell.initialsLabel.isHidden = false
-            let firstInitial = contact?.givenName[0]
-            let secondInitial = contact?.familyName[0]
-            contactsCell.initialsLabel.text = firstInitial! + secondInitial!
-        }
-        
-        //Delete button
-        contactsCell.deleteButton.isHidden = true
-        // Give the delete button an index number
-        contactsCell.deleteButton.layer.setValue(indexPath.row, forKey: "index")
-        // Add an action function to the delete button
-        contactsCell.deleteButton.addTarget(self, action: #selector(self.deleteContactButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
-        
-        return contactsCell
-    }
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if collectionView == contactsCollectionView {
-
-        let visibleCells = self.contactsCollectionView.visibleCells
-        
-        if editModeEnabled == true {
-            for cell in visibleCells {
-                let visibleCellIndexPath = contactsCollectionView.indexPath(for: cell)
-                let visibleCell = contactsCollectionView.cellForItem(at: visibleCellIndexPath!) as! contactsCollectionViewCell
-                // Shake all of the collection view cells
-                visibleCell.shakeIcons()
-            }
-        }
-        }
-    }
-    
-    // This function is fired when the collection view stop scrolling
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if collectionView == contactsCollectionView {
-        
-        let visibleCells = self.contactsCollectionView.visibleCells
-        
-        if editModeEnabled == true {
-            for cell in visibleCells {
-                let visibleCellIndexPath = contactsCollectionView.indexPath(for: cell)
-                let visibleCell = contactsCollectionView.cellForItem(at: visibleCellIndexPath!) as! contactsCollectionViewCell
-                // Shake all of the collection view cells
-                visibleCell.shakeIcons()
-            }
-        }
-        }
-    }
-
-    // MARK: - UICollectionViewFlowLayout
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        if collectionView == contactsCollectionView {
-        let picDimension = 55
-        return CGSize(width: picDimension, height: picDimension)
-        }
-        return CGSize(width: 50, height: 50)
-    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
-        
-        return UIEdgeInsetsMake(0, 0, 0, 0)
-    }
     
     fileprivate func checkContactsAccess() {
         switch CNContactStore.authorizationStatus(for: .contacts) {
@@ -1042,7 +529,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             
             let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
             
-            contactsCollectionView.insertItems(at: addedRowIndexPath as [IndexPath])
             groupMemberListTable.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
         }
         else {
@@ -1067,11 +553,10 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
-            contactsCollectionView.insertItems(at: addedRowIndexPath)
             groupMemberListTable.insertRows(at: addedRowIndexPath, with: .left)
         }
-            addFromContactsButton.layer.frame = CGRect(x: 101, y: 140, width: 148, height: 22)
-            addFromFacebookButton.layer.frame = CGRect(x: 95, y: 170, width: 160, height: 22)
+            addFromContactsButton.layer.frame = CGRect(x: 189, y: 330, width: 198, height: 22)
+            addFromFacebookButton.layer.frame = CGRect(x: 88, y: 375, width: 200, height: 22)
             soloForNowButton.isHidden = true
             groupMemberListTable.isHidden = false
             groupMemberListTable.layer.frame = CGRect(x: 29, y: 200, width: 292, height: 221)
@@ -1088,12 +573,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         } else {
             chatButton.isHidden = true
             subviewDoneButton.isHidden = false
-        }
-        if popupBlurView.alpha == 0 {
-            let when = DispatchTime.now() + 0.6
-            DispatchQueue.main.asyncAfter(deadline: when) {
-                self.spawnMessages()
-            }
         }
     }
     
@@ -1137,7 +616,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
-            contactsCollectionView.insertItems(at: addedRowIndexPath)
             groupMemberListTable.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
         }
         else {
@@ -1155,16 +633,15 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
-            contactsCollectionView.insertItems(at: addedRowIndexPath)
             groupMemberListTable.insertRows(at: addedRowIndexPath, with: .left)
         }
         
-        addFromContactsButton.layer.frame = CGRect(x: 101, y: 140, width: 148, height: 22)
-        addFromFacebookButton.layer.frame = CGRect(x: 95, y: 170, width: 160, height: 22)
+        addFromContactsButton.layer.frame = CGRect(x: 189, y: 330, width: 198, height: 22)
+        addFromFacebookButton.layer.frame = CGRect(x: 88, y: 375, width: 200, height: 22)
         soloForNowButton.isHidden = true
         groupMemberListTable.isHidden = false
         groupMemberListTable.layer.frame = CGRect(x: 29, y: 200, width: 292, height: 221)
-
+        
         //Uncomment for testing on Simulator
 //        chatButton.isHidden = true
 //        subviewDoneButton.isHidden = false
@@ -1177,12 +654,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         } else {
             chatButton.isHidden = true
             subviewDoneButton.isHidden = false
-        }
-        if popupBlurView.alpha == 0 {
-            let when = DispatchTime.now() + 0.6
-            DispatchQueue.main.asyncAfter(deadline: when) {
-                self.spawnMessages()
-            }
         }
     }
     
@@ -1212,7 +683,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 numberDestinationsSlider.isHidden = false
                 homeAirportTextField.isHidden = true
                 questionLabel.text = "How many destinations?"
-                subviewNextButton.isHidden = false
             } else {
                 subviewWho()
             }
@@ -1228,7 +698,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 numberDestinationsSlider.isHidden = false
                 homeAirportTextField.isHidden = true
                 questionLabel.text = "How many destinations?"
-                subviewNextButton.isHidden = false
             } else {
                 subviewWho()
             }
@@ -1246,37 +715,22 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numberOfRows = 0
         
-        if tableView == timeOfDayTableView {
-            numberOfRows = 7
-        }
         if tableView == groupMemberListTable {
             if contacts != nil {
                 numberOfRows += contacts!.count
             }
         }
-        if tableView == sortFilterFlightsCalloutTableView {
-            numberOfRows = filterFirstLevelOptions.count
-        }
         return numberOfRows
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == groupMemberListTable {
+//        if tableView == groupMemberListTable {
             return 55
-        }
-        if tableView == timeOfDayTableView {
-            return 20
-        }
-        // else if tableView == sortFilterFlightsCalloutTableView
-        return 22
+//        }
+
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if tableView == timeOfDayTableView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "timeOfDayPrototypeCell", for: indexPath) as! timeOfDayTableViewCell
-            cell.timeOfDayTableLabel.text = timesOfDayArray[indexPath.row]
-            return cell
-        }
-        else if tableView == groupMemberListTable {
+        if tableView == groupMemberListTable {
         let cell = tableView.dequeueReusableCell(withIdentifier: "contactsPrototypeCell", for: indexPath) as! contactsTableViewCell
         
         if contacts != nil {
@@ -1310,7 +764,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
         }
         
-        cell?.textLabel?.text = filterFirstLevelOptions[indexPath.row]
         cell?.textLabel?.textColor = UIColor.black
         cell?.textLabel?.font = UIFont.systemFont(ofSize: 15)
         cell?.textLabel?.numberOfLines = 0
@@ -1319,56 +772,48 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         return cell!
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == timeOfDayTableView {
-        let topRows = [IndexPath(row:0, section: 0),IndexPath(row:1, section: 0),IndexPath(row:2, section: 0),IndexPath(row:3, section: 0),IndexPath(row:4, section: 0),IndexPath(row:5, section: 0)]
-        if indexPath == IndexPath(row:6, section: 0) {
-            for rowIndex in topRows {
-                self.timeOfDayTableView.deselectRow(at: rowIndex, animated: false)
-            }
-        }
-        if topRows.contains(indexPath) {
-            self.timeOfDayTableView.deselectRow(at: IndexPath(row:6, section:0), animated: false)
-        }
-        
-        let selectedTimesOfDay = timeOfDayTableView.indexPathsForSelectedRows
-        var availableTimeOfDayInCell = [String]()
-        for indexPath in selectedTimesOfDay! {
-            let cell = timeOfDayTableView.cellForRow(at: indexPath) as! timeOfDayTableViewCell
-            availableTimeOfDayInCell.append(cell.timeOfDayTableLabel.text!)
-        }
-        let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
-        
-        let cell = calendarView.cellStatus(for: mostRecentSelectedCellDate as Date)
-        if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MM/dd/yyyy"
-            let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
-            leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
-        }
-        if cell?.selectedPosition() == .right {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MM/dd/yyyy"
-            let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
-            rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
-        }
-        
-        //Update trip preferences in dictionary
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["origin_departure_times"] = leftDateTimeArrays as NSDictionary
-        SavedPreferencesForTrip["return_departure_times"] = rightDateTimeArrays as NSDictionary
-            
-        //Save
-        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-        } else if tableView == sortFilterFlightsCalloutTableView {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
-                self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
-                self.sortFilterFlightsCalloutView.isHidden = true
-                //HANDLE SORT / FILTER SELECTION
-            })
-        }
-    }
-
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+////        if tableView == timeOfDayTableView {
+////        let topRows = [IndexPath(row:0, section: 0),IndexPath(row:1, section: 0),IndexPath(row:2, section: 0),IndexPath(row:3, section: 0),IndexPath(row:4, section: 0),IndexPath(row:5, section: 0)]
+////        if indexPath == IndexPath(row:6, section: 0) {
+////            for rowIndex in topRows {
+////                self.timeOfDayTableView.deselectRow(at: rowIndex, animated: false)
+////            }
+////        }
+////        if topRows.contains(indexPath) {
+////            self.timeOfDayTableView.deselectRow(at: IndexPath(row:6, section:0), animated: false)
+////        }
+////        
+////        let selectedTimesOfDay = timeOfDayTableView.indexPathsForSelectedRows
+//        var availableTimeOfDayInCell = ["Anytime"]
+////        for indexPath in selectedTimesOfDay! {
+////            let cell = timeOfDayTableView.cellForRow(at: indexPath) as! timeOfDayTableViewCell
+////            availableTimeOfDayInCell.append(cell.timeOfDayTableLabel.text!)
+////        }
+//        let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
+//        
+//        let cell = calendarView.cellStatus(for: mostRecentSelectedCellDate as Date)
+//        if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
+//            let formatter = DateFormatter()
+//            formatter.dateFormat = "MM/dd/yyyy"
+//            let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+//            leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+//        }
+//        if cell?.selectedPosition() == .right {
+//            let formatter = DateFormatter()
+//            formatter.dateFormat = "MM/dd/yyyy"
+//            let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+//            rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+//        }
+//        
+//        //Update trip preferences in dictionary
+//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//        SavedPreferencesForTrip["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+//        SavedPreferencesForTrip["return_departure_times"] = rightDateTimeArrays as NSDictionary
+//            
+//        //Save
+//        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//    }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
@@ -1384,24 +829,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         return "👋🏼"
     }
     
-    func animateInSubview(){
-        //Animate In Subview
-        self.view.addSubview(popupSubview)
-        popupSubview.center = self.view.center
-        popupSubview.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-        popupSubview.alpha = 0
-        UIView.animate(withDuration: 0.2) {
-            self.popupBlurView.alpha = 1
-            self.popupSubview.alpha = 1
-            self.popupSubview.transform = CGAffineTransform.identity
-        }
-        
-        //Set to when
-        underline.layer.frame = CGRect(x: 50, y: 30, width: 55, height: 51)
-        subviewWhen()
-        
-    }
-    
     func subviewWhere() {
         //Set to where
         questionLabel.text = "Where are you leaving from?"
@@ -1412,10 +839,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         addFromContactsButton.isHidden = true
         addFromFacebookButton.isHidden = true
         soloForNowButton.isHidden = true
-        subviewNextButton.isHidden = true
         calendarView.isHidden = true
-        popupBackgroundView.isHidden = true
-        timeOfDayTableView.isHidden = true
         subviewDoneButton.isHidden = true
         month1.isHidden = true
         month2.isHidden = true
@@ -1430,7 +854,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         numberDestinationsStackView.isHidden = true
         dayOfWeekStackView.isHidden = true
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 148, y: 30, width: 55, height: 51)
+            self.whiteLine.layer.frame = CGRect(x: 160, y: 104, width: 55, height: 51)
         }
     }
 
@@ -1444,10 +868,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         addFromContactsButton.isHidden = false
         addFromFacebookButton.isHidden = false
         soloForNowButton.isHidden = false
-        subviewNextButton.isHidden = true
         calendarView.isHidden = true
-        popupBackgroundView.isHidden = true
-        timeOfDayTableView.isHidden = true
         subviewDoneButton.isHidden = true
         month1.isHidden = true
         month2.isHidden = true
@@ -1463,24 +884,22 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         dayOfWeekStackView.isHidden = true
         
         if contacts != nil {
-            addFromContactsButton.layer.frame = CGRect(x: 101, y: 140, width: 148, height: 22)
-            addFromFacebookButton.layer.frame = CGRect(x: 95, y: 170, width: 160, height: 22)
+            addFromContactsButton.layer.frame = CGRect(x: 189, y: 280, width: 198, height: 22)
+            addFromFacebookButton.layer.frame = CGRect(x: 88, y: 310, width: 200, height: 22)
             soloForNowButton.isHidden = true
             groupMemberListTable.isHidden = false
             groupMemberListTable.layer.frame = CGRect(x: 29, y: 200, width: 292, height: 221)
-            subviewNextButton.isHidden = true
             subviewDoneButton.isHidden = false
         } else {
-            addFromContactsButton.layer.frame = CGRect(x: 101, y: 150, width: 148, height: 22)
-            addFromFacebookButton.layer.frame = CGRect(x: 95, y: 199, width: 160, height: 22)
+            addFromContactsButton.layer.frame = CGRect(x: 189, y: 290, width: 198, height: 22)
+            addFromFacebookButton.layer.frame = CGRect(x: 88, y: 339, width: 200, height: 22)
             soloForNowButton.isHidden = false
-            soloForNowButton.layer.frame = CGRect(x: 101, y: 248, width: 148, height: 22)
+            soloForNowButton.layer.frame = CGRect(x: 133, y: 388, width: 109, height: 22)
             groupMemberListTable.isHidden = true
-            subviewNextButton.isHidden = true
         }
         
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 241, y: 30, width: 55, height: 51)
+            self.whiteLine.layer.frame = CGRect(x: 254, y: 104, width: 55, height: 51)
         }
     }
     
@@ -1494,10 +913,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         addFromFacebookButton.isHidden = true
         soloForNowButton.isHidden = true
         calendarView.isHidden = true
-        popupBackgroundView.isHidden = true
-        timeOfDayTableView.isHidden = true
         subviewDoneButton.isHidden = true
-        subviewNextButton.isHidden = true
         month1.isHidden = true
         month2.isHidden = true
         month3.isHidden = true
@@ -1512,51 +928,27 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         dayOfWeekStackView.isHidden = true
     }
 
-    func animateOutSubview() {
-        if self.contacts?.count == 0 || self.contacts == nil {
-            self.addContactPlusIconMainVC.setTitle("Invite friends", for: .normal)
-            self.addContactPlusIconMainVC.titleLabel?.font = UIFont.systemFont(ofSize: 21)
-            self.addContactPlusIconMainVC.frame = CGRect(x: 87, y: 611, width: 201, height: 47)
-            self.view.bringSubview(toFront: self.addContactPlusIconMainVC)
-        }
-        UIView.animate(withDuration: 0.3, animations: {
-            self.popupSubview.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.popupBlurView.alpha = 0
-            self.popupSubview.alpha = 0
-            self.popupSubview.transform = CGAffineTransform.init(scaleX: 1, y: 1)
-        }) { (Success:Bool) in
-            self.popupSubview.removeFromSuperview()
-        }
-    }
     
     func deleteContact(indexPath: IndexPath) {
         contacts?.remove(at: indexPath.row)
         contactIDs?.remove(at: indexPath.row)
         contactPhoneNumbers.remove(at: indexPath.row)
         groupMemberListTable.deleteRows(at: [indexPath], with: .left)
-        contactsCollectionView.deleteItems(at: [indexPath])
-        
-        let visibleContactsCells = contactsCollectionView.visibleCells as! [contactsCollectionViewCell]
-        for visibleContactCell in visibleContactsCells {
-            let newIndexPathForItem = contactsCollectionView.indexPath(for: visibleContactCell)
-            visibleContactCell.deleteButton.layer.setValue(newIndexPathForItem?.row, forKey: "index")
-        }
         
         if contacts?.count == 0 || contacts == nil {
-            addFromContactsButton.layer.frame = CGRect(x: 101, y: 150, width: 148, height: 22)
-            addFromFacebookButton.layer.frame = CGRect(x: 95, y: 199, width: 160, height: 22)
+            addFromContactsButton.layer.frame = CGRect(x: 189, y: 290, width: 198, height: 22)
+            addFromFacebookButton.layer.frame = CGRect(x: 88, y: 339, width: 200, height: 22)
             soloForNowButton.isHidden = false
-            soloForNowButton.layer.frame = CGRect(x: 101, y: 248, width: 148, height: 22)
+            soloForNowButton.layer.frame = CGRect(x: 133, y: 388, width: 109, height: 22)
             groupMemberListTable.isHidden = true
-            subviewNextButton.isHidden = true
+        } else {
+            addFromContactsButton.layer.frame = CGRect(x: 189, y: 150, width: 198, height: 22)
+            addFromFacebookButton.layer.frame = CGRect(x: 88, y: 199, width: 200, height: 22)
+            soloForNowButton.isHidden = true
+            soloForNowButton.layer.frame = CGRect(x: 101, y: 248, width: 109, height: 22)
+            groupMemberListTable.isHidden = true
             subviewDoneButton.isHidden = true
-            chatButton.isHidden = true
-            addContactPlusIconMainVC.setTitle("Invite friends", for: .normal)
-            addContactPlusIconMainVC.titleLabel?.font = UIFont.systemFont(ofSize: 21)
-            addContactPlusIconMainVC.frame = CGRect(x: 87, y: 611, width: 201, height: 47)
-            self.view.bringSubview(toFront: self.addContactPlusIconMainVC)
-
-            dismissDeleteContactsMode()
+            chatButton.isHidden = false
         }
         
         //Update trip preferences dictionary
@@ -1571,23 +963,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
         animateInstructionsIn()
     }
-    @IBAction func filterButtonTouchedUpInside(_ sender: Any) {
-        if self.sortFilterFlightsCalloutView.isHidden == true {
-            sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 539, width: 170, height: 22 * filterFirstLevelOptions.count)
-            sortFilterFlightsCalloutTableView.reloadData()
-            self.sortFilterFlightsCalloutView.contentView = sortFilterFlightsCalloutTableView
-            self.sortFilterFlightsCalloutView.isHidden = false
-            self.sortFilterFlightsCalloutView.animation(withType: .stretch, presenting: true)
-            self.sortFilterFlightsCalloutView.permittedArrowDirection = .down
-            var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: filterButton.frame.midX, y: CGFloat(539))
-            self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-            
-        } else {
-            self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
-            self.sortFilterFlightsCalloutView.isHidden = true
-        }
-    }
     @IBAction func numberDestinationsValueChanged(_ sender: Any) {
         roundSlider()
     }
@@ -1598,21 +973,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBAction func instructionsGotItTouchedUpInside(_ sender: Any) {
         animateInstructionsOut()
     }
-    @IBAction func inviteFriendsGotItButtonTouchedUpInside(_ sender: Any) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.addFriendsInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.addFriendsInstructionsView.alpha = 0
-            self.popupBackgroundViewMainVC.isHidden = true
-            self.swipeableView.isUserInteractionEnabled = true
-            if self.countSwipes > 1 {
-                self.contactsCollectionView.isHidden = false
-            }
-            
-        }) { (Success:Bool) in
-            self.addFriendsInstructionsView.layer.isHidden = true
-        }
-    }
-    
     
     @IBAction func tripNameLabelEditingChanged(_ sender: Any) {
         let tripNameValue = tripNameLabel.text! as NSString
@@ -1639,9 +999,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         calendarView.scrollToDate(currentDate, triggerScrollToDateDelegate: true, animateScroll: true, preferredScrollPosition: UICollectionViewScrollPosition.top)
         
         getLengthOfSelectedAvailabilities()
-        if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
-            self.subviewNextButton.isHidden = false
-        }
     }
     @IBAction func noSpecificDatesButtonTouchedUpInside(_ sender: Any) {
         month1.isHidden = false
@@ -1664,11 +1021,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             twoWeeks.isSelected = false
             twoWeeks.backgroundColor = UIColor.darkGray
             twoWeeks.titleLabel?.textColor = UIColor.white
-            if (month1.backgroundColor == UIColor.white || month2.backgroundColor == UIColor.white || month3.backgroundColor == UIColor.white || month4.backgroundColor == UIColor.white) {
-                subviewNextButton.isHidden = false
-            } else {
-                subviewNextButton.isHidden = true
-            }
         }
     }
     
@@ -1711,11 +1063,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             twoWeeks.isSelected = false
             twoWeeks.backgroundColor = UIColor.darkGray
             twoWeeks.titleLabel?.textColor = UIColor.white
-            if (month1.backgroundColor == UIColor.white || month2.backgroundColor == UIColor.white || month3.backgroundColor == UIColor.white || month4.backgroundColor == UIColor.white) {
-                subviewNextButton.isHidden = false
-            } else {
-                subviewNextButton.isHidden = true
-            }
+//            if (month1.backgroundColor == UIColor.white || month2.backgroundColor == UIColor.white || month3.backgroundColor == UIColor.white || month4.backgroundColor == UIColor.white) {
+//                subviewNextButton.isHidden = false
+//            } else {
+//                subviewNextButton.isHidden = true
+//            }
         }
     }
     @IBAction func twoWeeksTouchedUpInside(_ sender: Any) {
@@ -1726,11 +1078,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             oneWeek.isSelected = false
             oneWeek.backgroundColor = UIColor.darkGray
             oneWeek.titleLabel?.textColor = UIColor.white
-            if (month1.backgroundColor == UIColor.white || month2.backgroundColor == UIColor.white || month3.backgroundColor == UIColor.white || month4.backgroundColor == UIColor.white) {
-                subviewNextButton.isHidden = false
-            } else {
-                subviewNextButton.isHidden = true
-            }
+//            if (month1.backgroundColor == UIColor.white || month2.backgroundColor == UIColor.white || month3.backgroundColor == UIColor.white || month4.backgroundColor == UIColor.white) {
+//                subviewNextButton.isHidden = false
+//            } else {
+//                subviewNextButton.isHidden = true
+//            }
         }
     }
     @IBAction func month1TouchedUpInside(_ sender: Any) {
@@ -1744,11 +1096,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             month4.isSelected = false
             month4.backgroundColor = UIColor.darkGray
             month4.titleLabel?.textColor = UIColor.white
-            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
-                subviewNextButton.isHidden = false
-            } else {
-                subviewNextButton.isHidden = true
-            }
+//            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
+//                subviewNextButton.isHidden = false
+//            } else {
+//                subviewNextButton.isHidden = true
+//            }
         }
     }
     @IBAction func month2TouchedUpInside(_ sender: Any) {
@@ -1762,11 +1114,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             month4.isSelected = false
             month4.backgroundColor = UIColor.darkGray
             month4.titleLabel?.textColor = UIColor.white
-            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
-                subviewNextButton.isHidden = false
-            } else {
-                subviewNextButton.isHidden = true
-            }
+//            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
+//                subviewNextButton.isHidden = false
+//            } else {
+//                subviewNextButton.isHidden = true
+//            }
         }
     }
     @IBAction func month3TouchedUpInside(_ sender: Any) {
@@ -1780,11 +1132,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             month4.isSelected = false
             month4.backgroundColor = UIColor.darkGray
             month4.titleLabel?.textColor = UIColor.white
-            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
-                subviewNextButton.isHidden = false
-            } else {
-                subviewNextButton.isHidden = true
-            }
+//            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
+//                subviewNextButton.isHidden = false
+//            } else {
+//                subviewNextButton.isHidden = true
+//            }
         }
     }
     
@@ -1799,11 +1151,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             month3.isSelected = false
             month3.backgroundColor = UIColor.darkGray
             month3.titleLabel?.textColor = UIColor.white
-            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
-                subviewNextButton.isHidden = false
-            } else {
-                subviewNextButton.isHidden = true
-            }
+//            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
+//                subviewNextButton.isHidden = false
+//            } else {
+//                subviewNextButton.isHidden = true
+//            }
         }
     }
     @IBAction func homeAirportEditingChanged(_ sender: Any) {
@@ -1814,9 +1166,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         //Enter code here for if airport code is entered
         }
     }
-    @IBAction func nextButtonTouchedUpInside(_ sender: Any) {
-        updateCompletionStatus()
-    }
 
     @IBAction func addContact(_ sender: Any) {
         checkContactsAccess()
@@ -1824,15 +1173,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBAction func addFromContacts(_ sender: Any) {
         checkContactsAccess()
     }
-    
-    @IBAction func rejectSelected(_ sender: Any) {
-        leftButtonAction()
-    }
-    
-    @IBAction func heartSelected(_ sender: Any) {
-        rightButtonAction()
-    }
-    
     @IBAction func subviewWhereButtonTouchedUpInside(_ sender: Any) {
         subviewWhere()
     }
@@ -1840,33 +1180,20 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBAction func subviewWhoButtonTouchedUpInside(_ sender: Any) {
         subviewWho()
     }
-    
-    @IBAction func subviewNextButtonTouchedUpInside(_ sender: Any) {
-        if numberDestinationsSlider.isHidden {
-            subviewWhere()
-        } else if !numberDestinationsSlider.isHidden  {
-            subviewWho()
-        }
-    }
     @IBAction func subviewWhenButtonTouchedUpInside(_ sender: Any) {
         subviewWhen()
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 50, y: 30, width: 55, height: 51)
+            self.whiteLine.layer.frame = CGRect(x: 61, y: 104, width: 55, height: 51)
         }
     }
     
     @IBAction func subviewDoneButtonTouchedUpInside(_ sender: Any) {
-        nextButton.alpha = 1
-        contactsCollectionView.alpha = 1
-        addContactPlusIconMainVC.alpha = 1
-        animateOutSubview()
+        updateCompletionStatus()
     }
     
     @IBAction func goingSoloButtonTouchedUpInside(_ sender: Any) {
-        nextButton.alpha = 1
-        contactsCollectionView.alpha = 1
-        addContactPlusIconMainVC.alpha = 1
-        animateOutSubview()
+        super.performSegue(withIdentifier: "newTripToSwiping", sender: self)
+        updateCompletionStatus()
     }
     @IBAction func chatButtonIsTouchedUpInside(_ sender: Any) {
         // Make sure the device can send text messages
@@ -1897,7 +1224,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     func updateLastVC(){
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["lastVC"] = "swiping" as NSString
+        SavedPreferencesForTrip["lastVC"] = "newTrip" as NSString
         //Save
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
@@ -2200,30 +1527,30 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             }
         }
         
-        //Spawn time of day selection
-        let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
-        var timeOfDayTableX = CGFloat()
-        var timeOfDayTableY = CGFloat()
-
-        if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full || cellState.selectedPosition() == .right {
-            if positionInSuperView.origin.y < 70 {
-                timeOfDayTableY = positionInSuperView.origin.y + 65
-            } else if positionInSuperView.origin.y < 350 {
-                timeOfDayTableY = positionInSuperView.origin.y + 30
-            } else {
-                timeOfDayTableY = positionInSuperView.origin.y - 170
-            }
-            if positionInSuperView.origin.x < 40 {
-                timeOfDayTableX = positionInSuperView.midX + 50
-            } else if positionInSuperView.origin.x < 310 {
-                timeOfDayTableX = positionInSuperView.midX - 12
-            } else {
-                timeOfDayTableX = positionInSuperView.midX - 77
-            }
-            timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
-            animateTimeOfDayTableIn()
-        }
-        
+//        //Spawn time of day selection
+//        let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+//        var timeOfDayTableX = CGFloat()
+//        var timeOfDayTableY = CGFloat()
+//
+//        if cellState.selectedPosition() == .left || cellState.selectedPosition() == .full || cellState.selectedPosition() == .right {
+//            if positionInSuperView.origin.y < 70 {
+//                timeOfDayTableY = positionInSuperView.origin.y + 65
+//            } else if positionInSuperView.origin.y < 350 {
+//                timeOfDayTableY = positionInSuperView.origin.y + 30
+//            } else {
+//                timeOfDayTableY = positionInSuperView.origin.y - 170
+//            }
+//            if positionInSuperView.origin.x < 40 {
+//                timeOfDayTableX = positionInSuperView.midX + 50
+//            } else if positionInSuperView.origin.x < 310 {
+//                timeOfDayTableX = positionInSuperView.midX - 12
+//            } else {
+//                timeOfDayTableX = positionInSuperView.midX - 77
+//            }
+//            timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
+//            animateTimeOfDayTableIn()
+//        }
+//        
         handleSelection(cell: cell, cellState: cellState)
         
         // Create array of selected dates
@@ -2237,6 +1564,32 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         //Save
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
         mostRecentSelectedCellDate = date as NSDate
+        
+        let availableTimeOfDayInCell = ["Anytime"]
+        let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
+        
+        let cell = calendarView.cellStatus(for: mostRecentSelectedCellDate as Date)
+        if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+            leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+        }
+        if cell?.selectedPosition() == .right {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+            rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+        }
+        
+        //Update trip preferences in dictionary
+        let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+        SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
+        
+        //Save
+        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
@@ -2274,83 +1627,134 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
                 }
             }
             
-            //Spawn time of day selection
-            
+//            //Spawn time of day selection
+//            
             let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/yyyy"
             let leftMostDateAsString = formatter.string (from: leftMostDate!)
             let rightMostDateAsString = formatter.string (from: rightMostDate!)
-            var cellRow = cellState.row()
-            var cellCol = cellState.column()
-
+//            var cellRow = cellState.row()
+//            var cellCol = cellState.column()
+//
             if leftDateTimeArrays[leftMostDateAsString] == nil {
-                
-                if cellCol != 6 {
-                    cellCol += 1
-                } else {
-                    cellCol = 0
-                    cellRow += 1
-                }
-
-                
-                //Spawn time of day selection
-                let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
-                var timeOfDayTableX = CGFloat()
-                var timeOfDayTableY = CGFloat()
-                    if positionInSuperView.origin.y < 70 {
-                        timeOfDayTableY = positionInSuperView.origin.y + 65
-                    } else if positionInSuperView.origin.y < 350 {
-                        timeOfDayTableY = positionInSuperView.origin.y + 30
-                    } else {
-                        timeOfDayTableY = positionInSuperView.origin.y - 170
-                    }
-                    if positionInSuperView.origin.x < 40 {
-                        timeOfDayTableX = positionInSuperView.midX + 50
-                    } else if positionInSuperView.origin.x < 310 {
-                        timeOfDayTableX = positionInSuperView.midX - 12
-                    } else {
-                        timeOfDayTableX = positionInSuperView.midX - 200
-                    }
-                
+//
+//                if cellCol != 6 {
+//                    cellCol += 1
+//                } else {
+//                    cellCol = 0
+//                    cellRow += 1
+//                }
+//
+//                
+//                //Spawn time of day selection
+//                let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+//                var timeOfDayTableX = CGFloat()
+//                var timeOfDayTableY = CGFloat()
+//                    if positionInSuperView.origin.y < 70 {
+//                        timeOfDayTableY = positionInSuperView.origin.y + 65
+//                    } else if positionInSuperView.origin.y < 350 {
+//                        timeOfDayTableY = positionInSuperView.origin.y + 30
+//                    } else {
+//                        timeOfDayTableY = positionInSuperView.origin.y - 170
+//                    }
+//                    if positionInSuperView.origin.x < 40 {
+//                        timeOfDayTableX = positionInSuperView.midX + 50
+//                    } else if positionInSuperView.origin.x < 310 {
+//                        timeOfDayTableX = positionInSuperView.midX - 12
+//                    } else {
+//                        timeOfDayTableX = positionInSuperView.midX - 200
+//                    }
+//                
                 mostRecentSelectedCellDate = leftMostDate! as NSDate
                 leftDateTimeArrays.removeAllObjects()
+                
+                let availableTimeOfDayInCell = ["Anytime"]
+                let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
+                
+                let cell = calendarView.cellStatus(for: mostRecentSelectedCellDate as Date)
+                if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MM/dd/yyyy"
+                    let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+                    leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                }
+                if cell?.selectedPosition() == .right {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MM/dd/yyyy"
+                    let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+                    rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                }
+                
+                //Update trip preferences in dictionary
+                let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+                SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+                SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
+                
+                //Save
+                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
 
-                timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
-                animateTimeOfDayTableIn()
+//
+//                timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
+//                animateTimeOfDayTableIn()
             }
-            
+//
             if rightDateTimeArrays[rightMostDateAsString] == nil {
-                
-                if cellCol != 0 {
-                    cellCol -= 1
-                } else {
-                    cellCol = 6
-                    cellRow -= 1
-                }
-
-                let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
-                var timeOfDayTableX = CGFloat()
-                var timeOfDayTableY = CGFloat()
-                if positionInSuperView.origin.y < 70 {
-                    timeOfDayTableY = positionInSuperView.origin.y + 65
-                } else if positionInSuperView.origin.y < 350 {
-                    timeOfDayTableY = positionInSuperView.origin.y + 30
-                } else {
-                    timeOfDayTableY = positionInSuperView.origin.y - 170
-                }
-                if positionInSuperView.origin.x < 40 {
-                    timeOfDayTableX = positionInSuperView.midX + 180
-                } else if positionInSuperView.origin.x < 310 {
-                    timeOfDayTableX = positionInSuperView.midX - 12
-                } else {
-                    timeOfDayTableX = positionInSuperView.midX - 77
-                }
-                
+//
+//                if cellCol != 0 {
+//                    cellCol -= 1
+//                } else {
+//                    cellCol = 6
+//                    cellRow -= 1
+//                }
+//
+//                let positionInSuperView = self.view.convert((cell?.frame)!, from:calendarView)
+//                var timeOfDayTableX = CGFloat()
+//                var timeOfDayTableY = CGFloat()
+//                if positionInSuperView.origin.y < 70 {
+//                    timeOfDayTableY = positionInSuperView.origin.y + 65
+//                } else if positionInSuperView.origin.y < 350 {
+//                    timeOfDayTableY = positionInSuperView.origin.y + 30
+//                } else {
+//                    timeOfDayTableY = positionInSuperView.origin.y - 170
+//                }
+//                if positionInSuperView.origin.x < 40 {
+//                    timeOfDayTableX = positionInSuperView.midX + 180
+//                } else if positionInSuperView.origin.x < 310 {
+//                    timeOfDayTableX = positionInSuperView.midX - 12
+//                } else {
+//                    timeOfDayTableX = positionInSuperView.midX - 77
+//                }
+//                
                 mostRecentSelectedCellDate = rightMostDate! as NSDate
                 rightDateTimeArrays.removeAllObjects()
                 
-                timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
-                animateTimeOfDayTableIn()
+                let availableTimeOfDayInCell = ["Anytime"]
+                let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
+                
+                let cell = calendarView.cellStatus(for: mostRecentSelectedCellDate as Date)
+                if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MM/dd/yyyy"
+                    let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+                    leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                }
+                if cell?.selectedPosition() == .right {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MM/dd/yyyy"
+                    let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+                    rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                }
+                
+                //Update trip preferences in dictionary
+                let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+                SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+                SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
+                
+                //Save
+                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+//
+//                timeOfDayTableView.center = CGPoint(x: timeOfDayTableX, y: timeOfDayTableY)
+//                animateTimeOfDayTableIn()
             }
             
         }
@@ -2460,34 +1864,34 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
         return headerCell
     }
     
-    func animateTimeOfDayTableIn(){
-        timeOfDayTableView.isHidden = false
-        timeOfDayTableView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-        timeOfDayTableView.alpha = 0
-        
-        UIView.animate(withDuration: 0.4) {
-            self.popupBackgroundView.isHidden = false
-            self.timeOfDayTableView.alpha = 1
-            self.timeOfDayTableView.transform = CGAffineTransform.identity
-        }
-    }
-    
-    func dismissTimeOfDayTableOut() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.timeOfDayTableView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.timeOfDayTableView.alpha = 0
-            let selectedRows = self.timeOfDayTableView.indexPathsForSelectedRows
-            self.popupBackgroundView.isHidden = true
-            for rowIndex in selectedRows! {
-                self.timeOfDayTableView.deselectRow(at: rowIndex, animated: false)
-            }
-            if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
-                self.subviewNextButton.isHidden = false
-            }
-        }) { (Success:Bool) in
-            self.timeOfDayTableView.isHidden = true
-        }
-    }
+//    func animateTimeOfDayTableIn(){
+//        timeOfDayTableView.isHidden = false
+//        timeOfDayTableView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+//        timeOfDayTableView.alpha = 0
+//        
+//        UIView.animate(withDuration: 0.4) {
+//            self.popupBackgroundView.isHidden = false
+//            self.timeOfDayTableView.alpha = 1
+//            self.timeOfDayTableView.transform = CGAffineTransform.identity
+//        }
+//    }
+//    
+//    func dismissTimeOfDayTableOut() {
+//        UIView.animate(withDuration: 0.3, animations: {
+//            self.timeOfDayTableView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+//            self.timeOfDayTableView.alpha = 0
+//            let selectedRows = self.timeOfDayTableView.indexPathsForSelectedRows
+//            self.popupBackgroundView.isHidden = true
+//            for rowIndex in selectedRows! {
+//                self.timeOfDayTableView.deselectRow(at: rowIndex, animated: false)
+//            }
+//            if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
+//                self.subviewNextButton.isHidden = false
+//            }
+//        }) { (Success:Bool) in
+//            self.timeOfDayTableView.isHidden = true
+//        }
+//    }
 }
 
 extension UIColor {

@@ -41,6 +41,7 @@
 		FA647D3F1EE775A100B36138 /* GetAllUsers.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FA647D3E1EE775A100B36138 /* GetAllUsers.graphql */; };
 		FA730B901EC9E88E004F310A /* flightSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA730B8F1EC9E88E004F310A /* flightSearchViewController.swift */; };
 		FA730B941EC9EEBA004F310A /* flightResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA730B931EC9EEBA004F310A /* flightResultsViewController.swift */; };
+		FA90F1D41EEB4B9F00094878 /* SwipingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */; };
 		FA97A3721EC530F4006E68EC /* country_json_50m in Resources */ = {isa = PBXBuildFile; fileRef = FA97A3711EC530F4006E68EC /* country_json_50m */; };
 		FA97F84B1EE66A8B008358EF /* chatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97F84A1EE66A8B008358EF /* chatViewController.swift */; };
 		FA9E39811EBBD2A900F6CB0B /* bucketListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */; };
@@ -163,6 +164,7 @@
 		FA647D3E1EE775A100B36138 /* GetAllUsers.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GetAllUsers.graphql; sourceTree = "<group>"; };
 		FA730B8F1EC9E88E004F310A /* flightSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = flightSearchViewController.swift; sourceTree = "<group>"; };
 		FA730B931EC9EEBA004F310A /* flightResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = flightResultsViewController.swift; sourceTree = "<group>"; };
+		FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipingViewController.swift; sourceTree = "<group>"; };
 		FA97A3711EC530F4006E68EC /* country_json_50m */ = {isa = PBXFileReference; lastKnownFileType = folder; path = country_json_50m; sourceTree = "<group>"; };
 		FA97F84A1EE66A8B008358EF /* chatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatViewController.swift; sourceTree = "<group>"; };
 		FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bucketListViewController.swift; sourceTree = "<group>"; };
@@ -398,6 +400,7 @@
 				FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */,
 				FAA8F2671E351B9500CD7337 /* TripListViewController.swift */,
 				FAA8F2601E351B9500CD7337 /* NewTripNameViewController.swift */,
+				FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */,
 				FAA8F2621E351B9500CD7337 /* RankingViewController.swift */,
 				FA730B8F1EC9E88E004F310A /* flightSearchViewController.swift */,
 				FA730B931EC9EEBA004F310A /* flightResultsViewController.swift */,
@@ -967,6 +970,7 @@
 				FAA8F2741E351B9500CD7337 /* ReviewAndBookViewController.swift in Sources */,
 				FAA8F28C1E351DBF00CD7337 /* CellView.swift in Sources */,
 				FAA8F2941E351DCD00CD7337 /* ActivityItem.swift in Sources */,
+				FA90F1D41EEB4B9F00094878 /* SwipingViewController.swift in Sources */,
 				FA4E36201EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
