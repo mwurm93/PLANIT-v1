@@ -21,7 +21,7 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
         //SMCallout
         var sortFilterFlightsCalloutView = SMCalloutView()
         let sortFilterFlightsCalloutTableView = UITableView(frame: CGRect.zero, style: .plain)
-        let filterFirstLevelOptions = ["Activities","Int'l vs. Domestic","Temperature", "Clear fliters"]
+        let filterFirstLevelOptions = ["Budget","Activities","Int'l vs. Domestic","Temperature", "Clear fliters"]
         
         //Messaging var
         let messageComposer = MessageComposer()
@@ -581,6 +581,7 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
                 self.addContactPlusIconMainVC.isHidden = false
             }) { (Success:Bool) in
                 self.instructionsView?.layer.isHidden = true
+                self.addFriendsInstructionsView.layer.isHidden = true
             }
             
         }
@@ -1058,6 +1059,7 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
         @IBAction func instructionsGotItTouchedUpInside(_ sender: Any) {
             animateInstructionsOut()
         }
+    
         @IBAction func inviteFriendsGotItButtonTouchedUpInside(_ sender: Any) {
             UIView.animate(withDuration: 0.3, animations: {
                 self.addFriendsInstructionsView.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)

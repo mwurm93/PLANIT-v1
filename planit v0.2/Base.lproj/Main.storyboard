@@ -2043,11 +2043,6 @@
                                     <action selector="filterFlightsButtonTouchedUpInside:" destination="pop-1B-VO6" eventType="touchUpInside" id="6wS-aT-BZM"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q29-x3-ZD2" customClass="ZLSwipeableView" customModule="planit_v0_2" customModuleProvider="target">
-                                <rect key="frame" x="28" y="69" width="320" height="422"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nsS-2m-5e5">
                                 <rect key="frame" x="312" y="18" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2056,6 +2051,22 @@
                                     <segue destination="0NW-dQ-30A" kind="show" identifier="swipingToChat" animates="NO" id="BRb-kg-zV2"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3bn-2d-Vcf">
+                                <rect key="frame" x="271" y="611" width="43" height="47"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="39"/>
+                                <state key="normal" title="+">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="addContact:" destination="U3Y-qh-fAI" eventType="touchUpInside" id="L7M-FN-sXC"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q29-x3-ZD2" customClass="ZLSwipeableView" customModule="planit_v0_2" customModuleProvider="target">
+                                <rect key="frame" x="28" y="69" width="320" height="422"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y24-En-fYb">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2084,17 +2095,6 @@
                                     <action selector="instructionsGotItTouchedUpInside:" destination="U3Y-qh-fAI" eventType="touchUpInside" id="raC-9s-Yf6"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3bn-2d-Vcf">
-                                <rect key="frame" x="271" y="611" width="43" height="47"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="39"/>
-                                <state key="normal" title="+">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="addContact:" destination="U3Y-qh-fAI" eventType="touchUpInside" id="L7M-FN-sXC"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e6k-NO-PFJ">
                                 <rect key="frame" x="87.5" y="530" width="200" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2113,6 +2113,9 @@
                                         <state key="normal" title="Got It">
                                             <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="inviteFriendsGotItButtonTouchedUpInside:" destination="U3Y-qh-fAI" eventType="touchUpInside" id="JOq-Nb-Gmu"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -9669,13 +9672,13 @@ AAAAAAAAAAAABApgA
         <segue reference="RAo-Nt-Dp1"/>
         <segue reference="lra-AY-k3U"/>
         <segue reference="rG8-GZ-vPL"/>
-        <segue reference="0XT-HI-iDA"/>
-        <segue reference="aaX-Gb-b3x"/>
-        <segue reference="aww-Ip-yzO"/>
-        <segue reference="rwx-9f-mbt"/>
-        <segue reference="XIs-yD-L7P"/>
+        <segue reference="IrZ-E3-weH"/>
+        <segue reference="t9O-2u-fWL"/>
         <segue reference="chs-U5-EMN"/>
+        <segue reference="mtv-1X-7Th"/>
+        <segue reference="cNU-Li-sIA"/>
         <segue reference="Cjv-x4-gBd"/>
+        <segue reference="rwx-9f-mbt"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

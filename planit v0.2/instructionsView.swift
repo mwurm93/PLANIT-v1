@@ -90,7 +90,34 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         }
 
         if indexPath.item == 0 {
-            cell.instructionsLabel.text = "Add your dates, home airport, and travel mates!"
+            let calendarAttachment = NSTextAttachment()
+            calendarAttachment.image = #imageLiteral(resourceName: "Calendar-Time")
+            calendarAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
+            let mapAttachment = NSTextAttachment()
+            mapAttachment.image = #imageLiteral(resourceName: "map")
+            mapAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
+            let threePeopleAttachment = NSTextAttachment()
+            threePeopleAttachment.image = #imageLiteral(resourceName: "three_people")
+            threePeopleAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
+            
+            if indexPath.item < whiteInstructionIndex {
+                calendarAttachment.image = #imageLiteral(resourceName: "Calendar-Time_green")
+                mapAttachment.image = #imageLiteral(resourceName: "map_green")
+                threePeopleAttachment.image = #imageLiteral(resourceName: "three_people_green")
+            }
+            
+            let stringForLabel = NSMutableAttributedString(string: "Tap ")
+            let attachment1 = NSAttributedString(attachment: calendarAttachment)
+            let attachment2 = NSAttributedString(attachment: mapAttachment)
+            let attachment3 = NSAttributedString(attachment: threePeopleAttachment)
+            stringForLabel.append(attachment1)
+            stringForLabel.append(NSAttributedString(string:" to add your dates, "))
+            stringForLabel.append(attachment2)
+            stringForLabel.append(NSAttributedString(string:" to add your home airport, and "))
+            stringForLabel.append(attachment3)
+            stringForLabel.append(NSAttributedString(string: " invite friends on your trip!"))
+            cell.instructionsLabel.attributedText = stringForLabel
+
         } else if indexPath.item == 1 {
             cell.instructionsLabel.text = "Swipe to discover where you might want to go, and invite your friends to do the same!"
         } else if indexPath.item == 2 {
@@ -99,10 +126,10 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
             let changeAttachment = NSTextAttachment()
             changeAttachment.image = #imageLiteral(resourceName: "changeFlight")
-            changeAttachment.bounds = CGRect(x: 0, y: 0, width: 15, height: 15)
+            changeAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 20)
             let changeHotelAttachment = NSTextAttachment()
             changeHotelAttachment.image = #imageLiteral(resourceName: "changeHotel")
-            changeHotelAttachment.bounds = CGRect(x: 0, y: 0, width: 15, height: 15)
+            changeHotelAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 20)
             
             if indexPath.item < whiteInstructionIndex {
                 hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_green")
@@ -130,7 +157,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         } else if indexPath.item == 4 {
             let hamburgerAttachment = NSTextAttachment()
             hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
-            hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
+            hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
             if indexPath.item < whiteInstructionIndex {
                 hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_green")
             } else if indexPath.item > whiteInstructionIndex {
@@ -144,7 +171,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         } else if indexPath.item == 5 {
             let hamburgerAttachment = NSTextAttachment()
             hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
-            hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
+            hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
             if indexPath.item < whiteInstructionIndex {
                 hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_green")
             } else if indexPath.item > whiteInstructionIndex {
