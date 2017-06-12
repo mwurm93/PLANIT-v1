@@ -14,7 +14,7 @@ import Cartography
 import Firebase
 
 class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
-
+    
     //Firebase channel
     var channelsRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     var newChannelRef: FIRDatabaseReference?
@@ -91,6 +91,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        chatButton.isHidden = true
+        
         //Set to when
         whiteLine.layer.frame = CGRect(x: 61, y: 104, width: 55, height: 51)
         subviewWhen()
@@ -133,7 +135,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         //Save
         self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
-        //        self.hideKeyboardWhenTappedAround()
+//        self.hideKeyboardWhenTappedAround()
         
         //Load the values from our shared data container singleton
         if NewOrAddedTripFromSegue != 1 {
@@ -154,13 +156,29 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         month3.layer.cornerRadius = 15
         month4.layer.cornerRadius = 15
         
-        weekend.backgroundColor = UIColor.darkGray
-        oneWeek.backgroundColor = UIColor.darkGray
-        twoWeeks.backgroundColor = UIColor.darkGray
-        month1.backgroundColor = UIColor.darkGray
-        month2.backgroundColor = UIColor.darkGray
-        month3.backgroundColor = UIColor.darkGray
-        month4.backgroundColor = UIColor.darkGray
+        weekend.backgroundColor = UIColor.clear
+        oneWeek.backgroundColor = UIColor.clear
+        twoWeeks.backgroundColor = UIColor.clear
+        month1.backgroundColor = UIColor.clear
+        month2.backgroundColor = UIColor.clear
+        month3.backgroundColor = UIColor.clear
+        month4.backgroundColor = UIColor.clear
+        
+        weekend.layer.borderColor = UIColor.white.cgColor
+        oneWeek.layer.borderColor = UIColor.white.cgColor
+        twoWeeks.layer.borderColor = UIColor.white.cgColor
+        month1.layer.borderColor = UIColor.white.cgColor
+        month2.layer.borderColor = UIColor.white.cgColor
+        month3.layer.borderColor = UIColor.white.cgColor
+        month4.layer.borderColor = UIColor.white.cgColor
+
+        weekend.layer.borderWidth = 1
+        oneWeek.layer.borderWidth = 1
+        twoWeeks.layer.borderWidth = 1
+        month1.layer.borderWidth = 1
+        month2.layer.borderWidth = 1
+        month3.layer.borderWidth = 1
+        month4.layer.borderWidth = 1
         
         let monthDateFormatter = DateFormatter()
         monthDateFormatter.dateFormat = "MM"
@@ -222,7 +240,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
             if selectedDatesValue.count > 0 {
                 self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
-                    calendarView.scrollToDate(selectedDatesValue[0], animateScroll: false)
             }
         }
         
@@ -366,10 +383,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             sender.backgroundColor = UIColor.white
             sender.titleLabel?.textColor = UIColor.black
         } else {
-            sender.backgroundColor = UIColor.darkGray
+            sender.backgroundColor = UIColor.clear
             sender.titleLabel?.textColor = UIColor.white
         }
         updateNonSpecificDatesDictionary()
+        nonSpecificDatesToWhereLogic()
     }
     
     func getMonth(Month: Int) -> String {
@@ -662,6 +680,13 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
     
     // MARK: UITextFieldDelegate
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        let hideKeyboardTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardAndRemoveHideKeyboardTap(touch:)))
+        self.view.addGestureRecognizer(hideKeyboardTap)
+        
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
         // Hide the keyboard.
         homeAirportTextField.resignFirstResponder()
@@ -675,40 +700,88 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
         }
         
-        let segmentLengthValue = SavedPreferencesForTrip["Availability_segment_lengths"] as! [NSNumber]
-        let nonSpecificDatesValue = SavedPreferencesForTrip["nonSpecificDates"] as! NSDictionary
-        if let nonSpecificDuration = nonSpecificDatesValue["duration"] as? String  {
-            if nonSpecificDuration != "weekend" {
-                numberDestinationsStackView.isHidden = false
-                numberDestinationsSlider.isHidden = false
-                homeAirportTextField.isHidden = true
-                questionLabel.text = "How many destinations?"
-            } else {
-                subviewWho()
-            }
-        } else if segmentLengthValue.count > 0 {
-            var maxSegmentLength = 0
-            for segmentIndex in 0...(segmentLengthValue.count-1) {
-                if (Int(segmentLengthValue[segmentIndex])) > maxSegmentLength {
-                    maxSegmentLength = (Int(segmentLengthValue[segmentIndex]))
+        if textField == homeAirportTextField {
+            let segmentLengthValue = SavedPreferencesForTrip["Availability_segment_lengths"] as! [NSNumber]
+            let nonSpecificDatesValue = SavedPreferencesForTrip["nonSpecificDates"] as! NSDictionary
+            if let nonSpecificDuration = nonSpecificDatesValue["duration"] as? String  {
+                if nonSpecificDuration != "weekend" {
+                    numberDestinationsStackView.isHidden = false
+                    numberDestinationsSlider.isHidden = false
+                    homeAirportTextField.isHidden = true
+                    questionLabel.text = "How many destinations?"
+                } else {
+                    subviewWho()
                 }
-            }
-            if maxSegmentLength >= 4 {
-                numberDestinationsStackView.isHidden = false
-                numberDestinationsSlider.isHidden = false
-                homeAirportTextField.isHidden = true
-                questionLabel.text = "How many destinations?"
+            } else if segmentLengthValue.count > 0 {
+                var maxSegmentLength = 0
+                for segmentIndex in 0...(segmentLengthValue.count-1) {
+                    if (Int(segmentLengthValue[segmentIndex])) > maxSegmentLength {
+                        maxSegmentLength = (Int(segmentLengthValue[segmentIndex]))
+                    }
+                }
+                if maxSegmentLength >= 4 {
+                    numberDestinationsStackView.isHidden = false
+                    numberDestinationsSlider.isHidden = false
+                    homeAirportTextField.isHidden = true
+                    questionLabel.text = "How many destinations?"
+                } else {
+                    subviewWho()
+                }
             } else {
                 subviewWho()
             }
-        } else {
-            subviewWho()
         }
-        
+        dismiss()
         return true
     }
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         return true
+    }
+    
+    func dismiss() {
+        view.endEditing(true)
+        
+        for gestureRecognizer in self.view.gestureRecognizers! {
+            self.view.removeGestureRecognizer(gestureRecognizer)
+        }
+
+    }
+    func dismissKeyboardAndRemoveHideKeyboardTap(touch: UITapGestureRecognizer) {
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        
+        if homeAirportTextField.isEditing {
+            let segmentLengthValue = SavedPreferencesForTrip["Availability_segment_lengths"] as! [NSNumber]
+            let nonSpecificDatesValue = SavedPreferencesForTrip["nonSpecificDates"] as! NSDictionary
+            if let nonSpecificDuration = nonSpecificDatesValue["duration"] as? String  {
+                if nonSpecificDuration != "weekend" {
+                    numberDestinationsStackView.isHidden = false
+                    numberDestinationsSlider.isHidden = false
+                    homeAirportTextField.isHidden = true
+                    questionLabel.text = "How many destinations?"
+                } else {
+                    subviewWho()
+                }
+            } else if segmentLengthValue.count > 0 {
+                var maxSegmentLength = 0
+                for segmentIndex in 0...(segmentLengthValue.count-1) {
+                    if (Int(segmentLengthValue[segmentIndex])) > maxSegmentLength {
+                        maxSegmentLength = (Int(segmentLengthValue[segmentIndex]))
+                    }
+                }
+                if maxSegmentLength >= 4 {
+                    numberDestinationsStackView.isHidden = false
+                    numberDestinationsSlider.isHidden = false
+                    homeAirportTextField.isHidden = true
+                    questionLabel.text = "How many destinations?"
+                } else {
+                    subviewWho()
+                }
+            } else {
+                subviewWho()
+            }
+        }
+        dismiss()
     }
     
     // MARK: UITableviewdelegate
@@ -884,8 +957,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         dayOfWeekStackView.isHidden = true
         
         if contacts != nil {
-            addFromContactsButton.layer.frame = CGRect(x: 89, y: 280, width: 198, height: 22)
-            addFromFacebookButton.layer.frame = CGRect(x: 88, y: 310, width: 200, height: 22)
+            addFromContactsButton.layer.frame = CGRect(x: 89, y: 330, width: 198, height: 22)
+            addFromFacebookButton.layer.frame = CGRect(x: 88, y: 375, width: 200, height: 22)
             soloForNowButton.isHidden = true
             groupMemberListTable.isHidden = false
             groupMemberListTable.layer.frame = CGRect(x: 29, y: 200, width: 292, height: 221)
@@ -965,6 +1038,11 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
     @IBAction func numberDestinationsValueChanged(_ sender: Any) {
         roundSlider()
+        let when = DispatchTime.now() + 0.15
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.subviewWho()
+        }
+
     }
     func deleteContactButtonTouchedUpInside(sender:UIButton) {
         let i: Int = (sender.layer.value(forKey: "index")) as! Int
@@ -996,7 +1074,15 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         dayOfWeekStackView.isHidden = false
         
         let currentDate = Date(timeIntervalSinceNow: 86400)
-        calendarView.scrollToDate(currentDate, triggerScrollToDateDelegate: true, animateScroll: true, preferredScrollPosition: UICollectionViewScrollPosition.top)
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
+            if selectedDatesValue.count > 0 {
+                calendarView.scrollToDate(selectedDatesValue[0], triggerScrollToDateDelegate: true, animateScroll: true, preferredScrollPosition: UICollectionViewScrollPosition.bottom)
+            } else {
+                calendarView.scrollToDate(currentDate, triggerScrollToDateDelegate: true, animateScroll: true, preferredScrollPosition: UICollectionViewScrollPosition.bottom)
+            }
+        }
         
         getLengthOfSelectedAvailabilities()
     }
@@ -1014,12 +1100,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         calendarView.isHidden = true        
     }
     @IBAction func weekendTouchedUpInside(_ sender: Any) {
-        if weekend.backgroundColor == UIColor.darkGray {
+        if weekend.backgroundColor == UIColor.clear {
             oneWeek.isSelected = false
-            oneWeek.backgroundColor = UIColor.darkGray
+            oneWeek.backgroundColor = UIColor.clear
             oneWeek.titleLabel?.textColor = UIColor.white
             twoWeeks.isSelected = false
-            twoWeeks.backgroundColor = UIColor.darkGray
+            twoWeeks.backgroundColor = UIColor.clear
             twoWeeks.titleLabel?.textColor = UIColor.white
         }
     }
@@ -1055,13 +1141,23 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
     
+    func nonSpecificDatesToWhereLogic() {
+        if (oneWeek.backgroundColor == UIColor.white || weekend.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) && (month1.backgroundColor == UIColor.white || month2.backgroundColor == UIColor.white || month3.backgroundColor == UIColor.white || month4.backgroundColor == UIColor.white) {
+            
+            let when = DispatchTime.now() + 0.15
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.subviewWhere()
+            }
+        }
+    }
+    
     @IBAction func oneWeekTouchedUpInside(_ sender: Any) {
-        if oneWeek.backgroundColor == UIColor.darkGray {
+        if oneWeek.backgroundColor == UIColor.clear {
             weekend.isSelected = false
-            weekend.backgroundColor = UIColor.darkGray
+            weekend.backgroundColor = UIColor.clear
             weekend.titleLabel?.textColor = UIColor.white
             twoWeeks.isSelected = false
-            twoWeeks.backgroundColor = UIColor.darkGray
+            twoWeeks.backgroundColor = UIColor.clear
             twoWeeks.titleLabel?.textColor = UIColor.white
 //            if (month1.backgroundColor == UIColor.white || month2.backgroundColor == UIColor.white || month3.backgroundColor == UIColor.white || month4.backgroundColor == UIColor.white) {
 //                subviewNextButton.isHidden = false
@@ -1071,12 +1167,12 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
     }
     @IBAction func twoWeeksTouchedUpInside(_ sender: Any) {
-        if twoWeeks.backgroundColor == UIColor.darkGray {
+        if twoWeeks.backgroundColor == UIColor.clear {
             weekend.isSelected = false
-            weekend.backgroundColor = UIColor.darkGray
+            weekend.backgroundColor = UIColor.clear
             weekend.titleLabel?.textColor = UIColor.white
             oneWeek.isSelected = false
-            oneWeek.backgroundColor = UIColor.darkGray
+            oneWeek.backgroundColor = UIColor.clear
             oneWeek.titleLabel?.textColor = UIColor.white
 //            if (month1.backgroundColor == UIColor.white || month2.backgroundColor == UIColor.white || month3.backgroundColor == UIColor.white || month4.backgroundColor == UIColor.white) {
 //                subviewNextButton.isHidden = false
@@ -1086,15 +1182,15 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
     }
     @IBAction func month1TouchedUpInside(_ sender: Any) {
-        if month1.backgroundColor == UIColor.darkGray {
+        if month1.backgroundColor == UIColor.clear {
             month2.isSelected = false
-            month2.backgroundColor = UIColor.darkGray
+            month2.backgroundColor = UIColor.clear
             month2.titleLabel?.textColor = UIColor.white
             month3.isSelected = false
-            month3.backgroundColor = UIColor.darkGray
+            month3.backgroundColor = UIColor.clear
             month3.titleLabel?.textColor = UIColor.white
             month4.isSelected = false
-            month4.backgroundColor = UIColor.darkGray
+            month4.backgroundColor = UIColor.clear
             month4.titleLabel?.textColor = UIColor.white
 //            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
 //                subviewNextButton.isHidden = false
@@ -1104,15 +1200,15 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
     }
     @IBAction func month2TouchedUpInside(_ sender: Any) {
-        if month2.backgroundColor == UIColor.darkGray {
+        if month2.backgroundColor == UIColor.clear {
             month1.isSelected = false
-            month1.backgroundColor = UIColor.darkGray
+            month1.backgroundColor = UIColor.clear
             month1.titleLabel?.textColor = UIColor.white
             month3.isSelected = false
-            month3.backgroundColor = UIColor.darkGray
+            month3.backgroundColor = UIColor.clear
             month3.titleLabel?.textColor = UIColor.white
             month4.isSelected = false
-            month4.backgroundColor = UIColor.darkGray
+            month4.backgroundColor = UIColor.clear
             month4.titleLabel?.textColor = UIColor.white
 //            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
 //                subviewNextButton.isHidden = false
@@ -1122,15 +1218,15 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
     }
     @IBAction func month3TouchedUpInside(_ sender: Any) {
-        if month3.backgroundColor == UIColor.darkGray {
+        if month3.backgroundColor == UIColor.clear {
             month1.isSelected = false
-            month1.backgroundColor = UIColor.darkGray
+            month1.backgroundColor = UIColor.clear
             month1.titleLabel?.textColor = UIColor.white
             month2.isSelected = false
-            month2.backgroundColor = UIColor.darkGray
+            month2.backgroundColor = UIColor.clear
             month2.titleLabel?.textColor = UIColor.white
             month4.isSelected = false
-            month4.backgroundColor = UIColor.darkGray
+            month4.backgroundColor = UIColor.clear
             month4.titleLabel?.textColor = UIColor.white
 //            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
 //                subviewNextButton.isHidden = false
@@ -1141,15 +1237,15 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     }
     
     @IBAction func month4TouchedUpInside(_ sender: Any) {
-        if month4.backgroundColor == UIColor.darkGray {
+        if month4.backgroundColor == UIColor.clear {
             month1.isSelected = false
-            month1.backgroundColor = UIColor.darkGray
+            month1.backgroundColor = UIColor.clear
             month1.titleLabel?.textColor = UIColor.white
             month2.isSelected = false
-            month2.backgroundColor = UIColor.darkGray
+            month2.backgroundColor = UIColor.clear
             month2.titleLabel?.textColor = UIColor.white
             month3.isSelected = false
-            month3.backgroundColor = UIColor.darkGray
+            month3.backgroundColor = UIColor.clear
             month3.titleLabel?.textColor = UIColor.white
 //            if (weekend.backgroundColor == UIColor.white || oneWeek.backgroundColor == UIColor.white || twoWeeks.backgroundColor == UIColor.white) {
 //                subviewNextButton.isHidden = false
@@ -1400,6 +1496,11 @@ extension UIViewController {
         view.addGestureRecognizer(hideKeyboardTap)
     }
     
+//    func stopHidingKeyboardWhenTappedAround() {
+//        
+//        view.removeGestureRecognizer(hideKeyboardTap)
+//    }
+//    
     func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -1519,6 +1620,11 @@ extension NewTripNameViewController: JTAppleCalendarViewDataSource, JTAppleCalen
             let leftDate = dateFormatter.date(from: leftKeys[0] as! String)
             if date > leftDate! {
                 calendarView.selectDates(from: leftDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+                let when = DispatchTime.now() + 0.15
+                DispatchQueue.main.asyncAfter(deadline: when) {
+                    self.subviewWhere()
+                }
+
             } else {
             calendarView.deselectAllDates(triggerSelectionDelegate: false)
             rightDateTimeArrays.removeAllObjects()

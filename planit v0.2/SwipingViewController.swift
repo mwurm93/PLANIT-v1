@@ -83,7 +83,6 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
             }
         }
         
-        
         override func viewDidLoad() {
             super.viewDidLoad()
             
@@ -141,7 +140,7 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
             sortFilterFlightsCalloutTableView.backgroundColor = UIColor.clear
             sortFilterFlightsCalloutTableView.layer.backgroundColor = UIColor.clear.cgColor
             
-            //        self.hideKeyboardWhenTappedAround()
+            self.hideKeyboardWhenTappedAround()
             
             popupBlurView.isUserInteractionEnabled = true
             
@@ -287,13 +286,13 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
             swipeableView.allowedDirection = .Horizontal
             
             swipeableView.didStart = {view, location in
-                print("Did start swiping view at location: \(location)")
+//                print("Did start swiping view at location: \(location)")
             }
             swipeableView.swiping = {view, location, translation in
-                print("Swiping at view location: \(location) translation: \(translation)")
+//                print("Swiping at view location: \(location) translation: \(translation)")
             }
             swipeableView.didEnd = {view, location in
-                print("Did end swiping view at location: \(location)")
+//                print("Did end swiping view at location: \(location)")
             }
             swipeableView.didSwipe = {view, direction, vector in
                 self.countSwipes += 1
@@ -347,7 +346,7 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
                 }
             }
             swipeableView.didCancel = {view in
-                print("Did cancel swiping view")
+//                print("Did cancel swiping view")
             }
             swipeableView.didTap = {view, location in
                 self.detailedCardView.isHidden = false
@@ -381,7 +380,7 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
                 }
             }
             swipeableView.didDisappear = { view in
-                print("Did disappear swiping view")
+//                print("Did disappear swiping view")
             }
             
             constrain(swipeableView, view) { view1, view2 in
@@ -569,6 +568,7 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
         }
         
         func animateInstructionsOut(){
+            contactsCollectionView.isHidden = false
             UIView.animate(withDuration: 0.3, animations: {
                 self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
                 self.instructionsView?.alpha = 0

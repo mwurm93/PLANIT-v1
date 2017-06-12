@@ -399,7 +399,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 
     func animateInstructionsIn(){
         instructionsView?.isHidden = false
-        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 1,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 2,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
         
         instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
         instructionsView?.alpha = 0

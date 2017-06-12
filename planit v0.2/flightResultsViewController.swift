@@ -439,7 +439,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 
     func animateInstructionsIn(){
         instructionsView?.isHidden = false
-        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 3,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
         
         instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
         instructionsView?.alpha = 0

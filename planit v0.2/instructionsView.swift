@@ -65,24 +65,26 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "instructionsCollectionViewCell", for: indexPath) as! instructionsCollectionViewCell
         cell.addViews()
         
-        let finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
+        let lastVC = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastVC") as? NSString ?? NSString()
         let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? NSNumber()
         
         var whiteInstructionIndex = Int()
-        if finishedEnteringPreferencesStatus == "swiping" && bookingStatus == 0 {
+        if lastVC == "newTrip" && bookingStatus == 0 {
+            whiteInstructionIndex = 0
+        } else if lastVC == "swiping" && bookingStatus == 0 {
             whiteInstructionIndex = 1
-        } else if finishedEnteringPreferencesStatus == "ranking"  && bookingStatus == 0 {
+        } else if lastVC == "ranking"  && bookingStatus == 0 {
             whiteInstructionIndex = 2
-        } else if finishedEnteringPreferencesStatus == "flightSearch"  && bookingStatus == 0 {
+        } else if lastVC == "flightSearch"  && bookingStatus == 0 {
             whiteInstructionIndex = 3
-        } else if finishedEnteringPreferencesStatus == "flightResults"  && bookingStatus == 0 {
+        } else if lastVC == "flightResults"  && bookingStatus == 0 {
             whiteInstructionIndex = 4
-        } else if finishedEnteringPreferencesStatus == "hotelResults"  && bookingStatus == 0 {
+        } else if lastVC == "hotelResults"  && bookingStatus == 0 {
             whiteInstructionIndex = 5
-        } else if finishedEnteringPreferencesStatus == "booking"  && bookingStatus == 0 {
-            whiteInstructionIndex = 5
-        } else if bookingStatus == 1 {
+        } else if lastVC == "booking"  && bookingStatus == 0 {
             whiteInstructionIndex = 6
+        } else if bookingStatus == 1{
+            whiteInstructionIndex = 7
         } else {
             whiteInstructionIndex = 0
         }
