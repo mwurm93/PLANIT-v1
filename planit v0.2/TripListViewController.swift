@@ -40,6 +40,9 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     private var channels: [Channel] = []
     private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     
+    //Times VC viewed
+    var timesViewed = [String: Int]()
+    
     //Maply
     var theViewC: MaplyBaseViewController?
     private let cachedGrayColor = UIColor.darkGray
@@ -92,6 +95,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        timesViewed = DataContainerSingleton.sharedDataContainer.timesViewed as? [String : Int] ?? ["settings":0, "bucketList":0, "tripList":0, "newTrip":0, "swiping":0, "ranking":0, "flightSearch":0,"flightResults":0,"hotelResults":0,"booking":0]
         
         observeChannels()
         
@@ -247,11 +252,15 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             createTripArrow.isHidden = true
         }
         
-        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips == nil || existing_trips?.count == 0 {
+//        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        if timesViewed["tripList"] == 0 {
             let when = DispatchTime.now() + 0.4
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
+                
+                let currentTimesViewed = self.timesViewed["tripList"]
+                self.timesViewed["tripList"]! = currentTimesViewed! + 1
+                DataContainerSingleton.sharedDataContainer.timesViewed = self.timesViewed as NSDictionary
             }
         }
         

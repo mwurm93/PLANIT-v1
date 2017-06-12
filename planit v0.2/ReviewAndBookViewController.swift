@@ -47,6 +47,9 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     //Instructions
     var instructionsView: instructionsView?
     
+    //Times VC viewed
+    var timesViewed = [String: Int]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -93,11 +96,14 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         tap.delegate = self
         popupBackgroundView.addGestureRecognizer(tap)
         
-        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 {
-            let when = DispatchTime.now() + 0.4
+        timesViewed = (DataContainerSingleton.sharedDataContainer.timesViewed as? [String : Int])!
+        if timesViewed["booking"] == 0 {
+            let when = DispatchTime.now() + 0.6
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
+                let currentTimesViewed = self.timesViewed["booking"]
+                self.timesViewed["booking"]! = currentTimesViewed! + 1
+                DataContainerSingleton.sharedDataContainer.timesViewed = self.timesViewed as NSDictionary
             }
         }
 

@@ -23,7 +23,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     private let cachedWhiteColor = UIColor.white
     private var useLocalTiles = false
     
-    //COPY
     var bucketListPinLocations = [[String: AnyObject]]()
     var beenTherePinLocations = [[String: AnyObject]]()
     var bucketListCountries = [String]()

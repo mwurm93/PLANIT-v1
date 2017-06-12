@@ -15,6 +15,9 @@ import Firebase
 
 class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     
+    //Times VC viewed
+    var timesViewed = [String: Int]()
+    
     //Firebase channel
     var channelsRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     var newChannelRef: FIRDatabaseReference?
@@ -315,11 +318,16 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                         
                     }
                 }
-                
-                
+            
+            timesViewed = (DataContainerSingleton.sharedDataContainer.timesViewed as? [String : Int])! 
+            if timesViewed["newTrip"] == 0 {
                 let when = DispatchTime.now() + 0.6
                 DispatchQueue.main.asyncAfter(deadline: when) {
                     self.animateInstructionsIn()
+                    let currentTimesViewed = self.timesViewed["newTrip"]
+                    self.timesViewed["newTrip"]! = currentTimesViewed! + 1
+                    DataContainerSingleton.sharedDataContainer.timesViewed = self.timesViewed as NSDictionary
+                }
             }
         }
         else {

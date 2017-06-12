@@ -2343,10 +2343,12 @@
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Heu-0f-mzk">
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Heu-0f-mzk">
                                                     <rect key="frame" x="15" y="59" width="30" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" image="changeFlight"/>
+                                                    <state key="normal" image="changeFlight">
+                                                        <attributedString key="attributedTitle"/>
+                                                    </state>
                                                     <connections>
                                                         <action selector="chooseFlightsButtonTouchedUpInside:" destination="6Nf-ZD-7fF" eventType="touchUpInside" id="nx0-dI-z0U"/>
                                                     </connections>
@@ -2464,16 +2466,26 @@
                                         <connections>
                                             <outlet property="DepartureOrigin" destination="vxc-gU-Vmg" id="lnH-D9-axO"/>
                                             <outlet property="accomodationFrom" destination="uGL-9W-6ls" id="VHZ-52-pwP"/>
+                                            <outlet property="airline" destination="IYv-hE-z0U" id="Rfb-Si-LoQ"/>
+                                            <outlet property="changeAccomodationButton" destination="Sf2-rg-a8H" id="070-bS-eK4"/>
                                             <outlet property="changeFlightsButton" destination="Heu-0f-mzk" id="STj-It-xxq"/>
                                             <outlet property="departureArrivalTime" destination="oh7-Ky-jge" id="ZYD-g6-eaD"/>
+                                            <outlet property="departureArrow" destination="piw-io-3L8" id="tfv-Ns-jsh"/>
                                             <outlet property="departureDepartureTime" destination="bHY-Wt-A4w" id="kJ2-JR-tAr"/>
                                             <outlet property="departureDestination" destination="6Gm-3T-l7X" id="Ega-YG-PL3"/>
                                             <outlet property="destinationLabel" destination="QZF-3r-ulb" id="7BC-gr-4ey"/>
+                                            <outlet property="hotelCalculationLabel" destination="oMT-6E-RAH" id="btD-fU-WFq"/>
+                                            <outlet property="hotelName" destination="uGL-9W-6ls" id="Pd8-PQ-hbv"/>
+                                            <outlet property="numberOfNights" destination="9rx-jI-DMG" id="UXX-14-CHE"/>
+                                            <outlet property="numberOfPeople" destination="c4o-Kk-qIi" id="h52-Nb-cNf"/>
                                             <outlet property="percentSwipedRight" destination="WXl-yo-Cuc" id="Iia-oX-dXb"/>
                                             <outlet property="returnArrivalTime" destination="5UF-UF-aRN" id="enM-3x-1XK"/>
+                                            <outlet property="returnArrow" destination="0xE-nq-VYr" id="k79-32-Oce"/>
                                             <outlet property="returnDepartureTime" destination="kIh-oo-6mM" id="qZX-7t-DKf"/>
                                             <outlet property="returnDestination" destination="Aam-wI-m75" id="Rox-jx-tyZ"/>
                                             <outlet property="returnOrigin" destination="TdF-xZ-cJR" id="ZNj-bV-j16"/>
+                                            <outlet property="roomPricePerNight" destination="V5p-qg-h9E" id="vnJ-49-UbK"/>
+                                            <outlet property="totalPriceForUser" destination="e6M-0I-rH6" id="72W-sM-u2F"/>
                                             <outlet property="tripPrice" destination="GJa-3c-T6c" id="yrz-hN-kWn"/>
                                         </connections>
                                     </tableViewCell>
@@ -2901,7 +2913,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uTE-AC-aKu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628" y="197"/>
+            <point key="canvasLocation" x="1628" y="196.55172413793105"/>
         </scene>
         <!--Review And Book View Controller-->
         <scene sceneID="oXU-ux-Xys">
@@ -3307,7 +3319,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vlo-fA-dkV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2009" y="893"/>
+            <point key="canvasLocation" x="2008.8" y="892.80359820089961"/>
         </scene>
         <!--Instructions For User View Controller-->
         <scene sceneID="eE3-wU-7an">
@@ -9670,12 +9682,12 @@ AAAAAAAAAAAABApgA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="lra-AY-k3U"/>
-        <segue reference="rG8-GZ-vPL"/>
-        <segue reference="IrZ-E3-weH"/>
-        <segue reference="t9O-2u-fWL"/>
+        <segue reference="cWA-9L-HdA"/>
         <segue reference="chs-U5-EMN"/>
-        <segue reference="mtv-1X-7Th"/>
+        <segue reference="t9O-2u-fWL"/>
+        <segue reference="IrZ-E3-weH"/>
+        <segue reference="rG8-GZ-vPL"/>
+        <segue reference="BRb-kg-zV2"/>
         <segue reference="cNU-Li-sIA"/>
         <segue reference="Cjv-x4-gBd"/>
         <segue reference="rwx-9f-mbt"/>

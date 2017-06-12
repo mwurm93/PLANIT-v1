@@ -11,6 +11,9 @@ import Firebase
 
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
+    //Times VC viewed
+    var timesViewed = [String: Int]()
+
     // MARK: Class properties
     //Load potential destinations from server
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
@@ -64,11 +67,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
-            } else {
-                //Load from server
-                let rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"75","destination":"Cabo","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"50","destination":"Denver","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"50","destination":"New York","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]]]
-                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
             }
+//            else {
+//                //Load from server
+//                let rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"75","destination":"Cabo","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"50","destination":"Denver","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]],["price":"$???","percentSwipedRight":"50","destination":"New York","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()]]]
+//                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
+//            }
         }
         SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
         //Save
@@ -83,11 +87,14 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.readyToBookButton.layer.cornerRadius = self.readyToBookButton.frame.height / 2
         self.readyToBookButton.titleLabel?.textAlignment = .center
         
-        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"]  as! String == "swiping"{
-            let when = DispatchTime.now() + 0.4
+        timesViewed = (DataContainerSingleton.sharedDataContainer.timesViewed as? [String : Int])!
+        if timesViewed["ranking"] == 0 {
+            let when = DispatchTime.now() + 0.6
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
+                let currentTimesViewed = self.timesViewed["ranking"]
+                self.timesViewed["ranking"]! = currentTimesViewed! + 1
+                DataContainerSingleton.sharedDataContainer.timesViewed = self.timesViewed as NSDictionary
             }
         } else {
             recommendationRankingTableView.frame = CGRect(x: 0, y: 75, width: 375, height: 500)
@@ -169,6 +176,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         let destinationsForRow = rankedPotentialTripsDictionary[nextRowToAdd]
 
+        
         cell.destinationLabel.text = destinationsForRow["destination"] as! String
         cell.tripPrice.text = destinationsForRow["price"] as! String
         cell.percentSwipedRight.text = "\(String(describing: destinationsForRow["percentSwipedRight"]!))% swiped right"
@@ -181,6 +189,22 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                     if let thisTripFlightResults = thisTripDict["flightOptions"] as? [Dictionary<String, AnyObject>] {
                         if thisTripFlightResults.count > 1 {
                             if let topFlightOption = thisTripFlightResults[0] as? Dictionary<String,Any> {
+                                cell.DepartureOrigin.isHidden = false
+                                cell.departureDestination.isHidden = false
+                                cell.departureDepartureTime.isHidden = false
+                                cell.departureArrivalTime.isHidden = false
+                                cell.returnDepartureTime.isHidden = false
+                                cell.returnOrigin.isHidden = false
+                                cell.returnArrivalTime.isHidden = false
+                                cell.returnDestination.isHidden = false
+                                cell.tripPrice.isHidden = false
+                                cell.departureArrow.isHidden = false
+                                cell.returnArrow.isHidden = false
+                                cell.airline.isHidden = false
+                                cell.changeFlightsButton.frame = CGRect(x: 15, y: 59, width: 30, height: 30)
+                                cell.changeFlightsButton.setImage(#imageLiteral(resourceName: "changeFlight"), for: .normal)
+                                cell.changeFlightsButton.setTitle(nil, for: .normal)
+                                
                                 cell.DepartureOrigin.text = topFlightOption["departureOrigin"] as? String
                                 cell.departureDestination.text = topFlightOption["departureDestination"] as? String
                                 cell.departureDepartureTime.text = topFlightOption["departureDepartureTime"] as? String
@@ -192,20 +216,80 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                                 cell.tripPrice.text = topFlightOption["totalPrice"] as? String
                             }
                         } else {
-                            cell.DepartureOrigin.text = "???"
-                            cell.departureDestination.text = "???"
-                            cell.departureDepartureTime.text = "??:??"
-                            cell.departureArrivalTime.text = "??:??"
-                            cell.returnDepartureTime.text = "??:??"
-                            cell.returnOrigin.text = "???"
-                            cell.returnArrivalTime.text = "??:??"
-                            cell.returnDestination.text = "???"
-                            cell.tripPrice.text = "$???"
+//                            cell.DepartureOrigin.text = "???"
+//                            cell.departureDestination.text = "???"
+//                            cell.departureDepartureTime.text = "??:??"
+//                            cell.departureArrivalTime.text = "??:??"
+//                            cell.returnDepartureTime.text = "??:??"
+//                            cell.returnOrigin.text = "???"
+//                            cell.returnArrivalTime.text = "??:??"
+//                            cell.returnDestination.text = "???"
+//                            cell.tripPrice.text = "$???"
+                            cell.DepartureOrigin.isHidden = true
+                            cell.departureDestination.isHidden = true
+                            cell.departureDepartureTime.isHidden = true
+                            cell.departureArrivalTime.isHidden = true
+                            cell.returnDepartureTime.isHidden = true
+                            cell.returnOrigin.isHidden = true
+                            cell.returnArrivalTime.isHidden = true
+                            cell.returnDestination.isHidden = true
+                            cell.tripPrice.isHidden = true
+                            cell.departureArrow.isHidden = true
+                            cell.returnArrow.isHidden = true
+                            cell.airline.isHidden = true
+                            cell.changeFlightsButton.setImage(nil, for: .normal)
+                            cell.changeFlightsButton.setTitle("Plan flights / travel", for: .normal)
+                            cell.changeFlightsButton.frame = CGRect(x: 175/2, y: 55, width: 200, height: 30)
+                            
+                            
                         }
                     }
+                    if let thisTripHotelResults = thisTripDict["hotelOptions"] as? [Dictionary<String, AnyObject>] {
+                        if thisTripHotelResults.count > 1 {
+                            if let topHotelOption = thisTripHotelResults[0] as? Dictionary<String,Any> {
+                                cell.roomPricePerNight.isHidden = false
+                                cell.numberOfNights.isHidden = false
+                                cell.numberOfPeople.isHidden = false
+                                cell.totalPriceForUser.isHidden = false
+                                cell.hotelCalculationLabel.isHidden = false
+                                cell.hotelName.isHidden = false
+                                cell.changeAccomodationButton.frame = CGRect(x: 15, y: 126, width: 30, height: 30)
+                                cell.changeAccomodationButton.setImage(#imageLiteral(resourceName: "changeHotel"), for: .normal)
+                                cell.changeAccomodationButton.setTitle(nil, for: .normal)
+                            }
+                        } else {
+                            cell.roomPricePerNight.isHidden = true
+                            cell.numberOfNights.isHidden = true
+                            cell.numberOfPeople.isHidden = true
+                            cell.totalPriceForUser.isHidden = true
+                            cell.hotelCalculationLabel.isHidden = true
+                            cell.hotelName.isHidden = true
+                            
+                            cell.changeAccomodationButton.setImage(nil, for: .normal)
+                            cell.changeAccomodationButton.setTitle("Plan accomodation", for: .normal)
+                            cell.changeAccomodationButton.frame = CGRect(x: 175/2, y: 95, width: 200, height: 30)
+                            
+                        }
+                    }
+
                 }
             }
         }
+        
+//        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+//            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+//                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
+//                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[rankedPotentialTripsDictionaryArrayIndex!] as? Dictionary<String, AnyObject> {
+//                    if let thisTripHotelResults = thisTripDict["hotelOptions"] {
+//                        if thisTripHotelResults.count > 1 {
+//                            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = thisTripHotelResults
+//                        } else {
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
         
         return cell
     }

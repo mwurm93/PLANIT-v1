@@ -34,6 +34,10 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
     @IBOutlet weak var instructionsGotItButton: UIButton!
     @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
     
+    
+    //Times VC viewed
+    var timesViewed = [String: Int]()
+
     //CalendarView vars
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
     var leftDates = [Date]()
@@ -79,14 +83,16 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
             }
         }
         
-        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"] as! String == "ranking" {
-            let when = DispatchTime.now() + 0.4
+        timesViewed = (DataContainerSingleton.sharedDataContainer.timesViewed as? [String : Int])!
+        if timesViewed["flightSearch"] == 0 {
+            let when = DispatchTime.now() + 0.6
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
+                let currentTimesViewed = self.timesViewed["flightSearch"]
+                self.timesViewed["flightSearch"]! = currentTimesViewed! + 1
+                DataContainerSingleton.sharedDataContainer.timesViewed = self.timesViewed as NSDictionary
             }
         }
-        
         //Load the values from our shared data container singleton
         self.tripNameLabel.delegate = self
         let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String

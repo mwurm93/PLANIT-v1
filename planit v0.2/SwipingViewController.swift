@@ -15,6 +15,9 @@ import SMCalloutView
 
 class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout, SMCalloutViewDelegate {
     
+        //Times VC viewed
+        var timesViewed = [String: Int]()
+    
         //City dict
         var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
         
@@ -102,24 +105,6 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
                     rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
                 }
             }
-//                else {
-//                    //Load from server
-//                    var rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["miami_1","miami_2"],"topThingsToDo":["Vizcaya Museum and Gardens", "American Airlines Arena", "Wynwood Walls", "Boat tours","Zoological Wildlife Foundation"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]]]
-//                    
-//                    rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Washington DC","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["washingtonDC_1","washingtonDC_2","washingtonDC_3","washingtonDC_4"],"topThingsToDo":["National Mall", "Smithsonian Air and Space Museum" ,"Logan Circle"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
-//                    
-//                    rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["sanDiego_1","sanDiego_2","sanDiego_3","sanDiego_4"],"topThingsToDo":["Sunset Cliffs", "San Diego Zoo" ,"Petco Park"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
-//                    
-//                    rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Nashville","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["nashville_1","nashville_2","nashville_3","nashville_4"],"topThingsToDo":["Grand Ole Opry", "Broadway" ,"Country Music Hall of Fame"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
-//                    
-//                    rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"New Orleans","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["newOrleans_1","newOrleans_2","newOrleans_3","newOrleans_4"],"topThingsToDo":["Bourbon Street", "National WWII Museum" ,"Jackson Square"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
-//                    
-//                    rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"Austin","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["austin_1","austin_2","austin_3","austin_4"],"topThingsToDo":["Zilker Park", "6th Street" ,"University of Texas"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
-//                    
-//                    rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
-//                    
-//                }
-//            }
             
             totalDailySwipeAllotment = rankedPotentialTripsDictionary.count
             
@@ -273,11 +258,17 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
 //                }
 //                
             
+            timesViewed = (DataContainerSingleton.sharedDataContainer.timesViewed as? [String : Int])!
+            if timesViewed["swiping"] == 0 {
                 let when = DispatchTime.now() + 0.6
                 DispatchQueue.main.asyncAfter(deadline: when) {
                     self.animateInstructionsIn()
+                    let currentTimesViewed = self.timesViewed["swiping"]
+                    self.timesViewed["swiping"]! = currentTimesViewed! + 1
+                    DataContainerSingleton.sharedDataContainer.timesViewed = self.timesViewed as NSDictionary
                 }
-//            }
+            }
+            //            }
 //            else {
                 retrieveContactsWithStore(store: addressBookStore)
 //            }

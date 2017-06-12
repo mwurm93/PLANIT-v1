@@ -16,6 +16,10 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     var searchMode: String?
     
     //MARK: Class vars
+    
+    //Times VC viewed
+    var timesViewed = [String: Int]()
+
     //Load flight results from server
     var selectedIndex = IndexPath(row: 0, section: 0)
     var sectionTitles = ["Selected flight", "Alternatives"]
@@ -123,11 +127,14 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         flightResultsTableView.allowsSelectionDuringEditing = true
         flightResultsTableView.separatorColor = UIColor.white
         
-        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"] as! String == "flightSearch"{
-            let when = DispatchTime.now() + 0.4
+        timesViewed = (DataContainerSingleton.sharedDataContainer.timesViewed as? [String : Int])!
+        if timesViewed["flightResults"] == 0 {
+            let when = DispatchTime.now() + 0.6
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
+                let currentTimesViewed = self.timesViewed["flightResults"]
+                self.timesViewed["flightResults"]! = currentTimesViewed! + 1
+                DataContainerSingleton.sharedDataContainer.timesViewed = self.timesViewed as NSDictionary
             }
         }
         

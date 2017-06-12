@@ -18,6 +18,9 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     // MARK: Class properties
     var selectedIndex = IndexPath(row: 0, section: 0)
     
+    //Times VC viewed
+    var timesViewed = [String: Int]()
+    
     var sectionTitles = ["Group's top hotel", "Alternatives"]
     var effect:UIVisualEffect!
     var hotelStockPhotos = [#imageLiteral(resourceName: "hotelPoolStockPhoto"),#imageLiteral(resourceName: "hotelRoomStockPhoto")]
@@ -117,11 +120,14 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.readyToBookButton.layer.cornerRadius = self.readyToBookButton.frame.height / 2
         self.readyToBookButton.titleLabel?.textAlignment = .center
         
-        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if existing_trips?.count == 1 && SavedPreferencesForTrip["finished_entering_preferences_status"] as! String == "flightResults" {
-            let when = DispatchTime.now() + 0.4
+        timesViewed = (DataContainerSingleton.sharedDataContainer.timesViewed as? [String : Int])!
+        if timesViewed["hotelResults"] == 0 {
+            let when = DispatchTime.now() + 0.6
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
+                let currentTimesViewed = self.timesViewed["hotelResults"]
+                self.timesViewed["hotelResults"]! = currentTimesViewed! + 1
+                DataContainerSingleton.sharedDataContainer.timesViewed = self.timesViewed as NSDictionary
             }
         }
         
