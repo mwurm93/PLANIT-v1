@@ -433,17 +433,37 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-
-
         
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
+
         if segue.identifier == "changeFlightsButtonToFlightSearch" {
             let destination = segue.destination as? flightSearchViewController
             destination?.rankedPotentialTripsDictionaryArrayIndex = rankedPotentialTripsDictionaryArrayIndexForSegue
+            if timesViewed["flightSearch"] == 0 {
+                UIView.animate(withDuration: 0.5) {
+                    self.popupBackgroundView.isHidden = false
+                }
+            }
         }
         if segue.identifier == "changeHotelButtonToExploreHotels" {
             let destination = segue.destination as? exploreHotelsViewController
             destination?.rankedPotentialTripsDictionaryArrayIndex = rankedPotentialTripsDictionaryArrayIndexForSegue
+            if timesViewed["hotelResults"] == 0 {
+                UIView.animate(withDuration: 0.5) {
+                    self.popupBackgroundView.isHidden = false
+                }
+            }
         }
+        
+        if segue.identifier == "rankingToBooking" && timesViewed["booking"] == 0 {
+            UIView.animate(withDuration: 0.5) {
+                self.popupBackgroundView.isHidden = false
+            }
+        }
+
+        
+
     }
     
     ////// ADD NEW TRIP VARS (NS ONLY) HERE ///////////////////////////////////////////////////////////////////////////

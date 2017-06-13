@@ -420,9 +420,16 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
         
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
+        if segue.identifier == "destinationSwipingToDestinationRanking" && timesViewed["ranking"] == 0 {
+            UIView.animate(withDuration: 0.5) {
+                self.popupBackgroundViewMainVC.isHidden = false
+            }
+        }
+
     }
-        
+    
     
         //Dismissing detailed card view
         public func panRecognized(recognizer:UIPanGestureRecognizer) {

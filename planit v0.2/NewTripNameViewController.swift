@@ -349,6 +349,13 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
+        if segue.identifier == "newTripToSwiping" && timesViewed["swiping"] == 0 {
+            UIView.animate(withDuration: 0.5) {
+                self.popupBackgroundViewMainVC.isHidden = false
+            }
+        }
     }
     
     func roundSlider() {

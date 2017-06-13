@@ -253,6 +253,15 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         if segue.identifier == "searchFlightsToFlightResults" {
             let destination = segue.destination as? flightResultsViewController
             destination?.searchMode = self.searchMode
+            
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
+            if timesViewed["flightResults"] == 0 {
+                UIView.animate(withDuration: 0.5) {
+                    self.popupBackgroundView.isHidden = false
+                }
+            }
+
         }
     }
 
