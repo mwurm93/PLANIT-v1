@@ -19,8 +19,19 @@ class instructionsCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    let instructionsTitle: UILabel = {
+        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 250, height: 35))
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.font = UIFont.boldSystemFont(ofSize: 22)
+        label.textColor = UIColor.white
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+    
     let instructionsLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 225, height: 155))
+        let label = UILabel(frame: CGRect(x: 10, y: 40, width: 250, height: 115))
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -30,7 +41,7 @@ class instructionsCollectionViewCell: UICollectionViewCell {
     }()
     
     let instructionsOutlineView: UIView = {
-        let outlineView = UIView(frame: CGRect(x: 0, y: 0, width: 245, height: 155))
+        let outlineView = UIView(frame: CGRect(x: 0, y: 0, width: 270, height: 155))
         outlineView.backgroundColor = UIColor.clear
         outlineView.layer.backgroundColor = UIColor.clear.cgColor
         outlineView.layer.cornerRadius = 10
@@ -39,7 +50,7 @@ class instructionsCollectionViewCell: UICollectionViewCell {
     }()
     
     let checkmarkImageView: UIImageView = {
-        let checkmarkIV = UIImageView(frame: CGRect(x: 230, y: -5, width: 25, height: 25))
+        let checkmarkIV = UIImageView(frame: CGRect(x: 256, y: -5, width: 25, height: 25))
         checkmarkIV.image = #imageLiteral(resourceName: "checkmark")
         return checkmarkIV
     }()
@@ -47,6 +58,7 @@ class instructionsCollectionViewCell: UICollectionViewCell {
     
     func addViews() {
         self.addSubview(instructionsOutlineView)
+        self.addSubview(instructionsTitle)
         self.addSubview(instructionsLabel)
         self.addSubview(checkmarkImageView)
 

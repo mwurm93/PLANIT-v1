@@ -17,7 +17,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Class properties
     //Load potential destinations from server
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
-    var sectionTitles = ["Group's top trip", "Alternatives"]
+    var sectionTitles = ["Front runner", "Alternatives"]
     var effect:UIVisualEffect!
     var rankedPotentialTripsDictionaryArrayIndexForSegue: Int?
     
@@ -87,14 +87,22 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.readyToBookButton.layer.cornerRadius = self.readyToBookButton.frame.height / 2
         self.readyToBookButton.titleLabel?.textAlignment = .center
         
-        timesViewed = (DataContainerSingleton.sharedDataContainer.timesViewed as? [String : Int])!
+        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
         if timesViewed["ranking"] == 0 {
-            let when = DispatchTime.now() + 0.6
+            var when = DispatchTime.now()
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInstructionsIn()
                 let currentTimesViewed = self.timesViewed["ranking"]
                 self.timesViewed["ranking"]! = currentTimesViewed! + 1
-                DataContainerSingleton.sharedDataContainer.timesViewed = self.timesViewed as NSDictionary
+                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
+                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            }
+            when = DispatchTime.now() + 0.8
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                UIView.animate(withDuration: 1.5) {
+                    self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 2,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+                    
+                }
             }
         } else {
             recommendationRankingTableView.frame = CGRect(x: 0, y: 75, width: 375, height: 500)
@@ -238,9 +246,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                             cell.returnArrow.isHidden = true
                             cell.airline.isHidden = true
                             cell.changeFlightsButton.setImage(nil, for: .normal)
-                            cell.changeFlightsButton.setTitle("Plan flights / travel", for: .normal)
-                            cell.changeFlightsButton.frame = CGRect(x: 175/2, y: 55, width: 200, height: 30)
-                            
+                            cell.changeFlightsButton.setTitle("FLIGHTS", for: .normal)
+                            cell.changeFlightsButton.frame = CGRect(x: 28, y: 40, width: 300, height: 50)
+                            cell.changeFlightsButton.addDashedBorder()
                             
                         }
                     }
@@ -266,9 +274,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                             cell.hotelName.isHidden = true
                             
                             cell.changeAccomodationButton.setImage(nil, for: .normal)
-                            cell.changeAccomodationButton.setTitle("Plan accomodation", for: .normal)
-                            cell.changeAccomodationButton.frame = CGRect(x: 175/2, y: 95, width: 200, height: 30)
-                            
+                            cell.changeAccomodationButton.setTitle("PLACE TO STAY", for: .normal)
+                            cell.changeAccomodationButton.frame = CGRect(x: 28, y: 110, width: 300, height: 50)
+                            cell.changeAccomodationButton.addDashedBorder()
                         }
                     }
 
@@ -309,6 +317,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        if indexPath == IndexPath(row: 0, section: 0) {
+            return false
+        }
+        
         return true
     }
     
@@ -400,7 +412,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         title.frame = CGRect(x: 10, y: header.frame.minY, width: header.frame.width, height: header.frame.height)
         title.textAlignment = .left
         title.font = UIFont.boldSystemFont(ofSize: 20)
-        title.textColor = UIColor.white
+        title.textColor = UIColor.lightGray
         title.text = sectionTitles[section]
         header.addSubview(title)
         
@@ -416,6 +428,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
+
+
+        
         if segue.identifier == "changeFlightsButtonToFlightSearch" {
             let destination = segue.destination as? flightSearchViewController
             destination?.rankedPotentialTripsDictionaryArrayIndex = rankedPotentialTripsDictionaryArrayIndexForSegue
@@ -434,6 +449,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? 0 as NSNumber
         let finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
         let lastVC = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastVC") as? NSString ?? NSString()
+        let timesViewed = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "timesViewed") as? NSDictionary ?? NSDictionary()
         //New Trip VC
         let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? NSString ?? NSString()
         let tripID = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "tripID") as? NSString ?? NSString()
@@ -464,7 +480,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         let rankedPotentialTripsDictionaryArrayIndex = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionaryArrayIndex") as? NSNumber ?? NSNumber()
 
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
     }
@@ -504,7 +520,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             
         }) { (Success:Bool) in
             self.instructionsView?.layer.isHidden = true
-        }        
+        }
     }
     
     func dismissInstructions(touch: UITapGestureRecognizer) {
@@ -513,6 +529,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Actions
     @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
         animateInstructionsIn()
+        self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 2,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
     }
     @IBAction func instructionsGotItButtonTouchedUpInside(_ sender: Any) {
         animateInstructionsOut()
@@ -554,5 +571,26 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         SavedPreferencesForTrip["trip_name"] = tripNameValue
         //Save
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+}
+
+extension UIButton {
+    func addDashedBorder() {
+        let color = UIColor.white.cgColor
+        
+        let shapeLayer:CAShapeLayer = CAShapeLayer()
+        let frameSize = self.frame.size
+        let shapeRect = CGRect(x: 0, y: 0, width: frameSize.width, height: frameSize.height)
+        
+        shapeLayer.bounds = shapeRect
+        shapeLayer.position = CGPoint(x: frameSize.width/2, y: frameSize.height/2)
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.strokeColor = color
+        shapeLayer.lineWidth = 3
+        shapeLayer.lineJoin = kCALineJoinRound
+        shapeLayer.lineDashPattern = [18,10]
+        shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: 5).cgPath
+        
+        self.layer.addSublayer(shapeLayer)
     }
 }

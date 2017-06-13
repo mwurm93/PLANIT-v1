@@ -28,7 +28,7 @@ struct DefaultKeys {
         static let bucketListCountries = "bucketListCountries"
         static let beenThereCountries = "beenThereCountries"
         static let token = "token"
-        static let timesViewed = "timesViewed"
+        static let timesViewedNonTrip = "timesViewedNonTrip"
 
     
     }
@@ -55,7 +55,7 @@ class DataContainerSingleton {
     var bucketListCountries: [String]?
     var beenThereCountries: [String]?
     var token: String?
-    var timesViewed: NSDictionary?
+    var timesViewedNonTrip: NSDictionary?
     
     var goToBackgroundObserver: AnyObject?
     
@@ -82,7 +82,7 @@ class DataContainerSingleton {
         bucketListCountries = defaults.object(forKey: DefaultKeys.bucketListCountries) as! [String]?
         beenThereCountries = defaults.object(forKey: DefaultKeys.beenThereCountries) as! [String]?
         token = defaults.object(forKey: DefaultKeys.token) as! String?
-        timesViewed = defaults.object(forKey: DefaultKeys.timesViewed) as! NSDictionary?
+        timesViewedNonTrip = defaults.object(forKey: DefaultKeys.timesViewedNonTrip) as! NSDictionary?
 
         
         //-----------------------------------------------------------------------------
@@ -116,7 +116,7 @@ class DataContainerSingleton {
             defaults.set( self.bucketListCountries, forKey: DefaultKeys.bucketListCountries)
             defaults.set( self.beenThereCountries, forKey: DefaultKeys.beenThereCountries)
             defaults.set( self.token, forKey: DefaultKeys.token)
-            defaults.set( self.timesViewed, forKey: DefaultKeys.timesViewed)
+            defaults.set( self.timesViewedNonTrip, forKey: DefaultKeys.timesViewedNonTrip)
             
             //-----------------------------------------------------------------------------
             //Tell NSUserDefaults to save to disk now.

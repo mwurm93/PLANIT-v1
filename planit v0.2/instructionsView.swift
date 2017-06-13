@@ -12,6 +12,8 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
     //Class vars
     var instructionsCollectionView: UICollectionView?
     
+    let instructionsTitleArray = ["Step 1: Logistics","Step 2: Destination Discovery", "Step 3: Compare and Decide","Step 4a: Search Flights","Step 4b: Select Flight","Step 5: Find a Place to Stay","Step 6: Book!"]
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -43,8 +45,8 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 65, bottom: 0, right: 65)
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 245, height: 159)
-        layout.minimumLineSpacing = 50
+        layout.itemSize = CGSize(width: 270, height: 159)
+        layout.minimumLineSpacing = 25
         
         instructionsCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         instructionsCollectionView?.delegate = self
@@ -54,6 +56,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         instructionsCollectionView?.register(instructionsCollectionViewCell.self, forCellWithReuseIdentifier: "instructionsCollectionViewCell")
         instructionsCollectionView?.backgroundColor = UIColor.clear
         self.addSubview(instructionsCollectionView!)
+
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 7
@@ -64,7 +67,7 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "instructionsCollectionViewCell", for: indexPath) as! instructionsCollectionViewCell
         cell.addViews()
-        
+        cell.instructionsTitle.text = instructionsTitleArray[indexPath.item]
         let lastVC = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastVC") as? NSString ?? NSString()
         let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? NSNumber()
         
@@ -188,14 +191,17 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         
         
         if indexPath.item < whiteInstructionIndex {
+            cell.instructionsTitle.textColor = UIColor.green
             cell.instructionsLabel.textColor = UIColor.green
             cell.instructionsOutlineView.layer.borderColor = UIColor.green.cgColor
             cell.checkmarkImageView.isHidden = false
         } else if indexPath.item == whiteInstructionIndex {
+            cell.instructionsTitle.textColor = UIColor.white
             cell.instructionsLabel.textColor = UIColor.white
             cell.instructionsOutlineView.layer.borderColor = UIColor.white.cgColor
             cell.checkmarkImageView.isHidden = true
         } else if indexPath.item > whiteInstructionIndex {
+            cell.instructionsTitle.textColor = UIColor.gray
             cell.instructionsLabel.textColor = UIColor.gray
             cell.instructionsOutlineView.layer.borderColor = UIColor.gray.cgColor
             cell.checkmarkImageView.isHidden = true

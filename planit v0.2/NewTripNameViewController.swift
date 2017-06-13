@@ -110,7 +110,17 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         instructionsGotItButton.isHidden = true
         
         //City data
-        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+        let SavedPreferencesForTrip_1 = self.fetchSavedPreferencesForTrip()
+        timesViewed = (SavedPreferencesForTrip_1["timesViewed"] as? [String : Int])!
+        if timesViewed["newTrip"] == nil {
+                timesViewed = ["newTrip":0, "swiping":0, "ranking":0, "flightSearch":0,"flightResults":0,"hotelResults":0,"booking":0]
+                SavedPreferencesForTrip_1["timesViewed"] = timesViewed
+                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip_1)
+        }
+            
+        
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
@@ -129,7 +139,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                 rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"Austin","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["austin_1","austin_2","austin_3","austin_4"],"topThingsToDo":["Zilker Park", "6th Street" ,"University of Texas"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
                 
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
-                
             }
         }
         
@@ -319,14 +328,17 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
                     }
                 }
             
-            timesViewed = (DataContainerSingleton.sharedDataContainer.timesViewed as? [String : Int])! 
+            let SavedPreferencesForTrip_2 = fetchSavedPreferencesForTrip()
+            timesViewed = (SavedPreferencesForTrip_2["timesViewed"] as? [String : Int])!
+            
             if timesViewed["newTrip"] == 0 {
-                let when = DispatchTime.now() + 0.6
+                let when = DispatchTime.now()
                 DispatchQueue.main.asyncAfter(deadline: when) {
                     self.animateInstructionsIn()
                     let currentTimesViewed = self.timesViewed["newTrip"]
                     self.timesViewed["newTrip"]! = currentTimesViewed! + 1
-                    DataContainerSingleton.sharedDataContainer.timesViewed = self.timesViewed as NSDictionary
+                    SavedPreferencesForTrip_2["timesViewed"] = self.timesViewed as NSDictionary
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip_2)
                 }
             }
         }
@@ -337,6 +349,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
+//        self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 0,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
     }
     
     func roundSlider() {
@@ -1351,6 +1364,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         var bookingStatus = NSNumber(value: 0)
         var finishedEnteringPreferencesStatus = NSString()
         var lastVC = NSString()
+        var timesViewed = NSDictionary()
         //New Trip VC
         var tripNameValue = NSString()
         var tripID = NSString()
@@ -1386,6 +1400,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? 0 as NSNumber
         finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
         lastVC = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastVC") as? NSString ?? NSString()
+        timesViewed = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "timesViewed") as? NSDictionary ?? NSDictionary()
         //New Trip VC
         tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? NSString ?? NSString()
         tripID = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "tripID") as? NSString ?? NSString()
@@ -1419,7 +1434,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         

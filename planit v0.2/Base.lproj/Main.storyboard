@@ -2311,7 +2311,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Destination" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QZF-3r-ulb">
                                                     <rect key="frame" x="8" y="2" width="198" height="23"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -5207,7 +5207,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0NW-dQ-30A" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" backIndicatorImage="Museum" id="qTT-Lr-iVa">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="Museum" id="qTT-Lr-iVa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -9682,15 +9682,15 @@ AAAAAAAAAAAABApgA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="cWA-9L-HdA"/>
-        <segue reference="chs-U5-EMN"/>
-        <segue reference="t9O-2u-fWL"/>
-        <segue reference="IrZ-E3-weH"/>
+        <segue reference="lra-AY-k3U"/>
         <segue reference="rG8-GZ-vPL"/>
-        <segue reference="BRb-kg-zV2"/>
+        <segue reference="0XT-HI-iDA"/>
+        <segue reference="aaX-Gb-b3x"/>
+        <segue reference="8MA-wa-IqS"/>
         <segue reference="cNU-Li-sIA"/>
-        <segue reference="Cjv-x4-gBd"/>
         <segue reference="rwx-9f-mbt"/>
+        <segue reference="chs-U5-EMN"/>
+        <segue reference="Cjv-x4-gBd"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
