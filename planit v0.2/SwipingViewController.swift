@@ -555,12 +555,16 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
             instructionsView?.alpha = 0
             swipeableView.isUserInteractionEnabled = false
             addContactPlusIconMainVC.isHidden = true
+//            let cell = self.instructionsView?.instructionsCollectionView?.cellForItem(at: IndexPath(item: 0, section: 0)) as! instructionsCollectionViewCell
+//                cell.checkmarkImageView.isHidden = true
             contactsCollectionView.isHidden = true
             UIView.animate(withDuration: 0.4) {
                 self.popupBackgroundViewMainVC.isHidden = false
                 self.instructionsView?.alpha = 1
                 self.instructionsView?.transform = CGAffineTransform.identity
                 self.instructionsGotItButton.isHidden = false
+                
+//                cell.checkmarkImageView.isHidden = false
             }
         }
         
@@ -579,6 +583,7 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
             }) { (Success:Bool) in
                 self.instructionsView?.layer.isHidden = true
                 self.addFriendsInstructionsView.layer.isHidden = true
+                self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 1,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
             }
             
         }

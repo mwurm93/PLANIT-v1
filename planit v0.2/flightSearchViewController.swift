@@ -63,12 +63,18 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         rankedPotentialTripsDictionaryArrayIndex = SavedPreferencesForTrip["rankedPotentialTripsDictionaryArrayIndex"] as? Int
         
+        
         //Setup instructions collection view
         instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
         instructionsView?.frame.origin.y = 200
         self.view.addSubview(instructionsView!)
         instructionsView?.isHidden = true
         instructionsGotItButton.isHidden = true
+        var when = DispatchTime.now() + 0.05
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 2,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+        }
+
         
         let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
         atap.numberOfTapsRequired = 1
@@ -471,6 +477,7 @@ class flightSearchViewController: UIViewController, UITextFieldDelegate, UITable
             self.popupBackgroundView.isHidden = true
         }) { (Success:Bool) in
             self.instructionsView?.layer.isHidden = true
+            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 3,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
         }
     }
     

@@ -349,7 +349,6 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-//        self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 0,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
     }
     
     func roundSlider() {
@@ -393,6 +392,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
             self.instructionsGotItButton.isHidden = true
         }) { (Success:Bool) in
             self.instructionsView?.layer.isHidden = true
+            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 0,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
         }
 
     }

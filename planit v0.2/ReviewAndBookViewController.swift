@@ -61,6 +61,10 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
         instructionsView?.isHidden = true
         instructionsGotItButton.isHidden = true
+        var when = DispatchTime.now() + 0.05
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+        }
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -565,6 +569,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
             self.popupBackgroundView.isHidden = true
         }) { (Success:Bool) in
             self.instructionsView?.layer.isHidden = true
+            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 6,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
         }
     }
     

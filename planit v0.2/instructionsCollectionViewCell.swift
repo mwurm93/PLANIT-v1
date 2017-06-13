@@ -30,8 +30,18 @@ class instructionsCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    let instructionsLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 10, y: 40, width: 250, height: 115))
+    let instructionsLabel_1: UILabel = {
+        let label = UILabel(frame: CGRect(x: 10, y: 35, width: 250, height: 100))
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 19)
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }()
+    
+    let instructionsLabel_2: UILabel = {
+        let label = UILabel(frame: CGRect(x: 10, y: 77, width: 250, height: 42))
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -39,6 +49,7 @@ class instructionsCollectionViewCell: UICollectionViewCell {
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
+
     
     let instructionsOutlineView: UIView = {
         let outlineView = UIView(frame: CGRect(x: 0, y: 0, width: 270, height: 155))
@@ -49,9 +60,10 @@ class instructionsCollectionViewCell: UICollectionViewCell {
         return outlineView
     }()
     
-    let checkmarkImageView: UIImageView = {
-        let checkmarkIV = UIImageView(frame: CGRect(x: 256, y: -5, width: 25, height: 25))
-        checkmarkIV.image = #imageLiteral(resourceName: "checkmark")
+    let checkmarkLabel: UILabel = {
+        let checkmarkIV = UILabel(frame: CGRect(x: 253, y: -10, width: 40, height: 40))
+        checkmarkIV.text = "✅"
+        checkmarkIV.font = UIFont.systemFont(ofSize: 30)
         return checkmarkIV
     }()
 
@@ -59,8 +71,9 @@ class instructionsCollectionViewCell: UICollectionViewCell {
     func addViews() {
         self.addSubview(instructionsOutlineView)
         self.addSubview(instructionsTitle)
-        self.addSubview(instructionsLabel)
-        self.addSubview(checkmarkImageView)
+        self.addSubview(instructionsLabel_1)
+        self.addSubview(instructionsLabel_2)
+        self.addSubview(checkmarkLabel)
 
     }
 }

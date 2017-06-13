@@ -44,6 +44,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
         instructionsView?.isHidden = true
         instructionsGotItButton.isHidden = true
+        var when = DispatchTime.now() + 0.05
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 1,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+        }
         
 //        hideKeyboardWhenTappedAround()
         
@@ -107,6 +111,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         } else {
             recommendationRankingTableView.frame = CGRect(x: 0, y: 75, width: 375, height: 500)
         }
+
         
         let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
         atap.numberOfTapsRequired = 1
@@ -498,9 +503,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     func animateInstructionsIn(){
-        instructionsView?.isHidden = false
-        instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 2,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
-        
+        instructionsView?.isHidden = false        
         instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
         instructionsView?.alpha = 0
         UIView.animate(withDuration: 0.4) {
@@ -520,6 +523,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             
         }) { (Success:Bool) in
             self.instructionsView?.layer.isHidden = true
+            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 2,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
         }
     }
     

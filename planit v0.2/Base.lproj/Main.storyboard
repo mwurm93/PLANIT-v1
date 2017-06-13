@@ -5207,7 +5207,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0NW-dQ-30A" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="Museum" id="qTT-Lr-iVa">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" backIndicatorImage="Museum" id="qTT-Lr-iVa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -9682,15 +9682,15 @@ AAAAAAAAAAAABApgA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="lra-AY-k3U"/>
-        <segue reference="rG8-GZ-vPL"/>
-        <segue reference="0XT-HI-iDA"/>
-        <segue reference="aaX-Gb-b3x"/>
-        <segue reference="8MA-wa-IqS"/>
-        <segue reference="cNU-Li-sIA"/>
-        <segue reference="rwx-9f-mbt"/>
+        <segue reference="cWA-9L-HdA"/>
         <segue reference="chs-U5-EMN"/>
+        <segue reference="RmY-wW-62S"/>
+        <segue reference="mtv-1X-7Th"/>
+        <segue reference="IrZ-E3-weH"/>
+        <segue reference="cNU-Li-sIA"/>
         <segue reference="Cjv-x4-gBd"/>
+        <segue reference="rG8-GZ-vPL"/>
+        <segue reference="rwx-9f-mbt"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

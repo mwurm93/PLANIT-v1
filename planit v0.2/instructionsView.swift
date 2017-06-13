@@ -92,119 +92,154 @@ class instructionsView: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             whiteInstructionIndex = 0
         }
 
+//        if indexPath.item == 0 {
+//            let calendarAttachment = NSTextAttachment()
+//            calendarAttachment.image = #imageLiteral(resourceName: "Calendar-Time")
+//            calendarAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
+//            let mapAttachment = NSTextAttachment()
+//            mapAttachment.image = #imageLiteral(resourceName: "map")
+//            mapAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
+//            let threePeopleAttachment = NSTextAttachment()
+//            threePeopleAttachment.image = #imageLiteral(resourceName: "three_people")
+//            threePeopleAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
+//            
+//            if indexPath.item < whiteInstructionIndex {
+//                calendarAttachment.image = #imageLiteral(resourceName: "Calendar-Time_green")
+//                mapAttachment.image = #imageLiteral(resourceName: "map_green")
+//                threePeopleAttachment.image = #imageLiteral(resourceName: "three_people_green")
+//            }
+//            
+//            let stringForLabel = NSMutableAttributedString(string: "Tap ")
+//            let attachment1 = NSAttributedString(attachment: calendarAttachment)
+//            let attachment2 = NSAttributedString(attachment: mapAttachment)
+//            let attachment3 = NSAttributedString(attachment: threePeopleAttachment)
+//            stringForLabel.append(attachment1)
+//            stringForLabel.append(NSAttributedString(string:" to add your dates, "))
+//            stringForLabel.append(attachment2)
+//            stringForLabel.append(NSAttributedString(string:" to add your home airport, and "))
+//            stringForLabel.append(attachment3)
+//            stringForLabel.append(NSAttributedString(string: " invite friends on your trip!"))
+//            cell.instructionsLabel.attributedText = stringForLabel
+//
+//        } else if indexPath.item == 1 {
+//            cell.instructionsLabel.text = "Swipe to discover where you might want to go, and invite your friends to do the same!"
+//        } else if indexPath.item == 2 {
+//            let hamburgerAttachment = NSTextAttachment()
+//            hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
+//            hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
+//            let changeAttachment = NSTextAttachment()
+//            changeAttachment.image = #imageLiteral(resourceName: "changeFlight")
+//            changeAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 20)
+//            let changeHotelAttachment = NSTextAttachment()
+//            changeHotelAttachment.image = #imageLiteral(resourceName: "changeHotel")
+//            changeHotelAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 20)
+//            
+//            if indexPath.item < whiteInstructionIndex {
+//                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_green")
+//                changeAttachment.image = #imageLiteral(resourceName: "changeFlight_green")
+//                changeHotelAttachment.image = #imageLiteral(resourceName: "changeHotel_green")
+//            } else if indexPath.item > whiteInstructionIndex {
+//                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_grey")
+//                changeAttachment.image = #imageLiteral(resourceName: "changeFlight_grey")
+//                changeHotelAttachment.image = #imageLiteral(resourceName: "changeHotel_grey")
+//            }
+//            
+//            let stringForLabel = NSMutableAttributedString(string: "Price out your group's options! Tap ")
+//            let attachment1 = NSAttributedString(attachment: changeAttachment)
+//            let attachment2 = NSAttributedString(attachment: hamburgerAttachment)
+//            let attachment3 = NSAttributedString(attachment: changeHotelAttachment)
+//            stringForLabel.append(attachment1)
+//            stringForLabel.append(NSAttributedString(string:" to look at flights, "))
+//            stringForLabel.append(attachment3)
+//            stringForLabel.append(NSAttributedString(string:" to look at hotels, and drag the "))
+//            stringForLabel.append(attachment2)
+//            stringForLabel.append(NSAttributedString(string: " to change your group's top trip"))
+//            cell.instructionsLabel.attributedText = stringForLabel
+//        } else if indexPath.item == 3 {
+//            cell.instructionsLabel.text = "Search flights to this destination to price it out"
+//        } else if indexPath.item == 4 {
+//            let hamburgerAttachment = NSTextAttachment()
+//            hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
+//            hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
+//            if indexPath.item < whiteInstructionIndex {
+//                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_green")
+//            } else if indexPath.item > whiteInstructionIndex {
+//                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_grey")
+//            }
+//            let stringForLabel = NSMutableAttributedString(string: "Explore your flight options drag the ")
+//            let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
+//            stringForLabel.append(attachment1)
+//            stringForLabel.append(NSAttributedString(string: " to change your flight"))
+//            cell.instructionsLabel.attributedText = stringForLabel
+//        } else if indexPath.item == 5 {
+//            let hamburgerAttachment = NSTextAttachment()
+//            hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
+//            hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
+//            if indexPath.item < whiteInstructionIndex {
+//                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_green")
+//            } else if indexPath.item > whiteInstructionIndex {
+//                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_grey")
+//            }
+//            let stringForLabel = NSMutableAttributedString(string: "Explore your hotel options and drag the ")
+//            let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
+//            stringForLabel.append(attachment1)
+//            stringForLabel.append(NSAttributedString(string: " to change your group's hotel"))
+//            cell.instructionsLabel.attributedText = stringForLabel
+//        } else if indexPath.item == 6 {
+//        cell.instructionsLabel.text = "Time to book! You only pay for your share of the accomodation, and can automatically cancel your reservation if others don't commit in 24 hours"
+//        }
         if indexPath.item == 0 {
-            let calendarAttachment = NSTextAttachment()
-            calendarAttachment.image = #imageLiteral(resourceName: "Calendar-Time")
-            calendarAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
-            let mapAttachment = NSTextAttachment()
-            mapAttachment.image = #imageLiteral(resourceName: "map")
-            mapAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
-            let threePeopleAttachment = NSTextAttachment()
-            threePeopleAttachment.image = #imageLiteral(resourceName: "three_people")
-            threePeopleAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
-            
-            if indexPath.item < whiteInstructionIndex {
-                calendarAttachment.image = #imageLiteral(resourceName: "Calendar-Time_green")
-                mapAttachment.image = #imageLiteral(resourceName: "map_green")
-                threePeopleAttachment.image = #imageLiteral(resourceName: "three_people_green")
-            }
-            
-            let stringForLabel = NSMutableAttributedString(string: "Tap ")
-            let attachment1 = NSAttributedString(attachment: calendarAttachment)
-            let attachment2 = NSAttributedString(attachment: mapAttachment)
-            let attachment3 = NSAttributedString(attachment: threePeopleAttachment)
-            stringForLabel.append(attachment1)
-            stringForLabel.append(NSAttributedString(string:" to add your dates, "))
-            stringForLabel.append(attachment2)
-            stringForLabel.append(NSAttributedString(string:" to add your home airport, and "))
-            stringForLabel.append(attachment3)
-            stringForLabel.append(NSAttributedString(string: " invite friends on your trip!"))
-            cell.instructionsLabel.attributedText = stringForLabel
-
+            cell.instructionsLabel_1.text = " ☐ Select dates or time range \n ☐ Add your home airport \n ☐ Invite friends!"
         } else if indexPath.item == 1 {
-            cell.instructionsLabel.text = "Swipe to discover where you might want to go, and invite your friends to do the same!"
+            cell.instructionsLabel_1.text = " ☐ Swipe right if you'd go \n ☐ Swipe left if not \n ☐ Compare with your friends!"
         } else if indexPath.item == 2 {
-            let hamburgerAttachment = NSTextAttachment()
-            hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
-            hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
-            let changeAttachment = NSTextAttachment()
-            changeAttachment.image = #imageLiteral(resourceName: "changeFlight")
-            changeAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 20)
-            let changeHotelAttachment = NSTextAttachment()
-            changeHotelAttachment.image = #imageLiteral(resourceName: "changeHotel")
-            changeHotelAttachment.bounds = CGRect(x: 0, y: 0, width: 20, height: 20)
-            
-            if indexPath.item < whiteInstructionIndex {
-                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_green")
-                changeAttachment.image = #imageLiteral(resourceName: "changeFlight_green")
-                changeHotelAttachment.image = #imageLiteral(resourceName: "changeHotel_green")
-            } else if indexPath.item > whiteInstructionIndex {
-                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_grey")
-                changeAttachment.image = #imageLiteral(resourceName: "changeFlight_grey")
-                changeHotelAttachment.image = #imageLiteral(resourceName: "changeHotel_grey")
-            }
-            
-            let stringForLabel = NSMutableAttributedString(string: "Price out your group's options! Tap ")
-            let attachment1 = NSAttributedString(attachment: changeAttachment)
-            let attachment2 = NSAttributedString(attachment: hamburgerAttachment)
-            let attachment3 = NSAttributedString(attachment: changeHotelAttachment)
-            stringForLabel.append(attachment1)
-            stringForLabel.append(NSAttributedString(string:" to look at flights, "))
-            stringForLabel.append(attachment3)
-            stringForLabel.append(NSAttributedString(string:" to look at hotels, and drag the "))
-            stringForLabel.append(attachment2)
-            stringForLabel.append(NSAttributedString(string: " to change your group's top trip"))
-            cell.instructionsLabel.attributedText = stringForLabel
+            cell.instructionsLabel_1.text = " ☐ Find the best flight for each \n ☐ Locate the best hotel for each \n ☐ Compare options and choose!"
         } else if indexPath.item == 3 {
-            cell.instructionsLabel.text = "Search flights to this destination to price it out"
+            cell.instructionsLabel_1.text = " ☐ Search for your dates \n ☐ If you already have a reservation, add it here"
         } else if indexPath.item == 4 {
-            let hamburgerAttachment = NSTextAttachment()
-            hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
-            hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
-            if indexPath.item < whiteInstructionIndex {
-                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_green")
-            } else if indexPath.item > whiteInstructionIndex {
-                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_grey")
-            }
-            let stringForLabel = NSMutableAttributedString(string: "Explore your flight options drag the ")
-            let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
-            stringForLabel.append(attachment1)
-            stringForLabel.append(NSAttributedString(string: " to change your flight"))
-            cell.instructionsLabel.attributedText = stringForLabel
+            cell.instructionsLabel_1.text = " ☐ Select the best flight"
         } else if indexPath.item == 5 {
-            let hamburgerAttachment = NSTextAttachment()
-            hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger")
-            hamburgerAttachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 11)
-            if indexPath.item < whiteInstructionIndex {
-                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_green")
-            } else if indexPath.item > whiteInstructionIndex {
-                hamburgerAttachment.image = #imageLiteral(resourceName: "hamburger_grey")
-            }
-            let stringForLabel = NSMutableAttributedString(string: "Explore your hotel options and drag the ")
-            let attachment1 = NSAttributedString(attachment: hamburgerAttachment)
-            stringForLabel.append(attachment1)
-            stringForLabel.append(NSAttributedString(string: " to change your group's hotel"))
-            cell.instructionsLabel.attributedText = stringForLabel
+            cell.instructionsLabel_1.text = " ☐ Select the best hotel"
         } else if indexPath.item == 6 {
-        cell.instructionsLabel.text = "Time to book! You only pay for your share of the accomodation, and can automatically cancel your reservation if others don't commit in 24 hours"
+            cell.instructionsLabel_1.text = " ☐ Book your flight and cancel within 24 hours if others don't \n ☐ Reserve hotel and only pay for your portion"
         }
-        
+
         
         if indexPath.item < whiteInstructionIndex {
             cell.instructionsTitle.textColor = UIColor.green
-            cell.instructionsLabel.textColor = UIColor.green
+            cell.instructionsLabel_1.textColor = UIColor.green
+            cell.instructionsLabel_2.textColor = UIColor.green
             cell.instructionsOutlineView.layer.borderColor = UIColor.green.cgColor
-            cell.checkmarkImageView.isHidden = false
+            cell.checkmarkLabel.isHidden = false
+            
+            if indexPath.item == 0 {
+                cell.instructionsLabel_1.text = " ✅ Select dates or time range \n ✅ Add your home airport \n ✅ Invite friends!"
+            } else if indexPath.item == 1 {
+                cell.instructionsLabel_1.text = " ✅ Swipe right if you'd go \n ✅ Swipe left if not \n ✅ Compare with your friends!"
+            } else if indexPath.item == 2 {
+                cell.instructionsLabel_1.text = " ✅ Find the best flight for each \n ✅ Locate the best hotel for each \n ✅ Compare options and choose!"
+            } else if indexPath.item == 3 {
+                cell.instructionsLabel_1.text = " ✅ Search for your dates \n ✅ If you already have a reservation, add it here"
+            } else if indexPath.item == 4 {
+                cell.instructionsLabel_1.text = " ✅ Select the best flight"
+            } else if indexPath.item == 5 {
+                cell.instructionsLabel_1.text = " ✅ Select the best hotel"
+            } else if indexPath.item == 6 {
+                cell.instructionsLabel_1.text = " ✅ Book your flight and cancel within 24 hours if others don't \n ✅ Reserve hotel and only pay for your portion"
+            }
+
         } else if indexPath.item == whiteInstructionIndex {
             cell.instructionsTitle.textColor = UIColor.white
-            cell.instructionsLabel.textColor = UIColor.white
+            cell.instructionsLabel_1.textColor = UIColor.white
+            cell.instructionsLabel_2.textColor = UIColor.white
             cell.instructionsOutlineView.layer.borderColor = UIColor.white.cgColor
-            cell.checkmarkImageView.isHidden = true
+            cell.checkmarkLabel.isHidden = true
         } else if indexPath.item > whiteInstructionIndex {
             cell.instructionsTitle.textColor = UIColor.gray
-            cell.instructionsLabel.textColor = UIColor.gray
+            cell.instructionsLabel_1.textColor = UIColor.gray
+            cell.instructionsLabel_2.textColor = UIColor.gray
             cell.instructionsOutlineView.layer.borderColor = UIColor.gray.cgColor
-            cell.checkmarkImageView.isHidden = true
+            cell.checkmarkLabel.isHidden = true
         }
 
         return cell

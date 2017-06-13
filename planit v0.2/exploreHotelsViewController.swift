@@ -63,6 +63,10 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
         instructionsView?.isHidden = true
         instructionsGotItButton.isHidden = true
+        var when = DispatchTime.now() + 0.05
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+        }
         
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
@@ -507,6 +511,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
             self.popupBackgroundView.isHidden = true
         }) { (Success:Bool) in
             self.instructionsView?.layer.isHidden = true
+            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
         }
     }
     
