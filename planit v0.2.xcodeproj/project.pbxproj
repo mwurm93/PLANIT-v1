@@ -600,8 +600,8 @@
 			children = (
 				FAE83F6A1EF46A700009A020 /* UserNameQuestionView.swift */,
 				FAE83F6C1EF4853B0009A020 /* UserNameQuestionView.xib */,
-				FAE83F6E1EF49F190009A020 /* TripNameQuestionView.xib */,
 				FAE83F701EF49F380009A020 /* TripNameQuestionView.swift */,
+				FAE83F6E1EF49F190009A020 /* TripNameQuestionView.xib */,
 			);
 			name = "Scrolling Views";
 			sourceTree = "<group>";

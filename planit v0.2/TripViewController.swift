@@ -81,11 +81,14 @@ class TripViewController: UIViewController, UITextFieldDelegate {
                 self.tripNameQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
                 let heightConstraint = NSLayoutConstraint(item: tripNameQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (tripNameQuestionView?.frame.height)!)
                 view.addConstraints([heightConstraint])
+
+                tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
+                if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
+                    tripNameQuestionView?.questionLabel?.text = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! \nDo you want to name your trip?"
+                }
             }
             
             updateHeightOfScrollView()
-
-            tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
 
         }
         
