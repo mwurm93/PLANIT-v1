@@ -76,10 +76,12 @@ class TripNameQuestionView: UIView {
         //Button
         tripNameQuestionButton = UIButton(type: .custom)
         tripNameQuestionButton?.frame = CGRect.zero
-        tripNameQuestionButton?.setTitleColor(UIColor.blue, for: .normal)
-        tripNameQuestionButton?.setBackgroundColor(color: UIColor.white, forState: .normal)
+        tripNameQuestionButton?.setTitleColor(UIColor.white, for: .normal)
+        tripNameQuestionButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         tripNameQuestionButton?.setTitleColor(UIColor.white, for: .selected)
         tripNameQuestionButton?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        tripNameQuestionButton?.layer.borderWidth = 1
+        tripNameQuestionButton?.layer.borderColor = UIColor.white.cgColor        
         tripNameQuestionButton?.layer.masksToBounds = true
         tripNameQuestionButton?.titleLabel?.textAlignment = .center
         tripNameQuestionButton?.setTitle("Not right now", for: .normal)
@@ -91,7 +93,10 @@ class TripNameQuestionView: UIView {
     
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
-        if sender.isSelected == false {
+        if sender.isSelected == true {
+            sender.layer.borderWidth = 0
+        } else {
+            sender.layer.borderWidth = 1
         }
     }
 }

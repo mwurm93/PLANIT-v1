@@ -95,6 +95,10 @@
 		FAE83F6D1EF4853B0009A020 /* UserNameQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F6C1EF4853B0009A020 /* UserNameQuestionView.xib */; };
 		FAE83F6F1EF49F190009A020 /* TripNameQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F6E1EF49F190009A020 /* TripNameQuestionView.xib */; };
 		FAE83F711EF49F380009A020 /* TripNameQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F701EF49F380009A020 /* TripNameQuestionView.swift */; };
+		FAE83F731EF649570009A020 /* WhereTravellingFromQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F721EF649570009A020 /* WhereTravellingFromQuestionView.swift */; };
+		FAE83F751EF64AA30009A020 /* WhereTravellingFromQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F741EF64AA30009A020 /* WhereTravellingFromQuestionView.xib */; };
+		FAE83F771EF654950009A020 /* DatesPickedOutQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F761EF654950009A020 /* DatesPickedOutQuestionView.swift */; };
+		FAE83F791EF6549E0009A020 /* DatesPickedOutQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F781EF6549E0009A020 /* DatesPickedOutQuestionView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -229,6 +233,10 @@
 		FAE83F6C1EF4853B0009A020 /* UserNameQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserNameQuestionView.xib; sourceTree = "<group>"; };
 		FAE83F6E1EF49F190009A020 /* TripNameQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TripNameQuestionView.xib; sourceTree = "<group>"; };
 		FAE83F701EF49F380009A020 /* TripNameQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripNameQuestionView.swift; sourceTree = "<group>"; };
+		FAE83F721EF649570009A020 /* WhereTravellingFromQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhereTravellingFromQuestionView.swift; sourceTree = "<group>"; };
+		FAE83F741EF64AA30009A020 /* WhereTravellingFromQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhereTravellingFromQuestionView.xib; sourceTree = "<group>"; };
+		FAE83F761EF654950009A020 /* DatesPickedOutQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatesPickedOutQuestionView.swift; sourceTree = "<group>"; };
+		FAE83F781EF6549E0009A020 /* DatesPickedOutQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DatesPickedOutQuestionView.xib; sourceTree = "<group>"; };
 		FF99F8DC1EC030B0E3C827B0 /* Pods_planit_v0_2Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_planit_v0_2Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -602,6 +610,10 @@
 				FAE83F6C1EF4853B0009A020 /* UserNameQuestionView.xib */,
 				FAE83F701EF49F380009A020 /* TripNameQuestionView.swift */,
 				FAE83F6E1EF49F190009A020 /* TripNameQuestionView.xib */,
+				FAE83F721EF649570009A020 /* WhereTravellingFromQuestionView.swift */,
+				FAE83F741EF64AA30009A020 /* WhereTravellingFromQuestionView.xib */,
+				FAE83F761EF654950009A020 /* DatesPickedOutQuestionView.swift */,
+				FAE83F781EF6549E0009A020 /* DatesPickedOutQuestionView.xib */,
 			);
 			name = "Scrolling Views";
 			sourceTree = "<group>";
@@ -750,6 +762,8 @@
 				FA4EA8D11EE86AA6005FCE91 /* GetTripMessages.graphql in Resources */,
 				FAA8F2551E351A2700CD7337 /* Main.storyboard in Resources */,
 				FAA8F22A1E35194100CD7337 /* Assets.xcassets in Resources */,
+				FAE83F751EF64AA30009A020 /* WhereTravellingFromQuestionView.xib in Resources */,
+				FAE83F791EF6549E0009A020 /* DatesPickedOutQuestionView.xib in Resources */,
 				FA647D3D1EE7666E00B36138 /* LoginUser.graphql in Resources */,
 				FA97A3721EC530F4006E68EC /* country_json_50m in Resources */,
 				FA647D3F1EE775A100B36138 /* GetAllUsers.graphql in Resources */,
@@ -947,6 +961,7 @@
 			files = (
 				FAA8F2771E351B9500CD7337 /* TripListViewController.swift in Sources */,
 				FA5F13AB1EB92E310003A992 /* amenityTableViewCell.swift in Sources */,
+				FAE83F731EF649570009A020 /* WhereTravellingFromQuestionView.swift in Sources */,
 				FA25F1FB1EBB7B9F005D29E5 /* hotelTableViewCell.swift in Sources */,
 				FAA8F26D1E351B9500CD7337 /* HomeAirportViewController.swift in Sources */,
 				FAA8F29D1E351DDE00CD7337 /* itemizedItineraryTableViewCell.swift in Sources */,
@@ -981,6 +996,7 @@
 				FAA8F26F1E351B9500CD7337 /* InternationalViewController.swift in Sources */,
 				FAA8F2701E351B9500CD7337 /* NewTripNameViewController.swift in Sources */,
 				FAA8F2831E351D8D00CD7337 /* DataContainerSingleton.swift in Sources */,
+				FAE83F771EF654950009A020 /* DatesPickedOutQuestionView.swift in Sources */,
 				FAA8F29E1E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift in Sources */,
 				FA730B941EC9EEBA004F310A /* flightResultsViewController.swift in Sources */,
 				FAE83F6B1EF46A700009A020 /* UserNameQuestionView.swift in Sources */,
