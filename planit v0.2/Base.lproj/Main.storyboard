@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bhU-Qo-H8O">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bhU-Qo-H8O">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -304,6 +304,54 @@
             </objects>
             <point key="canvasLocation" x="-2295" y="1796"/>
         </scene>
+        <!--Trip View Controller-->
+        <scene sceneID="CsW-XX-wky">
+            <objects>
+                <viewController id="QaX-H5-Z3p" customClass="TripViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="CD1-TJ-nzS"/>
+                        <viewControllerLayoutGuide type="bottom" id="4fw-4a-zq8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="muN-a6-dmD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SNF-xw-05H">
+                                <rect key="frame" x="0.0" y="120" width="375" height="547"/>
+                                <subviews>
+                                    <view autoresizesSubviews="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EeG-2u-mWE">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="547"/>
+                                        <color key="backgroundColor" red="0.16868258248730961" green="0.16868258248730961" blue="0.16868258248730961" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="EeG-2u-mWE" firstAttribute="leading" secondItem="SNF-xw-05H" secondAttribute="leading" id="3F2-II-yqv"/>
+                                    <constraint firstAttribute="trailing" secondItem="EeG-2u-mWE" secondAttribute="trailing" id="Paz-DY-2yu"/>
+                                    <constraint firstItem="EeG-2u-mWE" firstAttribute="top" secondItem="SNF-xw-05H" secondAttribute="top" id="aPe-Hh-VKx"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="4fw-4a-zq8" firstAttribute="top" secondItem="SNF-xw-05H" secondAttribute="bottom" id="Kwd-Fg-vOb"/>
+                            <constraint firstItem="EeG-2u-mWE" firstAttribute="width" secondItem="muN-a6-dmD" secondAttribute="width" id="OrC-3N-7iz"/>
+                            <constraint firstItem="SNF-xw-05H" firstAttribute="top" secondItem="CD1-TJ-nzS" secondAttribute="bottom" constant="100" id="Qw9-Jo-lfi"/>
+                            <constraint firstAttribute="trailing" secondItem="SNF-xw-05H" secondAttribute="trailing" id="iOS-Ta-8lF"/>
+                            <constraint firstItem="SNF-xw-05H" firstAttribute="leading" secondItem="muN-a6-dmD" secondAttribute="leading" id="p4B-UB-W6a"/>
+                        </constraints>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="375" height="667"/>
+                    <connections>
+                        <outlet property="scrollContentView" destination="EeG-2u-mWE" id="Zm1-5d-MxK"/>
+                        <outlet property="scrollView" destination="SNF-xw-05H" id="cke-8Q-0oX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VFw-mZ-VwK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-418.39999999999998" y="1806.7466266866568"/>
+        </scene>
         <!--Trip List View Controller-->
         <scene sceneID="iu3-GD-Dwe">
             <objects>
@@ -542,6 +590,14 @@
                                     <blurEffect style="dark"/>
                                 </vibrancyEffect>
                             </visualEffectView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dxq-aR-5pB">
+                                <rect key="frame" x="164" y="318" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="QaX-H5-Z3p" kind="show" id="DYb-Dy-Wps"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1633,7 +1689,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8x-iy-zTQ">
-                                        <rect key="frame" x="23" y="275" width="77" height="30"/>
+                                        <rect key="frame" x="23" y="305" width="77" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.2417314403553299" green="0.2417314403553299" blue="0.2417314403553299" alpha="0.74761879280821919" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="September"/>
@@ -1642,7 +1698,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mux-cm-6IE">
-                                        <rect key="frame" x="191" y="275" width="77" height="30"/>
+                                        <rect key="frame" x="191" y="305" width="77" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.2417314403553299" green="0.2417314403553299" blue="0.2417314403553299" alpha="0.74761879280821919" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="September"/>
@@ -1651,7 +1707,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Fo-2F-Zyq">
-                                        <rect key="frame" x="275" y="275" width="77" height="30"/>
+                                        <rect key="frame" x="275" y="305" width="77" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.2417314403553299" green="0.2417314403553299" blue="0.2417314403553299" alpha="0.74761879280821919" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="September"/>
@@ -1660,7 +1716,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bui-xb-scp">
-                                        <rect key="frame" x="107" y="275" width="77" height="30"/>
+                                        <rect key="frame" x="107" y="305" width="77" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.2417314403553299" green="0.2417314403553299" blue="0.2417314403553299" alpha="0.74761879280821919" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="September"/>
@@ -1669,7 +1725,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="heb-3p-Giv">
-                                        <rect key="frame" x="146" y="232" width="84" height="30"/>
+                                        <rect key="frame" x="146" y="242" width="84" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.2417314403553299" green="0.2417314403553299" blue="0.2417314403553299" alpha="0.74761879280821919" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="1 week"/>
@@ -1696,7 +1752,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dsN-la-ffi">
-                                        <rect key="frame" x="237" y="232" width="84" height="30"/>
+                                        <rect key="frame" x="237" y="242" width="84" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.2417314403553299" green="0.2417314403553299" blue="0.2417314403553299" alpha="0.74761879280821919" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="2 weeks"/>
@@ -1705,7 +1761,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="auX-ss-Rh7">
-                                        <rect key="frame" x="55" y="232" width="84" height="30"/>
+                                        <rect key="frame" x="55" y="242" width="84" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.2417314403553299" green="0.2417314403553299" blue="0.2417314403553299" alpha="0.74761879280821919" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Weekend"/>
@@ -1776,6 +1832,20 @@
                                         <rect key="frame" x="92" y="144" width="191" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Pick a duration:" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ruk-Jo-pC9">
+                                        <rect key="frame" x="23" y="215" width="191" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Pick a month:" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cYy-hI-Z0c">
+                                        <rect key="frame" x="23" y="278" width="191" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -1885,10 +1955,10 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13f-uh-sFc">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="329" width="375" height="338"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="BgG-gD-K2H">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="338"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="dark"/>
@@ -1932,6 +2002,8 @@
                         <outlet property="numberDestinationsSlider" destination="WCO-dh-zGR" id="UvR-MN-ZNH"/>
                         <outlet property="numberDestinationsStackView" destination="g35-90-LP6" id="Vxc-9f-Dep"/>
                         <outlet property="oneWeek" destination="heb-3p-Giv" id="rQf-1T-quh"/>
+                        <outlet property="pickADurationLabel" destination="ruk-Jo-pC9" id="T8p-37-Bld"/>
+                        <outlet property="pickAMonthLabel" destination="cYy-hI-Z0c" id="x32-Iu-w5b"/>
                         <outlet property="popupBackgroundViewMainVC" destination="13f-uh-sFc" id="6Cx-CW-78R"/>
                         <outlet property="questionLabel" destination="xz9-BD-RIc" id="yQb-Dn-vzY"/>
                         <outlet property="soloForNowButton" destination="f2T-RU-qgg" id="fCg-J7-4Ue"/>
@@ -1948,7 +2020,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Tr-yG-Z3P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-746.39999999999998" y="892.80359820089961"/>
+            <point key="canvasLocation" x="600.79999999999995" y="892.80359820089961"/>
         </scene>
         <!--Swiping View Controller-->
         <scene sceneID="2FE-QH-1zd">
@@ -2234,7 +2306,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0l5-V0-T51" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="40.799999999999997" y="892.80359820089961"/>
+            <point key="canvasLocation" x="1506" y="893"/>
         </scene>
         <!--Ranking View Controller-->
         <scene sceneID="TXl-Qm-BJI">
@@ -2554,7 +2626,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="efk-CD-lGv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="876" y="892.80359820089961"/>
+            <point key="canvasLocation" x="2382" y="893"/>
         </scene>
         <!--Explore Hotels View Controller-->
         <scene sceneID="TTu-5w-yoA">
@@ -2913,7 +2985,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uTE-AC-aKu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628" y="196.55172413793105"/>
+            <point key="canvasLocation" x="2678" y="197"/>
         </scene>
         <!--Review And Book View Controller-->
         <scene sceneID="oXU-ux-Xys">
@@ -3319,7 +3391,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vlo-fA-dkV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2008.8" y="892.80359820089961"/>
+            <point key="canvasLocation" x="3422" y="893"/>
         </scene>
         <!--Instructions For User View Controller-->
         <scene sceneID="eE3-wU-7an">
@@ -3922,7 +3994,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ym6-jt-5bp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="778" y="127"/>
+            <point key="canvasLocation" x="1881" y="127"/>
         </scene>
         <!--Bucket List View Controller-->
         <scene sceneID="h8J-t7-W0G">
@@ -4411,7 +4483,7 @@
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </objects>
-            <point key="canvasLocation" x="876" y="1795.9520239880062"/>
+            <point key="canvasLocation" x="1882" y="1796"/>
         </scene>
         <!--Flight Results View Controller-->
         <scene sceneID="Lvw-sP-N3u">
@@ -4710,7 +4782,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YyM-ds-ZOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628" y="1795.9520239880062"/>
+            <point key="canvasLocation" x="2678" y="1796"/>
         </scene>
         <!--Hotel Preferences View Controller-->
         <scene sceneID="Boy-fV-DLn">
@@ -5218,7 +5290,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kev-pd-TNi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="40.799999999999997" y="127.28635682158921"/>
+            <point key="canvasLocation" x="1095" y="127"/>
         </scene>
     </scenes>
     <resources>
@@ -9681,16 +9753,16 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="cWA-9L-HdA"/>
-        <segue reference="UAc-ww-JX6"/>
-        <segue reference="upa-Nb-p7J"/>
-        <segue reference="mtv-1X-7Th"/>
-        <segue reference="cNU-Li-sIA"/>
-        <segue reference="Cjv-x4-gBd"/>
-        <segue reference="rwx-9f-mbt"/>
+        <segue reference="lra-AY-k3U"/>
+        <segue reference="5Cy-Be-NXP"/>
+        <segue reference="aaX-Gb-b3x"/>
         <segue reference="0XT-HI-iDA"/>
-        <segue reference="rG8-GZ-vPL"/>
+        <segue reference="sNQ-RT-YBj"/>
+        <segue reference="AiS-CM-kbO"/>
+        <segue reference="upa-Nb-p7J"/>
+        <segue reference="UAc-ww-JX6"/>
+        <segue reference="bKD-fw-94P"/>
+        <segue reference="1VF-PM-MLD"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

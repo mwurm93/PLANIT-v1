@@ -89,6 +89,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     @IBOutlet weak var instructionsGotItButton: UIButton!
     @IBOutlet weak var chatButton: UIButton!
     @IBOutlet weak var whiteLine: UIImageView!
+    @IBOutlet weak var pickADurationLabel: UILabel!
+    @IBOutlet weak var pickAMonthLabel: UILabel!
     
     
     override func viewDidLoad() {
@@ -352,7 +354,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
         if segue.identifier == "newTripToSwiping" && timesViewed["swiping"] == 0 {
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.24) {
                 self.popupBackgroundViewMainVC.isHidden = false
             }
         }
@@ -954,6 +956,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         numberDestinationsSlider.isHidden = true
         numberDestinationsStackView.isHidden = true
         dayOfWeekStackView.isHidden = true
+        pickAMonthLabel.isHidden = true
+        pickADurationLabel.isHidden = true
         UIView.animate(withDuration: 0.4) {
             self.whiteLine.layer.frame = CGRect(x: 160, y: 104, width: 55, height: 51)
         }
@@ -983,6 +987,9 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         numberDestinationsSlider.isHidden = true
         numberDestinationsStackView.isHidden = true
         dayOfWeekStackView.isHidden = true
+        pickAMonthLabel.isHidden = true
+        pickADurationLabel.isHidden = true
+        
         
         if contacts != nil {
             addFromContactsButton.layer.frame = CGRect(x: 89, y: 330, width: 198, height: 22)
@@ -1027,6 +1034,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         numberDestinationsSlider.isHidden = true
         numberDestinationsStackView.isHidden = true
         dayOfWeekStackView.isHidden = true
+        pickAMonthLabel.isHidden = true
+        pickADurationLabel.isHidden = true
     }
 
     
@@ -1125,7 +1134,9 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
         specificDatesButton.isHidden = true
         noSpecificDatesButton.isHidden = true
         questionLabel.isHidden = false
-        calendarView.isHidden = true        
+        calendarView.isHidden = true
+        pickAMonthLabel.isHidden = false
+        pickADurationLabel.isHidden = false
     }
     @IBAction func weekendTouchedUpInside(_ sender: Any) {
         if weekend.backgroundColor == UIColor.clear {
