@@ -7,12 +7,17 @@
 //
 
 import UIKit
+import GooglePlaces
 
-class WhereTravellingFromQuestionView: UIView {
+class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISearchBarDelegate {
     
     //Class vars
     var questionLabel: UILabel?
-    var textfield: UITextField?
+        //GOOGLE PLACES SEARCH
+    var resultsViewController: GMSAutocompleteResultsViewController?
+    var searchController: UISearchController?
+    var resultView: UITextView?
+    var subView: UIView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,13 +40,7 @@ class WhereTravellingFromQuestionView: UIView {
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
         
-        textfield?.frame = CGRect(x: (bounds.size.width-175)/2, y: 120, width: 175, height: 30)
-        //Add underline to textfield
-        let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: 0.0,y: (textfield?.frame.height)! - 1,width: (textfield?.frame.width)!,height: 1.0)
-        bottomLine.backgroundColor = UIColor.white.cgColor
-        textfield?.layer.addSublayer(bottomLine)
-        
+        subView?.frame = CGRect(x: (bounds.size.width-275)/2, y: 120, width: 275, height: 30)
     }
     
     
@@ -57,14 +56,73 @@ class WhereTravellingFromQuestionView: UIView {
         questionLabel?.text = "Where will you be coming from?"
         self.addSubview(questionLabel!)
         
-        //Textfield
-        textfield = UITextField(frame: CGRect.zero)
-        textfield?.textColor = UIColor.white
-        textfield?.borderStyle = .none
-        textfield?.layer.masksToBounds = true
-        textfield?.textAlignment = .center
-        textfield?.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(textfield!)
+        //GOOGLE PLACES SEARCH
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self
+        resultsViewController?.tableCellBackgroundColor = UIColor.darkGray
+        resultsViewController?.tableCellSeparatorColor = UIColor.lightGray
+        resultsViewController?.primaryTextColor = UIColor.lightGray
+        resultsViewController?.secondaryTextColor = UIColor.lightGray
+        resultsViewController?.primaryTextHighlightColor = UIColor.white
+        searchController = UISearchController(searchResultsController: resultsViewController)
+        searchController?.searchResultsUpdater = resultsViewController
+        searchController?.searchBar.isTranslucent = true
+        searchController?.searchBar.layer.cornerRadius = 5
+        searchController?.searchBar.barStyle = .default
+        searchController?.searchBar.searchBarStyle = .minimal
+        searchController?.searchBar.setShowsCancelButton(false, animated: false)
+        searchController?.searchBar.delegate = self
+        let attributes = [
+            NSForegroundColorAttributeName : UIColor.white,
+            NSFontAttributeName : UIFont.systemFont(ofSize: 14)
+        ]
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
+        let textFieldInsideSearchBar = searchController?.searchBar.value(forKey: "searchField") as? UITextField
+        textFieldInsideSearchBar?.textColor = UIColor.white
+        let textFieldInsideSearchBarLabel = textFieldInsideSearchBar!.value(forKey: "placeholderLabel") as? UILabel
+        textFieldInsideSearchBarLabel?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as! UIButton
+        clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
+        clearButton.tintColor = UIColor.white
+        let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView
+        glassIconView?.image = glassIconView?.image?.withRenderingMode(.alwaysTemplate)
+        glassIconView?.tintColor = UIColor.white
+        subView = UIView(frame: CGRect(x: (bounds.size.width-275)/2, y: 120, width: 275, height: 30))
+        subView?.addSubview((searchController?.searchBar)!)
+        self.addSubview(subView!)
+        searchController?.searchBar.sizeToFit()
+        searchController?.hidesNavigationBarDuringPresentation = false
+        // When UISearchController presents the results view, present it in
+        // this view controller, not one further up the chain.
+        //        definesPresentationContext = true
+
+        
     }
     
+}
+// Handle the user's selection GOOGLE PLACES SEARCH
+extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerDelegate {
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
+                           didAutocompleteWith place: GMSPlace) {
+        searchController?.isActive = false
+        // Do something with the selected place.
+        
+        searchController?.searchBar.text = place.name
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
+    }
+    
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
+                           didFailAutocompleteWithError error: Error){
+        // TODO: handle the error.
+        print("Error: ", error.localizedDescription)
+    }
+    
+    // Turn the network activity indicator on and off again.
+    func didRequestAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
 }

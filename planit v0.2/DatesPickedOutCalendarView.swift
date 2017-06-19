@@ -72,7 +72,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Select your dates!"
+        questionLabel?.text = "Select dates for your trip!"
         self.addSubview(questionLabel!)
         
         // Calendar header setup

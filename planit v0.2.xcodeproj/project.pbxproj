@@ -103,6 +103,16 @@
 		FAE83F7D1EF6D40B0009A020 /* DatesPickedOutCalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F7C1EF6D40B0009A020 /* DatesPickedOutCalendarView.xib */; };
 		FAE83F7F1EF75CB10009A020 /* DecidedOnCityToVisitQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F7E1EF75CB10009A020 /* DecidedOnCityToVisitQuestionView.xib */; };
 		FAE83F811EF75CBD0009A020 /* DecidedOnCityToVisitQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F801EF75CBD0009A020 /* DecidedOnCityToVisitQuestionView.swift */; };
+		FAE83F831EF79E9B0009A020 /* NoCityDecidedAnyIdeasQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F821EF79E9B0009A020 /* NoCityDecidedAnyIdeasQuestionView.xib */; };
+		FAE83F851EF79EAA0009A020 /* NoCityDecidedAnyIdeasQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F841EF79EAA0009A020 /* NoCityDecidedAnyIdeasQuestionView.swift */; };
+		FAE83F871EF7AA780009A020 /* PlanTripToIdeaQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F861EF7AA780009A020 /* PlanTripToIdeaQuestionView.swift */; };
+		FAE83F891EF7AA840009A020 /* PlanTripToIdeaQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F881EF7AA840009A020 /* PlanTripToIdeaQuestionView.xib */; };
+		FAE83F8B1EF7ACB30009A020 /* WhatTypeOfTripQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F8A1EF7ACB30009A020 /* WhatTypeOfTripQuestionView.swift */; };
+		FAE83F8D1EF7ACBE0009A020 /* WhatTypeOfTripQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F8C1EF7ACBE0009A020 /* WhatTypeOfTripQuestionView.xib */; };
+		FAE83F8F1EF7B12E0009A020 /* HowFarAwayQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F8E1EF7B12E0009A020 /* HowFarAwayQuestionView.swift */; };
+		FAE83F911EF7B1500009A020 /* HowFarAwayQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F901EF7B1500009A020 /* HowFarAwayQuestionView.xib */; };
+		FAE83F931EF7B2EE0009A020 /* DestinationOptionsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F921EF7B2EE0009A020 /* DestinationOptionsCardView.swift */; };
+		FAE83F951EF7B2F70009A020 /* DestinationOptionsCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F941EF7B2F70009A020 /* DestinationOptionsCardView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -245,6 +255,16 @@
 		FAE83F7C1EF6D40B0009A020 /* DatesPickedOutCalendarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DatesPickedOutCalendarView.xib; sourceTree = "<group>"; };
 		FAE83F7E1EF75CB10009A020 /* DecidedOnCityToVisitQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DecidedOnCityToVisitQuestionView.xib; sourceTree = "<group>"; };
 		FAE83F801EF75CBD0009A020 /* DecidedOnCityToVisitQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecidedOnCityToVisitQuestionView.swift; sourceTree = "<group>"; };
+		FAE83F821EF79E9B0009A020 /* NoCityDecidedAnyIdeasQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoCityDecidedAnyIdeasQuestionView.xib; sourceTree = "<group>"; };
+		FAE83F841EF79EAA0009A020 /* NoCityDecidedAnyIdeasQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoCityDecidedAnyIdeasQuestionView.swift; sourceTree = "<group>"; };
+		FAE83F861EF7AA780009A020 /* PlanTripToIdeaQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanTripToIdeaQuestionView.swift; sourceTree = "<group>"; };
+		FAE83F881EF7AA840009A020 /* PlanTripToIdeaQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlanTripToIdeaQuestionView.xib; sourceTree = "<group>"; };
+		FAE83F8A1EF7ACB30009A020 /* WhatTypeOfTripQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhatTypeOfTripQuestionView.swift; sourceTree = "<group>"; };
+		FAE83F8C1EF7ACBE0009A020 /* WhatTypeOfTripQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhatTypeOfTripQuestionView.xib; sourceTree = "<group>"; };
+		FAE83F8E1EF7B12E0009A020 /* HowFarAwayQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HowFarAwayQuestionView.swift; sourceTree = "<group>"; };
+		FAE83F901EF7B1500009A020 /* HowFarAwayQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HowFarAwayQuestionView.xib; sourceTree = "<group>"; };
+		FAE83F921EF7B2EE0009A020 /* DestinationOptionsCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestinationOptionsCardView.swift; sourceTree = "<group>"; };
+		FAE83F941EF7B2F70009A020 /* DestinationOptionsCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DestinationOptionsCardView.xib; sourceTree = "<group>"; };
 		FF99F8DC1EC030B0E3C827B0 /* Pods_planit_v0_2Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_planit_v0_2Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -624,8 +644,18 @@
 				FAE83F781EF6549E0009A020 /* DatesPickedOutQuestionView.xib */,
 				FAE83F7A1EF6D3F70009A020 /* DatesPickedOutCalendarView.swift */,
 				FAE83F7C1EF6D40B0009A020 /* DatesPickedOutCalendarView.xib */,
-				FAE83F7E1EF75CB10009A020 /* DecidedOnCityToVisitQuestionView.xib */,
 				FAE83F801EF75CBD0009A020 /* DecidedOnCityToVisitQuestionView.swift */,
+				FAE83F7E1EF75CB10009A020 /* DecidedOnCityToVisitQuestionView.xib */,
+				FAE83F841EF79EAA0009A020 /* NoCityDecidedAnyIdeasQuestionView.swift */,
+				FAE83F821EF79E9B0009A020 /* NoCityDecidedAnyIdeasQuestionView.xib */,
+				FAE83F861EF7AA780009A020 /* PlanTripToIdeaQuestionView.swift */,
+				FAE83F881EF7AA840009A020 /* PlanTripToIdeaQuestionView.xib */,
+				FAE83F8A1EF7ACB30009A020 /* WhatTypeOfTripQuestionView.swift */,
+				FAE83F8C1EF7ACBE0009A020 /* WhatTypeOfTripQuestionView.xib */,
+				FAE83F8E1EF7B12E0009A020 /* HowFarAwayQuestionView.swift */,
+				FAE83F901EF7B1500009A020 /* HowFarAwayQuestionView.xib */,
+				FAE83F921EF7B2EE0009A020 /* DestinationOptionsCardView.swift */,
+				FAE83F941EF7B2F70009A020 /* DestinationOptionsCardView.xib */,
 			);
 			name = "Scrolling Views";
 			sourceTree = "<group>";
@@ -787,6 +817,7 @@
 				FAA8F2541E351A2700CD7337 /* LaunchScreen.storyboard in Resources */,
 				FAE83F6D1EF4853B0009A020 /* UserNameQuestionView.xib in Resources */,
 				FA4EA8D41EE87DBC005FCE91 /* common.js in Resources */,
+				FAE83F831EF79E9B0009A020 /* NoCityDecidedAnyIdeasQuestionView.xib in Resources */,
 				FA09A3ED1EB23694007F64A3 /* ToDoCardContentView.xib in Resources */,
 				FA4EA8D61EE881D3005FCE91 /* GoogleService-Info.plist in Resources */,
 				FA4EA8C91EE7A4AE005FCE91 /* CreateTrip.graphql in Resources */,
@@ -796,7 +827,11 @@
 				FAA8F28D1E351DBF00CD7337 /* CellView.xib in Resources */,
 				FA5201171EC4DC4C001EA849 /* geography-class_medres.mbtiles in Resources */,
 				FAA8F2A11E351DEB00CD7337 /* items.plist in Resources */,
+				FAE83F951EF7B2F70009A020 /* DestinationOptionsCardView.xib in Resources */,
+				FAE83F8D1EF7ACBE0009A020 /* WhatTypeOfTripQuestionView.xib in Resources */,
+				FAE83F891EF7AA840009A020 /* PlanTripToIdeaQuestionView.xib in Resources */,
 				FAE83F7D1EF6D40B0009A020 /* DatesPickedOutCalendarView.xib in Resources */,
+				FAE83F911EF7B1500009A020 /* HowFarAwayQuestionView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -976,6 +1011,7 @@
 				FAA8F2771E351B9500CD7337 /* TripListViewController.swift in Sources */,
 				FA5F13AB1EB92E310003A992 /* amenityTableViewCell.swift in Sources */,
 				FAE83F731EF649570009A020 /* WhereTravellingFromQuestionView.swift in Sources */,
+				FAE83F8F1EF7B12E0009A020 /* HowFarAwayQuestionView.swift in Sources */,
 				FA25F1FB1EBB7B9F005D29E5 /* hotelTableViewCell.swift in Sources */,
 				FAA8F26D1E351B9500CD7337 /* HomeAirportViewController.swift in Sources */,
 				FAA8F29D1E351DDE00CD7337 /* itemizedItineraryTableViewCell.swift in Sources */,
@@ -986,6 +1022,7 @@
 				FA9E39811EBBD2A900F6CB0B /* bucketListViewController.swift in Sources */,
 				FAA8F26C1E351B9500CD7337 /* EmailViewController.swift in Sources */,
 				FAA8F2711E351B9500CD7337 /* PasswordViewController.swift in Sources */,
+				FAE83F871EF7AA780009A020 /* PlanTripToIdeaQuestionView.swift in Sources */,
 				FAE83F651EF461500009A020 /* TripViewController.swift in Sources */,
 				FAC1BD311EAE7707008AB7C4 /* ZLSwipeableView.swift in Sources */,
 				FAC1BD2E1EAE7707008AB7C4 /* Direction.swift in Sources */,
@@ -1004,11 +1041,13 @@
 				FAA8F2231E35194100CD7337 /* AppDelegate.swift in Sources */,
 				FAA8F2681E351B9500CD7337 /* ActivitiesViewController.swift in Sources */,
 				FADF09FD1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift in Sources */,
+				FAE83F851EF79EAA0009A020 /* NoCityDecidedAnyIdeasQuestionView.swift in Sources */,
 				FAD50DDA1EE9C4AB0006C3AA /* instructionsCollectionViewCell.swift in Sources */,
 				FAC1BD301EAE7707008AB7C4 /* ViewManager.swift in Sources */,
 				FA4E922B1E3526DD00231C72 /* API.swift in Sources */,
 				FA25F1F91EBB6DA9005D29E5 /* exploreHotelsViewController.swift in Sources */,
 				FAA8F2751E351B9500CD7337 /* SettingsViewController.swift in Sources */,
+				FAE83F8B1EF7ACB30009A020 /* WhatTypeOfTripQuestionView.swift in Sources */,
 				FAA8F26F1E351B9500CD7337 /* InternationalViewController.swift in Sources */,
 				FAA8F2701E351B9500CD7337 /* NewTripNameViewController.swift in Sources */,
 				FAA8F2831E351D8D00CD7337 /* DataContainerSingleton.swift in Sources */,
@@ -1029,6 +1068,7 @@
 				FAA8F2741E351B9500CD7337 /* ReviewAndBookViewController.swift in Sources */,
 				FAA8F28C1E351DBF00CD7337 /* CellView.swift in Sources */,
 				FAA8F2941E351DCD00CD7337 /* ActivityItem.swift in Sources */,
+				FAE83F931EF7B2EE0009A020 /* DestinationOptionsCardView.swift in Sources */,
 				FAE83F711EF49F380009A020 /* TripNameQuestionView.swift in Sources */,
 				FA90F1D41EEB4B9F00094878 /* SwipingViewController.swift in Sources */,
 				FA4E36201EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift in Sources */,
