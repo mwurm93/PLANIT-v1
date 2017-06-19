@@ -5279,7 +5279,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0NW-dQ-30A" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" backIndicatorImage="Museum" id="qTT-Lr-iVa">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="Museum" id="qTT-Lr-iVa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

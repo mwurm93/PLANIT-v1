@@ -17,6 +17,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var tripNameQuestionView: TripNameQuestionView?
     var whereTravellingFromQuestionView: WhereTravellingFromQuestionView?
     var datesPickedOutQuestionView: DatesPickedOutQuestionView?
+    var datesPickedOutCalendarView: DatesPickedOutCalendarView?
+    var decidedOnCityToVisitQuestionView: DecidedOnCityToVisitQuestionView?
     
     
     // MARK: Outlets
@@ -40,6 +42,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         updateHeightOfScrollView()        
         scrollContentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(calendarDateRangeSelected), name: NSNotification.Name(rawValue: "calendarRangeSelected"), object: nil)
+
         
     }
     
@@ -115,14 +121,30 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             datesPickedOutQuestionView = Bundle.main.loadNibNamed("DatesPickedOutQuestionView", owner: self, options: nil)?.first! as? DatesPickedOutQuestionView
             self.scrollContentView.addSubview(datesPickedOutQuestionView!)
             let bounds = UIScreen.main.bounds
-            datesPickedOutQuestionView?.button1?.addTarget(self, action: #selector(self.datesPickedOutQuestion_No(sender:)), for: UIControlEvents.touchUpInside)
-            datesPickedOutQuestionView?.button2?.addTarget(self, action: #selector(self.datesPickedOutQuestion_Yes(sender:)), for: UIControlEvents.touchUpInside)
+            datesPickedOutQuestionView?.button1?.addTarget(self, action: #selector(self.datesPickedOutQuestion_Yes(sender:)), for: UIControlEvents.touchUpInside)
+            datesPickedOutQuestionView?.button2?.addTarget(self, action: #selector(self.datesPickedOutQuestion_No(sender:)), for: UIControlEvents.touchUpInside)
             self.datesPickedOutQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: datesPickedOutQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
             
-            updateHeightOfScrollView()
         }
+        updateHeightOfScrollView()
+        scrollDownToTopSubview()
+    }
+    func calendarDateRangeSelected() {
+        if decidedOnCityToVisitQuestionView == nil {
+            //Load next question
+            decidedOnCityToVisitQuestionView = Bundle.main.loadNibNamed("DecidedOnCityToVisitQuestionView", owner: self, options: nil)?.first! as? DecidedOnCityToVisitQuestionView
+            self.scrollContentView.addSubview(decidedOnCityToVisitQuestionView!)
+            decidedOnCityToVisitQuestionView?.textfield?.delegate = self
+            let bounds = UIScreen.main.bounds
+            decidedOnCityToVisitQuestionView?.button?.addTarget(self, action: #selector(self.decidedOnCityToVisitQuestion_No(sender:)), for: UIControlEvents.touchUpInside)
+            self.decidedOnCityToVisitQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: decidedOnCityToVisitQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (decidedOnCityToVisitQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+            decidedOnCityToVisitQuestionView?.textfield?.becomeFirstResponder()
+        }
+        updateHeightOfScrollView()
         scrollDownToTopSubview()
     }
     
@@ -137,8 +159,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
     }
     func datesPickedOutQuestion_Yes(sender:UIButton) {
+        if datesPickedOutCalendarView == nil {
+            //Load next question
+            datesPickedOutCalendarView = Bundle.main.loadNibNamed("DatesPickedOutCalendarView", owner: self, options: nil)?.first! as? DatesPickedOutCalendarView
+            self.scrollContentView.addSubview(datesPickedOutCalendarView!)
+            let bounds = UIScreen.main.bounds
+            self.datesPickedOutCalendarView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: datesPickedOutCalendarView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutCalendarView?.frame.height)!)
+            view.addConstraints([heightConstraint])            
+        }
+        updateHeightOfScrollView()
+        scrollDownToTopSubview()
+
+    }
+    func decidedOnCityToVisitQuestion_No(sender:UIButton) {
         
     }
+
 
     // MARK: UITextFieldDelegate
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
