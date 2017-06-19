@@ -583,6 +583,30 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             destination?.NewOrAddedTripFromSegue = NewOrAddedTripForSegue
             destination?.newChannelRef = channelRef
         }
+        if segue.identifier == "tripListToTripViewController" {
+            let destination = segue.destination as? TripViewController
+            
+            var NewOrAddedTripForSegue = Int()
+            
+            let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+            let currentTripIndex = DataContainerSingleton.sharedDataContainer.currenttrip!
+            var numberSavedTrips: Int?
+            if existing_trips == nil {
+                numberSavedTrips = 0
+                NewOrAddedTripForSegue = 1
+            } else {
+                numberSavedTrips = (existing_trips?.count)! - 1
+                if currentTripIndex <= numberSavedTrips! {
+                    NewOrAddedTripForSegue = 0
+                } else {
+                    NewOrAddedTripForSegue = 1
+                }
+            }
+            destination?.NewOrAddedTripFromSegue = NewOrAddedTripForSegue
+            destination?.newChannelRef = channelRef
+        }
+
+        
     }
 
     private func observeChannels() {

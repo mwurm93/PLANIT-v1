@@ -595,7 +595,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
-                                    <segue destination="QaX-H5-Z3p" kind="show" id="DYb-Dy-Wps"/>
+                                    <segue destination="QaX-H5-Z3p" kind="show" identifier="tripListToTripViewController" id="DYb-Dy-Wps"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1955,10 +1955,10 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13f-uh-sFc">
-                                <rect key="frame" x="0.0" y="329" width="375" height="338"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="BgG-gD-K2H">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="338"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="dark"/>
@@ -9753,16 +9753,16 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="lra-AY-k3U"/>
-        <segue reference="5Cy-Be-NXP"/>
-        <segue reference="aaX-Gb-b3x"/>
-        <segue reference="0XT-HI-iDA"/>
-        <segue reference="sNQ-RT-YBj"/>
-        <segue reference="AiS-CM-kbO"/>
-        <segue reference="upa-Nb-p7J"/>
-        <segue reference="UAc-ww-JX6"/>
-        <segue reference="bKD-fw-94P"/>
         <segue reference="1VF-PM-MLD"/>
+        <segue reference="AiS-CM-kbO"/>
+        <segue reference="BRb-kg-zV2"/>
+        <segue reference="0XT-HI-iDA"/>
+        <segue reference="rG8-GZ-vPL"/>
+        <segue reference="lra-AY-k3U"/>
+        <segue reference="bKD-fw-94P"/>
+        <segue reference="UAc-ww-JX6"/>
+        <segue reference="t9O-2u-fWL"/>
+        <segue reference="sNQ-RT-YBj"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

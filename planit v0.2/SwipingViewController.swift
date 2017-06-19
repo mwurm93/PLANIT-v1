@@ -98,7 +98,7 @@ class SwipingViewController: UIViewController, UITextFieldDelegate, CNContactPic
             instructionsView?.isHidden = true
             instructionsGotItButton.isHidden = true
             
-//            //City data
+            //City data
             let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
             if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
                 if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
