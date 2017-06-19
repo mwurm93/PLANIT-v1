@@ -55,13 +55,17 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         
         button1?.frame = CGRect(x: (bounds.size.width-200)/2, y: 460, width: 80, height: 80)
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
+        button1?.isHidden = true
         
         button2?.frame = CGRect(x: (bounds.size.width-200)/2+120, y: 460, width: 80, height: 80)
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
-
+        button2?.isHidden = true
+        
         swipeableView.nextView = {
             return self.nextCardView()
         }
+        swipeableView.isHidden = true
+        
     }
         
     func addViews() {
@@ -73,7 +77,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Cool, we’ve come up with a few options that you might like."
+        questionLabel?.text = "Cool, we’ve come up with\na few options you might like."
         self.addSubview(questionLabel!)
         
         //ZLSwipeableview

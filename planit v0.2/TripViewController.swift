@@ -272,13 +272,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var when = DispatchTime.now() + 3
         DispatchQueue.main.asyncAfter(deadline: when) {
             UIView.animate(withDuration: 1) {
-                self.destinationOptionsCardView?.questionLabel?.text = "Give a thumbs up to the destinations you MIGHT be interested in going to (and X the one’s you aren’t)."
+                self.destinationOptionsCardView?.questionLabel?.text = "Give a thumbs up to each place\nyou MIGHT be interested in going to\nand a thumbs down if not."
             }
         }
         when = DispatchTime.now() + 10
         DispatchQueue.main.asyncAfter(deadline: when) {
             UIView.animate(withDuration: 1) {
                 self.destinationOptionsCardView?.questionLabel?.isHidden = true
+                self.destinationOptionsCardView?.swipeableView.isHidden = false
+                self.destinationOptionsCardView?.button1?.isHidden = false
+                self.destinationOptionsCardView?.button2?.isHidden = false
             }
         }
 
