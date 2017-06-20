@@ -28,8 +28,8 @@ class HowFarAwayQuestionView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-        self.layer.borderColor = UIColor.green.cgColor
-        self.layer.borderWidth = 2
+//        self.layer.borderColor = UIColor.green.cgColor
+//        self.layer.borderWidth = 2
     }
     
     override func layoutSubviews() {
@@ -38,16 +38,32 @@ class HowFarAwayQuestionView: UIView {
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
         
-        button1?.frame = CGRect(x: (bounds.size.width-275)/2, y: 120, width: 275, height: 30)
+        button1?.sizeToFit()
+        button1?.frame.size.height = 30
+        button1?.frame.size.width += 20
+        button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
+        button1?.frame.origin.y = 120
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
-        button2?.frame = CGRect(x: (bounds.size.width-275)/2, y: 170, width: 275, height: 30)
+        button2?.sizeToFit()
+        button2?.frame.size.height = 30
+        button2?.frame.size.width += 20
+        button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
+        button2?.frame.origin.y = 170
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
-        button3?.frame = CGRect(x: (bounds.size.width-250)/2, y: 220, width: 250, height: 30)
+        button3?.sizeToFit()
+        button3?.frame.size.height = 30
+        button3?.frame.size.width += 20
+        button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2
+        button3?.frame.origin.y = 220
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
         
-        button4?.frame = CGRect(x: (bounds.size.width-250)/2, y: 270, width: 250, height: 30)
+        button4?.sizeToFit()
+        button4?.frame.size.height = 30
+        button4?.frame.size.width += 20
+        button4?.frame.origin.x = (bounds.size.width - (button4?.frame.width)!) / 2
+        button4?.frame.origin.y = 270
         button4?.layer.cornerRadius = (button4?.frame.height)! / 2
         
     }

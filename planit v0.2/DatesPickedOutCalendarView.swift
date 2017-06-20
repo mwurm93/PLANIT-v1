@@ -47,8 +47,8 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-        self.layer.borderColor = UIColor.purple.cgColor
-        self.layer.borderWidth = 2
+//        self.layer.borderColor = UIColor.purple.cgColor
+//        self.layer.borderWidth = 2
     }
     
     override func layoutSubviews() {

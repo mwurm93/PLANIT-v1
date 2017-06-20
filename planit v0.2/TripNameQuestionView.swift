@@ -26,8 +26,8 @@ class TripNameQuestionView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-        self.layer.borderColor = UIColor.green.cgColor
-        self.layer.borderWidth = 2
+//        self.layer.borderColor = UIColor.green.cgColor
+//        self.layer.borderWidth = 2
     }
     
     override func layoutSubviews() {
@@ -44,7 +44,11 @@ class TripNameQuestionView: UIView {
         tripNameQuestionTextfield?.layer.addSublayer(bottomLine)
         
         
-        tripNameQuestionButton?.frame = CGRect(x: (bounds.size.width-175)/2, y: 180, width: 175, height: 30)
+        tripNameQuestionButton?.sizeToFit()
+        tripNameQuestionButton?.frame.size.height = 30
+        tripNameQuestionButton?.frame.size.width += 20
+        tripNameQuestionButton?.frame.origin.x = (bounds.size.width - (tripNameQuestionButton?.frame.width)!) / 2
+        tripNameQuestionButton?.frame.origin.y = 180
         tripNameQuestionButton?.layer.cornerRadius = (tripNameQuestionButton?.frame.height)! / 2
     
     }

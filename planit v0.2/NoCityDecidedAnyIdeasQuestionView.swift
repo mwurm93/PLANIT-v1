@@ -1,18 +1,19 @@
 //
-//  WhereTravellingFromQuestionView.swift
+//  NoCityDecidedAnyIdeasQuestionView.swift
 //  planit v0.2
 //
-//  Created by MICHAEL WURM on 6/17/17.
+//  Created by MICHAEL WURM on 6/18/17.
 //  Copyright © 2017 MICHAEL WURM. All rights reserved.
 //
 
 import UIKit
 import GooglePlaces
 
-class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISearchBarDelegate {
+class NoCityDecidedAnyIdeasQuestionView: UIView, UISearchControllerDelegate, UISearchBarDelegate {
     
     //Class vars
     var questionLabel: UILabel?
+    var button: UIButton?
         //GOOGLE PLACES SEARCH
     var resultsViewController: GMSAutocompleteResultsViewController?
     var searchController: UISearchController?
@@ -30,7 +31,7 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-//        self.layer.borderColor = UIColor.blue.cgColor
+//        self.layer.borderColor = UIColor.green.cgColor
 //        self.layer.borderWidth = 2
     }
     
@@ -38,11 +39,18 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
+        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 160)
         
-        subView?.frame = CGRect(x: (bounds.size.width-275)/2, y: 120, width: 275, height: 30)
+        subView?.frame = CGRect(x: (bounds.size.width-275)/2, y: 200, width: 275, height: 30)
+        
+        button?.sizeToFit()
+        button?.frame.size.height = 30
+        button?.frame.size.width += 20
+        button?.frame.origin.x = (bounds.size.width - (button?.frame.width)!) / 2
+        button?.frame.origin.y = 260
+        button?.layer.cornerRadius = (button?.frame.height)! / 2
+        
     }
-    
     
     func addViews() {
         //Question label
@@ -52,8 +60,8 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         questionLabel?.textAlignment = .center
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
-        questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Where will you be coming from?"
+//        questionLabel?.adjustsFontSizeToFitWidth = true
+        questionLabel?.text = "No worries!\nLet’s see what you might like.\n\nTo start, do you have any destination ideas?"
         self.addSubview(questionLabel!)
         
         //GOOGLE PLACES SEARCH
@@ -94,21 +102,44 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         searchController?.hidesNavigationBarDuringPresentation = false
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
-        //        definesPresentationContext = true
-
+//        definesPresentationContext = true
         
+        //Button
+        button = UIButton(type: .custom)
+        button?.frame = CGRect.zero
+        button?.setTitleColor(UIColor.white, for: .normal)
+        button?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button?.setTitleColor(UIColor.white, for: .selected)
+        button?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        button?.layer.borderWidth = 1
+        button?.layer.borderColor = UIColor.white.cgColor
+        button?.layer.masksToBounds = true
+        button?.titleLabel?.textAlignment = .center
+        button?.setTitle("No, nothing specific", for: .normal)
+        button?.setTitle("No, nothing specific", for: .selected)
+        button?.translatesAutoresizingMaskIntoConstraints = false
+        button?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button!)
     }
     
+    func buttonClicked(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected == true {
+            sender.layer.borderWidth = 0
+        } else {
+            sender.layer.borderWidth = 1
+        }
+    }
 }
 // Handle the user's selection GOOGLE PLACES SEARCH
-extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerDelegate {
+extension NoCityDecidedAnyIdeasQuestionView: GMSAutocompleteResultsViewControllerDelegate {
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
                            didAutocompleteWith place: GMSPlace) {
         searchController?.isActive = false
         // Do something with the selected place.
         
         searchController?.searchBar.text = place.name
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "destinationIdeaEntered"), object: nil)
     }
     
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
@@ -126,3 +157,4 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
 }
+

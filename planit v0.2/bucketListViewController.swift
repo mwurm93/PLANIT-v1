@@ -231,81 +231,12 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         
         //COPY
         //Load previously placed pins and countries
-        bucketListPinLocations = DataContainerSingleton.sharedDataContainer.bucketListPinLocations as? [[String : AnyObject]] ?? [[String : AnyObject]]()
-        beenTherePinLocations = DataContainerSingleton.sharedDataContainer.beenTherePinLocations as? [[String : AnyObject]] ?? [[String : AnyObject]]()
+//        bucketListPinLocations = DataContainerSingleton.sharedDataContainer.bucketListPinLocations as? [[String : AnyObject]] ?? [[String : AnyObject]]()
+//        beenTherePinLocations = DataContainerSingleton.sharedDataContainer.beenTherePinLocations as? [[String : AnyObject]] ?? [[String : AnyObject]]()
         bucketListCountries = DataContainerSingleton.sharedDataContainer.bucketListCountries ?? [String]()
         beenThereCountries = DataContainerSingleton.sharedDataContainer.beenThereCountries ?? [String]()
-        
-        //Install bucket list pins
-        if bucketListPinLocations.count != 0 {
-            var pinLocationSphere = [MaplyCoordinate]()
-            var pinLocationCylinder = [MaplyCoordinate]()
-            for bucketListPinLocation in bucketListPinLocations {
-                pinLocationSphere.append(MaplyCoordinate(x: bucketListPinLocation["x"] as! Float, y: bucketListPinLocation["y"] as! Float))
-                pinLocationCylinder.append(MaplyCoordinate(x: bucketListPinLocation["x"] as! Float, y: bucketListPinLocation["y"] as! Float))
-            }
-            let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
-                let sphere = MaplyShapeSphere()
-                sphere.center = location
-                sphere.radius = 0.007
-                sphere.height = 0.022
-                sphere.selectable = true
-                sphere.userObject = location
-                return sphere
-            }
-            let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
-                let cylinder = MaplyShapeCylinder()
-                cylinder.baseCenter = location
-                cylinder.baseHeight = 0
-                cylinder.radius = 0.003
-                cylinder.height = 0.015
-                cylinder.selectable = true
-                cylinder.userObject = location
-                return cylinder
-            }
-            
-            let AddedSphereComponentObj = (self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: UIColor(cgColor: bucketListButton.layer.backgroundColor!)]))!
-            let AddedCylinderComponentObj = (self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)]))!
-            AddedSphereComponentObjs.append(AddedSphereComponentObj)
-            AddedCylinderComponentObjs.append(AddedCylinderComponentObj)
-            AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
-            AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
-        }
-        //Install been there pins
-        if beenTherePinLocations.count != 0 {
-            var pinLocationSphere = [MaplyCoordinate]()
-            var pinLocationCylinder = [MaplyCoordinate]()
-            for beenTherePinLocation in beenTherePinLocations {
-                pinLocationSphere.append(MaplyCoordinate(x: beenTherePinLocation["x"] as! Float, y: beenTherePinLocation["y"] as! Float))
-                pinLocationCylinder.append(MaplyCoordinate(x: beenTherePinLocation["x"] as! Float, y: beenTherePinLocation["y"] as! Float))
-            }
-            let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
-                let sphere = MaplyShapeSphere()
-                sphere.center = location
-                sphere.radius = 0.007
-                sphere.height = 0.022
-                sphere.selectable = true
-                sphere.userObject = location
-                return sphere
-            }
-            let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
-                let cylinder = MaplyShapeCylinder()
-                cylinder.baseCenter = location
-                cylinder.baseHeight = 0
-                cylinder.radius = 0.003
-                cylinder.height = 0.015
-                cylinder.selectable = true
-                cylinder.userObject = location
-                return cylinder
-            }
-            
-            let AddedSphereComponentObj = (self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: UIColor(cgColor: beenThereButton.layer.backgroundColor!)]))!
-            let AddedCylinderComponentObj = (self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)]))!
-            AddedSphereComponentObjs_been.append(AddedSphereComponentObj)
-            AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj)
-            AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
-            AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
-        }
+
+        addPins()
     }
     private func handleSelection(selectedObject: NSObject) {
         
@@ -753,17 +684,207 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     
     func handleModeButtonImages() {
         if mode == "pin" {
+            addPins()
             pinModeButton.setImage(#imageLiteral(resourceName: "map pin"), for: .normal)
             pinModeButton.layer.shadowOpacity = 0.6
             fillModeButton.setImage(#imageLiteral(resourceName: "paint bucket_grey"), for: .normal)
             fillModeButton.layer.shadowOpacity = 0.2
         } else if mode == "fill" {
+            removeAllPinsFromView()
             pinModeButton.setImage(#imageLiteral(resourceName: "map pin_grey"), for: .normal)
             pinModeButton.layer.shadowOpacity = 0.2
             fillModeButton.setImage(#imageLiteral(resourceName: "paint bucket"), for: .normal)
             fillModeButton.layer.shadowOpacity = 0.6
         }
     }
+    
+    func removeAllPinsFromView() {
+        var index = 0
+        for _ in AddedSphereMaplyShapeObjs {
+            theViewC?.remove(AddedCylinderComponentObjs[index])
+            theViewC?.remove(AddedSphereComponentObjs[index])
+            index += 1
+        }
+        index = 0
+        for _ in AddedSphereMaplyShapeObjs_been {
+            theViewC?.remove(AddedCylinderComponentObjs_been[index])
+            theViewC?.remove(AddedSphereComponentObjs_been[index])
+            index += 1
+        }
+        theViewC?.clearAnnotations()
+    }
+    
+    func removeAllCountriesFromView() {
+        var index = 0
+        for _ in AddedFillComponentObjs {
+            theViewC?.remove(AddedFillComponentObjs[index])
+            theViewC?.remove(AddedOutlineComponentObjs[index])
+            theViewC?.clearAnnotations()
+            index += 1
+        }
+        index = 0
+        for _ in AddedFillComponentObjs_been {
+            theViewC?.remove(AddedFillComponentObjs_been[index])
+            theViewC?.remove(AddedOutlineComponentObjs_been[index])
+            theViewC?.clearAnnotations()
+            index += 1
+        }
+    }
+
+    //    func addAllCountriesToView() {
+    //        var index = 0
+    //        for _ in AddedFillComponentObjs {
+    //            theViewC?.remove(AddedFillComponentObjs[index])
+    //            theViewC?.remove(AddedOutlineComponentObjs[index])
+    //            theViewC?.clearAnnotations()
+    //            index += 1
+    //        }
+    //        index = 0
+    //        for _ in AddedFillComponentObjs_been {
+    //            theViewC?.remove(AddedFillComponentObjs_been[index])
+    //            theViewC?.remove(AddedOutlineComponentObjs_been[index])
+    //            theViewC?.clearAnnotations()
+    //            index += 1
+    //        }
+    //
+    //
+    //        //COPY
+    //        if self.bucketListCountries.count != 0 {
+    //            if self.bucketListCountries.contains(vecName as! String) {
+    //                if (vecName.description.characters.count) > 0 {
+    //                    self.selectedVectorFillDict = [
+    //                        kMaplyColor: UIColor(cgColor: self.bucketListButton.layer.backgroundColor!),
+    //                        kMaplySelectable: true as AnyObject,
+    //                        kMaplyFilled: true as AnyObject,
+    //                        kMaplyVecWidth: 3.0 as AnyObject,
+    //                        kMaplySubdivType: kMaplySubdivGrid as AnyObject,
+    //                        kMaplySubdivEpsilon: 0.15 as AnyObject
+    //                    ]
+    //                    var AddedFillComponentObj = MaplyComponentObject()
+    //                    var AddedOutlineComponentObj = MaplyComponentObject()
+    //
+    //                    attrs.setValue("bucketList", forKey: "selectionStatus")
+    //
+    //                    AddedFillComponentObj = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorFillDict))!
+    //                    AddedOutlineComponentObj = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorOutlineDict))!
+    //                    self.AddedFillComponentObjs.append(AddedFillComponentObj)
+    //                    self.AddedOutlineComponentObjs.append(AddedOutlineComponentObj)
+    //                    self.AddedFillVectorObjs.append(wgVecObj)
+    //                    self.AddedOutlineVectorObjs.append(wgVecObj)
+    //                    alphabeticalBucketListCountries.append(wgVecObj.userObject as! String)
+    //                }
+    //            }
+    //        }
+    //        if self.beenThereCountries.count != 0 {
+    //            if self.beenThereCountries.contains(vecName as! String) {
+    //                if (vecName.description.characters.count) > 0 {
+    //                    self.selectedVectorFillDict = [
+    //                        kMaplyColor: UIColor(cgColor: self.beenThereButton.layer.backgroundColor!),
+    //                        kMaplySelectable: true as AnyObject,
+    //                        kMaplyFilled: true as AnyObject,
+    //                        kMaplyVecWidth: 3.0 as AnyObject,
+    //                        kMaplySubdivType: kMaplySubdivGrid as AnyObject,
+    //                        kMaplySubdivEpsilon: 0.15 as AnyObject
+    //                    ]
+    //                    var AddedFillComponentObj_been = MaplyComponentObject()
+    //                    var AddedOutlineComponentObj_been = MaplyComponentObject()
+    //
+    //                    attrs.setValue("beenThere", forKey: "selectionStatus")
+    //
+    //                    AddedFillComponentObj_been = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorFillDict))!
+    //                    AddedOutlineComponentObj_been = (self.theViewC?.addVectors([wgVecObj], desc: self.selectedVectorOutlineDict))!
+    //                    self.AddedFillComponentObjs_been.append(AddedFillComponentObj_been)
+    //                    self.AddedOutlineComponentObjs_been.append(AddedOutlineComponentObj_been)
+    //                    self.AddedFillVectorObjs_been.append(wgVecObj)
+    //                    self.AddedOutlineVectorObjs_been.append(wgVecObj)
+    //                    alphabeticalBeenThereCountries.append(wgVecObj.userObject as! String)
+    //                }
+    //            }
+    //        }
+    //
+    //    }
+    
+    
+    private func addPins() {
+        
+        if mode == "pin" {
+            bucketListPinLocations = DataContainerSingleton.sharedDataContainer.bucketListPinLocations as? [[String : AnyObject]] ?? [[String : AnyObject]]()
+            beenTherePinLocations = DataContainerSingleton.sharedDataContainer.beenTherePinLocations as? [[String : AnyObject]] ?? [[String : AnyObject]]()
+            //Install bucket list pins
+            if bucketListPinLocations.count != 0 {
+                var pinLocationSphere = [MaplyCoordinate]()
+                var pinLocationCylinder = [MaplyCoordinate]()
+                for bucketListPinLocation in bucketListPinLocations {
+                    pinLocationSphere.append(MaplyCoordinate(x: bucketListPinLocation["x"] as! Float, y: bucketListPinLocation["y"] as! Float))
+                    pinLocationCylinder.append(MaplyCoordinate(x: bucketListPinLocation["x"] as! Float, y: bucketListPinLocation["y"] as! Float))
+                }
+                let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
+                    let sphere = MaplyShapeSphere()
+                    sphere.center = location
+                    sphere.radius = 0.007
+                    sphere.height = 0.022
+                    sphere.selectable = true
+                    sphere.userObject = location
+                    return sphere
+                }
+                let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
+                    let cylinder = MaplyShapeCylinder()
+                    cylinder.baseCenter = location
+                    cylinder.baseHeight = 0
+                    cylinder.radius = 0.003
+                    cylinder.height = 0.015
+                    cylinder.selectable = true
+                    cylinder.userObject = location
+                    return cylinder
+                }
+                
+                let AddedSphereComponentObj = (self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: UIColor(cgColor: bucketListButton.layer.backgroundColor!)]))!
+                let AddedCylinderComponentObj = (self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)]))!
+                AddedSphereComponentObjs.append(AddedSphereComponentObj)
+                AddedCylinderComponentObjs.append(AddedCylinderComponentObj)
+                AddedSphereMaplyShapeObjs.append(pinTopSphere[0])
+                AddedCylinderMaplyShapeObjs.append(pinCylinder[0])
+            }
+            //Install been there pins
+            if beenTherePinLocations.count != 0 {
+                var pinLocationSphere = [MaplyCoordinate]()
+                var pinLocationCylinder = [MaplyCoordinate]()
+                for beenTherePinLocation in beenTherePinLocations {
+                    pinLocationSphere.append(MaplyCoordinate(x: beenTherePinLocation["x"] as! Float, y: beenTherePinLocation["y"] as! Float))
+                    pinLocationCylinder.append(MaplyCoordinate(x: beenTherePinLocation["x"] as! Float, y: beenTherePinLocation["y"] as! Float))
+                }
+                let pinTopSphere = pinLocationSphere.map { location -> MaplyShapeSphere in
+                    let sphere = MaplyShapeSphere()
+                    sphere.center = location
+                    sphere.radius = 0.007
+                    sphere.height = 0.022
+                    sphere.selectable = true
+                    sphere.userObject = location
+                    return sphere
+                }
+                let pinCylinder = pinLocationCylinder.map { location -> MaplyShapeCylinder in
+                    let cylinder = MaplyShapeCylinder()
+                    cylinder.baseCenter = location
+                    cylinder.baseHeight = 0
+                    cylinder.radius = 0.003
+                    cylinder.height = 0.015
+                    cylinder.selectable = true
+                    cylinder.userObject = location
+                    return cylinder
+                }
+                
+                let AddedSphereComponentObj = (self.theViewC?.addShapes(pinTopSphere, desc: [kMaplyColor: UIColor(cgColor: beenThereButton.layer.backgroundColor!)]))!
+                let AddedCylinderComponentObj = (self.theViewC?.addShapes(pinCylinder, desc: [kMaplyColor: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.75)]))!
+                AddedSphereComponentObjs_been.append(AddedSphereComponentObj)
+                AddedCylinderComponentObjs_been.append(AddedCylinderComponentObj)
+                AddedSphereMaplyShapeObjs_been.append(pinTopSphere[0])
+                AddedCylinderMaplyShapeObjs_been.append(pinCylinder[0])
+            }
+        }
+        
+        
+    }
+
     
     func removePinButtonAnnotationButtonAnnotationClicked(sender:UIButton) {
         var index = 0

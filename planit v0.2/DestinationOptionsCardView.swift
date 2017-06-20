@@ -43,8 +43,11 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-        self.layer.borderColor = UIColor.green.cgColor
-        self.layer.borderWidth = 2
+//        self.layer.borderColor = UIColor.green.cgColor
+//        self.layer.borderWidth = 2
+        button1?.isHidden = true
+        button2?.isHidden = true
+        swipeableView.isHidden = true
     }
     
     override func layoutSubviews() {
@@ -53,18 +56,15 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 100)
         
-        button1?.frame = CGRect(x: (bounds.size.width-200)/2, y: 460, width: 80, height: 80)
+        button1?.frame = CGRect(x: (bounds.size.width-200)/2, y: 490, width: 80, height: 80)
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
-        button1?.isHidden = true
         
-        button2?.frame = CGRect(x: (bounds.size.width-200)/2+120, y: 460, width: 80, height: 80)
+        button2?.frame = CGRect(x: (bounds.size.width-200)/2+120, y: 490, width: 80, height: 80)
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
-        button2?.isHidden = true
         
         swipeableView.nextView = {
             return self.nextCardView()
         }
-        swipeableView.isHidden = true
         
     }
         
@@ -332,7 +332,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
         otherGestureRecognizer : UIGestureRecognizer)->Bool {
-        return true
+        return false
     }
 
     
@@ -347,12 +347,6 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         sender.isSelected = !sender.isSelected
         if sender == button1 && sender.isSelected == true  {
             button2?.isSelected = false
-            button2?.layer.borderWidth = 1
-        }
-        if sender.isSelected == true {
-            sender.layer.borderWidth = 0
-        } else {
-            sender.layer.borderWidth = 1
         }
         leftButtonAction()
     }
@@ -360,12 +354,6 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         sender.isSelected = !sender.isSelected
         if sender == button2 && sender.isSelected == true {
             button1?.isSelected = false
-            button1?.layer.borderWidth = 1
-        }
-        if sender.isSelected == true {
-            sender.layer.borderWidth = 0
-        } else {
-            sender.layer.borderWidth = 1
         }
         rightButtonAction()
     }

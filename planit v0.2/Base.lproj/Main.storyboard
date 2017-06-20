@@ -146,7 +146,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bermudaSunsetTop" translatesAutoresizingMaskIntoConstraints="NO" id="ebn-E0-8KJ">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bermudaSubsetTopDark" translatesAutoresizingMaskIntoConstraints="NO" id="ebn-E0-8KJ">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -316,12 +316,41 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bermudaSubsetTopDark" translatesAutoresizingMaskIntoConstraints="NO" id="d7m-qR-cc1">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </imageView>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nUd-DK-C82">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="9pB-nt-hR4">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Abn-lc-U4N">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sJI-yE-7es">
+                                        <rect key="frame" x="5" y="25" width="28" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="backButton"/>
+                                        <connections>
+                                            <segue destination="c7O-w7-no5" kind="show" id="D0h-av-d3S"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                             <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SNF-xw-05H">
-                                <rect key="frame" x="0.0" y="120" width="375" height="547"/>
+                                <rect key="frame" x="0.0" y="65" width="375" height="602"/>
                                 <subviews>
                                     <view autoresizesSubviews="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EeG-2u-mWE">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="547"/>
-                                        <color key="backgroundColor" red="0.16868258248730961" green="0.16868258248730961" blue="0.16868258248730961" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="602"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -332,11 +361,11 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="4fw-4a-zq8" firstAttribute="top" secondItem="SNF-xw-05H" secondAttribute="bottom" id="Kwd-Fg-vOb"/>
                             <constraint firstItem="EeG-2u-mWE" firstAttribute="width" secondItem="muN-a6-dmD" secondAttribute="width" id="OrC-3N-7iz"/>
-                            <constraint firstItem="SNF-xw-05H" firstAttribute="top" secondItem="CD1-TJ-nzS" secondAttribute="bottom" constant="100" id="Qw9-Jo-lfi"/>
+                            <constraint firstItem="SNF-xw-05H" firstAttribute="top" secondItem="CD1-TJ-nzS" secondAttribute="bottom" constant="65" id="Qw9-Jo-lfi"/>
                             <constraint firstAttribute="trailing" secondItem="SNF-xw-05H" secondAttribute="trailing" id="iOS-Ta-8lF"/>
                             <constraint firstItem="SNF-xw-05H" firstAttribute="leading" secondItem="muN-a6-dmD" secondAttribute="leading" id="p4B-UB-W6a"/>
                         </constraints>
@@ -346,11 +375,12 @@
                     <connections>
                         <outlet property="scrollContentView" destination="EeG-2u-mWE" id="Zm1-5d-MxK"/>
                         <outlet property="scrollView" destination="SNF-xw-05H" id="cke-8Q-0oX"/>
+                        <outlet property="topView" destination="Abn-lc-U4N" id="2gS-y6-rRx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VFw-mZ-VwK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-418.39999999999998" y="1806.7466266866568"/>
+            <point key="canvasLocation" x="-1516" y="1773.4632683658172"/>
         </scene>
         <!--Trip List View Controller-->
         <scene sceneID="iu3-GD-Dwe">
@@ -364,7 +394,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bermudaSunsetTop" translatesAutoresizingMaskIntoConstraints="NO" id="ITK-bk-NGF">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bermudaSubsetTopDark" translatesAutoresizingMaskIntoConstraints="NO" id="ITK-bk-NGF">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -378,7 +408,7 @@
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
-                            <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ev1-nk-31U">
+                            <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ev1-nk-31U">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="U0o-xQ-0E8">
@@ -387,7 +417,7 @@
                                 </view>
                                 <blurEffect style="dark"/>
                             </visualEffectView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ksn-FA-mzC">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ksn-FA-mzC">
                                 <rect key="frame" x="50" y="510" width="275" height="95"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -414,7 +444,6 @@
                                         </state>
                                         <connections>
                                             <action selector="instructionsGotItTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="wIl-u8-0Fv"/>
-                                            <action selector="instructionsViewGotItButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="rH0-w1-UIm"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -469,40 +498,32 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sPl-5P-CDc">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sPl-5P-CDc">
                                 <rect key="frame" x="311" y="620" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="paint bucket"/>
-                                <connections>
-                                    <action selector="fillModeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="Kvg-1t-poK"/>
-                                </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="df7-PT-snJ">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="df7-PT-snJ">
                                 <rect key="frame" x="266" y="620" width="27" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="paint bucket"/>
-                                <connections>
-                                    <action selector="pinModeButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="1ho-b9-0I8"/>
-                                </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ir-KX-bmB">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ir-KX-bmB">
                                 <rect key="frame" x="136" y="620" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.69709708120000002" green="0.37376992599999997" blue="0.39410270689999999" alpha="0.65000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="I've been"/>
                                 <connections>
-                                    <action selector="beenThereButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="VHa-a0-LcE"/>
                                     <action selector="beenThereButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="Wl5-Ih-gXQ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TgD-WV-62k">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TgD-WV-62k">
                                 <rect key="frame" x="28" y="620" width="100" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.00077266624249999998" green="0.45897446069999998" blue="0.063549611549999996" alpha="0.64752782529999997" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Bucket list"/>
                                 <connections>
                                     <action selector="bucketListButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="00X-PD-oRx"/>
-                                    <action selector="bucketListButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="clq-NR-jzS"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4qV-Ms-ae1">
@@ -513,7 +534,7 @@
                                     <segue destination="O1b-cB-8Dj" kind="show" animates="NO" id="RAo-Nt-Dp1"/>
                                 </connections>
                             </button>
-                            <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DrV-cf-9bD">
+                            <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DrV-cf-9bD">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="KDu-DT-XZE">
@@ -523,38 +544,27 @@
                                 <blurEffect style="dark"/>
                             </visualEffectView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aXL-Zp-nBl">
-                                <rect key="frame" x="324" y="17" width="43" height="47"/>
+                                <rect key="frame" x="253" y="17" width="114" height="47"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="39"/>
-                                <state key="normal" title="+">
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Plan a trip">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="addTrip:" destination="c7O-w7-no5" eventType="touchUpInside" id="xZs-YT-Cqu"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZHg-bt-TMQ">
-                                <rect key="frame" x="324" y="17" width="43" height="47"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="39"/>
-                                <state key="normal" title="+">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="createFirstTripArrowTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="Bc0-dA-COV"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KjX-ub-hvz">
                                 <rect key="frame" x="229" y="20" width="118" height="46"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="26"/>
                                 <state key="normal" title="New trip"/>
                                 <connections>
                                     <action selector="createFirstTripButtonTouchedUpInside:" destination="c7O-w7-no5" eventType="touchUpInside" id="eHj-ge-XRP"/>
-                                    <action selector="createTripButtonTouchDown:" destination="c7O-w7-no5" eventType="touchDown" id="9gR-dq-NE6"/>
+                                    <segue destination="QaX-H5-Z3p" kind="show" identifier="tripListToTripViewController" id="Y7m-za-N5A"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fwo-up-aEh">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fwo-up-aEh">
                                 <rect key="frame" x="167" y="429" width="196" height="130"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -572,14 +582,11 @@
                                             <segment title="No, not decided"/>
                                             <segment title="Yes, already decided"/>
                                         </segments>
-                                        <connections>
-                                            <action selector="destinationDecidedControlValueChanged:" destination="c7O-w7-no5" eventType="valueChanged" id="0l9-Xl-BCx"/>
-                                        </connections>
                                     </segmentedControl>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                             </view>
-                            <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="byC-tZ-0h1">
+                            <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="byC-tZ-0h1">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="EfC-Ou-ewx">
@@ -590,49 +597,37 @@
                                     <blurEffect style="dark"/>
                                 </vibrancyEffect>
                             </visualEffectView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dxq-aR-5pB">
-                                <rect key="frame" x="164" y="318" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <segue destination="QaX-H5-Z3p" kind="show" identifier="tripListToTripViewController" id="DYb-Dy-Wps"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="ev1-nk-31U"/>
+                                <exclude reference="ksn-FA-mzC"/>
+                                <exclude reference="sPl-5P-CDc"/>
+                                <exclude reference="df7-PT-snJ"/>
+                                <exclude reference="0ir-KX-bmB"/>
+                                <exclude reference="TgD-WV-62k"/>
+                                <exclude reference="DrV-cf-9bD"/>
+                                <exclude reference="fwo-up-aEh"/>
+                                <exclude reference="byC-tZ-0h1"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="addAnotherTripButton" destination="aXL-Zp-nBl" id="Vtu-bi-Tmd"/>
                         <outlet property="backgroundBlurFilterView" destination="TMF-81-slu" id="6zM-kU-Hay"/>
                         <outlet property="backgroundView" destination="ITK-bk-NGF" id="PqR-JH-13m"/>
-                        <outlet property="beenThereButton" destination="0ir-KX-bmB" id="1iS-Vf-ung"/>
-                        <outlet property="bucketListButton" destination="TgD-WV-62k" id="tNh-Vp-Xbs"/>
-                        <outlet property="createTripArrow" destination="ZHg-bt-TMQ" id="NoT-Tb-hFp"/>
                         <outlet property="createTripButton" destination="KjX-ub-hvz" id="hLs-JC-zIJ"/>
-                        <outlet property="destinationDecidedControl" destination="Fir-vh-ZCH" id="f3m-fI-mKV"/>
-                        <outlet property="destinationDecidedControlView" destination="fwo-up-aEh" id="J66-q8-3fh"/>
                         <outlet property="existingTripsTable" destination="Gra-2t-s2J" id="seK-KW-ZCb"/>
-                        <outlet property="fillModeButton" destination="sPl-5P-CDc" id="0rL-Et-Aqi"/>
                         <outlet property="goToBucketListButton" destination="4qV-Ms-ae1" id="wmC-3v-gz0"/>
-                        <outlet property="gotItButton" destination="65v-WC-sF2" id="2XT-9M-5mW"/>
                         <outlet property="instructionsLabel" destination="Zwq-2l-9Kj" id="pNT-IK-NQ8"/>
-                        <outlet property="instructionsView" destination="ksn-FA-mzC" id="fq4-N1-rvj"/>
                         <outlet property="myTripsTitleLabel" destination="FnC-Mh-kbn" id="QJp-4q-Tri"/>
-                        <outlet property="pinModeButton" destination="df7-PT-snJ" id="KNz-aA-PKw"/>
-                        <outlet property="popupBackgroundView" destination="DrV-cf-9bD" id="a1S-BT-T5H"/>
-                        <outlet property="popupBackgroundViewDestinationDecided" destination="byC-tZ-0h1" id="JtL-hO-em4"/>
-                        <outlet property="popupBackgroundViewForInstructions" destination="ev1-nk-31U" id="73L-VS-A8U"/>
                         <outlet property="welcomeToPlanitLabel" destination="mEQ-nb-c4r" id="NnC-2B-K33"/>
-                        <segue destination="E8d-J0-NPc" kind="show" identifier="unfinishedExistingTripsToSwiping" animates="NO" id="5Cy-Be-NXP"/>
-                        <segue destination="E8d-J0-NPc" kind="show" identifier="addTripDestinationUndecided" animates="NO" id="anE-cP-H4U"/>
-                        <segue destination="6Nf-ZD-7fF" kind="show" identifier="unbookedTripToRanking" animates="NO" id="upa-Nb-p7J"/>
-                        <segue destination="LVk-lO-4Cs" kind="show" identifier="unbookedTripToExploreHotels" animates="NO" id="bKD-fw-94P"/>
-                        <segue destination="9Zf-or-QAX" kind="show" identifier="unbookedTripToBooking" animates="NO" id="UAc-ww-JX6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R3s-V1-O6L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1516" y="893"/>
+            <point key="canvasLocation" x="-1516" y="892.80359820089961"/>
         </scene>
         <!--Budget View Controller-->
         <scene sceneID="Vgz-mF-ryT">
@@ -1938,9 +1933,6 @@
                                 <state key="normal" title="&lt;">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <segue destination="c7O-w7-no5" kind="show" animates="NO" id="lra-AY-k3U"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IyT-wc-aIe">
                                 <rect key="frame" x="312" y="18" width="40" height="40"/>
@@ -3814,7 +3806,6 @@
                                 </state>
                                 <connections>
                                     <action selector="addContact:" destination="9Q5-Bs-FEW" eventType="touchUpInside" id="Ocn-gn-j5i"/>
-                                    <action selector="addTrip:" destination="c7O-w7-no5" eventType="touchUpInside" id="gvL-LQ-3hH"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="$ max budget" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dAE-Px-gww">
@@ -4008,7 +3999,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bermudaSunsetTop" translatesAutoresizingMaskIntoConstraints="NO" id="FNn-LX-ZiN">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bermudaSubsetTopDark" translatesAutoresizingMaskIntoConstraints="NO" id="FNn-LX-ZiN">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -5279,7 +5270,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0NW-dQ-30A" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" backIndicatorImage="Museum" id="qTT-Lr-iVa">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="Museum" id="qTT-Lr-iVa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -5303,7 +5294,9 @@
         <image name="Message" width="198" height="199"/>
         <image name="Museum" width="128" height="128"/>
         <image name="amenites" width="179" height="169"/>
+        <image name="backButton" width="800" height="800"/>
         <image name="bed icon" width="128" height="128"/>
+        <image name="bermudaSubsetTopDark" width="563" height="487"/>
         <image name="bermudaSunset" width="1500" height="1125"/>
         <image name="bermudaSunsetTop" width="563" height="487"/>
         <image name="budgetICon" width="256" height="256"/>
@@ -9753,16 +9746,16 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="1VF-PM-MLD"/>
+        <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="D0h-av-d3S"/>
         <segue reference="AiS-CM-kbO"/>
-        <segue reference="BRb-kg-zV2"/>
-        <segue reference="0XT-HI-iDA"/>
-        <segue reference="rG8-GZ-vPL"/>
-        <segue reference="lra-AY-k3U"/>
-        <segue reference="bKD-fw-94P"/>
-        <segue reference="UAc-ww-JX6"/>
-        <segue reference="t9O-2u-fWL"/>
+        <segue reference="kPA-Nl-bI1"/>
+        <segue reference="uxT-Gz-li3"/>
+        <segue reference="4uk-gB-sQc"/>
         <segue reference="sNQ-RT-YBj"/>
+        <segue reference="YJh-b0-V47"/>
+        <segue reference="JbU-KK-pA3"/>
+        <segue reference="XG6-b2-gcD"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

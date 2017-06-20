@@ -35,12 +35,25 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     //City dict
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     
+    //Loading subviews based on progress
+    var functionsToLoadSubviewsDictionary = Dictionary<Int,() -> ()>()
+    
     // MARK: Outlets
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollContentView: UIView!
+    @IBOutlet weak var topView: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        functionsToLoadSubviewsDictionary[0] = spawnWhereTravellingFromQuestionView
+        functionsToLoadSubviewsDictionary[1] = spawnDatesPickedOutCalendarView
+        functionsToLoadSubviewsDictionary[2] = spawnDecidedOnCityQuestionView
+        functionsToLoadSubviewsDictionary[3] = spawnNoCityDecidedAnyIdeasQuestionView
+        functionsToLoadSubviewsDictionary[4] = spawnPlanIdeaAsDestinationQuestionView
+        functionsToLoadSubviewsDictionary[5] = spawnWhatTypeOfTripQuestionView
+        functionsToLoadSubviewsDictionary[6] = spawnHowFarAwayQuestion
+        functionsToLoadSubviewsDictionary[7] = spawnDestinationOptionsCardView
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -69,30 +82,108 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //Save
         self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
-        
-        
-        
         scrollView.delegate = self
         
-        userNameQuestionView = Bundle.main.loadNibNamed("UserNameQuestionView", owner: self, options: nil)?.first! as? UserNameQuestionView
-        self.scrollContentView.addSubview(userNameQuestionView!)
-        userNameQuestionView?.userNameQuestionTextfield?.delegate = self
-        userNameQuestionView?.userNameQuestionTextfield?.becomeFirstResponder()
-        let bounds = UIScreen.main.bounds
-        self.userNameQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-        let heightConstraint = NSLayoutConstraint(item: userNameQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (userNameQuestionView?.frame.height)!)
+            if DataContainerSingleton.sharedDataContainer.firstName == nil {
+                spawnUserNameQuestionView()
+            } else {
+                spawnTripNameQuestionView()
+            }
+        if NewOrAddedTripFromSegue == 0 {
+            addSubviewsBasedOnProgress()
+        }
+        
         scrollContentViewHeight = NSLayoutConstraint(item: scrollContentView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: scrollContentView.subviews[scrollContentView.subviews.count - 1].frame.maxY)
-
-        view.addConstraints([heightConstraint,scrollContentViewHeight!])
-        updateHeightOfScrollView()        
+        view.addConstraints([scrollContentViewHeight!])
         scrollContentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        //Trip Name
+        if NewOrAddedTripFromSegue == 1 {
+            let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+            
+            //Create trip and trip data model
+            if tripNameQuestionView == nil || tripNameQuestionView?.tripNameQuestionTextfield?.text == "" || tripNameQuestionView?.tripNameQuestionTextfield?.text == nil {
+                    var tripNameValue = "Trip started \(Date().description.substring(to: 10).substring(from: 5))"
+                    //Check if trip name used already
+                    if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil && DataContainerSingleton.sharedDataContainer.usertrippreferences?.count != 0 {
+                        var countTripsMadeToday = 0
+                        for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+                            if (DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String)!.contains("\(Date().description.substring(to: 10).substring(from: 5))") {
+                                countTripsMadeToday += 1
+                            }
+                        }
+                        if countTripsMadeToday != 0 {
+                            tripNameValue = "Trip " + ("#\(countTripsMadeToday + 1) ") + tripNameValue.substring(from: 5)
+                        }
+                    }
+                    
+                    //                tripNameQuestionView?.tripNameQuestionTextfield?.text = tripNameValue
+                    
+                    //Update trip preferences in dictionary
+                    let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                    SavedPreferencesForTrip["trip_name"] = tripNameValue as NSString
+                    //Save
+                    saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    //Create trip on server
+                    apollo.perform(mutation: CreateTripMutation(trip: CreateTripInput(tripName: tripNameValue)), resultHandler: { (result, error) in
+                        guard let data = result?.data else { return }
+                        let tripID = data.createTrip?.changedTrip?.id
+                        
+                        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+                        SavedPreferencesForTrip["tripID"] = tripID as! NSString
+                        //Save
+                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                        
+                        print(error ?? "no error message")
+                    })
+                    
+                    //Create new firebase channel
+                    if let name = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String {
+                        newChannelRef = channelsRef.childByAutoId()
+                        let channelItem = [
+                            "name": name
+                        ]
+                        newChannelRef?.setValue(channelItem)
+                        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                        SavedPreferencesForTrip["firebaseChannelKey"] = newChannelRef?.key as! NSString
+                        //Save
+                        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                        
+                    }
+            }
+            
+                //            let SavedPreferencesForTrip_2 = fetchSavedPreferencesForTrip()
+                //            timesViewed = (SavedPreferencesForTrip_2["timesViewed"] as? [String : Int])!
+                //
+                //            if timesViewed["newTrip"] == 0 {
+                //                let when = DispatchTime.now()
+                //                DispatchQueue.main.asyncAfter(deadline: when) {
+                //                    self.animateInstructionsIn()
+                //                    let currentTimesViewed = self.timesViewed["newTrip"]
+                //                    self.timesViewed["newTrip"]! = currentTimesViewed! + 1
+                //                    SavedPreferencesForTrip_2["timesViewed"] = self.timesViewed as NSDictionary
+                //                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip_2)
+                //                }
+                //            }
+            
+        } else {
+                //            retrieveContactsWithStore(store: addressBookStore)
+        }
         
         // MARK: Register notifications
         NotificationCenter.default.addObserver(self, selector: #selector(spawnDecidedOnCityQuestionView), name: NSNotification.Name(rawValue: "calendarRangeSelected"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnDatesPickedOutCalendarView), name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnPlanIdeaAsDestinationQuestionView), name: NSNotification.Name(rawValue: "destinationIdeaEntered"), object: nil)
         
+    }
+    
+    override func viewDidLayoutSubviews() {
+        if NewOrAddedTripFromSegue == 0 {
+            updateHeightOfScrollView()
+            scrollDownToTopSubview()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -115,12 +206,49 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         UIView.animate(withDuration: 1) {
             self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.minY), animated: false)
         }
+        
+    }
+    
+    func addSubviewsBasedOnProgress() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let subviewTags = SavedPreferencesForTrip["progress"] as! [Int]
+        for subviewTag in subviewTags {
+            self.functionsToLoadSubviewsDictionary[subviewTag]!()
+        }
+    }
+    
+    func updateProgress() {
+        var currentSubviewsInScrollContentView = [Int]()
+        for subview in scrollContentView.subviews {
+            if subview != userNameQuestionView && subview != tripNameQuestionView {
+                currentSubviewsInScrollContentView.append(subview.tag)
+            }
+        }
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["progress"] = currentSubviewsInScrollContentView as [NSNumber]
+        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
+    func spawnUserNameQuestionView() {
+        userNameQuestionView = Bundle.main.loadNibNamed("UserNameQuestionView", owner: self, options: nil)?.first! as? UserNameQuestionView
+        self.scrollContentView.addSubview(userNameQuestionView!)
+        userNameQuestionView?.userNameQuestionTextfield?.delegate = self
+        userNameQuestionView?.userNameQuestionTextfield?.becomeFirstResponder()
+        let bounds = UIScreen.main.bounds
+        self.userNameQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+        let heightConstraint = NSLayoutConstraint(item: userNameQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (userNameQuestionView?.frame.height)!)
+        view.addConstraints([heightConstraint])
+        updateHeightOfScrollView()
     }
     
     func spawnTripNameQuestionView() {
-        userNameQuestionView?.userNameQuestionTextfield?.resignFirstResponder()
-        if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
-            tripNameQuestionView?.questionLabel?.text = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! \nDo you want to name your trip?"
+        if userNameQuestionView != nil {
+            userNameQuestionView?.userNameQuestionTextfield?.resignFirstResponder()
+            if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
+                tripNameQuestionView?.questionLabel?.text = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! \nDo you want to name your trip?"
+            }
+        } else {
+            tripNameQuestionView?.questionLabel?.text = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! \nDo you want to name your trip?"
         }
         if tripNameQuestionView == nil {
             //Load next question
@@ -130,22 +258,34 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             tripNameQuestionView?.tripNameQuestionTextfield?.delegate = self
             let bounds = UIScreen.main.bounds
             
-            self.tripNameQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            if userNameQuestionView != nil {
+                self.tripNameQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            } else {
+                self.tripNameQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            }
             let heightConstraint = NSLayoutConstraint(item: tripNameQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (tripNameQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
-                tripNameQuestionView?.questionLabel?.text = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! \nDo you want to name your trip?"
+            if userNameQuestionView != nil {
+                if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
+                    tripNameQuestionView?.questionLabel?.text = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! \nDo you want to name your trip?"
+                }
+            } else {
+                tripNameQuestionView?.questionLabel?.text = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! \nDo you want to name your trip?"
             }
             tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
         }
+        
         updateHeightOfScrollView()
-        scrollDownToTopSubview()
+        if userNameQuestionView != nil {
+            scrollDownToTopSubview()
+        }
     }
     func spawnWhereTravellingFromQuestionView(){
         tripNameQuestionView?.tripNameQuestionTextfield?.resignFirstResponder()
         if whereTravellingFromQuestionView == nil {
             //Load next question
             whereTravellingFromQuestionView = Bundle.main.loadNibNamed("WhereTravellingFromQuestionView", owner: self, options: nil)?.first! as? WhereTravellingFromQuestionView
+            whereTravellingFromQuestionView?.tag = 0
             self.scrollContentView.addSubview(whereTravellingFromQuestionView!)
             let bounds = UIScreen.main.bounds
             
@@ -156,11 +296,28 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         updateHeightOfScrollView()
         scrollDownToTopSubview()
 //        whereTravellingFromQuestionView?.searchController?.searchBar.becomeFirstResponder()
+        updateProgress()
+    }
+    func spawnDatesPickedOutCalendarView() {
+        if datesPickedOutCalendarView == nil {
+            //Load next question
+            datesPickedOutCalendarView = Bundle.main.loadNibNamed("DatesPickedOutCalendarView", owner: self, options: nil)?.first! as? DatesPickedOutCalendarView
+            datesPickedOutCalendarView?.tag = 1
+            self.scrollContentView.addSubview(datesPickedOutCalendarView!)
+            let bounds = UIScreen.main.bounds
+            self.datesPickedOutCalendarView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: datesPickedOutCalendarView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutCalendarView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+        }
+        updateHeightOfScrollView()
+        scrollDownToTopSubview()
+        updateProgress()
     }
     func spawnDecidedOnCityQuestionView() {
         if decidedOnCityToVisitQuestionView == nil {
             //Load next question
             decidedOnCityToVisitQuestionView = Bundle.main.loadNibNamed("DecidedOnCityToVisitQuestionView", owner: self, options: nil)?.first! as? DecidedOnCityToVisitQuestionView
+            decidedOnCityToVisitQuestionView?.tag = 2
             self.scrollContentView.addSubview(decidedOnCityToVisitQuestionView!)
             let bounds = UIScreen.main.bounds
             decidedOnCityToVisitQuestionView?.button1?.addTarget(self, action: #selector(self.decidedOnCityToVisitQuestion_Yes(sender:)), for: UIControlEvents.touchUpInside)
@@ -171,26 +328,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         updateHeightOfScrollView()
         scrollDownToTopSubview()
+        updateProgress()
     }
     
-    func spawnDatesPickedOutCalendarView() {
-        if datesPickedOutCalendarView == nil {
-            //Load next question
-            datesPickedOutCalendarView = Bundle.main.loadNibNamed("DatesPickedOutCalendarView", owner: self, options: nil)?.first! as? DatesPickedOutCalendarView
-            self.scrollContentView.addSubview(datesPickedOutCalendarView!)
-            let bounds = UIScreen.main.bounds
-            self.datesPickedOutCalendarView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: datesPickedOutCalendarView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutCalendarView?.frame.height)!)
-            view.addConstraints([heightConstraint])
-        }
-        updateHeightOfScrollView()
-        scrollDownToTopSubview()
-    }
     func spawnNoCityDecidedAnyIdeasQuestionView() {
         if noCityDecidedAnyIdeasQuestionView == nil {
             //Load next question
             noCityDecidedAnyIdeasQuestionView = Bundle.main.loadNibNamed("NoCityDecidedAnyIdeasQuestionView", owner: self, options: nil)?.first! as? NoCityDecidedAnyIdeasQuestionView
             self.scrollContentView.addSubview(noCityDecidedAnyIdeasQuestionView!)
+            noCityDecidedAnyIdeasQuestionView?.tag = 3
             let bounds = UIScreen.main.bounds
             noCityDecidedAnyIdeasQuestionView?.button?.addTarget(self, action: #selector(self.noCityDecidedAnyIdeasQuestionView_noIdeas(sender:)), for: UIControlEvents.touchUpInside)
             self.noCityDecidedAnyIdeasQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
@@ -199,11 +345,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         updateHeightOfScrollView()
         scrollDownToTopSubview()
+        updateProgress()
     }
     func spawnPlanIdeaAsDestinationQuestionView() {
         if planTripToIdeaQuestionView == nil {
             //Load next question
             planTripToIdeaQuestionView = Bundle.main.loadNibNamed("PlanTripToIdeaQuestionView", owner: self, options: nil)?.first! as? PlanTripToIdeaQuestionView
+            planTripToIdeaQuestionView?.tag = 4
             if noCityDecidedAnyIdeasQuestionView?.searchController?.searchBar.text != nil && noCityDecidedAnyIdeasQuestionView?.searchController?.searchBar.text != "" {
                 planTripToIdeaQuestionView?.questionLabel?.text = "Do you want to plan\nyour trip to \((noCityDecidedAnyIdeasQuestionView?.searchController?.searchBar.text!)!)?"
             }
@@ -217,11 +365,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         updateHeightOfScrollView()
         scrollDownToTopSubview()
+        updateProgress()
     }
     func spawnWhatTypeOfTripQuestionView() {
         if whatTypeOfTripQuestionView == nil {
             //Load next question
             whatTypeOfTripQuestionView = Bundle.main.loadNibNamed("WhatTypeOfTripQuestionView", owner: self, options: nil)?.first! as? WhatTypeOfTripQuestionView
+            whatTypeOfTripQuestionView?.tag = 5
             self.scrollContentView.addSubview(whatTypeOfTripQuestionView!)
             let bounds = UIScreen.main.bounds
             whatTypeOfTripQuestionView?.button1?.addTarget(self, action: #selector(self.whatTypeOfTripQuestionView_beaches(sender:)), for: UIControlEvents.touchUpInside)
@@ -235,11 +385,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         updateHeightOfScrollView()
         scrollDownToTopSubview()
+        updateProgress()
     }
     func spawnHowFarAwayQuestion() {
         if howFarAwayQuestionView == nil {
             //Load next question
             howFarAwayQuestionView = Bundle.main.loadNibNamed("HowFarAwayQuestionView", owner: self, options: nil)?.first! as? HowFarAwayQuestionView
+            howFarAwayQuestionView?.tag = 6
             self.scrollContentView.addSubview(howFarAwayQuestionView!)
             let bounds = UIScreen.main.bounds
             howFarAwayQuestionView?.button1?.addTarget(self, action: #selector(self.howFarAwayQuestionView_shortDrive(sender:)), for: UIControlEvents.touchUpInside)
@@ -252,12 +404,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         updateHeightOfScrollView()
         scrollDownToTopSubview()
+        updateProgress()
     }
 
     func spawnDestinationOptionsCardView() {
         if destinationOptionsCardView == nil {
             //Load next question
             destinationOptionsCardView = Bundle.main.loadNibNamed("DestinationOptionsCardView", owner: self, options: nil)?.first! as? DestinationOptionsCardView
+            destinationOptionsCardView?.tag = 7
             self.scrollContentView.addSubview(destinationOptionsCardView!)
             let bounds = UIScreen.main.bounds
             destinationOptionsCardView?.button1?.addTarget(self, action: #selector(self.destinationOptionsCardView_x(sender:)), for: UIControlEvents.touchUpInside)
@@ -268,6 +422,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         updateHeightOfScrollView()
         scrollDownToTopSubview()
+        updateProgress()
         
         var when = DispatchTime.now() + 3
         DispatchQueue.main.asyncAfter(deadline: when) {
@@ -275,7 +430,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 self.destinationOptionsCardView?.questionLabel?.text = "Give a thumbs up to each place\nyou MIGHT be interested in going to\nand a thumbs down if not."
             }
         }
-        when = DispatchTime.now() + 10
+        when = DispatchTime.now() + 8
         DispatchQueue.main.asyncAfter(deadline: when) {
             UIView.animate(withDuration: 1) {
                 self.destinationOptionsCardView?.questionLabel?.isHidden = true
@@ -390,6 +545,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             if userNameQuestionView?.userNameQuestionTextfield?.text == nil || userNameQuestionView?.userNameQuestionTextfield?.text == "" {
                 return false
             } else {
+                DataContainerSingleton.sharedDataContainer.firstName = textField.text
                 spawnTripNameQuestionView()
             }
         }
@@ -398,6 +554,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             if tripNameQuestionView?.tripNameQuestionTextfield?.text == nil || tripNameQuestionView?.tripNameQuestionTextfield?.text == "" {
                 return false
             } else {
+                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                SavedPreferencesForTrip["trip_name"] = textField.text
+                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                 spawnWhereTravellingFromQuestionView()
             }
         }
@@ -420,7 +579,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //Init preference vars for if new or added trip
         //Trip status
         var bookingStatus = NSNumber(value: 0)
-        var finishedEnteringPreferencesStatus = NSString()
+        var progress = [NSNumber]()
         var lastVC = NSString()
         var timesViewed = NSDictionary()
         //New Trip VC
@@ -456,7 +615,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if isNewOrAddedTrip == 0 {
             //Trip status
             bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? 0 as NSNumber
-            finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
+            progress = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "progress") as? [NSNumber] ?? [NSNumber]()
             lastVC = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastVC") as? NSString ?? NSString()
             timesViewed = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "timesViewed") as? NSDictionary ?? NSDictionary()
             //New Trip VC
@@ -492,7 +651,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         

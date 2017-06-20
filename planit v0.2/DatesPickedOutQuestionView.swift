@@ -27,8 +27,8 @@ class DatesPickedOutQuestionView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-        self.layer.borderColor = UIColor.red.cgColor
-        self.layer.borderWidth = 2
+//        self.layer.borderColor = UIColor.red.cgColor
+//        self.layer.borderWidth = 2
     }
     
     override func layoutSubviews() {
