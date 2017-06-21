@@ -88,6 +88,8 @@
 		FAD50DD61EE9BFD60006C3AA /* instructionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAD50DD51EE9BFD60006C3AA /* instructionsView.xib */; };
 		FAD50DD81EE9BFEA0006C3AA /* instructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD50DD71EE9BFEA0006C3AA /* instructionsView.swift */; };
 		FAD50DDA1EE9C4AB0006C3AA /* instructionsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD50DD91EE9C4AB0006C3AA /* instructionsCollectionViewCell.swift */; };
+		FADEF0EC1EF9F32C0005D147 /* AddAnotherDestinationQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADEF0EB1EF9F32B0005D147 /* AddAnotherDestinationQuestionView.swift */; };
+		FADEF0EE1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FADEF0ED1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib */; };
 		FADF09FD1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADF09FC1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift */; };
 		FADF0A011ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADF0A001ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift */; };
 		FAE83F651EF461500009A020 /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F641EF461500009A020 /* TripViewController.swift */; };
@@ -240,6 +242,8 @@
 		FAD50DD51EE9BFD60006C3AA /* instructionsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = instructionsView.xib; sourceTree = "<group>"; };
 		FAD50DD71EE9BFEA0006C3AA /* instructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = instructionsView.swift; sourceTree = "<group>"; };
 		FAD50DD91EE9C4AB0006C3AA /* instructionsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = instructionsCollectionViewCell.swift; sourceTree = "<group>"; };
+		FADEF0EB1EF9F32B0005D147 /* AddAnotherDestinationQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAnotherDestinationQuestionView.swift; sourceTree = "<group>"; };
+		FADEF0ED1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddAnotherDestinationQuestionView.xib; sourceTree = "<group>"; };
 		FADF09FC1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hotelPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		FADF0A001ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hotelReviewTableViewCell.swift; sourceTree = "<group>"; };
 		FAE83F641EF461500009A020 /* TripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
@@ -446,14 +450,6 @@
 				FAA8F2611E351B9500CD7337 /* PasswordViewController.swift */,
 				FAA8F2651E351B9500CD7337 /* SettingsViewController.swift */,
 				FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */,
-				FAA8F2671E351B9500CD7337 /* TripListViewController.swift */,
-				FAA8F2601E351B9500CD7337 /* NewTripNameViewController.swift */,
-				FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */,
-				FAA8F2621E351B9500CD7337 /* RankingViewController.swift */,
-				FA730B8F1EC9E88E004F310A /* flightSearchViewController.swift */,
-				FA730B931EC9EEBA004F310A /* flightResultsViewController.swift */,
-				FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */,
-				FAA8F2641E351B9500CD7337 /* ReviewAndBookViewController.swift */,
 				FA97F84A1EE66A8B008358EF /* chatViewController.swift */,
 				FAAE62611E3A423200A2A6B7 /* View Controllers (unused) */,
 			);
@@ -585,6 +581,14 @@
 		FAAE62611E3A423200A2A6B7 /* View Controllers (unused) */ = {
 			isa = PBXGroup;
 			children = (
+				FAA8F2671E351B9500CD7337 /* TripListViewController.swift */,
+				FAA8F2601E351B9500CD7337 /* NewTripNameViewController.swift */,
+				FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */,
+				FAA8F2621E351B9500CD7337 /* RankingViewController.swift */,
+				FA730B8F1EC9E88E004F310A /* flightSearchViewController.swift */,
+				FA730B931EC9EEBA004F310A /* flightResultsViewController.swift */,
+				FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */,
+				FAA8F2641E351B9500CD7337 /* ReviewAndBookViewController.swift */,
 				FA2CFC091E3E57A200527405 /* UnbookedTripSummaryViewController.swift */,
 				FAA8F2661E351B9500CD7337 /* SuggestDestinationViewController.swift */,
 				FAA8F25A1E351B9500CD7337 /* BudgetViewController.swift */,
@@ -656,6 +660,8 @@
 				FAE83F901EF7B1500009A020 /* HowFarAwayQuestionView.xib */,
 				FAE83F921EF7B2EE0009A020 /* DestinationOptionsCardView.swift */,
 				FAE83F941EF7B2F70009A020 /* DestinationOptionsCardView.xib */,
+				FADEF0EB1EF9F32B0005D147 /* AddAnotherDestinationQuestionView.swift */,
+				FADEF0ED1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib */,
 			);
 			name = "Scrolling Views";
 			sourceTree = "<group>";
@@ -822,6 +828,7 @@
 				FA4EA8D61EE881D3005FCE91 /* GoogleService-Info.plist in Resources */,
 				FA4EA8C91EE7A4AE005FCE91 /* CreateTrip.graphql in Resources */,
 				FAA8F2851E351DA300CD7337 /* CreateNewUser.graphql in Resources */,
+				FADEF0EE1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib in Resources */,
 				FAA8F28F1E351DBF00CD7337 /* monthHeaderView.xib in Resources */,
 				FA09A3F11EB23894007F64A3 /* CardContentView.xib in Resources */,
 				FAA8F28D1E351DBF00CD7337 /* CellView.xib in Resources */,
@@ -1040,6 +1047,7 @@
 				FAA8F2951E351DCD00CD7337 /* contactsCollectionViewCell.swift in Sources */,
 				FAA8F2231E35194100CD7337 /* AppDelegate.swift in Sources */,
 				FAA8F2681E351B9500CD7337 /* ActivitiesViewController.swift in Sources */,
+				FADEF0EC1EF9F32C0005D147 /* AddAnotherDestinationQuestionView.swift in Sources */,
 				FADF09FD1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift in Sources */,
 				FAE83F851EF79EAA0009A020 /* NoCityDecidedAnyIdeasQuestionView.swift in Sources */,
 				FAD50DDA1EE9C4AB0006C3AA /* instructionsCollectionViewCell.swift in Sources */,

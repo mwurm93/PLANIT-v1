@@ -342,10 +342,32 @@
                                             <segue destination="c7O-w7-no5" kind="show" id="D0h-av-d3S"/>
                                         </connections>
                                     </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="CE4-7f-ped">
+                                        <rect key="frame" x="51" y="22" width="273" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ej9-23-Zsq">
+                                                <rect key="frame" x="0.0" y="0.0" width="63" height="30"/>
+                                                <state key="normal" title="Assistant"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bPt-e2-WYa">
+                                                <rect key="frame" x="123" y="0.0" width="57" height="30"/>
+                                                <state key="normal" title="Itinerary"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bkP-qf-zvF">
+                                                <rect key="frame" x="240" y="0.0" width="33" height="30"/>
+                                                <state key="normal" title="Chat"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="white line" translatesAutoresizingMaskIntoConstraints="NO" id="N54-ke-5oc">
+                                        <rect key="frame" x="45" y="25" width="75" height="51"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SNF-xw-05H">
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SNF-xw-05H">
                                 <rect key="frame" x="0.0" y="65" width="375" height="602"/>
                                 <subviews>
                                     <view autoresizesSubviews="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EeG-2u-mWE">
@@ -373,9 +395,13 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
                     <connections>
+                        <outlet property="assistantButton" destination="Ej9-23-Zsq" id="IW1-VI-wK3"/>
+                        <outlet property="chatButton" destination="bkP-qf-zvF" id="rcW-kU-5q3"/>
+                        <outlet property="itineraryButton" destination="bPt-e2-WYa" id="CTF-hu-gzM"/>
                         <outlet property="scrollContentView" destination="EeG-2u-mWE" id="Zm1-5d-MxK"/>
                         <outlet property="scrollView" destination="SNF-xw-05H" id="cke-8Q-0oX"/>
                         <outlet property="topView" destination="Abn-lc-U4N" id="2gS-y6-rRx"/>
+                        <outlet property="underline" destination="N54-ke-5oc" id="7nI-3U-7Sf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VFw-mZ-VwK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5270,7 +5296,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0NW-dQ-30A" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="Museum" id="qTT-Lr-iVa">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" backIndicatorImage="Museum" id="qTT-Lr-iVa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -9746,16 +9772,16 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="RAo-Nt-Dp1"/>
-        <segue reference="D0h-av-d3S"/>
+        <segue reference="JbU-KK-pA3"/>
+        <segue reference="aaX-Gb-b3x"/>
+        <segue reference="YJh-b0-V47"/>
         <segue reference="AiS-CM-kbO"/>
-        <segue reference="kPA-Nl-bI1"/>
-        <segue reference="uxT-Gz-li3"/>
+        <segue reference="XG6-b2-gcD"/>
         <segue reference="4uk-gB-sQc"/>
         <segue reference="sNQ-RT-YBj"/>
-        <segue reference="YJh-b0-V47"/>
-        <segue reference="JbU-KK-pA3"/>
-        <segue reference="XG6-b2-gcD"/>
+        <segue reference="uxT-Gz-li3"/>
+        <segue reference="D0h-av-d3S"/>
+        <segue reference="1VF-PM-MLD"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

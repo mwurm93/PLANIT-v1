@@ -13,9 +13,7 @@ import JSQMessagesViewController
 import SwiftGifOrigin
 
 final class ChatViewController: JSQMessagesViewController {
-    
-    
-    
+
     //Passed via segue
     var searchMode: String?
     

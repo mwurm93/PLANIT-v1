@@ -57,10 +57,6 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
         calendarView?.frame = CGRect(x: 13, y: 100, width: 350, height: 300)
-        
-//        let test = calendarView
-//        let test2 = calendarView?.frame
-        
     }
     
     func addViews() {

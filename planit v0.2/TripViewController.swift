@@ -24,6 +24,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var whatTypeOfTripQuestionView: WhatTypeOfTripQuestionView?
     var howFarAwayQuestionView: HowFarAwayQuestionView?
     var destinationOptionsCardView: DestinationOptionsCardView?
+    var addAnotherDestinationQuestionView: AddAnotherDestinationQuestionView?
     
     //Firebase channel
     var channelsRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
@@ -42,6 +43,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollContentView: UIView!
     @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var underline: UIImageView!
+    @IBOutlet weak var assistantButton: UIButton!
+    @IBOutlet weak var itineraryButton: UIButton!
+    @IBOutlet weak var chatButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +59,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[5] = spawnWhatTypeOfTripQuestionView
         functionsToLoadSubviewsDictionary[6] = spawnHowFarAwayQuestion
         functionsToLoadSubviewsDictionary[7] = spawnDestinationOptionsCardView
+        functionsToLoadSubviewsDictionary[8] = spawnAddAnotherDestinationQuestionView
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -61,17 +67,17 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
             } else {
                 //Load from server
-                var rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["miami_1","miami_2"],"topThingsToDo":["Vizcaya Museum and Gardens", "American Airlines Arena", "Wynwood Walls", "Boat tours","Zoological Wildlife Foundation"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]]]
+                var rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["miami_1","miami_2"],"topThingsToDo":["Vizcaya Museum and Gardens", "American Airlines Arena", "Wynwood Walls", "Boat tours","Zoological Wildlife Foundation"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"]]
                 
-                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Washington DC","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["washingtonDC_1","washingtonDC_2","washingtonDC_3","washingtonDC_4"],"topThingsToDo":["National Mall", "Smithsonian Air and Space Museum" ,"Logan Circle"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Washington DC","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["washingtonDC_1","washingtonDC_2","washingtonDC_3","washingtonDC_4"],"topThingsToDo":["National Mall", "Smithsonian Air and Space Museum" ,"Logan Circle"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
                 
-                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["sanDiego_1","sanDiego_2","sanDiego_3","sanDiego_4"],"topThingsToDo":["Sunset Cliffs", "San Diego Zoo" ,"Petco Park"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["sanDiego_1","sanDiego_2","sanDiego_3","sanDiego_4"],"topThingsToDo":["Sunset Cliffs", "San Diego Zoo" ,"Petco Park"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
                 
-                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Nashville","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["nashville_1","nashville_2","nashville_3","nashville_4"],"topThingsToDo":["Grand Ole Opry", "Broadway" ,"Country Music Hall of Fame"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Nashville","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["nashville_1","nashville_2","nashville_3","nashville_4"],"topThingsToDo":["Grand Ole Opry", "Broadway" ,"Country Music Hall of Fame"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
                 
-                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"New Orleans","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["newOrleans_1","newOrleans_2","newOrleans_3","newOrleans_4"],"topThingsToDo":["Bourbon Street", "National WWII Museum" ,"Jackson Square"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"New Orleans","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["newOrleans_1","newOrleans_2","newOrleans_3","newOrleans_4"],"topThingsToDo":["Bourbon Street", "National WWII Museum" ,"Jackson Square"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
                 
-                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"Austin","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["austin_1","austin_2","austin_3","austin_4"],"topThingsToDo":["Zilker Park", "6th Street" ,"University of Texas"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()]])
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"Austin","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["austin_1","austin_2","austin_3","austin_4"],"topThingsToDo":["Zilker Park", "6th Street" ,"University of Texas"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
                 
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
             }
@@ -176,6 +182,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(spawnDecidedOnCityQuestionView), name: NSNotification.Name(rawValue: "calendarRangeSelected"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnDatesPickedOutCalendarView), name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnPlanIdeaAsDestinationQuestionView), name: NSNotification.Name(rawValue: "destinationIdeaEntered"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionView), name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
+        
         
     }
     
@@ -312,6 +320,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        
+        let when = DispatchTime.now() + 1.4
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.datesPickedOutCalendarView?.calendarView.flashScrollIndicators()
+        }
     }
     func spawnDecidedOnCityQuestionView() {
         if decidedOnCityToVisitQuestionView == nil {
@@ -423,25 +436,24 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
-        
-        var when = DispatchTime.now() + 3
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            UIView.animate(withDuration: 1) {
-                self.destinationOptionsCardView?.questionLabel?.text = "Give a thumbs up to each place\nyou MIGHT be interested in going to\nand a thumbs down if not."
-            }
-        }
-        when = DispatchTime.now() + 8
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            UIView.animate(withDuration: 1) {
-                self.destinationOptionsCardView?.questionLabel?.isHidden = true
-                self.destinationOptionsCardView?.swipeableView.isHidden = false
-                self.destinationOptionsCardView?.button1?.isHidden = false
-                self.destinationOptionsCardView?.button2?.isHidden = false
-            }
-        }
-
     }
-
+    func spawnAddAnotherDestinationQuestionView() {
+        if addAnotherDestinationQuestionView == nil {
+            //Load next question
+            addAnotherDestinationQuestionView = Bundle.main.loadNibNamed("AddAnotherDestinationQuestionView", owner: self, options: nil)?.first! as? AddAnotherDestinationQuestionView
+            addAnotherDestinationQuestionView?.tag = 8
+            self.scrollContentView.addSubview(addAnotherDestinationQuestionView!)
+            let bounds = UIScreen.main.bounds
+//            chooseDestinationTableView?.button1?.addTarget(self, action: #selector(self.destinationOptionsCardView_x(sender:)), for: UIControlEvents.touchUpInside)
+//            destinationOptionsCardView?.button2?.addTarget(self, action: #selector(self.destinationOptionsCardView_heart(sender:)), for: UIControlEvents.touchUpInside)
+            self.addAnotherDestinationQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: addAnotherDestinationQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (addAnotherDestinationQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+        }
+        updateHeightOfScrollView()
+        scrollDownToTopSubview()
+        updateProgress()
+    }
     
     // MARK: Sent events
     func tripNameQuestionButtonClicked(sender:UIButton) {

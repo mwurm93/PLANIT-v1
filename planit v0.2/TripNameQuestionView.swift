@@ -71,6 +71,7 @@ class TripNameQuestionView: UIView {
         tripNameQuestionTextfield?.borderStyle = .none
         tripNameQuestionTextfield?.layer.masksToBounds = true
         tripNameQuestionTextfield?.textAlignment = .center
+        tripNameQuestionTextfield?.returnKeyType = .next
         let userNameQuestionTextfieldPlaceholder = tripNameQuestionTextfield!.value(forKey: "placeholderLabel") as? UILabel
         userNameQuestionTextfieldPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         userNameQuestionTextfieldPlaceholder?.text = "Name"
