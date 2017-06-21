@@ -382,12 +382,28 @@
                                     <constraint firstItem="EeG-2u-mWE" firstAttribute="top" secondItem="SNF-xw-05H" secondAttribute="top" id="aPe-Hh-VKx"/>
                                 </constraints>
                             </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cvm-VN-7u9">
+                                <rect key="frame" x="335" y="65" width="40" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="▲"/>
+                                <connections>
+                                    <action selector="scrollUpButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="uSc-eQ-QQd"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5lv-hC-A2u">
+                                <rect key="frame" x="335" y="90" width="40" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="▼"/>
+                                <connections>
+                                    <action selector="scrollDownButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="Aec-vF-fKs"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="4fw-4a-zq8" firstAttribute="top" secondItem="SNF-xw-05H" secondAttribute="bottom" id="Kwd-Fg-vOb"/>
                             <constraint firstItem="EeG-2u-mWE" firstAttribute="width" secondItem="muN-a6-dmD" secondAttribute="width" id="OrC-3N-7iz"/>
-                            <constraint firstItem="SNF-xw-05H" firstAttribute="top" secondItem="CD1-TJ-nzS" secondAttribute="bottom" constant="65" id="Qw9-Jo-lfi"/>
+                            <constraint firstItem="SNF-xw-05H" firstAttribute="top" secondItem="CD1-TJ-nzS" secondAttribute="bottom" constant="45" id="Qw9-Jo-lfi"/>
                             <constraint firstAttribute="trailing" secondItem="SNF-xw-05H" secondAttribute="trailing" id="iOS-Ta-8lF"/>
                             <constraint firstItem="SNF-xw-05H" firstAttribute="leading" secondItem="muN-a6-dmD" secondAttribute="leading" id="p4B-UB-W6a"/>
                         </constraints>
@@ -399,6 +415,8 @@
                         <outlet property="chatButton" destination="bkP-qf-zvF" id="rcW-kU-5q3"/>
                         <outlet property="itineraryButton" destination="bPt-e2-WYa" id="CTF-hu-gzM"/>
                         <outlet property="scrollContentView" destination="EeG-2u-mWE" id="Zm1-5d-MxK"/>
+                        <outlet property="scrollDownButton" destination="5lv-hC-A2u" id="z8T-NK-lO8"/>
+                        <outlet property="scrollUpButton" destination="Cvm-VN-7u9" id="VzC-nF-CUJ"/>
                         <outlet property="scrollView" destination="SNF-xw-05H" id="cke-8Q-0oX"/>
                         <outlet property="topView" destination="Abn-lc-U4N" id="2gS-y6-rRx"/>
                         <outlet property="underline" destination="N54-ke-5oc" id="7nI-3U-7Sf"/>
@@ -2952,10 +2970,10 @@
                                 </connections>
                             </button>
                             <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nEI-Ar-bPd">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="504" width="375" height="163"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="Daw-TB-PxA">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="163"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="dark"/>
@@ -3003,7 +3021,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uTE-AC-aKu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2678" y="197"/>
+            <point key="canvasLocation" x="2677.5999999999999" y="196.55172413793105"/>
         </scene>
         <!--Review And Book View Controller-->
         <scene sceneID="oXU-ux-Xys">
@@ -9772,11 +9790,11 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="JbU-KK-pA3"/>
-        <segue reference="aaX-Gb-b3x"/>
-        <segue reference="YJh-b0-V47"/>
-        <segue reference="AiS-CM-kbO"/>
+        <segue reference="wqY-nU-Jm3"/>
         <segue reference="XG6-b2-gcD"/>
+        <segue reference="ylU-8y-Slg"/>
+        <segue reference="AiS-CM-kbO"/>
+        <segue reference="YJh-b0-V47"/>
         <segue reference="4uk-gB-sQc"/>
         <segue reference="sNQ-RT-YBj"/>
         <segue reference="uxT-Gz-li3"/>

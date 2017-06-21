@@ -47,6 +47,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var assistantButton: UIButton!
     @IBOutlet weak var itineraryButton: UIButton!
     @IBOutlet weak var chatButton: UIButton!
+    @IBOutlet weak var scrollUpButton: UIButton!
+    @IBOutlet weak var scrollDownButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,6 +91,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
         scrollView.delegate = self
+        scrollView.indicatorStyle = .white
         
             if DataContainerSingleton.sharedDataContainer.firstName == nil {
                 spawnUserNameQuestionView()
@@ -103,6 +106,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         view.addConstraints([scrollContentViewHeight!])
         scrollContentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        handleScrollUpAndDownButtons()
         
         //Trip Name
         if NewOrAddedTripFromSegue == 1 {
@@ -214,7 +219,39 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         UIView.animate(withDuration: 1) {
             self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.minY), animated: false)
         }
-        
+    }
+    
+    func scrollUpOneSubview(){
+        let yPoint = scrollView.contentOffset.y - self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.height
+        if yPoint >= 0 {
+            UIView.animate(withDuration: 1) {
+                self.scrollView.setContentOffset(CGPoint(x: 0, y: yPoint), animated: false)
+            }
+        }
+    }
+    
+    func scrollDownOneSubview(){
+        let yPoint = scrollView.contentOffset.y + 2 * self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.height
+        if yPoint <= scrollView.contentSize.height {
+            UIView.animate(withDuration: 1) {
+                self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollView.contentOffset.y + self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.height), animated: false)
+            }
+        }
+    }
+    
+    func handleScrollUpAndDownButtons(){
+        let yPointDown = scrollView.contentOffset.y + 2 * self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.height
+        let yPointUp = scrollView.contentOffset.y - self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.height
+        if yPointDown > scrollView.contentSize.height {
+            self.scrollDownButton.isHidden = true
+        } else {
+            self.scrollDownButton.isHidden = false
+        }
+        if yPointUp < 0 {
+            self.scrollUpButton.isHidden = true
+        } else {
+            self.scrollUpButton.isHidden = false
+        }
     }
     
     func addSubviewsBasedOnProgress() {
@@ -580,6 +617,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         return true
     }
 
+    //MARK: Scrollview delegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        handleScrollUpAndDownButtons()
+    }
     
     // MARK: SAVE TO SINGLETON
     ////// ADD NEW TRIP VARS (NS ONLY) HERE ///////////////////////////////////////////////////////////////////////////
@@ -717,6 +758,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             existing_trips?.append(SavedPreferencesForTrip as NSDictionary)
             DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
         }
+    }
+    
+    // MARK: Actions
+    @IBAction func scrollUpButtonTouchedUpInside(_ sender: Any) {
+        scrollUpOneSubview()
+    }
+    
+    @IBAction func scrollDownButtonTouchedUpInside(_ sender: Any) {
+        scrollDownOneSubview()
     }
 
 }

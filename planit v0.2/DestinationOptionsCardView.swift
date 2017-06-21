@@ -10,9 +10,7 @@ import UIKit
 import UIColor_FlatColors
 import Cartography
 
-class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
-    
-//    , UITableViewDataSource, UITableViewDelegate
+class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate {
     
     //MARK: Outlets
     @IBOutlet weak var swipeableView: ZLSwipeableView!
@@ -25,7 +23,9 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
     var button3: UIButton?
     var button4: UIButton?
     var button5: UIButton?
-    var destinationsSwipedRightTableView : UITableView?
+    var destinationsSwipedRightTableView: UITableView?
+    var destinationsSwipedRight = [String]()
+    var destinationsSwipedLeft = [String]()
     
         //ZLSwipeableView vars
     var colors = ["Turquoise", "Green Sea", "Emerald", "Nephritis", "Peter River", "Belize Hole", "Amethyst", "Wisteria", "Wet Asphalt", "Midnight Blue", "Sun Flower", "Orange", "Carrot", "Pumpkin", "Alizarin", "Pomegranate", "Silver", "Concrete", "Asbestos"]
@@ -57,6 +57,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         button2?.isHidden = true
         swipeableView.isHidden = true
         button4?.isHidden = true
+        destinationsSwipedRightTableView?.isHidden = true
         button5?.isHidden = true
     }
     
@@ -65,11 +66,14 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         let bounds = UIScreen.main.bounds
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 230)
+        if !(destinationsSwipedRightTableView?.isHidden)! {
+            self.questionLabel?.frame.size.height = 50
+        }
         
-        button1?.frame = CGRect(x: (bounds.size.width-200)/2, y: 490, width: 80, height: 80)
+        button1?.frame = CGRect(x: (bounds.size.width-200)/2, y: 510, width: 80, height: 80)
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
-        button2?.frame = CGRect(x: (bounds.size.width-200)/2+120, y: 490, width: 80, height: 80)
+        button2?.frame = CGRect(x: (bounds.size.width-200)/2+120, y: 510, width: 80, height: 80)
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
         button3?.sizeToFit()
@@ -90,18 +94,21 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         button5?.frame.size.height = 30
         button5?.frame.size.width += 20
         button5?.frame.origin.x = (bounds.size.width - (button5?.frame.width)!) / 2
-        button5?.frame.origin.y = 280
+        button5?.frame.origin.y = 400
         button5?.layer.cornerRadius = (button5?.frame.height)! / 2
         
         swipeableView.nextView = {
             return self.nextCardView()
         }
 
-        destinationsSwipedRightTableView?.frame = CGRect(x: 0, y: 150, width: 300, height: 186)
+        destinationsSwipedRightTableView?.frame = CGRect(x: (bounds.size.width - 300) / 2, y: 100, width: 300, height: 286)
         
     }
         
     func addViews() {
+        
+        setUpTable()
+        
         //Question label
         questionLabel = UILabel(frame: CGRect.zero)
         questionLabel?.translatesAutoresizingMaskIntoConstraints = false
@@ -191,9 +198,12 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
                 
                 let when = DispatchTime.now() + 0.4
                 DispatchQueue.main.asyncAfter(deadline: when) {
-                    self.questionLabel?.text = "Ready to choose one of the ones you liked as your destination?"
+                    self.questionLabel?.text = "Ready to choose a destination?"
+                    self.questionLabel?.frame.size.height = 50
                     self.questionLabel?.isHidden = false
-                    self.button4?.isHidden = false
+                    self.button4?.isHidden = true
+                    self.destinationsSwipedRightTableView?.reloadData()
+                    self.destinationsSwipedRightTableView?.isHidden = false
                     self.button5?.isHidden = false
                     self.button1?.isHidden = true
                     self.button2?.isHidden = true
@@ -208,11 +218,39 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
                     self.button2?.isSelected = false
                 }
                 
+                let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+                if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+                    if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                        if var thisTripDict = rankedPotentialTripsDictionaryFromSingleton[self.countSwipes - 1] as? Dictionary<String, AnyObject> {
+                            if let thisTripDestination = thisTripDict["destination"] as? String {
+                                if !self.destinationsSwipedRight.contains(thisTripDestination) {
+                                    self.destinationsSwipedRight.append(thisTripDestination)
+                                    thisTripDict["swipingStatus"] = "right" as AnyObject
+                                    self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                                }
+                            }
+                        }
+                    }
+                }
             }
             if direction == .Left {
                 self.button1?.isSelected = true
                 DispatchQueue.main.asyncAfter(deadline: when) {
                     self.button1?.isSelected = false
+                }
+                let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+                if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+                    if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                        if var thisTripDict = rankedPotentialTripsDictionaryFromSingleton[self.countSwipes - 1] as? Dictionary<String, AnyObject> {
+                            if let thisTripDestination = thisTripDict["destination"] as? String {
+                                if !self.destinationsSwipedLeft.contains(thisTripDestination) {
+                                    self.destinationsSwipedLeft.append(thisTripDestination)
+                                    thisTripDict["swipingStatus"] = "left" as AnyObject
+                                    self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -241,7 +279,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
             self.detailedCardView.addSubview(contentView)
             constrain(contentView, self.detailedCardView) { view1, view2 in
                 view1.left == view2.left
-                view1.top == view2.top + 70
+                view1.top == view2.top
                 view1.width == self.detailedCardView.bounds.width
                 view1.height == self.detailedCardView.bounds.height
             }
@@ -257,8 +295,8 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         constrain(swipeableView, self) { view1, view2 in
             view1.left == view2.left+30
             view1.right == view2.right-30
-            view1.top == view2.top + 40
-            view1.bottom == view2.bottom - 120
+            view1.top == view2.top + 55
+            view1.bottom == view2.bottom - 100
         }
         
         //Custom animation
@@ -438,94 +476,56 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         return UIColor.perform(Selector(selector)).takeUnretainedValue() as! UIColor
     }
     
-//    // MARK: Destination options tableview
-//    func setUpTable() {
-//        destinationsSwipedRightTableView = UITableView(frame: CGRect.zero, style: .grouped)
-//        destinationsSwipedRightTableView?.delegate = self
-//        destinationsSwipedRightTableView?.dataSource = self
-//        destinationsSwipedRightTableView?.separatorColor = UIColor.white
-//        destinationsSwipedRightTableView?.backgroundColor = UIColor.clear
-//        destinationsSwipedRightTableView?.layer.backgroundColor = UIColor.clear.cgColor
-//        destinationsSwipedRightTableView?.allowsSelection = false
-//        destinationsSwipedRightTableView?.backgroundView = nil
-//        destinationsSwipedRightTableView?.isOpaque = false
-//        self.addSubview(destinationsSwipedRightTableView!)
-//    }
-//    
-//    
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        var numberOfRows = 0
-//        
-//        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-//        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
-//            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
-//                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
-//                    if let thisTripDestinationTopThingsToDo = thisTripDict["swipingStatus"] as? [String] {
-//                        numberOfRows = thisTripDestinationTopThingsToDo.count
-//                    }
-//                }
-//            }
-//        }
-//        
-//        return numberOfRows
-//    }
-//    
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
-//    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        
-//        //Add destination label from data model
-//        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-//        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
-//            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
-//                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
-//                    if let thisTripDestination = thisTripDict["destination"] as? String {
-//                        let destinationLabel = UILabel(frame: CGRect(x: 0, y: 0, width: bounds.width, height: 50))
-//                        destinationLabel.font = UIFont.boldSystemFont(ofSize: 31)
-//                        destinationLabel.textColor = UIColor.white
-//                        destinationLabel.text = " " + thisTripDestination
-//                        self.addSubview(destinationLabel)
-//                    }
-//                }
-//            }
-//        }
-//        
-//        
-//        
-//        var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "cellID")
-//        
-//        if cell == nil {
-//            cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
-//        }
-//        
-//        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
-//            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
-//                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
-//                    if let thisTripDestinationTopThingsToDo = thisTripDict["topThingsToDo"] as? [String] {
-//                        cell?.textLabel?.text = thisTripDestinationTopThingsToDo[indexPath.row]
-//                    }
-//                }
-//            }
-//        }
-//        
-//        cell?.textLabel?.textColor = UIColor.white
-//        cell?.textLabel?.font = UIFont.systemFont(ofSize: 15)
-//        cell?.textLabel?.numberOfLines = 0
-//        cell?.backgroundColor = UIColor.clear
-//        cell?.layer.backgroundColor = UIColor.clear.cgColor
-//        
-//        return cell!
-//    }
-//    
-//    // Section Header
+    // MARK: Destination options tableview
+    func setUpTable() {
+        destinationsSwipedRightTableView = UITableView(frame: CGRect.zero, style: .grouped)
+        destinationsSwipedRightTableView?.delegate = self
+        destinationsSwipedRightTableView?.dataSource = self
+        destinationsSwipedRightTableView?.separatorColor = UIColor.clear
+        destinationsSwipedRightTableView?.backgroundColor = UIColor.clear
+        destinationsSwipedRightTableView?.layer.backgroundColor = UIColor.clear.cgColor
+        destinationsSwipedRightTableView?.allowsSelection = false
+        destinationsSwipedRightTableView?.backgroundView = nil
+        destinationsSwipedRightTableView?.isOpaque = false
+        destinationsSwipedRightTableView?.register(destinationsSwipedRightTableViewCell.self, forCellReuseIdentifier: "destinationsSwipedRightTableViewCell")
+        self.addSubview(destinationsSwipedRightTableView!)
+    }
+    
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return destinationsSwipedRight.count
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "destinationsSwipedRightTableViewCell") as! destinationsSwipedRightTableViewCell
+        
+        cell.cellButton.setTitle(destinationsSwipedRight[indexPath.row], for: .normal)
+        cell.cellButton.setTitle(destinationsSwipedRight[indexPath.row], for: .selected)
+        cell.cellButton.sizeToFit()
+        cell.cellButton.frame.size.height = 30
+        cell.cellButton.frame.size.width += 20
+        cell.cellButton.frame.origin.x = tableView.frame.width / 2 - cell.cellButton.frame.width / 2
+        cell.cellButton.frame.origin.y = 5
+        cell.cellButton.layer.cornerRadius = (cell.cellButton.frame.height) / 2
+
+        cell.backgroundColor = UIColor.clear
+        cell.backgroundView = nil
+        cell.layer.backgroundColor = UIColor.clear.cgColor
+        
+        return cell
+    }
+    
+    // Section Header
 //    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 //        return "Destinations you liked"
 //    }
 //    
 //    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let header = UIView(frame: CGRect(x: 0, y: 20, width: (topThingsToDoTableView?.bounds.size.width)!, height: 23))
+//        let header = UIView(frame: CGRect(x: 0, y: 20, width: (destinationsSwipedRightTableView?.bounds.size.width)!, height: 23))
 //        
 //        let title = UILabel()
 //        title.frame = header.frame
@@ -533,26 +533,17 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
 //        title.font = UIFont.boldSystemFont(ofSize: 18)
 //        title.textColor = UIColor.white
 //        
-//        //Add destination label from data model
-//        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-//        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
-//            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
-//                if let thisTripDict = rankedPotentialTripsDictionaryFromSingleton[cardToLoad] as? Dictionary<String, AnyObject> {
-//                    if let thisTripDestination = thisTripDict["destination"] as? String {
-//                        title.text = "Top things to do in \(thisTripDestination)"
-//                        self.addSubview(title)
-//                    }
-//                }
-//            }
-//        }
+//        title.text = "Destinations you liked"
+//        self.addSubview(title)
+//        
 //        header.addSubview(title)
 //        
 //        return header
 //    }
-//    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return CGFloat(25)
-//    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(40)
+    }
     
     // MARK: Sent events
 
@@ -597,6 +588,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         button1?.isHidden = false
         button2?.isHidden = false
         button4?.isHidden = true
+        destinationsSwipedRightTableView?.isHidden = true
         button5?.isHidden = true
         swipeableView.isHidden = false
         
@@ -626,9 +618,12 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
                 
                 let when = DispatchTime.now() + 0.4
                 DispatchQueue.main.asyncAfter(deadline: when) {
-                    self.questionLabel?.text = "Ready to choose your favorite destination?"
+                    self.questionLabel?.text = "Ready to choose a destination?"
+                    self.questionLabel?.frame.size.height = 50
                     self.questionLabel?.isHidden = false
-                    self.button4?.isHidden = false
+                    self.button4?.isHidden = true
+                    self.destinationsSwipedRightTableView?.reloadData()
+                    self.destinationsSwipedRightTableView?.isHidden = false
                     self.button5?.isHidden = false
                     self.button1?.isHidden = true
                     self.button2?.isHidden = true
@@ -642,11 +637,40 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
                 DispatchQueue.main.asyncAfter(deadline: when) {
                     self.button2?.isSelected = false
                 }
+                
+                let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+                if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+                    if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                        if var thisTripDict = rankedPotentialTripsDictionaryFromSingleton[self.countSwipes - 1] as? Dictionary<String, AnyObject> {
+                            if let thisTripDestination = thisTripDict["destination"] as? String {
+                                if !self.destinationsSwipedRight.contains(thisTripDestination) {
+                                    self.destinationsSwipedRight.append(thisTripDestination)
+                                    thisTripDict["swipingStatus"] = "right" as AnyObject
+                                    self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                                }
+                            }
+                        }
+                    }
+                }
             }
             if direction == .Left {
                 self.button1?.isSelected = true
                 DispatchQueue.main.asyncAfter(deadline: when) {
                     self.button1?.isSelected = false
+                }
+                let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+                if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+                    if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                        if var thisTripDict = rankedPotentialTripsDictionaryFromSingleton[self.countSwipes - 1] as? Dictionary<String, AnyObject> {
+                            if let thisTripDestination = thisTripDict["destination"] as? String {
+                                if !self.destinationsSwipedLeft.contains(thisTripDestination) {
+                                    self.destinationsSwipedLeft.append(thisTripDestination)
+                                    thisTripDict["swipingStatus"] = "left" as AnyObject
+                                    self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -675,7 +699,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
             self.detailedCardView.addSubview(contentView)
             constrain(contentView, self.detailedCardView) { view1, view2 in
                 view1.left == view2.left
-                view1.top == view2.top + 70
+                view1.top == view2.top
                 view1.width == self.detailedCardView.bounds.width
                 view1.height == self.detailedCardView.bounds.height
             }
@@ -691,8 +715,8 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate {
         constrain(swipeableView, self) { view1, view2 in
             view1.left == view2.left+30
             view1.right == view2.right-30
-            view1.top == view2.top + 40
-            view1.bottom == view2.bottom - 120
+            view1.top == view2.top + 55
+            view1.bottom == view2.bottom - 100
         }
         
         //Custom animation
