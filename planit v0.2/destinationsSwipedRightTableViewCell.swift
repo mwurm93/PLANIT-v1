@@ -26,6 +26,8 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
         cellButton.setTitle("title", for: UIControlState.normal)
         cellButton?.setTitleColor(UIColor.white, for: .normal)
         cellButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        cellButton?.setTitleColor(UIColor.white, for: .highlighted)
+        cellButton?.setBackgroundColor(color: UIColor.blue, forState: .highlighted)
         cellButton?.setTitleColor(UIColor.white, for: .selected)
         cellButton?.setBackgroundColor(color: UIColor.blue, forState: .selected)
         cellButton?.layer.borderWidth = 1
@@ -34,7 +36,7 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
         cellButton?.titleLabel?.numberOfLines = 0
         cellButton?.titleLabel?.textAlignment = .center
         cellButton?.translatesAutoresizingMaskIntoConstraints = false
-        cellButton?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        cellButton?.addTarget(self, action: #selector(self.chooseDestinationButtonClicked(sender:)), for: UIControlEvents.touchUpInside)
         addSubview(cellButton)
     }
 
@@ -43,13 +45,27 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func buttonClicked(sender:UIButton) {
+    func chooseDestinationButtonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
         if sender.isSelected == true {
             sender.layer.borderWidth = 0
         } else {
             sender.layer.borderWidth = 1
         }
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        if destinationsForTrip.count == 0 {
+            destinationsForTrip.append((cellButton.titleLabel?.text)!)
+        } else {
+            destinationsForTrip[0] = (cellButton.titleLabel?.text)!
+        }
+        SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+        let when = DispatchTime.now() + 0.15
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
+        }
     }
-
 }

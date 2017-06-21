@@ -34,20 +34,20 @@ class AddAnotherDestinationQuestionView: UIView {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
+        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 160)
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 120
+        button1?.frame.origin.y = 230
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         button2?.sizeToFit()
-        button2?.frame.size.height = 60
+        button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 170
+        button2?.frame.origin.y = 280
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
     }
@@ -62,7 +62,11 @@ class AddAnotherDestinationQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Woohoo! Let's plan a trip to [destination]. Will [chosen city] be your only destination for this trip?"
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        if destinationsForTrip.count != 0 {
+            questionLabel?.text = "Woohoo! Let's plan a trip to \(destinationsForTrip[0]).\n\nWill this be your only destination for this trip?"
+        }
         self.addSubview(questionLabel!)
         
         //Button2
@@ -70,6 +74,8 @@ class AddAnotherDestinationQuestionView: UIView {
         button1?.frame = CGRect.zero
         button1?.setTitleColor(UIColor.white, for: .normal)
         button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button1?.setTitleColor(UIColor.white, for: .highlighted)
+        button1?.setBackgroundColor(color: UIColor.blue, forState: .highlighted)
         button1?.setTitleColor(UIColor.white, for: .selected)
         button1?.setBackgroundColor(color: UIColor.blue, forState: .selected)
         button1?.layer.borderWidth = 1
@@ -77,8 +83,9 @@ class AddAnotherDestinationQuestionView: UIView {
         button1?.layer.masksToBounds = true
         button1?.titleLabel?.numberOfLines = 0
         button1?.titleLabel?.textAlignment = .center
-        button1?.setTitle("Only [destination]", for: .normal)
-        button1?.setTitle("Only [destination]", for: .selected)
+        button1?.setTitle("Yep, just \(destinationsForTrip[0])", for: .normal)
+        button1?.setTitle("Yep, just \(destinationsForTrip[0])", for: .highlighted)
+        button1?.setTitle("Yep, just \(destinationsForTrip[0])", for: .selected)
         button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
@@ -89,6 +96,8 @@ class AddAnotherDestinationQuestionView: UIView {
         button2?.frame = CGRect.zero
         button2?.setTitleColor(UIColor.white, for: .normal)
         button2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button2?.setTitleColor(UIColor.white, for: .highlighted)
+        button2?.setBackgroundColor(color: UIColor.blue, forState: .highlighted)
         button2?.setTitleColor(UIColor.white, for: .selected)
         button2?.setBackgroundColor(color: UIColor.blue, forState: .selected)
         button2?.layer.borderWidth = 1

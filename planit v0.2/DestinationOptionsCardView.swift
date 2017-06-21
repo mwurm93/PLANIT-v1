@@ -59,6 +59,8 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         button4?.isHidden = true
         destinationsSwipedRightTableView?.isHidden = true
         button5?.isHidden = true
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDestinationButtonSelection), name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
     }
     
     override func layoutSubviews() {
@@ -153,18 +155,19 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         button4?.setTitle("Choose a destination", for: .normal)
         button4?.setTitle("Choose a destination", for: .selected)
         button4?.translatesAutoresizingMaskIntoConstraints = false
-        button4?.addTarget(self, action: #selector(self.chooseDestinationButtonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button4!)
 
         //Button5
         button5 = UIButton(type: .custom)
         button5?.frame = CGRect.zero
-        button5?.setTitleColor(UIColor.white, for: .normal)
+        button5?.setTitleColor(UIColor.lightGray, for: .normal)
         button5?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        button5?.setTitleColor(UIColor.white, for: .selected)
-        button5?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        button5?.setTitleColor(UIColor.darkGray, for: .highlighted)
+        button5?.setBackgroundColor(color: UIColor.lightGray, forState: .highlighted)
+        button5?.setTitleColor(UIColor.darkGray, for: .selected)
+        button5?.setBackgroundColor(color: UIColor.lightGray, forState: .selected)
         button5?.layer.borderWidth = 1
-        button5?.layer.borderColor = UIColor.white.cgColor
+        button5?.layer.borderColor = UIColor.lightGray.cgColor
         button5?.layer.masksToBounds = true
         button5?.titleLabel?.numberOfLines = 0
         button5?.titleLabel?.textAlignment = .center
@@ -198,7 +201,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
                 
                 let when = DispatchTime.now() + 0.4
                 DispatchQueue.main.asyncAfter(deadline: when) {
-                    self.questionLabel?.text = "Ready to choose a destination?"
+                    self.questionLabel?.text = "Ready to choose\na destination?"
                     self.questionLabel?.frame.size.height = 50
                     self.questionLabel?.isHidden = false
                     self.button4?.isHidden = true
@@ -477,6 +480,17 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
     }
     
     // MARK: Destination options tableview
+    func handleDestinationButtonSelection(){
+        for buttonRow in 0 ... destinationsSwipedRight.count - 1 {
+            let cell = destinationsSwipedRightTableView?.cellForRow(at: IndexPath(row: buttonRow, section: 0)) as! destinationsSwipedRightTableViewCell
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            if cell.cellButton.isSelected && !(SavedPreferencesForTrip["destinationsForTrip"] as! [String]).contains((cell.cellButton.titleLabel?.text)!) {
+                cell.cellButton.isSelected = false
+                cell.cellButton.layer.borderWidth = 1
+            }
+        }
+    }
+    
     func setUpTable() {
         destinationsSwipedRightTableView = UITableView(frame: CGRect.zero, style: .grouped)
         destinationsSwipedRightTableView?.delegate = self
@@ -519,28 +533,6 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         return cell
     }
     
-    // Section Header
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return "Destinations you liked"
-//    }
-//    
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let header = UIView(frame: CGRect(x: 0, y: 20, width: (destinationsSwipedRightTableView?.bounds.size.width)!, height: 23))
-//        
-//        let title = UILabel()
-//        title.frame = header.frame
-//        title.textAlignment = .left
-//        title.font = UIFont.boldSystemFont(ofSize: 18)
-//        title.textColor = UIColor.white
-//        
-//        title.text = "Destinations you liked"
-//        self.addSubview(title)
-//        
-//        header.addSubview(title)
-//        
-//        return header
-//    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(40)
     }
@@ -576,13 +568,24 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         rightButtonAction()
     }
     
-    func chooseDestinationButtonClicked(sender:UIButton) {
-        let when = DispatchTime.now() + 0.15
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
-        }
-    }
     func moreOptionsButtonClicked(sender:UIButton) {
+        for buttonRow in 0 ... destinationsSwipedRight.count - 1 {
+            let cell = destinationsSwipedRightTableView?.cellForRow(at: IndexPath(row: buttonRow, section: 0)) as! destinationsSwipedRightTableViewCell
+            if cell.cellButton.isSelected {
+                cell.cellButton.isSelected = false
+                cell.cellButton.layer.borderWidth = 1
+            }
+        }
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        if destinationsForTrip.count == 0 {
+        } else {
+            destinationsForTrip.remove(at: 0)            
+        }
+        SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
         questionLabel?.isHidden = true
         button3?.isHidden = true
         button1?.isHidden = false
@@ -618,7 +621,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
                 
                 let when = DispatchTime.now() + 0.4
                 DispatchQueue.main.asyncAfter(deadline: when) {
-                    self.questionLabel?.text = "Ready to choose a destination?"
+                    self.questionLabel?.text = "Ready to choose\na destination?"
                     self.questionLabel?.frame.size.height = 50
                     self.questionLabel?.isHidden = false
                     self.button4?.isHidden = true
@@ -754,54 +757,4 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         detailedCardView.layer.cornerRadius = 15
     
     }
-    ////// ADD NEW TRIP VARS (NS ONLY) HERE ///////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func fetchSavedPreferencesForTrip() -> NSMutableDictionary {
-        //Update preference vars if an existing trip
-        //Trip status
-        let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? 0 as NSNumber
-        let finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
-        let lastVC = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastVC") as? NSString ?? NSString()
-        let timesViewed = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "timesViewed") as? NSDictionary ?? NSDictionary()
-        //New Trip VC
-        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? NSString ?? NSString()
-        let tripID = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "tripID") as? NSString ?? NSString()
-        let contacts = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contacts_in_group") as? [NSString] ?? [NSString]()
-        let contactPhoneNumbers = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contact_phone_numbers") as? [NSString] ?? [NSString]()
-        let hotelRoomsValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "hotel_rooms") as? [NSNumber] ?? [NSNumber]()
-        let segmentLengthValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "Availability_segment_lengths") as? [NSNumber] ?? [NSNumber]()
-        let selectedDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_dates") as? [NSDate] ?? [NSDate]()
-        let leftDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "origin_departure_times") as? NSDictionary ?? NSDictionary()
-        let rightDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "return_departure_times") as? NSDictionary ?? NSDictionary()
-        let numberDestinations = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "numberDestinations") as? NSNumber ?? NSNumber()
-        let nonSpecificDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "nonSpecificDates") as? NSDictionary ?? NSDictionary()
-        let firebaseChannelKey = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "firebaseChannelKey") as? NSString ?? NSString()
-        //Budget VC
-        let budgetValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "budget") as? NSString ?? NSString()
-        let expectedRoundtripFare = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_roundtrip_fare") as? NSString ?? NSString()
-        let expectedNightlyRate = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_nightly_rate") as? NSString ?? NSString()
-        //Suggested Destination VC
-        let decidedOnDestinationControlValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "decided_destination_control") as? NSString ?? NSString()
-        let decidedOnDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "decided_destination_value") as? NSString ?? NSString()
-        let suggestDestinationControlValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggest_destination_control") as? NSString ?? NSString()
-        let suggestedDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggested_destination") as? NSString ?? NSString()
-        //Activities VC
-        let selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [NSString] ?? [NSString]()
-        //Ranking VC
-        let topTrips = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "top_trips") as? [NSString] ?? [NSString]()
-        let rankedPotentialTripsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionary") as? [NSDictionary] ?? [NSDictionary]()
-        let rankedPotentialTripsDictionaryArrayIndex = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionaryArrayIndex") as? NSNumber ?? NSNumber()
-        
-        //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed] as NSMutableDictionary
-        
-        return fetchedSavedPreferencesForTrip
-    }
-    func saveUpdatedExistingTrip(SavedPreferencesForTrip: NSMutableDictionary) {
-        var existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        let currentTripIndex = DataContainerSingleton.sharedDataContainer.currenttrip!
-        existing_trips?[currentTripIndex] = SavedPreferencesForTrip as NSDictionary
-        DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
-    }
-
 }
