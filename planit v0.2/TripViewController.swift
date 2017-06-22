@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import JTAppleCalendar
 
 class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate {
 
@@ -26,6 +27,20 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var howFarAwayQuestionView: HowFarAwayQuestionView?
     var destinationOptionsCardView: DestinationOptionsCardView?
     var addAnotherDestinationQuestionView: AddAnotherDestinationQuestionView?
+    var howDoYouWantToGetThereQuestionView: HowDoYouWantToGetThereQuestionView?
+    var flightSearchQuestionView: FlightSearchQuestionView?
+
+    //CalendarView vars
+    let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
+    var leftDates = [Date]()
+    var rightDates = [Date]()
+    var fullDates = [Date]()
+    var lengthOfAvailabilitySegmentsArray = [Int]()
+    var leftDateTimeArrays = NSMutableDictionary()
+    var rightDateTimeArrays = NSMutableDictionary()
+    var mostRecentSelectedCellDate = NSDate()
+    var dateEditing = "departureDate"
+    var searchMode = "roundtrip"
     
     //Firebase channel
     var channelsRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
@@ -50,6 +65,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var chatButton: UIButton!
     @IBOutlet weak var scrollUpButton: UIButton!
     @IBOutlet weak var scrollDownButton: UIButton!
+    @IBOutlet var datePickingSubview: UIView!
+    @IBOutlet weak var calendarView: JTAppleCalendarView!
+    @IBOutlet weak var datePickingSubviewDoneButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +82,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[7] = spawnDestinationOptionsCardView
         functionsToLoadSubviewsDictionary[8] = spawnAddAnotherDestinationQuestionView
         functionsToLoadSubviewsDictionary[9] = spawnYesCityDecidedQuestionView
+        functionsToLoadSubviewsDictionary[10] = spawnHowDoYouWantToGetThereQuestionView
+        functionsToLoadSubviewsDictionary[11] = spawnFlightSearchQuestionView
+
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -113,8 +134,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         //Trip Name
         if NewOrAddedTripFromSegue == 1 {
-            let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-            
             //Create trip and trip data model
             if tripNameQuestionView == nil || tripNameQuestionView?.tripNameQuestionTextfield?.text == "" || tripNameQuestionView?.tripNameQuestionTextfield?.text == nil {
                     var tripNameValue = "Trip started \(Date().description.substring(to: 10).substring(from: 5))"
@@ -185,13 +204,43 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 //            retrieveContactsWithStore(store: addressBookStore)
         }
         
+        //Calendar subview setup
+        //Calendar Setup
+        datePickingSubview.layer.cornerRadius = 10
+        
+        // Calendar header setup
+        calendarView.register(UINib(nibName: "monthHeaderView", bundle: nil), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "monthHeaderView")
+        
+        // Calendar setup delegate and datasource
+        calendarView.calendarDataSource = self
+        calendarView.calendarDelegate = self
+        calendarView.register(UINib(nibName: "CellView", bundle: nil), forCellWithReuseIdentifier: "CellView")
+        calendarView.allowsMultipleSelection  = true
+        calendarView.isRangeSelectionUsed = true
+        calendarView.minimumLineSpacing = 0
+        calendarView.minimumInteritemSpacing = 2
+        calendarView.scrollingMode = .none
+        calendarView.scrollDirection = .vertical
+        calendarView.indicatorStyle = .white
+        
+        // Load trip preferences and install
+        if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
+            if selectedDatesValue.count > 0 {
+                self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
+                calendarView.scrollToDate(selectedDatesValue[0], animateScroll: false)
+            }
+        }
+
+        
         // MARK: Register notifications
         NotificationCenter.default.addObserver(self, selector: #selector(spawnDecidedOnCityQuestionView), name: NSNotification.Name(rawValue: "calendarRangeSelected"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnDatesPickedOutCalendarView), name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionView), name: NSNotification.Name(rawValue: "destinationDecidedEntered"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionViewEvenIfNonNil), name: NSNotification.Name(rawValue: "destinationDecidedEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnPlanIdeaAsDestinationQuestionView), name: NSNotification.Name(rawValue: "destinationIdeaEntered"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionView), name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionViewEvenIfNonNil), name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(animateInSubview_Departure), name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Departure"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(animateInSubview_Return), name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Return"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(animateOutSubview), name: NSNotification.Name(rawValue: "animateOutDatePickingSubview"), object: nil)
     }
 //    
     override func viewDidAppear(_ animated: Bool) {
@@ -210,6 +259,50 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     // MARK: Custom functions
+    func animateInSubview_Departure(){
+        //Animate In Subview
+        self.view.addSubview(datePickingSubview)
+        datePickingSubview.center = CGPoint(x: 210, y: 385)
+        datePickingSubview.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        datePickingSubview.alpha = 0
+        UIView.animate(withDuration: 0.2) {
+            self.datePickingSubview.alpha = 1
+            self.datePickingSubview.transform = CGAffineTransform.identity
+        }
+        
+        getLengthOfSelectedAvailabilities()
+        if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
+            self.datePickingSubview.isHidden = false
+        }
+    }
+    func animateInSubview_Return(){
+        //Animate In Subview
+        self.view.addSubview(datePickingSubview)
+        datePickingSubview.center = CGPoint(x: 210, y: 460)
+
+        datePickingSubview.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        datePickingSubview.alpha = 0
+        UIView.animate(withDuration: 0.2) {
+            self.datePickingSubview.alpha = 1
+            self.datePickingSubview.transform = CGAffineTransform.identity
+        }
+        
+        getLengthOfSelectedAvailabilities()
+        if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
+            self.datePickingSubview.isHidden = false
+        }
+    }
+
+    func animateOutSubview() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.datePickingSubview.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.datePickingSubview.alpha = 0
+            self.datePickingSubview.transform = CGAffineTransform.init(scaleX: 1, y: 1)
+        }) { (Success:Bool) in
+            self.datePickingSubview.removeFromSuperview()
+        }
+    }
+
     func updateHeightOfScrollView(){
         let heightOfScrollView = scrollContentView.subviews[scrollContentView.subviews.count - 1].frame.maxY
         scrollContentViewHeight?.constant = heightOfScrollView
@@ -283,7 +376,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         userNameQuestionView?.userNameQuestionTextfield?.becomeFirstResponder()
         let bounds = UIScreen.main.bounds
         self.userNameQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-        let heightConstraint = NSLayoutConstraint(item: userNameQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (userNameQuestionView?.frame.height)!)
+        let heightConstraint = NSLayoutConstraint(item: userNameQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (userNameQuestionView?.frame.height)!)
         view.addConstraints([heightConstraint])
         updateHeightOfScrollView()
     }
@@ -310,7 +403,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             } else {
                 self.tripNameQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
-            let heightConstraint = NSLayoutConstraint(item: tripNameQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (tripNameQuestionView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: tripNameQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (tripNameQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
             if userNameQuestionView != nil {
                 if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
@@ -337,7 +430,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let bounds = UIScreen.main.bounds
             
             self.whereTravellingFromQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: whereTravellingFromQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whereTravellingFromQuestionView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: whereTravellingFromQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whereTravellingFromQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
@@ -353,7 +446,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.scrollContentView.addSubview(datesPickedOutCalendarView!)
             let bounds = UIScreen.main.bounds
             self.datesPickedOutCalendarView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: datesPickedOutCalendarView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutCalendarView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: datesPickedOutCalendarView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutCalendarView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
@@ -375,7 +468,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             decidedOnCityToVisitQuestionView?.button1?.addTarget(self, action: #selector(self.decidedOnCityToVisitQuestion_Yes(sender:)), for: UIControlEvents.touchUpInside)
             decidedOnCityToVisitQuestionView?.button2?.addTarget(self, action: #selector(self.decidedOnCityToVisitQuestion_No(sender:)), for: UIControlEvents.touchUpInside)
             self.decidedOnCityToVisitQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: decidedOnCityToVisitQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (decidedOnCityToVisitQuestionView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: decidedOnCityToVisitQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (decidedOnCityToVisitQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
@@ -392,7 +485,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let bounds = UIScreen.main.bounds
             noCityDecidedAnyIdeasQuestionView?.button?.addTarget(self, action: #selector(self.noCityDecidedAnyIdeasQuestionView_noIdeas(sender:)), for: UIControlEvents.touchUpInside)
             self.noCityDecidedAnyIdeasQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: noCityDecidedAnyIdeasQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (noCityDecidedAnyIdeasQuestionView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: noCityDecidedAnyIdeasQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (noCityDecidedAnyIdeasQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
@@ -413,7 +506,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             planTripToIdeaQuestionView?.button1?.addTarget(self, action: #selector(self.planTripToIdeaQuestionView_Yes(sender:)), for: UIControlEvents.touchUpInside)
             planTripToIdeaQuestionView?.button2?.addTarget(self, action: #selector(self.planTripToIdeaQuestionView_No(sender:)), for: UIControlEvents.touchUpInside)
             self.planTripToIdeaQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: planTripToIdeaQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (planTripToIdeaQuestionView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: planTripToIdeaQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (planTripToIdeaQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
@@ -433,7 +526,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             whatTypeOfTripQuestionView?.button4?.addTarget(self, action: #selector(self.whatTypeOfTripQuestionView_partying(sender:)), for: UIControlEvents.touchUpInside)
             whatTypeOfTripQuestionView?.button5?.addTarget(self, action: #selector(self.whatTypeOfTripQuestionView_foodieHavens(sender:)), for: UIControlEvents.touchUpInside)
             self.whatTypeOfTripQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: whatTypeOfTripQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whatTypeOfTripQuestionView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: whatTypeOfTripQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whatTypeOfTripQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
@@ -452,7 +545,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             howFarAwayQuestionView?.button3?.addTarget(self, action: #selector(self.howFarAwayQuestionView_domestic(sender:)), for: UIControlEvents.touchUpInside)
             howFarAwayQuestionView?.button4?.addTarget(self, action: #selector(self.howFarAwayQuestionView_international(sender:)), for: UIControlEvents.touchUpInside)
             self.howFarAwayQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: howFarAwayQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howFarAwayQuestionView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: howFarAwayQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howFarAwayQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
@@ -467,10 +560,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             destinationOptionsCardView?.tag = 7
             self.scrollContentView.addSubview(destinationOptionsCardView!)
             let bounds = UIScreen.main.bounds
-            destinationOptionsCardView?.button1?.addTarget(self, action: #selector(self.destinationOptionsCardView_x(sender:)), for: UIControlEvents.touchUpInside)
-            destinationOptionsCardView?.button2?.addTarget(self, action: #selector(self.destinationOptionsCardView_heart(sender:)), for: UIControlEvents.touchUpInside)
+//            destinationOptionsCardView?.button1?.addTarget(self, action: #selector(self.destinationOptionsCardView_x(sender:)), for: UIControlEvents.touchUpInside)
+//            destinationOptionsCardView?.button2?.addTarget(self, action: #selector(self.destinationOptionsCardView_heart(sender:)), for: UIControlEvents.touchUpInside)
             self.destinationOptionsCardView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: destinationOptionsCardView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (destinationOptionsCardView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: destinationOptionsCardView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (destinationOptionsCardView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
@@ -484,10 +577,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             addAnotherDestinationQuestionView?.tag = 8
             self.scrollContentView.addSubview(addAnotherDestinationQuestionView!)
             let bounds = UIScreen.main.bounds
-//            chooseDestinationTableView?.button1?.addTarget(self, action: #selector(self.destinationOptionsCardView_x(sender:)), for: UIControlEvents.touchUpInside)
-//            destinationOptionsCardView?.button2?.addTarget(self, action: #selector(self.destinationOptionsCardView_heart(sender:)), for: UIControlEvents.touchUpInside)
+            addAnotherDestinationQuestionView?.button1?.addTarget(self, action: #selector(self.addAnotherDestinationQuestionView_justDestination(sender:)), for: UIControlEvents.touchUpInside)
             self.addAnotherDestinationQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: addAnotherDestinationQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (addAnotherDestinationQuestionView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: addAnotherDestinationQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (addAnotherDestinationQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
@@ -511,7 +603,42 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let bounds = UIScreen.main.bounds
             yesCityDecidedQuestionView?.button?.addTarget(self, action: #selector(self.yesCityDecidedQuestionView_actuallyDiscoverMoreOptions(sender:)), for: UIControlEvents.touchUpInside)
             self.yesCityDecidedQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: yesCityDecidedQuestionView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (yesCityDecidedQuestionView?.frame.height)!)
+            let heightConstraint = NSLayoutConstraint(item: yesCityDecidedQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (yesCityDecidedQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+        }
+        updateHeightOfScrollView()
+        scrollDownToTopSubview()
+        updateProgress()
+    }
+    func spawnHowDoYouWantToGetThereQuestionView() {
+        if howDoYouWantToGetThereQuestionView == nil {
+            //Load next question
+            howDoYouWantToGetThereQuestionView = Bundle.main.loadNibNamed("HowDoYouWantToGetThereQuestionView", owner: self, options: nil)?.first! as? HowDoYouWantToGetThereQuestionView
+            self.scrollContentView.addSubview(howDoYouWantToGetThereQuestionView!)
+            howDoYouWantToGetThereQuestionView?.tag = 10
+            let bounds = UIScreen.main.bounds
+            howDoYouWantToGetThereQuestionView?.button1?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_fly(sender:)), for: UIControlEvents.touchUpInside)
+            howDoYouWantToGetThereQuestionView?.button2?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_drive(sender:)), for: UIControlEvents.touchUpInside)
+            howDoYouWantToGetThereQuestionView?.button3?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_busTrainOther(sender:)), for: UIControlEvents.touchUpInside)
+            howDoYouWantToGetThereQuestionView?.button4?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_iDontKnowHelpMe(sender:)), for: UIControlEvents.touchUpInside)
+            howDoYouWantToGetThereQuestionView?.button5?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:)), for: UIControlEvents.touchUpInside)
+ self.howDoYouWantToGetThereQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: howDoYouWantToGetThereQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howDoYouWantToGetThereQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+        }
+        updateHeightOfScrollView()
+        scrollDownToTopSubview()
+        updateProgress()
+    }
+    func spawnFlightSearchQuestionView(){
+        if flightSearchQuestionView == nil {
+            //Load next question
+            flightSearchQuestionView = Bundle.main.loadNibNamed("FlightSearchQuestionView", owner: self, options: nil)?.first! as? FlightSearchQuestionView
+            self.scrollContentView.addSubview(flightSearchQuestionView!)
+            flightSearchQuestionView?.tag = 10
+            let bounds = UIScreen.main.bounds
+            self.flightSearchQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: flightSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (flightSearchQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
@@ -558,7 +685,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            spawnAddAnotherDestinationQuestionView()
+            spawnAddAnotherDestinationQuestionViewEvenIfNonNil()
         }
     }
     func planTripToIdeaQuestionView_No(sender:UIButton) {
@@ -611,17 +738,41 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             spawnDestinationOptionsCardView()
         }
     }
-    func destinationOptionsCardView_x(sender:UIButton) {
+    func addAnotherDestinationQuestionView_justDestination(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnHowDoYouWantToGetThereQuestionView()
+        }
+    }
+    func howDoYouWantToGetThereQuestionView_fly(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnFlightSearchQuestionView()
+        }
+    }
+    func howDoYouWantToGetThereQuestionView_drive(sender:UIButton) {
         if sender.isSelected == true {
         }
     }
-    func destinationOptionsCardView_heart(sender:UIButton) {
+    func howDoYouWantToGetThereQuestionView_busTrainOther(sender:UIButton) {
+        if sender.isSelected == true {
+        }
+    }
+    func howDoYouWantToGetThereQuestionView_iDontKnowHelpMe(sender:UIButton) {
+        if sender.isSelected == true {
+        }
+    }
+    func howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:UIButton) {
         if sender.isSelected == true {
         }
     }
 
     
-
+    // MARK: create subview even if non nil functions
+    func spawnAddAnotherDestinationQuestionViewEvenIfNonNil() {
+        if addAnotherDestinationQuestionView != nil {
+            addAnotherDestinationQuestionView = nil
+        }
+        spawnAddAnotherDestinationQuestionView()
+    }
 
     // MARK: UITextFieldDelegate
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -814,5 +965,382 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBAction func scrollDownButtonTouchedUpInside(_ sender: Any) {
         scrollDownOneSubview()
     }
+    @IBAction func datePickingSubviewDoneButtonTouchedUpInside(_ sender: Any) {
+        animateOutSubview()
+    }
 
+}
+
+// MARK: JTCalendarView Extension
+extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarViewDelegate {
+    func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy MM dd"
+        
+        let startDate = Date()
+        let endDate = formatter.date(from: "2017 12 31")
+        let parameters = ConfigurationParameters(
+            startDate: startDate,
+            endDate: endDate!,
+            numberOfRows: 6, // Only 1, 2, 3, & 6 are allowed
+            calendar: Calendar.current,
+            generateInDates: .forAllMonths,
+            generateOutDates: .tillEndOfRow,
+            firstDayOfWeek: .sunday)
+        return parameters
+    }
+    
+    func handleSelection(cell: JTAppleCell?, cellState: CellState) {
+        let myCustomCell = cell as? CellView
+        
+        switch cellState.selectedPosition() {
+        case .full:
+            myCustomCell?.selectedView.isHidden = false
+            myCustomCell?.dayLabel.textColor = DatesPickedOutCalendarView.blackColor
+            myCustomCell?.selectedView.layer.backgroundColor = DatesPickedOutCalendarView.whiteColor.cgColor
+            myCustomCell?.selectedView.layer.cornerRadius =  ((myCustomCell?.selectedView.frame.height)!/2)
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.leftSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+        case .left:
+            myCustomCell?.selectedView.isHidden = false
+            myCustomCell?.dayLabel.textColor = DatesPickedOutCalendarView.blackColor
+            myCustomCell?.selectedView.layer.backgroundColor = DatesPickedOutCalendarView.whiteColor.cgColor
+            myCustomCell?.selectedView.layer.cornerRadius =  ((myCustomCell?.selectedView.frame.height)!/2)
+            myCustomCell?.rightSideConnector.isHidden = false
+            myCustomCell?.leftSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+            
+        case .right:
+            myCustomCell?.selectedView.isHidden = false
+            myCustomCell?.dayLabel.textColor = DatesPickedOutCalendarView.blackColor
+            myCustomCell?.selectedView.layer.backgroundColor = DatesPickedOutCalendarView.whiteColor.cgColor
+            myCustomCell?.selectedView.layer.cornerRadius =  ((myCustomCell?.selectedView.frame.height)!/2)
+            myCustomCell?.leftSideConnector.isHidden = false
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+            
+        case .middle:
+            myCustomCell?.selectedView.isHidden = true
+            myCustomCell?.middleConnector.isHidden = false
+            myCustomCell?.middleConnector.layer.backgroundColor = DatesPickedOutCalendarView.transparentWhiteColor
+            myCustomCell?.dayLabel.textColor = DatesPickedOutCalendarView.whiteColor
+            myCustomCell?.selectedView.layer.cornerRadius =  0
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.leftSideConnector.isHidden = true
+        default:
+            myCustomCell?.selectedView.isHidden = true
+            myCustomCell?.selectedView.layer.backgroundColor = DatesPickedOutCalendarView.transparentColor
+            myCustomCell?.leftSideConnector.isHidden = true
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+            myCustomCell?.dayLabel.textColor = DatesPickedOutCalendarView.whiteColor
+        }
+        if cellState.date < Date() {
+            myCustomCell?.dayLabel.textColor = DatesPickedOutCalendarView.darkGrayColor
+        }
+        
+        if cellState.dateBelongsTo != .thisMonth  {
+            myCustomCell?.dayLabel.textColor = UIColor(cgColor: DatesPickedOutCalendarView.transparentColor)
+            myCustomCell?.selectedView.isHidden = true
+            myCustomCell?.selectedView.layer.backgroundColor = DatesPickedOutCalendarView.transparentColor
+            myCustomCell?.leftSideConnector.isHidden = true
+            myCustomCell?.rightSideConnector.isHidden = true
+            myCustomCell?.middleConnector.isHidden = true
+            return
+        }
+        
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, cellForItemAt date: Date, cellState: CellState, indexPath: IndexPath) -> JTAppleCell {
+        
+        let myCustomCell = calendarView?.dequeueReusableJTAppleCell(withReuseIdentifier: "CellView", for: indexPath) as! CellView
+        myCustomCell.dayLabel.text = cellState.text
+        if cellState.dateBelongsTo == .previousMonthWithinBoundary || cellState.dateBelongsTo == .followingMonthWithinBoundary {
+            myCustomCell.isSelected = false
+        }
+        
+        handleSelection(cell: myCustomCell, cellState: cellState)
+        
+        return myCustomCell
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
+        
+        if leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1 {
+            calendarView?.deselectAllDates(triggerSelectionDelegate: false)
+            rightDateTimeArrays.removeAllObjects()
+            leftDateTimeArrays.removeAllObjects()
+            calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+        }
+        
+        //UNCOMMENT FOR TWO CLICK RANGE SELECTION
+        let leftKeys = leftDateTimeArrays.allKeys
+        let rightKeys = rightDateTimeArrays.allKeys
+        if leftKeys.count == 1 && rightKeys.count == 0 {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            let leftDate = dateFormatter.date(from: leftKeys[0] as! String)
+            if date > leftDate! {
+                calendarView?.selectDates(from: leftDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+                let when = DispatchTime.now() + 0.15
+                DispatchQueue.main.asyncAfter(deadline: when) {
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "calendarRangeSelected"), object: nil)
+                }
+                
+            } else {
+                calendarView?.deselectAllDates(triggerSelectionDelegate: false)
+                rightDateTimeArrays.removeAllObjects()
+                leftDateTimeArrays.removeAllObjects()
+                calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+            }
+        }
+        
+        handleSelection(cell: cell, cellState: cellState)
+        
+        // Create array of selected dates
+        let selectedDates = calendarView?.selectedDates as! [NSDate]
+        getLengthOfSelectedAvailabilities()
+        
+        //        //Update trip preferences in dictionary
+        //        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        //        SavedPreferencesForTrip["selected_dates"] = selectedDates
+        //        SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
+        //        //Save
+        //        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        mostRecentSelectedCellDate = date as NSDate
+        
+        let availableTimeOfDayInCell = ["Anytime"]
+        let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
+        
+        let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
+        if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+            leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+        }
+        if cell?.selectedPosition() == .right {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+            rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+        }
+        
+        //        //Update trip preferences in dictionary
+        //        let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+        //        SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+        //        SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
+        //
+        //        //Save
+        //        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+        
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
+        
+        handleSelection(cell: cell, cellState: cellState)
+        getLengthOfSelectedAvailabilities()
+        
+        if lengthOfAvailabilitySegmentsArray.count > 1 || (leftDates.count > 0 && rightDates.count > 0 && fullDates.count > 0) || fullDates.count > 1 {
+            rightDateTimeArrays.removeAllObjects()
+            leftDateTimeArrays.removeAllObjects()
+            lengthOfAvailabilitySegmentsArray.removeAll()
+            calendarView?.deselectAllDates(triggerSelectionDelegate: false)
+            return
+        }
+        
+        // Create array of selected dates
+        calendarView?.deselectDates(from: date, to: date, triggerSelectionDelegate: false)
+        let selectedDates = calendarView?.selectedDates as! [NSDate]
+        
+        if selectedDates.count > 0 {
+            
+            var leftMostDate: Date?
+            var rightMostDate: Date?
+            
+            for selectedDate in selectedDates {
+                if leftMostDate == nil {
+                    leftMostDate = selectedDate as Date
+                } else if leftMostDate! > selectedDate as Date {
+                    leftMostDate = selectedDate as Date
+                }
+                if rightMostDate == nil {
+                    rightMostDate = selectedDate as Date
+                } else if selectedDate as Date > rightMostDate! {
+                    rightMostDate = selectedDate as Date
+                }
+            }
+            
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            let leftMostDateAsString = formatter.string (from: leftMostDate!)
+            let rightMostDateAsString = formatter.string (from: rightMostDate!)
+            if leftDateTimeArrays[leftMostDateAsString] == nil {
+                mostRecentSelectedCellDate = leftMostDate! as NSDate
+                leftDateTimeArrays.removeAllObjects()
+                
+                let availableTimeOfDayInCell = ["Anytime"]
+                let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
+                
+                let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
+                if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MM/dd/yyyy"
+                    let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+                    leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                }
+                if cell?.selectedPosition() == .right {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MM/dd/yyyy"
+                    let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+                    rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                }
+                
+                //                //Update trip preferences in dictionary
+                //                let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+                //                SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+                //                SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
+                //
+                //                //Save
+                //                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+                //
+            }
+            //
+            if rightDateTimeArrays[rightMostDateAsString] == nil {
+                mostRecentSelectedCellDate = rightMostDate! as NSDate
+                rightDateTimeArrays.removeAllObjects()
+                
+                let availableTimeOfDayInCell = ["Anytime"]
+                let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
+                
+                let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
+                if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MM/dd/yyyy"
+                    let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+                    leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                }
+                if cell?.selectedPosition() == .right {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MM/dd/yyyy"
+                    let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+                    rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+                }
+                
+                //                //Update trip preferences in dictionary
+                //                let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+                //                SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+                //                SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
+                //
+                //                //Save
+                //                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+            }
+            
+        }
+        
+        //        //Update trip preferences in dictionary
+        //        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        //        SavedPreferencesForTrip["selected_dates"] = selectedDates as [NSDate]
+        //        SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
+        //        //Save
+        //        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {
+        
+        if cellState.dateBelongsTo != .thisMonth || cellState.date < Date() {
+            return false
+        }
+        return true
+    }
+    
+    // MARK custom func to get length of selected availability segments
+    func getLengthOfSelectedAvailabilities() {
+        let selectedDates = calendarView?.selectedDates as! [NSDate]
+        leftDates = []
+        rightDates = []
+        fullDates = []
+        lengthOfAvailabilitySegmentsArray = []
+        if selectedDates.count > 0 {
+            for date in selectedDates {
+                if calendarView?.cellStatus(for: date as Date)?.selectedPosition() == .left {
+                    leftDates.append(date as Date)
+                }
+            }
+            for date in selectedDates {
+                if calendarView?.cellStatus(for: date as Date)?.selectedPosition() == .right {
+                    rightDates.append(date as Date)
+                }
+            }
+            for date in selectedDates {
+                if calendarView?.cellStatus(for: date as Date)?.selectedPosition() == .full {
+                    fullDates.append(date as Date)
+                }
+            }
+            if rightDates != [] && leftDates != [] {
+                for segment in 0...leftDates.count - 1 {
+                    let segmentAvailability = rightDates[segment].timeIntervalSince(leftDates[segment]) / 86400 + 1
+                    lengthOfAvailabilitySegmentsArray.append(Int(segmentAvailability))
+                }
+            } else {
+                lengthOfAvailabilitySegmentsArray = [1]
+            }
+        } else {
+            lengthOfAvailabilitySegmentsArray = [0]
+        }
+    }
+    
+    // MARK: Calendar header functions
+    // Sets the height of your header
+    func calendarSizeForMonths(_ calendar: JTAppleCalendarView?) -> MonthSize? {
+        return MonthSize(defaultSize: 21)
+    }
+    
+    // This setups the display of your header
+    func calendar(_ calendar: JTAppleCalendarView, headerViewForDateRange range: (start: Date, end: Date), at indexPath: IndexPath) -> JTAppleCollectionReusableView {
+        
+        let headerCell = calendarView?.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: "monthHeaderView", for: indexPath) as! monthHeaderView
+        
+        // Create Year String
+        let yearDateFormatter = DateFormatter()
+        yearDateFormatter.dateFormat = "yyyy"
+        let YearHeader = yearDateFormatter.string(from: range.start)
+        
+        //Create Month String
+        let monthDateFormatter = DateFormatter()
+        monthDateFormatter.dateFormat = "MM"
+        let MonthHeader = monthDateFormatter.string(from: range.start)
+        
+        // Update header
+        
+        
+        if MonthHeader == "01" {
+            headerCell.monthLabel.text = "January " + YearHeader
+        } else if MonthHeader == "02" {
+            headerCell.monthLabel.text = "February " + YearHeader
+        } else if MonthHeader == "03" {
+            headerCell.monthLabel.text = "March " + YearHeader
+        } else if MonthHeader == "04" {
+            headerCell.monthLabel.text = "April " + YearHeader
+        } else if MonthHeader == "05" {
+            headerCell.monthLabel.text = "May " + YearHeader
+        } else if MonthHeader == "06" {
+            headerCell.monthLabel.text = "June " + YearHeader
+        } else if MonthHeader == "07" {
+            headerCell.monthLabel.text = "July " + YearHeader
+        } else if MonthHeader == "08" {
+            headerCell.monthLabel.text = "August " + YearHeader
+        } else if MonthHeader == "09" {
+            headerCell.monthLabel.text = "September " + YearHeader
+        } else if MonthHeader == "10" {
+            headerCell.monthLabel.text = "October " + YearHeader
+        } else if MonthHeader == "11" {
+            headerCell.monthLabel.text = "November " + YearHeader
+        } else if MonthHeader == "12" {
+            headerCell.monthLabel.text = "December " + YearHeader
+        }
+        
+        return headerCell
+}
 }

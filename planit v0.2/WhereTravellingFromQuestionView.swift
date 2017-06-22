@@ -95,8 +95,9 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         // When UISearchController presents the results view, present it in
         // this view controller, not one further up the chain.
         //        definesPresentationContext = true
-
-        
+        if DataContainerSingleton.sharedDataContainer.homeAirport != nil && DataContainerSingleton.sharedDataContainer.homeAirport != "" {
+            searchController?.searchBar.text = DataContainerSingleton.sharedDataContainer.homeAirport
+        }        
     }
     
 }
@@ -108,6 +109,8 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
         // Do something with the selected place.
         
         searchController?.searchBar.text = place.name
+        DataContainerSingleton.sharedDataContainer.homeAirport = searchController?.searchBar.text
+        
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
     }
     

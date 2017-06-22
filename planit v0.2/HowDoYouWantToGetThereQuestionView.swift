@@ -1,15 +1,14 @@
 //
-//  WhatTypeOfTripQuestionView.swift
+//  HowDoYouWantToGetThereQuestionView.swift
 //  planit v0.2
 //
-//  Created by MICHAEL WURM on 6/18/17.
+//  Created by MICHAEL WURM on 6/21/17.
 //  Copyright © 2017 MICHAEL WURM. All rights reserved.
 //
 
 import UIKit
 
-class WhatTypeOfTripQuestionView: UIView {
-    
+class HowDoYouWantToGetThereQuestionView: UIView {
     //Class vars
     var questionLabel: UILabel?
     var button1: UIButton?
@@ -17,7 +16,7 @@ class WhatTypeOfTripQuestionView: UIView {
     var button3: UIButton?
     var button4: UIButton?
     var button5: UIButton?
-
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,8 +29,8 @@ class WhatTypeOfTripQuestionView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-//        self.layer.borderColor = UIColor.green.cgColor
-//        self.layer.borderWidth = 2
+        //        self.layer.borderColor = UIColor.green.cgColor
+        //        self.layer.borderWidth = 2
     }
     
     override func layoutSubviews() {
@@ -53,21 +52,21 @@ class WhatTypeOfTripQuestionView: UIView {
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
         button2?.frame.origin.y = 170
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
-
+        
         button3?.sizeToFit()
         button3?.frame.size.height = 30
         button3?.frame.size.width += 20
         button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2
         button3?.frame.origin.y = 220
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
-
+        
         button4?.sizeToFit()
         button4?.frame.size.height = 30
         button4?.frame.size.width += 20
         button4?.frame.origin.x = (bounds.size.width - (button4?.frame.width)!) / 2
         button4?.frame.origin.y = 270
         button4?.layer.cornerRadius = (button4?.frame.height)! / 2
-
+        
         button5?.sizeToFit()
         button5?.frame.size.height = 30
         button5?.frame.size.width += 20
@@ -86,7 +85,11 @@ class WhatTypeOfTripQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "What type of trip are you imagining?"
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        if destinationsForTrip.count != 0 {
+            questionLabel?.text = "How do you want to get to \(destinationsForTrip[0])?"
+        }
         self.addSubview(questionLabel!)
         
         //Button2
@@ -101,8 +104,8 @@ class WhatTypeOfTripQuestionView: UIView {
         button1?.layer.masksToBounds = true
         button1?.titleLabel?.numberOfLines = 0
         button1?.titleLabel?.textAlignment = .center
-        button1?.setTitle("Beaches", for: .normal)
-        button1?.setTitle("Beaches", for: .selected)
+        button1?.setTitle("Fly", for: .normal)
+        button1?.setTitle("Fly", for: .selected)
         button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
@@ -120,12 +123,12 @@ class WhatTypeOfTripQuestionView: UIView {
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.numberOfLines = 0
         button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("Nature adventuring", for: .normal)
-        button2?.setTitle("Nature adventuring", for: .selected)
+        button2?.setTitle("Drive", for: .normal)
+        button2?.setTitle("Drive", for: .selected)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)
-
+        
         //Button3
         button3 = UIButton(type: .custom)
         button3?.frame = CGRect.zero
@@ -138,8 +141,8 @@ class WhatTypeOfTripQuestionView: UIView {
         button3?.layer.masksToBounds = true
         button3?.titleLabel?.numberOfLines = 0
         button3?.titleLabel?.textAlignment = .center
-        button3?.setTitle("Winter sports", for: .normal)
-        button3?.setTitle("Winter sports", for: .selected)
+        button3?.setTitle("Train, Bus, other", for: .normal)
+        button3?.setTitle("Train, Bus, other", for: .selected)
         button3?.translatesAutoresizingMaskIntoConstraints = false
         button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button3!)
@@ -156,12 +159,12 @@ class WhatTypeOfTripQuestionView: UIView {
         button4?.layer.masksToBounds = true
         button4?.titleLabel?.numberOfLines = 0
         button4?.titleLabel?.textAlignment = .center
-        button4?.setTitle("Partying", for: .normal)
-        button4?.setTitle("Partying", for: .selected)
+        button4?.setTitle("I don't know, help me!", for: .normal)
+        button4?.setTitle("I don't know, help me!", for: .selected)
         button4?.translatesAutoresizingMaskIntoConstraints = false
         button4?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button4!)
-
+        
         //Button5
         button5 = UIButton(type: .custom)
         button5?.frame = CGRect.zero
@@ -174,13 +177,13 @@ class WhatTypeOfTripQuestionView: UIView {
         button5?.layer.masksToBounds = true
         button5?.titleLabel?.numberOfLines = 0
         button5?.titleLabel?.textAlignment = .center
-        button5?.setTitle("Foodie havens", for: .normal)
-        button5?.setTitle("Foodie havens", for: .selected)
+        button5?.setTitle("I'll already be there", for: .normal)
+        button5?.setTitle("I'll already be there", for: .selected)
         button5?.translatesAutoresizingMaskIntoConstraints = false
         button5?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button5!)
-
-
+        
+        
     }
     
     func buttonClicked(sender:UIButton) {
@@ -198,4 +201,3 @@ class WhatTypeOfTripQuestionView: UIView {
         }
     }
 }
-

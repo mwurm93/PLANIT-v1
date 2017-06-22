@@ -163,5 +163,11 @@ class HowFarAwayQuestionView: UIView {
         } else {
             sender.layer.borderWidth = 1
         }
+        for subview in self.subviews {
+            if subview.isKind(of: UIButton.self) && subview != sender {
+                (subview as! UIButton).isSelected = false
+                (subview as! UIButton).layer.borderWidth = 1
+            }
+        }
     }
 }
