@@ -26,6 +26,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     @IBOutlet weak var returnDateLabel: UILabel!
     @IBOutlet weak var returnOriginLabel: UILabel!
     @IBOutlet weak var returnDestinationLabel: UILabel!
+    @IBOutlet weak var searchButton: UIButton!
     
     
     override init(frame: CGRect) {
@@ -80,9 +81,8 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
                 }
             }
         }
-
         
-        underline.layer.frame = CGRect(x: 139, y: 92, width: 98, height: 51)
+        self.underline.layer.frame = CGRect(x: 132, y: 33, width: 98, height: 51)
         returnOrigin.isHidden = true
         returnOriginLabel.isHidden = true
         returnDestination.isHidden = true
@@ -110,7 +110,6 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         
         //Textfield setup
         self.departureDate.delegate = self
-        departureDate.addTarget(self, action: #selector(self.departureDateTextFieldTouchedDown(sender:)), for: UIControlEvents.touchDown)
         departureDate.layer.borderWidth = 1
         departureDate.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         departureDate.layer.masksToBounds = true
@@ -141,7 +140,6 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         departureDestinationLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
         
         self.returnDate.delegate = self
-        returnDate.addTarget(self, action: #selector(self.returnDateTextFieldTouchedDown(sender:)), for: UIControlEvents.touchDown)
         returnDate.layer.borderWidth = 1
         returnDate.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         returnDate.layer.masksToBounds = true
@@ -187,16 +185,21 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         return true
     }
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField == departureDate || textField == returnDate {
+        if textField == departureDate {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Departure"), object: nil)
+            return false
+        } else if textField == returnDate {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Departure"), object: nil)
             return false
         }
+
         return true
     }
     
     // MARK: Actions
     @IBAction func multiCityButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 247, y: 67, width: 98, height: 51)
+            self.underline.layer.frame = CGRect(x: 239, y: 33, width: 98, height: 51)
             self.returnOrigin.isHidden = false
             self.returnOriginLabel.isHidden = false
             self.returnDestination.isHidden = false
@@ -208,7 +211,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     }
     @IBAction func roundtripButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 139, y: 67, width: 98, height: 51)
+            self.underline.layer.frame = CGRect(x: 132, y: 33, width: 98, height: 51)
             self.returnOrigin.isHidden = true
             self.returnOriginLabel.isHidden = true
             self.returnDestination.isHidden = true
@@ -219,7 +222,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     }
     @IBAction func oneWayButtonTouchedUpInside(_ sender: Any) {
         UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 30, y: 67, width: 98, height: 51)
+            self.underline.layer.frame = CGRect(x: 24, y: 33, width: 98, height: 51)
             self.returnOrigin.isHidden = true
             self.returnOriginLabel.isHidden = true
             self.returnDestination.isHidden = true
@@ -230,13 +233,6 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         searchMode = "oneWay"
     }
     
-    func departureDateTextFieldTouchedDown(sender:UIButton) {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Departure"), object: nil)
-    }
-    func returnDateTextFieldTouchedDown(sender:UIButton) {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Return"), object: nil)
-    }
-
 //    @IBAction func subviewDoneButtonTouchedUpInside(_ sender: Any) {
 //        animateOutSubview()
 //    }

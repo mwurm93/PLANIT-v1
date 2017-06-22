@@ -1373,7 +1373,7 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     
     ////// ADD NEW TRIP VARS (NS ONLY) HERE ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    func fetchSavedPreferencesForTrip() -> NSMutableDictionary {
+    override func fetchSavedPreferencesForTrip() -> NSMutableDictionary {
         //Determine if new or added trip
         let isNewOrAddedTrip = determineIfNewOrAddedTrip()
 

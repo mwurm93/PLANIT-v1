@@ -1,25 +1,26 @@
 //
-//  flightResultsViewController.swift
+//  FlightResultsQuestionView.swift
 //  planit v0.2
 //
-//  Created by MICHAEL WURM on 5/15/17.
+//  Created by MICHAEL WURM on 6/21/17.
 //  Copyright © 2017 MICHAEL WURM. All rights reserved.
 //
 
 import UIKit
 import SMCalloutView
 
-class flightResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SMCalloutViewDelegate, UIGestureRecognizerDelegate {
+class FlightResultsQuestionView: UIView, UITableViewDelegate, UITableViewDataSource, SMCalloutViewDelegate {
     
     //Vars passed from segue
     var rankedPotentialTripsDictionaryArrayIndex: Int?
     var searchMode: String?
     
     //MARK: Class vars
+    var flightResultsTableView: UITableView?
     
     //Times VC viewed
     var timesViewed = [String: Int]()
-
+    
     //Load flight results from server
     var selectedIndex = IndexPath(row: 0, section: 0)
     var sectionTitles = ["Selected flight", "Alternatives"]
@@ -31,28 +32,52 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     var flightResultsDictionary = [Dictionary<String, Any>]()
 
-    //Instructions
-    var instructionsView: instructionsView?
-
-    
-    //MARK: Outlets
-    @IBOutlet weak var flightResultsTableView: UITableView!
+    // MARK: Outlets
+    @IBOutlet weak var searchSummaryTitle: UILabel!
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var sortButton: UIButton!
-    @IBOutlet weak var popupBackgroundView: UIVisualEffectView!
-    @IBOutlet weak var selectFlightButton: UIButton!
-    @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var searchSummaryTitle: UILabel!
-    @IBOutlet weak var searchSummaryDates: UILabel!
-    @IBOutlet weak var instructionsGotItButton: UIButton!
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        addViews()
+        //        self.layer.borderColor = UIColor.white.cgColor
+        //        self.layer.borderWidth = 2
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let bounds = UIScreen.main.bounds
+        
+        flightResultsTableView?.frame = CGRect(x: (bounds.size.width - 300) / 2, y: 100, width: 300, height: 400)
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    }
+    
+    
+    func addViews() {
         
+        searchMode = "roundtrip"
         
-        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-        rankedPotentialTripsDictionaryArrayIndex = SavedPreferencesForTrip["rankedPotentialTripsDictionaryArrayIndex"] as? Int
-                
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
+                for i in 0 ... rankedPotentialTripsDictionary.count - 1 {
+                    if rankedPotentialTripsDictionary[i]["destination"] as! String == (SavedPreferencesForTrip["destinationsForTrip"] as! [String])[0] {
+                        rankedPotentialTripsDictionaryArrayIndex = i
+                    }
+                }
+            }
+        }
+        
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
@@ -99,7 +124,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             homeAirportValue = DataContainerSingleton.sharedDataContainer.homeAirport!
         } else {
             homeAirportValue = ""
-        }        
+        }
         searchSummaryTitle.text = "\(homeAirportValue) - \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as! String)) \(String(describing: searchMode!))"
         
         self.sortFilterFlightsCalloutView.delegate = self
@@ -112,46 +137,33 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         sortFilterFlightsCalloutTableView.allowsMultipleSelection = false
         sortFilterFlightsCalloutTableView.backgroundColor = UIColor.clear
         sortFilterFlightsCalloutTableView.layer.backgroundColor = UIColor.clear.cgColor
+        sortButton.addTarget(self, action: #selector(self.sortButtonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        filterButton.addTarget(self, action: #selector(self.filterButtonClicked(sender:)), for: UIControlEvents.touchUpInside)
         
         //Set up table
-        flightResultsTableView.tableFooterView = UIView()
-//        flightResultsTableView.isEditing = true
-//        flightResultsTableView.allowsSelectionDuringEditing = true
-        flightResultsTableView.separatorColor = UIColor.white
-        
-//        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
-//        if timesViewed["flightResults"] == 0 {
-//            var when = DispatchTime.now()
-//            DispatchQueue.main.asyncAfter(deadline: when) {
-//                self.animateInstructionsIn()
-//                let currentTimesViewed = self.timesViewed["flightResults"]
-//                self.timesViewed["flightResults"]! = currentTimesViewed! + 1
-//                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
-//                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-//            }
-//            when = DispatchTime.now() + 0.8
-//            DispatchQueue.main.asyncAfter(deadline: when) {
-//                UIView.animate(withDuration: 1.5) {
-//                    self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
-//                    
-//                }
-//            }
-//        }
-//        
-//        let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
-//        atap.numberOfTapsRequired = 1
-//        atap.delegate = self
-//        self.popupBackgroundView.addGestureRecognizer(atap)
-//        popupBackgroundView.isHidden = true
-//        popupBackgroundView.isUserInteractionEnabled = true
+        flightResultsTableView = UITableView(frame: CGRect.zero, style: .grouped)
+        flightResultsTableView?.tableFooterView = UIView()
+        flightResultsTableView?.separatorColor = UIColor.white
+        flightResultsTableView?.register(UINib(nibName: "flightSearchResultTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "flightSearchResultTableViewCell")
+        flightResultsTableView?.register(flightSearchResultTableViewCell.self, forCellReuseIdentifier: "flightSearchResultTableViewCell")
+//        destinationsSwipedRightTableView?.register(destinationsSwipedRightTableViewCell.self, forCellReuseIdentifier: "destinationsSwipedRightTableViewCell")
+
+        flightResultsTableView?.delegate = self
+        flightResultsTableView?.dataSource = self
+        flightResultsTableView?.backgroundColor = UIColor.clear
+        flightResultsTableView?.layer.backgroundColor = UIColor.clear.cgColor
+        flightResultsTableView?.allowsSelection = true
+        flightResultsTableView?.backgroundView = nil
+        flightResultsTableView?.isOpaque = false
+        self.addSubview(flightResultsTableView!)
     }
     
     // MARK: UITableviewdelegate
     func numberOfSections(in tableView: UITableView) -> Int {
-//        if tableView == flightResultsTableView {
-//            return 2
-//        }
-//        // else if tableView == sortFilterFlightsCalloutTableView
+        if tableView == flightResultsTableView {
+            return 1
+        }
+        // else if tableView == sortFilterFlightsCalloutTableView
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -163,7 +175,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             let numberOfRows = flightResultsDictionary.count
             return numberOfRows - 1
         }
-        // else if tableView == sortFilterFlightsCalloutTableView
+            // else if tableView == sortFilterFlightsCalloutTableView
         else if calloutTableViewMode == "sort" {
             return sortFirstLevelOptions.count
         }
@@ -184,8 +196,13 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if tableView == flightResultsTableView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "flightSearchResultTableViewPrototypeCell", for: indexPath) as! flightSearchResultTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "flightSearchResultTableViewCell", for: indexPath) as! flightSearchResultTableViewCell
             cell.selectionStyle = .none
+            
+//            if cell == nil {
+//                cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
+//            }
+
             
 //            //Change hamburger icon
 //            for view in cell.subviews as [UIView] {
@@ -198,7 +215,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 //                    }
 //                }
 //            }
-//            
+            
 //            if indexPath == IndexPath(row: 0, section: 0) {
 //                cell.backgroundColor = UIColor.blue
 //            } else {
@@ -214,15 +231,15 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
                 addedRow += 1
             }
             
-            cell.departureOrigin.text = flightsForRow["departureOrigin"] as? String
-            cell.departureDestination.text = flightsForRow["departureDestination"] as? String
-            cell.departureDepartureTime.text = flightsForRow["departureDepartureTime"] as? String
-            cell.departureArrivalTime.text = flightsForRow["departureArrivalTime"] as? String
-            cell.returnDepartureTime.text = flightsForRow["returnDepartureTime"] as? String
-            cell.returnOrigin.text = flightsForRow["returnOrigin"] as? String
-            cell.returnArrivalTime.text = flightsForRow["returnArrivalTime"] as? String
-            cell.returnDestination.text = flightsForRow["returnDestination"] as? String
-            cell.totalPrice.text = flightsForRow["totalPrice"] as? String
+//            cell.departureOrigin.text = flightsForRow["departureOrigin"] as? String
+//            cell.departureDestination.text = flightsForRow["departureDestination"] as? String
+//            cell.departureDepartureTime.text = flightsForRow["departureDepartureTime"] as? String
+//            cell.departureArrivalTime.text = flightsForRow["departureArrivalTime"] as? String
+//            cell.returnDepartureTime.text = flightsForRow["returnDepartureTime"] as? String
+//            cell.returnOrigin.text = flightsForRow["returnOrigin"] as? String
+//            cell.returnArrivalTime.text = flightsForRow["returnArrivalTime"] as? String
+//            cell.returnDestination.text = flightsForRow["returnDestination"] as? String
+//            cell.totalPrice.text = flightsForRow["totalPrice"] as? String
             
             return cell
         }
@@ -253,9 +270,9 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             } else {
                 selectedIndex = indexPath
             }
-            self.flightResultsTableView.beginUpdates()
-            self.flightResultsTableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-            self.flightResultsTableView.endUpdates()
+            self.flightResultsTableView?.beginUpdates()
+            self.flightResultsTableView?.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            self.flightResultsTableView?.endUpdates()
         } else if tableView == sortFilterFlightsCalloutTableView {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
                 self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
@@ -266,7 +283,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     }
 //    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
 //    }
-//    
+    
 //    // MARK: moving rows
 //    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
 //        return .none
@@ -275,7 +292,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 //    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
 //        return false
 //    }
-//    
+    
 //    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
 //        if tableView == flightResultsTableView {
 //            return true
@@ -329,8 +346,8 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 //        }
 //        tableView.reloadData()
 //    }
-//    
-//    // MARK: Table Section Headers
+    
+    // MARK: Table Section Headers
 //    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 //        if tableView == flightResultsTableView {
 //            return sectionTitles[section]
@@ -341,7 +358,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 //    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
 //    {
 //        if tableView == flightResultsTableView {
-//            let header = UIView(frame: CGRect(x: 0, y: 0, width: flightResultsTableView.bounds.size.width, height: 30))
+//            let header = UIView(frame: CGRect(x: 0, y: 0, width: (flightResultsTableView?.bounds.size.width)!, height: 30))
 //            header.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
 //            header.layer.cornerRadius = 5
 //            
@@ -357,145 +374,20 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 //        }
 //        return nil
 //    }
-//
+//    
 //    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 //        if tableView == flightResultsTableView {
 //            return 30
 //        }
 //        return CGFloat.leastNormalMagnitude
 //    }
-//
+//    
 //    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 //        return CGFloat.leastNormalMagnitude
 //    }
     
-//    func fetchSavedPreferencesForTrip() -> NSMutableDictionary {
-//        //Update preference vars if an existing trip
-//        //Trip status
-//        let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? 0 as NSNumber
-//        let finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
-//        let lastVC = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastVC") as? NSString ?? NSString()
-//        let timesViewed = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "timesViewed") as? NSDictionary ?? NSDictionary()
-//        //New Trip VC
-//        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? NSString ?? NSString()
-//        let tripID = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "tripID") as? NSString ?? NSString()
-//        let contacts = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contacts_in_group") as? [NSString] ?? [NSString]()
-//        let contactPhoneNumbers = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contact_phone_numbers") as? [NSString] ?? [NSString]()
-//        let hotelRoomsValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "hotel_rooms") as? [NSNumber] ?? [NSNumber]()
-//        let segmentLengthValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "Availability_segment_lengths") as? [NSNumber] ?? [NSNumber]()
-//        let selectedDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_dates") as? [NSDate] ?? [NSDate]()
-//        let leftDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "origin_departure_times") as? NSDictionary ?? NSDictionary()
-//        let rightDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "return_departure_times") as? NSDictionary ?? NSDictionary()
-//        let numberDestinations = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "numberDestinations") as? NSNumber ?? NSNumber()
-//        let nonSpecificDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "nonSpecificDates") as? NSDictionary ?? NSDictionary()
-//        let firebaseChannelKey = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "firebaseChannelKey") as? NSString ?? NSString()
-//        //Budget VC
-//        let budgetValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "budget") as? NSString ?? NSString()
-//        let expectedRoundtripFare = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_roundtrip_fare") as? NSString ?? NSString()
-//        let expectedNightlyRate = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_nightly_rate") as? NSString ?? NSString()
-//        //Suggested Destination VC
-//        let decidedOnDestinationControlValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "decided_destination_control") as? NSString ?? NSString()
-//        let decidedOnDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "decided_destination_value") as? NSString ?? NSString()
-//        let suggestDestinationControlValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggest_destination_control") as? NSString ?? NSString()
-//        let suggestedDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggested_destination") as? NSString ?? NSString()
-//        //Activities VC
-//        let selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [NSString] ?? [NSString]()
-//        //Ranking VC
-//        let topTrips = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "top_trips") as? [NSString] ?? [NSString]()
-//        let rankedPotentialTripsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionary") as? [NSDictionary] ?? [NSDictionary]()
-//        let rankedPotentialTripsDictionaryArrayIndex = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionaryArrayIndex") as? NSNumber ?? NSNumber()
-//
-//        //SavedPreferences
-//        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"finished_entering_preferences_status": finishedEnteringPreferencesStatus, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed] as NSMutableDictionary
-//        
-//        return fetchedSavedPreferencesForTrip
-//    }
-//    func saveUpdatedExistingTrip(SavedPreferencesForTrip: NSMutableDictionary) {
-//        var existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-//        let currentTripIndex = DataContainerSingleton.sharedDataContainer.currenttrip!
-//        existing_trips?[currentTripIndex] = SavedPreferencesForTrip as NSDictionary
-//        DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
-//    }
-    
-//    func updateLastVC(){
-//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//        SavedPreferencesForTrip["lastVC"] = "flightResults" as NSString
-//        //Save
-//        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-//    }
-//    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
-//        
-//        if segue.identifier == "flightResultsToFlightSearch" {
-//            let destination = segue.destination as? flightSearchViewController
-//            destination?.rankedPotentialTripsDictionaryArrayIndex = rankedPotentialTripsDictionaryArrayIndex
-//        }
-//        if segue.identifier == "flightResultsToChat" {
-//            let destination = segue.destination as? UINavigationController
-//            let chatVC = destination?.topViewController as! ChatViewController
-//            chatVC.searchMode = self.searchMode
-//        }
-//
-//    }
-//    
-//    func updateCompletionStatus() {
-//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//        SavedPreferencesForTrip["finished_entering_preferences_status"] = "flightResults" as NSString
-//        //Save
-//        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-//    }
-//
-//    func animateInstructionsIn(){
-//        instructionsView?.isHidden = false
-//        instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-//        instructionsView?.alpha = 0
-//        UIView.animate(withDuration: 0.4) {
-//            self.popupBackgroundView.isHidden = false
-//            self.instructionsView?.alpha = 1
-//            self.instructionsView?.transform = CGAffineTransform.identity
-//            self.instructionsGotItButton.isHidden = false
-//        }
-//    }
-//    
-//    func animateInstructionsOut(){
-//        UIView.animate(withDuration: 0.3, animations: {
-//            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-//            self.instructionsView?.alpha = 0
-//            self.instructionsGotItButton.isHidden = true
-//            self.popupBackgroundView.isHidden = true
-//        }) { (Success:Bool) in
-//            self.instructionsView?.layer.isHidden = true
-//            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
-//        }
-//    }
-//    
-//    func dismissInstructions(touch: UITapGestureRecognizer) {
-//        animateInstructionsOut()
-//    }
-//    
-//    //MARK: Actions
-//    @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
-//        animateInstructionsIn()
-//        self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
-//    }
-//    @IBAction func instructionsGotItButtonTouchedUpInside(_ sender: Any) {
-//        animateInstructionsOut()
-//    }
-//    
-//    @IBAction func backButtonTouchedUpInside(_ sender: Any) {
-//        super.performSegue(withIdentifier: "flightResultsToFlightSearch", sender: self)
-//    }
-//    @IBAction func selectFlightButtonTouchedUpInside(_ sender: Any) {
-//        updateCompletionStatus()
-//        if rankedPotentialTripsDictionaryArrayIndex == 0 {
-//            super.performSegue(withIdentifier: "flightResultsToRanking", sender: self)
-//        } else {
-//            super.performSegue(withIdentifier: "flightResultsToRanking", sender: self)
-//        }
-//    }
-    
-    @IBAction func filterFlightsButtonTouchedUpInside(_ sender: Any) {
+    // MARK: Actions
+    func filterButtonClicked(sender:UIButton) {
         if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "sort") {
             calloutTableViewMode = "filter"
             sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
@@ -506,14 +398,14 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             self.sortFilterFlightsCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
             calloutRect.origin = CGPoint(x: filterButton.frame.midX, y: CGFloat(109))
-            self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-
+            self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self, constrainedTo: self, animated: true)
+            
         } else {
             self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
             self.sortFilterFlightsCalloutView.isHidden = true
         }
     }
-    @IBAction func sortFlightsButtonTouchedUpInside(_ sender: Any) {
+    func sortButtonClicked(sender:UIButton) {
         if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "filter"){
             calloutTableViewMode = "sort"
             sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 140, height: 22 * sortFirstLevelOptions.count)
@@ -524,11 +416,12 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             self.sortFilterFlightsCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
             calloutRect.origin = CGPoint(x: sortButton.frame.midX, y: CGFloat(109))
-            self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            self.sortFilterFlightsCalloutView.presentCallout(from: calloutRect, in: self, constrainedTo: self, animated: true)
             
         } else {
             self.sortFilterFlightsCalloutView.dismissCallout(animated: true)
             self.sortFilterFlightsCalloutView.isHidden = true
         }
     }
+
 }
