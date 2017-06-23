@@ -62,7 +62,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
                             rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["flightOptions"] = thisTripFlightResults
                         } else {
                             //Load from server
-                            var flightOptionsDictionaryFromServer = [["departureDepartureTime":"1:00a","departureOrigin":"JFK","departureArrivalTime":"2:00a","departureDestination":"AAA","returnDepartureTime":"1:00a","returnOrigin":"JFK","returnArrivalTime":"2:00a","returnDestination":"MIA","totalPrice":"$1,000"],["departureDepartureTime":"2:00a","departureOrigin":"JFK","departureArrivalTime":"3:00a","departureDestination":"BBB","returnDepartureTime":"2:00a","returnOrigin":"JFK","returnArrivalTime":"3:00a","returnDestination":"MIA","totalPrice":"$1,100"],["departureDepartureTime":"3:00a","departureOrigin":"JFK","departureArrivalTime":"4:00a","departureDestination":"CCC","returnDepartureTime":"3:00a","returnOrigin":"JFK","returnArrivalTime":"4:00a","returnDestination":"MIA","totalPrice":"$1,200"],["departureDepartureTime":"4:00a","departureOrigin":"JFK","departureArrivalTime":"5:00a","departureDestination":"DDD","returnDepartureTime":"4:00a","returnOrigin":"JFK","returnArrivalTime":"5:00a","returnDestination":"MIA","totalPrice":"$1,300"],["departureDepartureTime":"5:00a","departureOrigin":"JFK","departureArrivalTime":"6:00a","departureDestination":"EEE","returnDepartureTime":"5:00a","returnOrigin":"JFK","returnArrivalTime":"6:00a","returnDestination":"MIA","totalPrice":"$1,400"],["departureDepartureTime":"6:00a","departureOrigin":"JFK","departureArrivalTime":"7:00a","departureDestination":"FFF","returnDepartureTime":"6:00a","returnOrigin":"JFK","returnArrivalTime":"7:00a","returnDestination":"MIA","totalPrice":"$1,500"],["departureDepartureTime":"7:00a","departureOrigin":"JFK","departureArrivalTime":"8:00a","departureDestination":"GGG","returnDepartureTime":"7:00a","returnOrigin":"JFK","returnArrivalTime":"8:00a","returnDestination":"MIA","totalPrice":"$1,600"],["departureDepartureTime":"8:00a","departureOrigin":"JFK","departureArrivalTime":"9:00a","departureDestination":"HHH","returnDepartureTime":"8:00a","returnOrigin":"JFK","returnArrivalTime":"9:00a","returnDestination":"MIA","totalPrice":"$1,700"]]
+                            var flightOptionsDictionaryFromServer = [["departureDepartureTime":"1:00a","departureOrigin":"JFK","departureArrivalTime":"2:00a","departureDestination":"AAA","returnDepartureTime":"1:00a","returnOrigin":"JFK","returnArrivalTime":"2:00a","returnDestination":"MIA","totalPrice":"$1,000","selectedStatus":0],["departureDepartureTime":"2:00a","departureOrigin":"JFK","departureArrivalTime":"3:00a","departureDestination":"BBB","returnDepartureTime":"2:00a","returnOrigin":"JFK","returnArrivalTime":"3:00a","returnDestination":"MIA","totalPrice":"$1,100","selectedStatus":0],["departureDepartureTime":"3:00a","departureOrigin":"JFK","departureArrivalTime":"4:00a","departureDestination":"CCC","returnDepartureTime":"3:00a","returnOrigin":"JFK","returnArrivalTime":"4:00a","returnDestination":"MIA","totalPrice":"$1,200","selectedStatus":0],["departureDepartureTime":"4:00a","departureOrigin":"JFK","departureArrivalTime":"5:00a","departureDestination":"DDD","returnDepartureTime":"4:00a","returnOrigin":"JFK","returnArrivalTime":"5:00a","returnDestination":"MIA","totalPrice":"$1,300","selectedStatus":0],["departureDepartureTime":"5:00a","departureOrigin":"JFK","departureArrivalTime":"6:00a","departureDestination":"EEE","returnDepartureTime":"5:00a","returnOrigin":"JFK","returnArrivalTime":"6:00a","returnDestination":"MIA","totalPrice":"$1,400","selectedStatus":0],["departureDepartureTime":"6:00a","departureOrigin":"JFK","departureArrivalTime":"7:00a","departureDestination":"FFF","returnDepartureTime":"6:00a","returnOrigin":"JFK","returnArrivalTime":"7:00a","returnDestination":"MIA","totalPrice":"$1,500","selectedStatus":0],["departureDepartureTime":"7:00a","departureOrigin":"JFK","departureArrivalTime":"8:00a","departureDestination":"GGG","returnDepartureTime":"7:00a","returnOrigin":"JFK","returnArrivalTime":"8:00a","returnDestination":"MIA","totalPrice":"$1,600","selectedStatus":0],["departureDepartureTime":"8:00a","departureOrigin":"JFK","departureArrivalTime":"9:00a","departureDestination":"HHH","returnDepartureTime":"8:00a","returnOrigin":"JFK","returnArrivalTime":"9:00a","returnDestination":"MIA","totalPrice":"$1,700","selectedStatus":0]]
                             
                             for index in 0 ... flightOptionsDictionaryFromServer.count - 1 {
                                 var homeAirportValue = String()
@@ -100,7 +100,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         } else {
             homeAirportValue = ""
         }        
-        searchSummaryTitle.text = "\(homeAirportValue) - \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as! String)) \(String(describing: searchMode!))"
+        searchSummaryTitle.text = "\(homeAirportValue) - \(String(describing: (SavedPreferencesForTrip["destinationsForTrip"] as! [String])[0])) \(String(describing: searchMode!))"
         
         self.sortFilterFlightsCalloutView.delegate = self
         self.sortFilterFlightsCalloutView.isHidden = true
@@ -156,10 +156,6 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == flightResultsTableView {
-            if section == 0 {
-                return 1
-            }
-            // if section == 1
             let numberOfRows = flightResultsDictionary.count
             return numberOfRows - 1
         }
@@ -206,13 +202,9 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 //            }
             
             var flightsForRow = flightResultsDictionary[0]
-            
-            
-            var addedRow = indexPath.row + 1
-            if indexPath.section == 1 {
-                flightsForRow = flightResultsDictionary[addedRow]
-                addedRow += 1
-            }
+            var addedRow = indexPath.row
+            flightsForRow = flightResultsDictionary[addedRow]
+            addedRow += 1
             
             cell.departureOrigin.text = flightsForRow["departureOrigin"] as? String
             cell.departureDestination.text = flightsForRow["departureDestination"] as? String
@@ -223,6 +215,25 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             cell.returnArrivalTime.text = flightsForRow["returnArrivalTime"] as? String
             cell.returnDestination.text = flightsForRow["returnDestination"] as? String
             cell.totalPrice.text = flightsForRow["totalPrice"] as? String
+            
+            cell.selectFlightButton.setTitleColor(UIColor.white, for: .normal)
+            cell.selectFlightButton.setBackgroundColor(color: UIColor.clear, forState: .normal)
+            cell.selectFlightButton.setTitleColor(UIColor.white, for: .selected)
+            cell.selectFlightButton.setBackgroundColor(color: UIColor.blue, forState: .selected)
+            cell.selectFlightButton.layer.borderWidth = 1
+            cell.selectFlightButton.layer.borderColor = UIColor.white.cgColor
+            cell.selectFlightButton.layer.masksToBounds = true
+            cell.selectFlightButton.titleLabel?.numberOfLines = 0
+            cell.selectFlightButton.titleLabel?.textAlignment = .center
+            cell.selectFlightButton.setTitle("Select flight", for: .normal)
+            cell.selectFlightButton.setTitle("Select flight", for: .selected)
+            cell.selectFlightButton.translatesAutoresizingMaskIntoConstraints = false
+            cell.selectFlightButton.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+            cell.selectFlightButton.sizeToFit()
+            cell.selectFlightButton.frame.size.height = 25
+            cell.selectFlightButton.frame.size.width += 10
+            cell.selectFlightButton.layer.cornerRadius = cell.selectFlightButton.frame.height / 2
+            cell.selectFlightButton.tag = addedRow
             
             return cell
         }
@@ -246,6 +257,25 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
         
         return cell!
     }
+    
+    func buttonClicked(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected == true {
+            sender.layer.borderWidth = 0
+            // Set selected status to 1 (YES)
+            flightResultsDictionary[sender.tag]["selectedStatus"] = 1
+            // Set selected status of all other flights to 0 (NO)
+            for index in 0 ... flightResultsDictionary.count - 1 {
+                if index != sender.tag {
+                    flightResultsDictionary[index]["selectedStatus"] = 0
+                }
+            }
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightSelected"), object: nil)
+        } else {
+            sender.layer.borderWidth = 1
+        }
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == flightResultsTableView {
             if selectedIndex == indexPath {

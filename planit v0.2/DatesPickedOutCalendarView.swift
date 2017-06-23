@@ -104,7 +104,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         formatter.dateFormat = "yyyy MM dd"
         
         let startDate = Date()
-        let endDate = formatter.date(from: "2017 12 31")
+        let endDate = formatter.date(from: "2018 12 31")
         let parameters = ConfigurationParameters(
             startDate: startDate,
             endDate: endDate!,

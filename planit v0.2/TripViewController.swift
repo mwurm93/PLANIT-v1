@@ -270,6 +270,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func animateInSubview_Departure(){
         //Animate In Subview
         dateEditing = "departureDate"
+        self.view.endEditing(true)
         self.view.addSubview(datePickingSubview)
         let bounds = UIScreen.main.bounds
         datePickingSubview.center = CGPoint(x: bounds.size.width / 2, y: 405)
@@ -439,7 +440,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             whereTravellingFromQuestionView?.tag = 0
             self.scrollContentView.addSubview(whereTravellingFromQuestionView!)
             let bounds = UIScreen.main.bounds
-            
+            whereTravellingFromQuestionView?.button1?.addTarget(self, action: #selector(self.spawnDatesPickedOutCalendarView), for: UIControlEvents.touchUpInside)
             self.whereTravellingFromQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: whereTravellingFromQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whereTravellingFromQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
@@ -706,6 +707,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     func decidedOnCityToVisitQuestion_Yes(sender:UIButton) {
+        
         if sender.isSelected == true {
             spawnYesCityDecidedQuestionView()
         }
@@ -1096,7 +1098,7 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
         formatter.dateFormat = "yyyy MM dd"
         
         let startDate = Date()
-        let endDate = formatter.date(from: "2017 12 31")
+        let endDate = formatter.date(from: "2018 12 31")
         let parameters = ConfigurationParameters(
             startDate: startDate,
             endDate: endDate!,

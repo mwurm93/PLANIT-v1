@@ -24,6 +24,7 @@ class flightSearchResultTableViewCell: UITableViewCell {
     @IBOutlet weak var expandedView: UIView!
     @IBOutlet weak var defaultView: UIView!
     @IBOutlet weak var expandedViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var selectFlightButton: UIButton!
     
 //    required init?(coder aDecoder: NSCoder) {
 //        fatalError("init(coder:) has not been implemented")

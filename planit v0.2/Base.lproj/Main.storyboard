@@ -4682,14 +4682,14 @@
                                             <action selector="subviewWhoButtonTouchedUpInside:" destination="E8d-J0-NPc" eventType="touchUpInside" id="kWH-ZS-6vW"/>
                                         </connections>
                                     </button>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="52" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Upi-i4-7Fi">
-                                        <rect key="frame" x="0.0" y="113" width="375" height="350"/>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Upi-i4-7Fi">
+                                        <rect key="frame" x="0.0" y="113" width="375" height="467"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="flightSearchResultTableViewPrototypeCell" rowHeight="104" id="Dku-hn-0lb" customClass="flightSearchResultTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="55.5" width="375" height="104"/>
+                                                <rect key="frame" x="0.0" y="28" width="375" height="104"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dku-hn-0lb" id="sSX-bc-j45">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="103.5"/>
@@ -4730,7 +4730,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0,000" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bRT-bI-qPS">
-                                                                    <rect key="frame" x="274" y="13" width="52.5" height="19.5"/>
+                                                                    <rect key="frame" x="274" y="3" width="52.5" height="19.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
@@ -4766,13 +4766,20 @@
                                                                         <constraint firstAttribute="width" constant="43" id="vVG-OO-Dpf"/>
                                                                     </constraints>
                                                                 </imageView>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sXc-o5-NVD">
+                                                                    <rect key="frame" x="274" y="26" width="83" height="25"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="25" id="UUz-S3-xSc"/>
+                                                                    </constraints>
+                                                                    <state key="normal" title="Select flight"/>
+                                                                </button>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <constraints>
                                                                 <constraint firstItem="CbI-wp-XAm" firstAttribute="top" secondItem="LZQ-HI-juc" secondAttribute="top" constant="3" id="06b-PE-nMb"/>
                                                                 <constraint firstItem="QSA-UW-hgy" firstAttribute="top" secondItem="Frh-lg-GcQ" secondAttribute="bottom" constant="5.5" id="4QL-CJ-mAd"/>
                                                                 <constraint firstItem="bRT-bI-qPS" firstAttribute="leading" secondItem="QSA-UW-hgy" secondAttribute="leading" constant="55" id="5oq-ou-Zzl"/>
-                                                                <constraint firstItem="bRT-bI-qPS" firstAttribute="top" secondItem="LZQ-HI-juc" secondAttribute="top" constant="13" id="61S-xo-YZZ"/>
+                                                                <constraint firstItem="bRT-bI-qPS" firstAttribute="top" secondItem="LZQ-HI-juc" secondAttribute="top" constant="3" id="61S-xo-YZZ"/>
                                                                 <constraint firstItem="c3i-Ah-otB" firstAttribute="leading" secondItem="PbZ-ef-4mk" secondAttribute="leading" constant="48" id="73g-wg-9yq"/>
                                                                 <constraint firstItem="gCw-Og-URe" firstAttribute="leading" secondItem="c3i-Ah-otB" secondAttribute="leading" constant="45" id="8Wt-Qz-Qor"/>
                                                                 <constraint firstItem="Frh-lg-GcQ" firstAttribute="leading" secondItem="gCw-Og-URe" secondAttribute="leading" constant="53" id="CZ1-tV-S5d"/>
@@ -4783,6 +4790,7 @@
                                                                 <constraint firstItem="9b5-PZ-Zkx" firstAttribute="leading" secondItem="K7B-MG-YRq" secondAttribute="leading" constant="53" id="O6L-Kh-WMp"/>
                                                                 <constraint firstItem="F0s-e0-aNJ" firstAttribute="leading" secondItem="Sse-lb-FYg" secondAttribute="leading" constant="45" id="O8w-w9-FnC"/>
                                                                 <constraint firstItem="F0s-e0-aNJ" firstAttribute="top" secondItem="gCw-Og-URe" secondAttribute="bottom" constant="5.5" id="OP2-R3-Lnj"/>
+                                                                <constraint firstItem="sXc-o5-NVD" firstAttribute="leading" secondItem="QSA-UW-hgy" secondAttribute="leading" constant="55" id="QJS-6X-oGd"/>
                                                                 <constraint firstItem="Frh-lg-GcQ" firstAttribute="top" secondItem="LZQ-HI-juc" secondAttribute="top" constant="3" id="Ras-VK-uod"/>
                                                                 <constraint firstItem="QSA-UW-hgy" firstAttribute="leading" secondItem="F0s-e0-aNJ" secondAttribute="leading" constant="53" id="TrU-bY-BSS"/>
                                                                 <constraint firstItem="Sse-lb-FYg" firstAttribute="leading" secondItem="9b5-PZ-Zkx" secondAttribute="leading" constant="48" id="cmb-28-tQf"/>
@@ -4792,6 +4800,7 @@
                                                                 <constraint firstAttribute="height" constant="52" id="qHR-Nz-FdG"/>
                                                                 <constraint firstItem="CbI-wp-XAm" firstAttribute="leading" secondItem="LZQ-HI-juc" secondAttribute="leading" constant="20" id="qiz-LW-804"/>
                                                                 <constraint firstItem="gCw-Og-URe" firstAttribute="top" secondItem="LZQ-HI-juc" secondAttribute="top" constant="3" id="vVv-Bu-9CU"/>
+                                                                <constraint firstItem="sXc-o5-NVD" firstAttribute="top" secondItem="bRT-bI-qPS" secondAttribute="bottom" constant="3.5" id="zTr-V6-N2i"/>
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uMW-IK-LK9">
@@ -4835,6 +4844,7 @@
                                                     <outlet property="returnDepartureTime" destination="K7B-MG-YRq" id="Q7x-Gi-6Es"/>
                                                     <outlet property="returnDestination" destination="QSA-UW-hgy" id="tCa-0C-9fH"/>
                                                     <outlet property="returnOrigin" destination="9b5-PZ-Zkx" id="F9c-QE-sDv"/>
+                                                    <outlet property="selectFlightButton" destination="sXc-o5-NVD" id="pSq-6A-gYd"/>
                                                     <outlet property="totalPrice" destination="bRT-bI-qPS" id="zKR-5X-Nmn"/>
                                                 </connections>
                                             </tableViewCell>
@@ -9885,13 +9895,13 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4uk-gB-sQc"/>
+        <segue reference="IrZ-E3-weH"/>
+        <segue reference="aww-Ip-yzO"/>
         <segue reference="AiS-CM-kbO"/>
         <segue reference="YJh-b0-V47"/>
-        <segue reference="XG6-b2-gcD"/>
-        <segue reference="sNQ-RT-YBj"/>
-        <segue reference="JbU-KK-pA3"/>
-        <segue reference="uxT-Gz-li3"/>
+        <segue reference="XIs-yD-L7P"/>
+        <segue reference="chs-U5-EMN"/>
+        <segue reference="Cjv-x4-gBd"/>
         <segue reference="D0h-av-d3S"/>
         <segue reference="1VF-PM-MLD"/>
     </inferredMetricsTieBreakers>

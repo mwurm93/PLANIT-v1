@@ -13,6 +13,7 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
     
     //Class vars
     var questionLabel: UILabel?
+    var button1: UIButton?
         //GOOGLE PLACES SEARCH
     var resultsViewController: GMSAutocompleteResultsViewController?
     var searchController: UISearchController?
@@ -40,6 +41,18 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
         
+        button1?.sizeToFit()
+        button1?.frame.size.height = 30
+        button1?.frame.size.width += 20
+        button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
+        button1?.frame.origin.y = 190
+        button1?.layer.cornerRadius = (button1?.frame.height)! / 2
+        if DataContainerSingleton.sharedDataContainer.homeAirport != nil && DataContainerSingleton.sharedDataContainer.homeAirport != "" {
+            button1?.isHidden = false
+        } else {
+            button1?.isHidden = true
+        }
+        
         subView?.frame = CGRect(x: (bounds.size.width-275)/2, y: 120, width: 275, height: 30)
     }
     
@@ -55,6 +68,25 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         questionLabel?.adjustsFontSizeToFitWidth = true
         questionLabel?.text = "Where will you be coming from?"
         self.addSubview(questionLabel!)
+        
+        //Button1
+        button1 = UIButton(type: .custom)
+        button1?.frame = CGRect.zero
+        button1?.setTitleColor(UIColor.white, for: .normal)
+        button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button1?.setTitleColor(UIColor.white, for: .selected)
+        button1?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        button1?.layer.borderWidth = 1
+        button1?.layer.borderColor = UIColor.white.cgColor
+        button1?.layer.masksToBounds = true
+        button1?.titleLabel?.numberOfLines = 0
+        button1?.titleLabel?.textAlignment = .center
+        button1?.setTitle("Yep, that's right", for: .normal)
+        button1?.setTitle("Yep, that's right", for: .selected)
+        button1?.translatesAutoresizingMaskIntoConstraints = false
+        button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button1!)
+
         
         //GOOGLE PLACES SEARCH
         resultsViewController = GMSAutocompleteResultsViewController()
@@ -98,6 +130,15 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         if DataContainerSingleton.sharedDataContainer.homeAirport != nil && DataContainerSingleton.sharedDataContainer.homeAirport != "" {
             searchController?.searchBar.text = DataContainerSingleton.sharedDataContainer.homeAirport
         }        
+    }
+    
+    func buttonClicked(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected == true {
+            sender.layer.borderWidth = 0
+        } else {
+            sender.layer.borderWidth = 1
+        }
     }
     
 }
