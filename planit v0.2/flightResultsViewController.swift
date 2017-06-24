@@ -8,6 +8,7 @@
 
 import UIKit
 import SMCalloutView
+import Cartography
 
 class flightResultsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SMCalloutViewDelegate, UIGestureRecognizerDelegate {
     
@@ -118,6 +119,9 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 //        flightResultsTableView.isEditing = true
 //        flightResultsTableView.allowsSelectionDuringEditing = true
         flightResultsTableView.separatorColor = UIColor.white
+//        constrain(flightResultsTableView, scrollView.) { view1, view2 in
+//            view1.bottom == view2.bottom
+//        }
         
 //        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
 //        if timesViewed["flightResults"] == 0 {
@@ -144,6 +148,8 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 //        self.popupBackgroundView.addGestureRecognizer(atap)
 //        popupBackgroundView.isHidden = true
 //        popupBackgroundView.isUserInteractionEnabled = true
+    
+        NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedFlightToFlightResults), name: NSNotification.Name(rawValue: "bookSelectedFlightToFlightResults"), object: nil)
     }
     
     // MARK: UITableviewdelegate
@@ -270,7 +276,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
                     flightResultsDictionary[index]["selectedStatus"] = 0
                 }
             }
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightSelected"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightSelectButtonTouchedUpInside"), object: nil)
         } else {
             sender.layer.borderWidth = 1
         }
@@ -292,6 +298,15 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
                 self.sortFilterFlightsCalloutView.isHidden = true
                 //HANDLE SORT / FILTER SELECTION
             })
+        }
+    }
+    
+    func bookSelectedFlightToFlightResults() {
+        for row in 0 ... flightResultsTableView.numberOfRows(inSection: 0) - 1 {
+            let cell = flightResultsTableView.cellForRow(at: IndexPath(row: row, section: 0)) as! flightSearchResultTableViewCell
+            cell.selectFlightButton.isSelected = false
+            cell.selectFlightButton.layer.borderWidth = 1
+            flightResultsDictionary[row]["selectedStatus"] = 0
         }
     }
 //    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -388,16 +403,13 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 //        return nil
 //    }
 //
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        if tableView == flightResultsTableView {
-//            return 30
-//        }
-//        return CGFloat.leastNormalMagnitude
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        return CGFloat.leastNormalMagnitude
-//    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
     
 //    func fetchSavedPreferencesForTrip() -> NSMutableDictionary {
 //        //Update preference vars if an existing trip
@@ -525,6 +537,9 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
 //        }
 //    }
     
+    @IBAction func editFlightSearchButtonTouchedUpInside(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "editFlightSearchButtonTouchedUpInside"), object: nil)
+    }
     @IBAction func filterFlightsButtonTouchedUpInside(_ sender: Any) {
         if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "sort") {
             calloutTableViewMode = "filter"

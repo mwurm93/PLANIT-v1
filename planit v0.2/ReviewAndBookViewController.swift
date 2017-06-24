@@ -37,6 +37,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     @IBOutlet weak var addressState: UITextField!
     @IBOutlet weak var addressZipCode: UITextField!
     @IBOutlet weak var instructionsGotItButton: UIButton!
+    @IBOutlet weak var saveForLaterButton: UIButton!
     
     // Set up vars for Contacts - COPY
     var contacts: [CNContact]?
@@ -82,16 +83,6 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         }
         tripNameLabel.adjustsFontSizeToFitWidth = true
         tripNameLabel.minimumFontSize = 10
-        
-        //Appearance of booking buttons
-        bookThisTripButton.layer.borderWidth = 1
-        bookThisTripButton.layer.borderColor = UIColor.white.cgColor
-        bookThisTripButton.layer.cornerRadius = 5
-        bookThisTripButton.layer.backgroundColor = UIColor(red:1,green:1,blue:1,alpha:0.18).cgColor
-        
-        // Center booking button text
-        bookThisTripButton.titleLabel?.textAlignment = .center
-        
         
         // Set up tap outside info view
         popupBackgroundView.isHidden = true
@@ -147,6 +138,43 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         self.addressZipCode.delegate = self
         
         topItineraryTable.layer.cornerRadius = 5
+        
+        //appearance of save for later button
+        saveForLaterButton.setTitleColor(UIColor.white, for: .normal)
+        saveForLaterButton.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        saveForLaterButton.setTitleColor(UIColor.white, for: .selected)
+        saveForLaterButton.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        saveForLaterButton.layer.borderWidth = 1
+        saveForLaterButton.layer.borderColor = UIColor.white.cgColor
+        saveForLaterButton.layer.masksToBounds = true
+        saveForLaterButton.titleLabel?.numberOfLines = 0
+        saveForLaterButton.titleLabel?.textAlignment = .center
+        saveForLaterButton.setTitle("Save for later", for: .normal)
+        saveForLaterButton.setTitle("Save for later", for: .selected)
+        saveForLaterButton.addTarget(self, action: #selector(self.saveForLaterButtonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        saveForLaterButton.sizeToFit()
+        saveForLaterButton.frame.size.height = 30
+        saveForLaterButton.frame.size.width += 20
+        let bounds = UIScreen.main.bounds
+        saveForLaterButton.frame.origin.x = (bounds.size.width - saveForLaterButton.frame.width) / 2
+        saveForLaterButton.frame.origin.y = 545
+        saveForLaterButton.layer.cornerRadius = saveForLaterButton.frame.height / 2
+        
+        //Appearance of booking buttons
+        bookThisTripButton.setTitleColor(UIColor.white, for: .normal)
+        bookThisTripButton.setBackgroundColor(color: UIColor(red:1,green:1,blue:1,alpha:0.18), forState: .normal)
+        bookThisTripButton.setTitleColor(UIColor.white, for: .selected)
+        bookThisTripButton.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        bookThisTripButton.layer.borderWidth = 1
+        bookThisTripButton.layer.borderColor = UIColor.white.cgColor
+        bookThisTripButton.layer.masksToBounds = true
+        bookThisTripButton.titleLabel?.numberOfLines = 0
+        bookThisTripButton.titleLabel?.textAlignment = .center
+        bookThisTripButton.setTitle("Book", for: .normal)
+        bookThisTripButton.setTitle("Book", for: .selected)
+        bookThisTripButton.frame.origin.x = (bounds.size.width - bookThisTripButton.frame.width) / 2
+        bookThisTripButton.addTarget(self, action: #selector(self.bookButtonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        bookThisTripButton.layer.cornerRadius = bookThisTripButton.frame.height / 2
         
         // Set appearance of textfield
         firstName.layer.borderWidth = 0.5
@@ -265,6 +293,26 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
 
         
     }
+    
+    func bookButtonClicked(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected == true {
+            sender.layer.borderWidth = 0
+        } else {
+            sender.layer.borderWidth = 1
+        }
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookFlightButtonTouchedUpInside"), object: nil)
+    }
+    func saveForLaterButtonClicked(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected == true {
+            sender.layer.borderWidth = 0
+        } else {
+            sender.layer.borderWidth = 1
+        }
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "saveForLaterButtonTouchedUpInside"), object: nil)
+    }
+
     
     override func viewWillAppear(_ animated: Bool)
     {
@@ -578,6 +626,9 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     }
     
     // MARK: Actions
+    @IBAction func backButtonTouchedUpInside(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookSelectedFlightToFlightResults"), object: nil)
+    }
     @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
         animateInstructionsIn()
         self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 6,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)

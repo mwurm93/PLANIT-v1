@@ -13,20 +13,17 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     var rankedPotentialTripsDictionaryArrayIndex = 0
     var searchMode = "roundtrip"
-//    var questionLabel: UILabel?
+    var questionLabel: UILabel?
+    var searchButton: UIButton?
+    var departureOrigin: UITextField
+    var departureDestination: UITextField
+    var departureDate: UITextField
+    var returnDate: UITextField
+    var returnOrigin: UITextField
+    var returnDestination: UITextFi
     
     // MARK: Outlets
-    @IBOutlet weak var underline: UIImageView!
-    @IBOutlet weak var departureOrigin: UITextField!
-    @IBOutlet weak var departureDestination: UITextField!
-    @IBOutlet weak var departureDate: UITextField!
-    @IBOutlet weak var returnDate: UITextField!
-    @IBOutlet weak var returnOrigin: UITextField!
-    @IBOutlet weak var returnDestination: UITextField!
-    @IBOutlet weak var returnDateLabel: UILabel!
-    @IBOutlet weak var returnOriginLabel: UILabel!
-    @IBOutlet weak var returnDestinationLabel: UILabel!
-    @IBOutlet weak var searchButton: UIButton!
+    @IBOutlet weak var searchModeControl: UISegmentedControl!
     
     
     override init(frame: CGRect) {
@@ -46,30 +43,32 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-//        let bounds = UIScreen.main.bounds
-//        
-//        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
+        let bounds = UIScreen.main.bounds
+//
+        questionLabel?.frame = CGRect(x: 10, y: 20, width: bounds.size.width - 20, height: 50)
+        
+        searchButton?.sizeToFit()
+        searchButton?.frame.size.height = 30
+        searchButton?.frame.size.width += 20
+        searchButton?.frame.origin.x = (bounds.size.width - (searchButton?.frame.width)!) / 2
+        searchButton?.frame.origin.y = 270
+        searchButton?.layer.cornerRadius = (searchButton?.frame.height)! / 2
         
     }
     
     
     func addViews() {
-//        //Question label
-//        questionLabel = UILabel(frame: CGRect.zero)
-//        questionLabel?.translatesAutoresizingMaskIntoConstraints = false
-//        questionLabel?.numberOfLines = 0
-//        questionLabel?.textAlignment = .center
-//        questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
-//        questionLabel?.textColor = UIColor.white
-//        questionLabel?.adjustsFontSizeToFitWidth = true
-//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-//        if destinationsForTrip.count != 0 {
-//            questionLabel?.text = "How do you want to get to \(destinationsForTrip[0])?"
-//        }
-//        self.addSubview(questionLabel!)
-//        
-//   
+        //Question label
+        questionLabel = UILabel(frame: CGRect.zero)
+        questionLabel?.translatesAutoresizingMaskIntoConstraints = false
+        questionLabel?.numberOfLines = 0
+        questionLabel?.textAlignment = .center
+        questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+        questionLabel?.textColor = UIColor.white
+        questionLabel?.adjustsFontSizeToFitWidth = true
+        questionLabel?.text = "Search for flights"
+        self.addSubview(questionLabel!)
+
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
@@ -82,13 +81,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
             }
         }
         
-        self.underline.layer.frame = CGRect(x: 132, y: 33, width: 98, height: 51)
-        returnOrigin.isHidden = true
-        returnOriginLabel.isHidden = true
-        returnDestination.isHidden = true
-        returnDestinationLabel.isHidden = true
-        returnDate.isHidden = false
-        returnDateLabel.isHidden = false
+        handleSearchMode()
         
         if let leftDateTimeArrays = SavedPreferencesForTrip["origin_departure_times"]  as? NSMutableDictionary {
             if let rightDateTimeArrays = SavedPreferencesForTrip["return_departure_times"] as? NSMutableDictionary {
@@ -107,65 +100,75 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
             }
         }
         
-        
-        //Textfield setup
-        self.departureDate.delegate = self
-        departureDate.layer.borderWidth = 1
-        departureDate.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
-        departureDate.layer.masksToBounds = true
-        departureDate.layer.cornerRadius = 5
-        let departureDateLabelPlaceholder = departureDate!.value(forKey: "placeholderLabel") as? UILabel
-        departureDateLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
-        
-        self.departureOrigin.delegate = self
-        departureOrigin.layer.borderWidth = 1
-        departureOrigin.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
-        departureOrigin.layer.masksToBounds = true
-        departureOrigin.layer.cornerRadius = 5
-        let departureOriginValue = DataContainerSingleton.sharedDataContainer.homeAirport ?? ""
-        departureOrigin.text =  "\(departureOriginValue)"
-        let departureOriginLabelPlaceholder = departureOrigin!.value(forKey: "placeholderLabel") as? UILabel
-        departureOriginLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
-        
-        self.departureDestination.delegate = self
-        departureDestination.layer.borderWidth = 1
-        departureDestination.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
-        departureDestination.layer.masksToBounds = true
-        departureDestination.layer.cornerRadius = 5
+        //Button
+        searchButton = UIButton(type: .custom)
+        searchButton?.frame = CGRect.zero
+        searchButton?.setTitleColor(UIColor.white, for: .normal)
+        searchButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        searchButton?.setTitleColor(UIColor.white, for: .selected)
+        searchButton?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        searchButton?.layer.borderWidth = 1
+        searchButton?.layer.borderColor = UIColor.white.cgColor
+        searchButton?.layer.masksToBounds = true
+        searchButton?.titleLabel?.textAlignment = .center
+        searchButton?.setTitle("Search", for: .normal)
+        searchButton?.setTitle("Search", for: .selected)
+        searchButton?.translatesAutoresizingMaskIntoConstraints = false
+        searchButton?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(searchButton!)
         
         
-        let departureDestinationValue = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as! String
-        departureDestination.text =  "\(departureDestinationValue)"
-        let departureDestinationLabelPlaceholder = departureDestination!.value(forKey: "placeholderLabel") as? UILabel
-        departureDestinationLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        //Textfield
+        departureDate = UITextField(frame: CGRect.zero)
+        departureDate?.delegate = self
+        departureDate?.textColor = UIColor.white
+        departureDate?.borderStyle = .none
+        departureDate?.layer.masksToBounds = true
+        departureDate?.textAlignment = .center
+        departureDate?.returnKeyType = .next
+        let departureDatePlaceholder = NSAttributedString(string: "Departure date", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        departureDate?.attributedPlaceholder = departureDatePlaceholder
+        departureDate?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(departureDate!)
         
-        self.returnDate.delegate = self
-        returnDate.layer.borderWidth = 1
-        returnDate.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
-        returnDate.layer.masksToBounds = true
-        returnDate.layer.cornerRadius = 5
-        let returnDateLabelPlaceholder = returnDate!.value(forKey: "placeholderLabel") as? UILabel
-        returnDateLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        //Textfield
+        departureOrigin = UITextField(frame: CGRect.zero)
+        departureOrigin?.delegate = self
+        departureOrigin?.textColor = UIColor.white
+        departureOrigin?.borderStyle = .none
+        departureOrigin?.layer.masksToBounds = true
+        departureOrigin?.textAlignment = .center
+        departureOrigin?.returnKeyType = .next
+        let pickUpDatePlaceholder = NSAttributedString(string: "Pick-up date", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        pickUpDate?.attributedPlaceholder = pickUpDatePlaceholder
+        pickUpDate?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(pickUpDate!)
         
-        self.returnOrigin.delegate = self
-        returnOrigin.layer.borderWidth = 1
-        returnOrigin.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
-        returnOrigin.layer.masksToBounds = true
-        returnOrigin.layer.cornerRadius = 5
-        let returnOriginValue = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as! String
-        returnOrigin.text =  "\(returnOriginValue)"
-        let returnOriginLabelPlaceholder = returnOrigin!.value(forKey: "placeholderLabel") as? UILabel
-        returnOriginLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        //Textfield
+        differentDropOff = UITextField(frame: CGRect.zero)
+        differentDropOff?.delegate = self
+        differentDropOff?.textColor = UIColor.white
+        differentDropOff?.borderStyle = .none
+        differentDropOff?.layer.masksToBounds = true
+        differentDropOff?.textAlignment = .center
+        differentDropOff?.returnKeyType = .next
+        let differentDropOffPlaceholder = NSAttributedString(string: "Drop-off location", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        differentDropOff?.attributedPlaceholder = differentDropOffPlaceholder
+        differentDropOff?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(differentDropOff!)
         
-        self.returnDestination.delegate = self
-        returnDestination.layer.borderWidth = 1
-        returnDestination.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
-        returnDestination.layer.masksToBounds = true
-        returnDestination.layer.cornerRadius = 5
-        let returnDestinationValue = DataContainerSingleton.sharedDataContainer.homeAirport ?? ""
-        returnDestination.text =  "\(returnDestinationValue)"
-        let returnDestinationLabelPlaceholder = returnDestination!.value(forKey: "placeholderLabel") as? UILabel
-        returnDestinationLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
+        //Textfield
+        dropOffDate = UITextField(frame: CGRect.zero)
+        dropOffDate?.delegate = self
+        dropOffDate?.textColor = UIColor.white
+        dropOffDate?.borderStyle = .none
+        dropOffDate?.layer.masksToBounds = true
+        dropOffDate?.textAlignment = .center
+        dropOffDate?.returnKeyType = .next
+        let dropOffDatePlaceholder = NSAttributedString(string: "Drop-off date", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        dropOffDate?.attributedPlaceholder = dropOffDatePlaceholder
+        dropOffDate?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(dropOffDate!)
         
 
     }
@@ -195,42 +198,48 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
 
         return true
     }
+    func handleSearchMode() {
+        if searchMode == "oneWay" {
+            self.returnOrigin.isHidden = true
+            self.returnDestination.isHidden = true
+            self.returnDate.isHidden = true
+        } else if searchMode == "roundtrip" {
+            self.returnOrigin.isHidden = true
+            self.returnDestination.isHidden = true
+            self.returnDate.isHidden = false
+        } else if searchMode == "multiCity" {
+            self.returnOrigin.isHidden = false
+            self.returnDestination.isHidden = false
+            self.returnDate.isHidden = false
+        }
+    }
+    
+    func buttonClicked(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected == true {
+            sender.layer.borderWidth = 0
+        } else {
+            sender.layer.borderWidth = 1
+        }
+    }
+    
     
     // MARK: Actions
-    @IBAction func multiCityButtonTouchedUpInside(_ sender: Any) {
-        UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 239, y: 33, width: 98, height: 51)
-            self.returnOrigin.isHidden = false
-            self.returnOriginLabel.isHidden = false
-            self.returnDestination.isHidden = false
-            self.returnDestinationLabel.isHidden = false
-            self.returnDate.isHidden = false
-            self.returnDateLabel.isHidden = false
+    @IBAction func searchModeControlValueChanged(_ sender: Any) {
+        if searchModeControl.selectedSegmentIndex == 0 {
+            searchMode = "oneWay"
+        } else if searchModeControl.selectedSegmentIndex == 1 {
+            searchMode = "roundtrip"
+        } else {
+            searchMode = "multiCity"
         }
-        searchMode = "multiCity"
+        handleSearchMode()
+    }
+    @IBAction func multiCityButtonTouchedUpInside(_ sender: Any) {
     }
     @IBAction func roundtripButtonTouchedUpInside(_ sender: Any) {
-        UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 132, y: 33, width: 98, height: 51)
-            self.returnOrigin.isHidden = true
-            self.returnOriginLabel.isHidden = true
-            self.returnDestination.isHidden = true
-            self.returnDestinationLabel.isHidden = true
-            self.returnDate.isHidden = false
-            self.returnDateLabel.isHidden = false        }
-        searchMode = "roundtrip"
     }
     @IBAction func oneWayButtonTouchedUpInside(_ sender: Any) {
-        UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 24, y: 33, width: 98, height: 51)
-            self.returnOrigin.isHidden = true
-            self.returnOriginLabel.isHidden = true
-            self.returnDestination.isHidden = true
-            self.returnDestinationLabel.isHidden = true
-            self.returnDate.isHidden = true
-            self.returnDateLabel.isHidden = true
-        }
-        searchMode = "oneWay"
     }
     
 //    @IBAction func subviewDoneButtonTouchedUpInside(_ sender: Any) {

@@ -556,20 +556,28 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
-        let searchForTitle = cell.existingTripTableViewLabel.text
-        
-        let channel = channels[(indexPath as NSIndexPath).row]
-        channelRef = channelRef.child(channel.id)
-
-        for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
-            if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
-                DataContainerSingleton.sharedDataContainer.currenttrip = trip
+        if indexPath.row > channels.count - 1 {
+            return
+        } else {
+            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
+            let searchForTitle = cell.existingTripTableViewLabel.text
+            
+            let channel = channels[(indexPath as NSIndexPath).row]
+            channelRef = channelRef.child(channel.id)
+            
+            
+            for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+                
+                
+                if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
+                    
+                    DataContainerSingleton.sharedDataContainer.currenttrip = trip
+                    
+                }
             }
+            
+            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
         }
-        
-        super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
         
 //        let finishedEnteringPreferencesStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "finished_entering_preferences_status") as? NSString ?? NSString()
 //        let bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? NSNumber()
