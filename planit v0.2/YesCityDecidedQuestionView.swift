@@ -110,7 +110,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         button?.setTitleColor(UIColor.white, for: .normal)
         button?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         button?.setTitleColor(UIColor.white, for: .selected)
-        button?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        button?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button?.layer.borderWidth = 1
         button?.layer.borderColor = UIColor.white.cgColor
         button?.layer.masksToBounds = true

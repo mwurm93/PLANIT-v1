@@ -1,14 +1,14 @@
 //
-//  DecidedOnCityToVisitQuestionView.swift
+//  DoYouKnowWhereYouWillBeStayingQuestionView.swift
 //  planit v0.2
 //
-//  Created by MICHAEL WURM on 6/18/17.
+//  Created by MICHAEL WURM on 6/23/17.
 //  Copyright © 2017 MICHAEL WURM. All rights reserved.
 //
 
 import UIKit
 
-class DecidedOnCityToVisitQuestionView: UIView {
+class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
     
     //Class vars
     var questionLabel: UILabel?
@@ -26,8 +26,8 @@ class DecidedOnCityToVisitQuestionView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-//        self.layer.borderColor = UIColor.green.cgColor
-//        self.layer.borderWidth = 2
+        //        self.layer.borderColor = UIColor.green.cgColor
+        //        self.layer.borderWidth = 2
     }
     
     override func layoutSubviews() {
@@ -35,7 +35,7 @@ class DecidedOnCityToVisitQuestionView: UIView {
         let bounds = UIScreen.main.bounds
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
-
+        
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
@@ -44,7 +44,7 @@ class DecidedOnCityToVisitQuestionView: UIView {
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         button2?.sizeToFit()
-        button2?.frame.size.height = 60
+        button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
         button2?.frame.origin.y = 170
@@ -62,9 +62,9 @@ class DecidedOnCityToVisitQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Have you decided on a city to visit?"
+        questionLabel?.text = "Do you know where you'll be staying?"
         self.addSubview(questionLabel!)
-
+        
         //Button2
         button1 = UIButton(type: .custom)
         button1?.frame = CGRect.zero
@@ -77,12 +77,12 @@ class DecidedOnCityToVisitQuestionView: UIView {
         button1?.layer.masksToBounds = true
         button1?.titleLabel?.numberOfLines = 0
         button1?.titleLabel?.textAlignment = .center
-        button1?.setTitle("Yes, we've decided", for: .normal)
-        button1?.setTitle("Yes, we've decided", for: .selected)
+        button1?.setTitle("Yes", for: .normal)
+        button1?.setTitle("Yes", for: .selected)
         button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
-
+        
         
         //Button2
         button2 = UIButton(type: .custom)
@@ -96,8 +96,8 @@ class DecidedOnCityToVisitQuestionView: UIView {
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.numberOfLines = 0
         button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("No, nothing set in stone,\nopen to ideas!", for: .normal)
-        button2?.setTitle("No, nothing set in stone,\nopen to ideas!", for: .selected)
+        button2?.setTitle("Not yet, help me find a place", for: .normal)
+        button2?.setTitle("Not yet, help me find a place", for: .selected)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)

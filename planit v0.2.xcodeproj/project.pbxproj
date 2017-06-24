@@ -97,6 +97,8 @@
 		FAA8F29E1E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */; };
 		FAA8F29F1E351DDE00CD7337 /* timeOfDayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */; };
 		FAA8F2A11E351DEB00CD7337 /* items.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2A01E351DEB00CD7337 /* items.plist */; };
+		FABEACFC1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEACFB1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift */; };
+		FABEACFE1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */; };
 		FAC1BD2E1EAE7707008AB7C4 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1BD2A1EAE7707008AB7C4 /* Direction.swift */; };
 		FAC1BD2F1EAE7707008AB7C4 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1BD2B1EAE7707008AB7C4 /* Scheduler.swift */; };
 		FAC1BD301EAE7707008AB7C4 /* ViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1BD2C1EAE7707008AB7C4 /* ViewManager.swift */; };
@@ -268,6 +270,8 @@
 		FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rankedRecommendationsTableViewCell.swift; sourceTree = "<group>"; };
 		FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = timeOfDayTableViewCell.swift; sourceTree = "<group>"; };
 		FAA8F2A01E351DEB00CD7337 /* items.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = items.plist; sourceTree = "<group>"; };
+		FABEACFB1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoYouKnowWhereYouWillBeStayingQuestionView.swift; sourceTree = "<group>"; };
+		FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoYouKnowWhereYouWillBeStayingQuestionView.xib; sourceTree = "<group>"; };
 		FAC1BD2A1EAE7707008AB7C4 /* Direction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		FAC1BD2B1EAE7707008AB7C4 /* Scheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		FAC1BD2C1EAE7707008AB7C4 /* ViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewManager.swift; sourceTree = "<group>"; };
@@ -490,15 +494,16 @@
 		FAA8F2561E351AB100CD7337 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				FAE83F641EF461500009A020 /* TripViewController.swift */,
+				FAA8F2651E351B9500CD7337 /* SettingsViewController.swift */,
+				FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */,
 				FAA8F25C1E351B9500CD7337 /* EmailViewController.swift */,
 				FAA8F2611E351B9500CD7337 /* PasswordViewController.swift */,
 				FAA8F2671E351B9500CD7337 /* TripListViewController.swift */,
-				FAA8F2651E351B9500CD7337 /* SettingsViewController.swift */,
+				FAE83F641EF461500009A020 /* TripViewController.swift */,
+				FA97F84A1EE66A8B008358EF /* chatViewController.swift */,
 				FA730B931EC9EEBA004F310A /* flightResultsViewController.swift */,
 				FA77D1EA1EFDB53100A37A05 /* carRentalResultsViewController.swift */,
-				FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */,
-				FA97F84A1EE66A8B008358EF /* chatViewController.swift */,
+				FAA8F2641E351B9500CD7337 /* ReviewAndBookViewController.swift */,
 				FAAE62611E3A423200A2A6B7 /* View Controllers (unused) */,
 			);
 			name = "View Controllers";
@@ -637,7 +642,6 @@
 				FAA8F2621E351B9500CD7337 /* RankingViewController.swift */,
 				FA730B8F1EC9E88E004F310A /* flightSearchViewController.swift */,
 				FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */,
-				FAA8F2641E351B9500CD7337 /* ReviewAndBookViewController.swift */,
 				FA2CFC091E3E57A200527405 /* UnbookedTripSummaryViewController.swift */,
 				FAA8F2661E351B9500CD7337 /* SuggestDestinationViewController.swift */,
 				FAA8F25A1E351B9500CD7337 /* BudgetViewController.swift */,
@@ -721,6 +725,8 @@
 				FA8A20B91EFD94F100EB0360 /* DoYouNeedARentalCarQuestionView.xib */,
 				FA77D1EE1EFDCE6E00A37A05 /* CarRentalSearchQuestionView.swift */,
 				FA77D1F01EFDCED700A37A05 /* CarRentalSearchQuestionView.xib */,
+				FABEACFB1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift */,
+				FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */,
 			);
 			name = "Scrolling Views";
 			sourceTree = "<group>";
@@ -889,6 +895,7 @@
 				FA4EA8D41EE87DBC005FCE91 /* common.js in Resources */,
 				FAE83F831EF79E9B0009A020 /* NoCityDecidedAnyIdeasQuestionView.xib in Resources */,
 				FA09A3ED1EB23694007F64A3 /* ToDoCardContentView.xib in Resources */,
+				FABEACFE1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib in Resources */,
 				FA4EA8D61EE881D3005FCE91 /* GoogleService-Info.plist in Resources */,
 				FA4EA8C91EE7A4AE005FCE91 /* CreateTrip.graphql in Resources */,
 				FA14B22A1EFB22BE004E0E29 /* HowDoYouWantToGetThereQuestionView.xib in Resources */,
@@ -1091,6 +1098,7 @@
 				FA09A3EA1EB110A6007F64A3 /* ToDoViewController.swift in Sources */,
 				FA09A3F21EB23894007F64A3 /* CardView.swift in Sources */,
 				FADF0A011ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift in Sources */,
+				FABEACFC1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift in Sources */,
 				FA70D01F1EFA5CB000126176 /* destinationsSwipedRightTableViewCell.swift in Sources */,
 				FA9E39811EBBD2A900F6CB0B /* bucketListViewController.swift in Sources */,
 				FA77D1F31EFDD9D600A37A05 /* textfieldUnderline.swift in Sources */,

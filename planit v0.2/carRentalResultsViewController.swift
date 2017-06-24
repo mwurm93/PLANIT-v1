@@ -149,7 +149,7 @@ class carRentalResultsViewController: UIViewController, UITableViewDelegate, UIT
         //        popupBackgroundView.isHidden = true
         //        popupBackgroundView.isUserInteractionEnabled = true
         
-        NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedFlightToFlightResults), name: NSNotification.Name(rawValue: "bookSelectedFlightToFlightResults"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedCarRentalToCarRentalResults), name: NSNotification.Name(rawValue: "bookSelectedCarRentalToCarRentalResults"), object: nil)
     }
     
     // MARK: UITableviewdelegate
@@ -276,7 +276,7 @@ class carRentalResultsViewController: UIViewController, UITableViewDelegate, UIT
                     flightResultsDictionary[index]["selectedStatus"] = 0
                 }
             }
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightSelectButtonTouchedUpInside"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "carRentalSelectButtonTouchedUpInside"), object: nil)
         } else {
             sender.layer.borderWidth = 1
         }
@@ -301,9 +301,9 @@ class carRentalResultsViewController: UIViewController, UITableViewDelegate, UIT
         }
     }
     
-    func bookSelectedFlightToFlightResults() {
+    func bookSelectedCarRentalToCarRentalResults() {
         for row in 0 ... flightResultsTableView.numberOfRows(inSection: 0) - 1 {
-            let cell = flightResultsTableView.cellForRow(at: IndexPath(row: row, section: 0)) as! flightSearchResultTableViewCell
+            let cell = flightResultsTableView.cellForRow(at: IndexPath(row: row, section: 0)) as! carRentalSearchResultTableViewCell
             cell.selectFlightButton.isSelected = false
             cell.selectFlightButton.layer.borderWidth = 1
             flightResultsDictionary[row]["selectedStatus"] = 0
@@ -538,7 +538,7 @@ class carRentalResultsViewController: UIViewController, UITableViewDelegate, UIT
     //    }
     
     @IBAction func editFlightSearchButtonTouchedUpInside(_ sender: Any) {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "editFlightSearchButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "editCarRentalSearchButtonTouchedUpInside"), object: nil)
     }
     @IBAction func filterFlightsButtonTouchedUpInside(_ sender: Any) {
         if self.sortFilterFlightsCalloutView.isHidden == true || (self.sortFilterFlightsCalloutView.isHidden == false && calloutTableViewMode == "sort") {

@@ -65,14 +65,8 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.frame.size.height = 30
         searchButton?.frame.size.width += 20
         searchButton?.frame.origin.x = (bounds.size.width - (searchButton?.frame.width)!) / 2
-        searchButton?.frame.origin.y = 310
+        searchButton?.frame.origin.y = 330
         searchButton?.layer.cornerRadius = (searchButton?.frame.height)! / 2
-        
-        if searchMode == "Same drop-off" {
-            differentDropOff?.isHidden = true
-        } else {
-            differentDropOff?.isHidden = false
-        }
         
     }
     
@@ -110,10 +104,10 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         origin?.layer.masksToBounds = true
         origin?.textAlignment = .center
         origin?.returnKeyType = .next
-        let originPlaceholder = NSAttributedString(string: "Pick-up location", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])        
+        let originPlaceholder = NSAttributedString(string: "Pick-up where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
         origin?.attributedPlaceholder = originPlaceholder
         if rentalMode == "At destination" {
-            let departureDestinationValue = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as! String
+            let departureDestinationValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[0]
             if departureDestinationValue != nil && departureDestinationValue != "" {
                 origin?.text = departureDestinationValue
             }
@@ -134,7 +128,7 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         pickUpDate?.layer.masksToBounds = true
         pickUpDate?.textAlignment = .center
         pickUpDate?.returnKeyType = .next
-        let pickUpDatePlaceholder = NSAttributedString(string: "Pick-up date", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        let pickUpDatePlaceholder = NSAttributedString(string: "Pick-up when?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
         pickUpDate?.attributedPlaceholder = pickUpDatePlaceholder
         pickUpDate?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(pickUpDate!)
@@ -147,7 +141,7 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         differentDropOff?.layer.masksToBounds = true
         differentDropOff?.textAlignment = .center
         differentDropOff?.returnKeyType = .next
-        let differentDropOffPlaceholder = NSAttributedString(string: "Drop-off location", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        let differentDropOffPlaceholder = NSAttributedString(string: "Drop-off where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
         differentDropOff?.attributedPlaceholder = differentDropOffPlaceholder
         differentDropOff?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(differentDropOff!)
@@ -160,7 +154,7 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         dropOffDate?.layer.masksToBounds = true
         dropOffDate?.textAlignment = .center
         dropOffDate?.returnKeyType = .next
-        let dropOffDatePlaceholder = NSAttributedString(string: "Drop-off date", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        let dropOffDatePlaceholder = NSAttributedString(string: "Drop-off when?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
         dropOffDate?.attributedPlaceholder = dropOffDatePlaceholder
         dropOffDate?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(dropOffDate!)
@@ -171,7 +165,7 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.setTitleColor(UIColor.white, for: .normal)
         searchButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         searchButton?.setTitleColor(UIColor.white, for: .selected)
-        searchButton?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        searchButton?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         searchButton?.layer.borderWidth = 1
         searchButton?.layer.borderColor = UIColor.white.cgColor
         searchButton?.layer.masksToBounds = true
@@ -181,6 +175,12 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.translatesAutoresizingMaskIntoConstraints = false
         searchButton?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(searchButton!)
+        
+        if searchMode == "Same drop-off" {
+            differentDropOff?.isHidden = true
+        } else {
+            differentDropOff?.isHidden = false
+        }
     }
     
     func buttonClicked(sender:UIButton) {
@@ -221,8 +221,7 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         }
     }
 
-    
-    @IBAction func searchModeControlValueChanged(_ sender: Any) {
+    func handleSearchMode() {
         if searchModeControl.selectedSegmentIndex == 0 {
             searchMode = "Same drop-off"
             differentDropOff?.isHidden = true
@@ -230,6 +229,10 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
             searchMode = "Different drop-off"
             differentDropOff?.isHidden = false
         }
+    }
+    
+    @IBAction func searchModeControlValueChanged(_ sender: Any) {
+        handleSearchMode()
     }
     
 }

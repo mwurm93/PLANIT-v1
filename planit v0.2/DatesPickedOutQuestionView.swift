@@ -65,7 +65,7 @@ class DatesPickedOutQuestionView: UIView {
         button1?.setTitleColor(UIColor.white, for: .normal)
         button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         button1?.setTitleColor(UIColor.white, for: .selected)
-        button1?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        button1?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button1?.layer.borderWidth = 1
         button1?.layer.borderColor = UIColor.white.cgColor
         button1?.layer.masksToBounds = true
@@ -82,7 +82,7 @@ class DatesPickedOutQuestionView: UIView {
         button2?.setTitleColor(UIColor.white, for: .normal)
         button2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         button2?.setTitleColor(UIColor.white, for: .selected)
-        button2?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        button2?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button2?.layer.borderWidth = 1
         button2?.layer.borderColor = UIColor.white.cgColor
         button2?.layer.masksToBounds = true

@@ -84,7 +84,7 @@ class TripNameQuestionView: UIView {
         tripNameQuestionButton?.setTitleColor(UIColor.white, for: .normal)
         tripNameQuestionButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         tripNameQuestionButton?.setTitleColor(UIColor.white, for: .selected)
-        tripNameQuestionButton?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        tripNameQuestionButton?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         tripNameQuestionButton?.layer.borderWidth = 1
         tripNameQuestionButton?.layer.borderColor = UIColor.white.cgColor        
         tripNameQuestionButton?.layer.masksToBounds = true

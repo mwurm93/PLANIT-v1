@@ -37,6 +37,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
+        
         //        self.layer.borderColor = UIColor.green.cgColor
         //        self.layer.borderWidth = 2
     }
@@ -69,7 +70,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.frame.size.height = 30
         searchButton?.frame.size.width += 20
         searchButton?.frame.origin.x = (bounds.size.width - (searchButton?.frame.width)!) / 2
-        searchButton?.frame.origin.y = 310
+        searchButton?.frame.origin.y = 330
         searchButton?.layer.cornerRadius = (searchButton?.frame.height)! / 2
         
     }
@@ -98,9 +99,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
                 }
             }
         }
-        
-        handleSearchMode()
-        
+                
         if let leftDateTimeArrays = SavedPreferencesForTrip["origin_departure_times"]  as? NSMutableDictionary {
             if let rightDateTimeArrays = SavedPreferencesForTrip["return_departure_times"] as? NSMutableDictionary {
                 let departureDictionary = leftDateTimeArrays as Dictionary
@@ -124,7 +123,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.setTitleColor(UIColor.white, for: .normal)
         searchButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         searchButton?.setTitleColor(UIColor.white, for: .selected)
-        searchButton?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        searchButton?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         searchButton?.layer.borderWidth = 1
         searchButton?.layer.borderColor = UIColor.white.cgColor
         searchButton?.layer.masksToBounds = true
@@ -144,7 +143,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         departureDate?.layer.masksToBounds = true
         departureDate?.textAlignment = .center
         departureDate?.returnKeyType = .next
-        let departureDatePlaceholder = NSAttributedString(string: "Departure date", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        let departureDatePlaceholder = NSAttributedString(string: "Leave when?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         departureDate?.attributedPlaceholder = departureDatePlaceholder
         departureDate?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(departureDate!)
@@ -157,7 +156,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         departureOrigin?.layer.masksToBounds = true
         departureOrigin?.textAlignment = .center
         departureOrigin?.returnKeyType = .next
-        let departureOriginPlaceholder = NSAttributedString(string: "From where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        let departureOriginPlaceholder = NSAttributedString(string: "From where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         departureOrigin?.attributedPlaceholder = departureOriginPlaceholder
         let departureOriginValue = DataContainerSingleton.sharedDataContainer.homeAirport
         if departureOriginValue != nil && departureOriginValue != "" {
@@ -174,9 +173,9 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         departureDestination?.layer.masksToBounds = true
         departureDestination?.textAlignment = .center
         departureDestination?.returnKeyType = .next
-        let departureDestinationPlaceholder = NSAttributedString(string: "To where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        let departureDestinationPlaceholder = NSAttributedString(string: "To where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         departureDestination?.attributedPlaceholder = departureDestinationPlaceholder
-        let departureDestinationValue = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as! String
+        let departureDestinationValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[0]
         if departureDestinationValue != nil && departureDestinationValue != "" {
             departureDestination?.text = departureDestinationValue
         }
@@ -191,7 +190,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         returnDate?.layer.masksToBounds = true
         returnDate?.textAlignment = .center
         returnDate?.returnKeyType = .next
-        let returnDatePlaceholder = NSAttributedString(string: "Return date", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        let returnDatePlaceholder = NSAttributedString(string: "Return when?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         returnDate?.attributedPlaceholder = returnDatePlaceholder
         returnDate?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(returnDate!)
@@ -204,9 +203,9 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         returnOrigin?.layer.masksToBounds = true
         returnOrigin?.textAlignment = .center
         returnOrigin?.returnKeyType = .next
-        let returnOriginPlaceholder = NSAttributedString(string: "From where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        let returnOriginPlaceholder = NSAttributedString(string: "From where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         returnOrigin?.attributedPlaceholder = returnOriginPlaceholder
-        let returnOriginValue = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as! String
+        let returnOriginValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[0]
         if returnOriginValue != nil && returnOriginValue != "" {
             returnOrigin?.text = returnOriginValue
         }
@@ -222,14 +221,16 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         returnDestination?.layer.masksToBounds = true
         returnDestination?.textAlignment = .center
         returnDestination?.returnKeyType = .next
-        let returnDestinationPlaceholder = NSAttributedString(string: "To where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        let returnDestinationPlaceholder = NSAttributedString(string: "To where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         returnDestination?.attributedPlaceholder = returnDestinationPlaceholder
-        let returnDestinationValue = DataContainerSingleton.sharedDataContainer.homeAirport
-        if returnDestinationValue != nil && returnDestinationValue != "" {
-            returnDestination?.text = returnDestinationValue
-        }
+//        let returnDestinationValue = DataContainerSingleton.sharedDataContainer.homeAirport
+//        if returnDestinationValue != nil && returnDestinationValue != "" {
+//            returnDestination?.text = returnDestinationValue
+//        }
         returnDestination?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(returnDestination!)
+        
+        handleSearchMode()
 
     }
     

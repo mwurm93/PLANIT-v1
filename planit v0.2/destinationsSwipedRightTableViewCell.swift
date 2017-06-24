@@ -27,9 +27,9 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
         cellButton?.setTitleColor(UIColor.white, for: .normal)
         cellButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         cellButton?.setTitleColor(UIColor.white, for: .highlighted)
-        cellButton?.setBackgroundColor(color: UIColor.blue, forState: .highlighted)
+        cellButton?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .highlighted)
         cellButton?.setTitleColor(UIColor.white, for: .selected)
-        cellButton?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        cellButton?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         cellButton?.layer.borderWidth = 1
         cellButton?.layer.borderColor = UIColor.white.cgColor
         cellButton?.layer.masksToBounds = true

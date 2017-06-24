@@ -50,6 +50,8 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     
     //Times VC viewed
     var timesViewed = [String: Int]()
+    
+    var bookingMode = "flight"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -143,7 +145,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         saveForLaterButton.setTitleColor(UIColor.white, for: .normal)
         saveForLaterButton.setBackgroundColor(color: UIColor.clear, forState: .normal)
         saveForLaterButton.setTitleColor(UIColor.white, for: .selected)
-        saveForLaterButton.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        saveForLaterButton.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         saveForLaterButton.layer.borderWidth = 1
         saveForLaterButton.layer.borderColor = UIColor.white.cgColor
         saveForLaterButton.layer.masksToBounds = true
@@ -164,7 +166,7 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         bookThisTripButton.setTitleColor(UIColor.white, for: .normal)
         bookThisTripButton.setBackgroundColor(color: UIColor(red:1,green:1,blue:1,alpha:0.18), forState: .normal)
         bookThisTripButton.setTitleColor(UIColor.white, for: .selected)
-        bookThisTripButton.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        bookThisTripButton.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         bookThisTripButton.layer.borderWidth = 1
         bookThisTripButton.layer.borderColor = UIColor.white.cgColor
         bookThisTripButton.layer.masksToBounds = true
@@ -301,7 +303,11 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         } else {
             sender.layer.borderWidth = 1
         }
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookFlightButtonTouchedUpInside"), object: nil)
+        if bookingMode == "flight" {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookFlightButtonTouchedUpInside"), object: nil)
+        } else if bookingMode == "carRental" {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookCarRentalButtonTouchedUpInside"), object: nil)
+        }
     }
     func saveForLaterButtonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
@@ -310,7 +316,11 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         } else {
             sender.layer.borderWidth = 1
         }
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "saveForLaterButtonTouchedUpInside"), object: nil)
+        if bookingMode == "flight" {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "saveFlightForLaterButtonTouchedUpInside"), object: nil)
+        } else if bookingMode == "carRental" {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "saveCarRentalForLaterButtonTouchedUpInside"), object: nil)
+        }
     }
 
     
@@ -627,7 +637,11 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
     
     // MARK: Actions
     @IBAction func backButtonTouchedUpInside(_ sender: Any) {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookSelectedFlightToFlightResults"), object: nil)
+        if bookingMode == "flight" {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookSelectedFlightToFlightResults"), object: nil)
+        } else if bookingMode == "carRental" {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookSelectedCarRentalToCarRentalResults"), object: nil)
+        }
     }
     @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
         animateInstructionsIn()

@@ -20,4 +20,11 @@ extension UIButton {
         
         self.setBackgroundImage(colorImage, for: forState)
     }
+
+}
+
+extension UIColor {
+    func getCustomBlueColor() -> UIColor {
+        return UIColor(red: 0/255, green:8/255 ,blue:108/255 , alpha:0.82)
+    }
 }

@@ -128,7 +128,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         button3?.setTitleColor(UIColor.white, for: .normal)
         button3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         button3?.setTitleColor(UIColor.white, for: .selected)
-        button3?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        button3?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button3?.layer.borderWidth = 1
         button3?.layer.borderColor = UIColor.white.cgColor
         button3?.layer.masksToBounds = true
@@ -146,7 +146,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         button4?.setTitleColor(UIColor.white, for: .normal)
         button4?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         button4?.setTitleColor(UIColor.white, for: .selected)
-        button4?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        button4?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button4?.layer.borderWidth = 1
         button4?.layer.borderColor = UIColor.white.cgColor
         button4?.layer.masksToBounds = true

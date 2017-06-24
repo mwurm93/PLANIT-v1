@@ -75,7 +75,7 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         button1?.setTitleColor(UIColor.white, for: .normal)
         button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         button1?.setTitleColor(UIColor.white, for: .selected)
-        button1?.setBackgroundColor(color: UIColor.blue, forState: .selected)
+        button1?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button1?.layer.borderWidth = 1
         button1?.layer.borderColor = UIColor.white.cgColor
         button1?.layer.masksToBounds = true

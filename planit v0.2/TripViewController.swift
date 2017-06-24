@@ -18,8 +18,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //VCs
     var chatController: ChatViewController?
     var flightResultsController: flightResultsViewController?
-    var reviewAndBookingController: ReviewAndBookViewController?
+    var reviewAndBookFlightsController: ReviewAndBookViewController?
     var carRentalResultsController: carRentalResultsViewController?
+    var reviewAndBookCarRentalController: ReviewAndBookViewController?
         //Vies
     var userNameQuestionView: UserNameQuestionView?
     var tripNameQuestionView: TripNameQuestionView?
@@ -37,6 +38,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var flightSearchQuestionView: FlightSearchQuestionView?
     var doYouNeedARentalCarQuestionView: DoYouNeedARentalCarQuestionView?
     var carRentalSearchQuestionView: CarRentalSearchQuestionView?
+    var doYouKnowWhereYouWillBeStayingQuestionView: DoYouKnowWhereYouWillBeStayingQuestionView?
     
     //CalendarView vars
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
@@ -99,6 +101,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[13] = spawnFlightBookingQuestionView
         functionsToLoadSubviewsDictionary[14] = spawnDoYouNeedARentalCarQuestionView
         functionsToLoadSubviewsDictionary[15] = spawnCarRentalSearchQuestionView
+        functionsToLoadSubviewsDictionary[16] = spawnRentalCarResultsQuestionView
+        functionsToLoadSubviewsDictionary[17] = spawnCarRentalBookingQuestionView
+        functionsToLoadSubviewsDictionary[18] = spawnDoYouKnowWhereYouWillBeStayingQuestionView
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -255,13 +260,19 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(spawnPlanIdeaAsDestinationQuestionView), name: NSNotification.Name(rawValue: "destinationIdeaEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionViewEvenIfNonNil), name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(animateInSubview_Departure), name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Departure"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(animateInSubview_Return), name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Return"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(animateOutSubview), name: NSNotification.Name(rawValue: "animateOutDatePickingSubview"), object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(removeFlightResultsViewController), name: NSNotification.Name(rawValue: "editFlightSearchButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnFlightBookingQuestionView), name: NSNotification.Name(rawValue: "flightSelectButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightSelectedBooked), name: NSNotification.Name(rawValue: "bookFlightButtonTouchedUpInside"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(flightSelectedSavedForLater), name: NSNotification.Name(rawValue: "saveForLaterButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flightSelectedSavedForLater), name: NSNotification.Name(rawValue: "saveFlightForLaterButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedFlightToFlightResults), name: NSNotification.Name(rawValue: "bookSelectedFlightToFlightResults"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(removeCarRentalResultsViewController), name: NSNotification.Name(rawValue: "editCarRentalSearchButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnCarRentalBookingQuestionView), name: NSNotification.Name(rawValue: "carRentalSelectButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(carRentalSelectedBooked), name: NSNotification.Name(rawValue: "bookCarRentalButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(carRentalSelectedSavedForLater), name: NSNotification.Name(rawValue: "saveCarRentalForLaterButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedCarRentalToCarRentalResults), name: NSNotification.Name(rawValue: "bookSelectedCarRentalToCarRentalResults"), object: nil)
     }
 //
     override func viewDidAppear(_ animated: Bool) {
@@ -706,20 +717,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             subview.isHidden = true
         }
         self.flightSearchQuestionView?.addSubview((flightResultsController?.view)!)
+        flightResultsController?.view.tag = 12
         flightResultsController?.didMove(toParentViewController: self)
         
         updateProgress()
     }
     func spawnFlightBookingQuestionView() {
-        reviewAndBookingController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
-        reviewAndBookingController?.willMove(toParentViewController: self)
-        self.addChildViewController(reviewAndBookingController!)
-        reviewAndBookingController?.loadView()
-        reviewAndBookingController?.viewDidLoad()
-        reviewAndBookingController?.view.frame = self.view.bounds
+        reviewAndBookFlightsController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
+        reviewAndBookFlightsController?.willMove(toParentViewController: self)
+        self.addChildViewController(reviewAndBookFlightsController!)
+        reviewAndBookFlightsController?.bookingMode = "flight"
+        reviewAndBookFlightsController?.loadView()
+        reviewAndBookFlightsController?.viewDidLoad()
+        reviewAndBookFlightsController?.view.frame = self.view.bounds
         flightResultsController?.view.isHidden = true
-        self.flightSearchQuestionView?.addSubview((reviewAndBookingController?.view)!)
-        reviewAndBookingController?.didMove(toParentViewController: self)
+        self.flightSearchQuestionView?.addSubview((reviewAndBookFlightsController?.view)!)
+        reviewAndBookFlightsController?.view.tag = 12
+        reviewAndBookFlightsController?.didMove(toParentViewController: self)
         
         updateProgress()
     }
@@ -768,26 +782,44 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             subview.isHidden = true
         }
         self.carRentalSearchQuestionView?.addSubview((carRentalResultsController?.view)!)
+        carRentalResultsController?.view.tag = 16
         carRentalResultsController?.didMove(toParentViewController: self)
         
         updateProgress()
     }
-    func spawnRentalCarBookingQuestionView() {
-        reviewAndBookingController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
-        reviewAndBookingController?.willMove(toParentViewController: self)
-        self.addChildViewController(reviewAndBookingController!)
-        reviewAndBookingController?.loadView()
-        reviewAndBookingController?.viewDidLoad()
-        reviewAndBookingController?.view.frame = self.view.bounds
-        flightResultsController?.view.isHidden = true
-        self.flightSearchQuestionView?.addSubview((reviewAndBookingController?.view)!)
-        reviewAndBookingController?.didMove(toParentViewController: self)
+    func spawnCarRentalBookingQuestionView() {
+        reviewAndBookCarRentalController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
+        reviewAndBookCarRentalController?.willMove(toParentViewController: self)
+        self.addChildViewController(reviewAndBookCarRentalController!)
+        reviewAndBookCarRentalController?.bookingMode = "carRental"
+        reviewAndBookCarRentalController?.loadView()
+        reviewAndBookCarRentalController?.viewDidLoad()
+        reviewAndBookCarRentalController?.view.frame = self.view.bounds
+        carRentalResultsController?.view.isHidden = true
+        self.carRentalSearchQuestionView?.addSubview((reviewAndBookCarRentalController?.view)!)
+        reviewAndBookCarRentalController?.view.tag = 17
+        reviewAndBookCarRentalController?.didMove(toParentViewController: self)
         
         updateProgress()
     }
+    func spawnDoYouKnowWhereYouWillBeStayingQuestionView() {
+        if doYouKnowWhereYouWillBeStayingQuestionView == nil {
+            //Load next question
+            doYouKnowWhereYouWillBeStayingQuestionView = Bundle.main.loadNibNamed("DoYouKnowWhereYouWillBeStayingQuestionView", owner: self, options: nil)?.first! as? DoYouKnowWhereYouWillBeStayingQuestionView
+            self.scrollContentView.addSubview(doYouKnowWhereYouWillBeStayingQuestionView!)
+            doYouKnowWhereYouWillBeStayingQuestionView?.tag = 18
+            let bounds = UIScreen.main.bounds
+//            doYouKnowWhereYouWillBeStayingQuestionView?.searchButton?.addTarget(self, action: #selector(self.searchRentalCars(sender:)), for: UIControlEvents.touchUpInside)
+            self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: doYouKnowWhereYouWillBeStayingQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (doYouKnowWhereYouWillBeStayingQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+        }
+        updateHeightOfScrollView()
+        scrollDownToTopSubview()
+        updateProgress()
+    }
+    
 
-    
-    
     //FLIGHT SEARCH -> RESULTS -> BOOK FUNCTIONS
     func removeFlightResultsViewController() {
         self.willMove(toParentViewController: nil)
@@ -796,11 +828,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         for subview in (flightSearchQuestionView?.subviews)! {
             subview.isHidden = false
         }
+        flightSearchQuestionView?.handleSearchMode()
+        flightSearchQuestionView?.searchButton?.isSelected = false
+        flightSearchQuestionView?.searchButton?.layer.borderWidth = 1
     }
     func removeBookSelectedFlightViewController() {
         self.willMove(toParentViewController: nil)
-        reviewAndBookingController?.view.removeFromSuperview()
-        reviewAndBookingController?.removeFromParentViewController()
+        reviewAndBookFlightsController?.view.removeFromSuperview()
+        reviewAndBookFlightsController?.removeFromParentViewController()
     }
     
     func bookSelectedFlightToFlightResults() {
@@ -823,7 +858,47 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         // LINK TO ITINERARY
         // SHOW USER WHERE SELECTED FLIGHT SAVED AND WHERE TO BOOK QUICKLY
     }
+
+    //CAR RENTAL SEARCH -> RESULTS -> BOOK FUNCTIONS
+    func removeCarRentalResultsViewController() {
+        self.willMove(toParentViewController: nil)
+        carRentalResultsController?.view.removeFromSuperview()
+        carRentalResultsController?.removeFromParentViewController()
+        for subview in (carRentalSearchQuestionView?.subviews)! {
+            subview.isHidden = false
+        }
+        carRentalSearchQuestionView?.handleSearchMode()
+        carRentalSearchQuestionView?.searchButton?.isSelected = false
+        carRentalSearchQuestionView?.searchButton?.layer.borderWidth = 1
+        
+    }
+    func removeBookSelectedCarRentalViewController() {
+        self.willMove(toParentViewController: nil)
+        reviewAndBookCarRentalController?.view.removeFromSuperview()
+        reviewAndBookCarRentalController?.removeFromParentViewController()
+    }
     
+    func bookSelectedCarRentalToCarRentalResults() {
+        removeBookSelectedCarRentalViewController()
+        carRentalResultsController?.view.isHidden = false
+    }
+    
+    func carRentalSelectedBooked() {
+        removeCarRentalResultsViewController()
+        removeBookSelectedCarRentalViewController()
+        spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+        
+        // LINK TO ITINERARY
+        // SHOW USER WHERE ITINERARY SAVED
+    }
+    
+    func carRentalSelectedSavedForLater() {
+        spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+        
+        // LINK TO ITINERARY
+        // SHOW USER WHERE SELECTED FLIGHT SAVED AND WHERE TO BOOK QUICKLY
+    }
+
     // MARK: Sent events
     func tripNameQuestionButtonClicked(sender:UIButton) {
         if sender.isSelected == true {
@@ -953,6 +1028,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func doYouNeedARentalCarQuestionView_no(sender:UIButton) {
         if sender.isSelected == true {
+            spawnDoYouKnowWhereYouWillBeStayingQuestionView()
         }
     }
     func searchRentalCars(sender:UIButton) {
