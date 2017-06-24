@@ -21,6 +21,11 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     var returnDate: UITextField?
     var returnOrigin: UITextField?
     var returnDestination: UITextField?
+    var alreadyHaveFlightsQuestionLabel: UILabel?
+    var alreadyHaveFlightsDepartureDate: UITextField?
+    var alreadyHaveFlightsDepartureFlightNumber: UITextField?
+    var alreadyHaveFlightsReturnDate: UITextField?
+    var alreadyHaveFlightsReturnFlightNumber: UITextField?
     
     // MARK: Outlets
     @IBOutlet weak var searchModeControl: UISegmentedControl!
@@ -72,6 +77,21 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.frame.origin.x = (bounds.size.width - (searchButton?.frame.width)!) / 2
         searchButton?.frame.origin.y = 330
         searchButton?.layer.cornerRadius = (searchButton?.frame.height)! / 2
+        
+        alreadyHaveFlightsQuestionLabel?.frame = CGRect(x: 10, y: 390, width: bounds.size.width - 20, height: 75)
+
+        alreadyHaveFlightsDepartureDate?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 470, width: 150, height: 30)
+        alreadyHaveFlightsDepartureDate?.setBottomBorder(borderColor: UIColor.white)
+        
+        alreadyHaveFlightsDepartureFlightNumber?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 470, width: 150, height: 30)
+        alreadyHaveFlightsDepartureFlightNumber?.setBottomBorder(borderColor: UIColor.white)
+        
+        alreadyHaveFlightsReturnDate?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 545, width: 150, height: 30)
+        alreadyHaveFlightsReturnDate?.setBottomBorder(borderColor: UIColor.white)
+        
+        alreadyHaveFlightsReturnFlightNumber?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 545, width: 150, height: 30)
+        alreadyHaveFlightsReturnFlightNumber?.setBottomBorder(borderColor: UIColor.white)
+
         
     }
     
@@ -231,6 +251,18 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         self.addSubview(returnDestination!)
         
         handleSearchMode()
+        
+        //Question label
+        alreadyHaveFlightsQuestionLabel = UILabel(frame: CGRect.zero)
+        alreadyHaveFlightsQuestionLabel?.translatesAutoresizingMaskIntoConstraints = false
+        alreadyHaveFlightsQuestionLabel?.numberOfLines = 0
+        alreadyHaveFlightsQuestionLabel?.textAlignment = .center
+        alreadyHaveFlightsQuestionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+        alreadyHaveFlightsQuestionLabel?.textColor = UIColor.white
+        alreadyHaveFlightsQuestionLabel?.adjustsFontSizeToFitWidth = true
+        alreadyHaveFlightsQuestionLabel?.text = "If you already have flights, enter them here to share with your group."
+        self.addSubview(alreadyHaveFlightsQuestionLabel!)
+
 
     }
     

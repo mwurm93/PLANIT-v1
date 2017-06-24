@@ -59,6 +59,10 @@
 		FA8A20B81EFD94E900EB0360 /* DoYouNeedARentalCarQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A20B71EFD94E900EB0360 /* DoYouNeedARentalCarQuestionView.swift */; };
 		FA8A20BA1EFD94F100EB0360 /* DoYouNeedARentalCarQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8A20B91EFD94F100EB0360 /* DoYouNeedARentalCarQuestionView.xib */; };
 		FA90F1D41EEB4B9F00094878 /* SwipingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */; };
+		FA9407741EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9407731EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift */; };
+		FA9407781EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */; };
+		FA94077A1EFF0C6200E4EEE4 /* idkHowToGetThereQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9407791EFF0C6200E4EEE4 /* idkHowToGetThereQuestionView.swift */; };
+		FA94077C1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA94077B1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib */; };
 		FA97A3721EC530F4006E68EC /* country_json_50m in Resources */ = {isa = PBXBuildFile; fileRef = FA97A3711EC530F4006E68EC /* country_json_50m */; };
 		FA97F84B1EE66A8B008358EF /* chatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97F84A1EE66A8B008358EF /* chatViewController.swift */; };
 		FA9E39811EBBD2A900F6CB0B /* bucketListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */; };
@@ -228,6 +232,10 @@
 		FA8A20B71EFD94E900EB0360 /* DoYouNeedARentalCarQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoYouNeedARentalCarQuestionView.swift; sourceTree = "<group>"; };
 		FA8A20B91EFD94F100EB0360 /* DoYouNeedARentalCarQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoYouNeedARentalCarQuestionView.xib; sourceTree = "<group>"; };
 		FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipingViewController.swift; sourceTree = "<group>"; };
+		FA9407731EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusTrainOtherQuestionView.swift; sourceTree = "<group>"; };
+		FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusTrainOtherQuestionView.xib; sourceTree = "<group>"; };
+		FA9407791EFF0C6200E4EEE4 /* idkHowToGetThereQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = idkHowToGetThereQuestionView.swift; sourceTree = "<group>"; };
+		FA94077B1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = idkHowToGetThereQuestionView.xib; sourceTree = "<group>"; };
 		FA97A3711EC530F4006E68EC /* country_json_50m */ = {isa = PBXFileReference; lastKnownFileType = folder; path = country_json_50m; sourceTree = "<group>"; };
 		FA97F84A1EE66A8B008358EF /* chatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatViewController.swift; sourceTree = "<group>"; };
 		FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bucketListViewController.swift; sourceTree = "<group>"; };
@@ -733,6 +741,10 @@
 				FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */,
 				FABEACFF1EFE4D630075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.swift */,
 				FABEAD011EFE4D700075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.xib */,
+				FA9407731EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift */,
+				FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */,
+				FA9407791EFF0C6200E4EEE4 /* idkHowToGetThereQuestionView.swift */,
+				FA94077B1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib */,
 			);
 			name = "Scrolling Views";
 			sourceTree = "<group>";
@@ -894,10 +906,12 @@
 				FA77D1F11EFDCED700A37A05 /* CarRentalSearchQuestionView.xib in Resources */,
 				FAE83F6F1EF49F190009A020 /* TripNameQuestionView.xib in Resources */,
 				FA14B2361EFB9B1F004E0E29 /* flightSearchResultsTableViewCell.xib in Resources */,
+				FA94077C1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib in Resources */,
 				FABEAD021EFE4D700075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.xib in Resources */,
 				FA14B2301EFB2D3D004E0E29 /* FlightSearchQuestionView.xib in Resources */,
 				FA4EA8CD1EE86608005FCE91 /* GetTripName.graphql in Resources */,
 				FAA8F2541E351A2700CD7337 /* LaunchScreen.storyboard in Resources */,
+				FA9407781EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib in Resources */,
 				FAE83F6D1EF4853B0009A020 /* UserNameQuestionView.xib in Resources */,
 				FA4EA8D41EE87DBC005FCE91 /* common.js in Resources */,
 				FAE83F831EF79E9B0009A020 /* NoCityDecidedAnyIdeasQuestionView.xib in Resources */,
@@ -1099,6 +1113,7 @@
 				FAE83F731EF649570009A020 /* WhereTravellingFromQuestionView.swift in Sources */,
 				FAE83F8F1EF7B12E0009A020 /* HowFarAwayQuestionView.swift in Sources */,
 				FA25F1FB1EBB7B9F005D29E5 /* hotelTableViewCell.swift in Sources */,
+				FA94077A1EFF0C6200E4EEE4 /* idkHowToGetThereQuestionView.swift in Sources */,
 				FAA8F26D1E351B9500CD7337 /* HomeAirportViewController.swift in Sources */,
 				FAA8F29D1E351DDE00CD7337 /* itemizedItineraryTableViewCell.swift in Sources */,
 				FAA8F29C1E351DDE00CD7337 /* ExistingTripTableViewCell.swift in Sources */,
@@ -1128,6 +1143,7 @@
 				FA187E451E37005200971D47 /* messageComposer.swift in Sources */,
 				FA35EF311EA5506D0029E462 /* HotelPreferencesViewController.swift in Sources */,
 				FAE83F811EF75CBD0009A020 /* DecidedOnCityToVisitQuestionView.swift in Sources */,
+				FA9407741EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift in Sources */,
 				FA77D1EB1EFDB53100A37A05 /* carRentalResultsViewController.swift in Sources */,
 				FAA8F2951E351DCD00CD7337 /* contactsCollectionViewCell.swift in Sources */,
 				FAA8F2231E35194100CD7337 /* AppDelegate.swift in Sources */,

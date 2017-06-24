@@ -37,41 +37,41 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
+        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 75)
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 120
+        button1?.frame.origin.y = 145
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         button2?.sizeToFit()
         button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 170
+        button2?.frame.origin.y = 195
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
         button3?.sizeToFit()
         button3?.frame.size.height = 30
         button3?.frame.size.width += 20
         button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2
-        button3?.frame.origin.y = 220
+        button3?.frame.origin.y = 245
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
         
         button4?.sizeToFit()
         button4?.frame.size.height = 30
         button4?.frame.size.width += 20
         button4?.frame.origin.x = (bounds.size.width - (button4?.frame.width)!) / 2
-        button4?.frame.origin.y = 270
+        button4?.frame.origin.y = 295
         button4?.layer.cornerRadius = (button4?.frame.height)! / 2
         
         button5?.sizeToFit()
         button5?.frame.size.height = 30
         button5?.frame.size.width += 20
         button5?.frame.origin.x = (bounds.size.width - (button5?.frame.width)!) / 2
-        button5?.frame.origin.y = 320
+        button5?.frame.origin.y = 345
         button5?.layer.cornerRadius = (button5?.frame.height)! / 2
     }
     
@@ -88,7 +88,7 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
         if destinationsForTrip.count != 0 {
-            questionLabel?.text = "How do you want to get to \(destinationsForTrip[0])?"
+            questionLabel?.text = "Time to plan your travel!\nHow do you want to get to \(destinationsForTrip[0])?"
         }
         self.addSubview(questionLabel!)
         

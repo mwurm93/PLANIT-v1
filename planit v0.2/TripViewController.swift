@@ -40,6 +40,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var carRentalSearchQuestionView: CarRentalSearchQuestionView?
     var doYouKnowWhereYouWillBeStayingQuestionView: DoYouKnowWhereYouWillBeStayingQuestionView?
     var aboutWhatTimeWillYouStartDrivingQuestionView: AboutWhatTimeWillYouStartDrivingQuestionView?
+    var busTrainOtherQuestionView: BusTrainOtherQuestionView?
+    var idkHowToGetThereQuestionView: idkHowToGetThereQuestionView?
     
     //CalendarView vars
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
@@ -106,6 +108,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[17] = spawnCarRentalBookingQuestionView
         functionsToLoadSubviewsDictionary[18] = spawnDoYouKnowWhereYouWillBeStayingQuestionView
         functionsToLoadSubviewsDictionary[19] = spawnAboutWhatTimeWillYouStartDrivingQuestionView
+        functionsToLoadSubviewsDictionary[20] = spawnBusTrainOtherQuestionView
+        functionsToLoadSubviewsDictionary[21] = spawnidkHowToGetThereQuestionView
+
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -151,7 +156,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollContentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
-        handleScrollUpAndDownButtons()
         
         //Trip Name
         if NewOrAddedTripFromSegue == 1 {
@@ -275,6 +279,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(carRentalSelectedBooked), name: NSNotification.Name(rawValue: "bookCarRentalButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(carRentalSelectedSavedForLater), name: NSNotification.Name(rawValue: "saveCarRentalForLaterButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedCarRentalToCarRentalResults), name: NSNotification.Name(rawValue: "bookSelectedCarRentalToCarRentalResults"), object: nil)
+    
+        handleScrollUpAndDownButtons()
     }
 //
     override func viewDidAppear(_ animated: Bool) {
@@ -845,8 +851,40 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollDownToTopSubview()
         updateProgress()
     }
-
+    func spawnBusTrainOtherQuestionView() {
+        if busTrainOtherQuestionView == nil {
+            //Load next question
+            busTrainOtherQuestionView = Bundle.main.loadNibNamed("BusTrainOtherQuestionView", owner: self, options: nil)?.first! as? BusTrainOtherQuestionView
+            self.scrollContentView.addSubview(busTrainOtherQuestionView!)
+            busTrainOtherQuestionView?.tag = 20
+            let bounds = UIScreen.main.bounds
+            busTrainOtherQuestionView?.button1?.addTarget(self, action: #selector(self.busTrainOtherTravelPlans_done(sender:)), for: UIControlEvents.touchUpInside)
+            busTrainOtherQuestionView?.button2?.addTarget(self, action: #selector(self.busTrainOtherTravelPlans_addLater(sender:)), for: UIControlEvents.touchUpInside)
+            self.busTrainOtherQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: busTrainOtherQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (busTrainOtherQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+        }
+        updateHeightOfScrollView()
+        scrollDownToTopSubview()
+        updateProgress()
+    }
     
+    func spawnidkHowToGetThereQuestionView() {
+        if idkHowToGetThereQuestionView == nil {
+            //Load next question
+            idkHowToGetThereQuestionView = Bundle.main.loadNibNamed("idkHowToGetThereQuestionView", owner: self, options: nil)?.first! as? idkHowToGetThereQuestionView
+            self.scrollContentView.addSubview(idkHowToGetThereQuestionView!)
+            idkHowToGetThereQuestionView?.tag = 21
+            let bounds = UIScreen.main.bounds
+            idkHowToGetThereQuestionView?.button1?.addTarget(self, action: #selector(self.idkHowToGetThere_readyToPlan(sender:)), for: UIControlEvents.touchUpInside)
+            self.idkHowToGetThereQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: idkHowToGetThereQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (idkHowToGetThereQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+        }
+        updateHeightOfScrollView()
+        scrollDownToTopSubview()
+        updateProgress()
+    }
 
     //FLIGHT SEARCH -> RESULTS -> BOOK FUNCTIONS
     func removeFlightResultsViewController() {
@@ -919,7 +957,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         if modesOfTransportation[indexOfDestinationBeingPlanned] == "drive" {
             spawnAboutWhatTimeWillYouStartDrivingQuestionView()
-        } else if modesOfTransportation[indexOfDestinationBeingPlanned] == "fly" {
+        } else {
             spawnDoYouKnowWhereYouWillBeStayingQuestionView()
         }
         
@@ -1104,6 +1142,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            spawnDoYouKnowWhereYouWillBeStayingQuestionView()
         }
     }
     func searchFlights(sender:UIButton) {
@@ -1122,7 +1162,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
             if modesOfTransportation[indexOfDestinationBeingPlanned] == "drive" {
                 spawnAboutWhatTimeWillYouStartDrivingQuestionView()
-            } else if modesOfTransportation[indexOfDestinationBeingPlanned] == "fly" {
+            } else {
                 spawnDoYouKnowWhereYouWillBeStayingQuestionView()
             }
         }
@@ -1149,6 +1189,22 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if sender.isSelected == true {
         }
     }
+    func busTrainOtherTravelPlans_done(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnDoYouNeedARentalCarQuestionView()
+        }
+    }
+    func busTrainOtherTravelPlans_addLater(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnDoYouNeedARentalCarQuestionView()
+        }
+    }
+    func idkHowToGetThere_readyToPlan(sender:UIButton) {
+        if sender.isSelected == true {
+            scrollUpOneSubview()
+        }
+    }
+    
 
     
     // MARK: create subview even if non nil functions
