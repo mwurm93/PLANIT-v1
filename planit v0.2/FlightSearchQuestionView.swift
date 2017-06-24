@@ -295,7 +295,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         alreadyHaveFlightsDepartureFlightNumber?.layer.masksToBounds = true
         alreadyHaveFlightsDepartureFlightNumber?.textAlignment = .center
         alreadyHaveFlightsDepartureFlightNumber?.returnKeyType = .next
-        let alreadyHaveFlightsDepartureFlightNumberPlaceholder = NSAttributedString(string: "Example: DL555", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
+        let alreadyHaveFlightsDepartureFlightNumberPlaceholder = NSAttributedString(string: "Flight #", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         alreadyHaveFlightsDepartureFlightNumber?.attributedPlaceholder = alreadyHaveFlightsDepartureFlightNumberPlaceholder
         alreadyHaveFlightsDepartureFlightNumber?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(alreadyHaveFlightsDepartureFlightNumber!)
@@ -320,7 +320,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         alreadyHaveFlightsReturnFlightNumber?.layer.masksToBounds = true
         alreadyHaveFlightsReturnFlightNumber?.textAlignment = .center
         alreadyHaveFlightsReturnFlightNumber?.returnKeyType = .next
-        let alreadyHaveFlightsReturnFlightNumberPlaceholder = NSAttributedString(string: "Example: DL555", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
+        let alreadyHaveFlightsReturnFlightNumberPlaceholder = NSAttributedString(string: "Flight #", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         alreadyHaveFlightsReturnFlightNumber?.attributedPlaceholder = alreadyHaveFlightsReturnFlightNumberPlaceholder
         alreadyHaveFlightsReturnFlightNumber?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(alreadyHaveFlightsReturnFlightNumber!)
