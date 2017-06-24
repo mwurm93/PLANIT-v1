@@ -481,6 +481,8 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
     
     // MARK: Destination options tableview
     func handleDestinationButtonSelection(){
+        let test = destinationsSwipedRight.count - 1
+        
         for buttonRow in 0 ... destinationsSwipedRight.count - 1 {
             let cell = destinationsSwipedRightTableView?.cellForRow(at: IndexPath(row: buttonRow, section: 0)) as! destinationsSwipedRightTableViewCell
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()

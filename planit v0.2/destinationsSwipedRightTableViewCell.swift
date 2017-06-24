@@ -55,15 +55,23 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-        if destinationsForTrip.count == 0 {
-            destinationsForTrip.append((cellButton.titleLabel?.text)!)
+        var indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        if indexOfDestinationBeingPlanned == 0 {
+            if destinationsForTrip.count == 0 {
+                destinationsForTrip.append((cellButton.titleLabel?.text)!)
+            } else {
+                destinationsForTrip[0] = (cellButton.titleLabel?.text)!
+            }
         } else {
-            destinationsForTrip[0] = (cellButton.titleLabel?.text)!
+            destinationsForTrip.append((cellButton.titleLabel?.text)!)
+            indexOfDestinationBeingPlanned = destinationsForTrip.count - 1
         }
+        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = indexOfDestinationBeingPlanned
         SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
-        let when = DispatchTime.now() + 0.15
+        let when = DispatchTime.now() + 0.25
+        
         DispatchQueue.main.asyncAfter(deadline: when) {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
         }

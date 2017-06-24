@@ -39,6 +39,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var doYouNeedARentalCarQuestionView: DoYouNeedARentalCarQuestionView?
     var carRentalSearchQuestionView: CarRentalSearchQuestionView?
     var doYouKnowWhereYouWillBeStayingQuestionView: DoYouKnowWhereYouWillBeStayingQuestionView?
+    var aboutWhatTimeWillYouStartDrivingQuestionView: AboutWhatTimeWillYouStartDrivingQuestionView?
     
     //CalendarView vars
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
@@ -104,6 +105,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[16] = spawnRentalCarResultsQuestionView
         functionsToLoadSubviewsDictionary[17] = spawnCarRentalBookingQuestionView
         functionsToLoadSubviewsDictionary[18] = spawnDoYouKnowWhereYouWillBeStayingQuestionView
+        functionsToLoadSubviewsDictionary[19] = spawnAboutWhatTimeWillYouStartDrivingQuestionView
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -803,21 +805,41 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         updateProgress()
     }
     func spawnDoYouKnowWhereYouWillBeStayingQuestionView() {
-        if doYouKnowWhereYouWillBeStayingQuestionView == nil {
+//        if doYouKnowWhereYouWillBeStayingQuestionView == nil {
             //Load next question
             doYouKnowWhereYouWillBeStayingQuestionView = Bundle.main.loadNibNamed("DoYouKnowWhereYouWillBeStayingQuestionView", owner: self, options: nil)?.first! as? DoYouKnowWhereYouWillBeStayingQuestionView
             self.scrollContentView.addSubview(doYouKnowWhereYouWillBeStayingQuestionView!)
             doYouKnowWhereYouWillBeStayingQuestionView?.tag = 18
             let bounds = UIScreen.main.bounds
-//            doYouKnowWhereYouWillBeStayingQuestionView?.searchButton?.addTarget(self, action: #selector(self.searchRentalCars(sender:)), for: UIControlEvents.touchUpInside)
+            doYouKnowWhereYouWillBeStayingQuestionView?.button1?.addTarget(self, action: #selector(self.doYouKnowWhereYouWillBeStaying_yes(sender:)), for: UIControlEvents.touchUpInside)
+            doYouKnowWhereYouWillBeStayingQuestionView?.button2?.addTarget(self, action: #selector(self.doYouKnowWhereYouWillBeStaying_no(sender:)), for: UIControlEvents.touchUpInside)
             self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: doYouKnowWhereYouWillBeStayingQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (doYouKnowWhereYouWillBeStayingQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+//        }
+        updateHeightOfScrollView()
+        scrollDownToTopSubview()
+        updateProgress()
+    }
+    
+    func spawnAboutWhatTimeWillYouStartDrivingQuestionView() {
+        if aboutWhatTimeWillYouStartDrivingQuestionView == nil {
+            //Load next question
+            aboutWhatTimeWillYouStartDrivingQuestionView = Bundle.main.loadNibNamed("AboutWhatTimeWillYouStartDrivingQuestionView", owner: self, options: nil)?.first! as? AboutWhatTimeWillYouStartDrivingQuestionView
+            self.scrollContentView.addSubview(aboutWhatTimeWillYouStartDrivingQuestionView!)
+            aboutWhatTimeWillYouStartDrivingQuestionView?.tag = 19
+            let bounds = UIScreen.main.bounds
+            aboutWhatTimeWillYouStartDrivingQuestionView?.button1?.addTarget(self, action: #selector(self.notSureYetWhenStartDriving(sender:)), for: UIControlEvents.touchUpInside)
+            aboutWhatTimeWillYouStartDrivingQuestionView?.button2?.addTarget(self, action: #selector(self.timeChosenWhenStartDriving(sender:)), for: UIControlEvents.touchUpInside)
+            self.aboutWhatTimeWillYouStartDrivingQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: aboutWhatTimeWillYouStartDrivingQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (aboutWhatTimeWillYouStartDrivingQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
     }
+
     
 
     //FLIGHT SEARCH -> RESULTS -> BOOK FUNCTIONS
@@ -886,7 +908,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func carRentalSelectedBooked() {
         removeCarRentalResultsViewController()
         removeBookSelectedCarRentalViewController()
-        spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        if modesOfTransportation[indexOfDestinationBeingPlanned] == "drive" {
+            spawnAboutWhatTimeWillYouStartDrivingQuestionView()
+        } else if modesOfTransportation[indexOfDestinationBeingPlanned] == "fly" {
+            spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+        }
         
         // LINK TO ITINERARY
         // SHOW USER WHERE ITINERARY SAVED
@@ -999,23 +1028,76 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func howDoYouWantToGetThereQuestionView_fly(sender:UIButton) {
         if sender.isSelected == true {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned == 0 {
+                modesOfTransportation.append("fly")
+            } else {
+                modesOfTransportation[indexOfDestinationBeingPlanned] = "fly"
+            }
+            SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
             spawnFlightSearchQuestionView()
         }
     }
     func howDoYouWantToGetThereQuestionView_drive(sender:UIButton) {
         if sender.isSelected == true {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned == 0 {
+                modesOfTransportation.append("drive")
+            } else {
+                modesOfTransportation[indexOfDestinationBeingPlanned] = "drive"
+            }
+            SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            spawnDoYouNeedARentalCarQuestionView()
         }
     }
     func howDoYouWantToGetThereQuestionView_busTrainOther(sender:UIButton) {
         if sender.isSelected == true {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned == 0 {
+                modesOfTransportation.append("busTrainOther")
+            } else {
+                modesOfTransportation[indexOfDestinationBeingPlanned] = "busTrainOther"
+            }
+            SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
         }
     }
     func howDoYouWantToGetThereQuestionView_iDontKnowHelpMe(sender:UIButton) {
         if sender.isSelected == true {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned == 0 {
+                modesOfTransportation.append("iDontKnowHelpMe")
+            } else {
+                modesOfTransportation[indexOfDestinationBeingPlanned] = "iDontKnowHelpMe"
+            }
+            SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
         }
     }
     func howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:UIButton) {
         if sender.isSelected == true {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned == 0 {
+                modesOfTransportation.append("illAlreadyBeThere")
+            } else {
+                modesOfTransportation[indexOfDestinationBeingPlanned] = "illAlreadyBeThere"
+            }
+            SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
         }
     }
     func searchFlights(sender:UIButton) {
@@ -1028,13 +1110,39 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func doYouNeedARentalCarQuestionView_no(sender:UIButton) {
         if sender.isSelected == true {
-            spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+            
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if modesOfTransportation[indexOfDestinationBeingPlanned] == "drive" {
+                spawnAboutWhatTimeWillYouStartDrivingQuestionView()
+            } else if modesOfTransportation[indexOfDestinationBeingPlanned] == "fly" {
+                spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+            }
         }
     }
     func searchRentalCars(sender:UIButton) {
         spawnRentalCarResultsQuestionView()
     }
-
+    func notSureYetWhenStartDriving(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+        }
+    }
+    func timeChosenWhenStartDriving(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+        }
+    }
+    
+    func doYouKnowWhereYouWillBeStaying_yes(sender:UIButton) {
+        if sender.isSelected == true {
+        }
+    }
+    func doYouKnowWhereYouWillBeStaying_no(sender:UIButton) {
+        if sender.isSelected == true {
+        }
+    }
 
     
     // MARK: create subview even if non nil functions
@@ -1123,6 +1231,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var suggestedDestinationValue = NSString()
         
         var destinationsForTrip = [NSString]()
+        var modesOfTransportation = [NSString]()
+        var indexOfDestinationBeingPlanned = NSNumber(value: 0)
+
         //Activities VC
         var selectedActivities = [NSString]()
         //Ranking VC
@@ -1162,6 +1273,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             suggestedDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggested_destination") as? NSString ?? NSString()
             
             destinationsForTrip = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTrip") as? [NSString] ?? [NSString]()
+            modesOfTransportation = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "modesOfTransportation") as? [NSString] ?? [NSString]()
+            indexOfDestinationBeingPlanned = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "indexOfDestinationBeingPlanned") as? NSNumber ?? NSNumber()
+
 
             //Activities VC
             selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [NSString] ?? [NSString]()
@@ -1173,7 +1287,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"modesOfTransportation":modesOfTransportation, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
