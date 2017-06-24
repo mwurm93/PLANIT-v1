@@ -691,6 +691,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             flightSearchQuestionView?.tag = 11
             let bounds = UIScreen.main.bounds
             flightSearchQuestionView?.searchButton?.addTarget(self, action: #selector(self.searchFlights(sender:)), for: UIControlEvents.touchUpInside)
+            flightSearchQuestionView?.addButton?.addTarget(self, action: #selector(self.addFlightsAlreadyHad(sender:)), for: UIControlEvents.touchUpInside)
             self.flightSearchQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: flightSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (flightSearchQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
@@ -1114,6 +1115,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            spawnBusTrainOtherQuestionView()
         }
     }
     func howDoYouWantToGetThereQuestionView_iDontKnowHelpMe(sender:UIButton) {
@@ -1128,6 +1131,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            spawnidkHowToGetThereQuestionView()
         }
     }
     func howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:UIButton) {
@@ -1148,6 +1153,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func searchFlights(sender:UIButton) {
         spawnFlightResultsQuestionView()
+    }
+    func addFlightsAlreadyHad(sender:UIButton) {
+        spawnDoYouNeedARentalCarQuestionView()
     }
     func doYouNeedARentalCarQuestionView_yes(sender:UIButton) {
         if sender.isSelected == true {

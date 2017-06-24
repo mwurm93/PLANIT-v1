@@ -26,6 +26,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     var alreadyHaveFlightsDepartureFlightNumber: UITextField?
     var alreadyHaveFlightsReturnDate: UITextField?
     var alreadyHaveFlightsReturnFlightNumber: UITextField?
+    var addButton: UIButton?
     
     // MARK: Outlets
     @IBOutlet weak var searchModeControl: UISegmentedControl!
@@ -78,20 +79,26 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.frame.origin.y = 330
         searchButton?.layer.cornerRadius = (searchButton?.frame.height)! / 2
         
-        alreadyHaveFlightsQuestionLabel?.frame = CGRect(x: 10, y: 390, width: bounds.size.width - 20, height: 75)
+        alreadyHaveFlightsQuestionLabel?.frame = CGRect(x: 10, y: 380, width: bounds.size.width - 20, height: 75)
 
-        alreadyHaveFlightsDepartureDate?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 470, width: 150, height: 30)
+        alreadyHaveFlightsDepartureDate?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 460, width: 150, height: 30)
         alreadyHaveFlightsDepartureDate?.setBottomBorder(borderColor: UIColor.white)
         
-        alreadyHaveFlightsDepartureFlightNumber?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 470, width: 150, height: 30)
+        alreadyHaveFlightsDepartureFlightNumber?.frame = CGRect(x: (alreadyHaveFlightsDepartureDate?.frame.maxX)! + 25, y: 460, width: 150, height: 30)
         alreadyHaveFlightsDepartureFlightNumber?.setBottomBorder(borderColor: UIColor.white)
         
-        alreadyHaveFlightsReturnDate?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 545, width: 150, height: 30)
+        alreadyHaveFlightsReturnDate?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 515, width: 150, height: 30)
         alreadyHaveFlightsReturnDate?.setBottomBorder(borderColor: UIColor.white)
         
-        alreadyHaveFlightsReturnFlightNumber?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 545, width: 150, height: 30)
+        alreadyHaveFlightsReturnFlightNumber?.frame = CGRect(x: (alreadyHaveFlightsReturnDate?.frame.maxX)! + 25, y: 515, width: 150, height: 30)
         alreadyHaveFlightsReturnFlightNumber?.setBottomBorder(borderColor: UIColor.white)
-
+        
+        addButton?.sizeToFit()
+        addButton?.frame.size.height = 30
+        addButton?.frame.size.width += 20
+        addButton?.frame.origin.x = (bounds.size.width - (addButton?.frame.width)!) / 2
+        addButton?.frame.origin.y = 560
+        addButton?.layer.cornerRadius = (addButton?.frame.height)! / 2
         
     }
     
@@ -153,6 +160,24 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.translatesAutoresizingMaskIntoConstraints = false
         searchButton?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(searchButton!)
+        
+        //Button
+        addButton = UIButton(type: .custom)
+        addButton?.frame = CGRect.zero
+        addButton?.setTitleColor(UIColor.white, for: .normal)
+        addButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        addButton?.setTitleColor(UIColor.white, for: .selected)
+        addButton?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
+        addButton?.layer.borderWidth = 1
+        addButton?.layer.borderColor = UIColor.white.cgColor
+        addButton?.layer.masksToBounds = true
+        addButton?.titleLabel?.textAlignment = .center
+        addButton?.setTitle("Save", for: .normal)
+        addButton?.setTitle("Save", for: .selected)
+        addButton?.translatesAutoresizingMaskIntoConstraints = false
+        addButton?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(addButton!)
+
         
         
         //Textfield
@@ -249,6 +274,56 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
 //        }
         returnDestination?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(returnDestination!)
+        
+        //Textfield
+        alreadyHaveFlightsDepartureDate = UITextField(frame: CGRect.zero)
+        alreadyHaveFlightsDepartureDate?.delegate = self
+        alreadyHaveFlightsDepartureDate?.textColor = UIColor.white
+        alreadyHaveFlightsDepartureDate?.borderStyle = .none
+        alreadyHaveFlightsDepartureDate?.layer.masksToBounds = true
+        alreadyHaveFlightsDepartureDate?.textAlignment = .center
+        alreadyHaveFlightsDepartureDate?.returnKeyType = .next
+        let alreadyHaveFlightsDepartureDatePlaceholder = NSAttributedString(string: "MM/DD/YYYY", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
+        alreadyHaveFlightsDepartureDate?.attributedPlaceholder = alreadyHaveFlightsDepartureDatePlaceholder
+        alreadyHaveFlightsDepartureDate?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(alreadyHaveFlightsDepartureDate!)
+
+        alreadyHaveFlightsDepartureFlightNumber = UITextField(frame: CGRect.zero)
+        alreadyHaveFlightsDepartureFlightNumber?.delegate = self
+        alreadyHaveFlightsDepartureFlightNumber?.textColor = UIColor.white
+        alreadyHaveFlightsDepartureFlightNumber?.borderStyle = .none
+        alreadyHaveFlightsDepartureFlightNumber?.layer.masksToBounds = true
+        alreadyHaveFlightsDepartureFlightNumber?.textAlignment = .center
+        alreadyHaveFlightsDepartureFlightNumber?.returnKeyType = .next
+        let alreadyHaveFlightsDepartureFlightNumberPlaceholder = NSAttributedString(string: "Example: DL555", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
+        alreadyHaveFlightsDepartureFlightNumber?.attributedPlaceholder = alreadyHaveFlightsDepartureFlightNumberPlaceholder
+        alreadyHaveFlightsDepartureFlightNumber?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(alreadyHaveFlightsDepartureFlightNumber!)
+
+        //Textfield
+        alreadyHaveFlightsReturnDate = UITextField(frame: CGRect.zero)
+        alreadyHaveFlightsReturnDate?.delegate = self
+        alreadyHaveFlightsReturnDate?.textColor = UIColor.white
+        alreadyHaveFlightsReturnDate?.borderStyle = .none
+        alreadyHaveFlightsReturnDate?.layer.masksToBounds = true
+        alreadyHaveFlightsReturnDate?.textAlignment = .center
+        alreadyHaveFlightsReturnDate?.returnKeyType = .next
+        let alreadyHaveFlightsReturnDatePlaceholder = NSAttributedString(string: "MM/DD/YYYY", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
+        alreadyHaveFlightsReturnDate?.attributedPlaceholder = alreadyHaveFlightsReturnDatePlaceholder
+        alreadyHaveFlightsReturnDate?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(alreadyHaveFlightsReturnDate!)
+        
+        alreadyHaveFlightsReturnFlightNumber = UITextField(frame: CGRect.zero)
+        alreadyHaveFlightsReturnFlightNumber?.delegate = self
+        alreadyHaveFlightsReturnFlightNumber?.textColor = UIColor.white
+        alreadyHaveFlightsReturnFlightNumber?.borderStyle = .none
+        alreadyHaveFlightsReturnFlightNumber?.layer.masksToBounds = true
+        alreadyHaveFlightsReturnFlightNumber?.textAlignment = .center
+        alreadyHaveFlightsReturnFlightNumber?.returnKeyType = .next
+        let alreadyHaveFlightsReturnFlightNumberPlaceholder = NSAttributedString(string: "Example: DL555", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
+        alreadyHaveFlightsReturnFlightNumber?.attributedPlaceholder = alreadyHaveFlightsReturnFlightNumberPlaceholder
+        alreadyHaveFlightsReturnFlightNumber?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(alreadyHaveFlightsReturnFlightNumber!)
         
         handleSearchMode()
         

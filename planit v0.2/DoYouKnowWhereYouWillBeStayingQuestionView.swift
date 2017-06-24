@@ -34,20 +34,20 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 75)
+        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 100)
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 145
+        button1?.frame.origin.y = 170
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         button2?.sizeToFit()
         button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 195
+        button2?.frame.origin.y = 220
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
     }
@@ -62,7 +62,7 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Great, now let's make sure you have a comfy pillow under your head!\nDo you know where you'll be staying?"
+        questionLabel?.text = "Great, now let's make sure you have a comfy pillow under your head!\n\nDo you know where you'll be staying?"
         self.addSubview(questionLabel!)
         
         //Button2
