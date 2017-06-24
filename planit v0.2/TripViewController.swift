@@ -665,7 +665,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.scrollContentView.addSubview(flightSearchQuestionView!)
             flightSearchQuestionView?.tag = 11
             let bounds = UIScreen.main.bounds
-            flightSearchQuestionView?.searchButton.addTarget(self, action: #selector(self.searchFlights(sender:)), for: UIControlEvents.touchUpInside)
+            flightSearchQuestionView?.searchButton?.addTarget(self, action: #selector(self.searchFlights(sender:)), for: UIControlEvents.touchUpInside)
             self.flightSearchQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: flightSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (flightSearchQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
@@ -679,11 +679,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     let returnKeys = Array(returnDictionary.keys)
                     if returnKeys.count != 0 {
                         let returnDateValue = returnKeys[0]
-                        flightSearchQuestionView?.returnDate.text =  "\(returnDateValue)"
+                        flightSearchQuestionView?.returnDate?.text =  "\(returnDateValue)"
                     }
                     if departureKeys.count != 0 {
                         let departureDateValue = departureKeys[0]
-                        flightSearchQuestionView?.departureDate.text =  "\(departureDateValue)"
+                        flightSearchQuestionView?.departureDate?.text =  "\(departureDateValue)"
                     }
                 }
             }
@@ -1388,14 +1388,17 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
             formatter.dateFormat = "MM/dd/yyyy"
             let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
             leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
-            flightSearchQuestionView?.departureDate.text =  "\(mostRecentSelectedCellDateAsNSString)"
+            flightSearchQuestionView?.departureDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+            carRentalSearchQuestionView?.pickUpDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+
         }
         if cell?.selectedPosition() == .right {
             let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/yyyy"
             let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
             rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
-            flightSearchQuestionView?.returnDate.text =  "\(mostRecentSelectedCellDateAsNSString)"
+            flightSearchQuestionView?.returnDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+            carRentalSearchQuestionView?.dropOffDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
         }
         
                 //Update trip preferences in dictionary
@@ -1460,14 +1463,16 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
-                    flightSearchQuestionView?.departureDate.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    flightSearchQuestionView?.departureDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    carRentalSearchQuestionView?.pickUpDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                 }
                 if cell?.selectedPosition() == .right {
                     let formatter = DateFormatter()
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
-                    flightSearchQuestionView?.returnDate.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    flightSearchQuestionView?.returnDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    carRentalSearchQuestionView?.dropOffDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                 }
                 
                                 //Update trip preferences in dictionary
@@ -1493,14 +1498,16 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
-                    flightSearchQuestionView?.departureDate.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    flightSearchQuestionView?.departureDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    carRentalSearchQuestionView?.pickUpDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                 }
                 if cell?.selectedPosition() == .right {
                     let formatter = DateFormatter()
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
-                    flightSearchQuestionView?.returnDate.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    flightSearchQuestionView?.returnDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    carRentalSearchQuestionView?.dropOffDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                 }
                 
                                 //Update trip preferences in dictionary

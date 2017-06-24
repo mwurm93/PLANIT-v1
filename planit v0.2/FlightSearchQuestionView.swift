@@ -15,12 +15,12 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     var searchMode = "roundtrip"
     var questionLabel: UILabel?
     var searchButton: UIButton?
-    var departureOrigin: UITextField
-    var departureDestination: UITextField
-    var departureDate: UITextField
-    var returnDate: UITextField
-    var returnOrigin: UITextField
-    var returnDestination: UITextFi
+    var departureOrigin: UITextField?
+    var departureDestination: UITextField?
+    var departureDate: UITextField?
+    var returnDate: UITextField?
+    var returnOrigin: UITextField?
+    var returnDestination: UITextField?
     
     // MARK: Outlets
     @IBOutlet weak var searchModeControl: UISegmentedControl!
@@ -47,11 +47,29 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
 //
         questionLabel?.frame = CGRect(x: 10, y: 20, width: bounds.size.width - 20, height: 50)
         
+        departureDate?.frame = CGRect(x: (bounds.size.width-303-18*2)/2, y: 95, width: 101, height: 30)
+        departureDate?.setBottomBorder(borderColor: UIColor.white)
+        
+        departureOrigin?.frame = CGRect(x: (departureDate?.frame.maxX)! + 18, y: 95, width: 101, height: 30)
+        departureOrigin?.setBottomBorder(borderColor: UIColor.white)
+
+        departureDestination?.frame = CGRect(x: (departureOrigin?.frame.maxX)! + 18, y: 95, width: 101, height: 30)
+        departureDestination?.setBottomBorder(borderColor: UIColor.white)
+        
+        returnDate?.frame = CGRect(x: (bounds.size.width-303-18*2)/2, y: 170, width: 101, height: 30)
+        returnDate?.setBottomBorder(borderColor: UIColor.white)
+        
+        returnOrigin?.frame = CGRect(x: (returnDate?.frame.maxX)! + 18, y: 170, width: 101, height: 30)
+        returnOrigin?.setBottomBorder(borderColor: UIColor.white)
+
+        returnDestination?.frame = CGRect(x: (returnOrigin?.frame.maxX)! + 18, y: 170, width: 101, height: 30)
+        returnDestination?.setBottomBorder(borderColor: UIColor.white)
+        
         searchButton?.sizeToFit()
         searchButton?.frame.size.height = 30
         searchButton?.frame.size.width += 20
         searchButton?.frame.origin.x = (bounds.size.width - (searchButton?.frame.width)!) / 2
-        searchButton?.frame.origin.y = 270
+        searchButton?.frame.origin.y = 310
         searchButton?.layer.cornerRadius = (searchButton?.frame.height)! / 2
         
     }
@@ -91,11 +109,11 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
                 let returnKeys = Array(returnDictionary.keys)
                 if returnKeys.count != 0 {
                     let returnDateValue = returnKeys[0]
-                    returnDate.text =  "\(returnDateValue)"
+                    returnDate?.text =  "\(returnDateValue)"
                 }
                 if departureKeys.count != 0 {
                     let departureDateValue = departureKeys[0]
-                    departureDate.text =  "\(departureDateValue)"
+                    departureDate?.text =  "\(departureDateValue)"
                 }
             }
         }
@@ -139,48 +157,90 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         departureOrigin?.layer.masksToBounds = true
         departureOrigin?.textAlignment = .center
         departureOrigin?.returnKeyType = .next
-        let pickUpDatePlaceholder = NSAttributedString(string: "Pick-up date", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
-        pickUpDate?.attributedPlaceholder = pickUpDatePlaceholder
-        pickUpDate?.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(pickUpDate!)
+        let departureOriginPlaceholder = NSAttributedString(string: "From where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        departureOrigin?.attributedPlaceholder = departureOriginPlaceholder
+        let departureOriginValue = DataContainerSingleton.sharedDataContainer.homeAirport
+        if departureOriginValue != nil && departureOriginValue != "" {
+            departureOrigin?.text = departureOriginValue
+        }
+        departureOrigin?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(departureOrigin!)
         
         //Textfield
-        differentDropOff = UITextField(frame: CGRect.zero)
-        differentDropOff?.delegate = self
-        differentDropOff?.textColor = UIColor.white
-        differentDropOff?.borderStyle = .none
-        differentDropOff?.layer.masksToBounds = true
-        differentDropOff?.textAlignment = .center
-        differentDropOff?.returnKeyType = .next
-        let differentDropOffPlaceholder = NSAttributedString(string: "Drop-off location", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
-        differentDropOff?.attributedPlaceholder = differentDropOffPlaceholder
-        differentDropOff?.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(differentDropOff!)
+        departureDestination = UITextField(frame: CGRect.zero)
+        departureDestination?.delegate = self
+        departureDestination?.textColor = UIColor.white
+        departureDestination?.borderStyle = .none
+        departureDestination?.layer.masksToBounds = true
+        departureDestination?.textAlignment = .center
+        departureDestination?.returnKeyType = .next
+        let departureDestinationPlaceholder = NSAttributedString(string: "To where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        departureDestination?.attributedPlaceholder = departureDestinationPlaceholder
+        let departureDestinationValue = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as! String
+        if departureDestinationValue != nil && departureDestinationValue != "" {
+            departureDestination?.text = departureDestinationValue
+        }
+        departureDestination?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(departureDestination!)
         
         //Textfield
-        dropOffDate = UITextField(frame: CGRect.zero)
-        dropOffDate?.delegate = self
-        dropOffDate?.textColor = UIColor.white
-        dropOffDate?.borderStyle = .none
-        dropOffDate?.layer.masksToBounds = true
-        dropOffDate?.textAlignment = .center
-        dropOffDate?.returnKeyType = .next
-        let dropOffDatePlaceholder = NSAttributedString(string: "Drop-off date", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
-        dropOffDate?.attributedPlaceholder = dropOffDatePlaceholder
-        dropOffDate?.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(dropOffDate!)
+        returnDate = UITextField(frame: CGRect.zero)
+        returnDate?.delegate = self
+        returnDate?.textColor = UIColor.white
+        returnDate?.borderStyle = .none
+        returnDate?.layer.masksToBounds = true
+        returnDate?.textAlignment = .center
+        returnDate?.returnKeyType = .next
+        let returnDatePlaceholder = NSAttributedString(string: "Return date", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        returnDate?.attributedPlaceholder = returnDatePlaceholder
+        returnDate?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(returnDate!)
         
+        //Textfield
+        returnOrigin = UITextField(frame: CGRect.zero)
+        returnOrigin?.delegate = self
+        returnOrigin?.textColor = UIColor.white
+        returnOrigin?.borderStyle = .none
+        returnOrigin?.layer.masksToBounds = true
+        returnOrigin?.textAlignment = .center
+        returnOrigin?.returnKeyType = .next
+        let returnOriginPlaceholder = NSAttributedString(string: "From where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        returnOrigin?.attributedPlaceholder = returnOriginPlaceholder
+        let returnOriginValue = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as! String
+        if returnOriginValue != nil && returnOriginValue != "" {
+            returnOrigin?.text = returnOriginValue
+        }
+
+        returnOrigin?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(returnOrigin!)
+
+        //Textfield
+        returnDestination = UITextField(frame: CGRect.zero)
+        returnDestination?.delegate = self
+        returnDestination?.textColor = UIColor.white
+        returnDestination?.borderStyle = .none
+        returnDestination?.layer.masksToBounds = true
+        returnDestination?.textAlignment = .center
+        returnDestination?.returnKeyType = .next
+        let returnDestinationPlaceholder = NSAttributedString(string: "To where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])
+        returnDestination?.attributedPlaceholder = returnDestinationPlaceholder
+        let returnDestinationValue = DataContainerSingleton.sharedDataContainer.homeAirport
+        if returnDestinationValue != nil && returnDestinationValue != "" {
+            returnDestination?.text = returnDestinationValue
+        }
+        returnDestination?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(returnDestination!)
 
     }
     
     // MARK: UITextFieldDelegate
     func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
         // Hide the keyboard.
-        departureDestination.resignFirstResponder()
-        departureOrigin.resignFirstResponder()
+        departureDestination?.resignFirstResponder()
+        departureOrigin?.resignFirstResponder()
         
-        returnDestination.resignFirstResponder()
-        returnOrigin.resignFirstResponder()
+        returnDestination?.resignFirstResponder()
+        returnOrigin?.resignFirstResponder()
         
         return true
     }
@@ -200,17 +260,17 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     }
     func handleSearchMode() {
         if searchMode == "oneWay" {
-            self.returnOrigin.isHidden = true
-            self.returnDestination.isHidden = true
-            self.returnDate.isHidden = true
+            self.returnOrigin?.isHidden = true
+            self.returnDestination?.isHidden = true
+            self.returnDate?.isHidden = true
         } else if searchMode == "roundtrip" {
-            self.returnOrigin.isHidden = true
-            self.returnDestination.isHidden = true
-            self.returnDate.isHidden = false
+            self.returnOrigin?.isHidden = true
+            self.returnDestination?.isHidden = true
+            self.returnDate?.isHidden = false
         } else if searchMode == "multiCity" {
-            self.returnOrigin.isHidden = false
-            self.returnDestination.isHidden = false
-            self.returnDate.isHidden = false
+            self.returnOrigin?.isHidden = false
+            self.returnDestination?.isHidden = false
+            self.returnDate?.isHidden = false
         }
     }
     

@@ -13,6 +13,7 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     var rankedPotentialTripsDictionaryArrayIndex = 0
     var searchMode = "Same drop-off"
+    var rentalMode = "At destination"
 
     var questionLabel: UILabel?
     var origin: UITextField?
@@ -48,10 +49,10 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         
         questionLabel?.frame = CGRect(x: 10, y: 20, width: bounds.size.width - 20, height: 35)
         
-        pickUpDate?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 90, width: 150, height: 30)
+        pickUpDate?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 95, width: 150, height: 30)
         pickUpDate?.setBottomBorder(borderColor: UIColor.white)
         
-        origin?.frame = CGRect(x: (pickUpDate?.frame.maxX)! + 25, y: 90, width: 150, height: 30)
+        origin?.frame = CGRect(x: (pickUpDate?.frame.maxX)! + 25, y: 95, width: 150, height: 30)
         origin?.setBottomBorder(borderColor: UIColor.white)
 
         dropOffDate?.frame = CGRect(x: (bounds.size.width-300-25)/2, y: 170, width: 150, height: 30)
@@ -64,7 +65,7 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.frame.size.height = 30
         searchButton?.frame.size.width += 20
         searchButton?.frame.origin.x = (bounds.size.width - (searchButton?.frame.width)!) / 2
-        searchButton?.frame.origin.y = 270
+        searchButton?.frame.origin.y = 310
         searchButton?.layer.cornerRadius = (searchButton?.frame.height)! / 2
         
         if searchMode == "Same drop-off" {
@@ -111,6 +112,17 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         origin?.returnKeyType = .next
         let originPlaceholder = NSAttributedString(string: "Pick-up location", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6)])        
         origin?.attributedPlaceholder = originPlaceholder
+        if rentalMode == "At destination" {
+            let departureDestinationValue = rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex]["destination"] as! String
+            if departureDestinationValue != nil && departureDestinationValue != "" {
+                origin?.text = departureDestinationValue
+            }
+        } else {
+            let departureOriginValue = DataContainerSingleton.sharedDataContainer.homeAirport
+            if departureOriginValue != nil && departureOriginValue != "" {
+                origin?.text = departureOriginValue
+            }
+        }
         origin?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(origin!)
         
