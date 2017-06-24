@@ -421,12 +421,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     func spawnTripNameQuestionView() {
         if userNameQuestionView != nil {
+            let questionLabelValue = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)!, I'm Planny, your personal trip planning guru!\nI'll help you:"
+
             userNameQuestionView?.userNameQuestionTextfield?.resignFirstResponder()
             if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
-                tripNameQuestionView?.questionLabel?.text = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! \nDo you want to name your trip?"
+                tripNameQuestionView?.questionLabel?.text = questionLabelValue
             }
         } else {
-            tripNameQuestionView?.questionLabel?.text = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! \nDo you want to name your trip?"
+            let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))!, I'm Planny, your personal trip planning guru!\nI'll help you:"
+
+            tripNameQuestionView?.questionLabel?.text = questionLabelValue
         }
         if tripNameQuestionView == nil {
             //Load next question
@@ -445,10 +449,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             view.addConstraints([heightConstraint])
             if userNameQuestionView != nil {
                 if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
-                    tripNameQuestionView?.questionLabel?.text = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! \nDo you want to name your trip?"
+                    let questionLabelValue = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)!, I'm Planny, your personal trip planning guru!\nI'll help you:"
+                    tripNameQuestionView?.questionLabel?.text = questionLabelValue
                 }
             } else {
-                tripNameQuestionView?.questionLabel?.text = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! \nDo you want to name your trip?"
+                let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))!, I'm Planny, your personal trip planning guru!\nI'll help you:"
+                tripNameQuestionView?.questionLabel?.text = questionLabelValue
             }
             tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
         }

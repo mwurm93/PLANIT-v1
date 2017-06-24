@@ -61,7 +61,7 @@ class NoCityDecidedAnyIdeasQuestionView: UIView, UISearchControllerDelegate, UIS
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
 //        questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "No worries!\nLet’s see what you might like.\n\nTo start, do you have any destination ideas?"
+        questionLabel?.text = "No worries!\nLet’s see what you might like.\n\nTo start, do you have any ideas for where to go?"
         self.addSubview(questionLabel!)
         
         //GOOGLE PLACES SEARCH

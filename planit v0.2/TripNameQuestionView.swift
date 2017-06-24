@@ -12,6 +12,8 @@ class TripNameQuestionView: UIView {
     
     //Class vars
     var questionLabel: UILabel?
+    var questionLabel2: UILabel?
+    var questionLabel3: UILabel?
     var tripNameQuestionTextfield: UITextField?
     var tripNameQuestionButton: UIButton?
     
@@ -34,25 +36,21 @@ class TripNameQuestionView: UIView {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
+        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 80)
+        questionLabel2?.frame = CGRect(x: 50, y: 125, width: bounds.size.width - 100, height: 100)
+        questionLabel3?.frame = CGRect(x: 10, y: 220, width: bounds.size.width - 20, height: 60)
         
-        tripNameQuestionTextfield?.frame = CGRect(x: (bounds.size.width-175)/2, y: 120, width: 175, height: 30)
-        //Add underline to textfield
-        let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: 0.0,y: (tripNameQuestionTextfield?.frame.height)! - 1,width: (tripNameQuestionTextfield?.frame.width)!,height: 1.0)
-        bottomLine.backgroundColor = UIColor.white.cgColor
-        tripNameQuestionTextfield?.layer.addSublayer(bottomLine)
-        
+        tripNameQuestionTextfield?.frame = CGRect(x: (bounds.size.width-175)/2, y: 270, width: 175, height: 30)
+        tripNameQuestionTextfield?.setBottomBorder(borderColor: UIColor.white)
         
         tripNameQuestionButton?.sizeToFit()
         tripNameQuestionButton?.frame.size.height = 30
         tripNameQuestionButton?.frame.size.width += 20
         tripNameQuestionButton?.frame.origin.x = (bounds.size.width - (tripNameQuestionButton?.frame.width)!) / 2
-        tripNameQuestionButton?.frame.origin.y = 180
+        tripNameQuestionButton?.frame.origin.y = 330
         tripNameQuestionButton?.layer.cornerRadius = (tripNameQuestionButton?.frame.height)! / 2
     
     }
-    
     
     func addViews() {
         //Question label
@@ -63,7 +61,28 @@ class TripNameQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
+        questionLabel?.text = "Hi, I'm Planny, your personal trip planning guru! I'm here to help you:"
         self.addSubview(questionLabel!)
+
+        questionLabel2 = UILabel(frame: CGRect.zero)
+        questionLabel2?.translatesAutoresizingMaskIntoConstraints = false
+        questionLabel2?.numberOfLines = 0
+        questionLabel2?.textAlignment = .left
+        questionLabel2?.font = UIFont.boldSystemFont(ofSize: 19)
+        questionLabel2?.textColor = UIColor.white
+        questionLabel2?.adjustsFontSizeToFitWidth = true
+        questionLabel2?.text = " ☐  Select dates\n ☐  Choose your destination\n ☐  Plan your travel\n ☐  Find a place to stay\n ☐  Send to your friends!"
+        self.addSubview(questionLabel2!)
+        
+        questionLabel3 = UILabel(frame: CGRect.zero)
+        questionLabel3?.translatesAutoresizingMaskIntoConstraints = false
+        questionLabel3?.numberOfLines = 0
+        questionLabel3?.textAlignment = .center
+        questionLabel3?.font = UIFont.boldSystemFont(ofSize: 25)
+        questionLabel3?.textColor = UIColor.white
+        questionLabel3?.adjustsFontSizeToFitWidth = true
+        questionLabel3?.text = "Do you want to name this trip?"
+        self.addSubview(questionLabel3!)
         
         //Textfield
         tripNameQuestionTextfield = UITextField(frame: CGRect.zero)
