@@ -109,14 +109,11 @@ class NoCityDecidedAnyIdeasQuestionView: UIView, UISearchControllerDelegate, UIS
         button?.frame = CGRect.zero
         button?.setTitleColor(UIColor.white, for: .normal)
         button?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        button?.setTitleColor(UIColor.white, for: .selected)
-        button?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button?.layer.borderWidth = 1
         button?.layer.borderColor = UIColor.white.cgColor
         button?.layer.masksToBounds = true
         button?.titleLabel?.textAlignment = .center
         button?.setTitle("No, nothing specific", for: .normal)
-        button?.setTitle("No, nothing specific", for: .selected)
         button?.translatesAutoresizingMaskIntoConstraints = false
         button?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button!)
@@ -124,10 +121,16 @@ class NoCityDecidedAnyIdeasQuestionView: UIView, UISearchControllerDelegate, UIS
     
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
-        if sender.isSelected == true {
-            sender.layer.borderWidth = 0
+        if sender.isSelected {
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.layer.borderWidth = 1
+            sender.removeMask(button:sender)
+        }
+        for subview in self.subviews {
+            if subview.isKind(of: UIButton.self) && subview != sender {
+                (subview as! UIButton).isSelected = false
+                (subview as! UIButton).removeMask(button: subview as! UIButton)
+            }
         }
     }
 }

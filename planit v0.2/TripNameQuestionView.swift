@@ -37,19 +37,18 @@ class TripNameQuestionView: UIView {
         let bounds = UIScreen.main.bounds
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 80)
-        questionLabel2?.frame = CGRect(x: 50, y: 125, width: bounds.size.width - 100, height: 100)
-        questionLabel3?.frame = CGRect(x: 10, y: 220, width: bounds.size.width - 20, height: 60)
+        questionLabel2?.frame = CGRect(x: 100, y: 130, width: bounds.size.width - 160, height: 100)
+        questionLabel3?.frame = CGRect(x: 10, y: 230, width: bounds.size.width - 20, height: 60)
         
-        tripNameQuestionTextfield?.frame = CGRect(x: (bounds.size.width-175)/2, y: 270, width: 175, height: 30)
+        tripNameQuestionTextfield?.frame = CGRect(x: (bounds.size.width-175)/2, y: 285, width: 175, height: 30)
         tripNameQuestionTextfield?.setBottomBorder(borderColor: UIColor.white)
         
         tripNameQuestionButton?.sizeToFit()
         tripNameQuestionButton?.frame.size.height = 30
         tripNameQuestionButton?.frame.size.width += 20
         tripNameQuestionButton?.frame.origin.x = (bounds.size.width - (tripNameQuestionButton?.frame.width)!) / 2
-        tripNameQuestionButton?.frame.origin.y = 330
+        tripNameQuestionButton?.frame.origin.y = 340
         tripNameQuestionButton?.layer.cornerRadius = (tripNameQuestionButton?.frame.height)! / 2
-    
     }
     
     func addViews() {
@@ -71,7 +70,7 @@ class TripNameQuestionView: UIView {
         questionLabel2?.font = UIFont.boldSystemFont(ofSize: 19)
         questionLabel2?.textColor = UIColor.white
         questionLabel2?.adjustsFontSizeToFitWidth = true
-        questionLabel2?.text = " ☐  Select dates\n ☐  Choose your destination\n ☐  Plan your travel\n ☐  Find a place to stay\n ☐  Send to your friends!"
+        questionLabel2?.text = " •  Select dates\n •  Choose your destination\n •  Plan your travel\n •  Find a place to stay\n •  Send to your friends!"
         self.addSubview(questionLabel2!)
         
         questionLabel3 = UILabel(frame: CGRect.zero)
@@ -102,14 +101,11 @@ class TripNameQuestionView: UIView {
         tripNameQuestionButton?.frame = CGRect.zero
         tripNameQuestionButton?.setTitleColor(UIColor.white, for: .normal)
         tripNameQuestionButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        tripNameQuestionButton?.setTitleColor(UIColor.white, for: .selected)
-        tripNameQuestionButton?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         tripNameQuestionButton?.layer.borderWidth = 1
         tripNameQuestionButton?.layer.borderColor = UIColor.white.cgColor        
         tripNameQuestionButton?.layer.masksToBounds = true
         tripNameQuestionButton?.titleLabel?.textAlignment = .center
         tripNameQuestionButton?.setTitle("Not right now", for: .normal)
-        tripNameQuestionButton?.setTitle("Not right now", for: .selected)
         tripNameQuestionButton?.translatesAutoresizingMaskIntoConstraints = false
         tripNameQuestionButton?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(tripNameQuestionButton!)
@@ -117,10 +113,16 @@ class TripNameQuestionView: UIView {
     
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
-        if sender.isSelected == true {
-            sender.layer.borderWidth = 0
+        if sender.isSelected {
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.layer.borderWidth = 1
+            sender.removeMask(button:sender)
+        }
+        for subview in self.subviews {
+            if subview.isKind(of: UIButton.self) && subview != sender {
+                (subview as! UIButton).isSelected = false
+                (subview as! UIButton).removeMask(button: subview as! UIButton)
+            }
         }
     }
 }

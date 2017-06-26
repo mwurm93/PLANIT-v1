@@ -26,10 +26,6 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
         cellButton.setTitle("title", for: UIControlState.normal)
         cellButton?.setTitleColor(UIColor.white, for: .normal)
         cellButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        cellButton?.setTitleColor(UIColor.white, for: .highlighted)
-        cellButton?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .highlighted)
-        cellButton?.setTitleColor(UIColor.white, for: .selected)
-        cellButton?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         cellButton?.layer.borderWidth = 1
         cellButton?.layer.borderColor = UIColor.white.cgColor
         cellButton?.layer.masksToBounds = true
@@ -47,10 +43,10 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
     
     func chooseDestinationButtonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
-        if sender.isSelected == true {
-            sender.layer.borderWidth = 0
+        if sender.isSelected {
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.layer.borderWidth = 1
+            sender.removeMask(button:sender)
         }
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()

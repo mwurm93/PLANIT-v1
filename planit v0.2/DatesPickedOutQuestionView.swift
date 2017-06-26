@@ -109,17 +109,16 @@ class DatesPickedOutQuestionView: UIView {
     
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
-        if sender == button2 && sender.isSelected == true {
-            button1?.isSelected = false
-            button1?.layer.borderWidth = 1
-        } else if sender == button1 && sender.isSelected == true  {
-            button2?.isSelected = false
-            button2?.layer.borderWidth = 1
-        }
-        if sender.isSelected == true {
-            sender.layer.borderWidth = 0
+        if sender.isSelected {
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.layer.borderWidth = 1
+            sender.removeMask(button:sender)
+        }
+        for subview in self.subviews {
+            if subview.isKind(of: UIButton.self) && subview != sender {
+                (subview as! UIButton).isSelected = false
+                (subview as! UIButton).removeMask(button: subview as! UIButton)
+            }
         }
     }
 }

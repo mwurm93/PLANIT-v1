@@ -67,6 +67,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     //Loading subviews based on progress
     var functionsToLoadSubviewsDictionary = Dictionary<Int,() -> ()>()
+    var subviewFramesDictionary = Dictionary<Int,CGPoint>()
     
     // MARK: Outlets
     @IBOutlet weak var visualEffectView: UIVisualEffectView!
@@ -111,6 +112,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[20] = spawnBusTrainOtherQuestionView
         functionsToLoadSubviewsDictionary[21] = spawnidkHowToGetThereQuestionView
 
+        //Add shadow to topview
+        let borderLine = UIView()
+        borderLine.frame = CGRect(x: 0, y: Double(topView.frame.height)-0.5, width: Double(topView.frame.width), height: 0.5)
+        borderLine.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
+        borderLine.layer.shadowColor = UIColor.black.cgColor
+        borderLine.layer.shadowRadius = 2.5
+        borderLine.layer.masksToBounds = false
+        borderLine.layer.shadowOpacity = 1
+        borderLine.layer.shadowOffset = CGSize(width: 0, height: 3)
+        self.view.addSubview(borderLine)
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -399,18 +410,24 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         for subviewTag in subviewTags {
             self.functionsToLoadSubviewsDictionary[subviewTag]!()
         }
-    }
-    
+    }    
     func updateProgress() {
         var currentSubviewsInScrollContentView = [Int]()
         for subview in scrollContentView.subviews {
             if subview != userNameQuestionView && subview != tripNameQuestionView {
                 currentSubviewsInScrollContentView.append(subview.tag)
+                subviewFramesDictionary[subview.tag] = subview.frame.origin
             }
         }
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["progress"] = currentSubviewsInScrollContentView as [NSNumber]
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    func scrollToSubviewWithTag(tag:Int){
+        let topOfSubview = subviewFramesDictionary[tag]
+        UIView.animate(withDuration: 1) {
+            self.scrollView.setContentOffset(topOfSubview!, animated: false)
+        }
     }
     
     func spawnUserNameQuestionView() {
@@ -427,14 +444,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     func spawnTripNameQuestionView() {
         if userNameQuestionView != nil {
-            let questionLabelValue = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)!, I'm Planny, your personal trip planning guru!\nI'll help you:"
+            let questionLabelValue = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! I'm your personal\ntrip planning assistant,\nhere to help you:"
 
             userNameQuestionView?.userNameQuestionTextfield?.resignFirstResponder()
             if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
                 tripNameQuestionView?.questionLabel?.text = questionLabelValue
             }
         } else {
-            let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))!, I'm Planny, your personal trip planning guru!\nI'll help you:"
+            let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! I'm your personal\ntrip planning assistant,\nhere to help you:"
 
             tripNameQuestionView?.questionLabel?.text = questionLabelValue
         }
@@ -455,11 +472,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             view.addConstraints([heightConstraint])
             if userNameQuestionView != nil {
                 if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
-                    let questionLabelValue = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)!, I'm Planny, your personal trip planning guru!\nI'll help you:"
+                    let questionLabelValue = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! I'm your personal\ntrip planning assistant,\nhere to help you:"
                     tripNameQuestionView?.questionLabel?.text = questionLabelValue
                 }
             } else {
-                let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))!, I'm Planny, your personal trip planning guru!\nI'll help you:"
+                let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! I'm your personal\ntrip planning assistant,\nhere to help you:"
                 tripNameQuestionView?.questionLabel?.text = questionLabelValue
             }
             tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
@@ -470,6 +487,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             scrollDownToTopSubview()
         }
     }
+    
     func spawnWhereTravellingFromQuestionView(){
         tripNameQuestionView?.tripNameQuestionTextfield?.resignFirstResponder()
         if whereTravellingFromQuestionView == nil {
@@ -482,11 +500,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.whereTravellingFromQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: whereTravellingFromQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whereTravellingFromQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            
+            updateHeightOfScrollView()
+            scrollDownToTopSubview()
+            updateProgress()
+        } else {        
+            scrollToSubviewWithTag(tag: 0)
         }
-        updateHeightOfScrollView()
-        scrollDownToTopSubview()
 //        whereTravellingFromQuestionView?.searchController?.searchBar.becomeFirstResponder()
-        updateProgress()
     }
     func spawnDatesPickedOutCalendarView() {
         if datesPickedOutCalendarView == nil {
@@ -498,10 +519,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.datesPickedOutCalendarView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: datesPickedOutCalendarView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutCalendarView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 1)
+        }
+
         
         let when = DispatchTime.now() + 1.4
         DispatchQueue.main.asyncAfter(deadline: when) {
@@ -523,10 +548,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.decidedOnCityToVisitQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: decidedOnCityToVisitQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (decidedOnCityToVisitQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 2)
+        }
+
     }
     
     func spawnNoCityDecidedAnyIdeasQuestionView() {
@@ -540,10 +569,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.noCityDecidedAnyIdeasQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: noCityDecidedAnyIdeasQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (noCityDecidedAnyIdeasQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 3)
+        }
+
     }
     
     func spawnPlanIdeaAsDestinationQuestionView() {
@@ -561,10 +594,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.planTripToIdeaQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: planTripToIdeaQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (planTripToIdeaQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 4)
+        }
+
     }
     func spawnWhatTypeOfTripQuestionView() {
         if whatTypeOfTripQuestionView == nil {
@@ -581,10 +618,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.whatTypeOfTripQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: whatTypeOfTripQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whatTypeOfTripQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 5)
+        }
+
     }
     func spawnHowFarAwayQuestion() {
         if howFarAwayQuestionView == nil {
@@ -600,10 +641,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.howFarAwayQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: howFarAwayQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howFarAwayQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 6)
+        }
+
     }
 
     func spawnDestinationOptionsCardView() {
@@ -618,10 +663,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.destinationOptionsCardView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: destinationOptionsCardView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (destinationOptionsCardView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 7)
+        }
+
     }
     func spawnAddAnotherDestinationQuestionView() {
         if addAnotherDestinationQuestionView == nil {
@@ -643,9 +692,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             addAnotherDestinationQuestionView?.button1?.setTitle("Yep, just \(destinationsForTrip[0])", for: .normal)
             addAnotherDestinationQuestionView?.button1?.setTitle("Yep, just \(destinationsForTrip[0])", for: .highlighted)
             addAnotherDestinationQuestionView?.button1?.setTitle("Yep, just \(destinationsForTrip[0])", for: .selected)
-        }
+        
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 8)
+        }
+
     }
     func spawnYesCityDecidedQuestionView() {
         if yesCityDecidedQuestionView == nil {
@@ -658,10 +711,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.yesCityDecidedQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: yesCityDecidedQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (yesCityDecidedQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 9)
+        }
+
     }
     func spawnHowDoYouWantToGetThereQuestionView() {
         if howDoYouWantToGetThereQuestionView == nil {
@@ -678,10 +735,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.howDoYouWantToGetThereQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: howDoYouWantToGetThereQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howDoYouWantToGetThereQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 10)
+        }
+ 
     }
     func spawnFlightSearchQuestionView(){
         if flightSearchQuestionView == nil {
@@ -713,12 +774,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                 }
             }
-        }
 
-        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 11)
+        }
+
     }
     func spawnFlightResultsQuestionView() {
         flightResultsController = self.storyboard!.instantiateViewController(withIdentifier: "flightResultsViewController") as? flightResultsViewController
@@ -747,7 +810,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         reviewAndBookFlightsController?.view.frame = self.view.bounds
         flightResultsController?.view.isHidden = true
         self.flightSearchQuestionView?.addSubview((reviewAndBookFlightsController?.view)!)
-        reviewAndBookFlightsController?.view.tag = 12
+        reviewAndBookFlightsController?.view.tag = 13
         reviewAndBookFlightsController?.didMove(toParentViewController: self)
         
         updateProgress()
@@ -764,10 +827,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.doYouNeedARentalCarQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: doYouNeedARentalCarQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (doYouNeedARentalCarQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 14)
+        }
+
     }
     func spawnCarRentalSearchQuestionView() {
         if carRentalSearchQuestionView == nil {
@@ -780,10 +847,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.carRentalSearchQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: carRentalSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (carRentalSearchQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 15)
+        }
     }
     func spawnRentalCarResultsQuestionView() {
         carRentalResultsController = self.storyboard!.instantiateViewController(withIdentifier: "carRentalResultsViewController") as? carRentalResultsViewController
@@ -818,7 +888,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         updateProgress()
     }
     func spawnDoYouKnowWhereYouWillBeStayingQuestionView() {
-//        if doYouKnowWhereYouWillBeStayingQuestionView == nil {
+        if doYouKnowWhereYouWillBeStayingQuestionView == nil {
             //Load next question
             doYouKnowWhereYouWillBeStayingQuestionView = Bundle.main.loadNibNamed("DoYouKnowWhereYouWillBeStayingQuestionView", owner: self, options: nil)?.first! as? DoYouKnowWhereYouWillBeStayingQuestionView
             self.scrollContentView.addSubview(doYouKnowWhereYouWillBeStayingQuestionView!)
@@ -829,12 +899,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: doYouKnowWhereYouWillBeStayingQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (doYouKnowWhereYouWillBeStayingQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-//        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 18)
+        }
     }
-    
+
     func spawnAboutWhatTimeWillYouStartDrivingQuestionView() {
         if aboutWhatTimeWillYouStartDrivingQuestionView == nil {
             //Load next question
@@ -847,10 +920,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.aboutWhatTimeWillYouStartDrivingQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: aboutWhatTimeWillYouStartDrivingQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (aboutWhatTimeWillYouStartDrivingQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 19)
+        }
+
     }
     func spawnBusTrainOtherQuestionView() {
         if busTrainOtherQuestionView == nil {
@@ -864,10 +941,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.busTrainOtherQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: busTrainOtherQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (busTrainOtherQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 20)
+        }
+
     }
     
     func spawnidkHowToGetThereQuestionView() {
@@ -881,10 +962,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.idkHowToGetThereQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: idkHowToGetThereQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (idkHowToGetThereQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        }
+        
         updateHeightOfScrollView()
         scrollDownToTopSubview()
         updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 21)
+        }
     }
 
     //FLIGHT SEARCH -> RESULTS -> BOOK FUNCTIONS

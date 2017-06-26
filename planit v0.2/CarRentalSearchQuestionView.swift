@@ -164,14 +164,11 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.frame = CGRect.zero
         searchButton?.setTitleColor(UIColor.white, for: .normal)
         searchButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        searchButton?.setTitleColor(UIColor.white, for: .selected)
-        searchButton?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         searchButton?.layer.borderWidth = 1
         searchButton?.layer.borderColor = UIColor.white.cgColor
         searchButton?.layer.masksToBounds = true
         searchButton?.titleLabel?.textAlignment = .center
         searchButton?.setTitle("Search", for: .normal)
-        searchButton?.setTitle("Search", for: .selected)
         searchButton?.translatesAutoresizingMaskIntoConstraints = false
         searchButton?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(searchButton!)
@@ -185,10 +182,16 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
     
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
-        if sender.isSelected == true {
-            sender.layer.borderWidth = 0
+        if sender.isSelected {
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.layer.borderWidth = 1
+            sender.removeMask(button:sender)
+        }
+        for subview in self.subviews {
+            if subview.isKind(of: UIButton.self) && subview != sender {
+                (subview as! UIButton).isSelected = false
+                (subview as! UIButton).removeMask(button: subview as! UIButton)
+            }
         }
     }
     

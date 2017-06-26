@@ -82,17 +82,12 @@ class idkHowToGetThereQuestionView: UIView {
         button1?.frame = CGRect.zero
         button1?.setTitleColor(UIColor.white, for: .normal)
         button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        button1?.setTitleColor(UIColor.white, for: .highlighted)
-        button1?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .highlighted)
-        button1?.setTitleColor(UIColor.white, for: .selected)
-        button1?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button1?.layer.borderWidth = 1
         button1?.layer.borderColor = UIColor.white.cgColor
         button1?.layer.masksToBounds = true
         button1?.titleLabel?.numberOfLines = 0
         button1?.titleLabel?.textAlignment = .center
         button1?.setTitle("I'm ready to plan travel", for: .normal)
-        button1?.setTitle("I'm ready to plan travel", for: .selected)
         button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
@@ -143,11 +138,16 @@ class idkHowToGetThereQuestionView: UIView {
     
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
-        if sender.isSelected == true {
-            sender.layer.borderWidth = 0
+        if sender.isSelected {
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.layer.borderWidth = 1
+            sender.removeMask(button:sender)
+        }
+        for subview in self.subviews {
+            if subview.isKind(of: UIButton.self) && subview != sender {
+                (subview as! UIButton).isSelected = false
+                (subview as! UIButton).removeMask(button: subview as! UIButton)
+            }
         }
     }
-
 }

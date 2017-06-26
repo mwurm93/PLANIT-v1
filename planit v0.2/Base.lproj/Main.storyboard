@@ -41,7 +41,7 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="EgK-jy-RMs">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="EgK-jy-RMs" customClass="PasswordTextField" customModule="PasswordTextField">
                                 <rect key="frame" x="48" y="448" width="278" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
@@ -69,7 +69,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <connections>
-                        <outlet property="Password" destination="EgK-jy-RMs" id="OW6-fT-e62"/>
+                        <outlet property="Password" destination="EgK-jy-RMs" id="wIW-PH-VSd"/>
                         <outlet property="createPasswordLabel" destination="b6y-Y7-2Ts" id="2ol-Bw-IWD"/>
                         <outlet property="enterPasswordLabel" destination="mZJ-rV-QuP" id="TcE-Zu-zKr"/>
                         <segue destination="c7O-w7-no5" kind="show" identifier="passwordToTripList" animates="NO" id="GNg-b7-XVH"/>
@@ -377,7 +377,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.032515609715352202" blue="0.42190120123364594" alpha="0.82486087328767121" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Asu-0V-YB2">
                                 <rect key="frame" x="0.0" y="65" width="375" height="602"/>
@@ -10232,9 +10232,9 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="1VF-PM-MLD"/>
         <segue reference="0XT-HI-iDA"/>
-        <segue reference="D0h-av-d3S"/>
+        <segue reference="GNg-b7-XVH"/>
+        <segue reference="1VF-PM-MLD"/>
         <segue reference="wqY-nU-Jm3"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

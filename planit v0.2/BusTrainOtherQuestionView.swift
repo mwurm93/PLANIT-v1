@@ -34,10 +34,19 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 60)
+        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 100)
         
         textView?.frame = CGRect(x: 10, y: 130, width: bounds.size.width - 20, height: 140)
-        textView?.setBottomBorder(borderColor: UIColor.white)
+        let width = 1.0
+        let borderLine = UIView()
+        borderLine.frame = CGRect(x: Double((textView?.frame.minX)!), y: Double((textView?.frame.maxY)!) - width, width: Double((textView?.frame.width)!), height: width)
+        borderLine.backgroundColor = UIColor.white
+        self.addSubview(borderLine)
+        var topCorrect: CGFloat? = ((textView?.bounds.size.height)! - (textView?.contentSize.height)!)
+        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+        textView?.contentOffset = CGPoint()
+        textView?.contentOffset.x = 0
+        textView?.contentOffset.y = -topCorrect!
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
@@ -47,14 +56,12 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         button2?.sizeToFit()
-        button2?.frame.size.height = 60
+        button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
         button2?.frame.origin.y = 350
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
-        
     }
-    
     
     func addViews() {
         //Question label
@@ -73,17 +80,12 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button1?.frame = CGRect.zero
         button1?.setTitleColor(UIColor.white, for: .normal)
         button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        button1?.setTitleColor(UIColor.white, for: .highlighted)
-        button1?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .highlighted)
-        button1?.setTitleColor(UIColor.white, for: .selected)
-        button1?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button1?.layer.borderWidth = 1
         button1?.layer.borderColor = UIColor.white.cgColor
         button1?.layer.masksToBounds = true
         button1?.titleLabel?.numberOfLines = 0
         button1?.titleLabel?.textAlignment = .center
         button1?.setTitle("Done", for: .normal)
-        button1?.setTitle("Done", for: .selected)
         button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
@@ -94,17 +96,12 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button2?.frame = CGRect.zero
         button2?.setTitleColor(UIColor.white, for: .normal)
         button2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        button2?.setTitleColor(UIColor.white, for: .highlighted)
-        button2?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .highlighted)
-        button2?.setTitleColor(UIColor.white, for: .selected)
-        button2?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button2?.layer.borderWidth = 1
         button2?.layer.borderColor = UIColor.white.cgColor
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.numberOfLines = 0
         button2?.titleLabel?.textAlignment = .center
         button2?.setTitle("I'll add my travel plans later", for: .normal)
-        button2?.setTitle("I'll add my travel plans later", for: .selected)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)
@@ -127,19 +124,31 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
 
     }
     
+    func textViewDidChange(_ textView: UITextView) {
+        var topCorrect: CGFloat? = textView.bounds.size.height - textView.contentSize.height
+        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+        textView.contentOffset = CGPoint()
+        textView.contentOffset.x = 0
+        textView.contentOffset.y = -topCorrect!
+    }
+    
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        textView.resignFirstResponder()
+        return true
+    }
+    
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
-        if sender == button2 && sender.isSelected == true {
-            button1?.isSelected = false
-            button1?.layer.borderWidth = 1
-        } else if sender == button1 && sender.isSelected == true  {
-            button2?.isSelected = false
-            button2?.layer.borderWidth = 1
-        }
-        if sender.isSelected == true {
-            sender.layer.borderWidth = 0
+        if sender.isSelected {
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.layer.borderWidth = 1
+            sender.removeMask(button:sender)
+        }
+        for subview in self.subviews {
+            if subview.isKind(of: UIButton.self) && subview != sender {
+                (subview as! UIButton).isSelected = false
+                (subview as! UIButton).removeMask(button: subview as! UIButton)
+            }
         }
     }
 

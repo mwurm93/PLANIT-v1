@@ -127,15 +127,12 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         button3?.frame = CGRect.zero
         button3?.setTitleColor(UIColor.white, for: .normal)
         button3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        button3?.setTitleColor(UIColor.white, for: .selected)
-        button3?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button3?.layer.borderWidth = 1
         button3?.layer.borderColor = UIColor.white.cgColor
         button3?.layer.masksToBounds = true
         button3?.titleLabel?.numberOfLines = 0
         button3?.titleLabel?.textAlignment = .center
         button3?.setTitle("Got it", for: .normal)
-        button3?.setTitle("Got it", for: .selected)
         button3?.translatesAutoresizingMaskIntoConstraints = false
         button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button3!)
@@ -145,15 +142,12 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         button4?.frame = CGRect.zero
         button4?.setTitleColor(UIColor.white, for: .normal)
         button4?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        button4?.setTitleColor(UIColor.white, for: .selected)
-        button4?.setBackgroundColor(color: (UIColor()).getCustomBlueColor(), forState: .selected)
         button4?.layer.borderWidth = 1
         button4?.layer.borderColor = UIColor.white.cgColor
         button4?.layer.masksToBounds = true
         button4?.titleLabel?.numberOfLines = 0
         button4?.titleLabel?.textAlignment = .center
         button4?.setTitle("Choose a destination", for: .normal)
-        button4?.setTitle("Choose a destination", for: .selected)
         button4?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(button4!)
 
@@ -545,6 +539,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         sender.isSelected = !sender.isSelected
         if sender.isSelected == true {
             sender.layer.borderWidth = 0
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
             questionLabel?.isHidden = true
             button3?.isHidden = true
             button1?.isHidden = false
@@ -552,6 +547,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
             swipeableView.isHidden = false
         } else {
             sender.layer.borderWidth = 1
+            sender.removeMask(button:sender)
         }
     }
     

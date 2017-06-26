@@ -20,13 +20,14 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
         
         self.hideKeyboardWhenTappedAround()
         emailAddress.becomeFirstResponder()
-        
-        emailAddress.layer.borderWidth = 1
-        emailAddress.layer.cornerRadius = 5
-        emailAddress.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
+        emailAddress.setBottomBorder(borderColor: UIColor.white)
+
+//        emailAddress.layer.borderWidth = 1
+//        emailAddress.layer.cornerRadius = 5
+//        emailAddress.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         emailAddress.layer.masksToBounds = true
         let emailAddressLabelPlaceholder = emailAddress!.value(forKey: "placeholderLabel") as? UILabel
-        emailAddressLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        emailAddressLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
 //        let clearButton = emailAddress?.value(forKey: "clearButton") as! UIButton
 //        clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
 //        clearButton.tintColor = UIColor.white

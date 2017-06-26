@@ -29,6 +29,9 @@ pod 'Firebase/Auth'
 pod 'Firebase/Database'
 pod 'SwiftGifOrigin', '~> 1.6.1'
 
+# Pods for password input
+pod 'PasswordTextField', '~> 1.0'
+
   target 'planit v0.2Tests' do
     inherit! :search_paths
     # Pods for testing
