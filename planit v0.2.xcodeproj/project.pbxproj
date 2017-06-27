@@ -41,6 +41,7 @@
 		FA4887871F01B9780015F078 /* PlaceForGroupOrJustYouQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4887861F01B9780015F078 /* PlaceForGroupOrJustYouQuestionView.xib */; };
 		FA4887891F021FDD0015F078 /* SendProposalQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4887881F021FDD0015F078 /* SendProposalQuestionView.swift */; };
 		FA48878B1F021FFC0015F078 /* SendProposalQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA48878A1F021FFC0015F078 /* SendProposalQuestionView.xib */; };
+		FA48878E1F02C6320015F078 /* contactsTableViewCellForScrolling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA48878D1F02C6320015F078 /* contactsTableViewCellForScrolling.swift */; };
 		FA4E36201EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4E361F1EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift */; };
 		FA4E922B1E3526DD00231C72 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4E922A1E3526DD00231C72 /* API.swift */; };
 		FA4EA8C91EE7A4AE005FCE91 /* CreateTrip.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FA4EA8C81EE7A4AE005FCE91 /* CreateTrip.graphql */; };
@@ -225,6 +226,7 @@
 		FA4887861F01B9780015F078 /* PlaceForGroupOrJustYouQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceForGroupOrJustYouQuestionView.xib; sourceTree = "<group>"; };
 		FA4887881F021FDD0015F078 /* SendProposalQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendProposalQuestionView.swift; sourceTree = "<group>"; };
 		FA48878A1F021FFC0015F078 /* SendProposalQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendProposalQuestionView.xib; sourceTree = "<group>"; };
+		FA48878D1F02C6320015F078 /* contactsTableViewCellForScrolling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = contactsTableViewCellForScrolling.swift; sourceTree = "<group>"; };
 		FA4E361F1EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = destinationPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		FA4E922A1E3526DD00231C72 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		FA4EA8C81EE7A4AE005FCE91 /* CreateTrip.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CreateTrip.graphql; sourceTree = "<group>"; };
@@ -675,6 +677,7 @@
 			children = (
 				FAA8F2961E351DDE00CD7337 /* contactsTableViewCell.swift */,
 				FA70D01E1EFA5CB000126176 /* destinationsSwipedRightTableViewCell.swift */,
+				FA48878D1F02C6320015F078 /* contactsTableViewCellForScrolling.swift */,
 				FAA8F2971E351DDE00CD7337 /* ExistingTripTableViewCell.swift */,
 				FAA8F2981E351DDE00CD7337 /* itemizedItineraryTableViewCell.swift */,
 				FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */,
@@ -1238,6 +1241,7 @@
 				FADF09FD1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift in Sources */,
 				FAE83F851EF79EAA0009A020 /* NoCityDecidedAnyIdeasQuestionView.swift in Sources */,
 				FAD50DDA1EE9C4AB0006C3AA /* instructionsCollectionViewCell.swift in Sources */,
+				FA48878E1F02C6320015F078 /* contactsTableViewCellForScrolling.swift in Sources */,
 				FAC1BD301EAE7707008AB7C4 /* ViewManager.swift in Sources */,
 				FA4E922B1E3526DD00231C72 /* API.swift in Sources */,
 				FA14B22E1EFB2D33004E0E29 /* FlightSearchQuestionView.swift in Sources */,

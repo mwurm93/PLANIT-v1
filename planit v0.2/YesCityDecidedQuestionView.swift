@@ -41,7 +41,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 160)
         
-        subView?.frame = CGRect(x: (bounds.size.width-275)/2, y: 200, width: 275, height: 30)
+        subView?.frame = CGRect(x: (bounds.size.width-275)/2, y: 193, width: 275, height: 30)
         
         button?.sizeToFit()
         button?.frame.size.height = 30

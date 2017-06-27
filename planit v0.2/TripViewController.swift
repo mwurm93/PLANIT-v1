@@ -10,8 +10,10 @@ import UIKit
 import Firebase
 import JTAppleCalendar
 import Cartography
+import ContactsUI
+import Contacts
 
-class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate {
+class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate {
 
     //MARK: Class variables
     var scrollContentViewHeight: NSLayoutConstraint?
@@ -49,9 +51,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var shortTermRentalSearchQuestionView: ShortTermRentalSearchQuestionView?
     var stayWithSomeoneIKnowQuestionView: StayWithSomeoneIKnowQuestionView?
     var placeForGroupOrJustYouQuestionView: PlaceForGroupOrJustYouQuestionView?
-
-    
-    //CalendarView vars
+    var sendProposalQuestionView: SendProposalQuestionView?
+        //CalendarView vars
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
     var leftDates = [Date]()
     var rightDates = [Date]()
@@ -62,18 +63,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var mostRecentSelectedCellDate = NSDate()
     var dateEditing = "departureDate"
     var searchMode = "roundtrip"
-    
-    //Firebase channel
+        //Contacts vars COPY
+    fileprivate var addressBookStore: CNContactStore!
+    let picker = CNContactPickerViewController()
+    var contacts: [CNContact]?
+    var contactIDs: [NSString]?
+    var contactPhoneNumbers = [NSString]()
+    var editModeEnabled = false
+        //Messaging var
+    let messageComposer = MessageComposer()
+        //Firebase channel
     var channelsRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     var newChannelRef: FIRDatabaseReference?
-
-    //Singleton
+        //Singleton
     var NewOrAddedTripFromSegue: Int?
-
-    //City dict
+        //City dict
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
-    
-    //Loading subviews based on progress
+        //Loading subviews based on progress
     var functionsToLoadSubviewsDictionary = Dictionary<Int,() -> ()>()
     var subviewFramesDictionary = Dictionary<Int,CGPoint>()
     
@@ -93,6 +99,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var datePickingSubviewDoneButton: UIButton!
     @IBOutlet weak var chatView: UIView!
     @IBOutlet weak var itineraryView: UIView!
+    //Itinerary View Outlets
+    @IBOutlet weak var tripNameTextField: UITextField!
+    @IBOutlet weak var contactsCollectionView: UICollectionView!
+    @IBOutlet weak var addInviteeButton: UIButton!
+    @IBOutlet weak var popupBackgroundViewDeleteContactsWithinCollectionView: UIVisualEffectView!
+    @IBOutlet weak var popupBackgroundViewDeleteContacts: UIVisualEffectView!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,8 +139,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[26] = spawnHotelResultsQuestionView
         functionsToLoadSubviewsDictionary[27] = spawnHotelBookingQuestionView
         functionsToLoadSubviewsDictionary[28] = spawnPlaceForGroupOrJustYouQuestionView
-
-
+        functionsToLoadSubviewsDictionary[29] = spawnSendProposalQuestionView
+        
         //Add shadow to topview
         let borderLine = UIView()
         borderLine.frame = CGRect(x: 0, y: Double(topView.frame.height)-0.5, width: Double(topView.frame.width), height: 0.5)
@@ -317,9 +330,58 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(hotelSelectedSavedForLater), name: NSNotification.Name(rawValue: "saveHotelForLaterButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedHotelToHotelResults), name: NSNotification.Name(rawValue: "bookSelectedHotelToHotelResults"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnContactPickerVC), name: NSNotification.Name(rawValue: "contactPickerVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnMessageComposeVC), name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(delete), name: NSNotification.Name(rawValue: "deleteInvitee"), object: nil)
+        
+        
+        //MARK: Itinerary viewDidLoad
+        self.tripNameTextField.delegate = self
+        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
+        //Install the value into the label.
+        if tripNameValue != nil {
+            self.tripNameTextField.text =  "\(tripNameValue!)"
+        }
+        let bounds = UIScreen.main.bounds
+        tripNameTextField.adjustsFontSizeToFitWidth = true
+        tripNameTextField.minimumFontSize = 10
+        tripNameTextField?.frame.size.height = 40
+        tripNameTextField?.frame.size.width = bounds.width - 40
+        tripNameTextField?.frame.origin.x = (bounds.size.width - (tripNameTextField?.frame.width)!) / 2
+        tripNameTextField?.frame.origin.y = 0
+        tripNameTextField?.rightView?.tintColor = UIColor.white
+        tripNameTextField.setBottomBorder(borderColor: UIColor.white)
+        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongPress(gestureReconizer:)))
+        lpgr.minimumPressDuration = 0.5
+        lpgr.delaysTouchesBegan = true
+        lpgr.delegate = self
+        contactsCollectionView.dataSource = self
+        contactsCollectionView.delegate = self
+        self.contactsCollectionView.addGestureRecognizer(lpgr)
+        //
+        let tapOutsideContacts = UITapGestureRecognizer(target: self, action: #selector(self.dismissDeleteContactsMode))
+        tapOutsideContacts.numberOfTapsRequired = 1
+        tapOutsideContacts.delegate = self
+        self.popupBackgroundViewDeleteContacts.addGestureRecognizer(tapOutsideContacts)
+        popupBackgroundViewDeleteContacts.isHidden = true
+        popupBackgroundViewDeleteContacts.isUserInteractionEnabled = true
+        //
+        let tapOutsideContact = UITapGestureRecognizer(target: self, action: #selector(self.dismissDeleteContactsMode))
+        tapOutsideContact.numberOfTapsRequired = 1
+        tapOutsideContact.delegate = self
+        self.popupBackgroundViewDeleteContactsWithinCollectionView.addGestureRecognizer(tapOutsideContact)
+        popupBackgroundViewDeleteContactsWithinCollectionView.isHidden = true
+        popupBackgroundViewDeleteContactsWithinCollectionView.isUserInteractionEnabled = true
+        //END ITINERARY viewDidLoad
+
+        
         handleScrollUpAndDownButtons()
+        
+        //COPY FOR CONTACTS
+        addressBookStore = CNContactStore()
+        retrieveContactsWithStore(store: addressBookStore)
     }
-//
+    
     override func viewDidAppear(_ animated: Bool) {
         if NewOrAddedTripFromSegue == 0 {
             updateHeightOfScrollView()
@@ -336,6 +398,29 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     // MARK: Custom functions
+    func spawnContactPickerVC() {
+        checkContactsAccess()
+    }
+    func spawnMessageComposeVC() {
+        // Make sure the device can send text messages
+        if (messageComposer.canSendText()) {
+            // Obtain a configured MFMessageComposeViewController
+            let messageComposeVC = messageComposer.configuredMessageComposeViewController()
+            
+            // Present the configured MFMessageComposeViewController instance
+            present(messageComposeVC, animated: true, completion: nil)
+            
+        } else {
+            // Let the user know if his/her device isn't able to send text messages
+            let errorAlert = UIAlertController(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.destructive) {
+                (result : UIAlertAction) -> Void in
+            }
+            
+            errorAlert.addAction(cancelAction)
+            self.present(errorAlert, animated: true, completion: nil)
+        }
+    }
     func animateInSubview_Departure(){
         //Animate In Subview
         dateEditing = "departureDate"
@@ -355,24 +440,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.datePickingSubview.isHidden = false
         }
     }
-//    func animateInSubview_Return(){
-//        dateEditing = "returnDate"
-//        //Animate In Subview
-//        self.view.addSubview(datePickingSubview)
-//        let bounds = UIScreen.main.bounds
-//        datePickingSubview.center = CGPoint(x: bounds.size.width / 2, y: 500)
-//        datePickingSubview.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-//        datePickingSubview.alpha = 0
-//        UIView.animate(withDuration: 0.2) {
-//            self.datePickingSubview.alpha = 1
-//            self.datePickingSubview.transform = CGAffineTransform.identity
-//        }
-//        
-//        getLengthOfSelectedAvailabilities()
-//        if self.leftDates.count == self.rightDates.count && (self.leftDates.count != 0 || self.rightDates.count != 0) {
-//            self.datePickingSubview.isHidden = false
-//        }
-//    }
 
     func animateOutSubview() {
         UIView.animate(withDuration: 0.3, animations: {
@@ -1115,7 +1182,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         updateProgress()
     }
-
     
     func spawnPlaceForGroupOrJustYouQuestionView() {
         if placeForGroupOrJustYouQuestionView == nil {
@@ -1125,9 +1191,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             placeForGroupOrJustYouQuestionView?.tag = 28
             let bounds = UIScreen.main.bounds
             placeForGroupOrJustYouQuestionView?.button1?.addTarget(self, action: #selector(self.placeForGroupOrJustYouQuestionView_entireGroup(sender:)), for: UIControlEvents.touchUpInside)
-            placeForGroupOrJustYouQuestionView?.button1?.addTarget(self, action: #selector(self.placeForGroupOrJustYouQuestionView_someOfGroup(sender:)), for: UIControlEvents.touchUpInside)
-            placeForGroupOrJustYouQuestionView?.button1?.addTarget(self, action: #selector(self.placeForGroupOrJustYouQuestionView_justMe(sender:)), for: UIControlEvents.touchUpInside)
-
+            placeForGroupOrJustYouQuestionView?.button2?.addTarget(self, action: #selector(self.placeForGroupOrJustYouQuestionView_someOfGroup(sender:)), for: UIControlEvents.touchUpInside)
+            placeForGroupOrJustYouQuestionView?.button3?.addTarget(self, action: #selector(self.placeForGroupOrJustYouQuestionView_justMe(sender:)), for: UIControlEvents.touchUpInside)
             self.placeForGroupOrJustYouQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: placeForGroupOrJustYouQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (placeForGroupOrJustYouQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
@@ -1136,10 +1201,29 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             scrollDownToTopSubview()
             updateProgress()
         } else {
-            scrollToSubviewWithTag(tag: 27)
+            scrollToSubviewWithTag(tag: 28)
         }
     }
     
+    func spawnSendProposalQuestionView() {
+        if sendProposalQuestionView == nil {
+            //Load next question
+            sendProposalQuestionView = Bundle.main.loadNibNamed("SendProposalQuestionView", owner: self, options: nil)?.first! as? SendProposalQuestionView
+            self.scrollContentView.addSubview(sendProposalQuestionView!)
+            sendProposalQuestionView?.tag = 29
+            let bounds = UIScreen.main.bounds
+            self.sendProposalQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: sendProposalQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (sendProposalQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+            
+            updateHeightOfScrollView()
+            scrollDownToTopSubview()
+            updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 29)
+        }
+    }
+
     
     
     
@@ -1156,8 +1240,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.willMove(toParentViewController: nil)
         flightResultsController?.view.removeFromSuperview()
         flightResultsController?.removeFromParentViewController()
-        for subview in (flightSearchQuestionView?.subviews)! {
-            subview.isHidden = false
+        if flightSearchQuestionView?.subviews != nil {
+            for subview in (flightSearchQuestionView?.subviews)! {
+                subview.isHidden = false
+            }
         }
         flightSearchQuestionView?.handleSearchMode()
         flightSearchQuestionView?.searchButton?.isSelected = false
@@ -1563,14 +1649,17 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func placeForGroupOrJustYouQuestionView_entireGroup(sender:UIButton) {
         if sender.isSelected == true {
+            spawnSendProposalQuestionView()
         }
     }
     func placeForGroupOrJustYouQuestionView_someOfGroup(sender:UIButton) {
         if sender.isSelected == true {
+            spawnSendProposalQuestionView()
         }
     }
     func placeForGroupOrJustYouQuestionView_justMe(sender:UIButton) {
         if sender.isSelected == true {
+            spawnSendProposalQuestionView()
         }
     }
 
@@ -1594,7 +1683,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         spawnAddAnotherDestinationQuestionView()
     }
-
     // MARK: UITextFieldDelegate
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         
@@ -1603,6 +1691,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
         
+        if textField == tripNameTextField {
+            tripNameTextField.resignFirstResponder()
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["trip_name"] = tripNameTextField.text
+            //Save
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
         if textField == userNameQuestionView?.userNameQuestionTextfield {
             if userNameQuestionView?.userNameQuestionTextfield?.text == nil || userNameQuestionView?.userNameQuestionTextfield?.text == "" {
                 return false
@@ -1828,6 +1923,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         assistantViewIsHiddenTrue()
         itineraryView.isHidden = false
+        contactsCollectionView.reloadData()
         chatView.isHidden = true
         self.view.endEditing(true)
     }
@@ -1843,6 +1939,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     // MARK: Actions
+    @IBAction func addInviteesButtonTouchedUpInside(_ sender: Any) {
+        checkContactsAccess()
+    }
     @IBAction func assistantButtonTouchedUpInside(_ sender: Any) {
         assistant()
     }
@@ -2263,4 +2362,417 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
         
         return headerCell
 }
+}
+
+extension TripViewController {
+    // MARK: CONTACTS
+    fileprivate func checkContactsAccess() {
+        switch CNContactStore.authorizationStatus(for: .contacts) {
+        // Update our UI if the user has granted access to their Contacts
+        case .authorized:
+            self.showContactsPicker()
+        // Prompt the user for access to Contacts if there is no definitive answer
+        case .notDetermined :
+            self.requestContactsAccess()
+        // Display a message if the user has denied or restricted access to Contacts
+        case .denied,
+             .restricted:
+            let alert = UIAlertController(title: "Privacy Warning!",
+                                          message: "Please Enable permission! in settings!.",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    fileprivate func requestContactsAccess() {
+        addressBookStore.requestAccess(for: .contacts) {granted, error in
+            if granted {
+                DispatchQueue.main.async {
+                    self.showContactsPicker()
+                    return
+                }
+            }
+        }
+    }
+    
+    //Show Contact Picker
+    fileprivate  func showContactsPicker() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        contactIDs = SavedPreferencesForTrip["contacts_in_group"] as? [NSString]
+        
+        picker.delegate = self
+        picker.displayedPropertyKeys = [CNContactPhoneNumbersKey]
+        
+        if (contactIDs?.count)! > 0 {
+            picker.predicateForEnablingContact = NSPredicate(format:"(phoneNumbers.@count > 0) AND NOT (identifier in %@)", contactIDs!)
+        } else {
+            picker.predicateForEnablingContact = NSPredicate(format:"(phoneNumbers.@count > 0)")
+        }
+        picker.predicateForSelectionOfContact = NSPredicate(format:"phoneNumbers.@count == 1")
+        self.present(picker , animated: true, completion: nil)
+    }
+    
+    func retrieveContactsWithStore(store: CNContactStore) {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        contactIDs = SavedPreferencesForTrip["contacts_in_group"] as? [NSString]
+        contactPhoneNumbers = (SavedPreferencesForTrip["contact_phone_numbers"] as? [NSString])!
+        
+        do {
+            if (contactIDs?.count)! > 0 {
+                let predicate = CNContact.predicateForContacts(withIdentifiers: contactIDs! as [String])
+                let keysToFetch = [CNContactFormatter.descriptorForRequiredKeys(for: .fullName), CNContactPhoneNumbersKey, CNContactThumbnailImageDataKey, CNContactImageDataAvailableKey] as [Any]
+                let updatedContacts = try store.unifiedContacts(matching: predicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
+                
+                var reorderedUpdatedContacts = [CNContact]()
+                for contactID in contactIDs! {
+                    for updatedContact in updatedContacts {
+                        if updatedContact.identifier as NSString == contactID {
+                            reorderedUpdatedContacts.append(updatedContact)
+                        }
+                    }
+                }
+                self.contacts = reorderedUpdatedContacts
+                
+                //Update trip preferences dictionary
+                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+                SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+                
+            } else {
+                self.contacts = nil
+            }
+        } catch {
+            print(error)
+        }
+    }
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contactProperty: CNContactProperty) {
+        
+        if (contactIDs?.count)! > 0 {
+            contacts?.append(contactProperty.contact)
+            contactIDs?.append(contactProperty.contact.identifier as NSString)
+            let allPhoneNumbersForContact = contactProperty.contact.phoneNumbers
+            var indexForCorrectPhoneNumber: Int?
+            for indexOfPhoneNumber in 0...(allPhoneNumbersForContact.count - 1) {
+                if allPhoneNumbersForContact[indexOfPhoneNumber].value == contactProperty.value as! CNPhoneNumber {
+                    indexForCorrectPhoneNumber = indexOfPhoneNumber
+                }
+            }
+            let phoneNumberToAdd = contactProperty.contact.phoneNumbers[indexForCorrectPhoneNumber!].value.value(forKey: "digits") as! NSString
+            contactPhoneNumbers.append(phoneNumberToAdd)
+            
+            let numberContactsInTable = (contacts?.count)! - 1
+            
+            //Update trip preferences dictionary
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+            
+            //Save updated trip preferences dictionary
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
+            if sendProposalQuestionView != nil {
+                    sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
+            }
+            contactsCollectionView.insertItems(at: addedRowIndexPath)
+        }
+        else {
+            contacts = [contactProperty.contact]
+            contactIDs = [contactProperty.contact.identifier as NSString]
+            let allPhoneNumbersForContact = contactProperty.contact.phoneNumbers
+            var indexForCorrectPhoneNumber: Int?
+            for indexOfPhoneNumber in 0...(allPhoneNumbersForContact.count - 1) {
+                if allPhoneNumbersForContact[indexOfPhoneNumber].value == contactProperty.value as! CNPhoneNumber {
+                    indexForCorrectPhoneNumber = indexOfPhoneNumber
+                }
+            }
+            let phoneNumberToAdd = contactProperty.contact.phoneNumbers[indexForCorrectPhoneNumber!].value.value(forKey: "digits") as! NSString
+            contactPhoneNumbers = [phoneNumberToAdd]
+            
+            //Update trip preferences dictionary
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+            
+            //Save updated trip preferences dictionary
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
+            if sendProposalQuestionView != nil {
+                sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
+            }
+            contactsCollectionView.insertItems(at: addedRowIndexPath)
+        }
+        if sendProposalQuestionView != nil {
+            sendProposalQuestionView?.contactsTableView?.isHidden = false
+            sendProposalQuestionView?.button2?.isHidden = false
+        }
+        updateProgress()
+        //        //Uncomment for testing on Simulator
+        //        //        chatButton.isHidden = true
+        //        //        subviewDoneButton.isHidden = false
+        //
+        //        //Uncomment for testing on iPhone
+        //        if (contacts?.count)! > 0 {
+        //            chatButton.isHidden = false
+        //            subviewDoneButton.isHidden = true
+        //
+        //        } else {
+        //            chatButton.isHidden = true
+        //            subviewDoneButton.isHidden = false
+        //        }
+    }
+    func spawnMessages() {
+        // Make sure the device can send text messages
+        if (messageComposer.canSendText()) {
+            // Obtain a configured MFMessageComposeViewController
+            let messageComposeVC = messageComposer.configuredMessageComposeViewController()
+            
+            // Present the configured MFMessageComposeViewController instance
+            present(messageComposeVC, animated: true, completion: nil)
+        } else {
+            // Let the user know if his/her device isn't able to send text messages
+            let errorAlert = UIAlertController(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.destructive) {
+                (result : UIAlertAction) -> Void in
+            }
+            
+            errorAlert.addAction(cancelAction)
+            self.present(errorAlert, animated: true, completion: nil)
+        }
+    }
+    func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
+        updateProgress()
+    }
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        
+        //Update changed preferences as variables
+        if (contactIDs?.count)! > 0 {
+            contacts?.append(contact)
+            contactIDs?.append(contact.identifier as NSString)
+            let phoneNumberToAdd = contact.phoneNumbers[0].value.value(forKey: "digits") as! NSString
+            contactPhoneNumbers.append(phoneNumberToAdd)
+            
+            let numberContactsInTable = (contacts?.count)! - 1
+            
+            //Update trip preferences dictionary
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+            
+            //Save updated trip preferences dictionary
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
+            if sendProposalQuestionView != nil {
+                sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
+            }
+            contactsCollectionView.insertItems(at: addedRowIndexPath)
+        }
+        else {
+            contacts = [contact]
+            contactIDs = [contact.identifier as NSString]
+            let phoneNumberToAdd = contact.phoneNumbers[0].value.value(forKey: "digits") as! NSString
+            contactPhoneNumbers = [phoneNumberToAdd]
+            
+            //Update trip preferences dictionary
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+            
+            //Save updated trip preferences dictionary
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
+            if sendProposalQuestionView != nil {
+                sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
+            }
+            contactsCollectionView.insertItems(at: addedRowIndexPath)
+        }
+        
+        if sendProposalQuestionView != nil {
+            sendProposalQuestionView?.contactsTableView?.isHidden = false
+            sendProposalQuestionView?.button2?.isHidden = false
+            
+        }
+        updateProgress()
+        //        //Uncomment for testing on Simulator
+        //        //        chatButton.isHidden = true
+        //        //        subviewDoneButton.isHidden = false
+        //
+        //        //Uncomment for testing on iPhone
+        //        if (contacts?.count)! > 0 {
+        //            chatButton.isHidden = false
+        //            subviewDoneButton.isHidden = true
+        //            
+        //        } else {
+        //            chatButton.isHidden = true
+        //            subviewDoneButton.isHidden = false
+        //        }
+    }
+
+}
+
+//MARK: all code for itinerary not in viewDidLoad
+extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    // MARK: - UICollectionViewDataSource
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        var numberOfContacts = 0
+        if contacts != nil {
+            numberOfContacts += contacts!.count
+        }
+        
+        return numberOfContacts
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        addressBookStore = CNContactStore()
+
+        let contactsCell = contactsCollectionView.dequeueReusableCell(withReuseIdentifier: "contactsCollectionPrototypeCell", for: indexPath) as! contactsCollectionViewCell
+        
+        let contact = contacts?[indexPath.row]
+        
+//        if (contact?.imageDataAvailable)! {
+//            contactsCell.thumbnailImage.image = UIImage(data: (contact?.thumbnailImageData!)!)
+//            contactsCell.thumbnailImage.contentMode = .scaleToFill
+//            let reCenter = contactsCell.thumbnailImage.center
+//            contactsCell.thumbnailImage.layer.frame = CGRect(x: contactsCell.thumbnailImage.layer.frame.minX
+//                , y: contactsCell.thumbnailImage.layer.frame.minY, width: contactsCell.thumbnailImage.layer.frame.width * 0.91, height: contactsCell.thumbnailImage.layer.frame.height * 0.91)
+//            contactsCell.thumbnailImage.center = reCenter
+//            contactsCell.thumbnailImage.layer.cornerRadius = contactsCell.thumbnailImage.frame.height / 2
+//            contactsCell.thumbnailImage.layer.masksToBounds = true
+//            contactsCell.initialsLabel.isHidden = true
+//            contactsCell.thumbnailImageFilter.isHidden = false
+//            contactsCell.thumbnailImageFilter.image = UIImage(named: "no_contact_image_selected")!
+//            contactsCell.thumbnailImageFilter.alpha = 0.5
+//        } else {
+            contactsCell.thumbnailImage.image = UIImage(named: "no_contact_image")!
+            contactsCell.thumbnailImageFilter.isHidden = true
+            contactsCell.initialsLabel.isHidden = false
+            let firstInitial = contact?.givenName[0]
+            let secondInitial = contact?.familyName[0]
+            contactsCell.initialsLabel.text = firstInitial! + secondInitial!
+//        }
+        
+        //Delete button
+        contactsCell.deleteButton.isHidden = true
+        // Give the delete button an index number
+        contactsCell.deleteButton.layer.setValue(indexPath.row, forKey: "index")
+        // Add an action function to the delete button
+        contactsCell.deleteButton.addTarget(self, action: #selector(self.deleteContactButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
+        
+        return contactsCell
+    }
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        let visibleCells = self.contactsCollectionView.visibleCells
+        
+        if editModeEnabled == true {
+            for cell in visibleCells {
+                let visibleCellIndexPath = contactsCollectionView.indexPath(for: cell)
+                let visibleCell = contactsCollectionView.cellForItem(at: visibleCellIndexPath!) as! contactsCollectionViewCell
+                // Shake all of the collection view cells
+                visibleCell.shakeIcons()
+            }
+        }
+    }
+    // This function is fired when the collection view stop scrolling
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let visibleCells = self.contactsCollectionView.visibleCells
+        
+        if editModeEnabled == true {
+            for cell in visibleCells {
+                let visibleCellIndexPath = contactsCollectionView.indexPath(for: cell)
+                let visibleCell = contactsCollectionView.cellForItem(at: visibleCellIndexPath!) as! contactsCollectionViewCell
+                // Shake all of the collection view cells
+                visibleCell.shakeIcons()
+            }
+        }
+    }
+    
+    
+    // MARK: - UICollectionViewFlowLayout
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let picDimension = 55
+        return CGSize(width: picDimension, height: picDimension)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        return UIEdgeInsetsMake(0, 0, 0, 0)
+    }
+    
+    // MARK: Custom functions
+    // COPY for Contacts
+    func deleteContactButtonTouchedUpInside(sender:UIButton) {
+        let i: Int = (sender.layer.value(forKey: "index")) as! Int
+        deleteContact(indexPath: IndexPath(row:i, section: 0))
+    }
+    func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
+        if gestureReconizer.state == UIGestureRecognizerState.began {
+            editModeEnabled = true
+            popupBackgroundViewDeleteContacts.isHidden = false
+            popupBackgroundViewDeleteContactsWithinCollectionView.isHidden = false
+            
+            for item in self.contactsCollectionView!.visibleCells as! [contactsCollectionViewCell] {
+                let indexPath: IndexPath = self.contactsCollectionView!.indexPath(for: item as contactsCollectionViewCell)!
+                let cell: contactsCollectionViewCell = self.contactsCollectionView!.cellForItem(at: indexPath) as! contactsCollectionViewCell!
+                cell.deleteButton.isHidden = false
+                cell.shakeIcons()
+            }
+        }
+    }
+    func deleteContact(indexPath: IndexPath) {
+        contacts?.remove(at: indexPath.row)
+        contactIDs?.remove(at: indexPath.row)
+        contactPhoneNumbers.remove(at: indexPath.row)
+        
+        //Update trip preferences dictionary
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+        SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+        //Save updated trip preferences dictionary
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+        //Delete rows in sendProposalQuestionView
+        sendProposalQuestionView?.contactsTableView?.deleteRows(at: [indexPath], with: .left)
+        if contacts?.count == 0 || contacts == nil {
+            sendProposalQuestionView?.button2?.isHidden = true
+        }
+        
+        contactsCollectionView.deleteItems(at: [indexPath])
+        let visibleContactsCells = contactsCollectionView.visibleCells as! [contactsCollectionViewCell]
+        for visibleContactCell in visibleContactsCells {
+            let newIndexPathForItem = contactsCollectionView.indexPath(for: visibleContactCell)
+            visibleContactCell.deleteButton.layer.setValue(newIndexPathForItem?.row, forKey: "index")
+        }
+        
+        if contacts?.count == 0 || contacts == nil {
+            dismissDeleteContactsMode()
+        }
+        
+    }
+
+    //    func leaveDeleteContactsMode(touch: UITapGestureRecognizer) {
+    //        dismissDeleteContactsMode()
+    //    }
+    //
+    //    func leaveDeleteContactsMode2(touch: UITapGestureRecognizer) {
+    //        dismissDeleteContactsMode()
+    //    }
+    
+    func dismissDeleteContactsMode(){
+        self.popupBackgroundViewDeleteContactsWithinCollectionView.isHidden = true
+        self.popupBackgroundViewDeleteContacts.isHidden = true
+        for item in self.contactsCollectionView!.visibleCells as! [contactsCollectionViewCell] {
+            let indexPath: IndexPath = self.contactsCollectionView!.indexPath(for: item as contactsCollectionViewCell)!
+            let cell: contactsCollectionViewCell = self.contactsCollectionView!.cellForItem(at: indexPath) as! contactsCollectionViewCell!
+            cell.deleteButton.isHidden = true
+            cell.stopShakingIcons()
+        }
+        editModeEnabled = false
+    }
+
 }
