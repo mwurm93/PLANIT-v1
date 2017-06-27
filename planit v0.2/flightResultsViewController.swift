@@ -226,6 +226,7 @@ class flightResultsViewController: UIViewController, UITableViewDelegate, UITabl
             cell.selectFlightButton.setBackgroundColor(color: UIColor.clear, forState: .normal)
             cell.selectFlightButton.setTitleColor(UIColor.white, for: .selected)
             cell.selectFlightButton.setBackgroundColor(color: UIColor.blue, forState: .selected)
+            
             cell.selectFlightButton.layer.borderWidth = 1
             cell.selectFlightButton.layer.borderColor = UIColor.white.cgColor
             cell.selectFlightButton.layer.masksToBounds = true

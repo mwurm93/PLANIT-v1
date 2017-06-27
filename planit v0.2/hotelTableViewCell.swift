@@ -27,6 +27,7 @@ class hotelTableViewCell: UITableViewCell, GMSMapViewDelegate, UITableViewDataSo
     @IBOutlet weak var expandedViewLabelOne: UILabel!
     @IBOutlet weak var expandedViewLabelTwo: UILabel!
     @IBOutlet weak var cancellationPolicyLabel: UILabel!
+    @IBOutlet weak var selectButton: UIButton!
     
     var googleMaps: GMSMapView!
     var camera = GMSCameraPosition()

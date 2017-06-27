@@ -1,14 +1,14 @@
 //
-//  DoYouKnowWhereYouWillBeStayingQuestionView.swift
+//  PlaceForGroupOrJustYouQuestionView.swift
 //  planit v0.2
 //
-//  Created by MICHAEL WURM on 6/23/17.
+//  Created by MICHAEL WURM on 6/26/17.
 //  Copyright © 2017 MICHAEL WURM. All rights reserved.
 //
 
 import UIKit
 
-class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
+class PlaceForGroupOrJustYouQuestionView: UIView {
     
     //Class vars
     var questionLabel: UILabel?
@@ -57,7 +57,7 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2
         button3?.frame.origin.y = 270
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
-
+        
     }
     
     
@@ -70,10 +70,10 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Great, now let's make sure you have a comfy pillow under your head!\n\nDo you know where you'll be staying?"
+        questionLabel?.text = "Is this a place to stay for your group too?"
         self.addSubview(questionLabel!)
         
-        //Button2
+        //Button1
         button1 = UIButton(type: .custom)
         button1?.frame = CGRect.zero
         button1?.setTitleColor(UIColor.white, for: .normal)
@@ -83,7 +83,7 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         button1?.layer.masksToBounds = true
         button1?.titleLabel?.numberOfLines = 0
         button1?.titleLabel?.textAlignment = .center
-        button1?.setTitle("Yes", for: .normal)
+        button1?.setTitle("Entire group", for: .normal)
         button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
@@ -99,30 +99,26 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.numberOfLines = 0
         button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("Not yet, help me find a place", for: .normal)
+        button2?.setTitle("Some of the group", for: .normal)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)
         
-        //Button2
+        //Button3
         button3 = UIButton(type: .custom)
         button3?.frame = CGRect.zero
-        button3?.setTitleColor(UIColor.lightGray, for: .normal)
+        button3?.setTitleColor(UIColor.white, for: .normal)
         button3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        button3?.setTitleColor(UIColor.darkGray, for: .highlighted)
-        button3?.setBackgroundColor(color: UIColor.lightGray, forState: .highlighted)
-        button3?.setTitleColor(UIColor.darkGray, for: .selected)
-        button3?.setBackgroundColor(color: UIColor.lightGray, forState: .selected)
         button3?.layer.borderWidth = 1
-        button3?.layer.borderColor = UIColor.lightGray.cgColor
+        button3?.layer.borderColor = UIColor.white.cgColor
         button3?.layer.masksToBounds = true
         button3?.titleLabel?.numberOfLines = 0
         button3?.titleLabel?.textAlignment = .center
-        button3?.setTitle("Not yet, we'll figure it out later", for: .normal)
+        button3?.setTitle("Just me", for: .normal)
         button3?.translatesAutoresizingMaskIntoConstraints = false
         button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button3!)
-
+        
     }
     
     func buttonClicked(sender:UIButton) {
@@ -136,10 +132,6 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
             if subview.isKind(of: UIButton.self) && subview != sender {
                 (subview as! UIButton).isSelected = false
                 (subview as! UIButton).removeMask(button: subview as! UIButton)
-                if subview == button3 {
-                    (subview as! UIButton).layer.borderColor = UIColor.lightGray.cgColor
-                    (subview as! UIButton).setTitleColor(UIColor.lightGray, for: .normal)
-                }
             }
         }
     }

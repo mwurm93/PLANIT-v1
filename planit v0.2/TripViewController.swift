@@ -21,6 +21,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var reviewAndBookFlightsController: ReviewAndBookViewController?
     var carRentalResultsController: carRentalResultsViewController?
     var reviewAndBookCarRentalController: ReviewAndBookViewController?
+    var hotelResultsController: exploreHotelsViewController?
+    var reviewAndBookHotelController: ReviewAndBookViewController?
         //Vies
     var userNameQuestionView: UserNameQuestionView?
     var tripNameQuestionView: TripNameQuestionView?
@@ -42,6 +44,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var aboutWhatTimeWillYouStartDrivingQuestionView: AboutWhatTimeWillYouStartDrivingQuestionView?
     var busTrainOtherQuestionView: BusTrainOtherQuestionView?
     var idkHowToGetThereQuestionView: idkHowToGetThereQuestionView?
+    var whatTypeOfPlaceToStayQuestionView: WhatTypeOfPlaceToStayQuestionView?
+    var hotelSearchQuestionView: HotelSearchQuestionView?
+    var shortTermRentalSearchQuestionView: ShortTermRentalSearchQuestionView?
+    var stayWithSomeoneIKnowQuestionView: StayWithSomeoneIKnowQuestionView?
+    var placeForGroupOrJustYouQuestionView: PlaceForGroupOrJustYouQuestionView?
+
     
     //CalendarView vars
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
@@ -111,6 +119,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[19] = spawnAboutWhatTimeWillYouStartDrivingQuestionView
         functionsToLoadSubviewsDictionary[20] = spawnBusTrainOtherQuestionView
         functionsToLoadSubviewsDictionary[21] = spawnidkHowToGetThereQuestionView
+        functionsToLoadSubviewsDictionary[22] = spawnWhatTypeOfTripQuestionView
+        functionsToLoadSubviewsDictionary[23] = spawnHotelSearchQuestionView
+        functionsToLoadSubviewsDictionary[24] = spawnShortTermRentalSearchQuestionView
+        functionsToLoadSubviewsDictionary[25] = spawnStayWithSomeoneIKnowQuestionView
+        functionsToLoadSubviewsDictionary[26] = spawnHotelResultsQuestionView
+        functionsToLoadSubviewsDictionary[27] = spawnHotelBookingQuestionView
+        functionsToLoadSubviewsDictionary[28] = spawnPlaceForGroupOrJustYouQuestionView
+
 
         //Add shadow to topview
         let borderLine = UIView()
@@ -271,7 +287,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         assistant()
         
         // MARK: Register notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(spawnDecidedOnCityQuestionView), name: NSNotification.Name(rawValue: "calendarRangeSelected"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnDecidedOnCityQuestionView), name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnDatesPickedOutCalendarView), name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionViewEvenIfNonNil), name: NSNotification.Name(rawValue: "destinationDecidedEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnPlanIdeaAsDestinationQuestionView), name: NSNotification.Name(rawValue: "destinationIdeaEntered"), object: nil)
@@ -290,7 +306,17 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(carRentalSelectedBooked), name: NSNotification.Name(rawValue: "bookCarRentalButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(carRentalSelectedSavedForLater), name: NSNotification.Name(rawValue: "saveCarRentalForLaterButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedCarRentalToCarRentalResults), name: NSNotification.Name(rawValue: "bookSelectedCarRentalToCarRentalResults"), object: nil)
-    
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnDoYouNeedARentalCarQuestionView), name: NSNotification.Name(rawValue: "busTrainOtherTextViewNextPressed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnPlaceForGroupOrJustYouQuestionView), name: NSNotification.Name(rawValue: "shortTermRentalTextViewNextPressed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnPlaceForGroupOrJustYouQuestionView), name: NSNotification.Name(rawValue: "stayWithSomeoneIKnowTextViewNextPressed"), object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(removeHotelResultsViewController), name: NSNotification.Name(rawValue: "editHotelSearchButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnHotelBookingQuestionView), name: NSNotification.Name(rawValue: "hotelSelectButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelSelectedBooked), name: NSNotification.Name(rawValue: "bookHotelButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelSelectedSavedForLater), name: NSNotification.Name(rawValue: "saveHotelForLaterButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedHotelToHotelResults), name: NSNotification.Name(rawValue: "bookSelectedHotelToHotelResults"), object: nil)
+        
         handleScrollUpAndDownButtons()
     }
 //
@@ -895,7 +921,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             doYouKnowWhereYouWillBeStayingQuestionView?.tag = 18
             let bounds = UIScreen.main.bounds
             doYouKnowWhereYouWillBeStayingQuestionView?.button1?.addTarget(self, action: #selector(self.doYouKnowWhereYouWillBeStaying_yes(sender:)), for: UIControlEvents.touchUpInside)
-            doYouKnowWhereYouWillBeStayingQuestionView?.button2?.addTarget(self, action: #selector(self.doYouKnowWhereYouWillBeStaying_no(sender:)), for: UIControlEvents.touchUpInside)
+            doYouKnowWhereYouWillBeStayingQuestionView?.button2?.addTarget(self, action: #selector(self.doYouKnowWhereYouWillBeStaying_noPlanNow(sender:)), for: UIControlEvents.touchUpInside)
+            doYouKnowWhereYouWillBeStayingQuestionView?.button3?.addTarget(self, action: #selector(self.doYouKnowWhereYouWillBeStaying_noPlanLater(sender:)), for: UIControlEvents.touchUpInside)
             self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: doYouKnowWhereYouWillBeStayingQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (doYouKnowWhereYouWillBeStayingQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
@@ -970,6 +997,159 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             scrollToSubviewWithTag(tag: 21)
         }
     }
+    func spawnWhatTypeOfPlaceToStayQuestionView() {
+        if whatTypeOfPlaceToStayQuestionView == nil {
+            //Load next question
+            whatTypeOfPlaceToStayQuestionView = Bundle.main.loadNibNamed("WhatTypeOfPlaceToStayQuestionView", owner: self, options: nil)?.first! as? WhatTypeOfPlaceToStayQuestionView
+            self.scrollContentView.addSubview(whatTypeOfPlaceToStayQuestionView!)
+            whatTypeOfPlaceToStayQuestionView?.tag = 22
+            let bounds = UIScreen.main.bounds
+            whatTypeOfPlaceToStayQuestionView?.button1?.addTarget(self, action: #selector(self.whatTypeOfPlaceToStayQuestionView_hotel(sender:)), for: UIControlEvents.touchUpInside)
+            whatTypeOfPlaceToStayQuestionView?.button2?.addTarget(self, action: #selector(self.whatTypeOfPlaceToStayQuestionView_shortTermRental(sender:)), for: UIControlEvents.touchUpInside)
+            whatTypeOfPlaceToStayQuestionView?.button3?.addTarget(self, action: #selector(self.whatTypeOfPlaceToStayQuestionView_stayWithSomeoneIKnow(sender:)), for: UIControlEvents.touchUpInside)
+
+            self.whatTypeOfPlaceToStayQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: whatTypeOfPlaceToStayQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whatTypeOfPlaceToStayQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+            
+            updateHeightOfScrollView()
+            scrollDownToTopSubview()
+            updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 22)
+        }
+    }
+    func spawnHotelSearchQuestionView() {
+        if hotelSearchQuestionView == nil {
+            //Load next question
+            hotelSearchQuestionView = Bundle.main.loadNibNamed("HotelSearchQuestionView", owner: self, options: nil)?.first! as? HotelSearchQuestionView
+            self.scrollContentView.addSubview(hotelSearchQuestionView!)
+            hotelSearchQuestionView?.tag = 23
+            let bounds = UIScreen.main.bounds
+            hotelSearchQuestionView?.searchButton?.addTarget(self, action: #selector(self.hotelSearchQuestionView_searchButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
+            self.hotelSearchQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: hotelSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (hotelSearchQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+            
+            updateHeightOfScrollView()
+            scrollDownToTopSubview()
+            updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 23)
+        }
+
+        
+    }
+    func spawnShortTermRentalSearchQuestionView() {
+        if shortTermRentalSearchQuestionView == nil {
+            //Load next question
+            shortTermRentalSearchQuestionView = Bundle.main.loadNibNamed("ShortTermRentalSearchQuestionView", owner: self, options: nil)?.first! as? ShortTermRentalSearchQuestionView
+            self.scrollContentView.addSubview(shortTermRentalSearchQuestionView!)
+            shortTermRentalSearchQuestionView?.tag = 24
+            let bounds = UIScreen.main.bounds
+            shortTermRentalSearchQuestionView?.button1?.addTarget(self, action: #selector(self.shortTermRentalSearchQuestionView_done(sender:)), for: UIControlEvents.touchUpInside)
+            self.shortTermRentalSearchQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: shortTermRentalSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (shortTermRentalSearchQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+            
+            updateHeightOfScrollView()
+            scrollDownToTopSubview()
+            updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 24)
+        }
+
+        
+    }
+    func spawnStayWithSomeoneIKnowQuestionView() {
+        if stayWithSomeoneIKnowQuestionView == nil {
+            //Load next question
+            stayWithSomeoneIKnowQuestionView = Bundle.main.loadNibNamed("StayWithSomeoneIKnowQuestionView", owner: self, options: nil)?.first! as? StayWithSomeoneIKnowQuestionView
+            self.scrollContentView.addSubview(stayWithSomeoneIKnowQuestionView!)
+            stayWithSomeoneIKnowQuestionView?.tag = 25
+            let bounds = UIScreen.main.bounds
+            stayWithSomeoneIKnowQuestionView?.button1?.addTarget(self, action: #selector(self.stayWithSomeoneIKnowQuestionView_done(sender:)), for: UIControlEvents.touchUpInside)
+            self.stayWithSomeoneIKnowQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: stayWithSomeoneIKnowQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (stayWithSomeoneIKnowQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+            
+            updateHeightOfScrollView()
+            scrollDownToTopSubview()
+            updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 25)
+        }
+    }
+
+    func spawnHotelResultsQuestionView() {
+        self.view.endEditing(true)
+        hotelResultsController = self.storyboard!.instantiateViewController(withIdentifier: "exploreHotelsViewController") as? exploreHotelsViewController
+        hotelResultsController?.willMove(toParentViewController: self)
+        self.addChildViewController(hotelResultsController!)
+        hotelResultsController?.loadView()
+        hotelResultsController?.viewDidLoad()
+        hotelResultsController?.view.frame = self.view.bounds
+        for subview in (hotelSearchQuestionView?.subviews)! {
+            subview.isHidden = true
+        }
+        self.hotelSearchQuestionView?.addSubview((hotelResultsController?.view)!)
+        hotelResultsController?.view.tag = 26
+        hotelResultsController?.didMove(toParentViewController: self)
+        
+        updateProgress()
+
+    }
+    
+    func spawnHotelBookingQuestionView() {
+        reviewAndBookHotelController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
+        reviewAndBookHotelController?.willMove(toParentViewController: self)
+        self.addChildViewController(reviewAndBookHotelController!)
+        reviewAndBookHotelController?.bookingMode = "hotel"
+        reviewAndBookHotelController?.loadView()
+        reviewAndBookHotelController?.viewDidLoad()
+        reviewAndBookHotelController?.view.frame = self.view.bounds
+        hotelResultsController?.view.isHidden = true
+        self.hotelSearchQuestionView?.addSubview((reviewAndBookHotelController?.view)!)
+        reviewAndBookHotelController?.view.tag = 27
+        reviewAndBookHotelController?.didMove(toParentViewController: self)
+        
+        updateProgress()
+    }
+
+    
+    func spawnPlaceForGroupOrJustYouQuestionView() {
+        if placeForGroupOrJustYouQuestionView == nil {
+            //Load next question
+            placeForGroupOrJustYouQuestionView = Bundle.main.loadNibNamed("PlaceForGroupOrJustYouQuestionView", owner: self, options: nil)?.first! as? PlaceForGroupOrJustYouQuestionView
+            self.scrollContentView.addSubview(placeForGroupOrJustYouQuestionView!)
+            placeForGroupOrJustYouQuestionView?.tag = 28
+            let bounds = UIScreen.main.bounds
+            placeForGroupOrJustYouQuestionView?.button1?.addTarget(self, action: #selector(self.placeForGroupOrJustYouQuestionView_entireGroup(sender:)), for: UIControlEvents.touchUpInside)
+            placeForGroupOrJustYouQuestionView?.button1?.addTarget(self, action: #selector(self.placeForGroupOrJustYouQuestionView_someOfGroup(sender:)), for: UIControlEvents.touchUpInside)
+            placeForGroupOrJustYouQuestionView?.button1?.addTarget(self, action: #selector(self.placeForGroupOrJustYouQuestionView_justMe(sender:)), for: UIControlEvents.touchUpInside)
+
+            self.placeForGroupOrJustYouQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: placeForGroupOrJustYouQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (placeForGroupOrJustYouQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+            
+            updateHeightOfScrollView()
+            scrollDownToTopSubview()
+            updateProgress()
+        } else {
+            scrollToSubviewWithTag(tag: 27)
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     //FLIGHT SEARCH -> RESULTS -> BOOK FUNCTIONS
     func removeFlightResultsViewController() {
@@ -1010,6 +1190,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         // SHOW USER WHERE SELECTED FLIGHT SAVED AND WHERE TO BOOK QUICKLY
     }
 
+    
+    
+    
+    
+    
     //CAR RENTAL SEARCH -> RESULTS -> BOOK FUNCTIONS
     func removeCarRentalResultsViewController() {
         self.willMove(toParentViewController: nil)
@@ -1057,6 +1242,49 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         // SHOW USER WHERE SELECTED FLIGHT SAVED AND WHERE TO BOOK QUICKLY
     }
 
+    
+    
+    
+    
+    //CAR RENTAL SEARCH -> RESULTS -> BOOK FUNCTIONS
+    func removeHotelResultsViewController() {
+        self.willMove(toParentViewController: nil)
+        hotelResultsController?.view.removeFromSuperview()
+        hotelResultsController?.removeFromParentViewController()
+        for subview in (hotelSearchQuestionView?.subviews)! {
+            subview.isHidden = false
+        }
+        hotelSearchQuestionView?.searchButton?.isSelected = false
+        hotelSearchQuestionView?.searchButton?.removeMask(button: (hotelSearchQuestionView?.searchButton)!)
+        
+    }
+    func removeBookSelectedHotelViewController() {
+        self.willMove(toParentViewController: nil)
+        reviewAndBookHotelController?.view.removeFromSuperview()
+        reviewAndBookHotelController?.removeFromParentViewController()
+    }
+    func bookSelectedHotelToHotelResults() {
+        removeBookSelectedHotelViewController()
+        hotelResultsController?.view.isHidden = false
+    }
+    func hotelSelectedBooked() {
+        removeHotelResultsViewController()
+        removeBookSelectedHotelViewController()
+        spawnPlaceForGroupOrJustYouQuestionView()
+        // LINK TO ITINERARY
+        // SHOW USER WHERE ITINERARY SAVED
+    }
+    func hotelSelectedSavedForLater() {
+        spawnPlaceForGroupOrJustYouQuestionView()
+        
+        // LINK TO ITINERARY
+        // SHOW USER WHERE SELECTED FLIGHT SAVED AND WHERE TO BOOK QUICKLY
+    }
+    
+    
+    
+    
+    
     // MARK: Sent events
     func tripNameQuestionButtonClicked(sender:UIButton) {
         if sender.isSelected == true {
@@ -1277,8 +1505,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if sender.isSelected == true {
         }
     }
-    func doYouKnowWhereYouWillBeStaying_no(sender:UIButton) {
+    func doYouKnowWhereYouWillBeStaying_noPlanNow(sender:UIButton) {
         if sender.isSelected == true {
+            spawnWhatTypeOfPlaceToStayQuestionView()
+        }
+    }
+    func doYouKnowWhereYouWillBeStaying_noPlanLater(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnPlaceForGroupOrJustYouQuestionView()
         }
     }
     func busTrainOtherTravelPlans_done(sender:UIButton) {
@@ -1293,11 +1527,65 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func idkHowToGetThere_readyToPlan(sender:UIButton) {
         if sender.isSelected == true {
-            scrollUpOneSubview()
+            scrollToSubviewWithTag(tag: 10)
+        }
+    }
+    func whatTypeOfPlaceToStayQuestionView_hotel(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnHotelSearchQuestionView()
+        }
+    }
+    func whatTypeOfPlaceToStayQuestionView_shortTermRental(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnShortTermRentalSearchQuestionView()
+        }
+    }
+    func whatTypeOfPlaceToStayQuestionView_stayWithSomeoneIKnow(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnStayWithSomeoneIKnowQuestionView()
         }
     }
     
+    func hotelSearchQuestionView_searchButtonTouchedUpInside(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnHotelResultsQuestionView()
+        }
+    }
+    func shortTermRentalSearchQuestionView_done(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnPlaceForGroupOrJustYouQuestionView()
+        }
+    }
+    func stayWithSomeoneIKnowQuestionView_done(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnPlaceForGroupOrJustYouQuestionView()
+        }
+    }
+    func placeForGroupOrJustYouQuestionView_entireGroup(sender:UIButton) {
+        if sender.isSelected == true {
+        }
+    }
+    func placeForGroupOrJustYouQuestionView_someOfGroup(sender:UIButton) {
+        if sender.isSelected == true {
+        }
+    }
+    func placeForGroupOrJustYouQuestionView_justMe(sender:UIButton) {
+        if sender.isSelected == true {
+        }
+    }
 
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     // MARK: create subview even if non nil functions
     func spawnAddAnotherDestinationQuestionViewEvenIfNonNil() {
@@ -1734,7 +2022,7 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
             leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
             flightSearchQuestionView?.departureDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
             carRentalSearchQuestionView?.pickUpDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
-
+            hotelSearchQuestionView?.checkInDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
         }
         if cell?.selectedPosition() == .right {
             let formatter = DateFormatter()
@@ -1743,6 +2031,7 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
             rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
             flightSearchQuestionView?.returnDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
             carRentalSearchQuestionView?.dropOffDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+            hotelSearchQuestionView?.checkOutDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
         }
         
                 //Update trip preferences in dictionary
@@ -1809,6 +2098,8 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
                     leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
                     flightSearchQuestionView?.departureDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                     carRentalSearchQuestionView?.pickUpDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    hotelSearchQuestionView?.checkInDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+
                 }
                 if cell?.selectedPosition() == .right {
                     let formatter = DateFormatter()
@@ -1817,6 +2108,7 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
                     rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
                     flightSearchQuestionView?.returnDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                     carRentalSearchQuestionView?.dropOffDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    hotelSearchQuestionView?.checkOutDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                 }
                 
                                 //Update trip preferences in dictionary
@@ -1844,6 +2136,7 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
                     leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
                     flightSearchQuestionView?.departureDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                     carRentalSearchQuestionView?.pickUpDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    hotelSearchQuestionView?.checkInDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                 }
                 if cell?.selectedPosition() == .right {
                     let formatter = DateFormatter()
@@ -1852,6 +2145,7 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
                     rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
                     flightSearchQuestionView?.returnDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                     carRentalSearchQuestionView?.dropOffDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
+                    hotelSearchQuestionView?.checkOutDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                 }
                 
                                 //Update trip preferences in dictionary

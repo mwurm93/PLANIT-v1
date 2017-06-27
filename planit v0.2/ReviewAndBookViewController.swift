@@ -58,16 +58,16 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         
         updateLastVC()
         
-        //Setup instructions collection view
-        instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
-        instructionsView?.frame.origin.y = 200
-        self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
-        instructionsView?.isHidden = true
-        instructionsGotItButton.isHidden = true
-        var when = DispatchTime.now() + 0.05
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
-        }
+//        //Setup instructions collection view
+//        instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
+//        instructionsView?.frame.origin.y = 200
+//        self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
+//        instructionsView?.isHidden = true
+//        instructionsGotItButton.isHidden = true
+//        var when = DispatchTime.now() + 0.05
+//        DispatchQueue.main.asyncAfter(deadline: when) {
+//            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+//        }
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -86,31 +86,31 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         tripNameLabel.adjustsFontSizeToFitWidth = true
         tripNameLabel.minimumFontSize = 10
         
-        // Set up tap outside info view
-        popupBackgroundView.isHidden = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
-        tap.numberOfTapsRequired = 1
-        tap.delegate = self
-        popupBackgroundView.addGestureRecognizer(tap)
-        
-        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
-        if timesViewed["booking"] == 0 {
-            var when = DispatchTime.now()
-            DispatchQueue.main.asyncAfter(deadline: when) {
-                self.animateInstructionsIn()
-                let currentTimesViewed = self.timesViewed["booking"]
-                self.timesViewed["booking"]! = currentTimesViewed! + 1
-                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
-                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            }
-            when = DispatchTime.now() + 0.8
-            DispatchQueue.main.asyncAfter(deadline: when) {
-                UIView.animate(withDuration: 1.5) {
-                    self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 6,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
-                    
-                }
-            }
-        }
+//        // Set up tap outside info view
+//        popupBackgroundView.isHidden = true
+//        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
+//        tap.numberOfTapsRequired = 1
+//        tap.delegate = self
+//        popupBackgroundView.addGestureRecognizer(tap)
+//        
+//        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
+//        if timesViewed["booking"] == 0 {
+//            var when = DispatchTime.now()
+//            DispatchQueue.main.asyncAfter(deadline: when) {
+//                self.animateInstructionsIn()
+//                let currentTimesViewed = self.timesViewed["booking"]
+//                self.timesViewed["booking"]! = currentTimesViewed! + 1
+//                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
+//                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//            }
+//            when = DispatchTime.now() + 0.8
+//            DispatchQueue.main.asyncAfter(deadline: when) {
+//                UIView.animate(withDuration: 1.5) {
+//                    self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 6,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+//                    
+//                }
+//            }
+//        }
 
         //Set up notifications for moving VC up when keyboard presented
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -307,6 +307,8 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookFlightButtonTouchedUpInside"), object: nil)
         } else if bookingMode == "carRental" {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookCarRentalButtonTouchedUpInside"), object: nil)
+        } else if bookingMode == "hotel" {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookHotelButtonTouchedUpInside"), object: nil)
         }
     }
     func saveForLaterButtonClicked(sender:UIButton) {
@@ -320,7 +322,10 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "saveFlightForLaterButtonTouchedUpInside"), object: nil)
         } else if bookingMode == "carRental" {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "saveCarRentalForLaterButtonTouchedUpInside"), object: nil)
+        } else if bookingMode == "carRental" {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "saveHotelForLaterButtonTouchedUpInside"), object: nil)
         }
+
     }
 
     
@@ -641,7 +646,11 @@ class ReviewAndBookViewController: UIViewController, UITextFieldDelegate, UITabl
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookSelectedFlightToFlightResults"), object: nil)
         } else if bookingMode == "carRental" {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookSelectedCarRentalToCarRentalResults"), object: nil)
+        } else if bookingMode == "hotel" {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bookSelectedHotelToHotelResults"), object: nil)
         }
+
+        
     }
     @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
         animateInstructionsIn()

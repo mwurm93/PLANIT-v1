@@ -212,7 +212,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
                 calendarView?.selectDates(from: leftDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
                 let when = DispatchTime.now() + 0.15
                 DispatchQueue.main.asyncAfter(deadline: when) {
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "calendarRangeSelected"), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
                 }
                 
             } else {

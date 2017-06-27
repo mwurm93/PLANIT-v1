@@ -9,6 +9,7 @@
 import UIKit
 
 class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
+    
     //Class vars
     var questionLabel: UILabel?
     var button1: UIButton?
@@ -85,7 +86,7 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button1?.layer.masksToBounds = true
         button1?.titleLabel?.numberOfLines = 0
         button1?.titleLabel?.textAlignment = .center
-        button1?.setTitle("Done", for: .normal)
+        button1?.setTitle("Next", for: .normal)
         button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
@@ -132,8 +133,12 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         textView.contentOffset.y = -topCorrect!
     }
     
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        textView.resignFirstResponder()
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if (text == "\n") {
+            textView.resignFirstResponder()
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "busTrainOtherTextViewNextPressed"), object: nil)
+            return false
+        }
         return true
     }
     

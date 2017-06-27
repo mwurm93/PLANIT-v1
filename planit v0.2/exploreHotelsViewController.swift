@@ -33,8 +33,8 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
     var hotelResultsDictionary = [Dictionary<String, Any>]()
     
-    //Instructions
-    var instructionsView: instructionsView?
+//    //Instructions
+//    var instructionsView: instructionsView?
 
     
     // MARK: Outlets
@@ -52,21 +52,21 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        updateLastVC()
+//        updateLastVC()
         
         let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
         rankedPotentialTripsDictionaryArrayIndex = SavedPreferencesForTrip["rankedPotentialTripsDictionaryArrayIndex"] as? Int
         
-        //Setup instructions collection view
-        instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
-        instructionsView?.frame.origin.y = 200
-        self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
-        instructionsView?.isHidden = true
-        instructionsGotItButton.isHidden = true
-        var when = DispatchTime.now() + 0.05
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
-        }
+//        //Setup instructions collection view
+//        instructionsView = Bundle.main.loadNibNamed("instructionsView", owner: self, options: nil)?.first! as? instructionsView
+//        instructionsView?.frame.origin.y = 200
+//        self.view.insertSubview(instructionsView!, aboveSubview: popupBackgroundView)
+//        instructionsView?.isHidden = true
+//        instructionsGotItButton.isHidden = true
+//        var when = DispatchTime.now() + 0.05
+//        DispatchQueue.main.asyncAfter(deadline: when) {
+//            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 4,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+//        }
         
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
@@ -77,7 +77,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
                             rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = thisTripHotelResults
                         } else {
                             //Load from server
-                            let hotelOptionsDictionaryFromServer = [["hotelName":"The W"],["hotelName":"Hilton"],["hotelName":"Marriott"],["hotelName":"Holiday Inn"],["hotelName":"VRBO"]]
+                            let hotelOptionsDictionaryFromServer = [["hotelName":"The W","selectedStatus":0],["hotelName":"Hilton","selectedStatus":0],["hotelName":"Marriott","selectedStatus":0],["hotelName":"Holiday Inn","selectedStatus":0],["hotelName":"VRBO","selectedStatus":0]]
                             
                             rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = hotelOptionsDictionaryFromServer
                         }
@@ -94,7 +94,7 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
         //Update search summary title
-        searchSummaryTitle.text = "Accomodation in \(String(describing: rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["destination"] as! String))"
+        searchSummaryTitle.text = "Accomodation in \(String(describing: (SavedPreferencesForTrip["destinationsForTrip"] as? [String])![0]))"
 
         
         //Set up sort and filter callout views
@@ -113,8 +113,8 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         
         //Set up table
         recommendationRankingTableView.tableFooterView = UIView()
-        recommendationRankingTableView.isEditing = true
-        recommendationRankingTableView.allowsSelectionDuringEditing = true
+//        recommendationRankingTableView.isEditing = true
+//        recommendationRankingTableView.allowsSelectionDuringEditing = true
         recommendationRankingTableView.separatorColor = UIColor.white
         
         self.readyToBookButton.setTitle("Select hotel", for: .normal)
@@ -124,32 +124,45 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         self.readyToBookButton.layer.cornerRadius = self.readyToBookButton.frame.height / 2
         self.readyToBookButton.titleLabel?.textAlignment = .center
         
-        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
-        if timesViewed["hotelResults"] == 0 {
-            var when = DispatchTime.now()
-            DispatchQueue.main.asyncAfter(deadline: when) {
-                self.animateInstructionsIn()
-                let currentTimesViewed = self.timesViewed["hotelResults"]
-                self.timesViewed["hotelResults"]! = currentTimesViewed! + 1
-                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
-                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            }
-            when = DispatchTime.now() + 0.8
-            DispatchQueue.main.asyncAfter(deadline: when) {
-                UIView.animate(withDuration: 1.5) {
-                    self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
-                    
-                }
-            }
-        }
+//        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
+//        if timesViewed["hotelResults"] == 0 {
+//            var when = DispatchTime.now()
+//            DispatchQueue.main.asyncAfter(deadline: when) {
+////                self.animateInstructionsIn()
+//                let currentTimesViewed = self.timesViewed["hotelResults"]
+//                self.timesViewed["hotelResults"]! = currentTimesViewed! + 1
+//                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
+//                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//            }
+//            when = DispatchTime.now() + 0.8
+//            DispatchQueue.main.asyncAfter(deadline: when) {
+//                UIView.animate(withDuration: 1.5) {
+//                    self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+//                    
+//                }
+//            }
+//        }
         
-        let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
-        atap.numberOfTapsRequired = 1
-        atap.delegate = self
-        self.popupBackgroundView.addGestureRecognizer(atap)
-        popupBackgroundView.isHidden = true
-        popupBackgroundView.isUserInteractionEnabled = true
+//        let atap = UITapGestureRecognizer(target: self, action: #selector(self.dismissInstructions(touch:)))
+//        atap.numberOfTapsRequired = 1
+//        atap.delegate = self
+//        self.popupBackgroundView.addGestureRecognizer(atap)
+//        popupBackgroundView.isHidden = true
+//        popupBackgroundView.isUserInteractionEnabled = true
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedHotelToHotelResults), name: NSNotification.Name(rawValue: "bookSelectedHotelToHotelResults"), object: nil)
+
     }
+    
+    func bookSelectedHotelToHotelResults() {
+        for row in 0 ... recommendationRankingTableView.numberOfRows(inSection: 0) - 1 {
+            let cell = recommendationRankingTableView.cellForRow(at: IndexPath(row: row, section: 0)) as! hotelTableViewCell
+            cell.selectButton.isSelected = false
+            cell.selectButton.layer.borderWidth = 1
+            hotelResultsDictionary[row]["selectedStatus"] = 0
+        }
+    }
+
     
     // didReceiveMemoryWarning
     override func didReceiveMemoryWarning() {
@@ -158,20 +171,12 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         
     // MARK: UITableviewdelegate
     func numberOfSections(in tableView: UITableView) -> Int {
-        if tableView == recommendationRankingTableView {
-            return 2
-        }
-        // else if tableView == sortFilterHotelsCalloutTableView
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == recommendationRankingTableView {
-            if section == 0 {
-                return 1
-            }
-            // if section == 1
             let numberOfRows = hotelResultsDictionary.count
-            return numberOfRows - 1
+            return numberOfRows
         }
         // else if tableView == sortFilterHotelsCalloutTableView
         else if calloutTableViewMode == "sort" {
@@ -186,34 +191,46 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
             cell.selectionStyle = .none
             cell.showHotelOnMap()
             
-            //Change hamburger icon
-            for view in cell.subviews as [UIView] {
-                if type(of: view).description().range(of: "Reorder") != nil {
-                    for subview in view.subviews as! [UIImageView] {
-                        if subview.isKind(of: UIImageView.self) {
-                            subview.image = UIImage(named: "hamburger")
-                            subview.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
-                        }
-                    }
-                }
-            }
+//            //Change hamburger icon
+//            for view in cell.subviews as [UIView] {
+//                if type(of: view).description().range(of: "Reorder") != nil {
+//                    for subview in view.subviews as! [UIImageView] {
+//                        if subview.isKind(of: UIImageView.self) {
+//                            subview.image = UIImage(named: "hamburger")
+//                            subview.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
+//                        }
+//                    }
+//                }
+//            }
             
-            if indexPath == IndexPath(row: 0, section: 0) {
-                cell.backgroundColor = UIColor.blue
-            } else {
-                cell.backgroundColor = UIColor.clear
-            }
+//            if indexPath == IndexPath(row: 0, section: 0) {
+//                cell.backgroundColor = UIColor.blue
+//            } else {
+//                cell.backgroundColor = UIColor.clear
+//            }
             
             var hotelsForRow = hotelResultsDictionary[0]
+            var addedRow = indexPath.row
+            hotelsForRow = hotelResultsDictionary[addedRow]
+            addedRow += 1
             
-            
-            var addedRow = indexPath.row + 1
-            if indexPath.section == 1 {
-                hotelsForRow = hotelResultsDictionary[addedRow]
-                addedRow += 1
-            }
             
             cell.hotelName.text = hotelsForRow["hotelName"] as! String
+            cell.selectButton.layer.borderWidth = 1
+            cell.selectButton.layer.borderColor = UIColor.white.cgColor
+            cell.selectButton.layer.masksToBounds = true
+            cell.selectButton.titleLabel?.numberOfLines = 0
+            cell.selectButton.titleLabel?.textAlignment = .center
+            cell.selectButton.setTitle("Select", for: .normal)
+            cell.selectButton.setTitle("Select", for: .selected)
+            cell.selectButton.translatesAutoresizingMaskIntoConstraints = false
+            cell.selectButton.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+            cell.selectButton.sizeToFit()
+            cell.selectButton.frame.size.height = 25
+            cell.selectButton.frame.size.width += 10
+            cell.selectButton.layer.cornerRadius = cell.selectButton.frame.height / 2
+            cell.selectButton.tag = addedRow
+            
             
             return cell
         }
@@ -256,103 +273,122 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
     
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-    }
-    
-    // MARK: moving rows
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return .none
-    }
-    
-    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-    
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        if tableView == recommendationRankingTableView {
-            return true
-        }
-        // else if tableView == sortFilterHotelsCalloutTableView
-        return false
-    }
-    
-    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        if proposedDestinationIndexPath == IndexPath(row: 1, section: 0) {
-            return IndexPath(row: 0, section: 1)
-        }
-        
-        return proposedDestinationIndexPath
-    }
-    
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
-        if destinationIndexPath == IndexPath(row: 0, section: 0) {
-            let alertController = UIAlertController(title: "You are changing your group's hotel to \(String(describing: self.hotelResultsDictionary[sourceIndexPath.row + 1]["hotelName"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
-            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
-                (result : UIAlertAction) -> Void in
-                tableView.reloadData()
+    func buttonClicked(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected == true {
+            sender.layer.borderWidth = 0
+            // Set selected status to 1 (YES)
+            hotelResultsDictionary[sender.tag]["selectedStatus"] = 1
+            // Set selected status of all other flights to 0 (NO)
+            for index in 0 ... hotelResultsDictionary.count - 1 {
+                if index != sender.tag {
+                    hotelResultsDictionary[index]["selectedStatus"] = 0
+                }
             }
-            let continueAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.default) {
-                (result : UIAlertAction) -> Void in
-                
-                let movedRowDictionary = self.hotelResultsDictionary[sourceIndexPath.row + 1]
-                self.hotelResultsDictionary.remove(at: sourceIndexPath.row + 1)
-                self.hotelResultsDictionary.insert(movedRowDictionary, at: 0)
-                
-                let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-                self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = self.hotelResultsDictionary
-                SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
-                //Save
-                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-
-                tableView.reloadData()
-                
-                self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
-            }
-            alertController.addAction(cancelAction)
-            alertController.addAction(continueAction)
-            self.present(alertController, animated: true, completion: nil)
-        } else if sourceIndexPath == IndexPath(row: 0, section: 0) {
-            let alertController = UIAlertController(title: "You are changing your group's hotel to \(String(describing: self.hotelResultsDictionary[1]["hotelName"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
-            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
-                (result : UIAlertAction) -> Void in
-                tableView.reloadData()
-            }
-            let continueAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.default) {
-                (result : UIAlertAction) -> Void in
-                
-                let movedRowDictionary = self.hotelResultsDictionary[sourceIndexPath.row]
-                self.hotelResultsDictionary.remove(at: sourceIndexPath.row)
-                self.hotelResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row)
-                
-                let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-                self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = self.hotelResultsDictionary
-                SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
-                //Save
-                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-
-                tableView.reloadData()
-                
-                self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
-            }
-            alertController.addAction(cancelAction)
-            alertController.addAction(continueAction)
-            self.present(alertController, animated: true, completion: nil)
-            
-            
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelSelectButtonTouchedUpInside"), object: nil)
         } else {
-            let movedRowDictionary = hotelResultsDictionary[sourceIndexPath.row + 1]
-            hotelResultsDictionary.remove(at: sourceIndexPath.row + 1)
-            hotelResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row + 1)
-            
-            let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = hotelResultsDictionary
-            SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
-            //Save
-            self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            sender.layer.borderWidth = 1
         }
-        tableView.reloadData()
     }
+
+//
+//    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+//    }
+//    
+//    // MARK: moving rows
+//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+//        return .none
+//    }
+//    
+//    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+//        return false
+//    }
+//    
+//    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+//        if tableView == recommendationRankingTableView {
+//            return true
+//        }
+//        // else if tableView == sortFilterHotelsCalloutTableView
+//        return false
+//    }
+//    
+//    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+//        if proposedDestinationIndexPath == IndexPath(row: 1, section: 0) {
+//            return IndexPath(row: 0, section: 1)
+//        }
+//        
+//        return proposedDestinationIndexPath
+//    }
+//    
+//    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        
+//        if destinationIndexPath == IndexPath(row: 0, section: 0) {
+//            let alertController = UIAlertController(title: "You are changing your group's hotel to \(String(describing: self.hotelResultsDictionary[sourceIndexPath.row + 1]["hotelName"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
+//            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
+//                (result : UIAlertAction) -> Void in
+//                tableView.reloadData()
+//            }
+//            let continueAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.default) {
+//                (result : UIAlertAction) -> Void in
+//                
+//                let movedRowDictionary = self.hotelResultsDictionary[sourceIndexPath.row + 1]
+//                self.hotelResultsDictionary.remove(at: sourceIndexPath.row + 1)
+//                self.hotelResultsDictionary.insert(movedRowDictionary, at: 0)
+//                
+//                let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+//                self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = self.hotelResultsDictionary
+//                SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
+//                //Save
+//                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//
+//                tableView.reloadData()
+//                
+//                self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
+//            }
+//            alertController.addAction(cancelAction)
+//            alertController.addAction(continueAction)
+//            self.present(alertController, animated: true, completion: nil)
+//        } else if sourceIndexPath == IndexPath(row: 0, section: 0) {
+//            let alertController = UIAlertController(title: "You are changing your group's hotel to \(String(describing: self.hotelResultsDictionary[1]["hotelName"]!))", message: "Make sure everyone in your group is okay with this!", preferredStyle: UIAlertControllerStyle.alert)
+//            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
+//                (result : UIAlertAction) -> Void in
+//                tableView.reloadData()
+//            }
+//            let continueAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.default) {
+//                (result : UIAlertAction) -> Void in
+//                
+//                let movedRowDictionary = self.hotelResultsDictionary[sourceIndexPath.row]
+//                self.hotelResultsDictionary.remove(at: sourceIndexPath.row)
+//                self.hotelResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row)
+//                
+//                let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+//                self.rankedPotentialTripsDictionary[self.rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = self.hotelResultsDictionary
+//                SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
+//                //Save
+//                self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//
+//                tableView.reloadData()
+//                
+//                self.readyToBookButton.setTitle("Confirm details and book", for: .normal)
+//            }
+//            alertController.addAction(cancelAction)
+//            alertController.addAction(continueAction)
+//            self.present(alertController, animated: true, completion: nil)
+//            
+//            
+//        } else {
+//            let movedRowDictionary = hotelResultsDictionary[sourceIndexPath.row + 1]
+//            hotelResultsDictionary.remove(at: sourceIndexPath.row + 1)
+//            hotelResultsDictionary.insert(movedRowDictionary, at: destinationIndexPath.row + 1)
+//            
+//            let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+//            rankedPotentialTripsDictionary[rankedPotentialTripsDictionaryArrayIndex!]["hotelOptions"] = hotelResultsDictionary
+//            SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
+//            //Save
+//            self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//        }
+//        tableView.reloadData()
+//    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == recommendationRankingTableView {
             if (selectedIndex == indexPath) {
@@ -373,37 +409,37 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         tableViewCell.expandedViewPhotos()
     }
     
-    // MARK: Table Section Headers
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView == recommendationRankingTableView {
-            return sectionTitles[section]
-        }
-        // else if tableView == sortFilterHotelsCalloutTableView
-        return nil
-    }
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if tableView == recommendationRankingTableView {
-            let header = UIView(frame: CGRect(x: 0, y: 0, width: recommendationRankingTableView.bounds.size.width, height: 30))
-            header.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
-            header.layer.cornerRadius = 5
-            
-            let title = UILabel()
-            title.frame = CGRect(x: 5, y: header.frame.minY, width: header.frame.width, height: header.frame.height)
-            title.textAlignment = .left
-            title.font = UIFont.boldSystemFont(ofSize: 20)
-            title.textColor = UIColor.white
-            title.text = sectionTitles[section]
-            header.addSubview(title)
-            
-            return header
-        }
-        return nil
-    }
+//    // MARK: Table Section Headers
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        if tableView == recommendationRankingTableView {
+//            return sectionTitles[section]
+//        }
+//        // else if tableView == sortFilterHotelsCalloutTableView
+//        return nil
+//    }
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        if tableView == recommendationRankingTableView {
+//            let header = UIView(frame: CGRect(x: 0, y: 0, width: recommendationRankingTableView.bounds.size.width, height: 30))
+//            header.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
+//            header.layer.cornerRadius = 5
+//            
+//            let title = UILabel()
+//            title.frame = CGRect(x: 5, y: header.frame.minY, width: header.frame.width, height: header.frame.height)
+//            title.textAlignment = .left
+//            title.font = UIFont.boldSystemFont(ofSize: 20)
+//            title.textColor = UIColor.white
+//            title.text = sectionTitles[section]
+//            header.addSubview(title)
+//            
+//            return header
+//        }
+//        return nil
+//    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if tableView == recommendationRankingTableView {
-            return 30
-        }
+//        if tableView == recommendationRankingTableView {
+//            return 30
+//        }
         return CGFloat.leastNormalMagnitude
     }
     
@@ -411,10 +447,10 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         return CGFloat.leastNormalMagnitude
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        super.prepare(for: segue, sender: sender)
+//        self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+//    }
     
     //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     //
@@ -491,42 +527,42 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
     
-    func animateInstructionsIn(){
-        instructionsView?.isHidden = false
-        instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-        instructionsView?.alpha = 0
-        UIView.animate(withDuration: 0.4) {
-            self.popupBackgroundView.isHidden = false
-            self.instructionsView?.alpha = 1
-            self.instructionsView?.transform = CGAffineTransform.identity
-            self.instructionsGotItButton.isHidden = false
-        }
-    }
-    
-    func animateInstructionsOut(){
-        UIView.animate(withDuration: 0.3, animations: {
-            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
-            self.instructionsView?.alpha = 0
-            self.instructionsGotItButton.isHidden = true
-            self.popupBackgroundView.isHidden = true
-        }) { (Success:Bool) in
-            self.instructionsView?.layer.isHidden = true
-            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
-        }
-    }
-    
-    func dismissInstructions(touch: UITapGestureRecognizer) {
-        animateInstructionsOut()
-    }
-    
-    // MARK: Actions
-    @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
-        animateInstructionsIn()
-        self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
-    }
-    @IBAction func instructionsGotItButtonTouchedUpInside(_ sender: Any) {
-        animateInstructionsOut()
-    }
+//    func animateInstructionsIn(){
+//        instructionsView?.isHidden = false
+//        instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+//        instructionsView?.alpha = 0
+//        UIView.animate(withDuration: 0.4) {
+//            self.popupBackgroundView.isHidden = false
+//            self.instructionsView?.alpha = 1
+//            self.instructionsView?.transform = CGAffineTransform.identity
+//            self.instructionsGotItButton.isHidden = false
+//        }
+//    }
+//    
+//    func animateInstructionsOut(){
+//        UIView.animate(withDuration: 0.3, animations: {
+//            self.instructionsView?.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+//            self.instructionsView?.alpha = 0
+//            self.instructionsGotItButton.isHidden = true
+//            self.popupBackgroundView.isHidden = true
+//        }) { (Success:Bool) in
+//            self.instructionsView?.layer.isHidden = true
+//            self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+//        }
+//    }
+//    
+//    func dismissInstructions(touch: UITapGestureRecognizer) {
+//        animateInstructionsOut()
+//    }
+//    
+//    // MARK: Actions
+//    @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
+//        animateInstructionsIn()
+//        self.instructionsView?.instructionsCollectionView?.scrollToItem(at: IndexPath(item: 5,section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: true)
+//    }
+//    @IBAction func instructionsGotItButtonTouchedUpInside(_ sender: Any) {
+//        animateInstructionsOut()
+//    }
     @IBAction func nextButtonPressed(_ sender: Any) {
         updateCompletionStatus()
     }
@@ -567,6 +603,12 @@ class exploreHotelsViewController: UIViewController, UITableViewDataSource, UITa
             self.sortFilterHotelsCalloutView.isHidden = true
         }
     }
+    
+    //MARK: Actions
+    @IBAction func editHotelSearchButtonTouchedUpInside(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "editHotelSearchButtonTouchedUpInside"), object: nil)
+    }
+    
 }
 
 extension exploreHotelsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

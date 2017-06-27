@@ -24,14 +24,11 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.Password.delegate = self
-        Password.showButtonWhile = .Always        
+        Password.showButtonWhile = .Always
+        Password.imageTintColor = UIColor.white
         self.hideKeyboardWhenTappedAround()
-        
         Password.becomeFirstResponder()
         Password.setBottomBorder(borderColor: UIColor.white)
-//        Password.layer.borderWidth = 1
-//        Password.layer.cornerRadius = 5
-//        Password.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:0.25).cgColor
         Password.layer.masksToBounds = true
         let passwordLabelPlaceholder = Password!.value(forKey: "placeholderLabel") as? UILabel
         passwordLabelPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
@@ -74,7 +71,7 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         DataContainerSingleton.sharedDataContainer.password = Password.text
         
         if Password.isValid() {
-            if existingUser == false {
+            if existingUser {
             
             //Create account and authenticate instance
             apollo.perform(mutation: CreateUserMutation(user: CreateUserInput(password: DataContainerSingleton.sharedDataContainer.password!, username: DataContainerSingleton.sharedDataContainer.emailAddress!)), resultHandler: { (result, error) in
@@ -100,7 +97,7 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
                 super.performSegue(withIdentifier: "passwordToTripList", sender: self)
                 
             })
-            } else if existingUser == true {
+            } else if existingUser {
                 
                 apollo.perform(mutation: LoginUserMutation(user: LoginUserInput(username: DataContainerSingleton.sharedDataContainer.emailAddress!, password: DataContainerSingleton.sharedDataContainer.password!)), resultHandler: { (result, error) in
                     
@@ -143,8 +140,8 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
             
         } else {
             UIView.animate(withDuration: 0.5) {
-                self.createPasswordLabel.text = "Your password must be longer than 6 characters"
-                self.enterPasswordLabel.text = "Your password must be longer than 6 characters"
+                self.createPasswordLabel.text = "Your password must be 8+ characters and contain one uppercase letter and one number"
+                self.enterPasswordLabel.text = "Your password must be 8+ characters and contain one uppercase letter and one number"
                 self.Password.becomeFirstResponder()
             }
         }

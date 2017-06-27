@@ -2764,7 +2764,6 @@
                         <outlet property="returnToSwipingButton" destination="se9-wg-6Zg" id="f5B-77-4XD"/>
                         <outlet property="tripNameLabel" destination="hyB-Sf-eHs" id="gaI-Ml-xnf"/>
                         <segue destination="nd6-3o-Pa6" kind="show" identifier="changeFlightsButtonToFlightSearch" animates="NO" id="cNU-Li-sIA"/>
-                        <segue destination="LVk-lO-4Cs" kind="show" identifier="changeHotelButtonToExploreHotels" animates="NO" id="Cjv-x4-gBd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="efk-CD-lGv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2774,7 +2773,7 @@
         <!--Explore Hotels View Controller-->
         <scene sceneID="TTu-5w-yoA">
             <objects>
-                <viewController id="LVk-lO-4Cs" customClass="exploreHotelsViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="exploreHotelsViewController" id="LVk-lO-4Cs" customClass="exploreHotelsViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="J6c-P2-G6h"/>
                         <viewControllerLayoutGuide type="bottom" id="MVf-gE-59p"/>
@@ -2783,12 +2782,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bermudaSunsetTop" translatesAutoresizingMaskIntoConstraints="NO" id="mx4-zg-fUZ">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bermudaSunsetTop" translatesAutoresizingMaskIntoConstraints="NO" id="mx4-zg-fUZ">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </imageView>
-                            <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PvQ-BR-SRn">
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PvQ-BR-SRn">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="7E2-Mo-iRt">
@@ -2843,23 +2842,18 @@
                                 <state key="normal" title="Move forward with this hotel"/>
                                 <connections>
                                     <action selector="nextButtonPressed:" destination="LVk-lO-4Cs" eventType="touchUpInside" id="KYx-6K-TO6"/>
-                                    <segue destination="6Nf-ZD-7fF" kind="show" animates="NO" id="X8O-WS-ybJ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVL-nk-bs7">
-                                <rect key="frame" x="0.0" y="607" width="60" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="ORZ-C6-eNJ"/>
-                                    <constraint firstAttribute="width" constant="60" id="yct-CZ-L8P"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
-                                <state key="normal" title="&lt;"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVL-nk-bs7">
+                                <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="review"/>
                                 <connections>
-                                    <segue destination="6Nf-ZD-7fF" kind="show" id="wqY-nU-Jm3"/>
+                                    <action selector="editHotelSearchButtonTouchedUpInside:" destination="LVk-lO-4Cs" eventType="touchUpInside" id="ooW-Z7-JEr"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="104" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="hCM-L6-AVq">
-                                <rect key="frame" x="0.0" y="114" width="375" height="447"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="492"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2881,7 +2875,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="A8b-eq-UJ9">
-                                                            <rect key="frame" x="152.5" y="4.5" width="217.5" height="37.5"/>
+                                                            <rect key="frame" x="82.5" y="4.5" width="217.5" height="37.5"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  $200        4          2      $400" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ioH-D3-Ssi">
                                                                     <rect key="frame" x="0.0" y="0.0" width="217.5" height="20.5"/>
@@ -2897,6 +2891,13 @@
                                                                 </label>
                                                             </subviews>
                                                         </stackView>
+                                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q9v-5c-rAE">
+                                                            <rect key="frame" x="310" y="10.5" width="44" height="25"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="25" id="yNi-qr-pDA"/>
+                                                            </constraints>
+                                                            <state key="normal" title="Select"/>
+                                                        </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yes-Fd-rkn">
                                                             <rect key="frame" x="0.0" y="0.0" width="30" height="46"/>
                                                             <constraints>
@@ -2910,7 +2911,8 @@
                                                         <constraint firstItem="8DR-Yf-4Mh" firstAttribute="leading" secondItem="H6y-6u-atb" secondAttribute="leading" constant="5" id="NrB-m5-zev"/>
                                                         <constraint firstItem="8DR-Yf-4Mh" firstAttribute="centerY" secondItem="H6y-6u-atb" secondAttribute="centerY" id="ZO4-zi-aS3"/>
                                                         <constraint firstItem="A8b-eq-UJ9" firstAttribute="centerY" secondItem="H6y-6u-atb" secondAttribute="centerY" id="f9p-gB-bPb"/>
-                                                        <constraint firstAttribute="trailing" secondItem="A8b-eq-UJ9" secondAttribute="trailing" constant="5" id="jpm-Ea-hr6"/>
+                                                        <constraint firstAttribute="trailing" secondItem="A8b-eq-UJ9" secondAttribute="trailing" constant="75" id="jpm-Ea-hr6"/>
+                                                        <constraint firstItem="q9v-5c-rAE" firstAttribute="leading" secondItem="A8b-eq-UJ9" secondAttribute="trailing" constant="10" id="x34-2x-pgg"/>
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="subviews">
@@ -3059,6 +3061,7 @@
                                             <outlet property="photosButton" destination="1ye-d1-wIt" id="r7W-4S-E2R"/>
                                             <outlet property="photosCollectionView" destination="wNQ-E8-Wvu" id="gGD-io-Q5u"/>
                                             <outlet property="reviewsButton" destination="fZH-CG-zx8" id="bGr-dV-iXb"/>
+                                            <outlet property="selectButton" destination="q9v-5c-rAE" id="eKM-yD-5bt"/>
                                             <outlet property="whiteLine" destination="Wc7-lr-ANS" id="BBW-VQ-Xa8"/>
                                         </connections>
                                     </tableViewCell>
@@ -3068,12 +3071,12 @@
                                     <outlet property="delegate" destination="LVk-lO-4Cs" id="nQd-vY-jRY"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eBA-wM-GCx">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eBA-wM-GCx">
                                 <rect key="frame" x="312" y="18" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="Message"/>
                             </button>
-                            <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nEI-Ar-bPd">
+                            <visualEffectView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nEI-Ar-bPd">
                                 <rect key="frame" x="0.0" y="504" width="375" height="163"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="Daw-TB-PxA">
@@ -3082,7 +3085,7 @@
                                 </view>
                                 <blurEffect style="dark"/>
                             </visualEffectView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ag-Co-iEm">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ag-Co-iEm">
                                 <rect key="frame" x="13" y="18" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="info icon"/>
@@ -3090,7 +3093,7 @@
                                     <action selector="infoButtonTouchedUpInside:" destination="LVk-lO-4Cs" eventType="touchUpInside" id="eGp-9e-66p"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Cg-LJ-hDC">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Cg-LJ-hDC">
                                 <rect key="frame" x="68" y="420" width="239" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
@@ -3102,14 +3105,23 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="MVf-gE-59p" firstAttribute="top" secondItem="xVL-nk-bs7" secondAttribute="bottom" id="5uO-kO-Oua"/>
                             <constraint firstItem="MVf-gE-59p" firstAttribute="top" secondItem="PLC-ds-5nR" secondAttribute="bottom" constant="15" id="9pe-ap-p4k"/>
                             <constraint firstItem="PLC-ds-5nR" firstAttribute="centerX" secondItem="byp-xa-axC" secondAttribute="centerX" id="XLW-z1-lc6"/>
                             <constraint firstItem="PLC-ds-5nR" firstAttribute="centerX" secondItem="byp-xa-axC" secondAttribute="centerX" id="j3S-Yd-wFq"/>
-                            <constraint firstItem="xVL-nk-bs7" firstAttribute="leading" secondItem="byp-xa-axC" secondAttribute="leading" id="j6M-g9-nGZ"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="mx4-zg-fUZ"/>
+                                <exclude reference="PvQ-BR-SRn"/>
+                                <exclude reference="PLC-ds-5nR"/>
+                                <exclude reference="eBA-wM-GCx"/>
+                                <exclude reference="nEI-Ar-bPd"/>
+                                <exclude reference="3Ag-Co-iEm"/>
+                                <exclude reference="6Cg-LJ-hDC"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="filterButton" destination="H6t-8H-HOn" id="neP-SM-VMI"/>
@@ -3125,7 +3137,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uTE-AC-aKu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2677.5999999999999" y="196.55172413793105"/>
+            <point key="canvasLocation" x="-1516" y="4139"/>
         </scene>
         <!--Review And Book View Controller-->
         <scene sceneID="oXU-ux-Xys">
@@ -10233,9 +10245,9 @@ AAAAAAAAAAAABApgA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="0XT-HI-iDA"/>
+        <segue reference="t9O-2u-fWL"/>
         <segue reference="GNg-b7-XVH"/>
         <segue reference="1VF-PM-MLD"/>
-        <segue reference="wqY-nU-Jm3"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
