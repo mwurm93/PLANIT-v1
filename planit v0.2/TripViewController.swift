@@ -12,8 +12,9 @@ import JTAppleCalendar
 import Cartography
 import ContactsUI
 import Contacts
+import Floaty
 
-class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate {
+class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate {
 
     //MARK: Class variables
     var scrollContentViewHeight: NSLayoutConstraint?
@@ -82,8 +83,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //Loading subviews based on progress
     var functionsToLoadSubviewsDictionary = Dictionary<Int,() -> ()>()
     var subviewFramesDictionary = Dictionary<Int,CGPoint>()
-        //Itinerary vars
-//    var destinationsDatesView: destinationsDatesView?
+        //FAB
+    var floaty: Floaty?
+    var datesItem: FloatyItem?
+    var destinationItem: FloatyItem?
+    var travelItem: FloatyItem?
+    var placeToStayItem: FloatyItem?
     
     // MARK: Outlets
     @IBOutlet weak var visualEffectView: UIVisualEffectView!
@@ -112,6 +117,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var itineraryButton3: UIButton!
     @IBOutlet weak var destinationsDatesCollectionView: UICollectionView!
     @IBOutlet var detailedInformationSubview: UIView!
+    @IBOutlet weak var travelSummaryView: UIView!
+    @IBOutlet weak var travelSummaryTravelLabel: UILabel!
+    @IBOutlet weak var travelSummaryDetailsLabel: UILabel!
+    @IBOutlet weak var placeToStaySummaryView: UIView!
+    @IBOutlet weak var PlaceToStaySummaryPlaceToStayLabel: UILabel!
+    @IBOutlet weak var placeToStaySummaryDetailsLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -148,6 +159,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[29] = spawnSendProposalQuestionView
         
 //        hideKeyboardWhenTappedAround()
+        
+        setUpFloaty()
         
         //Add shadow to topview
         let borderLine = UIView()
@@ -481,6 +494,110 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     // MARK: Custom functions
+    func setUpFloaty() {
+        floaty = Floaty()
+        floaty?.autoCloseOnTap = false
+        floaty?.buttonColor = UIColor.white
+        floaty?.fabDelegate = self
+        
+        placeToStayItem = FloatyItem()
+        placeToStayItem?.buttonColor = UIColor.flatSunFlower()
+        placeToStayItem?.title = "Place to stay"
+        placeToStayItem?.icon = UIImage(named: "changeHotel")
+        placeToStayItem?.handler = { item in
+            self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+            self.floaty?.close()
+            self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
+            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
+            self.floaty?.removeItem(item: self.placeToStayItem!)
+            self.floaty?.removeItem(item: self.travelItem!)
+            self.floaty?.removeItem(item: self.destinationItem!)
+            self.floaty?.removeItem(item: self.datesItem!)
+            self.floaty?.addItem(item: self.travelItem!)
+            self.floaty?.addItem(item: self.destinationItem!)
+            self.floaty?.addItem(item: self.datesItem!)
+        }
+        floaty?.addItem(item: placeToStayItem!)
+        
+        travelItem = FloatyItem()
+        travelItem?.buttonColor = UIColor.flatCarrot()
+        travelItem?.title = "Travel"
+        travelItem?.icon = UIImage(named: "changeFlight")
+        travelItem?.handler = { item in
+            self.spawnHowDoYouWantToGetThereQuestionView()
+            self.floaty?.close()
+            self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
+            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
+            self.floaty?.removeItem(item: self.placeToStayItem!)
+            self.floaty?.removeItem(item: self.travelItem!)
+            self.floaty?.removeItem(item: self.destinationItem!)
+            self.floaty?.removeItem(item: self.datesItem!)
+            self.floaty?.addItem(item: self.placeToStayItem!)
+            self.floaty?.addItem(item: self.destinationItem!)
+            self.floaty?.addItem(item: self.datesItem!)        }
+        floaty?.addItem(item: travelItem!)
+        
+        destinationItem = FloatyItem()
+        destinationItem?.buttonColor = UIColor.flatTurquoise()
+        destinationItem?.title = "Destination"
+        destinationItem?.icon = UIImage(named: "map")
+        destinationItem?.handler = { item in
+            self.spawnWhereTravellingFromQuestionView()
+            self.floaty?.close()
+            self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
+            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
+            self.floaty?.removeItem(item: self.placeToStayItem!)
+            self.floaty?.removeItem(item: self.travelItem!)
+            self.floaty?.removeItem(item: self.destinationItem!)
+            self.floaty?.removeItem(item: self.datesItem!)
+            self.floaty?.addItem(item: self.placeToStayItem!)
+            self.floaty?.addItem(item: self.travelItem!)
+            self.floaty?.addItem(item: self.datesItem!)
+        }
+        floaty?.addItem(item: destinationItem!)
+        
+        datesItem = FloatyItem()
+        datesItem?.buttonColor = UIColor.flatPeterRiver()
+        datesItem?.title = "Dates"
+        datesItem?.icon = UIImage(named: "Calendar-Time")
+        datesItem?.handler = { item in
+            self.spawnDatesPickedOutCalendarView()
+            self.floaty?.close()
+            self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
+            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
+            self.floaty?.removeItem(item: self.placeToStayItem!)
+            self.floaty?.removeItem(item: self.travelItem!)
+            self.floaty?.removeItem(item: self.destinationItem!)
+            self.floaty?.removeItem(item: self.datesItem!)
+            self.floaty?.addItem(item: self.placeToStayItem!)
+            self.floaty?.addItem(item: self.travelItem!)
+            self.floaty?.addItem(item: self.destinationItem!)
+        }
+        floaty?.addItem(item: datesItem!)
+
+        self.view.addSubview(floaty!)
+    }
+    
+    func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
+        
+        let scale = newWidth / image.size.width
+        let newHeight = image.size.height * scale
+        UIGraphicsBeginImageContext(CGSize(width: newWidth,height: newHeight))
+        image.draw(in: CGRect(x: 0,y:  0,width: newWidth,height: newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
+    }
+
+    
+    func disableDatesItem() {
+        datesItem?.handler = nil
+        datesItem?.buttonColor = UIColor.lightGray
+        datesItem?.titleColor = UIColor.lightGray
+    }
+    
+    
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
         if sender.isSelected {

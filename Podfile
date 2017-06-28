@@ -9,7 +9,7 @@ target 'planit v0.2' do
 
 # Pods for planit v0.2
 pod 'pop', '~> 1.0'
-pod "Apollo"
+pod 'Apollo'
 pod 'JTAppleCalendar', '~> 7’
 pod 'SMCalloutView', '~> 2.1'
 
@@ -31,6 +31,10 @@ pod 'SwiftGifOrigin', '~> 1.6.1'
 
 # Pods for password input
 pod 'PasswordTextField', '~> 1.0'
+
+# Pods for FAB
+pod 'Floaty', '~> 3.0.0’
+pod 'UICircularProgressRing'
 
   target 'planit v0.2Tests' do
     inherit! :search_paths

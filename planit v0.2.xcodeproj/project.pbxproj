@@ -480,6 +480,8 @@
 		FA4887741F01AE4D0015F078 /* Destination */ = {
 			isa = PBXGroup;
 			children = (
+				FAE83F721EF649570009A020 /* WhereTravellingFromQuestionView.swift */,
+				FAE83F741EF64AA30009A020 /* WhereTravellingFromQuestionView.xib */,
 				FAE83F801EF75CBD0009A020 /* DecidedOnCityToVisitQuestionView.swift */,
 				FAE83F7E1EF75CB10009A020 /* DecidedOnCityToVisitQuestionView.xib */,
 				FA14B2251EFB1073004E0E29 /* YesCityDecidedQuestionView.swift */,
@@ -507,8 +509,6 @@
 				FAE83F6C1EF4853B0009A020 /* UserNameQuestionView.xib */,
 				FAE83F701EF49F380009A020 /* TripNameQuestionView.swift */,
 				FAE83F6E1EF49F190009A020 /* TripNameQuestionView.xib */,
-				FAE83F721EF649570009A020 /* WhereTravellingFromQuestionView.swift */,
-				FAE83F741EF64AA30009A020 /* WhereTravellingFromQuestionView.xib */,
 			);
 			name = "Basic info";
 			sourceTree = "<group>";

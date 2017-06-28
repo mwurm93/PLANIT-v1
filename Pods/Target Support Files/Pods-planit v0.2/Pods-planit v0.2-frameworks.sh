@@ -86,6 +86,7 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Apollo/Apollo.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Cartography/Cartography.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Floaty/Floaty.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GTMSessionFetcher/GTMSessionFetcher.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GoogleToolboxForMac/GoogleToolboxForMac.framework"
   install_framework "$BUILT_PRODUCTS_DIR/JSQMessagesViewController/JSQMessagesViewController.framework"
@@ -94,12 +95,14 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/PasswordTextField/PasswordTextField.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SMCalloutView/SMCalloutView.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SwiftGifOrigin/SwiftGifOrigin.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/UICircularProgressRing/UICircularProgressRing.framework"
   install_framework "$BUILT_PRODUCTS_DIR/UIColor+FlatColors/UIColor_FlatColors.framework"
   install_framework "$BUILT_PRODUCTS_DIR/pop/pop.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Apollo/Apollo.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Cartography/Cartography.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Floaty/Floaty.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GTMSessionFetcher/GTMSessionFetcher.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GoogleToolboxForMac/GoogleToolboxForMac.framework"
   install_framework "$BUILT_PRODUCTS_DIR/JSQMessagesViewController/JSQMessagesViewController.framework"
@@ -108,6 +111,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/PasswordTextField/PasswordTextField.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SMCalloutView/SMCalloutView.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SwiftGifOrigin/SwiftGifOrigin.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/UICircularProgressRing/UICircularProgressRing.framework"
   install_framework "$BUILT_PRODUCTS_DIR/UIColor+FlatColors/UIColor_FlatColors.framework"
   install_framework "$BUILT_PRODUCTS_DIR/pop/pop.framework"
 fi
