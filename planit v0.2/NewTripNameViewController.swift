@@ -1531,21 +1531,6 @@ extension String {
     }
 }
 
-extension UIViewController {
-    func hideKeyboardWhenTappedAround() {
-        let hideKeyboardTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        view.addGestureRecognizer(hideKeyboardTap)
-    }
-    
-//    func stopHidingKeyboardWhenTappedAround() {
-//        
-//        view.removeGestureRecognizer(hideKeyboardTap)
-//    }
-//    
-    func dismissKeyboard() {
-        view.endEditing(true)
-    }
-}
 
 
 // MARK: JTCalendarView Extension

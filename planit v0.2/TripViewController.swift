@@ -82,6 +82,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //Loading subviews based on progress
     var functionsToLoadSubviewsDictionary = Dictionary<Int,() -> ()>()
     var subviewFramesDictionary = Dictionary<Int,CGPoint>()
+        //Itinerary vars
+//    var destinationsDatesView: destinationsDatesView?
     
     // MARK: Outlets
     @IBOutlet weak var visualEffectView: UIVisualEffectView!
@@ -105,7 +107,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var addInviteeButton: UIButton!
     @IBOutlet weak var popupBackgroundViewDeleteContactsWithinCollectionView: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundViewDeleteContacts: UIVisualEffectView!
-    
+    @IBOutlet weak var itineraryButton1: UIButton!
+    @IBOutlet weak var itineraryButton2: UIButton!
+    @IBOutlet weak var itineraryButton3: UIButton!
+    @IBOutlet weak var destinationsDatesCollectionView: UICollectionView!
+    @IBOutlet var detailedInformationSubview: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -140,6 +146,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[27] = spawnHotelBookingQuestionView
         functionsToLoadSubviewsDictionary[28] = spawnPlaceForGroupOrJustYouQuestionView
         functionsToLoadSubviewsDictionary[29] = spawnSendProposalQuestionView
+        
+//        hideKeyboardWhenTappedAround()
         
         //Add shadow to topview
         let borderLine = UIView()
@@ -345,7 +353,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let bounds = UIScreen.main.bounds
         tripNameTextField.adjustsFontSizeToFitWidth = true
         tripNameTextField.minimumFontSize = 10
-        tripNameTextField?.frame.size.height = 40
+        tripNameTextField?.frame.size.height = 50
         tripNameTextField?.frame.size.width = bounds.width - 40
         tripNameTextField?.frame.origin.x = (bounds.size.width - (tripNameTextField?.frame.width)!) / 2
         tripNameTextField?.frame.origin.y = 0
@@ -372,6 +380,81 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.popupBackgroundViewDeleteContactsWithinCollectionView.addGestureRecognizer(tapOutsideContact)
         popupBackgroundViewDeleteContactsWithinCollectionView.isHidden = true
         popupBackgroundViewDeleteContactsWithinCollectionView.isUserInteractionEnabled = true
+        if SavedPreferencesForTrip["isInitiator"] as! Int == 0 {
+            itineraryButton1?.setTitle("I'm in and ready to book", for: .normal)
+            itineraryButton2?.setTitle("I'd be in if we changed...", for: .normal)
+            itineraryButton3?.setTitle("I'm out", for: .normal)
+            itineraryButton1?.isHidden = false
+            itineraryButton2?.isHidden = false
+            itineraryButton3?.isHidden = false
+        } else if SavedPreferencesForTrip["isInitiator"] as! Int == 1 {
+            itineraryButton1?.setTitle("I'm ready to book!", for: .normal)
+            itineraryButton2?.setTitle("Send invites", for: .normal)
+            itineraryButton1?.isHidden = false
+            itineraryButton2?.isHidden = false
+            itineraryButton3?.isHidden = true
+        }
+        itineraryButton1?.setTitleColor(UIColor.white, for: .normal)
+        itineraryButton1?.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        itineraryButton1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        itineraryButton1?.layer.borderWidth = 1
+        itineraryButton1?.layer.borderColor = UIColor.white.cgColor
+        itineraryButton1?.layer.masksToBounds = true
+        itineraryButton1?.titleLabel?.numberOfLines = 0
+        itineraryButton1?.titleLabel?.textAlignment = .center
+//        itineraryButton1?.translatesAutoresizingMaskIntoConstraints = false
+        itineraryButton1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        itineraryButton1?.sizeToFit()
+        itineraryButton1?.frame.size.height = 30
+        itineraryButton1?.frame.size.width += 20
+        itineraryButton1?.frame.origin.x = (bounds.size.width - (itineraryButton1?.frame.width)!) / 2
+        itineraryButton1?.frame.origin.y = 492
+        itineraryButton1?.layer.cornerRadius = (itineraryButton1?.frame.height)! / 2
+        itineraryButton2?.setTitleColor(UIColor.white, for: .normal)
+        itineraryButton2?.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        itineraryButton2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        itineraryButton2?.layer.borderWidth = 1
+        itineraryButton2?.layer.borderColor = UIColor.white.cgColor
+        itineraryButton2?.layer.masksToBounds = true
+        itineraryButton2?.titleLabel?.numberOfLines = 0
+        itineraryButton2?.titleLabel?.textAlignment = .center
+//        itineraryButton2?.translatesAutoresizingMaskIntoConstraints = false
+        itineraryButton2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        itineraryButton2?.sizeToFit()
+        itineraryButton2?.frame.size.height = 30
+        itineraryButton2?.frame.size.width += 20
+        itineraryButton2?.frame.origin.x = (bounds.size.width - (itineraryButton2?.frame.width)!) / 2
+        itineraryButton2?.frame.origin.y = itineraryButton1.frame.origin.y + 35
+        itineraryButton2?.layer.cornerRadius = (itineraryButton2?.frame.height)! / 2
+        itineraryButton3?.setTitleColor(UIColor.white, for: .normal)
+        itineraryButton3?.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        itineraryButton3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        itineraryButton3?.layer.borderWidth = 1
+        itineraryButton3?.layer.borderColor = UIColor.white.cgColor
+        itineraryButton3?.layer.masksToBounds = true
+        itineraryButton3?.titleLabel?.numberOfLines = 0
+        itineraryButton3?.titleLabel?.textAlignment = .center
+//        itineraryButton3?.translatesAutoresizingMaskIntoConstraints = false
+        itineraryButton3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        itineraryButton3?.sizeToFit()
+        itineraryButton3?.frame.size.height = 30
+        itineraryButton3?.frame.size.width += 20
+        itineraryButton3?.frame.origin.x = (bounds.size.width - (itineraryButton3?.frame.width)!) / 2
+        itineraryButton3?.frame.origin.y = itineraryButton2.frame.origin.y + 35
+        itineraryButton3?.layer.cornerRadius = (itineraryButton3?.frame.height)! / 2
+        if SavedPreferencesForTrip["isInitiator"] as! Int == 0 {
+            itineraryButton2?.frame.origin.y = itineraryButton1.frame.origin.y + 35
+        } else if SavedPreferencesForTrip["isInitiator"] as! Int == 1 {
+            itineraryButton2?.frame.origin.y = itineraryButton1.frame.origin.y + 55
+        }
+        destinationsDatesCollectionView.dataSource = self
+        destinationsDatesCollectionView.delegate = self
+//        //Setup instructions collection view
+//        destinationsDatesView = Bundle.main.loadNibNamed("destinationsDatesView", owner: self, options: nil)?.first! as? DestinationsDatesView
+//        destinationsDatesView?.frame.origin.y = 0
+//        self.itineraryView.insertSubview(destinationsDatesView!, aboveSubview: itineraryButton3)
+//        destinationsDatesView?.isHidden = true
+
         //END ITINERARY viewDidLoad
 
         
@@ -398,6 +481,21 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     // MARK: Custom functions
+    func buttonClicked(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected {
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
+        } else {
+            sender.removeMask(button:sender)
+        }
+        for subview in self.itineraryView.subviews {
+            if subview.isKind(of: UIButton.self) && subview != sender && subview.layer.mask != nil {
+                (subview as! UIButton).isSelected = false
+                (subview as! UIButton).removeMask(button: subview as! UIButton)
+            }
+        }
+    }
+    
     func spawnContactPickerVC() {
         checkContactsAccess()
     }
@@ -1770,6 +1868,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var destinationsForTrip = [NSString]()
         var modesOfTransportation = [NSString]()
         var indexOfDestinationBeingPlanned = NSNumber(value: 0)
+        var isInitiator = NSNumber(value: 1)
 
         //Activities VC
         var selectedActivities = [NSString]()
@@ -1812,6 +1911,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             destinationsForTrip = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTrip") as? [NSString] ?? [NSString]()
             modesOfTransportation = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "modesOfTransportation") as? [NSString] ?? [NSString]()
             indexOfDestinationBeingPlanned = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "indexOfDestinationBeingPlanned") as? NSNumber ?? NSNumber()
+            isInitiator = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "isInitiator") as? NSNumber ?? NSNumber()
 
 
             //Activities VC
@@ -1824,7 +1924,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"modesOfTransportation":modesOfTransportation, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"modesOfTransportation":modesOfTransportation, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
@@ -1923,7 +2023,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         assistantViewIsHiddenTrue()
         itineraryView.isHidden = false
+        retrieveContactsWithStore(store: addressBookStore)
         contactsCollectionView.reloadData()
+        destinationsDatesCollectionView.reloadData()
         chatView.isHidden = true
         self.view.endEditing(true)
     }
@@ -2475,7 +2577,8 @@ extension TripViewController {
             if sendProposalQuestionView != nil {
                     sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
             }
-            contactsCollectionView.insertItems(at: addedRowIndexPath)
+            let addedRowIndexPathCollectionView = [IndexPath(row: numberContactsInTable + 1, section: 0)]
+            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
         }
         else {
             contacts = [contactProperty.contact]
@@ -2502,7 +2605,8 @@ extension TripViewController {
             if sendProposalQuestionView != nil {
                 sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
             }
-            contactsCollectionView.insertItems(at: addedRowIndexPath)
+            let addedRowIndexPathCollectionView = [addedRowIndexPath[0],IndexPath(row: 1, section: 0)]
+            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
         }
         if sendProposalQuestionView != nil {
             sendProposalQuestionView?.contactsTableView?.isHidden = false
@@ -2568,7 +2672,8 @@ extension TripViewController {
             if sendProposalQuestionView != nil {
                 sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
             }
-            contactsCollectionView.insertItems(at: addedRowIndexPath)
+            let addedRowIndexPathCollectionView = [IndexPath(row: numberContactsInTable + 1, section: 0)]
+            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
         }
         else {
             contacts = [contact]
@@ -2588,7 +2693,8 @@ extension TripViewController {
             if sendProposalQuestionView != nil {
                 sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
             }
-            contactsCollectionView.insertItems(at: addedRowIndexPath)
+            let addedRowIndexPathCollectionView = [addedRowIndexPath[0],IndexPath(row: 1, section: 0)]
+            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
         }
         
         if sendProposalQuestionView != nil {
@@ -2617,23 +2723,84 @@ extension TripViewController {
 //MARK: all code for itinerary not in viewDidLoad
 extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     // MARK: - UICollectionViewDataSource
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if collectionView == destinationsDatesCollectionView {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            let countDestinations = (SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count
+            return countDestinations
+        }
+//        else if collectionView == contactsCollectionView
+        //This includes the user
         var numberOfContacts = 0
         if contacts != nil {
-            numberOfContacts += contacts!.count
+            numberOfContacts += contacts!.count + 1
         }
         
         return numberOfContacts
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        addressBookStore = CNContactStore()
-
-        let contactsCell = contactsCollectionView.dequeueReusableCell(withReuseIdentifier: "contactsCollectionPrototypeCell", for: indexPath) as! contactsCollectionViewCell
+        if collectionView == destinationsDatesCollectionView {
+            let destinationsDatesCell = destinationsDatesCollectionView.dequeueReusableCell(withReuseIdentifier: "destinationsDatesCollectionViewCell", for: indexPath) as! destinationsDatesCollectionViewCell
+            
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+            
+            destinationsDatesCell.destination.setTitle(destinationsForTrip[indexPath.row], for: .normal)
+            destinationsDatesCell.destination?.setTitleColor(UIColor.white, for: .normal)
+            destinationsDatesCell.destination?.titleLabel?.font = UIFont.systemFont(ofSize: 25)
+            destinationsDatesCell.destination?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+            destinationsDatesCell.destination?.layer.borderWidth = 1
+            destinationsDatesCell.destination?.layer.borderColor = UIColor.white.cgColor
+            destinationsDatesCell.destination?.titleLabel?.numberOfLines = 0
+            destinationsDatesCell.destination?.titleLabel?.textAlignment = .center
+            destinationsDatesCell.destination?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+            destinationsDatesCell.destination?.sizeToFit()
+            destinationsDatesCell.destination?.frame.size.height = 50
+            destinationsDatesCell.destination?.frame.size.width += 20
+            destinationsDatesCell.destination?.frame.origin.x = (destinationsDatesCell.frame.size.width - (destinationsDatesCell.destination?.frame.width)!) / 2
+            destinationsDatesCell.destination?.layer.cornerRadius = (destinationsDatesCell.destination?.frame.height)! / 2
+            
+            destinationsDatesCell.date?.setTitleColor(UIColor.white, for: .normal)
+            destinationsDatesCell.date?.titleLabel?.font = UIFont.systemFont(ofSize: 21)
+            destinationsDatesCell.date?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+            destinationsDatesCell.date?.layer.borderWidth = 1
+            destinationsDatesCell.date?.layer.borderColor = UIColor.white.cgColor
+            destinationsDatesCell.date?.titleLabel?.numberOfLines = 0
+            destinationsDatesCell.date?.titleLabel?.textAlignment = .center
+            destinationsDatesCell.date?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+            destinationsDatesCell.date?.sizeToFit()
+            destinationsDatesCell.date?.frame.size.height = 40
+            destinationsDatesCell.date?.frame.size.width += 20
+            destinationsDatesCell.date?.frame.origin.x = (destinationsDatesCell.frame.size.width - (destinationsDatesCell.date?.frame.width)!) / 2
+            destinationsDatesCell.date?.frame.origin.y = destinationsDatesCell.date.frame.origin.y + 35
+            destinationsDatesCell.date?.layer.cornerRadius = (destinationsDatesCell.date?.frame.height)! / 2
+            
+            return destinationsDatesCell
+        }
         
-        let contact = contacts?[indexPath.row]
+        
+        //        else if collectionView == contactsCollectionView
+        let contactsCell = contactsCollectionView.dequeueReusableCell(withReuseIdentifier: "contactsCollectionPrototypeCell", for: indexPath) as! contactsCollectionViewCell
+        if indexPath == IndexPath(item: 0, section: 0) {
+            contactsCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected")
+            contactsCell.initialsLabel.textColor = UIColor.darkGray
+            contactsCell.thumbnailImageFilter.isHidden = true
+            contactsCell.initialsLabel.isHidden = false
+            let firstInitial = "M"
+            let secondInitial = "E"
+            contactsCell.initialsLabel.text = firstInitial + secondInitial
+            
+            //Delete button
+            contactsCell.deleteButton.isHidden = true
+            // Give the delete button an index number
+            contactsCell.deleteButton.layer.setValue(indexPath.row, forKey: "index")
+            // Add an action function to the delete button
+            contactsCell.deleteButton.addTarget(self, action: #selector(self.deleteContactButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
+            return contactsCell
+        }
+//        else
+        
+        let contact = contacts?[indexPath.row - 1]
         
 //        if (contact?.imageDataAvailable)! {
 //            contactsCell.thumbnailImage.image = UIImage(data: (contact?.thumbnailImageData!)!)
@@ -2655,6 +2822,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             let firstInitial = contact?.givenName[0]
             let secondInitial = contact?.familyName[0]
             contactsCell.initialsLabel.text = firstInitial! + secondInitial!
+            contactsCell.initialsLabel.textColor = UIColor.white
 //        }
         
         //Delete button
@@ -2667,37 +2835,64 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return contactsCell
     }
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
-        let visibleCells = self.contactsCollectionView.visibleCells
-        
-        if editModeEnabled == true {
-            for cell in visibleCells {
-                let visibleCellIndexPath = contactsCollectionView.indexPath(for: cell)
-                let visibleCell = contactsCollectionView.cellForItem(at: visibleCellIndexPath!) as! contactsCollectionViewCell
-                // Shake all of the collection view cells
-                visibleCell.shakeIcons()
+        if collectionView == contactsCollectionView {
+            let visibleCells = self.contactsCollectionView.visibleCells
+            
+            if editModeEnabled == true {
+                for cell in visibleCells {
+                    let visibleCellIndexPath = contactsCollectionView.indexPath(for: cell)
+                    let visibleCell = contactsCollectionView.cellForItem(at: visibleCellIndexPath!) as! contactsCollectionViewCell
+                    // Shake all of the collection view cells
+                    visibleCell.shakeIcons()
+                }
             }
         }
     }
     // This function is fired when the collection view stop scrolling
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let visibleCells = self.contactsCollectionView.visibleCells
-        
-        if editModeEnabled == true {
-            for cell in visibleCells {
-                let visibleCellIndexPath = contactsCollectionView.indexPath(for: cell)
-                let visibleCell = contactsCollectionView.cellForItem(at: visibleCellIndexPath!) as! contactsCollectionViewCell
-                // Shake all of the collection view cells
-                visibleCell.shakeIcons()
+        if collectionView == contactsCollectionView {
+            
+            let visibleCells = self.contactsCollectionView.visibleCells
+            
+            if editModeEnabled == true {
+                for cell in visibleCells {
+                    let visibleCellIndexPath = contactsCollectionView.indexPath(for: cell)
+                    let visibleCell = contactsCollectionView.cellForItem(at: visibleCellIndexPath!) as! contactsCollectionViewCell
+                    // Shake all of the collection view cells
+                    visibleCell.shakeIcons()
+                }
             }
         }
     }
-    
-    
+    // Item SELECTED: update border color and save data when
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == contactsCollectionView {
+            // Change border color to grey
+            let selectedCell = contactsCollectionView.cellForItem(at: indexPath) as! contactsCollectionViewCell
+            selectedCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected")
+            selectedCell.initialsLabel.textColor = UIColor.darkGray
+            //SET DATA MODEL TO SHOW TRAVEL AND PLACE TO STAY INFO FOR THIS CONTACT
+            
+            for item in 0 ... (contacts?.count)! {
+                let cell = contactsCollectionView.cellForItem(at: IndexPath(item: item, section: 0)) as! contactsCollectionViewCell
+                if cell.initialsLabel.textColor == UIColor.darkGray && IndexPath(item: item, section: 0) != indexPath {
+                    cell.thumbnailImage.image = UIImage(named: "no_contact_image")
+                    cell.initialsLabel.textColor = UIColor.white
+                }
+            }
+        }
+    }
+
     // MARK: - UICollectionViewFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let picDimension = 55
-        return CGSize(width: picDimension, height: picDimension)
+        if collectionView == destinationsDatesCollectionView {
+            return CGSize(width: 200, height: 128)
+        }
+        
+        //        else if collectionView == contactsCollectionView {
+            let picDimension = 55
+            return CGSize(width: picDimension, height: picDimension)
+//        }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
@@ -2708,7 +2903,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
     // COPY for Contacts
     func deleteContactButtonTouchedUpInside(sender:UIButton) {
         let i: Int = (sender.layer.value(forKey: "index")) as! Int
-        deleteContact(indexPath: IndexPath(row:i, section: 0))
+        deleteContact(indexPath: IndexPath(row: i, section: 0))
     }
     func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
         if gestureReconizer.state == UIGestureRecognizerState.began {
@@ -2718,16 +2913,19 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             for item in self.contactsCollectionView!.visibleCells as! [contactsCollectionViewCell] {
                 let indexPath: IndexPath = self.contactsCollectionView!.indexPath(for: item as contactsCollectionViewCell)!
-                let cell: contactsCollectionViewCell = self.contactsCollectionView!.cellForItem(at: indexPath) as! contactsCollectionViewCell!
-                cell.deleteButton.isHidden = false
+                if indexPath != IndexPath(row: 0, section: 0) {
+                    let cell: contactsCollectionViewCell = self.contactsCollectionView!.cellForItem(at: indexPath) as! contactsCollectionViewCell!
+                    cell.deleteButton.isHidden = false
                 cell.shakeIcons()
+                }
             }
         }
     }
     func deleteContact(indexPath: IndexPath) {
-        contacts?.remove(at: indexPath.row)
-        contactIDs?.remove(at: indexPath.row)
-        contactPhoneNumbers.remove(at: indexPath.row)
+        
+        contacts?.remove(at: indexPath.row - 1)
+        contactIDs?.remove(at: indexPath.row - 1)
+        contactPhoneNumbers.remove(at: indexPath.row - 1)
         
         //Update trip preferences dictionary
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -2737,7 +2935,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         //Delete rows in sendProposalQuestionView
-        sendProposalQuestionView?.contactsTableView?.deleteRows(at: [indexPath], with: .left)
+        sendProposalQuestionView?.contactsTableView?.deleteRows(at: [IndexPath(row: indexPath.row - 1, section: 0)], with: .left)
         if contacts?.count == 0 || contacts == nil {
             sendProposalQuestionView?.button2?.isHidden = true
         }
@@ -2752,7 +2950,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         if contacts?.count == 0 || contacts == nil {
             dismissDeleteContactsMode()
         }
-        
     }
 
     //    func leaveDeleteContactsMode(touch: UITapGestureRecognizer) {
