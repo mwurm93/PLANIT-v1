@@ -51,18 +51,16 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-        var indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-        if indexOfDestinationBeingPlanned == 0 {
-            if destinationsForTrip.count == 0 {
-                destinationsForTrip.append((cellButton.titleLabel?.text)!)
-            } else {
-                destinationsForTrip[0] = (cellButton.titleLabel?.text)!
-            }
-        } else {
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        if indexOfDestinationBeingPlanned == destinationsForTrip.count {
+            //write new destination
             destinationsForTrip.append((cellButton.titleLabel?.text)!)
-            indexOfDestinationBeingPlanned = destinationsForTrip.count - 1
+        } else if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+            //over write
+            destinationsForTrip[indexOfDestinationBeingPlanned] = (cellButton.titleLabel?.text)!
+        } else if indexOfDestinationBeingPlanned > destinationsForTrip.count {
+            fatalError("indexOfDestinationBeingPlanned > destinationsForTrip.count in destinationsSwipedRightTableViewCell.swift")
         }
-        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = indexOfDestinationBeingPlanned
         SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         

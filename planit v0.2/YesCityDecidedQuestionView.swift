@@ -141,18 +141,25 @@ extension YesCityDecidedQuestionView: GMSAutocompleteResultsViewControllerDelega
         searchController?.isActive = false
         // Do something with the selected place.
         
+        //Display selected place in searchBar
         searchController?.searchBar.text = place.name
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-        if destinationsForTrip.count == 0 {
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        if indexOfDestinationBeingPlanned == destinationsForTrip.count {
+            //write new destination
             destinationsForTrip.append((searchController?.searchBar.text)!)
-        } else {
-            destinationsForTrip[0] = (searchController?.searchBar.text)!
+        } else if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+            //over write
+            destinationsForTrip[indexOfDestinationBeingPlanned] = (searchController?.searchBar.text)!
+        } else if indexOfDestinationBeingPlanned > destinationsForTrip.count {
+            fatalError("indexOfDestinationBeingPlanned > destinationsForTrip.count in destinationsSwipedRightTableViewCell.swift")
         }
         SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
+        //Post notification
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "destinationDecidedEntered"), object: nil)
     }
     

@@ -475,8 +475,6 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
     
     // MARK: Destination options tableview
     func handleDestinationButtonSelection(){
-        let test = destinationsSwipedRight.count - 1
-        
         for buttonRow in 0 ... destinationsSwipedRight.count - 1 {
             let cell = destinationsSwipedRightTableView?.cellForRow(at: IndexPath(row: buttonRow, section: 0)) as! destinationsSwipedRightTableViewCell
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -574,16 +572,6 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
                 cell.cellButton.layer.borderWidth = 1
             }
         }
-        
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-        if destinationsForTrip.count == 0 {
-        } else {
-            destinationsForTrip.remove(at: 0)            
-        }
-        SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
-        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-        
         questionLabel?.isHidden = true
         button3?.isHidden = true
         button1?.isHidden = false
