@@ -55,7 +55,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         let bounds = UIScreen.main.bounds
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
-        calendarView?.frame = CGRect(x: 13, y: 100, width: 350, height: 450)
+        calendarView?.frame = CGRect(x: 13, y: 100, width: 350, height: 400)
         calendarView?.cellSize = 50
         
     }

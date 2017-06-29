@@ -324,9 +324,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         // MARK: Register notifications
         NotificationCenter.default.addObserver(self, selector: #selector(spawnWhereTravellingFromQuestionView), name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnDecidedOnCityQuestionView), name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionViewEvenIfNonNil), name: NSNotification.Name(rawValue: "destinationDecidedEntered"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(spawnPlanIdeaAsDestinationQuestionView), name: NSNotification.Name(rawValue: "destinationIdeaEntered"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionViewEvenIfNonNil), name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionView), name: NSNotification.Name(rawValue: "destinationDecidedEntered"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(noCityDecidedAnyIdeasQuestionView_ideaEntered), name: NSNotification.Name(rawValue: "destinationIdeaEntered"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionView), name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(animateInSubview_Departure), name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Departure"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(animateOutSubview), name: NSNotification.Name(rawValue: "animateOutDatePickingSubview"), object: nil)
         
@@ -558,6 +558,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.view.addSubview(floaty!)
         floaty?.isHidden = true
     }
+    
     
     func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
         
@@ -837,10 +838,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         for subviewTag in subviewTags {
             self.functionsToLoadSubviewsDictionary[subviewTag]!()
         }
-//        getCurrentSubview()
-//        let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
-//        let currentSubview = SavedPreferencesForTrip2["currentAssistantSubview"] as! Int
-//        self.functionsToLoadSubviewsDictionary[currentSubview]!()
     }
     func updateProgress() {
         var currentSubviewsInScrollContentView = [Int]()
@@ -891,6 +888,27 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.scrollView.setContentOffset(topOfSubview!, animated: false)
         }
     }
+    func alignSubviews() {
+        for i in 1 ... scrollContentView.subviews.count - 1 {
+            let higherSubviewBottomY = scrollContentView.subviews[i - 1].frame.maxY
+            let lowerSubviewTopY = scrollContentView.subviews[i].frame.minY
+            let differenceToAdjustLowerSubviewBy = higherSubviewBottomY - lowerSubviewTopY
+            if differenceToAdjustLowerSubviewBy != 0 {
+                scrollContentView.subviews[i].frame.origin.y += differenceToAdjustLowerSubviewBy
+            }
+        }
+        updateHeightOfScrollView()
+        updateProgress()
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     func spawnUserNameQuestionView() {
         userNameQuestionView = Bundle.main.loadNibNamed("UserNameQuestionView", owner: self, options: nil)?.first! as? UserNameQuestionView
@@ -956,7 +974,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             //Load next question
             whereTravellingFromQuestionView = Bundle.main.loadNibNamed("WhereTravellingFromQuestionView", owner: self, options: nil)?.first! as? WhereTravellingFromQuestionView
             whereTravellingFromQuestionView?.tag = 0
-            self.scrollContentView.addSubview(whereTravellingFromQuestionView!)
+            self.scrollContentView.insertSubview(whereTravellingFromQuestionView!, aboveSubview: datesPickedOutCalendarView!)
             let bounds = UIScreen.main.bounds
             whereTravellingFromQuestionView?.button1?.addTarget(self, action: #selector(self.spawnDecidedOnCityQuestionView), for: UIControlEvents.touchUpInside)
             self.whereTravellingFromQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
@@ -973,7 +991,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func spawnDatesPickedOutCalendarView() {
         self.view.endEditing(true)
-        if datesPickedOutCalendarView == nil {
+        if datesPickedOutCalendarView == nil  {
             //handle floaty
             scrolledToDatesItem()
             disableDestinationItem()
@@ -990,7 +1008,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             //Load next question
             datesPickedOutCalendarView = Bundle.main.loadNibNamed("DatesPickedOutCalendarView", owner: self, options: nil)?.first! as? DatesPickedOutCalendarView
             datesPickedOutCalendarView?.tag = 1
-            self.scrollContentView.addSubview(datesPickedOutCalendarView!)
+            self.scrollContentView.insertSubview(datesPickedOutCalendarView!, aboveSubview: tripNameQuestionView!)
             let bounds = UIScreen.main.bounds
             self.datesPickedOutCalendarView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: datesPickedOutCalendarView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutCalendarView?.frame.height)!)
@@ -1017,7 +1035,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             //Load next question
             decidedOnCityToVisitQuestionView = Bundle.main.loadNibNamed("DecidedOnCityToVisitQuestionView", owner: self, options: nil)?.first! as? DecidedOnCityToVisitQuestionView
             decidedOnCityToVisitQuestionView?.tag = 2
-            self.scrollContentView.addSubview(decidedOnCityToVisitQuestionView!)
+            self.scrollContentView.insertSubview(decidedOnCityToVisitQuestionView!, aboveSubview: whereTravellingFromQuestionView!)
             let bounds = UIScreen.main.bounds
             decidedOnCityToVisitQuestionView?.button1?.addTarget(self, action: #selector(self.decidedOnCityToVisitQuestion_Yes(sender:)), for: UIControlEvents.touchUpInside)
             decidedOnCityToVisitQuestionView?.button2?.addTarget(self, action: #selector(self.decidedOnCityToVisitQuestion_No(sender:)), for: UIControlEvents.touchUpInside)
@@ -1038,21 +1056,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if noCityDecidedAnyIdeasQuestionView == nil {
             //Load next question
             noCityDecidedAnyIdeasQuestionView = Bundle.main.loadNibNamed("NoCityDecidedAnyIdeasQuestionView", owner: self, options: nil)?.first! as? NoCityDecidedAnyIdeasQuestionView
-            self.scrollContentView.addSubview(noCityDecidedAnyIdeasQuestionView!)
+            self.scrollContentView.insertSubview(noCityDecidedAnyIdeasQuestionView!, aboveSubview: decidedOnCityToVisitQuestionView!)
             noCityDecidedAnyIdeasQuestionView?.tag = 3
             let bounds = UIScreen.main.bounds
             noCityDecidedAnyIdeasQuestionView?.button?.addTarget(self, action: #selector(self.noCityDecidedAnyIdeasQuestionView_noIdeas(sender:)), for: UIControlEvents.touchUpInside)
-            self.noCityDecidedAnyIdeasQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            self.noCityDecidedAnyIdeasQuestionView!.frame = CGRect(x: 0, y: (decidedOnCityToVisitQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: noCityDecidedAnyIdeasQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (noCityDecidedAnyIdeasQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        
-        updateHeightOfScrollView()
-        scrollDownToTopSubview()
-        updateProgress()
-        } else {
-            scrollToSubviewWithTag(tag: 3)
         }
-
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 3)
     }
     
     func spawnPlanIdeaAsDestinationQuestionView() {
@@ -1063,67 +1076,58 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             if noCityDecidedAnyIdeasQuestionView?.searchController?.searchBar.text != nil && noCityDecidedAnyIdeasQuestionView?.searchController?.searchBar.text != "" {
                 planTripToIdeaQuestionView?.questionLabel?.text = "Do you want to plan\nyour trip to \((noCityDecidedAnyIdeasQuestionView?.searchController?.searchBar.text!)!)?"
             }
-            self.scrollContentView.addSubview(planTripToIdeaQuestionView!)
+            self.scrollContentView.insertSubview(planTripToIdeaQuestionView!, aboveSubview: noCityDecidedAnyIdeasQuestionView!)
             let bounds = UIScreen.main.bounds
             planTripToIdeaQuestionView?.button1?.addTarget(self, action: #selector(self.planTripToIdeaQuestionView_Yes(sender:)), for: UIControlEvents.touchUpInside)
             planTripToIdeaQuestionView?.button2?.addTarget(self, action: #selector(self.planTripToIdeaQuestionView_No(sender:)), for: UIControlEvents.touchUpInside)
-            self.planTripToIdeaQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            self.planTripToIdeaQuestionView!.frame = CGRect(x: 0, y: (noCityDecidedAnyIdeasQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: planTripToIdeaQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (planTripToIdeaQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        
-        updateHeightOfScrollView()
-        scrollDownToTopSubview()
-        updateProgress()
-        } else {
-            scrollToSubviewWithTag(tag: 4)
         }
-
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 4)
     }
     func spawnWhatTypeOfTripQuestionView() {
         if whatTypeOfTripQuestionView == nil {
             //Load next question
             whatTypeOfTripQuestionView = Bundle.main.loadNibNamed("WhatTypeOfTripQuestionView", owner: self, options: nil)?.first! as? WhatTypeOfTripQuestionView
             whatTypeOfTripQuestionView?.tag = 5
-            self.scrollContentView.addSubview(whatTypeOfTripQuestionView!)
             let bounds = UIScreen.main.bounds
+            if planTripToIdeaQuestionView != nil {
+                self.scrollContentView.insertSubview(whatTypeOfTripQuestionView!, aboveSubview: planTripToIdeaQuestionView!)
+                self.whatTypeOfTripQuestionView!.frame = CGRect(x: 0, y: (planTripToIdeaQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            } else {
+                self.scrollContentView.insertSubview(whatTypeOfTripQuestionView!, aboveSubview: noCityDecidedAnyIdeasQuestionView!)
+                self.whatTypeOfTripQuestionView!.frame = CGRect(x: 0, y: (noCityDecidedAnyIdeasQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            }
             whatTypeOfTripQuestionView?.button1?.addTarget(self, action: #selector(self.whatTypeOfTripQuestionView_beaches(sender:)), for: UIControlEvents.touchUpInside)
             whatTypeOfTripQuestionView?.button2?.addTarget(self, action: #selector(self.whatTypeOfTripQuestionView_natureAdventuring(sender:)), for: UIControlEvents.touchUpInside)
             whatTypeOfTripQuestionView?.button3?.addTarget(self, action: #selector(self.whatTypeOfTripQuestionView_winterSports(sender:)), for: UIControlEvents.touchUpInside)
             whatTypeOfTripQuestionView?.button4?.addTarget(self, action: #selector(self.whatTypeOfTripQuestionView_partying(sender:)), for: UIControlEvents.touchUpInside)
             whatTypeOfTripQuestionView?.button5?.addTarget(self, action: #selector(self.whatTypeOfTripQuestionView_foodieHavens(sender:)), for: UIControlEvents.touchUpInside)
-            self.whatTypeOfTripQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: whatTypeOfTripQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whatTypeOfTripQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        
-        updateHeightOfScrollView()
-        scrollDownToTopSubview()
-        updateProgress()
-        } else {
-            scrollToSubviewWithTag(tag: 5)
         }
-
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 5)
     }
     func spawnHowFarAwayQuestion() {
         if howFarAwayQuestionView == nil {
             //Load next question
             howFarAwayQuestionView = Bundle.main.loadNibNamed("HowFarAwayQuestionView", owner: self, options: nil)?.first! as? HowFarAwayQuestionView
             howFarAwayQuestionView?.tag = 6
-            self.scrollContentView.addSubview(howFarAwayQuestionView!)
+            self.scrollContentView.insertSubview(howFarAwayQuestionView!, aboveSubview: whatTypeOfTripQuestionView!)
             let bounds = UIScreen.main.bounds
             howFarAwayQuestionView?.button1?.addTarget(self, action: #selector(self.howFarAwayQuestionView_shortDrive(sender:)), for: UIControlEvents.touchUpInside)
             howFarAwayQuestionView?.button2?.addTarget(self, action: #selector(self.howFarAwayQuestionView_shortFlight(sender:)), for: UIControlEvents.touchUpInside)
             howFarAwayQuestionView?.button3?.addTarget(self, action: #selector(self.howFarAwayQuestionView_domestic(sender:)), for: UIControlEvents.touchUpInside)
             howFarAwayQuestionView?.button4?.addTarget(self, action: #selector(self.howFarAwayQuestionView_international(sender:)), for: UIControlEvents.touchUpInside)
-            self.howFarAwayQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            self.howFarAwayQuestionView!.frame = CGRect(x: 0, y: (whatTypeOfTripQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: howFarAwayQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howFarAwayQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        
-        updateHeightOfScrollView()
-        scrollDownToTopSubview()
-        updateProgress()
-        } else {
-            scrollToSubviewWithTag(tag: 6)
         }
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 6)
     }
 
     func spawnDestinationOptionsCardView() {
@@ -1131,35 +1135,37 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             //Load next question
             destinationOptionsCardView = Bundle.main.loadNibNamed("DestinationOptionsCardView", owner: self, options: nil)?.first! as? DestinationOptionsCardView
             destinationOptionsCardView?.tag = 7
-            self.scrollContentView.addSubview(destinationOptionsCardView!)
+            self.scrollContentView.insertSubview(destinationOptionsCardView!, aboveSubview: howFarAwayQuestionView!)
             let bounds = UIScreen.main.bounds
 //            destinationOptionsCardView?.button1?.addTarget(self, action: #selector(self.destinationOptionsCardView_x(sender:)), for: UIControlEvents.touchUpInside)
 //            destinationOptionsCardView?.button2?.addTarget(self, action: #selector(self.destinationOptionsCardView_heart(sender:)), for: UIControlEvents.touchUpInside)
-            self.destinationOptionsCardView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            self.destinationOptionsCardView!.frame = CGRect(x: 0, y: (howFarAwayQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: destinationOptionsCardView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (destinationOptionsCardView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        
-        updateHeightOfScrollView()
-        scrollDownToTopSubview()
-        updateProgress()
-        } else {
-            scrollToSubviewWithTag(tag: 7)
         }
-
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 7)
     }
     func spawnAddAnotherDestinationQuestionView() {
         if addAnotherDestinationQuestionView == nil {
             //Load next question
             addAnotherDestinationQuestionView = Bundle.main.loadNibNamed("AddAnotherDestinationQuestionView", owner: self, options: nil)?.first! as? AddAnotherDestinationQuestionView
             addAnotherDestinationQuestionView?.tag = 8
-            self.scrollContentView.addSubview(addAnotherDestinationQuestionView!)
             let bounds = UIScreen.main.bounds
+            if yesCityDecidedQuestionView != nil {
+                self.scrollContentView.insertSubview(addAnotherDestinationQuestionView!, aboveSubview: yesCityDecidedQuestionView!)
+                self.addAnotherDestinationQuestionView!.frame = CGRect(x: 0, y: (yesCityDecidedQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            } else if planTripToIdeaQuestionView != nil && destinationOptionsCardView == nil {
+                self.scrollContentView.insertSubview(addAnotherDestinationQuestionView!, aboveSubview: planTripToIdeaQuestionView!)
+                self.addAnotherDestinationQuestionView!.frame = CGRect(x: 0, y: (planTripToIdeaQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            } else {
+                self.scrollContentView.insertSubview(addAnotherDestinationQuestionView!, aboveSubview: destinationOptionsCardView!)
+                self.addAnotherDestinationQuestionView!.frame = CGRect(x: 0, y: (destinationOptionsCardView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            }
             addAnotherDestinationQuestionView?.button1?.addTarget(self, action: #selector(self.addAnotherDestinationQuestionView_justDestination(sender:)), for: UIControlEvents.touchUpInside)
-            self.addAnotherDestinationQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: addAnotherDestinationQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (addAnotherDestinationQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
-        updateHeightOfScrollView()
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
         if destinationsForTrip.count != 0 {
@@ -1167,39 +1173,30 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             addAnotherDestinationQuestionView?.button1?.setTitle("Yep, just \(destinationsForTrip[0])", for: .normal)
             addAnotherDestinationQuestionView?.button1?.setTitle("Yep, just \(destinationsForTrip[0])", for: .highlighted)
             addAnotherDestinationQuestionView?.button1?.setTitle("Yep, just \(destinationsForTrip[0])", for: .selected)
-        
-        scrollDownToTopSubview()
-        updateProgress()
-        } else {
-            scrollToSubviewWithTag(tag: 8)
         }
-
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 8)
     }
     func spawnYesCityDecidedQuestionView() {
         if yesCityDecidedQuestionView == nil {
             //Load next question
             yesCityDecidedQuestionView = Bundle.main.loadNibNamed("YesCityDecidedQuestionView", owner: self, options: nil)?.first! as? YesCityDecidedQuestionView
-            self.scrollContentView.addSubview(yesCityDecidedQuestionView!)
+            self.scrollContentView.insertSubview(yesCityDecidedQuestionView!, aboveSubview: decidedOnCityToVisitQuestionView!)
             yesCityDecidedQuestionView?.tag = 9
             let bounds = UIScreen.main.bounds
             yesCityDecidedQuestionView?.button?.addTarget(self, action: #selector(self.yesCityDecidedQuestionView_actuallyDiscoverMoreOptions(sender:)), for: UIControlEvents.touchUpInside)
-            self.yesCityDecidedQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            self.yesCityDecidedQuestionView!.frame = CGRect(x: 0, y: (decidedOnCityToVisitQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: yesCityDecidedQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (yesCityDecidedQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        
-        updateHeightOfScrollView()
-        scrollDownToTopSubview()
-        updateProgress()
-        } else {
-            scrollToSubviewWithTag(tag: 9)
         }
-
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 9)
     }
     func spawnHowDoYouWantToGetThereQuestionView() {
         if howDoYouWantToGetThereQuestionView == nil {
             //Load next question
             howDoYouWantToGetThereQuestionView = Bundle.main.loadNibNamed("HowDoYouWantToGetThereQuestionView", owner: self, options: nil)?.first! as? HowDoYouWantToGetThereQuestionView
-            self.scrollContentView.addSubview(howDoYouWantToGetThereQuestionView!)
+            self.scrollContentView.insertSubview(howDoYouWantToGetThereQuestionView!, aboveSubview: addAnotherDestinationQuestionView!)
             howDoYouWantToGetThereQuestionView?.tag = 10
             let bounds = UIScreen.main.bounds
             howDoYouWantToGetThereQuestionView?.button1?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_fly(sender:)), for: UIControlEvents.touchUpInside)
@@ -1207,23 +1204,18 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             howDoYouWantToGetThereQuestionView?.button3?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_busTrainOther(sender:)), for: UIControlEvents.touchUpInside)
             howDoYouWantToGetThereQuestionView?.button4?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_iDontKnowHelpMe(sender:)), for: UIControlEvents.touchUpInside)
             howDoYouWantToGetThereQuestionView?.button5?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:)), for: UIControlEvents.touchUpInside)
-            self.howDoYouWantToGetThereQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            self.howDoYouWantToGetThereQuestionView!.frame = CGRect(x: 0, y: (addAnotherDestinationQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: howDoYouWantToGetThereQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howDoYouWantToGetThereQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-        
-        updateHeightOfScrollView()
-        scrollDownToTopSubview()
-        updateProgress()
-        } else {
-            scrollToSubviewWithTag(tag: 10)
         }
- 
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 10)
     }
     func spawnFlightSearchQuestionView(){
         if flightSearchQuestionView == nil {
             //Load next question
             flightSearchQuestionView = Bundle.main.loadNibNamed("FlightSearchQuestionView", owner: self, options: nil)?.first! as? FlightSearchQuestionView
-            self.scrollContentView.addSubview(flightSearchQuestionView!)
+            self.scrollContentView.insertSubview(flightSearchQuestionView!, aboveSubview: howDoYouWantToGetThereQuestionView!)
             flightSearchQuestionView?.tag = 11
             let bounds = UIScreen.main.bounds
             flightSearchQuestionView?.searchButton?.addTarget(self, action: #selector(self.searchFlights(sender:)), for: UIControlEvents.touchUpInside)
@@ -1294,7 +1286,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if doYouNeedARentalCarQuestionView == nil {
             //Load next question
             doYouNeedARentalCarQuestionView = Bundle.main.loadNibNamed("DoYouNeedARentalCarQuestionView", owner: self, options: nil)?.first! as? DoYouNeedARentalCarQuestionView
-            self.scrollContentView.addSubview(doYouNeedARentalCarQuestionView!)
+            if flightSearchQuestionView == nil && busTrainOtherQuestionView == nil {
+                self.scrollContentView.insertSubview(doYouNeedARentalCarQuestionView!, aboveSubview: howDoYouWantToGetThereQuestionView!)
+            } else if flightSearchQuestionView != nil && busTrainOtherQuestionView == nil {
+                self.scrollContentView.insertSubview(doYouNeedARentalCarQuestionView!, aboveSubview: flightSearchQuestionView!)
+
+            } else if flightSearchQuestionView == nil && busTrainOtherQuestionView != nil {
+                self.scrollContentView.insertSubview(doYouNeedARentalCarQuestionView!, aboveSubview: busTrainOtherQuestionView!)
+            }
             doYouNeedARentalCarQuestionView?.tag = 14
             let bounds = UIScreen.main.bounds
             doYouNeedARentalCarQuestionView?.button1?.addTarget(self, action: #selector(self.doYouNeedARentalCarQuestionView_yes(sender:)), for: UIControlEvents.touchUpInside)
@@ -1315,7 +1314,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if carRentalSearchQuestionView == nil {
             //Load next question
             carRentalSearchQuestionView = Bundle.main.loadNibNamed("CarRentalSearchQuestionView", owner: self, options: nil)?.first! as? CarRentalSearchQuestionView
-            self.scrollContentView.addSubview(carRentalSearchQuestionView!)
+            self.scrollContentView.insertSubview(carRentalSearchQuestionView!, aboveSubview: doYouNeedARentalCarQuestionView!)
             carRentalSearchQuestionView?.tag = 15
             let bounds = UIScreen.main.bounds
             carRentalSearchQuestionView?.searchButton?.addTarget(self, action: #selector(self.searchRentalCars(sender:)), for: UIControlEvents.touchUpInside)
@@ -1366,7 +1365,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if doYouKnowWhereYouWillBeStayingQuestionView == nil {
             //Load next question
             doYouKnowWhereYouWillBeStayingQuestionView = Bundle.main.loadNibNamed("DoYouKnowWhereYouWillBeStayingQuestionView", owner: self, options: nil)?.first! as? DoYouKnowWhereYouWillBeStayingQuestionView
-            self.scrollContentView.addSubview(doYouKnowWhereYouWillBeStayingQuestionView!)
+            if flightSearchQuestionView == nil && busTrainOtherQuestionView == nil {
+                self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: aboutWhatTimeWillYouStartDrivingQuestionView!)
+            } else if flightSearchQuestionView != nil || busTrainOtherQuestionView != nil {
+                if carRentalSearchQuestionView == nil {
+                    self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: doYouNeedARentalCarQuestionView!)
+                } else {
+                    self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: carRentalSearchQuestionView!)
+                }
+            }
             doYouKnowWhereYouWillBeStayingQuestionView?.tag = 18
             let bounds = UIScreen.main.bounds
             doYouKnowWhereYouWillBeStayingQuestionView?.button1?.addTarget(self, action: #selector(self.doYouKnowWhereYouWillBeStaying_yes(sender:)), for: UIControlEvents.touchUpInside)
@@ -1388,8 +1395,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if aboutWhatTimeWillYouStartDrivingQuestionView == nil {
             //Load next question
             aboutWhatTimeWillYouStartDrivingQuestionView = Bundle.main.loadNibNamed("AboutWhatTimeWillYouStartDrivingQuestionView", owner: self, options: nil)?.first! as? AboutWhatTimeWillYouStartDrivingQuestionView
-            self.scrollContentView.addSubview(aboutWhatTimeWillYouStartDrivingQuestionView!)
-            aboutWhatTimeWillYouStartDrivingQuestionView?.tag = 19
+            if carRentalSearchQuestionView == nil {
+                self.scrollContentView.insertSubview(aboutWhatTimeWillYouStartDrivingQuestionView!, aboveSubview: doYouNeedARentalCarQuestionView!)
+            } else {
+                self.scrollContentView.insertSubview(aboutWhatTimeWillYouStartDrivingQuestionView!, aboveSubview: carRentalSearchQuestionView!)
+            }
+                aboutWhatTimeWillYouStartDrivingQuestionView?.tag = 19
             let bounds = UIScreen.main.bounds
             aboutWhatTimeWillYouStartDrivingQuestionView?.button1?.addTarget(self, action: #selector(self.notSureYetWhenStartDriving(sender:)), for: UIControlEvents.touchUpInside)
             aboutWhatTimeWillYouStartDrivingQuestionView?.button2?.addTarget(self, action: #selector(self.timeChosenWhenStartDriving(sender:)), for: UIControlEvents.touchUpInside)
@@ -1409,7 +1420,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if busTrainOtherQuestionView == nil {
             //Load next question
             busTrainOtherQuestionView = Bundle.main.loadNibNamed("BusTrainOtherQuestionView", owner: self, options: nil)?.first! as? BusTrainOtherQuestionView
-            self.scrollContentView.addSubview(busTrainOtherQuestionView!)
+            self.scrollContentView.insertSubview(busTrainOtherQuestionView!, aboveSubview: howDoYouWantToGetThereQuestionView!)
             busTrainOtherQuestionView?.tag = 20
             let bounds = UIScreen.main.bounds
             busTrainOtherQuestionView?.button1?.addTarget(self, action: #selector(self.busTrainOtherTravelPlans_done(sender:)), for: UIControlEvents.touchUpInside)
@@ -1431,7 +1442,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if idkHowToGetThereQuestionView == nil {
             //Load next question
             idkHowToGetThereQuestionView = Bundle.main.loadNibNamed("idkHowToGetThereQuestionView", owner: self, options: nil)?.first! as? idkHowToGetThereQuestionView
-            self.scrollContentView.addSubview(idkHowToGetThereQuestionView!)
+            self.scrollContentView.insertSubview(idkHowToGetThereQuestionView!, aboveSubview: howDoYouWantToGetThereQuestionView!)
             idkHowToGetThereQuestionView?.tag = 21
             let bounds = UIScreen.main.bounds
             idkHowToGetThereQuestionView?.button1?.addTarget(self, action: #selector(self.idkHowToGetThere_readyToPlan(sender:)), for: UIControlEvents.touchUpInside)
@@ -1450,7 +1461,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if whatTypeOfPlaceToStayQuestionView == nil {
             //Load next question
             whatTypeOfPlaceToStayQuestionView = Bundle.main.loadNibNamed("WhatTypeOfPlaceToStayQuestionView", owner: self, options: nil)?.first! as? WhatTypeOfPlaceToStayQuestionView
-            self.scrollContentView.addSubview(whatTypeOfPlaceToStayQuestionView!)
+            self.scrollContentView.insertSubview(whatTypeOfPlaceToStayQuestionView!, aboveSubview: doYouKnowWhereYouWillBeStayingQuestionView!)
             whatTypeOfPlaceToStayQuestionView?.tag = 22
             let bounds = UIScreen.main.bounds
             whatTypeOfPlaceToStayQuestionView?.button1?.addTarget(self, action: #selector(self.whatTypeOfPlaceToStayQuestionView_hotel(sender:)), for: UIControlEvents.touchUpInside)
@@ -1472,7 +1483,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if hotelSearchQuestionView == nil {
             //Load next question
             hotelSearchQuestionView = Bundle.main.loadNibNamed("HotelSearchQuestionView", owner: self, options: nil)?.first! as? HotelSearchQuestionView
-            self.scrollContentView.addSubview(hotelSearchQuestionView!)
+            self.scrollContentView.insertSubview(hotelSearchQuestionView!, aboveSubview: whatTypeOfPlaceToStayQuestionView!)
             hotelSearchQuestionView?.tag = 23
             let bounds = UIScreen.main.bounds
             hotelSearchQuestionView?.searchButton?.addTarget(self, action: #selector(self.hotelSearchQuestionView_searchButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
@@ -1493,7 +1504,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if shortTermRentalSearchQuestionView == nil {
             //Load next question
             shortTermRentalSearchQuestionView = Bundle.main.loadNibNamed("ShortTermRentalSearchQuestionView", owner: self, options: nil)?.first! as? ShortTermRentalSearchQuestionView
-            self.scrollContentView.addSubview(shortTermRentalSearchQuestionView!)
+            self.scrollContentView.insertSubview(shortTermRentalSearchQuestionView!, aboveSubview: whatTypeOfPlaceToStayQuestionView!)
             shortTermRentalSearchQuestionView?.tag = 24
             let bounds = UIScreen.main.bounds
             shortTermRentalSearchQuestionView?.button1?.addTarget(self, action: #selector(self.shortTermRentalSearchQuestionView_done(sender:)), for: UIControlEvents.touchUpInside)
@@ -1514,7 +1525,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if stayWithSomeoneIKnowQuestionView == nil {
             //Load next question
             stayWithSomeoneIKnowQuestionView = Bundle.main.loadNibNamed("StayWithSomeoneIKnowQuestionView", owner: self, options: nil)?.first! as? StayWithSomeoneIKnowQuestionView
-            self.scrollContentView.addSubview(stayWithSomeoneIKnowQuestionView!)
+            self.scrollContentView.insertSubview(stayWithSomeoneIKnowQuestionView!, aboveSubview: whatTypeOfPlaceToStayQuestionView!)
             stayWithSomeoneIKnowQuestionView?.tag = 25
             let bounds = UIScreen.main.bounds
             stayWithSomeoneIKnowQuestionView?.button1?.addTarget(self, action: #selector(self.stayWithSomeoneIKnowQuestionView_done(sender:)), for: UIControlEvents.touchUpInside)
@@ -1569,7 +1580,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if placeForGroupOrJustYouQuestionView == nil {
             //Load next question
             placeForGroupOrJustYouQuestionView = Bundle.main.loadNibNamed("PlaceForGroupOrJustYouQuestionView", owner: self, options: nil)?.first! as? PlaceForGroupOrJustYouQuestionView
-            self.scrollContentView.addSubview(placeForGroupOrJustYouQuestionView!)
+            if hotelSearchQuestionView != nil {
+                self.scrollContentView.insertSubview(placeForGroupOrJustYouQuestionView!, aboveSubview: hotelSearchQuestionView!)
+            } else if stayWithSomeoneIKnowQuestionView != nil {
+                self.scrollContentView.insertSubview(placeForGroupOrJustYouQuestionView!, aboveSubview: stayWithSomeoneIKnowQuestionView!)
+            } else if shortTermRentalSearchQuestionView != nil {
+                self.scrollContentView.insertSubview(placeForGroupOrJustYouQuestionView!, aboveSubview: shortTermRentalSearchQuestionView!)
+            }
             placeForGroupOrJustYouQuestionView?.tag = 28
             let bounds = UIScreen.main.bounds
             placeForGroupOrJustYouQuestionView?.button1?.addTarget(self, action: #selector(self.placeForGroupOrJustYouQuestionView_entireGroup(sender:)), for: UIControlEvents.touchUpInside)
@@ -1591,7 +1608,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if sendProposalQuestionView == nil {
             //Load next question
             sendProposalQuestionView = Bundle.main.loadNibNamed("SendProposalQuestionView", owner: self, options: nil)?.first! as? SendProposalQuestionView
-            self.scrollContentView.addSubview(sendProposalQuestionView!)
+            self.scrollContentView.insertSubview(sendProposalQuestionView!, aboveSubview: placeForGroupOrJustYouQuestionView!)
             sendProposalQuestionView?.tag = 29
             let bounds = UIScreen.main.bounds
             self.sendProposalQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
@@ -1765,29 +1782,103 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func decidedOnCityToVisitQuestion_No(sender:UIButton) {
         if sender.isSelected == true {
+            if yesCityDecidedQuestionView != nil {
+                yesCityDecidedQuestionView?.removeFromSuperview()
+                yesCityDecidedQuestionView = nil
+                if addAnotherDestinationQuestionView != nil {
+                    addAnotherDestinationQuestionView?.removeFromSuperview()
+                    addAnotherDestinationQuestionView = nil
+                }
+                alignSubviews()
+            }
             spawnNoCityDecidedAnyIdeasQuestionView()
         }
     }
     func decidedOnCityToVisitQuestion_Yes(sender:UIButton) {
-        
         if sender.isSelected == true {
+            if noCityDecidedAnyIdeasQuestionView != nil {
+                noCityDecidedAnyIdeasQuestionView?.removeFromSuperview()
+                noCityDecidedAnyIdeasQuestionView = nil
+                if planTripToIdeaQuestionView != nil {
+                    planTripToIdeaQuestionView?.removeFromSuperview()
+                    planTripToIdeaQuestionView = nil
+                }
+                if whatTypeOfTripQuestionView != nil {
+                    whatTypeOfTripQuestionView?.removeFromSuperview()
+                    whatTypeOfTripQuestionView = nil
+                }
+                if howFarAwayQuestionView != nil {
+                    howFarAwayQuestionView?.removeFromSuperview()
+                    howFarAwayQuestionView = nil
+                }
+                if destinationOptionsCardView != nil {
+                    destinationOptionsCardView?.removeFromSuperview()
+                    destinationOptionsCardView = nil
+                }
+                if addAnotherDestinationQuestionView != nil {
+                    addAnotherDestinationQuestionView?.removeFromSuperview()
+                    addAnotherDestinationQuestionView = nil
+                }
+                alignSubviews()
+            }
             spawnYesCityDecidedQuestionView()
         }
     }
     func yesCityDecidedQuestionView_actuallyDiscoverMoreOptions(sender:UIButton) {
         if sender.isSelected == true {
-            spawnNoCityDecidedAnyIdeasQuestionView()
+            decidedOnCityToVisitQuestionView?.button2?.sendActions(for: .touchUpInside)
         }
     }
     
     func noCityDecidedAnyIdeasQuestionView_noIdeas(sender:UIButton) {
         if sender.isSelected == true {
+            if planTripToIdeaQuestionView != nil {
+                planTripToIdeaQuestionView?.removeFromSuperview()
+                planTripToIdeaQuestionView = nil
+            }
             spawnWhatTypeOfTripQuestionView()
         }
+    }
+    func noCityDecidedAnyIdeasQuestionView_ideaEntered() {
+        if whatTypeOfTripQuestionView != nil {
+            whatTypeOfTripQuestionView?.removeFromSuperview()
+            whatTypeOfTripQuestionView = nil
+        }
+        if howFarAwayQuestionView != nil {
+            howFarAwayQuestionView?.removeFromSuperview()
+            howFarAwayQuestionView = nil
+        }
+        if destinationOptionsCardView != nil {
+            destinationOptionsCardView?.removeFromSuperview()
+            destinationOptionsCardView = nil
+        }
+        if addAnotherDestinationQuestionView != nil {
+            addAnotherDestinationQuestionView?.removeFromSuperview()
+            addAnotherDestinationQuestionView = nil
+        }
+        alignSubviews()
+        spawnPlanIdeaAsDestinationQuestionView()
     }
     
     func planTripToIdeaQuestionView_Yes(sender:UIButton) {
         if sender.isSelected == true {
+            if whatTypeOfTripQuestionView != nil {
+                whatTypeOfTripQuestionView?.removeFromSuperview()
+                whatTypeOfTripQuestionView = nil
+            }
+            if howFarAwayQuestionView != nil {
+                howFarAwayQuestionView?.removeFromSuperview()
+                howFarAwayQuestionView = nil
+            }
+            if destinationOptionsCardView != nil {
+                destinationOptionsCardView?.removeFromSuperview()
+                destinationOptionsCardView = nil
+            }
+            if addAnotherDestinationQuestionView != nil {
+                addAnotherDestinationQuestionView?.removeFromSuperview()
+                addAnotherDestinationQuestionView = nil
+            }
+            
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
             if destinationsForTrip.count == 0 {
@@ -1797,11 +1888,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            spawnAddAnotherDestinationQuestionViewEvenIfNonNil()
+            spawnAddAnotherDestinationQuestionView()
         }
     }
     func planTripToIdeaQuestionView_No(sender:UIButton) {
         if sender.isSelected == true {
+            if addAnotherDestinationQuestionView != nil {
+                addAnotherDestinationQuestionView?.removeFromSuperview()
+                addAnotherDestinationQuestionView = nil
+            }
             spawnWhatTypeOfTripQuestionView()
         }
     }
@@ -2062,13 +2157,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     
     
-    // MARK: create subview even if non nil functions
-    func spawnAddAnotherDestinationQuestionViewEvenIfNonNil() {
-        if addAnotherDestinationQuestionView != nil {
-            addAnotherDestinationQuestionView = nil
-        }
-        spawnAddAnotherDestinationQuestionView()
-    }
+//    // MARK: create subview even if non nil functions
+//    func spawnAddAnotherDestinationQuestionViewEvenIfNonNil() {
+//        if addAnotherDestinationQuestionView != nil {
+//            addAnotherDestinationQuestionView = nil
+//        }
+//        spawnAddAnotherDestinationQuestionView()
+//    }
     // MARK: UITextFieldDelegate
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         

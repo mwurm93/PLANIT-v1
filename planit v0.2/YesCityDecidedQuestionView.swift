@@ -31,8 +31,8 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-        //        self.layer.borderColor = UIColor.green.cgColor
-        //        self.layer.borderWidth = 2
+                self.layer.borderColor = UIColor.blue.cgColor
+                self.layer.borderWidth = 2
     }
     
     override func layoutSubviews() {
