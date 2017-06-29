@@ -36,8 +36,8 @@ class TripNameQuestionView: UIView {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 80)
-        questionLabel2?.frame = CGRect(x: 100, y: 130, width: bounds.size.width - 160, height: 100)
+        questionLabel?.frame = CGRect(x: 10, y: 10, width: bounds.size.width - 20, height: 80)
+        questionLabel2?.frame = CGRect(x: 100, y: 110, width: bounds.size.width - 160, height: 100)
         questionLabel3?.frame = CGRect(x: 10, y: 230, width: bounds.size.width - 20, height: 60)
         
         tripNameQuestionTextfield?.frame = CGRect(x: (bounds.size.width-175)/2, y: 285, width: 175, height: 30)

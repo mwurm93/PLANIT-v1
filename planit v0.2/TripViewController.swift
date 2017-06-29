@@ -18,7 +18,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 
     //MARK: Class variables
     var scrollContentViewHeight: NSLayoutConstraint?
-        //VCs
+        //View controllers
     var chatController: ChatViewController?
     var flightResultsController: flightResultsViewController?
     var reviewAndBookFlightsController: ReviewAndBookViewController?
@@ -26,7 +26,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var reviewAndBookCarRentalController: ReviewAndBookViewController?
     var hotelResultsController: exploreHotelsViewController?
     var reviewAndBookHotelController: ReviewAndBookViewController?
-        //Vies
+        //Views
     var userNameQuestionView: UserNameQuestionView?
     var tripNameQuestionView: TripNameQuestionView?
     var whereTravellingFromQuestionView: WhereTravellingFromQuestionView?
@@ -118,15 +118,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var destinationsDatesCollectionView: UICollectionView!
     @IBOutlet var detailedInformationSubview: UIView!
     @IBOutlet weak var travelSummaryView: UIView!
-    @IBOutlet weak var travelSummaryTravelLabel: UILabel!
-    @IBOutlet weak var travelSummaryDetailsLabel: UILabel!
     @IBOutlet weak var placeToStaySummaryView: UIView!
-    @IBOutlet weak var PlaceToStaySummaryPlaceToStayLabel: UILabel!
-    @IBOutlet weak var placeToStaySummaryDetailsLabel: UILabel!
+    @IBOutlet weak var travelButton: UIButton!
+    @IBOutlet weak var travelSummaryDescriptionButton: UIButton!
+    @IBOutlet weak var placeToStayButton: UIButton!
+    @IBOutlet weak var placetoStaySummaryDescriptionButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-            
+        
+        //UPDATE WHEN ADDING SUBVIEWS TO SCROLLVIEW
         functionsToLoadSubviewsDictionary[0] = spawnWhereTravellingFromQuestionView
         functionsToLoadSubviewsDictionary[1] = spawnDatesPickedOutCalendarView
         functionsToLoadSubviewsDictionary[2] = spawnDecidedOnCityQuestionView
@@ -149,7 +150,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[19] = spawnAboutWhatTimeWillYouStartDrivingQuestionView
         functionsToLoadSubviewsDictionary[20] = spawnBusTrainOtherQuestionView
         functionsToLoadSubviewsDictionary[21] = spawnidkHowToGetThereQuestionView
-        functionsToLoadSubviewsDictionary[22] = spawnWhatTypeOfTripQuestionView
+        functionsToLoadSubviewsDictionary[22] = spawnWhatTypeOfPlaceToStayQuestionView
         functionsToLoadSubviewsDictionary[23] = spawnHotelSearchQuestionView
         functionsToLoadSubviewsDictionary[24] = spawnShortTermRentalSearchQuestionView
         functionsToLoadSubviewsDictionary[25] = spawnStayWithSomeoneIKnowQuestionView
@@ -321,8 +322,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         assistant()
         
         // MARK: Register notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(spawnDecidedOnCityQuestionView), name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(spawnDatesPickedOutCalendarView), name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnWhereTravellingFromQuestionView), name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnDecidedOnCityQuestionView), name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionViewEvenIfNonNil), name: NSNotification.Name(rawValue: "destinationDecidedEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnPlanIdeaAsDestinationQuestionView), name: NSNotification.Name(rawValue: "destinationIdeaEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionViewEvenIfNonNil), name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)
@@ -462,15 +463,24 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         destinationsDatesCollectionView.dataSource = self
         destinationsDatesCollectionView.delegate = self
-//        //Setup instructions collection view
-//        destinationsDatesView = Bundle.main.loadNibNamed("destinationsDatesView", owner: self, options: nil)?.first! as? DestinationsDatesView
-//        destinationsDatesView?.frame.origin.y = 0
-//        self.itineraryView.insertSubview(destinationsDatesView!, aboveSubview: itineraryButton3)
-//        destinationsDatesView?.isHidden = true
-
+        travelButton.layer.cornerRadius = travelButton.frame.size.height / 2
+        travelButton.backgroundColor = travelItem?.buttonColor
+        travelButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
+        travelButton.layer.shadowColor = UIColor.black.cgColor
+        travelButton.layer.shadowRadius = 1
+        travelButton.layer.masksToBounds = false
+        travelButton.layer.shadowOpacity = 0.4
+        travelButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+        placeToStayButton.layer.cornerRadius = placeToStayButton.frame.size.height / 2
+        placeToStayButton.backgroundColor = placeToStayItem?.buttonColor
+        placeToStayButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
+        placeToStayButton.layer.shadowColor = UIColor.black.cgColor
+        placeToStayButton.layer.shadowRadius = 1
+        placeToStayButton.layer.masksToBounds = false
+        placeToStayButton.layer.shadowOpacity = 0.4
+        placeToStayButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         //END ITINERARY viewDidLoad
 
-        
         handleScrollUpAndDownButtons()
         
         //COPY FOR CONTACTS
@@ -499,6 +509,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         floaty?.autoCloseOnTap = false
         floaty?.buttonColor = UIColor.white
         floaty?.fabDelegate = self
+        floaty?.rotationDegrees = 0
         
         placeToStayItem = FloatyItem()
         placeToStayItem?.buttonColor = UIColor.flatSunFlower()
@@ -507,15 +518,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         placeToStayItem?.handler = { item in
             self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
             self.floaty?.close()
-            self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
-            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
-            self.floaty?.removeItem(item: self.placeToStayItem!)
-            self.floaty?.removeItem(item: self.travelItem!)
-            self.floaty?.removeItem(item: self.destinationItem!)
-            self.floaty?.removeItem(item: self.datesItem!)
-            self.floaty?.addItem(item: self.travelItem!)
-            self.floaty?.addItem(item: self.destinationItem!)
-            self.floaty?.addItem(item: self.datesItem!)
+            self.scrolledToPlaceToStayItem()
         }
         floaty?.addItem(item: placeToStayItem!)
         
@@ -526,15 +529,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         travelItem?.handler = { item in
             self.spawnHowDoYouWantToGetThereQuestionView()
             self.floaty?.close()
-            self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
-            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
-            self.floaty?.removeItem(item: self.placeToStayItem!)
-            self.floaty?.removeItem(item: self.travelItem!)
-            self.floaty?.removeItem(item: self.destinationItem!)
-            self.floaty?.removeItem(item: self.datesItem!)
-            self.floaty?.addItem(item: self.placeToStayItem!)
-            self.floaty?.addItem(item: self.destinationItem!)
-            self.floaty?.addItem(item: self.datesItem!)        }
+            self.scrolledToTravelItem()
+        }
         floaty?.addItem(item: travelItem!)
         
         destinationItem = FloatyItem()
@@ -544,15 +540,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         destinationItem?.handler = { item in
             self.spawnWhereTravellingFromQuestionView()
             self.floaty?.close()
-            self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
-            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
-            self.floaty?.removeItem(item: self.placeToStayItem!)
-            self.floaty?.removeItem(item: self.travelItem!)
-            self.floaty?.removeItem(item: self.destinationItem!)
-            self.floaty?.removeItem(item: self.datesItem!)
-            self.floaty?.addItem(item: self.placeToStayItem!)
-            self.floaty?.addItem(item: self.travelItem!)
-            self.floaty?.addItem(item: self.datesItem!)
+            self.scrolledToDestinationItem()
         }
         floaty?.addItem(item: destinationItem!)
         
@@ -563,19 +551,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         datesItem?.handler = { item in
             self.spawnDatesPickedOutCalendarView()
             self.floaty?.close()
-            self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
-            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
-            self.floaty?.removeItem(item: self.placeToStayItem!)
-            self.floaty?.removeItem(item: self.travelItem!)
-            self.floaty?.removeItem(item: self.destinationItem!)
-            self.floaty?.removeItem(item: self.datesItem!)
-            self.floaty?.addItem(item: self.placeToStayItem!)
-            self.floaty?.addItem(item: self.travelItem!)
-            self.floaty?.addItem(item: self.destinationItem!)
+            self.scrolledToDatesItem()
         }
         floaty?.addItem(item: datesItem!)
 
         self.view.addSubview(floaty!)
+        floaty?.isHidden = true
     }
     
     func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
@@ -589,14 +570,152 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         return newImage!
     }
-
+    
+    func scrolledToDatesItem() {
+        enableDatesItem()
+        self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
+        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
+        self.floaty?.removeItem(item: self.placeToStayItem!)
+        self.floaty?.removeItem(item: self.travelItem!)
+        self.floaty?.removeItem(item: self.destinationItem!)
+        self.floaty?.removeItem(item: self.datesItem!)
+        self.floaty?.addItem(item: self.placeToStayItem!)
+        self.floaty?.addItem(item: self.travelItem!)
+        self.floaty?.addItem(item: self.destinationItem!)
+    }
+    func scrolledToDestinationItem() {
+        enableDestinationItem()
+        self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
+        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
+        self.floaty?.removeItem(item: self.placeToStayItem!)
+        self.floaty?.removeItem(item: self.travelItem!)
+        self.floaty?.removeItem(item: self.destinationItem!)
+        self.floaty?.removeItem(item: self.datesItem!)
+        self.floaty?.addItem(item: self.placeToStayItem!)
+        self.floaty?.addItem(item: self.travelItem!)
+        self.floaty?.addItem(item: self.datesItem!)
+    }
+    func scrolledToTravelItem() {
+        enableTravelItem()
+        self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
+        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
+        self.floaty?.removeItem(item: self.placeToStayItem!)
+        self.floaty?.removeItem(item: self.travelItem!)
+        self.floaty?.removeItem(item: self.destinationItem!)
+        self.floaty?.removeItem(item: self.datesItem!)
+        self.floaty?.addItem(item: self.placeToStayItem!)
+        self.floaty?.addItem(item: self.destinationItem!)
+        self.floaty?.addItem(item: self.datesItem!)
+    }
+    func scrolledToPlaceToStayItem() {
+        enablePlaceToStayItem()
+        self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
+        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
+        self.floaty?.removeItem(item: self.placeToStayItem!)
+        self.floaty?.removeItem(item: self.travelItem!)
+        self.floaty?.removeItem(item: self.destinationItem!)
+        self.floaty?.removeItem(item: self.datesItem!)
+        self.floaty?.addItem(item: self.travelItem!)
+        self.floaty?.addItem(item: self.destinationItem!)
+        self.floaty?.addItem(item: self.datesItem!)
+    }
     
     func disableDatesItem() {
         datesItem?.handler = nil
         datesItem?.buttonColor = UIColor.lightGray
         datesItem?.titleColor = UIColor.lightGray
+        datesItem?.setNeedsDisplay()
     }
-    
+    func disableDestinationItem() {
+        destinationItem?.handler = nil
+        destinationItem?.buttonColor = UIColor.lightGray
+        destinationItem?.titleColor = UIColor.lightGray
+        destinationItem?.setNeedsDisplay()
+    }
+    func disableTravelItem() {
+        travelItem?.handler = nil
+        travelItem?.buttonColor = UIColor.lightGray
+        travelItem?.titleColor = UIColor.lightGray
+        travelItem?.setNeedsDisplay()
+    }
+    func disablePlaceToStayItem() {
+        placeToStayItem?.handler = nil
+        placeToStayItem?.buttonColor = UIColor.lightGray
+        placeToStayItem?.titleColor = UIColor.lightGray
+        placeToStayItem?.setNeedsDisplay()
+    }
+    func enableDatesItem() {
+        datesItem?.buttonColor = UIColor.flatPeterRiver()
+        datesItem?.titleColor = UIColor.white
+        datesItem?.handler = { item in
+            self.spawnDatesPickedOutCalendarView()
+            self.floaty?.close()
+            self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
+            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
+            self.floaty?.removeItem(item: self.placeToStayItem!)
+            self.floaty?.removeItem(item: self.travelItem!)
+            self.floaty?.removeItem(item: self.destinationItem!)
+            self.floaty?.removeItem(item: self.datesItem!)
+            self.floaty?.addItem(item: self.placeToStayItem!)
+            self.floaty?.addItem(item: self.travelItem!)
+            self.floaty?.addItem(item: self.destinationItem!)
+        }
+        datesItem?.setNeedsDisplay()
+    }
+    func enableDestinationItem() {
+        destinationItem?.buttonColor = UIColor.flatTurquoise()
+        destinationItem?.titleColor = UIColor.white
+        destinationItem?.handler = { item in
+            self.spawnWhereTravellingFromQuestionView()
+            self.floaty?.close()
+            self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
+            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
+            self.floaty?.removeItem(item: self.placeToStayItem!)
+            self.floaty?.removeItem(item: self.travelItem!)
+            self.floaty?.removeItem(item: self.destinationItem!)
+            self.floaty?.removeItem(item: self.datesItem!)
+            self.floaty?.addItem(item: self.placeToStayItem!)
+            self.floaty?.addItem(item: self.travelItem!)
+            self.floaty?.addItem(item: self.datesItem!)
+        }
+        destinationItem?.setNeedsDisplay()
+    }
+    func enableTravelItem() {
+        travelItem?.buttonColor = UIColor.flatCarrot()
+        travelItem?.titleColor = UIColor.white
+        travelItem?.handler = { item in
+            self.spawnHowDoYouWantToGetThereQuestionView()
+            self.floaty?.close()
+            self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
+            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
+            self.floaty?.removeItem(item: self.placeToStayItem!)
+            self.floaty?.removeItem(item: self.travelItem!)
+            self.floaty?.removeItem(item: self.destinationItem!)
+            self.floaty?.removeItem(item: self.datesItem!)
+            self.floaty?.addItem(item: self.placeToStayItem!)
+            self.floaty?.addItem(item: self.destinationItem!)
+            self.floaty?.addItem(item: self.datesItem!)
+        }
+        travelItem?.setNeedsDisplay()
+    }
+    func enablePlaceToStayItem() {
+        placeToStayItem?.buttonColor = UIColor.flatSunFlower()
+        placeToStayItem?.titleColor = UIColor.white
+        placeToStayItem?.handler = { item in
+            self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+            self.floaty?.close()
+            self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
+            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
+            self.floaty?.removeItem(item: self.placeToStayItem!)
+            self.floaty?.removeItem(item: self.travelItem!)
+            self.floaty?.removeItem(item: self.destinationItem!)
+            self.floaty?.removeItem(item: self.datesItem!)
+            self.floaty?.addItem(item: self.travelItem!)
+            self.floaty?.addItem(item: self.destinationItem!)
+            self.floaty?.addItem(item: self.datesItem!)
+        }
+        placeToStayItem?.setNeedsDisplay()
+    }
     
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
@@ -718,7 +837,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         for subviewTag in subviewTags {
             self.functionsToLoadSubviewsDictionary[subviewTag]!()
         }
-    }    
+//        getCurrentSubview()
+//        let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+//        let currentSubview = SavedPreferencesForTrip2["currentAssistantSubview"] as! Int
+//        self.functionsToLoadSubviewsDictionary[currentSubview]!()
+    }
     func updateProgress() {
         var currentSubviewsInScrollContentView = [Int]()
         for subview in scrollContentView.subviews {
@@ -730,6 +853,37 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["progress"] = currentSubviewsInScrollContentView as [NSNumber]
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    func getCurrentSubview() {
+        var currentSubview = Int()
+        for subview in scrollContentView.subviews {
+            if subview.frame.intersects(scrollView.bounds) {
+                currentSubview = subview.tag
+            }
+        }
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["currentAssistantSubview"] = currentSubview as NSNumber
+        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    func handleFloatyBasedOnProgressOfInitiator() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let currentSubview = SavedPreferencesForTrip["currentAssistantSubview"] as! Int
+        
+        //UPDATE WHEN ADDING SUBVIEWS TO SCROLLVIEW
+        let datesSubviews = [1]
+        let destinationSubviews = [0,2,3,4,5,6,7,8,9]
+        let travelSubviews = [10,11,12,13,14,15,16,17,19,20,21]
+        let placeToStaySubviews = [18,22,23,24,25,26,27,28]
+        
+        if datesSubviews.contains(currentSubview) {
+            scrolledToDatesItem()
+        } else if destinationSubviews.contains(currentSubview) {
+            scrolledToDestinationItem()
+        } else if travelSubviews.contains(currentSubview) {
+            scrolledToTravelItem()
+        } else if placeToStaySubviews.contains(currentSubview) {
+            scrolledToPlaceToStayItem()
+        }
     }
     func scrollToSubviewWithTag(tag:Int){
         let topOfSubview = subviewFramesDictionary[tag]
@@ -804,7 +958,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             whereTravellingFromQuestionView?.tag = 0
             self.scrollContentView.addSubview(whereTravellingFromQuestionView!)
             let bounds = UIScreen.main.bounds
-            whereTravellingFromQuestionView?.button1?.addTarget(self, action: #selector(self.spawnDatesPickedOutCalendarView), for: UIControlEvents.touchUpInside)
+            whereTravellingFromQuestionView?.button1?.addTarget(self, action: #selector(self.spawnDecidedOnCityQuestionView), for: UIControlEvents.touchUpInside)
             self.whereTravellingFromQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: whereTravellingFromQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whereTravellingFromQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
@@ -818,7 +972,21 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        whereTravellingFromQuestionView?.searchController?.searchBar.becomeFirstResponder()
     }
     func spawnDatesPickedOutCalendarView() {
+        self.view.endEditing(true)
         if datesPickedOutCalendarView == nil {
+            //handle floaty
+            scrolledToDatesItem()
+            disableDestinationItem()
+            disableTravelItem()
+            disablePlaceToStayItem()
+            floaty?.alpha = 0
+            floaty?.isHidden = false
+            let when_1 = DispatchTime.now() + 0.8
+            DispatchQueue.main.asyncAfter(deadline: when_1) {
+                UIView.animate(withDuration: 1) {
+                    self.floaty?.alpha = 1
+                }
+            }
             //Load next question
             datesPickedOutCalendarView = Bundle.main.loadNibNamed("DatesPickedOutCalendarView", owner: self, options: nil)?.first! as? DatesPickedOutCalendarView
             datesPickedOutCalendarView?.tag = 1
@@ -956,7 +1124,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         } else {
             scrollToSubviewWithTag(tag: 6)
         }
-
     }
 
     func spawnDestinationOptionsCardView() {
@@ -1501,8 +1668,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.willMove(toParentViewController: nil)
         carRentalResultsController?.view.removeFromSuperview()
         carRentalResultsController?.removeFromParentViewController()
-        for subview in (carRentalSearchQuestionView?.subviews)! {
-            subview.isHidden = false
+        if carRentalSearchQuestionView?.subviews != nil {
+            for subview in (carRentalSearchQuestionView?.subviews)! {
+                subview.isHidden = false
+            }
         }
         carRentalSearchQuestionView?.handleSearchMode()
         carRentalSearchQuestionView?.searchButton?.isSelected = false
@@ -1552,8 +1721,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.willMove(toParentViewController: nil)
         hotelResultsController?.view.removeFromSuperview()
         hotelResultsController?.removeFromParentViewController()
-        for subview in (hotelSearchQuestionView?.subviews)! {
-            subview.isHidden = false
+        if hotelSearchQuestionView?.subviews != nil {
+            for subview in (hotelSearchQuestionView?.subviews)! {
+                subview.isHidden = false
+            }
         }
         hotelSearchQuestionView?.searchButton?.isSelected = false
         hotelSearchQuestionView?.searchButton?.removeMask(button: (hotelSearchQuestionView?.searchButton)!)
@@ -1589,7 +1760,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     // MARK: Sent events
     func tripNameQuestionButtonClicked(sender:UIButton) {
         if sender.isSelected == true {
-            spawnWhereTravellingFromQuestionView()
+            spawnDatesPickedOutCalendarView()
         }
     }
     func decidedOnCityToVisitQuestion_No(sender:UIButton) {
@@ -1929,7 +2100,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
                 SavedPreferencesForTrip["trip_name"] = textField.text
                 saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                spawnWhereTravellingFromQuestionView()
+                spawnDatesPickedOutCalendarView()
             }
         }
         return true
@@ -1944,6 +2115,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         handleScrollUpAndDownButtons()
         animateOutSubview()
+        getCurrentSubview()
+        handleFloatyBasedOnProgressOfInitiator()
     }
     
     // MARK: SAVE TO SINGLETON
@@ -1986,6 +2159,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var modesOfTransportation = [NSString]()
         var indexOfDestinationBeingPlanned = NSNumber(value: 0)
         var isInitiator = NSNumber(value: 1)
+        var currentAssistantSubview = NSNumber(value: 0)
 
         //Activities VC
         var selectedActivities = [NSString]()
@@ -2029,6 +2203,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             modesOfTransportation = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "modesOfTransportation") as? [NSString] ?? [NSString]()
             indexOfDestinationBeingPlanned = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "indexOfDestinationBeingPlanned") as? NSNumber ?? NSNumber()
             isInitiator = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "isInitiator") as? NSNumber ?? NSNumber()
+            currentAssistantSubview = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "currentAssistantSubview") as? NSNumber ?? NSNumber()
 
 
             //Activities VC
@@ -2041,7 +2216,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"modesOfTransportation":modesOfTransportation, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"modesOfTransportation":modesOfTransportation, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
@@ -2118,11 +2293,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollView.isHidden = true
         scrollUpButton.isHidden = true
         scrollDownButton.isHidden = true
+        floaty?.isHidden = true
     }
     func assistantViewIsHiddenFalse() {
         scrollView.isHidden = false
         scrollUpButton.isHidden = false
         scrollDownButton.isHidden = false
+        floaty?.isHidden = false
     }
     
     func assistant() {
@@ -2861,36 +3038,30 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+//            var datesForTrip = (SavedPreferencesForTrip["datesForTrip"] as! [String])
+            destinationsDatesCell.destinationLabel.text = destinationsForTrip[indexPath.row]
+            destinationsDatesCell.destinationLabel.font = UIFont.systemFont(ofSize: 22)
+//            datesLabel = datesForTrip[indexPath.row]
+            destinationsDatesCell.datesLabel.font = UIFont.systemFont(ofSize: 22)
+            destinationsDatesCell.destinationButton.layer.cornerRadius = destinationsDatesCell.destinationButton.frame.size.height / 2
+            destinationsDatesCell.destinationButton.backgroundColor = destinationItem?.buttonColor
+            destinationsDatesCell.destinationButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,12,10)
+            destinationsDatesCell.destinationButton.layer.shadowColor = UIColor.black.cgColor
+            destinationsDatesCell.destinationButton.layer.shadowRadius = 1
+            destinationsDatesCell.destinationButton.layer.masksToBounds = false
+            destinationsDatesCell.destinationButton.layer.shadowOpacity = 0.4
+            destinationsDatesCell.destinationButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+
             
-            destinationsDatesCell.destination.setTitle(destinationsForTrip[indexPath.row], for: .normal)
-            destinationsDatesCell.destination?.setTitleColor(UIColor.white, for: .normal)
-            destinationsDatesCell.destination?.titleLabel?.font = UIFont.systemFont(ofSize: 25)
-            destinationsDatesCell.destination?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-            destinationsDatesCell.destination?.layer.borderWidth = 1
-            destinationsDatesCell.destination?.layer.borderColor = UIColor.white.cgColor
-            destinationsDatesCell.destination?.titleLabel?.numberOfLines = 0
-            destinationsDatesCell.destination?.titleLabel?.textAlignment = .center
-            destinationsDatesCell.destination?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
-            destinationsDatesCell.destination?.sizeToFit()
-            destinationsDatesCell.destination?.frame.size.height = 50
-            destinationsDatesCell.destination?.frame.size.width += 20
-            destinationsDatesCell.destination?.frame.origin.x = (destinationsDatesCell.frame.size.width - (destinationsDatesCell.destination?.frame.width)!) / 2
-            destinationsDatesCell.destination?.layer.cornerRadius = (destinationsDatesCell.destination?.frame.height)! / 2
-            
-            destinationsDatesCell.date?.setTitleColor(UIColor.white, for: .normal)
-            destinationsDatesCell.date?.titleLabel?.font = UIFont.systemFont(ofSize: 21)
-            destinationsDatesCell.date?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-            destinationsDatesCell.date?.layer.borderWidth = 1
-            destinationsDatesCell.date?.layer.borderColor = UIColor.white.cgColor
-            destinationsDatesCell.date?.titleLabel?.numberOfLines = 0
-            destinationsDatesCell.date?.titleLabel?.textAlignment = .center
-            destinationsDatesCell.date?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
-            destinationsDatesCell.date?.sizeToFit()
-            destinationsDatesCell.date?.frame.size.height = 40
-            destinationsDatesCell.date?.frame.size.width += 20
-            destinationsDatesCell.date?.frame.origin.x = (destinationsDatesCell.frame.size.width - (destinationsDatesCell.date?.frame.width)!) / 2
-            destinationsDatesCell.date?.frame.origin.y = destinationsDatesCell.date.frame.origin.y + 35
-            destinationsDatesCell.date?.layer.cornerRadius = (destinationsDatesCell.date?.frame.height)! / 2
+            destinationsDatesCell.datesButton.layer.cornerRadius = destinationsDatesCell.datesButton.frame.size.height / 2
+            destinationsDatesCell.datesButton.backgroundColor = datesItem?.buttonColor
+            destinationsDatesCell.datesButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
+            destinationsDatesCell.datesButton.layer.shadowColor = UIColor.black.cgColor
+            destinationsDatesCell.datesButton.layer.shadowRadius = 1
+            destinationsDatesCell.datesButton.layer.masksToBounds = false
+            destinationsDatesCell.datesButton.layer.shadowOpacity = 0.4
+            destinationsDatesCell.datesButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+
             
             return destinationsDatesCell
         }
@@ -3003,7 +3174,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
     // MARK: - UICollectionViewFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == destinationsDatesCollectionView {
-            return CGSize(width: 200, height: 128)
+            return CGSize(width: 300, height: 145)
         }
         
         //        else if collectionView == contactsCollectionView {
