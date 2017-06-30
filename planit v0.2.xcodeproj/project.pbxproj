@@ -72,6 +72,10 @@
 		FA77D1F51EFDDA2900A37A05 /* buttonColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA77D1F41EFDDA2900A37A05 /* buttonColor.swift */; };
 		FA8A20B81EFD94E900EB0360 /* DoYouNeedARentalCarQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A20B71EFD94E900EB0360 /* DoYouNeedARentalCarQuestionView.swift */; };
 		FA8A20BA1EFD94F100EB0360 /* DoYouNeedARentalCarQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8A20B91EFD94F100EB0360 /* DoYouNeedARentalCarQuestionView.xib */; };
+		FA8DBAC11F060343005D2B61 /* YesIKnowWhereImStayingQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8DBAC01F060343005D2B61 /* YesIKnowWhereImStayingQuestionView.swift */; };
+		FA8DBAC31F06035D005D2B61 /* YesIKnowWhereImStayingQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8DBAC21F06035D005D2B61 /* YesIKnowWhereImStayingQuestionView.xib */; };
+		FA8DBAC51F06072B005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8DBAC41F06072B005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.swift */; };
+		FA8DBAC71F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8DBAC61F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib */; };
 		FA90F1D41EEB4B9F00094878 /* SwipingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */; };
 		FA9407741EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9407731EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift */; };
 		FA9407781EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */; };
@@ -259,6 +263,10 @@
 		FA77D1F41EFDDA2900A37A05 /* buttonColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = buttonColor.swift; sourceTree = "<group>"; };
 		FA8A20B71EFD94E900EB0360 /* DoYouNeedARentalCarQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoYouNeedARentalCarQuestionView.swift; sourceTree = "<group>"; };
 		FA8A20B91EFD94F100EB0360 /* DoYouNeedARentalCarQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoYouNeedARentalCarQuestionView.xib; sourceTree = "<group>"; };
+		FA8DBAC01F060343005D2B61 /* YesIKnowWhereImStayingQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YesIKnowWhereImStayingQuestionView.swift; sourceTree = "<group>"; };
+		FA8DBAC21F06035D005D2B61 /* YesIKnowWhereImStayingQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YesIKnowWhereImStayingQuestionView.xib; sourceTree = "<group>"; };
+		FA8DBAC41F06072B005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoYouNeedHelpBookingAHotelQuestionView.swift; sourceTree = "<group>"; };
+		FA8DBAC61F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoYouNeedHelpBookingAHotelQuestionView.xib; sourceTree = "<group>"; };
 		FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipingViewController.swift; sourceTree = "<group>"; };
 		FA9407731EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusTrainOtherQuestionView.swift; sourceTree = "<group>"; };
 		FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusTrainOtherQuestionView.xib; sourceTree = "<group>"; };
@@ -438,6 +446,10 @@
 			children = (
 				FABEACFB1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift */,
 				FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */,
+				FA8DBAC01F060343005D2B61 /* YesIKnowWhereImStayingQuestionView.swift */,
+				FA8DBAC21F06035D005D2B61 /* YesIKnowWhereImStayingQuestionView.xib */,
+				FA8DBAC41F06072B005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.swift */,
+				FA8DBAC61F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib */,
 				FA48876A1F01AAEF0015F078 /* WhatTypeOfPlaceToStayQuestionView.swift */,
 				FA4887701F01AC000015F078 /* WhatTypeOfPlaceToStayQuestionView.xib */,
 				FA4887781F01B3800015F078 /* HotelSearchQuestionView.swift */,
@@ -997,6 +1009,7 @@
 				FA48877F1F01B3C00015F078 /* ShortTermRentalSearchQuestionView.xib in Resources */,
 				FA4887871F01B9780015F078 /* PlaceForGroupOrJustYouQuestionView.xib in Resources */,
 				FAE83F6D1EF4853B0009A020 /* UserNameQuestionView.xib in Resources */,
+				FA8DBAC71F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib in Resources */,
 				FA4EA8D41EE87DBC005FCE91 /* common.js in Resources */,
 				FAE83F831EF79E9B0009A020 /* NoCityDecidedAnyIdeasQuestionView.xib in Resources */,
 				FA09A3ED1EB23694007F64A3 /* ToDoCardContentView.xib in Resources */,
@@ -1007,6 +1020,7 @@
 				FAA8F2851E351DA300CD7337 /* CreateNewUser.graphql in Resources */,
 				FADEF0EE1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib in Resources */,
 				FAA8F28F1E351DBF00CD7337 /* monthHeaderView.xib in Resources */,
+				FA8DBAC31F06035D005D2B61 /* YesIKnowWhereImStayingQuestionView.xib in Resources */,
 				FA09A3F11EB23894007F64A3 /* CardContentView.xib in Resources */,
 				FAA8F28D1E351DBF00CD7337 /* CellView.xib in Resources */,
 				FA5201171EC4DC4C001EA849 /* geography-class_medres.mbtiles in Resources */,
@@ -1255,6 +1269,7 @@
 				FA4887791F01B3800015F078 /* HotelSearchQuestionView.swift in Sources */,
 				FAA8F26F1E351B9500CD7337 /* InternationalViewController.swift in Sources */,
 				FA14B2241EFAE5F9004E0E29 /* savingToSingleton.swift in Sources */,
+				FA8DBAC51F06072B005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.swift in Sources */,
 				FA14B2261EFB1073004E0E29 /* YesCityDecidedQuestionView.swift in Sources */,
 				FAA8F2701E351B9500CD7337 /* NewTripNameViewController.swift in Sources */,
 				FA77D1F51EFDDA2900A37A05 /* buttonColor.swift in Sources */,
@@ -1274,6 +1289,7 @@
 				FAA8F2931E351DCD00CD7337 /* ActivitiesCollectionViewCell.swift in Sources */,
 				FA09A3EE1EB23694007F64A3 /* ToDoCardView.swift in Sources */,
 				FAA8F2741E351B9500CD7337 /* ReviewAndBookViewController.swift in Sources */,
+				FA8DBAC11F060343005D2B61 /* YesIKnowWhereImStayingQuestionView.swift in Sources */,
 				FAA8F28C1E351DBF00CD7337 /* CellView.swift in Sources */,
 				FAA8F2941E351DCD00CD7337 /* ActivityItem.swift in Sources */,
 				FAE83F931EF7B2EE0009A020 /* DestinationOptionsCardView.swift in Sources */,
