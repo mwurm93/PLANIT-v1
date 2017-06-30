@@ -64,7 +64,7 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
         SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
-        let when = DispatchTime.now() + 0.25
+        let when = DispatchTime.now() + 0.3
         
         DispatchQueue.main.asyncAfter(deadline: when) {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "AddAnotherDestinationQuestionView"), object: nil)

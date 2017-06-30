@@ -36,9 +36,9 @@ class DoYouNeedHelpBookingAHotelQuestionView: UIView, UITextViewDelegate {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 100)
+        questionLabel?.frame = CGRect(x: 10, y: 10, width: bounds.size.width - 20, height: 210)
         
-        textView?.frame = CGRect(x: 10, y: 180, width: bounds.size.width - 20, height: 140)
+        textView?.frame = CGRect(x: 10, y: 200, width: bounds.size.width - 20, height: 80)
         let width = 1.0
         let borderLine = UIView()
         borderLine.frame = CGRect(x: Double((textView?.frame.minX)!), y: Double((textView?.frame.maxY)!) - width, width: Double((textView?.frame.width)!), height: width)
@@ -54,7 +54,7 @@ class DoYouNeedHelpBookingAHotelQuestionView: UIView, UITextViewDelegate {
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 130
+        button1?.frame.origin.y = 90
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         
@@ -63,15 +63,15 @@ class DoYouNeedHelpBookingAHotelQuestionView: UIView, UITextViewDelegate {
         button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 350
+        button2?.frame.origin.y = 290
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
         button3?.sizeToFit()
         button3?.frame.size.height = 30
         button3?.frame.size.width += 20
-        button3?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button3?.frame.origin.y = 400
-        button3?.layer.cornerRadius = (button1?.frame.height)! / 2
+        button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2
+        button3?.frame.origin.y = 340
+        button3?.layer.cornerRadius = (button3?.frame.height)! / 2
     }
     
     func addViews() {
@@ -83,7 +83,7 @@ class DoYouNeedHelpBookingAHotelQuestionView: UIView, UITextViewDelegate {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Do you need help\nbooking a hotel"
+        questionLabel?.text = "Do you need help\nbooking a hotel?\n\n\nIf you already have one booked, share the details with your group below!"
         self.addSubview(questionLabel!)
         
         //Button1
