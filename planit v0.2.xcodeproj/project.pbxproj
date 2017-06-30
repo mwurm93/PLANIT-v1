@@ -22,7 +22,6 @@
 		FA14B22C1EFB22D7004E0E29 /* HowDoYouWantToGetThereQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA14B22B1EFB22D7004E0E29 /* HowDoYouWantToGetThereQuestionView.swift */; };
 		FA14B22E1EFB2D33004E0E29 /* FlightSearchQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA14B22D1EFB2D33004E0E29 /* FlightSearchQuestionView.swift */; };
 		FA14B2301EFB2D3D004E0E29 /* FlightSearchQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA14B22F1EFB2D3D004E0E29 /* FlightSearchQuestionView.xib */; };
-		FA14B2361EFB9B1F004E0E29 /* flightSearchResultsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA14B2351EFB9B1F004E0E29 /* flightSearchResultsTableViewCell.xib */; };
 		FA16B3C51ECC7743005E4DEF /* flightSearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA16B3C41ECC7743005E4DEF /* flightSearchResultTableViewCell.swift */; };
 		FA187E451E37005200971D47 /* messageComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA187E441E37005200971D47 /* messageComposer.swift */; };
 		FA25F1F91EBB6DA9005D29E5 /* exploreHotelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */; };
@@ -209,7 +208,6 @@
 		FA14B22B1EFB22D7004E0E29 /* HowDoYouWantToGetThereQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HowDoYouWantToGetThereQuestionView.swift; sourceTree = "<group>"; };
 		FA14B22D1EFB2D33004E0E29 /* FlightSearchQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlightSearchQuestionView.swift; sourceTree = "<group>"; };
 		FA14B22F1EFB2D3D004E0E29 /* FlightSearchQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FlightSearchQuestionView.xib; sourceTree = "<group>"; };
-		FA14B2351EFB9B1F004E0E29 /* flightSearchResultsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = flightSearchResultsTableViewCell.xib; sourceTree = "<group>"; };
 		FA16B3C41ECC7743005E4DEF /* flightSearchResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = flightSearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		FA187E441E37005200971D47 /* messageComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = messageComposer.swift; sourceTree = "<group>"; };
 		FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = exploreHotelsViewController.swift; sourceTree = "<group>"; };
@@ -690,7 +688,6 @@
 				FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */,
 				FA16B3C41ECC7743005E4DEF /* flightSearchResultTableViewCell.swift */,
 				FA77D1EC1EFDB58A00A37A05 /* carRentalSearchResultTableViewCell.swift */,
-				FA14B2351EFB9B1F004E0E29 /* flightSearchResultsTableViewCell.xib */,
 				FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */,
 				FADF0A001ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift */,
 			);
@@ -991,7 +988,6 @@
 				FAE83F7F1EF75CB10009A020 /* DecidedOnCityToVisitQuestionView.xib in Resources */,
 				FA77D1F11EFDCED700A37A05 /* CarRentalSearchQuestionView.xib in Resources */,
 				FAE83F6F1EF49F190009A020 /* TripNameQuestionView.xib in Resources */,
-				FA14B2361EFB9B1F004E0E29 /* flightSearchResultsTableViewCell.xib in Resources */,
 				FA94077C1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib in Resources */,
 				FABEAD021EFE4D700075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.xib in Resources */,
 				FA14B2301EFB2D3D004E0E29 /* FlightSearchQuestionView.xib in Resources */,

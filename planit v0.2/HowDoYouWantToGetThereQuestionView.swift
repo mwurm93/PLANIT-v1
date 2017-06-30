@@ -87,8 +87,9 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         questionLabel?.adjustsFontSizeToFitWidth = true
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         if destinationsForTrip.count != 0 {
-            questionLabel?.text = "Time to plan your travel!\n\nHow do you want to get to\n\(destinationsForTrip[0])?"
+            questionLabel?.text = "Time to plan your travel!\n\nHow do you want to get to\n\(destinationsForTrip[indexOfDestinationBeingPlanned])?"
         }
         self.addSubview(questionLabel!)
         

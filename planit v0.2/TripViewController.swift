@@ -1046,6 +1046,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.decidedOnCityToVisitQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: decidedOnCityToVisitQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (decidedOnCityToVisitQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned > 0 {
+                decidedOnCityToVisitQuestionView?.questionLabel?.text = "Great, have you already decided\nwhere else to visit?"
+            }
         
         updateHeightOfScrollView()
         scrollDownToTopSubview()
@@ -1213,6 +1219,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func spawnHowDoYouWantToGetThereQuestionView() {
         if howDoYouWantToGetThereQuestionView == nil {
+            
             //Load next question
             howDoYouWantToGetThereQuestionView = Bundle.main.loadNibNamed("HowDoYouWantToGetThereQuestionView", owner: self, options: nil)?.first! as? HowDoYouWantToGetThereQuestionView
             self.scrollContentView.insertSubview(howDoYouWantToGetThereQuestionView!, aboveSubview: addAnotherDestinationQuestionView!)
@@ -1372,10 +1379,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             //Load next question
             doYouKnowWhereYouWillBeStayingQuestionView = Bundle.main.loadNibNamed("DoYouKnowWhereYouWillBeStayingQuestionView", owner: self, options: nil)?.first! as? DoYouKnowWhereYouWillBeStayingQuestionView
             let bounds = UIScreen.main.bounds
-            if flightSearchQuestionView == nil && busTrainOtherQuestionView == nil {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if modesOfTransportation[indexOfDestinationBeingPlanned] == "drive" {
                 self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: aboutWhatTimeWillYouStartDrivingQuestionView!)
                 self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (aboutWhatTimeWillYouStartDrivingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            } else if flightSearchQuestionView != nil || busTrainOtherQuestionView != nil {
+            } else if modesOfTransportation[indexOfDestinationBeingPlanned] == "busTrainOther" || modesOfTransportation[indexOfDestinationBeingPlanned] == "fly" {
                 if carRentalSearchQuestionView == nil {
                     self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: doYouNeedARentalCarQuestionView!)
                     self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (doYouNeedARentalCarQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
@@ -1383,6 +1393,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: carRentalSearchQuestionView!)
                     self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (carRentalSearchQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
                 }
+            } else if modesOfTransportation[indexOfDestinationBeingPlanned] == "illAlreadyBeThere" {
+                self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: howDoYouWantToGetThereQuestionView!)
+                self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (howDoYouWantToGetThereQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
             doYouKnowWhereYouWillBeStayingQuestionView?.tag = 18
             doYouKnowWhereYouWillBeStayingQuestionView?.button1?.addTarget(self, action: #selector(self.doYouKnowWhereYouWillBeStaying_yes(sender:)), for: UIControlEvents.touchUpInside)
@@ -1580,10 +1593,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if sendProposalQuestionView == nil {
             //Load next question
             sendProposalQuestionView = Bundle.main.loadNibNamed("SendProposalQuestionView", owner: self, options: nil)?.first! as? SendProposalQuestionView
-            self.scrollContentView.insertSubview(sendProposalQuestionView!, aboveSubview: placeForGroupOrJustYouQuestionView!)
-            sendProposalQuestionView?.tag = 29
             let bounds = UIScreen.main.bounds
-            self.sendProposalQuestionView!.frame = CGRect(x: 0, y: (placeForGroupOrJustYouQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            if placeForGroupOrJustYouQuestionView != nil {
+                self.scrollContentView.insertSubview(sendProposalQuestionView!, aboveSubview: placeForGroupOrJustYouQuestionView!)
+                self.sendProposalQuestionView!.frame = CGRect(x: 0, y: (placeForGroupOrJustYouQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            } else {
+                self.scrollContentView.insertSubview(sendProposalQuestionView!, aboveSubview: doYouKnowWhereYouWillBeStayingQuestionView!)
+                self.sendProposalQuestionView!.frame = CGRect(x: 0, y: (doYouKnowWhereYouWillBeStayingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            }
+            sendProposalQuestionView?.tag = 29
             let heightConstraint = NSLayoutConstraint(item: sendProposalQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (sendProposalQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
@@ -1906,7 +1924,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func addAnotherDestinationQuestionView_justDestination(sender:UIButton) {
         if sender.isSelected == true {
             spawnHowDoYouWantToGetThereQuestionView()
-//            addAnotherDestinationQuestionView?.button2?.isHidden = true
+            
+            //set planning index to 0
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            indexOfDestinationBeingPlanned = 0
+            SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = indexOfDestinationBeingPlanned as NSNumber
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            addAnotherDestinationQuestionView?.button2?.isHidden = true
         }
     }
     func addAnotherDestinationQuestionView_addAnother(sender:UIButton) {
@@ -1963,9 +1989,31 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned == 0 {
+            if indexOfDestinationBeingPlanned >= modesOfTransportation.count {
                 modesOfTransportation.append("fly")
-            } else {
+            } else if indexOfDestinationBeingPlanned < modesOfTransportation.count {
+                if modesOfTransportation[indexOfDestinationBeingPlanned] != "fly" {
+                    if doYouNeedARentalCarQuestionView != nil {
+                        doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                        doYouNeedARentalCarQuestionView = nil
+                        if carRentalSearchQuestionView != nil {
+                            carRentalSearchQuestionView?.removeFromSuperview()
+                            carRentalSearchQuestionView = nil
+                        }
+                        if aboutWhatTimeWillYouStartDrivingQuestionView != nil {
+                            aboutWhatTimeWillYouStartDrivingQuestionView?.removeFromSuperview()
+                            aboutWhatTimeWillYouStartDrivingQuestionView = nil
+                        }
+                    }
+                    if busTrainOtherQuestionView != nil {
+                        busTrainOtherQuestionView?.removeFromSuperview()
+                        busTrainOtherQuestionView = nil
+                    }
+                    if idkHowToGetThereQuestionView != nil {
+                        idkHowToGetThereQuestionView?.removeFromSuperview()
+                        idkHowToGetThereQuestionView = nil
+                    }
+                }
                 modesOfTransportation[indexOfDestinationBeingPlanned] = "fly"
             }
             SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
@@ -1979,9 +2027,32 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned == 0 {
+            if indexOfDestinationBeingPlanned >= modesOfTransportation.count {
                 modesOfTransportation.append("drive")
-            } else {
+            } else if indexOfDestinationBeingPlanned < modesOfTransportation.count {
+                if modesOfTransportation[indexOfDestinationBeingPlanned] != "drive" {
+                    if flightSearchQuestionView != nil {
+                        flightSearchQuestionView?.removeFromSuperview()
+                        flightSearchQuestionView = nil
+                        if doYouNeedARentalCarQuestionView != nil {
+                            doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                            doYouNeedARentalCarQuestionView = nil
+                            if carRentalSearchQuestionView != nil {
+                                carRentalSearchQuestionView?.removeFromSuperview()
+                                carRentalSearchQuestionView = nil
+                            }
+                        }
+                    }
+                    if busTrainOtherQuestionView != nil {
+                        busTrainOtherQuestionView?.removeFromSuperview()
+                        busTrainOtherQuestionView = nil
+                    }
+                    if idkHowToGetThereQuestionView != nil {
+                        idkHowToGetThereQuestionView?.removeFromSuperview()
+                        idkHowToGetThereQuestionView = nil
+                    }
+                        
+                }
                 modesOfTransportation[indexOfDestinationBeingPlanned] = "drive"
             }
             SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
@@ -1995,9 +2066,40 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned == 0 {
+            if indexOfDestinationBeingPlanned >= modesOfTransportation.count {
                 modesOfTransportation.append("busTrainOther")
-            } else {
+            } else if indexOfDestinationBeingPlanned < modesOfTransportation.count {
+                if modesOfTransportation[indexOfDestinationBeingPlanned] != "busTrainOther" {
+                    if  flightSearchQuestionView != nil {
+                        flightSearchQuestionView?.removeFromSuperview()
+                        flightSearchQuestionView = nil
+                        if doYouNeedARentalCarQuestionView != nil {
+                            doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                            doYouNeedARentalCarQuestionView = nil
+                            if carRentalSearchQuestionView != nil {
+                                carRentalSearchQuestionView?.removeFromSuperview()
+                                carRentalSearchQuestionView = nil
+                            }
+                        }
+                    }
+                    if doYouNeedARentalCarQuestionView != nil {
+                        doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                        doYouNeedARentalCarQuestionView = nil
+                        if carRentalSearchQuestionView != nil {
+                            carRentalSearchQuestionView?.removeFromSuperview()
+                            carRentalSearchQuestionView = nil
+                        }
+                        if aboutWhatTimeWillYouStartDrivingQuestionView != nil {
+                            aboutWhatTimeWillYouStartDrivingQuestionView?.removeFromSuperview()
+                            aboutWhatTimeWillYouStartDrivingQuestionView = nil
+                        }
+                    }
+                    if idkHowToGetThereQuestionView != nil {
+                        idkHowToGetThereQuestionView?.removeFromSuperview()
+                        idkHowToGetThereQuestionView = nil
+                    }
+                }
+
                 modesOfTransportation[indexOfDestinationBeingPlanned] = "busTrainOther"
             }
             SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
@@ -2011,9 +2113,40 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned == 0 {
+            if indexOfDestinationBeingPlanned >= modesOfTransportation.count {
                 modesOfTransportation.append("iDontKnowHelpMe")
-            } else {
+            } else if indexOfDestinationBeingPlanned < modesOfTransportation.count {
+                if modesOfTransportation[indexOfDestinationBeingPlanned] != "iDontKnowHelpMe" {
+                    if flightSearchQuestionView != nil {
+                        flightSearchQuestionView?.removeFromSuperview()
+                        flightSearchQuestionView = nil
+                        if doYouNeedARentalCarQuestionView != nil {
+                            doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                            doYouNeedARentalCarQuestionView = nil
+                            if carRentalSearchQuestionView != nil {
+                                carRentalSearchQuestionView?.removeFromSuperview()
+                                carRentalSearchQuestionView = nil
+                            }
+                        }
+                    }
+                    if doYouNeedARentalCarQuestionView != nil {
+                        doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                        doYouNeedARentalCarQuestionView = nil
+                        if carRentalSearchQuestionView != nil {
+                            carRentalSearchQuestionView?.removeFromSuperview()
+                            carRentalSearchQuestionView = nil
+                        }
+                        if aboutWhatTimeWillYouStartDrivingQuestionView != nil {
+                            aboutWhatTimeWillYouStartDrivingQuestionView?.removeFromSuperview()
+                            aboutWhatTimeWillYouStartDrivingQuestionView = nil
+                        }
+                    }
+                    if busTrainOtherQuestionView != nil {
+                        busTrainOtherQuestionView?.removeFromSuperview()
+                        busTrainOtherQuestionView = nil
+                    }
+                }
+
                 modesOfTransportation[indexOfDestinationBeingPlanned] = "iDontKnowHelpMe"
             }
             SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
@@ -2027,9 +2160,43 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned == 0 {
+            if indexOfDestinationBeingPlanned >= modesOfTransportation.count {
                 modesOfTransportation.append("illAlreadyBeThere")
-            } else {
+            } else if indexOfDestinationBeingPlanned < modesOfTransportation.count {
+                if modesOfTransportation[indexOfDestinationBeingPlanned] != "illAlreadyBeThere" {
+                    if flightSearchQuestionView != nil {
+                        flightSearchQuestionView?.removeFromSuperview()
+                        flightSearchQuestionView = nil
+                        if doYouNeedARentalCarQuestionView != nil {
+                            doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                            doYouNeedARentalCarQuestionView = nil
+                            if carRentalSearchQuestionView != nil {
+                                carRentalSearchQuestionView?.removeFromSuperview()
+                                carRentalSearchQuestionView = nil
+                            }
+                        }
+                    }
+                    if doYouNeedARentalCarQuestionView != nil {
+                        doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                        doYouNeedARentalCarQuestionView = nil
+                        if carRentalSearchQuestionView != nil {
+                            carRentalSearchQuestionView?.removeFromSuperview()
+                            carRentalSearchQuestionView = nil
+                        }
+                        if aboutWhatTimeWillYouStartDrivingQuestionView != nil {
+                            aboutWhatTimeWillYouStartDrivingQuestionView?.removeFromSuperview()
+                            aboutWhatTimeWillYouStartDrivingQuestionView = nil
+                        }
+                    }
+                    if busTrainOtherQuestionView != nil {
+                        busTrainOtherQuestionView?.removeFromSuperview()
+                        busTrainOtherQuestionView = nil
+                    }
+                    if idkHowToGetThereQuestionView != nil {
+                        idkHowToGetThereQuestionView?.removeFromSuperview()
+                        idkHowToGetThereQuestionView = nil
+                    }
+                }
                 modesOfTransportation[indexOfDestinationBeingPlanned] = "illAlreadyBeThere"
             }
             SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
@@ -2051,6 +2218,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func doYouNeedARentalCarQuestionView_no(sender:UIButton) {
         if sender.isSelected == true {
+            if carRentalSearchQuestionView != nil {
+                carRentalSearchQuestionView?.removeFromSuperview()
+                carRentalSearchQuestionView = nil
+            }
             
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
@@ -2087,9 +2258,30 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func doYouKnowWhereYouWillBeStaying_noPlanLater(sender:UIButton) {
         if sender.isSelected == true {
-            spawnPlaceForGroupOrJustYouQuestionView()
+            if whatTypeOfPlaceToStayQuestionView != nil {
+                whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
+                whatTypeOfPlaceToStayQuestionView = nil
+                if hotelSearchQuestionView != nil {
+                    hotelSearchQuestionView?.removeFromSuperview()
+                    hotelSearchQuestionView = nil
+                }
+                if shortTermRentalSearchQuestionView != nil {
+                    shortTermRentalSearchQuestionView?.removeFromSuperview()
+                    shortTermRentalSearchQuestionView = nil
+                }
+                if stayWithSomeoneIKnowQuestionView != nil {
+                    stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
+                    stayWithSomeoneIKnowQuestionView = nil
+                }
+                if placeForGroupOrJustYouQuestionView != nil {
+                    placeForGroupOrJustYouQuestionView?.removeFromSuperview()
+                    placeForGroupOrJustYouQuestionView = nil
+                }
+            }
+            planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
         }
     }
+    
     func busTrainOtherTravelPlans_done(sender:UIButton) {
         if sender.isSelected == true {
             spawnDoYouNeedARentalCarQuestionView()
@@ -2107,16 +2299,57 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func whatTypeOfPlaceToStayQuestionView_hotel(sender:UIButton) {
         if sender.isSelected == true {
+            if shortTermRentalSearchQuestionView != nil {
+                shortTermRentalSearchQuestionView?.removeFromSuperview()
+                shortTermRentalSearchQuestionView = nil
+            }
+            if stayWithSomeoneIKnowQuestionView != nil {
+                stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
+                stayWithSomeoneIKnowQuestionView = nil
+            }
+            if placeForGroupOrJustYouQuestionView != nil {
+                placeForGroupOrJustYouQuestionView?.removeFromSuperview()
+                placeForGroupOrJustYouQuestionView = nil
+            }
+        
+            
             spawnHotelSearchQuestionView()
         }
     }
     func whatTypeOfPlaceToStayQuestionView_shortTermRental(sender:UIButton) {
         if sender.isSelected == true {
+            if hotelSearchQuestionView != nil {
+                hotelSearchQuestionView?.removeFromSuperview()
+                hotelSearchQuestionView = nil
+            }
+            if stayWithSomeoneIKnowQuestionView != nil {
+                stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
+                stayWithSomeoneIKnowQuestionView = nil
+            }
+            if placeForGroupOrJustYouQuestionView != nil {
+                placeForGroupOrJustYouQuestionView?.removeFromSuperview()
+                placeForGroupOrJustYouQuestionView = nil
+            }
+
+            
             spawnShortTermRentalSearchQuestionView()
         }
     }
     func whatTypeOfPlaceToStayQuestionView_stayWithSomeoneIKnow(sender:UIButton) {
         if sender.isSelected == true {
+            if hotelSearchQuestionView != nil {
+                hotelSearchQuestionView?.removeFromSuperview()
+                hotelSearchQuestionView = nil
+            }
+            if shortTermRentalSearchQuestionView != nil {
+                shortTermRentalSearchQuestionView?.removeFromSuperview()
+                shortTermRentalSearchQuestionView = nil
+            }
+            if placeForGroupOrJustYouQuestionView != nil {
+                placeForGroupOrJustYouQuestionView?.removeFromSuperview()
+                placeForGroupOrJustYouQuestionView = nil
+            }
+
             spawnStayWithSomeoneIKnowQuestionView()
         }
     }
@@ -2138,17 +2371,17 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func placeForGroupOrJustYouQuestionView_entireGroup(sender:UIButton) {
         if sender.isSelected == true {
-            spawnSendProposalQuestionView()
+            planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
         }
     }
     func placeForGroupOrJustYouQuestionView_someOfGroup(sender:UIButton) {
         if sender.isSelected == true {
-            spawnSendProposalQuestionView()
+            planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
         }
     }
     func placeForGroupOrJustYouQuestionView_justMe(sender:UIButton) {
         if sender.isSelected == true {
-            spawnSendProposalQuestionView()
+            planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
         }
     }
 
@@ -2165,13 +2398,81 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     
     
-//    // MARK: create subview even if non nil functions
-//    func spawnAddAnotherDestinationQuestionViewEvenIfNonNil() {
-//        if addAnotherDestinationQuestionView != nil {
-//            addAnotherDestinationQuestionView = nil
-//        }
-//        spawnAddAnotherDestinationQuestionView()
-//    }
+    // MARK: iterative travel and accomodation planning function
+    func planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        if indexOfDestinationBeingPlanned < destinationsForTrip.count - 1 {
+            //increment destination being planned
+            indexOfDestinationBeingPlanned += 1
+            SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = indexOfDestinationBeingPlanned
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            //Remove travel and place to stay subviews
+            if howDoYouWantToGetThereQuestionView != nil {
+                if flightSearchQuestionView != nil {
+                    flightSearchQuestionView?.removeFromSuperview()
+                    flightSearchQuestionView = nil
+                    if doYouNeedARentalCarQuestionView != nil {
+                        doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                        doYouNeedARentalCarQuestionView = nil
+                        if carRentalSearchQuestionView != nil {
+                            carRentalSearchQuestionView?.removeFromSuperview()
+                            carRentalSearchQuestionView = nil
+                        }
+                    }
+                }
+                if doYouNeedARentalCarQuestionView != nil {
+                    doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                    doYouNeedARentalCarQuestionView = nil
+                    if carRentalSearchQuestionView != nil {
+                        carRentalSearchQuestionView?.removeFromSuperview()
+                        carRentalSearchQuestionView = nil
+                    }
+                    if aboutWhatTimeWillYouStartDrivingQuestionView != nil {
+                        aboutWhatTimeWillYouStartDrivingQuestionView?.removeFromSuperview()
+                        aboutWhatTimeWillYouStartDrivingQuestionView = nil
+                    }
+                }
+                if busTrainOtherQuestionView != nil {
+                    busTrainOtherQuestionView?.removeFromSuperview()
+                    busTrainOtherQuestionView = nil
+                }
+                if idkHowToGetThereQuestionView != nil {
+                    idkHowToGetThereQuestionView?.removeFromSuperview()
+                    idkHowToGetThereQuestionView = nil
+                }
+            }
+            if doYouKnowWhereYouWillBeStayingQuestionView != nil {
+                if whatTypeOfPlaceToStayQuestionView != nil {
+                    whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
+                    whatTypeOfPlaceToStayQuestionView = nil
+                    if hotelSearchQuestionView != nil {
+                        hotelSearchQuestionView?.removeFromSuperview()
+                        hotelSearchQuestionView = nil
+                    }
+                    if shortTermRentalSearchQuestionView != nil {
+                        shortTermRentalSearchQuestionView?.removeFromSuperview()
+                        shortTermRentalSearchQuestionView = nil
+                    }
+                    if stayWithSomeoneIKnowQuestionView != nil {
+                        stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
+                        stayWithSomeoneIKnowQuestionView = nil
+                    }
+                    if placeForGroupOrJustYouQuestionView != nil {
+                        placeForGroupOrJustYouQuestionView?.removeFromSuperview()
+                        placeForGroupOrJustYouQuestionView = nil
+                    }
+                }
+            }
+            
+            //spawn travel subview
+            spawnHowDoYouWantToGetThereQuestionView()
+        } else {
+            spawnSendProposalQuestionView()
+        }
+    }
     // MARK: UITextFieldDelegate
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         
@@ -2378,7 +2679,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     func addChatViewController() {
-        chatController = self.storyboard!.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+        chatController = self.storyboard!.instantiateViewController(withIdentifier: "ChatViewController") as? ChatViewController
         chatController?.willMove(toParentViewController: self)
         self.addChildViewController(chatController!)
         chatController?.loadView()
