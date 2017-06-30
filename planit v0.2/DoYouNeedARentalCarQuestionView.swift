@@ -93,9 +93,9 @@ class DoYouNeedARentalCarQuestionView: UIView {
         button2?.titleLabel?.textAlignment = .center
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+        var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-        if modesOfTransportation[indexOfDestinationBeingPlanned] == "drive" {
+        if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
             button2?.setTitle("Nope, I have a car to drive", for: .normal)
         } else {
             button2?.setTitle("Nope", for: .normal)

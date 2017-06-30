@@ -225,31 +225,31 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         
         handleSelection(cell: cell, cellState: cellState)
         
-        // Create array of selected dates
         let selectedDates = calendarView?.selectedDates as! [NSDate]
+        // Create dictionary of selected dates and destinations
+        var datesDestinationsDictionary = [String:[Date]]()
+        datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
         getLengthOfSelectedAvailabilities()
+        //Update trip preferences in dictionary
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+        SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)        
         
-//        //Update trip preferences in dictionary
-//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//        SavedPreferencesForTrip["selected_dates"] = selectedDates
-//        SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
-//        //Save
-//        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
         mostRecentSelectedCellDate = date as NSDate
         
         let availableTimeOfDayInCell = ["Anytime"]
         let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
-        
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+
         let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
         if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MM/dd/yyyy"
             let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
             leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
         }
         if cell?.selectedPosition() == .right {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MM/dd/yyyy"
             let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
             rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
         }
@@ -366,12 +366,18 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
             
         }
         
-//        //Update trip preferences in dictionary
-//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//        SavedPreferencesForTrip["selected_dates"] = selectedDates as [NSDate]
-//        SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
-//        //Save
-//        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        // Create dictionary of selected dates and destinations
+        var datesDestinationsDictionary = [String:[Date]]()
+        datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
+        getLengthOfSelectedAvailabilities()
+        //Update trip preferences in dictionary
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+        SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+        
     }
     
     func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {

@@ -513,6 +513,52 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     // MARK: Custom functions
+    func handleItinerary() {
+        //Handle destinationDatesCollectionView
+        destinationChosenUpdateDatesDestinationsDict()
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+        if datesDestinationsDictionary.count == 0 {
+            //hide dates and destination
+        } else if datesDestinationsDictionary["destinationTBD"] != nil {
+            //Show dates
+            //hide destination
+        } else {
+            //Show dates
+            //Show destination
+        }
+        
+    }
+    
+    func destinationChosenUpdateDatesDestinationsDict() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        if destinationsForTrip.count == 1 {
+            var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+            let dateDestinationForKeyUpdate = datesDestinationsDictionary["destinationTBD"]
+            datesDestinationsDictionary.removeValue(forKey: "destinationTBD")
+            datesDestinationsDictionary[destinationsForTrip[0]] = dateDestinationForKeyUpdate
+            //Update trip preferences in dictionary
+            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        } else {
+            //SPAWN CALENDAR QUESTION VIEW TO PARSE DATES BY DESTINATION
+            
+            
+            var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+            let dateDestinationForKeyUpdate = datesDestinationsDictionary["destinationTBD"]
+            datesDestinationsDictionary.removeValue(forKey: "destinationTBD")
+            for i in 0 ... destinationsForTrip.count - 1 {
+                datesDestinationsDictionary[destinationsForTrip[i]] = dateDestinationForKeyUpdate
+            }
+            //Update trip preferences in dictionary
+            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
+    }
+    
     func setUpFloaty() {
         floaty = Floaty()
         floaty?.autoCloseOnTap = false
@@ -1385,12 +1431,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             doYouKnowWhereYouWillBeStayingQuestionView = Bundle.main.loadNibNamed("DoYouKnowWhereYouWillBeStayingQuestionView", owner: self, options: nil)?.first! as? DoYouKnowWhereYouWillBeStayingQuestionView
             let bounds = UIScreen.main.bounds
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if modesOfTransportation[indexOfDestinationBeingPlanned] == "drive" {
+            if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
                 self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: aboutWhatTimeWillYouStartDrivingQuestionView!)
                 self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (aboutWhatTimeWillYouStartDrivingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            } else if modesOfTransportation[indexOfDestinationBeingPlanned] == "busTrainOther" || modesOfTransportation[indexOfDestinationBeingPlanned] == "fly" {
+            } else if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "busTrainOther" || travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "fly" {
                 if carRentalSearchQuestionView == nil {
                     self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: doYouNeedARentalCarQuestionView!)
                     self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (doYouNeedARentalCarQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
@@ -1398,7 +1444,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: carRentalSearchQuestionView!)
                     self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (carRentalSearchQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
                 }
-            } else if modesOfTransportation[indexOfDestinationBeingPlanned] == "illAlreadyBeThere" {
+            } else if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "illAlreadyBeThere" {
                 self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: howDoYouWantToGetThereQuestionView!)
                 self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (howDoYouWantToGetThereQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
@@ -1763,9 +1809,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         removeCarRentalResultsViewController()
         removeBookSelectedCarRentalViewController()
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+        var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-        if modesOfTransportation[indexOfDestinationBeingPlanned] == "drive" {
+        if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
             spawnAboutWhatTimeWillYouStartDrivingQuestionView()
         } else {
             spawnDoYouKnowWhereYouWillBeStayingQuestionView()
@@ -2055,12 +2101,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func howDoYouWantToGetThereQuestionView_fly(sender:UIButton) {
         if sender.isSelected == true {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned >= modesOfTransportation.count {
-                modesOfTransportation.append("fly")
-            } else if indexOfDestinationBeingPlanned < modesOfTransportation.count {
-                if modesOfTransportation[indexOfDestinationBeingPlanned] != "fly" {
+            if indexOfDestinationBeingPlanned >= travelDictionary.count {
+                travelDictionary.append(["modeOfTransportation":"fly"])
+            } else if indexOfDestinationBeingPlanned < travelDictionary.count {
+                if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "fly" {
                     if doYouNeedARentalCarQuestionView != nil {
                         doYouNeedARentalCarQuestionView?.removeFromSuperview()
                         doYouNeedARentalCarQuestionView = nil
@@ -2082,9 +2128,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                         idkHowToGetThereQuestionView = nil
                     }
                 }
-                modesOfTransportation[indexOfDestinationBeingPlanned] = "fly"
+                travelDictionary[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"fly"]
             }
-            SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
+            SavedPreferencesForTrip["travelDictionary"] = travelDictionary
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             spawnFlightSearchQuestionView()
@@ -2093,12 +2139,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func howDoYouWantToGetThereQuestionView_drive(sender:UIButton) {
         if sender.isSelected == true {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned >= modesOfTransportation.count {
-                modesOfTransportation.append("drive")
-            } else if indexOfDestinationBeingPlanned < modesOfTransportation.count {
-                if modesOfTransportation[indexOfDestinationBeingPlanned] != "drive" {
+            if indexOfDestinationBeingPlanned >= travelDictionary.count {
+                travelDictionary.append(["modeOfTransportation":"drive"])
+            } else if indexOfDestinationBeingPlanned < travelDictionary.count {
+                if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "drive" {
                     if flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
@@ -2121,9 +2167,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                         
                 }
-                modesOfTransportation[indexOfDestinationBeingPlanned] = "drive"
+                travelDictionary[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"drive"]
             }
-            SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
+            SavedPreferencesForTrip["travelDictionary"] = travelDictionary
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             spawnDoYouNeedARentalCarQuestionView()
@@ -2132,12 +2178,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func howDoYouWantToGetThereQuestionView_busTrainOther(sender:UIButton) {
         if sender.isSelected == true {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned >= modesOfTransportation.count {
-                modesOfTransportation.append("busTrainOther")
-            } else if indexOfDestinationBeingPlanned < modesOfTransportation.count {
-                if modesOfTransportation[indexOfDestinationBeingPlanned] != "busTrainOther" {
+            if indexOfDestinationBeingPlanned >= travelDictionary.count {
+                travelDictionary.append(["modeOfTransportation":"busTrainOther"])
+            } else if indexOfDestinationBeingPlanned < travelDictionary.count {
+                if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "busTrainOther" {
                     if  flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
@@ -2168,9 +2214,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                 }
 
-                modesOfTransportation[indexOfDestinationBeingPlanned] = "busTrainOther"
+                travelDictionary[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"busTrainOther"]
             }
-            SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
+            SavedPreferencesForTrip["travelDictionary"] = travelDictionary
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             spawnBusTrainOtherQuestionView()
@@ -2179,12 +2225,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func howDoYouWantToGetThereQuestionView_iDontKnowHelpMe(sender:UIButton) {
         if sender.isSelected == true {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned >= modesOfTransportation.count {
-                modesOfTransportation.append("iDontKnowHelpMe")
-            } else if indexOfDestinationBeingPlanned < modesOfTransportation.count {
-                if modesOfTransportation[indexOfDestinationBeingPlanned] != "iDontKnowHelpMe" {
+            if indexOfDestinationBeingPlanned >= travelDictionary.count {
+                travelDictionary.append(["modeOfTransportation":"iDontKnowHelpMe"])
+            } else if indexOfDestinationBeingPlanned < travelDictionary.count {
+                if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "iDontKnowHelpMe" {
                     if flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
@@ -2215,9 +2261,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                 }
 
-                modesOfTransportation[indexOfDestinationBeingPlanned] = "iDontKnowHelpMe"
+                travelDictionary[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"iDontKnowHelpMe"]
             }
-            SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
+            SavedPreferencesForTrip["travelDictionary"] = travelDictionary
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             spawnidkHowToGetThereQuestionView()
@@ -2226,12 +2272,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:UIButton) {
         if sender.isSelected == true {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned >= modesOfTransportation.count {
-                modesOfTransportation.append("illAlreadyBeThere")
-            } else if indexOfDestinationBeingPlanned < modesOfTransportation.count {
-                if modesOfTransportation[indexOfDestinationBeingPlanned] != "illAlreadyBeThere" {
+            if indexOfDestinationBeingPlanned >= travelDictionary.count {
+                travelDictionary.append(["modeOfTransportation":"illAlreadyBeThere"])
+            } else if indexOfDestinationBeingPlanned < travelDictionary.count {
+                if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "illAlreadyBeThere" {
                     if flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
@@ -2265,9 +2311,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                         idkHowToGetThereQuestionView = nil
                     }
                 }
-                modesOfTransportation[indexOfDestinationBeingPlanned] = "illAlreadyBeThere"
+                travelDictionary[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"illAlreadyBeThere"]
             }
-            SavedPreferencesForTrip["modesOfTransportation"] = modesOfTransportation
+            SavedPreferencesForTrip["travelDictionary"] = travelDictionary
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             spawnDoYouKnowWhereYouWillBeStayingQuestionView()
@@ -2292,9 +2338,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var modesOfTransportation = SavedPreferencesForTrip["modesOfTransportation"] as! [String]
+            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if modesOfTransportation[indexOfDestinationBeingPlanned] == "drive" {
+            if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
                 spawnAboutWhatTimeWillYouStartDrivingQuestionView()
             } else {
                 spawnDoYouKnowWhereYouWillBeStayingQuestionView()
@@ -2774,7 +2820,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 
     //MARK: Scrollview delegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.isHidden == true {
+        if scrollView.isHidden == false {
             handleScrollUpAndDownButtons()
         }
         animateOutSubview()
@@ -2819,10 +2865,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var suggestedDestinationValue = NSString()
         
         var destinationsForTrip = [NSString]()
-        var modesOfTransportation = [NSString]()
+        var travelDictionary = [NSDictionary]()
         var indexOfDestinationBeingPlanned = NSNumber(value: 0)
         var isInitiator = NSNumber(value: 1)
         var currentAssistantSubview = NSNumber(value: 0)
+        var datesDestinationsDictionary  = NSDictionary()
 
         //Activities VC
         var selectedActivities = [NSString]()
@@ -2863,10 +2910,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             suggestedDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggested_destination") as? NSString ?? NSString()
             
             destinationsForTrip = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTrip") as? [NSString] ?? [NSString]()
-            modesOfTransportation = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "modesOfTransportation") as? [NSString] ?? [NSString]()
+            travelDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "travelDictionary") as? [NSDictionary] ?? [NSDictionary]()
             indexOfDestinationBeingPlanned = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "indexOfDestinationBeingPlanned") as? NSNumber ?? NSNumber()
             isInitiator = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "isInitiator") as? NSNumber ?? NSNumber()
             currentAssistantSubview = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "currentAssistantSubview") as? NSNumber ?? NSNumber()
+            datesDestinationsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "datesDestinationsDictionary") as? NSDictionary ?? NSDictionary()
 
 
             //Activities VC
@@ -2879,7 +2927,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"modesOfTransportation":modesOfTransportation, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
@@ -2978,6 +3026,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         UIView.animate(withDuration: 0.4) {
             self.underline.layer.frame = CGRect(x: 163, y: 25, width: 85, height: 51)
         }
+        handleItinerary()
         assistantViewIsHiddenTrue()
         itineraryView.isHidden = false
         retrieveContactsWithStore(store: addressBookStore)
@@ -3716,6 +3765,20 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.destinationButton.layer.shadowOffset = CGSize(width: 1, height: 1)
 
             
+            //Find left and right dates
+            let datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+            var leftDatesDestinations = [String:Date]()
+            var rightDatesDestinations = [String:Date]()
+            if datesDestinationsDictionary[destinationsForTrip[indexPath.row]] != nil {
+                leftDatesDestinations[destinationsForTrip[indexPath.row]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?[0]
+                rightDatesDestinations[destinationsForTrip[indexPath.row]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?[(datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?.count)! - 1]
+            }
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd"
+            let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexPath.row]]!)
+            let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row]]!)
+            
+            destinationsDatesCell.datesLabel.text = "\(leftDateAsString) - \(rightDateAsString)"
             destinationsDatesCell.datesButton.layer.cornerRadius = destinationsDatesCell.datesButton.frame.size.height / 2
             destinationsDatesCell.datesButton.backgroundColor = datesItem?.buttonColor
             destinationsDatesCell.datesButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
