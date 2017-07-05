@@ -88,6 +88,9 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         //GOOGLE PLACES SEARCH
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
+        let filter = GMSAutocompleteFilter()
+        filter.type = .city
+        resultsViewController?.autocompleteFilter = filter
         resultsViewController?.tableCellBackgroundColor = UIColor.darkGray
         resultsViewController?.tableCellSeparatorColor = UIColor.lightGray
         resultsViewController?.primaryTextColor = UIColor.lightGray
@@ -172,4 +175,6 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
     func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
+    
+
 }

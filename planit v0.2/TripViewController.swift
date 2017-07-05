@@ -516,6 +516,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func handleItinerary() {
         //Handle destinationDatesCollectionView
         destinationChosenUpdateDatesDestinationsDict()
+
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
         var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
@@ -537,25 +538,27 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
         if destinationsForTrip.count == 1 {
             var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
-            let dateDestinationForKeyUpdate = datesDestinationsDictionary["destinationTBD"]
-            datesDestinationsDictionary.removeValue(forKey: "destinationTBD")
-            datesDestinationsDictionary[destinationsForTrip[0]] = dateDestinationForKeyUpdate
-            //Update trip preferences in dictionary
-            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
-            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-        } else {
+            if let dateDestinationForKeyUpdate = datesDestinationsDictionary["destinationTBD"] {
+                datesDestinationsDictionary.removeValue(forKey: "destinationTBD")
+                datesDestinationsDictionary[destinationsForTrip[0]] = dateDestinationForKeyUpdate
+                //Update trip preferences in dictionary
+                SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            }
+        } else if destinationsForTrip.count > 1 {
             //SPAWN CALENDAR QUESTION VIEW TO PARSE DATES BY DESTINATION
             
             
             var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
-            let dateDestinationForKeyUpdate = datesDestinationsDictionary["destinationTBD"]
-            datesDestinationsDictionary.removeValue(forKey: "destinationTBD")
-            for i in 0 ... destinationsForTrip.count - 1 {
-                datesDestinationsDictionary[destinationsForTrip[i]] = dateDestinationForKeyUpdate
+            if let dateDestinationForKeyUpdate = datesDestinationsDictionary["destinationTBD"] {
+                datesDestinationsDictionary.removeValue(forKey: "destinationTBD")
+                for i in 0 ... destinationsForTrip.count - 1 {
+                    datesDestinationsDictionary[destinationsForTrip[i]] = dateDestinationForKeyUpdate
+                }
+                //Update trip preferences in dictionary
+                SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
             }
-            //Update trip preferences in dictionary
-            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
-            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         }
     }
     
@@ -3763,7 +3766,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.destinationButton.layer.masksToBounds = false
             destinationsDatesCell.destinationButton.layer.shadowOpacity = 0.4
             destinationsDatesCell.destinationButton.layer.shadowOffset = CGSize(width: 1, height: 1)
-
             
             //Find left and right dates
             let datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]

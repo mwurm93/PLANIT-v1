@@ -67,6 +67,9 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         //GOOGLE PLACES SEARCH
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self
+        let filter = GMSAutocompleteFilter()
+        filter.type = .city
+        resultsViewController?.autocompleteFilter = filter
         resultsViewController?.tableCellBackgroundColor = UIColor.darkGray
         resultsViewController?.tableCellSeparatorColor = UIColor.lightGray
         resultsViewController?.primaryTextColor = UIColor.lightGray

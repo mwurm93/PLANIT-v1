@@ -64,6 +64,7 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
         SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
+        
         let when = DispatchTime.now() + 0.3
         
         DispatchQueue.main.asyncAfter(deadline: when) {
