@@ -28,7 +28,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     static let blackColor = UIColor(colorWithHexValue: 0x000000, alpha: 1)
     var selectionColor = UIColor()
     var selectionColorTransparent = UIColor()
-    var colors = ["Silver", "Concrete", "Nephritis", "Peter River", "Belize Hole", "Amethyst", "Wisteria", "Wet Asphalt", "Midnight Blue", "Sun Flower", "Orange", "Carrot", "Pumpkin", "Alizarin", "Pomegranate", "Turquoise", "Green Sea", "Asbestos"]
+    var colors = ["Turquoise", "Peter River", "Nephritis", "Belize Hole", "Amethyst", "Wisteria", "Wet Asphalt", "Midnight Blue", "Sun Flower", "Orange", "Carrot", "Pumpkin", "Alizarin", "Pomegranate", "Turquoise", "Green Sea", "Asbestos"]
     var colorIndex = 0
 
     //Clas data object vars
@@ -183,6 +183,9 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             myCustomCell?.rightSideConnector.isHidden = true
             myCustomCell?.middleConnector.isHidden = true
             myCustomCell?.dayLabel.textColor = DatesPickedOutCalendarView.whiteColor
+            if !(cellState.isSelected) {
+                myCustomCell?.dayLabel.textColor = DatesPickedOutCalendarView.darkGrayColor
+            }
         }
         if cellState.date < Date() {
             myCustomCell?.dayLabel.textColor = DatesPickedOutCalendarView.darkGrayColor
@@ -239,75 +242,76 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
-//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//        if calendar == travelDaysCalendarView {
-//            if travelDaysCalendarView.selectedDates.count > ((SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count - 1) {
+        calendarView?.deselectDates(from: date)
+////        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+////        if calendar == travelDaysCalendarView {
+////            if travelDaysCalendarView.selectedDates.count > ((SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count - 1) {
+////                calendarView?.deselectAllDates(triggerSelectionDelegate: false)
+////                calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+////            }
+////            
+////        } else if calendar == calendarView {
+//            if leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1 {
 //                calendarView?.deselectAllDates(triggerSelectionDelegate: false)
+//                rightDateTimeArrays.removeAllObjects()
+//                leftDateTimeArrays.removeAllObjects()
 //                calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
 //            }
 //            
-//        } else if calendar == calendarView {
-            if leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1 {
-                calendarView?.deselectAllDates(triggerSelectionDelegate: false)
-                rightDateTimeArrays.removeAllObjects()
-                leftDateTimeArrays.removeAllObjects()
-                calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-            }
-            
-            //UNCOMMENT FOR TWO CLICK RANGE SELECTION
-            let leftKeys = leftDateTimeArrays.allKeys
-            let rightKeys = rightDateTimeArrays.allKeys
-            if leftKeys.count == 1 && rightKeys.count == 0 {
-                formatter.dateFormat = "MM/dd/yyyy"
-                let leftDate = formatter.date(from: leftKeys[0] as! String)
-                if date > leftDate! {
-                    calendarView?.selectDates(from: leftDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-                } else {
-                    calendarView?.deselectAllDates(triggerSelectionDelegate: false)
-                    rightDateTimeArrays.removeAllObjects()
-                    leftDateTimeArrays.removeAllObjects()
-                    calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-                }
-            }
-            
-            handleSelection(cell: cell, cellState: cellState)
-            
-            let selectedDates = calendarView?.selectedDates as! [NSDate]
-            // Create dictionary of selected dates and destinations
-            var datesDestinationsDictionary = [String:[Date]]()
-            datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
-            getLengthOfSelectedAvailabilities()
-            //Update trip preferences in dictionary
-            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
-            SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
-            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            
-            mostRecentSelectedCellDate = date as NSDate
-            
-            let availableTimeOfDayInCell = ["Anytime"]
-            let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
-            
-            formatter.dateFormat = "MM/dd/yyyy"
-            
-            let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
-            if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
-                let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
-                leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
-            }
-            if cell?.selectedPosition() == .right {
-                let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
-                rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
-            }
-            
-            //        //Update trip preferences in dictionary
-            //        let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
-            //        SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
-            //        SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
-            //
-            //        //Save
-            //        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
-//        }
+//            //UNCOMMENT FOR TWO CLICK RANGE SELECTION
+//            let leftKeys = leftDateTimeArrays.allKeys
+//            let rightKeys = rightDateTimeArrays.allKeys
+//            if leftKeys.count == 1 && rightKeys.count == 0 {
+//                formatter.dateFormat = "MM/dd/yyyy"
+//                let leftDate = formatter.date(from: leftKeys[0] as! String)
+//                if date > leftDate! {
+//                    calendarView?.selectDates(from: leftDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+//                } else {
+//                    calendarView?.deselectAllDates(triggerSelectionDelegate: false)
+//                    rightDateTimeArrays.removeAllObjects()
+//                    leftDateTimeArrays.removeAllObjects()
+//                    calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+//                }
+//            }
+//            
+//            handleSelection(cell: cell, cellState: cellState)
+//            
+//            let selectedDates = calendarView?.selectedDates as! [NSDate]
+//            // Create dictionary of selected dates and destinations
+//            var datesDestinationsDictionary = [String:[Date]]()
+//            datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
+//            getLengthOfSelectedAvailabilities()
+//            //Update trip preferences in dictionary
+//            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+//            SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
+//            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//            
+//            mostRecentSelectedCellDate = date as NSDate
+//            
+//            let availableTimeOfDayInCell = ["Anytime"]
+//            let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
+//            
+//            formatter.dateFormat = "MM/dd/yyyy"
+//            
+//            let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
+//            if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
+//                let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+//                leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+//            }
+//            if cell?.selectedPosition() == .right {
+//                let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
+//                rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
+//            }
+//            
+//            //        //Update trip preferences in dictionary
+//            //        let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+//            //        SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+//            //        SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
+//            //
+//            //        //Save
+//            //        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+////        }
     }
 
     
@@ -326,13 +330,12 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                 if !isDeselectedDateDateBeforeOtherTravelDates {
                     travelDates.append(date)
                     calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-                }
-                else {
+                } else {
                     travelDates.removeAll()
                     travelDates.append(date)
                     calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-                    var fromDestination = 0
-                    var toDestination = 1
+                    fromDestination = 0
+                    toDestination = 1
                     questionLabel?.text = "When do you want to travel from \(destinationsForTrip[fromDestination]) to \(destinationsForTrip[toDestination])?"
                     fromDestination += 1
                     toDestination += 1
@@ -341,8 +344,8 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                 travelDates.removeAll()
                 travelDates.append(date)
                 calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-                var fromDestination = 0
-                var toDestination = 1
+                fromDestination = 0
+                toDestination = 1
                 questionLabel?.text = "When do you want to travel from \(destinationsForTrip[fromDestination]) to \(destinationsForTrip[toDestination])?"
                 fromDestination += 1
                 toDestination += 1
@@ -350,7 +353,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         }
         calendarView?.reloadDates(calendarView.selectedDates)
         
-        if destinationsForTrip.count - 1 < toDestination {
+        if (destinationsForTrip.count - 1) >= toDestination {
         
             UIView.animate(withDuration: 1) {
                 self.questionLabel?.text = "When do you want to travel from \(destinationsForTrip[self.fromDestination]) to \(destinationsForTrip[self.toDestination])?"
