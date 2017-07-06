@@ -76,6 +76,8 @@
 		FA8DBAC31F06035D005D2B61 /* YesIKnowWhereImStayingQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8DBAC21F06035D005D2B61 /* YesIKnowWhereImStayingQuestionView.xib */; };
 		FA8DBAC51F06072B005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8DBAC41F06072B005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.swift */; };
 		FA8DBAC71F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8DBAC61F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib */; };
+		FA8DBAC91F0DA6D9005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8DBAC81F0DA6D9005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.swift */; };
+		FA8DBACB1F0DA6FA005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8DBACA1F0DA6FA005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.xib */; };
 		FA90F1D41EEB4B9F00094878 /* SwipingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */; };
 		FA9407741EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9407731EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift */; };
 		FA9407781EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */; };
@@ -267,6 +269,8 @@
 		FA8DBAC21F06035D005D2B61 /* YesIKnowWhereImStayingQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YesIKnowWhereImStayingQuestionView.xib; sourceTree = "<group>"; };
 		FA8DBAC41F06072B005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoYouNeedHelpBookingAHotelQuestionView.swift; sourceTree = "<group>"; };
 		FA8DBAC61F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoYouNeedHelpBookingAHotelQuestionView.xib; sourceTree = "<group>"; };
+		FA8DBAC81F0DA6D9005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseDatesForMultipleDestinationsCalendarView.swift; sourceTree = "<group>"; };
+		FA8DBACA1F0DA6FA005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ParseDatesForMultipleDestinationsCalendarView.xib; sourceTree = "<group>"; };
 		FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipingViewController.swift; sourceTree = "<group>"; };
 		FA9407731EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusTrainOtherQuestionView.swift; sourceTree = "<group>"; };
 		FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusTrainOtherQuestionView.xib; sourceTree = "<group>"; };
@@ -530,6 +534,8 @@
 				FAE83F781EF6549E0009A020 /* DatesPickedOutQuestionView.xib */,
 				FAE83F7A1EF6D3F70009A020 /* DatesPickedOutCalendarView.swift */,
 				FAE83F7C1EF6D40B0009A020 /* DatesPickedOutCalendarView.xib */,
+				FA8DBAC81F0DA6D9005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.swift */,
+				FA8DBACA1F0DA6FA005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.xib */,
 			);
 			name = Calendar;
 			sourceTree = "<group>";
@@ -987,6 +993,7 @@
 				FA4EA8D11EE86AA6005FCE91 /* GetTripMessages.graphql in Resources */,
 				FAA8F2551E351A2700CD7337 /* Main.storyboard in Resources */,
 				FAA8F22A1E35194100CD7337 /* Assets.xcassets in Resources */,
+				FA8DBACB1F0DA6FA005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.xib in Resources */,
 				FA14B2281EFB107C004E0E29 /* YesCityDecidedQuestionView.xib in Resources */,
 				FAE83F751EF64AA30009A020 /* WhereTravellingFromQuestionView.xib in Resources */,
 				FAE83F791EF6549E0009A020 /* DatesPickedOutQuestionView.xib in Resources */,
@@ -1232,6 +1239,7 @@
 				FA4887851F01B95A0015F078 /* PlaceForGroupOrJustYouQuestionView.swift in Sources */,
 				FAA8F2711E351B9500CD7337 /* PasswordViewController.swift in Sources */,
 				FAE83F871EF7AA780009A020 /* PlanTripToIdeaQuestionView.swift in Sources */,
+				FA8DBAC91F0DA6D9005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.swift in Sources */,
 				FAE83F651EF461500009A020 /* TripViewController.swift in Sources */,
 				FA77D1ED1EFDB58A00A37A05 /* carRentalSearchResultTableViewCell.swift in Sources */,
 				FAC1BD311EAE7707008AB7C4 /* ZLSwipeableView.swift in Sources */,

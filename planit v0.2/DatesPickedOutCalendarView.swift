@@ -17,6 +17,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
     
     //Class UI object vars
     var questionLabel: UILabel?
+    var formatter = DateFormatter()
     
     //Cache color vars
     static let transparentColor = UIColor(colorWithHexValue: 0xFFFFFF, alpha: 0).cgColor
@@ -101,7 +102,6 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
 // MARK: JTCalendarView Extension
 
     func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
-        let formatter = DateFormatter()
         formatter.dateFormat = "yyyy MM dd"
         
         let startDate = Date()
@@ -205,9 +205,8 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         let leftKeys = leftDateTimeArrays.allKeys
         let rightKeys = rightDateTimeArrays.allKeys
         if leftKeys.count == 1 && rightKeys.count == 0 {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM/dd/yyyy"
-            let leftDate = dateFormatter.date(from: leftKeys[0] as! String)
+            formatter.dateFormat = "MM/dd/yyyy"
+            let leftDate = formatter.date(from: leftKeys[0] as! String)
             if date > leftDate! {
                 calendarView?.selectDates(from: leftDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
                 let when = DispatchTime.now() + 0.15
@@ -241,7 +240,6 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         let availableTimeOfDayInCell = ["Anytime"]
         let timeOfDayToAddToArray = availableTimeOfDayInCell.joined(separator: ", ") as NSString
 
-        let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yyyy"
 
         let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
@@ -299,7 +297,6 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
                 }
             }
             
-            let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/yyyy"
             let leftMostDateAsString = formatter.string (from: leftMostDate!)
             let rightMostDateAsString = formatter.string (from: rightMostDate!)
@@ -312,13 +309,11 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
                 
                 let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
                 if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
-                    let formatter = DateFormatter()
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
                 }
                 if cell?.selectedPosition() == .right {
-                    let formatter = DateFormatter()
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
@@ -343,13 +338,11 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
                 
                 let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
                 if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
-                    let formatter = DateFormatter()
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
                 }
                 if cell?.selectedPosition() == .right {
-                    let formatter = DateFormatter()
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
@@ -434,45 +427,10 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
     func calendar(_ calendar: JTAppleCalendarView, headerViewForDateRange range: (start: Date, end: Date), at indexPath: IndexPath) -> JTAppleCollectionReusableView {
         
         let headerCell = calendarView?.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: "monthHeaderView", for: indexPath) as! monthHeaderView
-        
-        // Create Year String
-        let yearDateFormatter = DateFormatter()
-        yearDateFormatter.dateFormat = "yyyy"
-        let YearHeader = yearDateFormatter.string(from: range.start)
-        
-        //Create Month String
-        let monthDateFormatter = DateFormatter()
-        monthDateFormatter.dateFormat = "MM"
-        let MonthHeader = monthDateFormatter.string(from: range.start)
-        
-        // Update header
-        
-        
-        if MonthHeader == "01" {
-            headerCell.monthLabel.text = "January " + YearHeader
-        } else if MonthHeader == "02" {
-            headerCell.monthLabel.text = "February " + YearHeader
-        } else if MonthHeader == "03" {
-            headerCell.monthLabel.text = "March " + YearHeader
-        } else if MonthHeader == "04" {
-            headerCell.monthLabel.text = "April " + YearHeader
-        } else if MonthHeader == "05" {
-            headerCell.monthLabel.text = "May " + YearHeader
-        } else if MonthHeader == "06" {
-            headerCell.monthLabel.text = "June " + YearHeader
-        } else if MonthHeader == "07" {
-            headerCell.monthLabel.text = "July " + YearHeader
-        } else if MonthHeader == "08" {
-            headerCell.monthLabel.text = "August " + YearHeader
-        } else if MonthHeader == "09" {
-            headerCell.monthLabel.text = "September " + YearHeader
-        } else if MonthHeader == "10" {
-            headerCell.monthLabel.text = "October " + YearHeader
-        } else if MonthHeader == "11" {
-            headerCell.monthLabel.text = "November " + YearHeader
-        } else if MonthHeader == "12" {
-            headerCell.monthLabel.text = "December " + YearHeader
-        }
+
+        formatter.dateFormat = "MMMM yyyy"
+        let stringForHeader = formatter.string(from: range.start)
+        headerCell.monthLabel.text = stringForHeader
         
         return headerCell
     }

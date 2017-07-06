@@ -50,9 +50,6 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
                 self.createPasswordLabel.isHidden = false
             }
         }
-        
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -71,7 +68,7 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         DataContainerSingleton.sharedDataContainer.password = Password.text
         
         if Password.isValid() {
-            if existingUser {
+            if !existingUser {
             
             //Create account and authenticate instance
             apollo.perform(mutation: CreateUserMutation(user: CreateUserInput(password: DataContainerSingleton.sharedDataContainer.password!, username: DataContainerSingleton.sharedDataContainer.emailAddress!)), resultHandler: { (result, error) in

@@ -13,6 +13,7 @@ import Cartography
 import ContactsUI
 import Contacts
 import Floaty
+import SafariServices
 
 class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate {
 
@@ -55,6 +56,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var sendProposalQuestionView: SendProposalQuestionView?
     var yesIKnowWhereImStayingQuestionView: YesIKnowWhereImStayingQuestionView?
     var doYouNeedHelpBookingAHotelQuestionView: DoYouNeedHelpBookingAHotelQuestionView?
+    var parseDatesForMultipleDestinationsCalendarView: ParseDatesForMultipleDestinationsCalendarView?
         //CalendarView vars
     let timesOfDayArray = ["Early morning (before 8am)","Morning (8am-11am)","Midday (11am-2pm)","Afternoon (2pm-5pm)","Evening (5pm-9pm)","Night (after 9pm)","Anytime"]
     var leftDates = [Date]()
@@ -91,6 +93,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var destinationItem: FloatyItem?
     var travelItem: FloatyItem?
     var placeToStayItem: FloatyItem?
+        //BookingMode
+    var bookingMode = "flight"
+        //Date formatting
+    var formatter = DateFormatter()
     
     // MARK: Outlets
     @IBOutlet weak var visualEffectView: UIVisualEffectView!
@@ -162,6 +168,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[29] = spawnSendProposalQuestionView
         functionsToLoadSubviewsDictionary[30] = spawnYesIKnowWhereImStayingQuestionView
         functionsToLoadSubviewsDictionary[31] = spawnDoYouNeedHelpBookingAHotelQuestionView
+        functionsToLoadSubviewsDictionary[32] = spawnParseDatesForMultipleDestinationsCalendarView
         
 //        hideKeyboardWhenTappedAround()
         
@@ -421,7 +428,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         itineraryButton1?.layer.masksToBounds = true
         itineraryButton1?.titleLabel?.numberOfLines = 0
         itineraryButton1?.titleLabel?.textAlignment = .center
-//        itineraryButton1?.translatesAutoresizingMaskIntoConstraints = false
         itineraryButton1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         itineraryButton1?.sizeToFit()
         itineraryButton1?.frame.size.height = 30
@@ -437,7 +443,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         itineraryButton2?.layer.masksToBounds = true
         itineraryButton2?.titleLabel?.numberOfLines = 0
         itineraryButton2?.titleLabel?.textAlignment = .center
-//        itineraryButton2?.translatesAutoresizingMaskIntoConstraints = false
         itineraryButton2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         itineraryButton2?.sizeToFit()
         itineraryButton2?.frame.size.height = 30
@@ -453,7 +458,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         itineraryButton3?.layer.masksToBounds = true
         itineraryButton3?.titleLabel?.numberOfLines = 0
         itineraryButton3?.titleLabel?.textAlignment = .center
-//        itineraryButton3?.translatesAutoresizingMaskIntoConstraints = false
         itineraryButton3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         itineraryButton3?.sizeToFit()
         itineraryButton3?.frame.size.height = 30
@@ -925,7 +929,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let currentSubview = SavedPreferencesForTrip["currentAssistantSubview"] as! Int
         
         //UPDATE WHEN ADDING SUBVIEWS TO SCROLLVIEW
-        let datesSubviews = [1]
+        let datesSubviews = [1,32]
         let destinationSubviews = [0,2,3,4,5,6,7,8,9]
         let travelSubviews = [10,11,12,13,14,15,16,17,19,20,21]
         let placeToStaySubviews = [18,22,23,24,25,26,27,28,30,31]
@@ -1035,7 +1039,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.scrollContentView.insertSubview(whereTravellingFromQuestionView!, aboveSubview: datesPickedOutCalendarView!)
             let bounds = UIScreen.main.bounds
             whereTravellingFromQuestionView?.button1?.addTarget(self, action: #selector(self.spawnDecidedOnCityQuestionView), for: UIControlEvents.touchUpInside)
-            self.whereTravellingFromQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            self.whereTravellingFromQuestionView!.frame = CGRect(x: 0, y: (datesPickedOutCalendarView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: whereTravellingFromQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whereTravellingFromQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
             
@@ -1068,7 +1072,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             datesPickedOutCalendarView?.tag = 1
             self.scrollContentView.insertSubview(datesPickedOutCalendarView!, aboveSubview: tripNameQuestionView!)
             let bounds = UIScreen.main.bounds
-            self.datesPickedOutCalendarView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            self.datesPickedOutCalendarView!.frame = CGRect(x: 0, y: (tripNameQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: datesPickedOutCalendarView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutCalendarView?.frame.height)!)
             view.addConstraints([heightConstraint])
         
@@ -1097,7 +1101,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let bounds = UIScreen.main.bounds
             decidedOnCityToVisitQuestionView?.button1?.addTarget(self, action: #selector(self.decidedOnCityToVisitQuestion_Yes(sender:)), for: UIControlEvents.touchUpInside)
             decidedOnCityToVisitQuestionView?.button2?.addTarget(self, action: #selector(self.decidedOnCityToVisitQuestion_No(sender:)), for: UIControlEvents.touchUpInside)
-            self.decidedOnCityToVisitQuestionView!.frame = CGRect(x: 0, y: scrollContentView.subviews[scrollContentView.subviews.count - 2].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            self.decidedOnCityToVisitQuestionView!.frame = CGRect(x: 0, y: (whereTravellingFromQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: decidedOnCityToVisitQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (decidedOnCityToVisitQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
             
@@ -1251,7 +1255,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 destinationsString = "\(destinationsForTrip[0]) and \(destinationsForTrip[1])"
             }
             addAnotherDestinationQuestionView?.questionLabel?.text = "Woohoo! Let's plan a trip to \(destinationsString).\n\nWill these be the only destinations on this trip?"
-            addAnotherDestinationQuestionView?.button1?.setTitle("Yep,  \(destinationsString)", for: .normal)
+            addAnotherDestinationQuestionView?.button1?.setTitle("Yep, \(destinationsString)", for: .normal)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 8)
@@ -1326,36 +1330,41 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollToSubviewWithTag(tag: 11)
     }
     func spawnFlightResultsQuestionView() {
-        flightResultsController = self.storyboard!.instantiateViewController(withIdentifier: "flightResultsViewController") as? flightResultsViewController
-        flightResultsController?.willMove(toParentViewController: self)
-        self.addChildViewController(flightResultsController!)
-        flightResultsController?.searchMode = flightSearchQuestionView?.searchMode
-        flightResultsController?.loadView()
-        flightResultsController?.viewDidLoad()
-        flightResultsController?.view.frame = self.view.bounds
-        for subview in (flightSearchQuestionView?.subviews)! {
-            subview.isHidden = true
-        }
-        self.flightSearchQuestionView?.addSubview((flightResultsController?.view)!)
-        flightResultsController?.view.tag = 12
-        flightResultsController?.didMove(toParentViewController: self)
+        bookingMode = "flight"
         
-        updateProgress()
+        let whiteLabelURL_FlightSearchQuery = URL(string: "http://secure.rezserver.com/flights/results/depart/?rs_o_city=Seattle%2C+WA&rs_d_city=Paris%2C+France&rs_chk_in=07%2F11%2F2017&rs_o_aircode=800051061&rs_d_aircode=800029376&rs_chk_out=07%2F17%2F2017&rs_adults=1&rs_children=0&refid=8056&air_search_type=roundtrip&preferred_airline=&cabin_class=")!
+        showWebsite(URL: whiteLabelURL_FlightSearchQuery)
+        
+//        flightResultsController = self.storyboard!.instantiateViewController(withIdentifier: "flightResultsViewController") as? flightResultsViewController
+//        flightResultsController?.willMove(toParentViewController: self)
+//        self.addChildViewController(flightResultsController!)
+//        flightResultsController?.searchMode = flightSearchQuestionView?.searchMode
+//        flightResultsController?.loadView()
+//        flightResultsController?.viewDidLoad()
+//        flightResultsController?.view.frame = self.view.bounds
+//        for subview in (flightSearchQuestionView?.subviews)! {
+//            subview.isHidden = true
+//        }
+//        self.flightSearchQuestionView?.addSubview((flightResultsController?.view)!)
+//        flightResultsController?.view.tag = 12
+//        flightResultsController?.didMove(toParentViewController: self)
+//        
+//        updateProgress()
     }
     func spawnFlightBookingQuestionView() {
-        reviewAndBookFlightsController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
-        reviewAndBookFlightsController?.willMove(toParentViewController: self)
-        self.addChildViewController(reviewAndBookFlightsController!)
-        reviewAndBookFlightsController?.bookingMode = "flight"
-        reviewAndBookFlightsController?.loadView()
-        reviewAndBookFlightsController?.viewDidLoad()
-        reviewAndBookFlightsController?.view.frame = self.view.bounds
-        flightResultsController?.view.isHidden = true
-        self.flightSearchQuestionView?.addSubview((reviewAndBookFlightsController?.view)!)
-        reviewAndBookFlightsController?.view.tag = 13
-        reviewAndBookFlightsController?.didMove(toParentViewController: self)
-        
-        updateProgress()
+//        reviewAndBookFlightsController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
+//        reviewAndBookFlightsController?.willMove(toParentViewController: self)
+//        self.addChildViewController(reviewAndBookFlightsController!)
+//        reviewAndBookFlightsController?.bookingMode = "flight"
+//        reviewAndBookFlightsController?.loadView()
+//        reviewAndBookFlightsController?.viewDidLoad()
+//        reviewAndBookFlightsController?.view.frame = self.view.bounds
+//        flightResultsController?.view.isHidden = true
+//        self.flightSearchQuestionView?.addSubview((reviewAndBookFlightsController?.view)!)
+//        reviewAndBookFlightsController?.view.tag = 13
+//        reviewAndBookFlightsController?.didMove(toParentViewController: self)
+//        
+//        updateProgress()
     }
     func spawnDoYouNeedARentalCarQuestionView() {
         if doYouNeedARentalCarQuestionView == nil {
@@ -1397,36 +1406,41 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollToSubviewWithTag(tag: 15)
     }
     func spawnRentalCarResultsQuestionView() {
-        carRentalResultsController = self.storyboard!.instantiateViewController(withIdentifier: "carRentalResultsViewController") as? carRentalResultsViewController
-        carRentalResultsController?.willMove(toParentViewController: self)
-        self.addChildViewController(carRentalResultsController!)
-        carRentalResultsController?.searchMode = carRentalSearchQuestionView?.searchMode
-        carRentalResultsController?.loadView()
-        carRentalResultsController?.viewDidLoad()
-        carRentalResultsController?.view.frame = self.view.bounds
-        for subview in (carRentalSearchQuestionView?.subviews)! {
-            subview.isHidden = true
-        }
-        self.carRentalSearchQuestionView?.addSubview((carRentalResultsController?.view)!)
-        carRentalResultsController?.view.tag = 16
-        carRentalResultsController?.didMove(toParentViewController: self)
+        bookingMode = "carRental"
         
-        updateProgress()
+        let whiteLabelURL_CarRentalSearchQuery = URL(string: "http://secure.rezserver.com/flights/results/depart/?rs_o_city=Seattle%2C+WA&rs_d_city=Paris%2C+France&rs_chk_in=07%2F11%2F2017&rs_o_aircode=800051061&rs_d_aircode=800029376&rs_chk_out=07%2F17%2F2017&rs_adults=1&rs_children=0&refid=8056&air_search_type=roundtrip&preferred_airline=&cabin_class=")!
+        showWebsite(URL: whiteLabelURL_CarRentalSearchQuery)
+        
+//        carRentalResultsController = self.storyboard!.instantiateViewController(withIdentifier: "carRentalResultsViewController") as? carRentalResultsViewController
+//        carRentalResultsController?.willMove(toParentViewController: self)
+//        self.addChildViewController(carRentalResultsController!)
+//        carRentalResultsController?.searchMode = carRentalSearchQuestionView?.searchMode
+//        carRentalResultsController?.loadView()
+//        carRentalResultsController?.viewDidLoad()
+//        carRentalResultsController?.view.frame = self.view.bounds
+//        for subview in (carRentalSearchQuestionView?.subviews)! {
+//            subview.isHidden = true
+//        }
+//        self.carRentalSearchQuestionView?.addSubview((carRentalResultsController?.view)!)
+//        carRentalResultsController?.view.tag = 16
+//        carRentalResultsController?.didMove(toParentViewController: self)
+//        
+//        updateProgress()
     }
     func spawnCarRentalBookingQuestionView() {
-        reviewAndBookCarRentalController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
-        reviewAndBookCarRentalController?.willMove(toParentViewController: self)
-        self.addChildViewController(reviewAndBookCarRentalController!)
-        reviewAndBookCarRentalController?.bookingMode = "carRental"
-        reviewAndBookCarRentalController?.loadView()
-        reviewAndBookCarRentalController?.viewDidLoad()
-        reviewAndBookCarRentalController?.view.frame = self.view.bounds
-        carRentalResultsController?.view.isHidden = true
-        self.carRentalSearchQuestionView?.addSubview((reviewAndBookCarRentalController?.view)!)
-        reviewAndBookCarRentalController?.view.tag = 17
-        reviewAndBookCarRentalController?.didMove(toParentViewController: self)
-        
-        updateProgress()
+//        reviewAndBookCarRentalController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
+//        reviewAndBookCarRentalController?.willMove(toParentViewController: self)
+//        self.addChildViewController(reviewAndBookCarRentalController!)
+//        reviewAndBookCarRentalController?.bookingMode = "carRental"
+//        reviewAndBookCarRentalController?.loadView()
+//        reviewAndBookCarRentalController?.viewDidLoad()
+//        reviewAndBookCarRentalController?.view.frame = self.view.bounds
+//        carRentalResultsController?.view.isHidden = true
+//        self.carRentalSearchQuestionView?.addSubview((reviewAndBookCarRentalController?.view)!)
+//        reviewAndBookCarRentalController?.view.tag = 17
+//        reviewAndBookCarRentalController?.didMove(toParentViewController: self)
+//        
+//        updateProgress()
     }
     func spawnDoYouKnowWhereYouWillBeStayingQuestionView() {
         if doYouKnowWhereYouWillBeStayingQuestionView == nil {
@@ -1598,39 +1612,45 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
 
     func spawnHotelResultsQuestionView() {
-        self.view.endEditing(true)
-        hotelResultsController = self.storyboard!.instantiateViewController(withIdentifier: "exploreHotelsViewController") as? exploreHotelsViewController
-        hotelResultsController?.willMove(toParentViewController: self)
-        self.addChildViewController(hotelResultsController!)
-        hotelResultsController?.loadView()
-        hotelResultsController?.viewDidLoad()
-        hotelResultsController?.view.frame = self.view.bounds
-        for subview in (hotelSearchQuestionView?.subviews)! {
-            subview.isHidden = true
-        }
-        self.hotelSearchQuestionView?.addSubview((hotelResultsController?.view)!)
-        hotelResultsController?.view.tag = 26
-        hotelResultsController?.didMove(toParentViewController: self)
+        bookingMode = "hotel"
         
-        updateProgress()
+        let whiteLabelURL_HotelSearchQuery = URL(string: "http://secure.rezserver.com/flights/results/depart/?rs_o_city=Seattle%2C+WA&rs_d_city=Paris%2C+France&rs_chk_in=07%2F11%2F2017&rs_o_aircode=800051061&rs_d_aircode=800029376&rs_chk_out=07%2F17%2F2017&rs_adults=1&rs_children=0&refid=8056&air_search_type=roundtrip&preferred_airline=&cabin_class=")!
+        showWebsite(URL: whiteLabelURL_HotelSearchQuery)
+        
+//        self.view.endEditing(true)
+//        hotelResultsController = self.storyboard!.instantiateViewController(withIdentifier: "exploreHotelsViewController") as? exploreHotelsViewController
+//        hotelResultsController?.willMove(toParentViewController: self)
+//        self.addChildViewController(hotelResultsController!)
+//        hotelResultsController?.loadView()
+//        hotelResultsController?.viewDidLoad()
+//        hotelResultsController?.view.frame = self.view.bounds
+//        for subview in (hotelSearchQuestionView?.subviews)! {
+//            subview.isHidden = true
+//        }
+//        self.hotelSearchQuestionView?.addSubview((hotelResultsController?.view)!)
+//        hotelResultsController?.view.tag = 26
+//        hotelResultsController?.didMove(toParentViewController: self)
+//        
+//        updateProgress()
 
     }
     
     func spawnHotelBookingQuestionView() {
-        self.view.endEditing(true)
-        reviewAndBookHotelController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
-        reviewAndBookHotelController?.willMove(toParentViewController: self)
-        self.addChildViewController(reviewAndBookHotelController!)
-        reviewAndBookHotelController?.bookingMode = "hotel"
-        reviewAndBookHotelController?.loadView()
-        reviewAndBookHotelController?.viewDidLoad()
-        reviewAndBookHotelController?.view.frame = self.view.bounds
-        hotelResultsController?.view.isHidden = true
-        self.hotelSearchQuestionView?.addSubview((reviewAndBookHotelController?.view)!)
-        reviewAndBookHotelController?.view.tag = 27
-        reviewAndBookHotelController?.didMove(toParentViewController: self)
         
-        updateProgress()
+//        self.view.endEditing(true)
+//        reviewAndBookHotelController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
+//        reviewAndBookHotelController?.willMove(toParentViewController: self)
+//        self.addChildViewController(reviewAndBookHotelController!)
+//        reviewAndBookHotelController?.bookingMode = "hotel"
+//        reviewAndBookHotelController?.loadView()
+//        reviewAndBookHotelController?.viewDidLoad()
+//        reviewAndBookHotelController?.view.frame = self.view.bounds
+//        hotelResultsController?.view.isHidden = true
+//        self.hotelSearchQuestionView?.addSubview((reviewAndBookHotelController?.view)!)
+//        reviewAndBookHotelController?.view.tag = 27
+//        reviewAndBookHotelController?.didMove(toParentViewController: self)
+//        
+//        updateProgress()
     }
     
     func spawnPlaceForGroupOrJustYouQuestionView() {
@@ -1725,6 +1745,26 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollToSubviewWithTag(tag: 31)
         
     }
+    func spawnParseDatesForMultipleDestinationsCalendarView() {
+        self.view.endEditing(true)
+        if parseDatesForMultipleDestinationsCalendarView == nil  {
+            //Load next question
+            parseDatesForMultipleDestinationsCalendarView = Bundle.main.loadNibNamed("ParseDatesForMultipleDestinationsCalendarView", owner: self, options: nil)?.first! as? ParseDatesForMultipleDestinationsCalendarView
+            parseDatesForMultipleDestinationsCalendarView?.tag = 32
+            self.scrollContentView.insertSubview(parseDatesForMultipleDestinationsCalendarView!, aboveSubview: addAnotherDestinationQuestionView!)
+            let bounds = UIScreen.main.bounds
+            self.parseDatesForMultipleDestinationsCalendarView!.frame = CGRect(x: 0, y: (addAnotherDestinationQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: parseDatesForMultipleDestinationsCalendarView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (parseDatesForMultipleDestinationsCalendarView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+        }
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 32)
+        
+        let when = DispatchTime.now() + 1.4
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.parseDatesForMultipleDestinationsCalendarView?.calendarView.flashScrollIndicators()
+        }
+    }
 
     
     
@@ -1762,8 +1802,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     func flightSelectedBooked() {
-        removeFlightResultsViewController()
-        removeBookSelectedFlightViewController()
+//        removeFlightResultsViewController()
+//        removeBookSelectedFlightViewController()
         spawnDoYouNeedARentalCarQuestionView()
         
         // LINK TO ITINERARY
@@ -1809,8 +1849,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     func carRentalSelectedBooked() {
-        removeCarRentalResultsViewController()
-        removeBookSelectedCarRentalViewController()
+//        removeCarRentalResultsViewController()
+//        removeBookSelectedCarRentalViewController()
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
@@ -1859,8 +1899,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         hotelResultsController?.view.isHidden = false
     }
     func hotelSelectedBooked() {
-        removeHotelResultsViewController()
-        removeBookSelectedHotelViewController()
+//        removeHotelResultsViewController()
+//        removeBookSelectedHotelViewController()
         spawnPlaceForGroupOrJustYouQuestionView()
         // LINK TO ITINERARY
         // SHOW USER WHERE ITINERARY SAVED
@@ -2039,6 +2079,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func addAnotherDestinationQuestionView_justDestination(sender:UIButton) {
         if sender.isSelected == true {
+            destinationChosenUpdateDatesDestinationsDict()
             
             addAnotherDestinationQuestionView?.button2?.isHidden = true
             
@@ -2049,7 +2090,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = indexOfDestinationBeingPlanned as NSNumber
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
-            spawnHowDoYouWantToGetThereQuestionView()
+            if (SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count > 1 {
+                spawnParseDatesForMultipleDestinationsCalendarView()
+            } else {
+                spawnHowDoYouWantToGetThereQuestionView()
+            }
         }
     }
     func addAnotherDestinationQuestionView_addAnother(sender:UIButton) {
@@ -3078,7 +3123,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 // MARK: JTCalendarView Extension
 extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarViewDelegate {
     func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
-        let formatter = DateFormatter()
         formatter.dateFormat = "yyyy MM dd"
         
         let startDate = Date()
@@ -3189,9 +3233,8 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
         let leftKeys = leftDateTimeArrays.allKeys
         let rightKeys = rightDateTimeArrays.allKeys
         if leftKeys.count == 1 && rightKeys.count == 0 {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM/dd/yyyy"
-            let leftDate = dateFormatter.date(from: leftKeys[0] as! String)
+            formatter.dateFormat = "MM/dd/yyyy"
+            let leftDate = formatter.date(from: leftKeys[0] as! String)
             if date > leftDate! {
                 calendarView?.selectDates(from: leftDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
                 let when = DispatchTime.now() + 0.15
@@ -3226,7 +3269,6 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
         
         let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
         if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
-            let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/yyyy"
             let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
             leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
@@ -3235,7 +3277,6 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
             hotelSearchQuestionView?.checkInDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
         }
         if cell?.selectedPosition() == .right {
-            let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/yyyy"
             let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
             rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
@@ -3289,7 +3330,6 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
                 }
             }
             
-            let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/yyyy"
             let leftMostDateAsString = formatter.string (from: leftMostDate!)
             let rightMostDateAsString = formatter.string (from: rightMostDate!)
@@ -3302,7 +3342,6 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
                 
                 let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
                 if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
-                    let formatter = DateFormatter()
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
@@ -3312,7 +3351,6 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
 
                 }
                 if cell?.selectedPosition() == .right {
-                    let formatter = DateFormatter()
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
@@ -3340,7 +3378,6 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
                 
                 let cell = calendarView?.cellStatus(for: mostRecentSelectedCellDate as Date)
                 if cell?.selectedPosition() == .full || cell?.selectedPosition() == .left {
-                    let formatter = DateFormatter()
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     leftDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
@@ -3349,7 +3386,6 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
                     hotelSearchQuestionView?.checkInDate?.text =  "\(mostRecentSelectedCellDateAsNSString)"
                 }
                 if cell?.selectedPosition() == .right {
-                    let formatter = DateFormatter()
                     formatter.dateFormat = "MM/dd/yyyy"
                     let mostRecentSelectedCellDateAsNSString = formatter.string(from: mostRecentSelectedCellDate as Date)
                     rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
@@ -3432,44 +3468,9 @@ extension TripViewController: JTAppleCalendarViewDataSource, JTAppleCalendarView
         
         let headerCell = calendarView?.dequeueReusableJTAppleSupplementaryView(withReuseIdentifier: "monthHeaderView", for: indexPath) as! monthHeaderView
         
-        // Create Year String
-        let yearDateFormatter = DateFormatter()
-        yearDateFormatter.dateFormat = "yyyy"
-        let YearHeader = yearDateFormatter.string(from: range.start)
-        
-        //Create Month String
-        let monthDateFormatter = DateFormatter()
-        monthDateFormatter.dateFormat = "MM"
-        let MonthHeader = monthDateFormatter.string(from: range.start)
-        
-        // Update header
-        
-        
-        if MonthHeader == "01" {
-            headerCell.monthLabel.text = "January " + YearHeader
-        } else if MonthHeader == "02" {
-            headerCell.monthLabel.text = "February " + YearHeader
-        } else if MonthHeader == "03" {
-            headerCell.monthLabel.text = "March " + YearHeader
-        } else if MonthHeader == "04" {
-            headerCell.monthLabel.text = "April " + YearHeader
-        } else if MonthHeader == "05" {
-            headerCell.monthLabel.text = "May " + YearHeader
-        } else if MonthHeader == "06" {
-            headerCell.monthLabel.text = "June " + YearHeader
-        } else if MonthHeader == "07" {
-            headerCell.monthLabel.text = "July " + YearHeader
-        } else if MonthHeader == "08" {
-            headerCell.monthLabel.text = "August " + YearHeader
-        } else if MonthHeader == "09" {
-            headerCell.monthLabel.text = "September " + YearHeader
-        } else if MonthHeader == "10" {
-            headerCell.monthLabel.text = "October " + YearHeader
-        } else if MonthHeader == "11" {
-            headerCell.monthLabel.text = "November " + YearHeader
-        } else if MonthHeader == "12" {
-            headerCell.monthLabel.text = "December " + YearHeader
-        }
+        formatter.dateFormat = "MMMM yyyy"
+        let stringForHeader = formatter.string(from: range.start)
+        headerCell.monthLabel.text = stringForHeader
         
         return headerCell
 }
@@ -3753,10 +3754,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-//            var datesForTrip = (SavedPreferencesForTrip["datesForTrip"] as! [String])
             destinationsDatesCell.destinationLabel.text = destinationsForTrip[indexPath.row]
             destinationsDatesCell.destinationLabel.font = UIFont.systemFont(ofSize: 22)
-//            datesLabel = datesForTrip[indexPath.row]
             destinationsDatesCell.datesLabel.font = UIFont.systemFont(ofSize: 22)
             destinationsDatesCell.destinationButton.layer.cornerRadius = destinationsDatesCell.destinationButton.frame.size.height / 2
             destinationsDatesCell.destinationButton.backgroundColor = destinationItem?.buttonColor
@@ -3771,16 +3770,15 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             let datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
             var leftDatesDestinations = [String:Date]()
             var rightDatesDestinations = [String:Date]()
+            
             if datesDestinationsDictionary[destinationsForTrip[indexPath.row]] != nil {
                 leftDatesDestinations[destinationsForTrip[indexPath.row]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?[0]
                 rightDatesDestinations[destinationsForTrip[indexPath.row]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?[(datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?.count)! - 1]
+                formatter.dateFormat = "MM/dd"
+                let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexPath.row]]!)
+                let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row]]!)
+                destinationsDatesCell.datesLabel.text = "\(leftDateAsString) - \(rightDateAsString)"
             }
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MM/dd"
-            let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexPath.row]]!)
-            let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row]]!)
-            
-            destinationsDatesCell.datesLabel.text = "\(leftDateAsString) - \(rightDateAsString)"
             destinationsDatesCell.datesButton.layer.cornerRadius = destinationsDatesCell.datesButton.frame.size.height / 2
             destinationsDatesCell.datesButton.backgroundColor = datesItem?.buttonColor
             destinationsDatesCell.datesButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
@@ -3789,7 +3787,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.datesButton.layer.masksToBounds = false
             destinationsDatesCell.datesButton.layer.shadowOpacity = 0.4
             destinationsDatesCell.datesButton.layer.shadowOffset = CGSize(width: 1, height: 1)
-
             
             return destinationsDatesCell
         }
@@ -3992,4 +3989,25 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         editModeEnabled = false
     }
 
+}
+
+extension TripViewController: SFSafariViewControllerDelegate {
+    func showWebsite(URL: URL) {
+        let webVC = SFSafariViewController(url: URL)
+        webVC.delegate = self
+        webVC.preferredBarTintColor = UIColor(red: 25/255, green: 134/255, blue: 191/255, alpha: 1)
+        webVC.preferredControlTintColor = UIColor.white
+        self.present(webVC, animated: true, completion: nil)
+    }
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        controller.dismiss(animated: true, completion: nil)
+        
+        if bookingMode == "flight" {
+            flightSelectedBooked()
+        } else if bookingMode == "carRental" {
+            carRentalSelectedBooked()
+        } else if bookingMode == "hotel" {
+            hotelSelectedBooked()
+        }
+    }
 }
