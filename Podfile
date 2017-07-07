@@ -37,7 +37,8 @@ pod 'Floaty', '~> 3.0.0’
 pod 'UICircularProgressRing'
 
 # Pod for CSV
-pod 'CSV', '~> 0.0'
+pod 'CSVImporter', '~> 1.7'
+
 
   target 'planit v0.2Tests' do
     inherit! :search_paths

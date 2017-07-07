@@ -14,7 +14,7 @@ import ContactsUI
 import Contacts
 import Floaty
 import SafariServices
-import CSV
+import CSVImporter
 
 
 class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate {
@@ -99,6 +99,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var bookingMode = "flight"
         //Date formatting
     var formatter = DateFormatter()
+        //PPN Cities
+    var PPNCities = [Dictionary<String, String>]()
     
     // MARK: Outlets
     @IBOutlet weak var visualEffectView: UIVisualEffectView!
@@ -136,6 +138,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //import PPN cities csv
+        getCities()
         
         //UPDATE WHEN ADDING SUBVIEWS TO SCROLLVIEW
         functionsToLoadSubviewsDictionary[0] = spawnWhereTravellingFromQuestionView
@@ -1350,12 +1355,41 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 11)
+        
     }
     func spawnFlightResultsQuestionView() {
         bookingMode = "flight"
+        var originCity = String()
+        var originCityID = String()
+        var destinationCity = String()
+        var destinationCityID = String()
+        var originDay = String() //DD
+        var originMonth = String() //MM
+        var originYear = String() // YYYY
+        var returnDay = String() //DD
+        var returnMonth = String() //MM
+        var returnYear = String() //YYYY
         
-        let whiteLabelURL_FlightSearchQuery = URL(string: "http://secure.rezserver.com/flights/results/depart/?rs_o_city=Seattle%2C+WA&rs_d_city=Paris%2C+France&rs_chk_in=07%2F11%2F2017&rs_o_aircode=800051061&rs_d_aircode=800029376&rs_chk_out=07%2F17%2F2017&rs_adults=1&rs_children=0&refid=8056&air_search_type=roundtrip&preferred_airline=&cabin_class=")!
-        showWebsite(URL: whiteLabelURL_FlightSearchQuery)
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        
+        originCity = DataContainerSingleton.sharedDataContainer.homeAirport!
+        originCityID = findCityIDWith(cityString: originCity)
+        destinationCity = destinationsForTrip[indexOfDestinationBeingPlanned]
+        destinationCityID = findCityIDWith(cityString: destinationCity)
+        let originDate = flightSearchQuestionView?.departureDate?.text
+        originMonth = (originDate?[0])! + (originDate?[1])!                   //DD
+        originDay = (originDate?[3])! + (originDate?[4])!                 //MM
+        originYear = (originDate?[6])! + (originDate?[7])! + (originDate?[8])! + (originDate?[9])!                   //YYYY
+        let returnDate = flightSearchQuestionView?.returnDate?.text
+        returnMonth = (returnDate?[0])! + (returnDate?[1])!                   //DD
+        returnDay = (returnDate?[3])! + (returnDate?[4])!                 //MM
+        returnYear = (returnDate?[6])! + (returnDate?[7])! + (returnDate?[8])! + (returnDate?[9])!                  //YYYY
+        
+        let whiteLabelURL_FlightSearchQuery = URL(string: "http://secure.rezserver.com/flights/results/depart/?rs_o_city=\(originCity)&rs_d_city=\(destinationCity)&rs_chk_in=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_o_aircode=\(originCityID)&rs_d_aircode=\(destinationCityID)&rs_chk_out=\(returnMonth)%2F\(returnDay)%2F\(returnYear)&rs_adults=1&rs_children=0&refid=8056&air_search_type=\(searchMode)&preferred_airline=&cabin_class=")
+        
+        showWebsite(URL: whiteLabelURL_FlightSearchQuery!)
         
 //        flightResultsController = self.storyboard!.instantiateViewController(withIdentifier: "flightResultsViewController") as? flightResultsViewController
 //        flightResultsController?.willMove(toParentViewController: self)
@@ -4079,24 +4113,25 @@ extension TripViewController: SFSafariViewControllerDelegate {
 }
 
 extension TripViewController {
-    func getCities() -> Dictionary<String, String> {
+    func getCities() {
         let bundle = Bundle.main
         let path = bundle.path(forResource: "Car-Cities", ofType: "csv")
-        let c = CSV
-        let importer = CSVImporter<[String: String]>(path: path)
+        let importer = CSVImporter<[String: String]>(path: path!)
         importer.startImportingRecords(structure: { (headerValues) -> Void in
             
             print(headerValues)
             
         }) { $0 }.onFinish { importedRecords in
-            
-            for record in importedRecords {
-                print(record) // => e.g. ["firstName": "Harry", "lastName": "Potter"]
-                print(record["firstName"]) // prints "Harry" on first, "Hermione" on second run
-                print(record["lastName"]) // prints "Potter" on first, "Granger" on second run
-            }
+            self.PPNCities = importedRecords
             
         }
-
+    }
+    func findCityIDWith(cityString: String) -> String {
+        for PPNCityDictionary in PPNCities {
+            if PPNCityDictionary["city"] == cityString {
+                return PPNCityDictionary["cityid_ppn"]!
+            }
+        }
+        return "noMatchingCity"
     }
 }
