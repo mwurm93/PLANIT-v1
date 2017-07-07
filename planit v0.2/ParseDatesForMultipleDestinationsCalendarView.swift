@@ -19,6 +19,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     var questionLabel: UILabel?
     var formatter = DateFormatter()
     var leftDate: Date?
+    var button1: UIButton?
     
     //Cache color vars
     static let transparentColor = UIColor(colorWithHexValue: 0xFFFFFF, alpha: 0).cgColor
@@ -28,7 +29,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     static let blackColor = UIColor(colorWithHexValue: 0x000000, alpha: 1)
     var selectionColor = UIColor()
     var selectionColorTransparent = UIColor()
-    var colors = ["Turquoise", "Peter River", "Nephritis", "Belize Hole", "Amethyst", "Wisteria", "Wet Asphalt", "Midnight Blue", "Sun Flower", "Orange", "Carrot", "Pumpkin", "Alizarin", "Pomegranate", "Turquoise", "Green Sea", "Asbestos"]
+    var colors = ["Turquoise", "Peter River","Carrot", "Pumpkin", "Alizarin", "Pomegranate", "Turquoise", "Green Sea", "Asbestos"]
     var colorIndex = 0
 
     //Clas data object vars
@@ -42,6 +43,8 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     var travelDates = [Date]()
     var fromDestination = 0
     var toDestination = 1
+    
+    var tripDates: [Date]?
     
     
     override init(frame: CGRect) {
@@ -64,20 +67,57 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         let bounds = UIScreen.main.bounds
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
+        
+        button1?.sizeToFit()
+        button1?.frame.size.height = 30
+        button1?.frame.size.width += 20
+        button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
+        button1?.frame.origin.y = 520
+        button1?.layer.cornerRadius = (button1?.frame.height)! / 2
+        
         calendarView?.frame = CGRect(x: 13, y: 100, width: 350, height: 400)
         calendarView?.cellSize = 50
         
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
-        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
-        let datesToSelect = datesDestinationsDictionary[destinationsForTrip[0]]!
-        calendarView.selectDates(datesToSelect, triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
     }
     
+    func loadDates() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date]
+        if destinationsForTrip.count > 0 {
+            tripDates = selectedDatesValue
+            calendarView.selectDates(tripDates!, triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
+            if (tripDates?.count)! > 0 {
+                
+            }
+        }
+        
+    }
+    func scrollToDate() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date]
+        let scrollToDate = selectedDatesValue?[0]
+        calendarView.scrollToDate(scrollToDate!, animateScroll: true)
+    }
     func addViews() {
         //Question label
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        
+        //Button1
+        button1 = UIButton(type: .custom)
+        button1?.frame = CGRect.zero
+        button1?.setTitleColor(UIColor.white, for: .normal)
+        button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button1?.layer.borderWidth = 1
+        button1?.layer.borderColor = UIColor.white.cgColor
+        button1?.layer.masksToBounds = true
+        button1?.titleLabel?.numberOfLines = 0
+        button1?.titleLabel?.textAlignment = .center
+        button1?.setTitle("Change trip dates", for: .normal)
+        button1?.translatesAutoresizingMaskIntoConstraints = false
+        button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button1!)
         
         questionLabel = UILabel(frame: CGRect.zero)
         questionLabel?.translatesAutoresizingMaskIntoConstraints = false
@@ -108,14 +148,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         selectionColor = colorForName(colors[colorIndex])
         selectionColorTransparent = selectionColor.withAlphaComponent(0.35)
         
-        //        // Load trip preferences and install
-        //        if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
-        //            if selectedDatesValue.count > 0 {
-        //                self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
-        //            }
-        //        }
-        
-        
+        loadDates()
     }
     
     
@@ -136,6 +169,10 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             generateOutDates: .tillEndOfRow,
             firstDayOfWeek: .sunday)
         return parameters
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {
+        return false
     }
     
     func handleSelection(cell: JTAppleCell?, cellState: CellState) {
@@ -219,7 +256,12 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                     myCustomCell?.rightSideConnector.isHidden = false
                     myCustomCell?.rightSideConnector.layer.backgroundColor = selectionColorTransparent.cgColor
                     myCustomCell?.leftSideConnector.isHidden = false
+                    
                     myCustomCell?.middleConnector.isHidden = true
+                    
+                    if i == 0 {
+                        myCustomCell?.leftSideConnector.layer.backgroundColor = DatesPickedOutCalendarView.transparentWhiteColor
+                    }
                 }
             }
         }
@@ -242,7 +284,8 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
-        calendarView?.deselectDates(from: date)
+        
+//        calendarView?.deselectDates(from: date)
 ////        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
 ////        if calendar == travelDaysCalendarView {
 ////            if travelDaysCalendarView.selectedDates.count > ((SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count - 1) {
@@ -314,26 +357,63 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
 ////        }
     }
 
-    
-    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
+    func parseTripDatesByTravelDates() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
-        if (datesDestinationsDictionary[destinationsForTrip[0]]!).contains(date) {
-            if travelDates.count < destinationsForTrip.count - 1 {
-                var isDeselectedDateDateBeforeOtherTravelDates = false
-                for travelDate in travelDates {
-                    if date <= travelDate {
-                        isDeselectedDateDateBeforeOtherTravelDates = true
+        for i in 0 ... destinationsForTrip.count - 2 {
+            var segmentDates = [Date]()
+            if i - 1 >= 0 {
+                //second to (n - 1)th segment
+                for tripDate in tripDates! {
+                    if tripDate <= travelDates[i] && tripDate >= travelDates[i-1]{
+                        segmentDates.append(tripDate)
                     }
                 }
-                if !isDeselectedDateDateBeforeOtherTravelDates {
+            } else {
+                //first segment
+                for tripDate in tripDates! {
+                    if tripDate <= travelDates[i] {
+                        segmentDates.append(tripDate)
+                    }
+                }
+            }
+            datesDestinationsDictionary[destinationsForTrip[i]] = segmentDates
+        }
+        //last segment
+        var lastSegmentDates = [Date]()
+        for tripDate in tripDates! {
+            if tripDate >= travelDates[travelDates.count - 1] {
+                lastSegmentDates.append(tripDate)
+            }
+        }
+        datesDestinationsDictionary[destinationsForTrip[destinationsForTrip.count - 1]] = lastSegmentDates
+        
+        //Save
+        SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+    }
+    
+    func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
+
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        if (tripDates?.contains(date))! {
+            if travelDates.count < destinationsForTrip.count - 1 {
+                var isDeselectedDateBeforeOtherTravelDates = false
+                for travelDate in travelDates {
+                    if date <= travelDate {
+                        isDeselectedDateBeforeOtherTravelDates = true
+                    }
+                }
+                if !isDeselectedDateBeforeOtherTravelDates {
                     travelDates.append(date)
-                    calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
                 } else {
                     travelDates.removeAll()
                     travelDates.append(date)
-                    calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
                     fromDestination = 0
                     toDestination = 1
                     questionLabel?.text = "When do you want to travel from \(destinationsForTrip[fromDestination]) to \(destinationsForTrip[toDestination])?"
@@ -343,7 +423,6 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             } else {
                 travelDates.removeAll()
                 travelDates.append(date)
-                calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
                 fromDestination = 0
                 toDestination = 1
                 questionLabel?.text = "When do you want to travel from \(destinationsForTrip[fromDestination]) to \(destinationsForTrip[toDestination])?"
@@ -351,6 +430,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                 toDestination += 1
             }
         }
+        calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
         calendarView?.reloadDates(calendarView.selectedDates)
         
         if (destinationsForTrip.count - 1) >= toDestination {
@@ -361,7 +441,8 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             fromDestination += 1
             toDestination += 1
         } else {
-            let when = DispatchTime.now() + 0.15
+            parseTripDatesByTravelDates()
+            let when = DispatchTime.now() + 0.5
             DispatchQueue.main.asyncAfter(deadline: when) {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsComplete"), object: nil)
             }
@@ -478,13 +559,13 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         
     }
     
-    func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {
-        
-        if cellState.dateBelongsTo != .thisMonth || cellState.date < Date() {
-            return false
-        }
-        return true
-    }
+//    func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {
+//        
+//        if cellState.dateBelongsTo != .thisMonth || cellState.date < Date() {
+//            return false
+//        }
+//        return true
+//    }
     
     // MARK custom func to get length of selected availability segments
     func getLengthOfSelectedAvailabilities() {
@@ -543,5 +624,20 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         let sanitizedName = name.replacingOccurrences(of: " ", with: "")
         let selector = "flat\(sanitizedName)Color"
         return UIColor.perform(Selector(selector)).takeUnretainedValue() as! UIColor
+    }
+    
+    func buttonClicked(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected {
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
+        } else {
+            sender.removeMask(button:sender)
+        }
+        for subview in self.subviews {
+            if subview.isKind(of: UIButton.self) && subview != sender {
+                (subview as! UIButton).isSelected = false
+                (subview as! UIButton).removeMask(button: subview as! UIButton)
+            }
+        }
     }
 }

@@ -65,7 +65,7 @@ class DecidedOnCityToVisitQuestionView: UIView {
         questionLabel?.text = "Have you decided on a city to visit?"
         self.addSubview(questionLabel!)
 
-        //Button2
+        //Button1
         button1 = UIButton(type: .custom)
         button1?.frame = CGRect.zero
         button1?.setTitleColor(UIColor.white, for: .normal)

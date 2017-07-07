@@ -85,6 +85,7 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Apollo/Apollo.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/CSV/CSV.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Cartography/Cartography.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Floaty/Floaty.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GTMSessionFetcher/GTMSessionFetcher.framework"
@@ -101,6 +102,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Apollo/Apollo.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/CSV/CSV.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Cartography/Cartography.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Floaty/Floaty.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GTMSessionFetcher/GTMSessionFetcher.framework"

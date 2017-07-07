@@ -36,6 +36,9 @@ pod 'PasswordTextField', '~> 1.0'
 pod 'Floaty', '~> 3.0.0’
 pod 'UICircularProgressRing'
 
+# Pod for CSV
+pod 'CSV', '~> 0.0'
+
   target 'planit v0.2Tests' do
     inherit! :search_paths
     # Pods for testing

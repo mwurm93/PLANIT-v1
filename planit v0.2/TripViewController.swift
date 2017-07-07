@@ -14,6 +14,8 @@ import ContactsUI
 import Contacts
 import Floaty
 import SafariServices
+import CSV
+
 
 class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate {
 
@@ -333,7 +335,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         assistant()
         
         // MARK: Register notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(spawnWhereTravellingFromQuestionView), name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleCalendarRangeSelected), name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnHowDoYouWantToGetThereQuestionView), name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsComplete"), object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(spawnDecidedOnCityQuestionView), name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnAddAnotherDestinationQuestionView), name: NSNotification.Name(rawValue: "destinationDecidedEntered"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(noCityDecidedAnyIdeasQuestionView_ideaEntered), name: NSNotification.Name(rawValue: "destinationIdeaEntered"), object: nil)
@@ -364,6 +368,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(hotelSelectedSavedForLater), name: NSNotification.Name(rawValue: "saveHotelForLaterButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedHotelToHotelResults), name: NSNotification.Name(rawValue: "bookSelectedHotelToHotelResults"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(handleContactsChanged), name: NSNotification.Name(rawValue: "contactsListChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnContactPickerVC), name: NSNotification.Name(rawValue: "contactPickerVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnMessageComposeVC), name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(delete), name: NSNotification.Name(rawValue: "deleteInvitee"), object: nil)
@@ -499,6 +504,17 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //COPY FOR CONTACTS
         addressBookStore = CNContactStore()
         retrieveContactsWithStore(store: addressBookStore)
+        if (SavedPreferencesForTrip["contacts_in_group"] as? [NSString])?.count == 0 {
+            itineraryButton.titleLabel?.textColor = UIColor.gray
+            itineraryButton.isEnabled = false
+            chatButton.titleLabel?.textColor = UIColor.gray
+            chatButton.isEnabled = false
+        } else {
+            itineraryButton.titleLabel?.textColor = UIColor.white
+            itineraryButton.isEnabled = true
+            chatButton.titleLabel?.textColor = UIColor.white
+            chatButton.isEnabled = true
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -1071,6 +1087,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             datesPickedOutCalendarView = Bundle.main.loadNibNamed("DatesPickedOutCalendarView", owner: self, options: nil)?.first! as? DatesPickedOutCalendarView
             datesPickedOutCalendarView?.tag = 1
             self.scrollContentView.insertSubview(datesPickedOutCalendarView!, aboveSubview: tripNameQuestionView!)
+            datesPickedOutCalendarView?.button1?.addTarget(self, action: #selector(self.datesPickedOutCalendarView_backToTravelDates(sender:)), for: UIControlEvents.touchUpInside)
             let bounds = UIScreen.main.bounds
             self.datesPickedOutCalendarView!.frame = CGRect(x: 0, y: (tripNameQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: datesPickedOutCalendarView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutCalendarView?.frame.height)!)
@@ -1280,15 +1297,20 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             
             //Load next question
             howDoYouWantToGetThereQuestionView = Bundle.main.loadNibNamed("HowDoYouWantToGetThereQuestionView", owner: self, options: nil)?.first! as? HowDoYouWantToGetThereQuestionView
-            self.scrollContentView.insertSubview(howDoYouWantToGetThereQuestionView!, aboveSubview: addAnotherDestinationQuestionView!)
-            howDoYouWantToGetThereQuestionView?.tag = 10
             let bounds = UIScreen.main.bounds
+            if parseDatesForMultipleDestinationsCalendarView != nil {
+                self.scrollContentView.insertSubview(howDoYouWantToGetThereQuestionView!, aboveSubview: parseDatesForMultipleDestinationsCalendarView!)
+                self.howDoYouWantToGetThereQuestionView!.frame = CGRect(x: 0, y: (parseDatesForMultipleDestinationsCalendarView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            } else {
+                self.scrollContentView.insertSubview(howDoYouWantToGetThereQuestionView!, aboveSubview: addAnotherDestinationQuestionView!)
+                self.howDoYouWantToGetThereQuestionView!.frame = CGRect(x: 0, y: (addAnotherDestinationQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            }
+            howDoYouWantToGetThereQuestionView?.tag = 10
             howDoYouWantToGetThereQuestionView?.button1?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_fly(sender:)), for: UIControlEvents.touchUpInside)
             howDoYouWantToGetThereQuestionView?.button2?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_drive(sender:)), for: UIControlEvents.touchUpInside)
             howDoYouWantToGetThereQuestionView?.button3?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_busTrainOther(sender:)), for: UIControlEvents.touchUpInside)
             howDoYouWantToGetThereQuestionView?.button4?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_iDontKnowHelpMe(sender:)), for: UIControlEvents.touchUpInside)
             howDoYouWantToGetThereQuestionView?.button5?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:)), for: UIControlEvents.touchUpInside)
-            self.howDoYouWantToGetThereQuestionView!.frame = CGRect(x: 0, y: (addAnotherDestinationQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: howDoYouWantToGetThereQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howDoYouWantToGetThereQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
         }
@@ -1752,10 +1774,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             parseDatesForMultipleDestinationsCalendarView = Bundle.main.loadNibNamed("ParseDatesForMultipleDestinationsCalendarView", owner: self, options: nil)?.first! as? ParseDatesForMultipleDestinationsCalendarView
             parseDatesForMultipleDestinationsCalendarView?.tag = 32
             self.scrollContentView.insertSubview(parseDatesForMultipleDestinationsCalendarView!, aboveSubview: addAnotherDestinationQuestionView!)
+            parseDatesForMultipleDestinationsCalendarView?.button1?.addTarget(self, action: #selector(self.parseDatesForMultipleDestinationsCalendarView_changeDates(sender:)), for: UIControlEvents.touchUpInside)
             let bounds = UIScreen.main.bounds
             self.parseDatesForMultipleDestinationsCalendarView!.frame = CGRect(x: 0, y: (addAnotherDestinationQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: parseDatesForMultipleDestinationsCalendarView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (parseDatesForMultipleDestinationsCalendarView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            
+            
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 32)
@@ -1763,6 +1788,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let when = DispatchTime.now() + 1.4
         DispatchQueue.main.asyncAfter(deadline: when) {
             self.parseDatesForMultipleDestinationsCalendarView?.calendarView.flashScrollIndicators()
+            self.parseDatesForMultipleDestinationsCalendarView?.scrollToDate()
         }
     }
 
@@ -1922,6 +1948,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             spawnDatesPickedOutCalendarView()
         }
     }
+    func handleCalendarRangeSelected() {
+        if parseDatesForMultipleDestinationsCalendarView != nil {
+        } else {
+            spawnWhereTravellingFromQuestionView()
+        }
+    }
+    
     func decidedOnCityToVisitQuestion_No(sender:UIButton) {
         if sender.isSelected == true {
             if yesCityDecidedQuestionView != nil {
@@ -2731,6 +2764,19 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             spawnPlaceForGroupOrJustYouQuestionView()
         }
     }
+    func parseDatesForMultipleDestinationsCalendarView_changeDates(sender:UIButton) {
+        if sender.isSelected == true {
+            scrollToSubviewWithTag(tag: 1)
+            datesPickedOutCalendarView?.button1?.isHidden = false
+        }
+    }
+    func datesPickedOutCalendarView_backToTravelDates(sender:UIButton) {
+        if sender.isSelected == true {
+            scrollToSubviewWithTag(tag: 32)
+            parseDatesForMultipleDestinationsCalendarView?.button1?.buttonClicked(sender: (parseDatesForMultipleDestinationsCalendarView?.button1)!)
+            parseDatesForMultipleDestinationsCalendarView?.loadDates()
+        }
+    }
     
     
     
@@ -2865,6 +2911,21 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         return true
     }
+    
+    func handleContactsChanged() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if (SavedPreferencesForTrip["contacts_in_group"] as? [NSString])?.count == 0 {
+            itineraryButton.titleLabel?.textColor = UIColor.gray
+            itineraryButton.isEnabled = false
+            chatButton.titleLabel?.textColor = UIColor.gray
+            chatButton.isEnabled = false
+        } else {
+            itineraryButton.titleLabel?.textColor = UIColor.white
+            itineraryButton.isEnabled = true
+            chatButton.titleLabel?.textColor = UIColor.white
+            chatButton.isEnabled = true
+        }
+    }
 
     //MARK: Scrollview delegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -2874,6 +2935,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         animateOutSubview()
         getCurrentSubview()
         handleFloatyBasedOnProgressOfInitiator()
+        if parseDatesForMultipleDestinationsCalendarView != nil {
+            if (parseDatesForMultipleDestinationsCalendarView?.frame.intersects(scrollView.bounds))! {
+                parseDatesForMultipleDestinationsCalendarView?.loadDates()
+            }
+        }        
     }
     
     // MARK: SAVE TO SINGLETON
@@ -4009,5 +4075,28 @@ extension TripViewController: SFSafariViewControllerDelegate {
         } else if bookingMode == "hotel" {
             hotelSelectedBooked()
         }
+    }
+}
+
+extension TripViewController {
+    func getCities() -> Dictionary<String, String> {
+        let bundle = Bundle.main
+        let path = bundle.path(forResource: "Car-Cities", ofType: "csv")
+        let c = CSV
+        let importer = CSVImporter<[String: String]>(path: path)
+        importer.startImportingRecords(structure: { (headerValues) -> Void in
+            
+            print(headerValues)
+            
+        }) { $0 }.onFinish { importedRecords in
+            
+            for record in importedRecords {
+                print(record) // => e.g. ["firstName": "Harry", "lastName": "Potter"]
+                print(record["firstName"]) // prints "Harry" on first, "Hermione" on second run
+                print(record["lastName"]) // prints "Potter" on first, "Granger" on second run
+            }
+            
+        }
+
     }
 }

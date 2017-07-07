@@ -180,6 +180,9 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
             if contacts != nil {
                 numberOfRows += contacts!.count
             }
+            if numberOfRows != 0 {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "contactsListChanged"), object: nil)
+            }
         }
         return numberOfRows
     }
@@ -266,6 +269,7 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
         if contacts?.count == 0 || contacts == nil {
             button2?.isHidden = true
         }
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "contactsListChanged"), object: nil)
     }
 
     func buttonClicked(sender:UIButton) {

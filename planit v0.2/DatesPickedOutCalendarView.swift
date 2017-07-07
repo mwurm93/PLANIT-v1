@@ -18,6 +18,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
     //Class UI object vars
     var questionLabel: UILabel?
     var formatter = DateFormatter()
+    var button1: UIButton?
     
     //Cache color vars
     static let transparentColor = UIColor(colorWithHexValue: 0xFFFFFF, alpha: 0).cgColor
@@ -59,9 +60,50 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         calendarView?.frame = CGRect(x: 13, y: 100, width: 350, height: 400)
         calendarView?.cellSize = 50
         
+        button1?.sizeToFit()
+        button1?.frame.size.height = 30
+        button1?.frame.size.width += 20
+        button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
+        button1?.frame.origin.y = 520
+        button1?.layer.cornerRadius = (button1?.frame.height)! / 2
+        button1?.isHidden = true
+        
+        loadDates()
     }
     
+    func loadDates() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        // Load trip preferences and install
+        if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
+            if selectedDatesValue.count > 0 {
+                self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
+            }
+        }
+    }
+//    func scrollToDate() {
+//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//        let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date]
+//        let scrollToDate = selectedDatesValue?[0]
+//        calendarView.scrollToDate(scrollToDate!, animateScroll: true)
+//    }
+
     func addViews() {
+        
+        //Button1
+        button1 = UIButton(type: .custom)
+        button1?.frame = CGRect.zero
+        button1?.setTitleColor(UIColor.white, for: .normal)
+        button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button1?.layer.borderWidth = 1
+        button1?.layer.borderColor = UIColor.white.cgColor
+        button1?.layer.masksToBounds = true
+        button1?.titleLabel?.numberOfLines = 0
+        button1?.titleLabel?.textAlignment = .center
+        button1?.setTitle("Back to travel dates", for: .normal)
+        button1?.translatesAutoresizingMaskIntoConstraints = false
+        button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button1!)
+        
         //Question label
         questionLabel = UILabel(frame: CGRect.zero)
         questionLabel?.translatesAutoresizingMaskIntoConstraints = false
@@ -87,12 +129,6 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         calendarView?.scrollingMode = .none
         calendarView?.scrollDirection = .vertical
         
-//        // Load trip preferences and install
-//        if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
-//            if selectedDatesValue.count > 0 {
-//                self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
-//            }
-//        }
 
         
     }
@@ -231,6 +267,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         getLengthOfSelectedAvailabilities()
         //Update trip preferences in dictionary
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["selected_dates"] = selectedDates as [Date]
         SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
         SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)        
@@ -365,6 +402,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         getLengthOfSelectedAvailabilities()
         //Update trip preferences in dictionary
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["selected_dates"] = selectedDates as [Date]
         SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
         SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
         //Save
@@ -434,4 +472,20 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         
         return headerCell
     }
+    
+    func buttonClicked(sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected {
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
+        } else {
+            sender.removeMask(button:sender)
+        }
+        for subview in self.subviews {
+            if subview.isKind(of: UIButton.self) && subview != sender {
+                (subview as! UIButton).isSelected = false
+                (subview as! UIButton).removeMask(button: subview as! UIButton)
+            }
+        }
+    }
+
 }

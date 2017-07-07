@@ -565,11 +565,13 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
     }
     
     func moreOptionsButtonClicked(sender:UIButton) {
-        for buttonRow in 0 ... destinationsSwipedRight.count - 1 {
-            let cell = destinationsSwipedRightTableView?.cellForRow(at: IndexPath(row: buttonRow, section: 0)) as! destinationsSwipedRightTableViewCell
-            if cell.cellButton.isSelected {
-                cell.cellButton.isSelected = false
-                cell.cellButton.layer.borderWidth = 1
+        if destinationsSwipedRight.count > 0 {
+            for buttonRow in 0 ... destinationsSwipedRight.count - 1 {
+                let cell = destinationsSwipedRightTableView?.cellForRow(at: IndexPath(row: buttonRow, section: 0)) as! destinationsSwipedRightTableViewCell
+                if cell.cellButton.isSelected {
+                    cell.cellButton.isSelected = false
+                    cell.cellButton.layer.borderWidth = 1
+                }
             }
         }
         questionLabel?.isHidden = true
