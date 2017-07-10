@@ -17,6 +17,7 @@ struct DefaultKeys {
         static let gender = "gender"
         static let phone = "phone"
         static let homeAirport = "homeAirport"
+        static let homeState = "homeState"
         static let passportNumber = "passportNumber"
         static let knownTravelerNumber = "knownTravelerNumber"
         static let redressNumber = "redressNumber"
@@ -44,6 +45,7 @@ class DataContainerSingleton {
     var gender: String?
     var phone: String?
     var homeAirport: String?
+    var homeState: String?
     var passportNumber: String?
     var knownTravelerNumber: String?
     var redressNumber: String?
@@ -71,6 +73,7 @@ class DataContainerSingleton {
         gender = defaults.object(forKey: DefaultKeys.gender) as! String?
         phone = defaults.object(forKey: DefaultKeys.phone) as! String?
         homeAirport = defaults.object(forKey: DefaultKeys.homeAirport) as! String?
+        homeState = defaults.object(forKey: DefaultKeys.homeState) as! String?
         passportNumber = defaults.object(forKey: DefaultKeys.passportNumber) as! String?
         knownTravelerNumber = defaults.object(forKey: DefaultKeys.knownTravelerNumber) as! String?
         redressNumber = defaults.object(forKey: DefaultKeys.redressNumber) as! String?
@@ -105,6 +108,7 @@ class DataContainerSingleton {
             defaults.set( self.password, forKey: DefaultKeys.password)
             defaults.set( self.phone, forKey: DefaultKeys.phone)
             defaults.set( self.homeAirport, forKey: DefaultKeys.homeAirport)
+            defaults.set( self.homeState, forKey: DefaultKeys.homeState)
             defaults.set( self.passportNumber, forKey: DefaultKeys.passportNumber)
             defaults.set( self.knownTravelerNumber, forKey: DefaultKeys.knownTravelerNumber)
             defaults.set( self.redressNumber, forKey: DefaultKeys.redressNumber)

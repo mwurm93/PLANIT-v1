@@ -27,7 +27,6 @@
 		FA25F1F91EBB6DA9005D29E5 /* exploreHotelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */; };
 		FA25F1FB1EBB7B9F005D29E5 /* hotelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */; };
 		FA2CFC0A1E3E57A200527405 /* UnbookedTripSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2CFC091E3E57A200527405 /* UnbookedTripSummaryViewController.swift */; };
-		FA2D0A721F101B5B00E06343 /* Car-Cities.csv in Resources */ = {isa = PBXBuildFile; fileRef = FA2D0A711F101B5B00E06343 /* Car-Cities.csv */; };
 		FA35EF311EA5506D0029E462 /* HotelPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA35EF301EA5506D0029E462 /* HotelPreferencesViewController.swift */; };
 		FA48876B1F01AAEF0015F078 /* WhatTypeOfPlaceToStayQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA48876A1F01AAEF0015F078 /* WhatTypeOfPlaceToStayQuestionView.swift */; };
 		FA4887711F01AC000015F078 /* WhatTypeOfPlaceToStayQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4887701F01AC000015F078 /* WhatTypeOfPlaceToStayQuestionView.xib */; };
@@ -44,6 +43,11 @@
 		FA48878E1F02C6320015F078 /* contactsTableViewCellForScrolling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA48878D1F02C6320015F078 /* contactsTableViewCellForScrolling.swift */; };
 		FA4887901F033DCB0015F078 /* hideKeyboardWhenTappedAround.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA48878F1F033DCB0015F078 /* hideKeyboardWhenTappedAround.swift */; };
 		FA4887921F033F070015F078 /* destinationsDatesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4887911F033F070015F078 /* destinationsDatesCollectionViewCell.swift */; };
+		FA4E22D11F106D400077CCD3 /* Air-Airports.csv in Resources */ = {isa = PBXBuildFile; fileRef = FA4E22CE1F106D400077CCD3 /* Air-Airports.csv */; };
+		FA4E22D31F106D400077CCD3 /* Hotel-Cities.csv in Resources */ = {isa = PBXBuildFile; fileRef = FA4E22D01F106D400077CCD3 /* Hotel-Cities.csv */; };
+		FA4E22D51F106D710077CCD3 /* states.csv in Resources */ = {isa = PBXBuildFile; fileRef = FA4E22D41F106D710077CCD3 /* states.csv */; };
+		FA4E22D71F1309550077CCD3 /* Car-Cities.csv in Resources */ = {isa = PBXBuildFile; fileRef = FA4E22D61F1309550077CCD3 /* Car-Cities.csv */; };
+		FA4E22D91F131CDE0077CCD3 /* countryAbbreviations.csv in Resources */ = {isa = PBXBuildFile; fileRef = FA4E22D81F131CDE0077CCD3 /* countryAbbreviations.csv */; };
 		FA4E36201EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4E361F1EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift */; };
 		FA4E922B1E3526DD00231C72 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4E922A1E3526DD00231C72 /* API.swift */; };
 		FA4EA8C91EE7A4AE005FCE91 /* CreateTrip.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FA4EA8C81EE7A4AE005FCE91 /* CreateTrip.graphql */; };
@@ -220,7 +224,6 @@
 		FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = exploreHotelsViewController.swift; sourceTree = "<group>"; };
 		FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hotelTableViewCell.swift; sourceTree = "<group>"; };
 		FA2CFC091E3E57A200527405 /* UnbookedTripSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnbookedTripSummaryViewController.swift; sourceTree = "<group>"; };
-		FA2D0A711F101B5B00E06343 /* Car-Cities.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Car-Cities.csv"; sourceTree = "<group>"; };
 		FA35EF301EA5506D0029E462 /* HotelPreferencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HotelPreferencesViewController.swift; sourceTree = "<group>"; };
 		FA48876A1F01AAEF0015F078 /* WhatTypeOfPlaceToStayQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhatTypeOfPlaceToStayQuestionView.swift; sourceTree = "<group>"; };
 		FA4887701F01AC000015F078 /* WhatTypeOfPlaceToStayQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhatTypeOfPlaceToStayQuestionView.xib; sourceTree = "<group>"; };
@@ -237,6 +240,11 @@
 		FA48878D1F02C6320015F078 /* contactsTableViewCellForScrolling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = contactsTableViewCellForScrolling.swift; sourceTree = "<group>"; };
 		FA48878F1F033DCB0015F078 /* hideKeyboardWhenTappedAround.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hideKeyboardWhenTappedAround.swift; sourceTree = "<group>"; };
 		FA4887911F033F070015F078 /* destinationsDatesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = destinationsDatesCollectionViewCell.swift; sourceTree = "<group>"; };
+		FA4E22CE1F106D400077CCD3 /* Air-Airports.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Air-Airports.csv"; sourceTree = "<group>"; };
+		FA4E22D01F106D400077CCD3 /* Hotel-Cities.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Hotel-Cities.csv"; sourceTree = "<group>"; };
+		FA4E22D41F106D710077CCD3 /* states.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = states.csv; sourceTree = "<group>"; };
+		FA4E22D61F1309550077CCD3 /* Car-Cities.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Car-Cities.csv"; sourceTree = "<group>"; };
+		FA4E22D81F131CDE0077CCD3 /* countryAbbreviations.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = countryAbbreviations.csv; sourceTree = "<group>"; };
 		FA4E361F1EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = destinationPhotosCollectionViewCell.swift; sourceTree = "<group>"; };
 		FA4E922A1E3526DD00231C72 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		FA4EA8C81EE7A4AE005FCE91 /* CreateTrip.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CreateTrip.graphql; sourceTree = "<group>"; };
@@ -571,7 +579,11 @@
 		FA6897001F0FFB0B00602D17 /* PPN Cities */ = {
 			isa = PBXGroup;
 			children = (
-				FA2D0A711F101B5B00E06343 /* Car-Cities.csv */,
+				FA4E22D61F1309550077CCD3 /* Car-Cities.csv */,
+				FA4E22D41F106D710077CCD3 /* states.csv */,
+				FA4E22CE1F106D400077CCD3 /* Air-Airports.csv */,
+				FA4E22D01F106D400077CCD3 /* Hotel-Cities.csv */,
+				FA4E22D81F131CDE0077CCD3 /* countryAbbreviations.csv */,
 			);
 			name = "PPN Cities";
 			sourceTree = "<group>";
@@ -1019,7 +1031,6 @@
 				FA77D1F11EFDCED700A37A05 /* CarRentalSearchQuestionView.xib in Resources */,
 				FAE83F6F1EF49F190009A020 /* TripNameQuestionView.xib in Resources */,
 				FA94077C1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib in Resources */,
-				FA2D0A721F101B5B00E06343 /* Car-Cities.csv in Resources */,
 				FABEAD021EFE4D700075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.xib in Resources */,
 				FA14B2301EFB2D3D004E0E29 /* FlightSearchQuestionView.xib in Resources */,
 				FA4EA8CD1EE86608005FCE91 /* GetTripName.graphql in Resources */,
@@ -1040,11 +1051,16 @@
 				FADEF0EE1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib in Resources */,
 				FAA8F28F1E351DBF00CD7337 /* monthHeaderView.xib in Resources */,
 				FA8DBAC31F06035D005D2B61 /* YesIKnowWhereImStayingQuestionView.xib in Resources */,
+				FA4E22D31F106D400077CCD3 /* Hotel-Cities.csv in Resources */,
 				FA09A3F11EB23894007F64A3 /* CardContentView.xib in Resources */,
 				FAA8F28D1E351DBF00CD7337 /* CellView.xib in Resources */,
 				FA5201171EC4DC4C001EA849 /* geography-class_medres.mbtiles in Resources */,
+				FA4E22D71F1309550077CCD3 /* Car-Cities.csv in Resources */,
+				FA4E22D11F106D400077CCD3 /* Air-Airports.csv in Resources */,
 				FA48877B1F01B3930015F078 /* HotelSearchQuestionView.xib in Resources */,
 				FAA8F2A11E351DEB00CD7337 /* items.plist in Resources */,
+				FA4E22D51F106D710077CCD3 /* states.csv in Resources */,
+				FA4E22D91F131CDE0077CCD3 /* countryAbbreviations.csv in Resources */,
 				FAE83F951EF7B2F70009A020 /* DestinationOptionsCardView.xib in Resources */,
 				FA48878B1F021FFC0015F078 /* SendProposalQuestionView.xib in Resources */,
 				FAE83F8D1EF7ACBE0009A020 /* WhatTypeOfTripQuestionView.xib in Resources */,

@@ -10,8 +10,8 @@ import UIKit
 
 class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     //Class vars
-    var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
-    var rankedPotentialTripsDictionaryArrayIndex = 0
+//    var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
+//    var rankedPotentialTripsDictionaryArrayIndex = 0
     var searchMode = "roundtrip"
     var questionLabel: UILabel?
     var searchButton: UIButton?
@@ -27,6 +27,8 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     var alreadyHaveFlightsReturnDate: UITextField?
     var alreadyHaveFlightsReturnFlightNumber: UITextField?
     var addButton: UIButton?
+    
+    var formatter = DateFormatter()
     
     // MARK: Outlets
     @IBOutlet weak var searchModeControl: UISegmentedControl!
@@ -100,6 +102,48 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         addButton?.frame.origin.y = 560
         addButton?.layer.cornerRadius = (addButton?.frame.height)! / 2
         
+        
+        //UPDATE DATES
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+
+        var leftDatesDestinations = [String:Date]()
+        var rightDatesDestinations = [String:Date]()
+        
+        if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
+            leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
+            rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?.count)! - 1]
+            formatter.dateFormat = "MM/dd/YYYY"
+            let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
+            let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
+            departureDate?.text = leftDateAsString
+            returnDate?.text = rightDateAsString
+        }
+        
+        
+        //UPDATE DESTINATIONS
+        var departureOriginValue = String()
+        if indexOfDestinationBeingPlanned == 0 {
+            departureOriginValue = DataContainerSingleton.sharedDataContainer.homeAirport!
+        } else {
+            departureOriginValue = ((SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[indexOfDestinationBeingPlanned - 1])!
+        }
+        if departureOriginValue != "" {
+            departureOrigin?.text = departureOriginValue
+        }
+        
+        let returnOriginValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[indexOfDestinationBeingPlanned]
+        if returnOriginValue != nil && returnOriginValue != "" {
+            returnOrigin?.text = returnOriginValue
+        }
+
+        let departureDestinationValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[indexOfDestinationBeingPlanned]
+        if departureDestinationValue != nil && departureDestinationValue != "" {
+            departureDestination?.text = departureDestinationValue
+        }
+
     }
     
     
@@ -116,33 +160,33 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         self.addSubview(questionLabel!)
 
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
-            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
-                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
-                for i in 0 ... rankedPotentialTripsDictionary.count - 1 {
-                    if rankedPotentialTripsDictionary[i]["destination"] as! String == (SavedPreferencesForTrip["destinationsForTrip"] as! [String])[0] {
-                        rankedPotentialTripsDictionaryArrayIndex = i
-                    }
-                }
-            }
-        }
-                
-        if let leftDateTimeArrays = SavedPreferencesForTrip["origin_departure_times"]  as? NSMutableDictionary {
-            if let rightDateTimeArrays = SavedPreferencesForTrip["return_departure_times"] as? NSMutableDictionary {
-                let departureDictionary = leftDateTimeArrays as Dictionary
-                let returnDictionary = rightDateTimeArrays as Dictionary
-                let departureKeys = Array(departureDictionary.keys)
-                let returnKeys = Array(returnDictionary.keys)
-                if returnKeys.count != 0 {
-                    let returnDateValue = returnKeys[0]
-                    returnDate?.text =  "\(returnDateValue)"
-                }
-                if departureKeys.count != 0 {
-                    let departureDateValue = departureKeys[0]
-                    departureDate?.text =  "\(departureDateValue)"
-                }
-            }
-        }
+//        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+//            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+//                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
+//                for i in 0 ... rankedPotentialTripsDictionary.count - 1 {
+//                    if rankedPotentialTripsDictionary[i]["destination"] as! String == (SavedPreferencesForTrip["destinationsForTrip"] as! [String])[0] {
+//                        rankedPotentialTripsDictionaryArrayIndex = i
+//                    }
+//                }
+//            }
+//        }
+        
+//        if let leftDateTimeArrays = SavedPreferencesForTrip["origin_departure_times"]  as? NSMutableDictionary {
+//            if let rightDateTimeArrays = SavedPreferencesForTrip["return_departure_times"] as? NSMutableDictionary {
+//                let departureDictionary = leftDateTimeArrays as Dictionary
+//                let returnDictionary = rightDateTimeArrays as Dictionary
+//                let departureKeys = Array(departureDictionary.keys)
+//                let returnKeys = Array(returnDictionary.keys)
+//                if returnKeys.count != 0 {
+//                    let returnDateValue = returnKeys[0]
+//                    returnDate?.text =  "\(returnDateValue)"
+//                }
+//                if departureKeys.count != 0 {
+//                    let departureDateValue = departureKeys[0]
+//                    departureDate?.text =  "\(departureDateValue)"
+//                }
+//            }
+//        }
         
         //Button
         searchButton = UIButton(type: .custom)
@@ -197,10 +241,6 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         departureOrigin?.returnKeyType = .next
         let departureOriginPlaceholder = NSAttributedString(string: "From where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         departureOrigin?.attributedPlaceholder = departureOriginPlaceholder
-        let departureOriginValue = DataContainerSingleton.sharedDataContainer.homeAirport
-        if departureOriginValue != nil && departureOriginValue != "" {
-            departureOrigin?.text = departureOriginValue
-        }
         departureOrigin?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(departureOrigin!)
         
@@ -214,10 +254,6 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         departureDestination?.returnKeyType = .next
         let departureDestinationPlaceholder = NSAttributedString(string: "To where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         departureDestination?.attributedPlaceholder = departureDestinationPlaceholder
-        let departureDestinationValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[0]
-        if departureDestinationValue != nil && departureDestinationValue != "" {
-            departureDestination?.text = departureDestinationValue
-        }
         departureDestination?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(departureDestination!)
         
@@ -244,10 +280,6 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         returnOrigin?.returnKeyType = .next
         let returnOriginPlaceholder = NSAttributedString(string: "From where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         returnOrigin?.attributedPlaceholder = returnOriginPlaceholder
-        let returnOriginValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[0]
-        if returnOriginValue != nil && returnOriginValue != "" {
-            returnOrigin?.text = returnOriginValue
-        }
 
         returnOrigin?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(returnOrigin!)
@@ -262,10 +294,6 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         returnDestination?.returnKeyType = .next
         let returnDestinationPlaceholder = NSAttributedString(string: "To where?", attributes: [NSForegroundColorAttributeName: UIColor(white: 1, alpha: 0.6),NSFontAttributeName: UIFont.systemFont(ofSize: 16)])
         returnDestination?.attributedPlaceholder = returnDestinationPlaceholder
-//        let returnDestinationValue = DataContainerSingleton.sharedDataContainer.homeAirport
-//        if returnDestinationValue != nil && returnDestinationValue != "" {
-//            returnDestination?.text = returnDestinationValue
-//        }
         returnDestination?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(returnDestination!)
         

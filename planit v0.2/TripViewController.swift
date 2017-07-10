@@ -99,8 +99,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var bookingMode = "flight"
         //Date formatting
     var formatter = DateFormatter()
-        //PPN Cities
-    var PPNCities = [Dictionary<String, String>]()
+    //PPN Cities
+    var ppnCarRentalCities = [Dictionary<String, String>]()
+    var ppnHotelCities = [Dictionary<String, String>]()
+    var ppnAirportCities = [Dictionary<String, String>]()
+    var stateAbbreviationsDict = [Dictionary<String, String>]()
+    var countryAbbreviationsDict = [Dictionary<String, String>]()
     
     // MARK: Outlets
     @IBOutlet weak var visualEffectView: UIVisualEffectView!
@@ -140,7 +144,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         super.viewDidLoad()
         
         //import PPN cities csv
-        getCities()
+        getCarRentalCities()
+        getHotelCities()
+        getAirportCities()
+        getStateAbbreviations()
+        getCountryAbbreviations()
         
         //UPDATE WHEN ADDING SUBVIEWS TO SCROLLVIEW
         functionsToLoadSubviewsDictionary[0] = spawnWhereTravellingFromQuestionView
@@ -1359,10 +1367,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func spawnFlightResultsQuestionView() {
         bookingMode = "flight"
+    
         var originCity = String()
         var originCityID = String()
+        var originStateAbbrev = String()
+        var isOriginCityInUS = true
         var destinationCity = String()
         var destinationCityID = String()
+        var destinationStateAbbrev = String()
+        var isDestinationCityInUS = true
         var originDay = String() //DD
         var originMonth = String() //MM
         var originYear = String() // YYYY
@@ -1373,11 +1386,50 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        var destinationsForTripStates = SavedPreferencesForTrip["destinationsForTripStates"] as! [String]
         
-        originCity = DataContainerSingleton.sharedDataContainer.homeAirport!
-        originCityID = findCityIDWith(cityString: originCity)
+        if indexOfDestinationBeingPlanned == 0 {
+            originCity = DataContainerSingleton.sharedDataContainer.homeAirport!
+            originStateAbbrev = findStateAbbreviationWith(state: DataContainerSingleton.sharedDataContainer.homeState!)
+            if originStateAbbrev == "noStateMatch" {
+                isOriginCityInUS = false
+                originStateAbbrev = findCountryAbbreviationWith(country:DataContainerSingleton.sharedDataContainer.homeState!)
+            }
+            originCityID = findCarAirportCityIDWith(cityString: originCity, stateString: originStateAbbrev)
+            originCity = originCity.replacingOccurrences(of: " ", with: "+")
+            if !isOriginCityInUS {
+                originStateAbbrev = DataContainerSingleton.sharedDataContainer.homeState!
+            }
+            originStateAbbrev = originStateAbbrev.replacingOccurrences(of: " ", with: "+")
+        } else {
+            originCity = destinationsForTrip[indexOfDestinationBeingPlanned - 1]
+            originStateAbbrev = findStateAbbreviationWith(state: destinationsForTripStates[indexOfDestinationBeingPlanned - 1])
+            if originStateAbbrev == "noStateMatch" {
+                isOriginCityInUS = false
+                originStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned - 1])
+            }
+            originCityID = findCarAirportCityIDWith(cityString: originCity, stateString: originStateAbbrev)
+            originCity = originCity.replacingOccurrences(of: " ", with: "+")
+            if !isOriginCityInUS {
+                originStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned - 1]
+            }
+            originStateAbbrev = originStateAbbrev.replacingOccurrences(of: " ", with: "+")
+        }
+        
+        
         destinationCity = destinationsForTrip[indexOfDestinationBeingPlanned]
-        destinationCityID = findCityIDWith(cityString: destinationCity)
+        destinationStateAbbrev = findStateAbbreviationWith(state: destinationsForTripStates[indexOfDestinationBeingPlanned])
+        if destinationStateAbbrev == "noStateMatch" {
+            isDestinationCityInUS = false
+            destinationStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned])
+        }
+        destinationCityID = findCarAirportCityIDWith(cityString: destinationCity, stateString: destinationStateAbbrev)
+        destinationCity = destinationCity.replacingOccurrences(of: " ", with: "+")
+        if !isDestinationCityInUS {
+            destinationStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned]
+        }
+        destinationStateAbbrev = destinationStateAbbrev.replacingOccurrences(of: " ", with: "+")
+        
         let originDate = flightSearchQuestionView?.departureDate?.text
         originMonth = (originDate?[0])! + (originDate?[1])!                   //DD
         originDay = (originDate?[3])! + (originDate?[4])!                 //MM
@@ -1387,9 +1439,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         returnDay = (returnDate?[3])! + (returnDate?[4])!                 //MM
         returnYear = (returnDate?[6])! + (returnDate?[7])! + (returnDate?[8])! + (returnDate?[9])!                  //YYYY
         
-        let whiteLabelURL_FlightSearchQuery = URL(string: "http://secure.rezserver.com/flights/results/depart/?rs_o_city=\(originCity)&rs_d_city=\(destinationCity)&rs_chk_in=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_o_aircode=\(originCityID)&rs_d_aircode=\(destinationCityID)&rs_chk_out=\(returnMonth)%2F\(returnDay)%2F\(returnYear)&rs_adults=1&rs_children=0&refid=8056&air_search_type=\(searchMode)&preferred_airline=&cabin_class=")
+        var stringForURL = "http://secure.rezserver.com/flights/home/?refid=8056"
+        if originCityID != "noMatchingCity" && destinationCityID != "noMatchingCity" {
+            stringForURL = "http://secure.rezserver.com/flights/results/depart/?rs_o_city=\(originCity)%2C+\(originStateAbbrev)&rs_d_city=\(destinationCity)%2C+\(destinationStateAbbrev)&rs_chk_in=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_chk_out=\(returnMonth)%2F\(returnDay)%2F\(returnYear)&rs_adults=1&rs_children=0&refid=8056&rs_o_aircode=\(originCityID)&rs_d_aircode=\(destinationCityID)&air_search_type=\(searchMode)&preferred_airline=&cabin_class="
+        }
+        let whiteLabelURL_FlightSearchQuery = URL(string: stringForURL)!
         
-        showWebsite(URL: whiteLabelURL_FlightSearchQuery!)
+        
+        showWebsite(URL: whiteLabelURL_FlightSearchQuery)
         
 //        flightResultsController = self.storyboard!.instantiateViewController(withIdentifier: "flightResultsViewController") as? flightResultsViewController
 //        flightResultsController?.willMove(toParentViewController: self)
@@ -3013,6 +3070,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var suggestedDestinationValue = NSString()
         
         var destinationsForTrip = [NSString]()
+        var destinationsForTripStates = [NSString]()
         var travelDictionary = [NSDictionary]()
         var indexOfDestinationBeingPlanned = NSNumber(value: 0)
         var isInitiator = NSNumber(value: 1)
@@ -3058,6 +3116,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             suggestedDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggested_destination") as? NSString ?? NSString()
             
             destinationsForTrip = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTrip") as? [NSString] ?? [NSString]()
+            destinationsForTripStates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTripStates") as? [NSString] ?? [NSString]()
             travelDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "travelDictionary") as? [NSDictionary] ?? [NSDictionary]()
             indexOfDestinationBeingPlanned = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "indexOfDestinationBeingPlanned") as? NSNumber ?? NSNumber()
             isInitiator = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "isInitiator") as? NSNumber ?? NSNumber()
@@ -3075,7 +3134,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
@@ -4113,25 +4172,107 @@ extension TripViewController: SFSafariViewControllerDelegate {
 }
 
 extension TripViewController {
-    func getCities() {
+    func getCarRentalCities() {
         let bundle = Bundle.main
         let path = bundle.path(forResource: "Car-Cities", ofType: "csv")
         let importer = CSVImporter<[String: String]>(path: path!)
         importer.startImportingRecords(structure: { (headerValues) -> Void in
             
-            print(headerValues)
+        }) { $0 }.onFinish { importedRecords in
+            self.ppnCarRentalCities = importedRecords
+        }
+    }
+    func getHotelCities() {
+        let bundle = Bundle.main
+        let path = bundle.path(forResource: "Hotel-Cities", ofType: "csv")
+        let importer = CSVImporter<[String: String]>(path: path!)
+        importer.startImportingRecords(structure: { (headerValues) -> Void in
             
         }) { $0 }.onFinish { importedRecords in
-            self.PPNCities = importedRecords
+            self.ppnHotelCities = importedRecords
+        }
+    }
+    func getAirportCities() {
+        let bundle = Bundle.main
+        let path = bundle.path(forResource: "Air-Airports", ofType: "csv")
+        let importer = CSVImporter<[String: String]>(path: path!)
+        importer.startImportingRecords(structure: { (headerValues) -> Void in
+            
+        }) { $0 }.onFinish { importedRecords in
+            self.ppnAirportCities = importedRecords
+        }
+    }
+    func getStateAbbreviations() {
+        let bundle = Bundle.main
+        let path = bundle.path(forResource: "states", ofType: "csv")
+        let importer = CSVImporter<[String: String]>(path: path!)
+        importer.startImportingRecords(structure: { (headerValues) -> Void in
+            
+        }) { $0 }.onFinish { importedRecords in
+            self.stateAbbreviationsDict = importedRecords
             
         }
     }
-    func findCityIDWith(cityString: String) -> String {
-        for PPNCityDictionary in PPNCities {
+    func getCountryAbbreviations() {
+        let bundle = Bundle.main
+        let path = bundle.path(forResource: "countryAbbreviations", ofType: "csv")
+        let importer = CSVImporter<[String: String]>(path: path!)
+        importer.startImportingRecords(structure: { (headerValues) -> Void in
+            
+        }) { $0 }.onFinish { importedRecords in
+            self.countryAbbreviationsDict = importedRecords
+            
+        }
+    }
+    
+    
+    func findCarAirportCityIDWith(cityString: String, stateString: String) -> String {
+        for PPNCityDictionary in ppnCarRentalCities {
             if PPNCityDictionary["city"] == cityString {
-                return PPNCityDictionary["cityid_ppn"]!
+                
+                if PPNCityDictionary["state_code"] == stateString || PPNCityDictionary["country_code"] == stateString {
+                    let cityIDWithNameMatch = PPNCityDictionary["cityid_ppn"]!
+//                    let airports = findAirportWith(cityID: cityIDWithNameMatch)
+//                    if airports.count >= 1 {
+                        return cityIDWithNameMatch
+//                    }
+                }
             }
         }
         return "noMatchingCity"
     }
+    func findAirportWith(cityID: String) -> [String] {
+        var airports = [String]()
+        for PPNAirportDictionary in ppnAirportCities {
+            if PPNAirportDictionary["cityid_ppn"] == cityID {
+                airports.append(PPNAirportDictionary["airport"]!)
+            }
+        }
+        return airports
+    }
+    func findStateAbbreviationWith(state: String) -> String {
+        for stateAbbreviationDict in stateAbbreviationsDict {
+            if stateAbbreviationDict["State"] == state {
+                return stateAbbreviationDict["Abbreviation"]!
+            }
+        }
+//        return state
+//        for countryAbbreviationDict in countryAbbreviationsDict {
+//            if countryAbbreviationDict["name"] == state {
+//                return countryAbbreviationDict["name"]
+//            }
+//        }
+//        
+        return "noStateMatch"
+    }
+    func findCountryAbbreviationWith(country: String) -> String {
+        for countryAbbreviationDict in countryAbbreviationsDict {
+            if countryAbbreviationDict["name"] == country {
+                return countryAbbreviationDict["ISO3166-1-Alpha-2"]!
+            }
+        }
+        
+        return "noCountryMatch"
+    }
+
 }

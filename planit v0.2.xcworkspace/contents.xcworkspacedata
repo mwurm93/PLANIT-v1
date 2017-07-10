@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Car-Cities.csv">
-   </FileRef>
-   <FileRef
       location = "group:planit v0.2.xcodeproj">
    </FileRef>
    <FileRef

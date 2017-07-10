@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import CSVImporter
 
 class NoCityDecidedAnyIdeasQuestionView: UIView, UISearchControllerDelegate, UISearchBarDelegate {
     
@@ -19,6 +20,7 @@ class NoCityDecidedAnyIdeasQuestionView: UIView, UISearchControllerDelegate, UIS
     var searchController: UISearchController?
     var resultView: UITextView?
     var subView: UIView?
+    var stateAbbreviationsDict = [Dictionary<String, String>]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,6 +33,7 @@ class NoCityDecidedAnyIdeasQuestionView: UIView, UISearchControllerDelegate, UIS
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
+        getStateAbbreviations()
 //        self.layer.borderColor = UIColor.black.cgColor
 //        self.layer.borderWidth = 2
     }
@@ -149,16 +152,52 @@ extension NoCityDecidedAnyIdeasQuestionView: GMSAutocompleteResultsViewControlle
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        var destinationsForTripStates = (SavedPreferencesForTrip["destinationsForTripStates"] as! [String])
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         if indexOfDestinationBeingPlanned == destinationsForTrip.count {
             //write new destination
             destinationsForTrip.append((searchController?.searchBar.text)!)
+            var destinationsForTripStatesToBeAppended = String()
+            if place.addressComponents?.count == 4 {
+                destinationsForTripStatesToBeAppended = ((place.addressComponents?[3].name)!)
+            } else if place.addressComponents?.count == 3 {
+                destinationsForTripStatesToBeAppended = ((place.addressComponents?[2].name)!)
+            } else if place.addressComponents?.count == 2 {
+                destinationsForTripStatesToBeAppended = ((place.addressComponents?[1].name)!)
+            }
+            if destinationsForTripStatesToBeAppended == "United States" {
+                for stateAbbreviationDict in stateAbbreviationsDict {
+                    if stateAbbreviationDict["State"] == place.addressComponents?[1].name {
+                        destinationsForTripStatesToBeAppended = ((place.addressComponents?[1].name)!)
+                    } else if stateAbbreviationDict["State"] == place.addressComponents?[2].name {
+                        destinationsForTripStatesToBeAppended = ((place.addressComponents?[2].name)!)
+                    }
+                }
+            }
+            destinationsForTripStates.append(destinationsForTripStatesToBeAppended)
         } else if indexOfDestinationBeingPlanned < destinationsForTrip.count {
             //over write
             destinationsForTrip[indexOfDestinationBeingPlanned] = (searchController?.searchBar.text)!
+            if place.addressComponents?.count == 4 {
+                destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[3].name)!
+            } else if place.addressComponents?.count == 3 {
+                destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[2].name)!
+            } else if place.addressComponents?.count == 2 {
+                destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[1].name)!
+            }
+            if destinationsForTripStates[indexOfDestinationBeingPlanned] == "United States" {
+                for stateAbbreviationDict in stateAbbreviationsDict {
+                    if stateAbbreviationDict["State"] == place.addressComponents?[1].name {
+                        destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[1].name)!
+                    } else if stateAbbreviationDict["State"] == place.addressComponents?[2].name {
+                        destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[2].name)!
+                    }
+                }
+            }
         } else if indexOfDestinationBeingPlanned > destinationsForTrip.count {
             fatalError("indexOfDestinationBeingPlanned > destinationsForTrip.count in destinationsSwipedRightTableViewCell.swift")
         }
+        SavedPreferencesForTrip["destinationsForTripStates"] = destinationsForTripStates
         SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
@@ -179,6 +218,17 @@ extension NoCityDecidedAnyIdeasQuestionView: GMSAutocompleteResultsViewControlle
     
     func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
+    func getStateAbbreviations() {
+        let bundle = Bundle.main
+        let path = bundle.path(forResource: "states", ofType: "csv")
+        let importer = CSVImporter<[String: String]>(path: path!)
+        importer.startImportingRecords(structure: { (headerValues) -> Void in
+            
+        }) { $0 }.onFinish { importedRecords in
+            self.stateAbbreviationsDict = importedRecords
+            
+        }
     }
 }
 

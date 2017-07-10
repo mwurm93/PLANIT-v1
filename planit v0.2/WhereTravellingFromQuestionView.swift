@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import CSVImporter
 
 class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISearchBarDelegate {
     
@@ -19,6 +20,7 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
     var searchController: UISearchController?
     var resultView: UITextView?
     var subView: UIView?
+    var stateAbbreviationsDict = [Dictionary<String, String>]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,6 +33,7 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
+        getStateAbbreviations()
 //        self.layer.borderColor = UIColor.blue.cgColor
 //        self.layer.borderWidth = 2
     }
@@ -155,8 +158,30 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
         searchController?.isActive = false
         // Do something with the selected place.
         
-        searchController?.searchBar.text = place.name
-        DataContainerSingleton.sharedDataContainer.homeAirport = searchController?.searchBar.text
+//        let test = place.addressComponents?[0].name
+//        let test1 = place.addressComponents?[1].name
+//        let test2 = place.addressComponents?[2].name
+//        let test3 = place.addressComponents?[3].name
+                        
+        searchController?.searchBar.text = place.addressComponents?[0].name
+        DataContainerSingleton.sharedDataContainer.homeAirport = place.addressComponents?[0].name
+        
+        if place.addressComponents?.count == 4 {
+            DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[3].name
+        } else if place.addressComponents?.count == 3 {
+            DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[2].name
+        } else if place.addressComponents?.count == 2 {
+            DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[1].name
+        }
+        if DataContainerSingleton.sharedDataContainer.homeState == "United States" {
+            for stateAbbreviationDict in stateAbbreviationsDict {
+                if stateAbbreviationDict["State"] == place.addressComponents?[1].name {
+                    DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[1].name
+                } else if stateAbbreviationDict["State"] == place.addressComponents?[2].name {
+                    DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[2].name
+                }
+            }
+        }
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
     }
@@ -175,6 +200,15 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
     func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
-    
-
+    func getStateAbbreviations() {
+        let bundle = Bundle.main
+        let path = bundle.path(forResource: "states", ofType: "csv")
+        let importer = CSVImporter<[String: String]>(path: path!)
+        importer.startImportingRecords(structure: { (headerValues) -> Void in
+        
+        }) { $0 }.onFinish { importedRecords in
+        self.stateAbbreviationsDict = importedRecords
+        
+        }
+    }
 }
