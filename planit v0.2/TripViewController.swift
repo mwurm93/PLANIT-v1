@@ -1361,9 +1361,17 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 }
             }
         }
+
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        if destinationsForTrip.count > 1 {
+            flightSearchQuestionView?.searchMode = "oneWay"
+            flightSearchQuestionView?.handleSearchMode()
+            flightSearchQuestionView?.searchModeControl.selectedSegmentIndex = 0
+        }
+        
         alignSubviews()
         scrollToSubviewWithTag(tag: 11)
-        
     }
     func spawnFlightResultsQuestionView() {
         bookingMode = "flight"
@@ -1372,10 +1380,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var originCityID = String()
         var originStateAbbrev = String()
         var isOriginCityInUS = true
+        var isOriginCityNearAirport = false
         var destinationCity = String()
         var destinationCityID = String()
         var destinationStateAbbrev = String()
         var isDestinationCityInUS = true
+        var isDestinationCityNearAirport = false
         var originDay = String() //DD
         var originMonth = String() //MM
         var originYear = String() // YYYY
@@ -1395,7 +1405,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 isOriginCityInUS = false
                 originStateAbbrev = findCountryAbbreviationWith(country:DataContainerSingleton.sharedDataContainer.homeState!)
             }
-            originCityID = findCarAirportCityIDWith(cityString: originCity, stateString: originStateAbbrev)
+            originCityID = findCarCityIDWith(cityString: originCity, stateString: originStateAbbrev)
             originCity = originCity.replacingOccurrences(of: " ", with: "+")
             if !isOriginCityInUS {
                 originStateAbbrev = DataContainerSingleton.sharedDataContainer.homeState!
@@ -1408,14 +1418,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 isOriginCityInUS = false
                 originStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned - 1])
             }
-            originCityID = findCarAirportCityIDWith(cityString: originCity, stateString: originStateAbbrev)
+            originCityID = findCarCityIDWith(cityString: originCity, stateString: originStateAbbrev)
             originCity = originCity.replacingOccurrences(of: " ", with: "+")
             if !isOriginCityInUS {
                 originStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned - 1]
             }
             originStateAbbrev = originStateAbbrev.replacingOccurrences(of: " ", with: "+")
         }
-        
+        if findAirportWith(cityID: originCityID).count > 0 {
+            isOriginCityNearAirport = true
+        }
         
         destinationCity = destinationsForTrip[indexOfDestinationBeingPlanned]
         destinationStateAbbrev = findStateAbbreviationWith(state: destinationsForTripStates[indexOfDestinationBeingPlanned])
@@ -1423,12 +1435,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             isDestinationCityInUS = false
             destinationStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned])
         }
-        destinationCityID = findCarAirportCityIDWith(cityString: destinationCity, stateString: destinationStateAbbrev)
+        destinationCityID = findCarCityIDWith(cityString: destinationCity, stateString: destinationStateAbbrev)
         destinationCity = destinationCity.replacingOccurrences(of: " ", with: "+")
         if !isDestinationCityInUS {
             destinationStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned]
         }
         destinationStateAbbrev = destinationStateAbbrev.replacingOccurrences(of: " ", with: "+")
+        if findAirportWith(cityID: destinationCityID).count > 0 {
+            isDestinationCityNearAirport = true
+        }
         
         let originDate = flightSearchQuestionView?.departureDate?.text
         originMonth = (originDate?[0])! + (originDate?[1])!                   //DD
@@ -1440,8 +1455,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         returnYear = (returnDate?[6])! + (returnDate?[7])! + (returnDate?[8])! + (returnDate?[9])!                  //YYYY
         
         var stringForURL = "http://secure.rezserver.com/flights/home/?refid=8056"
-        if originCityID != "noMatchingCity" && destinationCityID != "noMatchingCity" {
-            stringForURL = "http://secure.rezserver.com/flights/results/depart/?rs_o_city=\(originCity)%2C+\(originStateAbbrev)&rs_d_city=\(destinationCity)%2C+\(destinationStateAbbrev)&rs_chk_in=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_chk_out=\(returnMonth)%2F\(returnDay)%2F\(returnYear)&rs_adults=1&rs_children=0&refid=8056&rs_o_aircode=\(originCityID)&rs_d_aircode=\(destinationCityID)&air_search_type=\(searchMode)&preferred_airline=&cabin_class="
+        if (originCityID != "noMatchingCity" && destinationCityID != "noMatchingCity") && flightSearchQuestionView?.searchMode == "roundtrip" {
+            stringForURL = "http://secure.rezserver.com/flights/results/depart/?rs_o_city=\(originCity)%2C+\(originStateAbbrev)&rs_d_city=\(destinationCity)%2C+\(destinationStateAbbrev)&rs_chk_in=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_chk_out=\(returnMonth)%2F\(returnDay)%2F\(returnYear)&rs_adults=1&rs_children=0&refid=8056&rs_o_aircode=\(originCityID)&rs_d_aircode=\(destinationCityID)&air_search_type=\((flightSearchQuestionView?.searchMode)!)&preferred_airline=&cabin_class="
+        } else if (originCityID != "noMatchingCity" && destinationCityID != "noMatchingCity")  && flightSearchQuestionView?.searchMode == "oneWay" {
+            stringForURL = "http://secure.rezserver.com/flights/results/depart/?rs_o_city1=\(originCity)%2C+\(originStateAbbrev)&rs_d_city1=\(destinationCity)%2C+\(destinationStateAbbrev)&rs_chk_in1=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_adults=1&rs_children=0&refid=8056&rs_o_aircode1=\(originCityID)&rs_d_aircode1=\(destinationCityID)&air_search_type=\((flightSearchQuestionView?.searchMode)!)&preferred_airline=&cabin_class="
         }
         let whiteLabelURL_FlightSearchQuery = URL(string: stringForURL)!
         
@@ -4226,16 +4243,13 @@ extension TripViewController {
     }
     
     
-    func findCarAirportCityIDWith(cityString: String, stateString: String) -> String {
+    func findCarCityIDWith(cityString: String, stateString: String) -> String {
         for PPNCityDictionary in ppnCarRentalCities {
             if PPNCityDictionary["city"] == cityString {
                 
                 if PPNCityDictionary["state_code"] == stateString || PPNCityDictionary["country_code"] == stateString {
                     let cityIDWithNameMatch = PPNCityDictionary["cityid_ppn"]!
-//                    let airports = findAirportWith(cityID: cityIDWithNameMatch)
-//                    if airports.count >= 1 {
                         return cityIDWithNameMatch
-//                    }
                 }
             }
         }
@@ -4256,13 +4270,6 @@ extension TripViewController {
                 return stateAbbreviationDict["Abbreviation"]!
             }
         }
-//        return state
-//        for countryAbbreviationDict in countryAbbreviationsDict {
-//            if countryAbbreviationDict["name"] == state {
-//                return countryAbbreviationDict["name"]
-//            }
-//        }
-//        
         return "noStateMatch"
     }
     func findCountryAbbreviationWith(country: String) -> String {

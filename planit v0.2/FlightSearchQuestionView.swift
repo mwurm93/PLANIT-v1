@@ -105,7 +105,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         
         //UPDATE DATES
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        let datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
 
@@ -375,6 +375,37 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         return true
     }
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        
+        if textField == departureOrigin {
+            //UPDATE DESTINATIONS
+            if indexOfDestinationBeingPlanned == 0 {
+                DataContainerSingleton.sharedDataContainer.homeAirport = textField.text
+            } else {
+                let datesOfDestinationForUpdate = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned - 1]]
+                datesDestinationsDictionary.removeValue(forKey: destinationsForTrip[indexOfDestinationBeingPlanned - 1])
+                datesDestinationsDictionary[textField.text!] = datesOfDestinationForUpdate
+                
+                destinationsForTrip[indexOfDestinationBeingPlanned - 1] = textField.text!
+                SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
+                SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            }
+        }
+        if textField == departureDestination {
+            let datesOfDestinationForUpdate = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]
+            datesDestinationsDictionary.removeValue(forKey: destinationsForTrip[indexOfDestinationBeingPlanned])
+            datesDestinationsDictionary[textField.text!] = datesOfDestinationForUpdate
+            
+            destinationsForTrip[indexOfDestinationBeingPlanned] = textField.text!
+            SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
+            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
+        
         return true
     }
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -393,14 +424,20 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
             self.returnOrigin?.isHidden = true
             self.returnDestination?.isHidden = true
             self.returnDate?.isHidden = true
+            self.searchModeControl.frame.origin.y = 185
+            self.searchButton?.frame.origin.y = 260
         } else if searchMode == "roundtrip" {
             self.returnOrigin?.isHidden = true
             self.returnDestination?.isHidden = true
             self.returnDate?.isHidden = false
+            self.searchModeControl.frame.origin.y = 255
+            self.searchButton?.frame.origin.y = 330
         } else if searchMode == "multiCity" {
             self.returnOrigin?.isHidden = false
             self.returnDestination?.isHidden = false
             self.returnDate?.isHidden = false
+            self.searchModeControl.frame.origin.y = 255
+            self.searchButton?.frame.origin.y = 330
         }
     }
     
