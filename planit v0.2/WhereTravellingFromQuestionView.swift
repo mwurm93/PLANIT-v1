@@ -150,6 +150,18 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         }
     }
     
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        UIView.animate(withDuration: 0.25) {
+            self.subView?.frame.origin.y = 0
+            self.questionLabel?.isHidden = true
+            self.button1?.isHidden = true
+        }
+    }
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+            self.subView?.frame.origin.y = 120
+            self.questionLabel?.isHidden = false
+            self.button1?.isHidden = false
+    }
 }
 // Handle the user's selection GOOGLE PLACES SEARCH
 extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerDelegate {
@@ -165,8 +177,11 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
                         
         searchController?.searchBar.text = place.addressComponents?[0].name
         DataContainerSingleton.sharedDataContainer.homeAirport = place.addressComponents?[0].name
-        
-        if place.addressComponents?.count == 4 {
+        if place.addressComponents?.count == 6 {
+            DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[5].name
+        } else if place.addressComponents?.count == 5 {
+            DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[4].name
+        } else if place.addressComponents?.count == 4 {
             DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[3].name
         } else if place.addressComponents?.count == 3 {
             DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[2].name

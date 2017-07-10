@@ -159,7 +159,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         questionLabel?.text = "Search for flights"
         self.addSubview(questionLabel!)
 
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
 //        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
 //            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
 //                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]

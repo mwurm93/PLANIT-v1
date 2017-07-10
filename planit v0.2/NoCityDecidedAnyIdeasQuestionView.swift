@@ -158,7 +158,11 @@ extension NoCityDecidedAnyIdeasQuestionView: GMSAutocompleteResultsViewControlle
             //write new destination
             destinationsForTrip.append((searchController?.searchBar.text)!)
             var destinationsForTripStatesToBeAppended = String()
-            if place.addressComponents?.count == 4 {
+            if place.addressComponents?.count == 6 {
+                destinationsForTripStatesToBeAppended = ((place.addressComponents?[5].name)!)
+            } else if place.addressComponents?.count == 5 {
+                destinationsForTripStatesToBeAppended = ((place.addressComponents?[4].name)!)
+            } else if place.addressComponents?.count == 4 {
                 destinationsForTripStatesToBeAppended = ((place.addressComponents?[3].name)!)
             } else if place.addressComponents?.count == 3 {
                 destinationsForTripStatesToBeAppended = ((place.addressComponents?[2].name)!)
@@ -178,7 +182,11 @@ extension NoCityDecidedAnyIdeasQuestionView: GMSAutocompleteResultsViewControlle
         } else if indexOfDestinationBeingPlanned < destinationsForTrip.count {
             //over write
             destinationsForTrip[indexOfDestinationBeingPlanned] = (searchController?.searchBar.text)!
-            if place.addressComponents?.count == 4 {
+            if place.addressComponents?.count == 6 {
+                destinationsForTripStates[indexOfDestinationBeingPlanned] = ((place.addressComponents?[5].name)!)
+            } else if place.addressComponents?.count == 5 {
+                destinationsForTripStates[indexOfDestinationBeingPlanned] = ((place.addressComponents?[4].name)!)
+            } else if place.addressComponents?.count == 4 {
                 destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[3].name)!
             } else if place.addressComponents?.count == 3 {
                 destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[2].name)!

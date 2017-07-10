@@ -10,7 +10,7 @@ import UIKit
 import JTAppleCalendar
 import UIColor_FlatColors
 
-class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarViewDataSource, JTAppleCalendarViewDelegate {
+class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarViewDataSource, JTAppleCalendarViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
     //MARK: Outlets
     @IBOutlet weak var calendarView: JTAppleCalendarView!
@@ -20,6 +20,8 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     var formatter = DateFormatter()
     var leftDate: Date?
     var button1: UIButton?
+    var destinationDaysTableView: UITableView?
+
     
     //Cache color vars
     static let transparentColor = UIColor(colorWithHexValue: 0xFFFFFF, alpha: 0).cgColor
@@ -75,10 +77,15 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         button1?.frame.origin.y = 520
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
-        calendarView?.frame = CGRect(x: 13, y: 100, width: 350, height: 400)
+        calendarView?.frame = CGRect(x: 13, y: 250, width: 350, height: 250)
         calendarView?.cellSize = 50
         
+        destinationDaysTableView?.frame = CGRect(x: (bounds.size.width - 300) / 2, y: 100, width: 300, height: 150)
+
+        
     }
+    
+  
     
     func loadDates() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -100,6 +107,8 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         calendarView.scrollToDate(scrollToDate!, animateScroll: true)
     }
     func addViews() {
+        setUpTable()
+        
         //Question label
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
@@ -151,7 +160,76 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         loadDates()
     }
     
+    //Tableview
+    func setUpTable() {
+        destinationDaysTableView = UITableView(frame: CGRect.zero, style: .grouped)
+        destinationDaysTableView?.delegate = self
+        destinationDaysTableView?.dataSource = self
+        destinationDaysTableView?.separatorColor = UIColor.clear
+        destinationDaysTableView?.backgroundColor = UIColor.clear
+        destinationDaysTableView?.layer.backgroundColor = UIColor.clear.cgColor
+        destinationDaysTableView?.allowsSelection = false
+        destinationDaysTableView?.backgroundView = nil
+        destinationDaysTableView?.isOpaque = false
+        destinationDaysTableView?.isEditing = true
+        destinationDaysTableView?.register(destinationsSwipedRightTableViewCell.self, forCellReuseIdentifier: "destinationDaysTableViewCell")
+        self.addSubview(destinationDaysTableView!)
+    }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        
+        return destinationsForTrip.count
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "destinationDaysTableViewCell") as! destinationDaysTableViewCell
+
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        
+        cell.cellButton.setTitle(destinationsForTrip[indexPath.row], for: .normal)
+//        cell.cellButton.setTitle(destinationsForTrip[indexPath.row], for: .selected)
+        cell.cellButton.sizeToFit()
+        cell.cellButton.frame.size.height = 30
+        cell.cellButton.frame.size.width += 20
+        cell.cellButton.frame.origin.x = tableView.frame.width / 2 - cell.cellButton.frame.width / 2
+        cell.cellButton.frame.origin.y = 5
+//        cell.cellButton.layer.cornerRadius = (cell.cellButton.frame.height) / 2
+        
+        cell.backgroundColor = UIColor.clear
+        cell.backgroundView = nil
+        if indexPath.row == 0 {
+            cell.layer.backgroundColor = ParseDatesForMultipleDestinationsCalendarView.transparentWhiteColor.cgColor
+        } else {
+            cell.layer.backgroundColor = colorForName(colors[indexPath.row - 1]).cgColor
+        }
+        
+        
+        //Change hamburger icon
+        for view in cell.subviews as [UIView] {
+            if type(of: view).description().range(of: "Reorder") != nil {
+                for subview in view.subviews as! [UIImageView] {
+                    if subview.isKind(of: UIImageView.self) {
+                        subview.image = UIImage(named: "hamburger")
+                        subview.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
+                    }
+                }
+            }
+        }
+
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(40)
+    }
+
     
     // MARK: JTCalendarView Extension
     

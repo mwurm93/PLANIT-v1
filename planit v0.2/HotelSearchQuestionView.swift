@@ -20,6 +20,8 @@ class HotelSearchQuestionView: UIView, UITextFieldDelegate {
     var checkOutDate: UITextField?
     var searchButton: UIButton?
     
+    var formatter = DateFormatter()
+    
     //MARK: Outlets
     @IBOutlet weak var numberOfRoomsPickerView: UIPickerView!
     
@@ -60,6 +62,25 @@ class HotelSearchQuestionView: UIView, UITextFieldDelegate {
         searchButton?.frame.origin.x = (bounds.size.width - (searchButton?.frame.width)!) / 2
         searchButton?.frame.origin.y = 330
         searchButton?.layer.cornerRadius = (searchButton?.frame.height)! / 2
+        
+        //UPDATE DATES
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        
+        var leftDatesDestinations = [String:Date]()
+        var rightDatesDestinations = [String:Date]()
+        
+        if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
+            leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
+            rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?.count)! - 1]
+            formatter.dateFormat = "MM/dd/YYYY"
+            let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
+            let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
+            checkInDate?.text = leftDateAsString
+            checkOutDate?.text = rightDateAsString
+        }
         
         
 //        numberOfRoomsPickerView.frame = CGRect(x: (checkOutDate?.frame.maxX)! + 25, y: 160, width: 150, height: 50)

@@ -155,8 +155,8 @@ extension YesCityDecidedQuestionView: GMSAutocompleteResultsViewControllerDelega
 //        let test1 = place.addressComponents?[1].name
 //        let test2 = place.addressComponents?[2].name
 //        let test3 = place.addressComponents?[3].name
-//
-        
+////
+//        
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
         var destinationsForTripStates = (SavedPreferencesForTrip["destinationsForTripStates"] as! [String])
@@ -165,7 +165,11 @@ extension YesCityDecidedQuestionView: GMSAutocompleteResultsViewControllerDelega
             //write new destination
             destinationsForTrip.append((searchController?.searchBar.text)!)
             var destinationsForTripStatesToBeAppended = String()
-            if place.addressComponents?.count == 4 {
+            if place.addressComponents?.count == 6 {
+                destinationsForTripStatesToBeAppended = ((place.addressComponents?[5].name)!)
+            } else if place.addressComponents?.count == 5 {
+                destinationsForTripStatesToBeAppended = ((place.addressComponents?[4].name)!)
+            } else if place.addressComponents?.count == 4 {
                 destinationsForTripStatesToBeAppended = ((place.addressComponents?[3].name)!)
             } else if place.addressComponents?.count == 3 {
                 destinationsForTripStatesToBeAppended = ((place.addressComponents?[2].name)!)
@@ -185,7 +189,11 @@ extension YesCityDecidedQuestionView: GMSAutocompleteResultsViewControllerDelega
         } else if indexOfDestinationBeingPlanned < destinationsForTrip.count {
             //over write
             destinationsForTrip[indexOfDestinationBeingPlanned] = (searchController?.searchBar.text)!
-            if place.addressComponents?.count == 4 {
+            if place.addressComponents?.count == 6 {
+                destinationsForTripStates[indexOfDestinationBeingPlanned] = ((place.addressComponents?[5].name)!)
+            } else if place.addressComponents?.count == 5 {
+                destinationsForTripStates[indexOfDestinationBeingPlanned] = ((place.addressComponents?[4].name)!)
+            } else if place.addressComponents?.count == 4 {
                 destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[3].name)!
             } else if place.addressComponents?.count == 3 {
                 destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[2].name)!

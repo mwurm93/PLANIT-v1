@@ -848,6 +848,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     func animateInSubview_Departure(){
+        
+        var fromDate = Date()
+        var toDate = Date()
+        if bookingMode == "flight" {
+            let fromDateInTextfield = (flightSearchQuestionView?.departureDate?.text)!
+            let toDateInTextfield = (flightSearchQuestionView?.returnDate?.text)!
+            
+            fromDate = formatter.date(from: fromDateInTextfield)!
+            toDate = formatter.date(from: toDateInTextfield)!
+        } else if bookingMode == "carRental" {
+            fromDate = formatter.date(from: (carRentalSearchQuestionView?.pickUpDate?.text)!)!
+            toDate = formatter.date(from: (carRentalSearchQuestionView?.dropOffDate?.text)!)!
+        } else if bookingMode == "hotel" {
+            fromDate = formatter.date(from: (hotelSearchQuestionView?.checkInDate?.text)!)!
+            toDate = formatter.date(from: (hotelSearchQuestionView?.checkOutDate?.text)!)!
+        }
+        calendarView.selectDates(from: fromDate, to: toDate)
         //Animate In Subview
         dateEditing = "departureDate"
         self.view.endEditing(true)
@@ -1538,7 +1555,92 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func spawnRentalCarResultsQuestionView() {
         bookingMode = "carRental"
         
-        let whiteLabelURL_CarRentalSearchQuery = URL(string: "http://secure.rezserver.com/flights/results/depart/?rs_o_city=Seattle%2C+WA&rs_d_city=Paris%2C+France&rs_chk_in=07%2F11%2F2017&rs_o_aircode=800051061&rs_d_aircode=800029376&rs_chk_out=07%2F17%2F2017&rs_adults=1&rs_children=0&refid=8056&air_search_type=roundtrip&preferred_airline=&cabin_class=")!
+        var originCity = String()
+        var originCityID = String()
+        var originStateAbbrev = String()
+        var isOriginCityInUS = true
+        var isOriginCityNearAirport = false
+        var destinationCity = String()
+        var destinationCityID = String()
+        var destinationStateAbbrev = String()
+        var isDestinationCityInUS = true
+        var isDestinationCityNearAirport = false
+        var originDay = String() //DD
+        var originMonth = String() //MM
+        var originYear = String() // YYYY
+        var returnDay = String() //DD
+        var returnMonth = String() //MM
+        var returnYear = String() //YYYY
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        var destinationsForTripStates = SavedPreferencesForTrip["destinationsForTripStates"] as! [String]
+        var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+        if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
+            originCity = DataContainerSingleton.sharedDataContainer.homeAirport!
+            originStateAbbrev = findStateAbbreviationWith(state: DataContainerSingleton.sharedDataContainer.homeState!)
+            if originStateAbbrev == "noStateMatch" {
+                isOriginCityInUS = false
+                originStateAbbrev = findCountryAbbreviationWith(country:DataContainerSingleton.sharedDataContainer.homeState!)
+            }
+            originCityID = findCarCityIDWith(cityString: originCity, stateString: originStateAbbrev)
+            originCity = originCity.replacingOccurrences(of: " ", with: "+")
+            if !isOriginCityInUS {
+                originStateAbbrev = DataContainerSingleton.sharedDataContainer.homeState!
+            }
+            originStateAbbrev = originStateAbbrev.replacingOccurrences(of: " ", with: "+")
+        } else {
+            originCity = destinationsForTrip[indexOfDestinationBeingPlanned]
+            originStateAbbrev = findStateAbbreviationWith(state: destinationsForTripStates[indexOfDestinationBeingPlanned])
+            if originStateAbbrev == "noStateMatch" {
+                isOriginCityInUS = false
+                originStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned])
+            }
+            originCityID = findCarCityIDWith(cityString: originCity, stateString: originStateAbbrev)
+            originCity = originCity.replacingOccurrences(of: " ", with: "+")
+            if !isOriginCityInUS {
+                originStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned]
+            }
+            originStateAbbrev = originStateAbbrev.replacingOccurrences(of: " ", with: "+")
+        }
+        if findAirportWith(cityID: originCityID).count > 0 {
+            isOriginCityNearAirport = true
+        }
+        
+        destinationCity = destinationsForTrip[indexOfDestinationBeingPlanned]
+        destinationStateAbbrev = findStateAbbreviationWith(state: destinationsForTripStates[indexOfDestinationBeingPlanned])
+        if destinationStateAbbrev == "noStateMatch" {
+            isDestinationCityInUS = false
+            destinationStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned])
+        }
+        destinationCityID = findCarCityIDWith(cityString: destinationCity, stateString: destinationStateAbbrev)
+        destinationCity = destinationCity.replacingOccurrences(of: " ", with: "+")
+        if !isDestinationCityInUS {
+            destinationStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned]
+        }
+        destinationStateAbbrev = destinationStateAbbrev.replacingOccurrences(of: " ", with: "+")
+        if findAirportWith(cityID: destinationCityID).count > 0 {
+            isDestinationCityNearAirport = true
+        }
+        
+        let originDate = carRentalSearchQuestionView?.pickUpDate?.text
+        originMonth = (originDate?[0])! + (originDate?[1])!                   //DD
+        originDay = (originDate?[3])! + (originDate?[4])!                 //MM
+        originYear = (originDate?[6])! + (originDate?[7])! + (originDate?[8])! + (originDate?[9])!                   //YYYY
+        let returnDate = carRentalSearchQuestionView?.dropOffDate?.text
+        returnMonth = (returnDate?[0])! + (returnDate?[1])!                   //DD
+        returnDay = (returnDate?[3])! + (returnDate?[4])!                 //MM
+        returnYear = (returnDate?[6])! + (returnDate?[7])! + (returnDate?[8])! + (returnDate?[9])!                  //YYYY
+        
+        var stringForURL = "http://secure.rezserver.com/car_rentals/home/?refid=8056"
+        if (originCityID != "noMatchingCity" && destinationCityID != "noMatchingCity") && carRentalSearchQuestionView?.searchMode == "Same drop-off" {
+            stringForURL = "http://secure.rezserver.com/car_rentals/results/?rs_pu_city=\(originCity)%2C+\(originStateAbbrev)&rs_pu_date=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_pu_time=8%3A30&rs_pu_cityid=\(originCityID)&rs_do_city=&rs_do_date=\(returnMonth)%2F\(returnDay)%2F\(returnYear)&rs_do_time=8%3A30&rs_company_code=&rs_cartype=&rs_company=&refid=8056"
+        } else if (originCityID != "noMatchingCity" && destinationCityID != "noMatchingCity")  && carRentalSearchQuestionView?.searchMode == "Different drop-off" {
+        }
+        let whiteLabelURL_CarRentalSearchQuery = URL(string: stringForURL)!
+        
+        
         showWebsite(URL: whiteLabelURL_CarRentalSearchQuery)
         
 //        carRentalResultsController = self.storyboard!.instantiateViewController(withIdentifier: "carRentalResultsViewController") as? carRentalResultsViewController
@@ -1744,7 +1846,58 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func spawnHotelResultsQuestionView() {
         bookingMode = "hotel"
         
-        let whiteLabelURL_HotelSearchQuery = URL(string: "http://secure.rezserver.com/flights/results/depart/?rs_o_city=Seattle%2C+WA&rs_d_city=Paris%2C+France&rs_chk_in=07%2F11%2F2017&rs_o_aircode=800051061&rs_d_aircode=800029376&rs_chk_out=07%2F17%2F2017&rs_adults=1&rs_children=0&refid=8056&air_search_type=roundtrip&preferred_airline=&cabin_class=")!
+        var destinationCity = String()
+        var destinationCityID = String()
+        var destinationStateAbbrev = String()
+        var isDestinationCityInUS = true
+        var isDestinationCityNearAirport = false
+        var originDay = String() //DD
+        var originMonth = String() //MM
+        var originYear = String() // YYYY
+        var returnDay = String() //DD
+        var returnMonth = String() //MM
+        var returnYear = String() //YYYY
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        var destinationsForTripStates = SavedPreferencesForTrip["destinationsForTripStates"] as! [String]
+        
+        destinationCity = destinationsForTrip[indexOfDestinationBeingPlanned]
+        destinationStateAbbrev = findStateAbbreviationWith(state: destinationsForTripStates[indexOfDestinationBeingPlanned])
+        if destinationStateAbbrev == "noStateMatch" {
+            isDestinationCityInUS = false
+            destinationStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned])
+        }
+        destinationCityID = findCarCityIDWith(cityString: destinationCity, stateString: destinationStateAbbrev)
+        
+        if !isDestinationCityInUS {
+            destinationStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned]
+        }
+        destinationStateAbbrev = destinationStateAbbrev.replacingOccurrences(of: " ", with: "+")
+        destinationCity = destinationCity + ", \(destinationStateAbbrev)"
+        destinationCity = destinationCity.replacingOccurrences(of: " ", with: "%20")
+        
+        if findAirportWith(cityID: destinationCityID).count > 0 {
+            isDestinationCityNearAirport = true
+        }
+        
+        let originDate = carRentalSearchQuestionView?.pickUpDate?.text
+        originMonth = (originDate?[0])! + (originDate?[1])!                   //DD
+        originDay = (originDate?[3])! + (originDate?[4])!                 //MM
+        originYear = (originDate?[6])! + (originDate?[7])! + (originDate?[8])! + (originDate?[9])!                   //YYYY
+        let returnDate = carRentalSearchQuestionView?.dropOffDate?.text
+        returnMonth = (returnDate?[0])! + (returnDate?[1])!                   //DD
+        returnDay = (returnDate?[3])! + (returnDate?[4])!                 //MM
+        returnYear = (returnDate?[6])! + (returnDate?[7])! + (returnDate?[8])! + (returnDate?[9])!                  //YYYY
+        
+        var stringForURL = "http://secure.rezserver.com/hotels/home/?refid=8056"
+        if destinationCityID != "noMatchingCity" {
+            stringForURL = "http://secure.rezserver.com/hotels/results/?query=\(destinationCity)&check_in=\(originMonth)%2F\(originDay)%2F\(originYear)&check_out=\(returnMonth)%2F\(returnDay)%2F\(returnYear)&rooms=1&adults=2&refid=8056&city_id=\(destinationCityID)"
+        }
+        let whiteLabelURL_HotelSearchQuery = URL(string: stringForURL)!
+        
+        
         showWebsite(URL: whiteLabelURL_HotelSearchQuery)
         
 //        self.view.endEditing(true)
