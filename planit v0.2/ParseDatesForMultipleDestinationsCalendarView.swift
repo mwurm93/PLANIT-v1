@@ -10,7 +10,7 @@ import UIKit
 import JTAppleCalendar
 import UIColor_FlatColors
 
-class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarViewDataSource, JTAppleCalendarViewDelegate, UITableViewDataSource, UITableViewDelegate {
+class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarViewDataSource, JTAppleCalendarViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     //MARK: Outlets
     @IBOutlet weak var calendarView: JTAppleCalendarView!
@@ -21,6 +21,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     var leftDate: Date?
     var button1: UIButton?
     var destinationDaysTableView: UITableView?
+    var timesLoaded = 0
 
     
     //Cache color vars
@@ -81,8 +82,6 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         calendarView?.cellSize = 50
         
         destinationDaysTableView?.frame = CGRect(x: (bounds.size.width - 300) / 2, y: 80, width: 300, height: 200)
-
-        
     }
     
   
@@ -98,7 +97,6 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                 
             }
         }
-        
     }
     func scrollToDate() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -160,6 +158,92 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         loadDates()
     }
     
+    //UITextfield delegate
+    func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        
+        var differenceInNightsCount = 0
+        for i in 0 ... destinationsForTrip.count - 1 {
+            if textField.tag == i {
+                //Update textfields to match total
+                let previousNightsCount = (datesDestinationsDictionary[destinationsForTrip[i]]?.count)! - 1
+                differenceInNightsCount = previousNightsCount - Int(textField.text!)!
+                
+                var row = Int()
+                if i == destinationsForTrip.count - 1 {
+                    row = destinationsForTrip.count - 2
+                } else {
+                    row = i + 1
+                }
+                let cellForUpdate = destinationDaysTableView?.cellForRow(at: IndexPath(row: row, section: 0)) as! destinationDaysTableViewCell
+                if cellForUpdate.cellTextField.text! != "?" {
+                    let previousNightsCountForUpdate = Int(cellForUpdate.cellTextField.text!)!
+                    cellForUpdate.cellTextField.text = String(previousNightsCountForUpdate + differenceInNightsCount)
+                } else {
+                    cellForUpdate.cellTextField.text = String(differenceInNightsCount)
+                }
+                
+                
+                //Update datasource
+                travelDates.removeAll()
+                var sinceDate = tripDates?[0]
+                for i in 0 ... destinationsForTrip.count - 2 {
+                    let cell = destinationDaysTableView?.cellForRow(at: IndexPath(row: i, section: 0)) as! destinationDaysTableViewCell
+                    let selectedDays = Int(cell.cellTextField.text!)!
+                    let travelDateToAppend = Date(timeInterval: TimeInterval(86400 * selectedDays), since: sinceDate!)
+                    sinceDate = travelDateToAppend
+                    travelDates.append(travelDateToAppend)
+                }
+                parseTripDatesByTravelDates()
+                
+                timesLoaded += 1
+                //Update calendar
+                let selectedDates = calendarView.selectedDates
+                calendarView.reloadDates(calendarView.selectedDates)
+            }
+        }
+        
+        
+        textField.resignFirstResponder()
+        
+        var anyQuestionMarks = String()
+        for i in 0 ... destinationsForTrip.count - 1 {
+            let cell = destinationDaysTableView?.cellForRow(at: IndexPath(row: i, section: 0)) as! destinationDaysTableViewCell
+            anyQuestionMarks.append(cell.cellTextField.text!)
+        }
+        
+        if !anyQuestionMarks.contains("?") {
+            let when = DispatchTime.now() + 3.0
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsComplete"), object: nil)
+            }
+        }
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if (string.characters.count == 0) {
+            return true
+        }
+        
+        if (textField.text == "") && string == "0" {
+            return false
+        } else if Int(textField.text! + string)! >= (tripDates?.count)! - 1 {
+            return false
+        }
+        
+        let acceptableCharacters = "0123456789"
+        let cs = NSCharacterSet(charactersIn: acceptableCharacters)
+        let filtered = string.components(separatedBy: cs as CharacterSet).filter {  !$0.isEmpty }
+        let str = filtered.joined(separator: "")
+        
+        return (string != str)
+    }
+
+    
     //Tableview
     func setUpTable() {
         destinationDaysTableView = UITableView(frame: CGRect.zero, style: .grouped)
@@ -189,27 +273,23 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "destinationDaysTableViewCell") as! destinationDaysTableViewCell
-
-        //Change hamburger icon
-        for view in cell.subviews as [UIView] {
-            if type(of: view).description().range(of: "Reorder") != nil {
-                for subview in view.subviews as! [UIImageView] {
-                    if subview.isKind(of: UIImageView.self) {
-                        subview.image = UIImage(named: "hamburger")
-                        subview.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
-                    }
-                }
-            }
-        }
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
         var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
         
-        cell.cellButton.setTitle("in \(destinationsForTrip[indexPath.row])", for: .normal)
+        cell.destinationLabel.text = destinationsForTrip[indexPath.row]
         
-        //Number of days
-        cell.cellTextField.text = String((datesDestinationsDictionary[destinationsForTrip[indexPath.row]]!).count - 1)
+        
+        cell.cellTextField.delegate = self
+        cell.cellTextField.tag = indexPath.row
+        if timesLoaded != 0 {
+            //Number of days
+            cell.cellTextField.text = String((datesDestinationsDictionary[destinationsForTrip[indexPath.row]]!).count -
+            1)
+        } else {
+            cell.cellTextField.text = "?"
+        }
         
         cell.backgroundColor = UIColor.clear
         cell.backgroundView = nil
@@ -217,6 +297,24 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             cell.layer.backgroundColor = ParseDatesForMultipleDestinationsCalendarView.transparentWhiteColor
         } else {
             cell.layer.backgroundColor = colorForName(colors[indexPath.row - 1]).withAlphaComponent(0.35).cgColor
+        }
+        
+//        let test = type(of: view).description().range(of: "Reorder") != nil
+        
+        
+//        //Change hamburger icon
+//        for view in cell.subviews as [UIView] {
+//            if type(of: view).description().range(of: "Reorder") != nil {
+//                for subview in view.subviews as! [UIImageView] {
+//                    if subview.isKind(of: UIImageView.self) {
+//                        subview.image = UIImage(named: "hamburger")
+//                        subview.bounds = CGRect(x: 0, y: 0, width: 20, height: 13)
+//                    }
+//                }
+//            }
+//        }
+        if indexPath.row == destinationsForTrip.count - 1 {
+            timesLoaded += 1
         }
         
         return cell
@@ -254,7 +352,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         travelDates.removeAll()
         var sinceDate = tripDates?[0]
         for i in 0 ... destinationsForTrip.count - 2 {
-            let selectedDays = (datesDestinationsDictionary[destinationsForTrip[i]]!).count
+            let selectedDays = (datesDestinationsDictionary[destinationsForTrip[i]]!).count - 1
             let travelDateToAppend = Date(timeInterval: TimeInterval(86400 * selectedDays), since: sinceDate!)
             sinceDate = travelDateToAppend
             travelDates.append(travelDateToAppend)
@@ -269,8 +367,11 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = indexOfDestinationBeingPlanned
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
+        timesLoaded -= 1
+        if timesLoaded > 0 {
+            calendarView.reloadDates(calendarView.selectedDates)
+        }
         tableView.reloadData()
-        calendarView.reloadData()
     }
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         return .none
@@ -298,6 +399,12 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     }
     func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {
         return false
+    }
+    func calendar(_ calendar: JTAppleCalendarView, shouldDeselectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {
+        if date == (tripDates?[0])! || date == (tripDates?[(tripDates?.count)! - 1 ])! {
+            return false
+        }
+        return true
     }
     func handleSelection(cell: JTAppleCell?, cellState: CellState) {
         let myCustomCell = cell as? CellView
@@ -567,7 +674,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         } else {
             destinationDaysTableView?.reloadData()
             parseTripDatesByTravelDates()
-            let when = DispatchTime.now() + 2.0
+            let when = DispatchTime.now() + 3.0
             DispatchQueue.main.asyncAfter(deadline: when) {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsComplete"), object: nil)
             }

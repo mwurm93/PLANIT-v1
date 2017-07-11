@@ -15,6 +15,7 @@ import Contacts
 import Floaty
 import SafariServices
 import CSVImporter
+import UICircularProgressRing
 
 
 class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate {
@@ -95,6 +96,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var destinationItem: FloatyItem?
     var travelItem: FloatyItem?
     var placeToStayItem: FloatyItem?
+    var progressRing: UICircularProgressRingView?
         //BookingMode
     var bookingMode = "flight"
         //Date formatting
@@ -596,6 +598,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     func setUpFloaty() {
+        
+        
         floaty = Floaty()
         floaty?.autoCloseOnTap = false
         floaty?.buttonColor = UIColor.white
@@ -648,6 +652,21 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 
         self.view.addSubview(floaty!)
         floaty?.isHidden = true
+        
+        
+        progressRing = UICircularProgressRingView(frame: (floaty?.frame)!)
+        progressRing?.maxValue = 100
+        progressRing?.outerRingColor = UIColor.white
+        progressRing?.outerRingWidth = 7
+        progressRing?.innerRingColor = UIColor.flatTurquoise()
+        progressRing?.innerRingWidth = 7
+        progressRing?.setProgress(value: 49, animationDuration: 2.0) {
+            // Do anything your heart desires...
+        }
+        self.floaty?.addSubview(progressRing!)
+        progressRing.frame.origin = CGPoint(x: 0, y: 0)
+        let test = progressRing?.frame
+        
     }
     
     
@@ -665,8 +684,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     func scrolledToDatesItem() {
         enableDatesItem()
-        self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
-        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
+//        self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
+//        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
         self.floaty?.removeItem(item: self.placeToStayItem!)
         self.floaty?.removeItem(item: self.travelItem!)
         self.floaty?.removeItem(item: self.destinationItem!)
@@ -677,8 +696,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func scrolledToDestinationItem() {
         enableDestinationItem()
-        self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
-        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
+//        self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
+//        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
         self.floaty?.removeItem(item: self.placeToStayItem!)
         self.floaty?.removeItem(item: self.travelItem!)
         self.floaty?.removeItem(item: self.destinationItem!)
@@ -689,8 +708,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func scrolledToTravelItem() {
         enableTravelItem()
-        self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
-        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
+//        self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
+//        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
         self.floaty?.removeItem(item: self.placeToStayItem!)
         self.floaty?.removeItem(item: self.travelItem!)
         self.floaty?.removeItem(item: self.destinationItem!)
@@ -701,8 +720,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func scrolledToPlaceToStayItem() {
         enablePlaceToStayItem()
-        self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
-        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
+//        self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
+//        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
         self.floaty?.removeItem(item: self.placeToStayItem!)
         self.floaty?.removeItem(item: self.travelItem!)
         self.floaty?.removeItem(item: self.destinationItem!)
@@ -852,19 +871,26 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var fromDate = Date()
         var toDate = Date()
         if bookingMode == "flight" {
-            let fromDateInTextfield = (flightSearchQuestionView?.departureDate?.text)!
-            let toDateInTextfield = (flightSearchQuestionView?.returnDate?.text)!
-            
-            fromDate = formatter.date(from: fromDateInTextfield)!
-            toDate = formatter.date(from: toDateInTextfield)!
+            if flightSearchQuestionView?.returnDate?.text != nil {
+                let fromDateInTextfield = (flightSearchQuestionView?.departureDate?.text)!
+                let toDateInTextfield = (flightSearchQuestionView?.returnDate?.text)!
+                fromDate = formatter.date(from: fromDateInTextfield)!
+                toDate = formatter.date(from: toDateInTextfield)!
+                calendarView.selectDates(from: fromDate, to: toDate)
+            } else  {
+                let fromDateInTextfield = (flightSearchQuestionView?.departureDate?.text)!
+                fromDate = formatter.date(from: fromDateInTextfield)!
+                calendarView.selectDates([fromDate])
+            }
         } else if bookingMode == "carRental" {
             fromDate = formatter.date(from: (carRentalSearchQuestionView?.pickUpDate?.text)!)!
             toDate = formatter.date(from: (carRentalSearchQuestionView?.dropOffDate?.text)!)!
+            calendarView.selectDates(from: fromDate, to: toDate)
         } else if bookingMode == "hotel" {
             fromDate = formatter.date(from: (hotelSearchQuestionView?.checkInDate?.text)!)!
             toDate = formatter.date(from: (hotelSearchQuestionView?.checkOutDate?.text)!)!
+            calendarView.selectDates(from: fromDate, to: toDate)
         }
-        calendarView.selectDates(from: fromDate, to: toDate)
         //Animate In Subview
         dateEditing = "departureDate"
         self.view.endEditing(true)
@@ -2049,11 +2075,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 32)
-        
+        self.parseDatesForMultipleDestinationsCalendarView?.scrollToDate()
         let when = DispatchTime.now() + 1.4
         DispatchQueue.main.asyncAfter(deadline: when) {
             self.parseDatesForMultipleDestinationsCalendarView?.calendarView.flashScrollIndicators()
-            self.parseDatesForMultipleDestinationsCalendarView?.scrollToDate()
         }
     }
 
