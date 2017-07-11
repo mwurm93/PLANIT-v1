@@ -80,7 +80,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         calendarView?.frame = CGRect(x: 13, y: 250, width: 350, height: 250)
         calendarView?.cellSize = 50
         
-        destinationDaysTableView?.frame = CGRect(x: (bounds.size.width - 300) / 2, y: 100, width: 300, height: 150)
+        destinationDaysTableView?.frame = CGRect(x: (bounds.size.width - 300) / 2, y: 80, width: 300, height: 200)
 
         
     }
@@ -135,7 +135,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "When do you want to travel from \(destinationsForTrip[fromDestination]) to \(destinationsForTrip[toDestination])?"
+        questionLabel?.text = "How do you want to\nsplit up your time?"
         fromDestination += 1
         toDestination += 1
         self.addSubview(questionLabel!)
@@ -172,7 +172,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         destinationDaysTableView?.backgroundView = nil
         destinationDaysTableView?.isOpaque = false
         destinationDaysTableView?.isEditing = true
-        destinationDaysTableView?.register(destinationsSwipedRightTableViewCell.self, forCellReuseIdentifier: "destinationDaysTableViewCell")
+        destinationDaysTableView?.register(destinationDaysTableViewCell.self, forCellReuseIdentifier: "destinationDaysTableViewCell")
         self.addSubview(destinationDaysTableView!)
     }
     
@@ -190,27 +190,6 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "destinationDaysTableViewCell") as! destinationDaysTableViewCell
 
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
-        
-        cell.cellButton.setTitle(destinationsForTrip[indexPath.row], for: .normal)
-//        cell.cellButton.setTitle(destinationsForTrip[indexPath.row], for: .selected)
-        cell.cellButton.sizeToFit()
-        cell.cellButton.frame.size.height = 30
-        cell.cellButton.frame.size.width += 20
-        cell.cellButton.frame.origin.x = tableView.frame.width / 2 - cell.cellButton.frame.width / 2
-        cell.cellButton.frame.origin.y = 5
-//        cell.cellButton.layer.cornerRadius = (cell.cellButton.frame.height) / 2
-        
-        cell.backgroundColor = UIColor.clear
-        cell.backgroundView = nil
-        if indexPath.row == 0 {
-            cell.layer.backgroundColor = ParseDatesForMultipleDestinationsCalendarView.transparentWhiteColor.cgColor
-        } else {
-            cell.layer.backgroundColor = colorForName(colors[indexPath.row - 1]).cgColor
-        }
-        
-        
         //Change hamburger icon
         for view in cell.subviews as [UIView] {
             if type(of: view).description().range(of: "Reorder") != nil {
@@ -222,17 +201,86 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                 }
             }
         }
-
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        
+        cell.cellButton.setTitle("in \(destinationsForTrip[indexPath.row])", for: .normal)
+        
+        //Number of days
+        cell.cellTextField.text = String((datesDestinationsDictionary[destinationsForTrip[indexPath.row]]!).count - 1)
+        
+        cell.backgroundColor = UIColor.clear
+        cell.backgroundView = nil
+        if indexPath.row == 0 {
+            cell.layer.backgroundColor = ParseDatesForMultipleDestinationsCalendarView.transparentWhiteColor
+        } else {
+            cell.layer.backgroundColor = colorForName(colors[indexPath.row - 1]).withAlphaComponent(0.35).cgColor
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(40)
     }
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        var destinationsForTripStates = SavedPreferencesForTrip["destinationsForTripStates"] as! [String]
+        var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        var indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        
+        let movedDestinationForTrip = destinationsForTrip[sourceIndexPath.row]
+        destinationsForTrip.remove(at: sourceIndexPath.row)
+        destinationsForTrip.insert(movedDestinationForTrip, at: destinationIndexPath.row)
+        
+        let movedDestinationForTripStates = destinationsForTripStates[sourceIndexPath.row]
+        destinationsForTripStates.remove(at: sourceIndexPath.row)
+        destinationsForTripStates.insert(movedDestinationForTripStates, at: destinationIndexPath.row)
+        
+        if travelDictionary.count == destinationsForTrip.count {
+            let movedtravelDictionary = travelDictionary[sourceIndexPath.row]
+            travelDictionary.remove(at: sourceIndexPath.row)
+            travelDictionary.insert(movedtravelDictionary, at: destinationIndexPath.row)
+        }
+        
+        travelDates.removeAll()
+        var sinceDate = tripDates?[0]
+        for i in 0 ... destinationsForTrip.count - 2 {
+            let selectedDays = (datesDestinationsDictionary[destinationsForTrip[i]]!).count
+            let travelDateToAppend = Date(timeInterval: TimeInterval(86400 * selectedDays), since: sinceDate!)
+            sinceDate = travelDateToAppend
+            travelDates.append(travelDateToAppend)
+        }
+        parseTripDatesByTravelDates()
+    
+        //Save
+        SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
+        SavedPreferencesForTrip["destinationsForTripStates"] = destinationsForTripStates
+        SavedPreferencesForTrip["travelDictionary"] = travelDictionary
+        SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = indexOfDestinationBeingPlanned
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+        tableView.reloadData()
+        calendarView.reloadData()
+    }
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return .none
+    }
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
 
     
     // MARK: JTCalendarView Extension
-    
     func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
         formatter.dateFormat = "yyyy MM dd"
         
@@ -248,11 +296,9 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             firstDayOfWeek: .sunday)
         return parameters
     }
-    
     func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {
         return false
     }
-    
     func handleSelection(cell: JTAppleCell?, cellState: CellState) {
         let myCustomCell = cell as? CellView
         
@@ -494,7 +540,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                     travelDates.append(date)
                     fromDestination = 0
                     toDestination = 1
-                    questionLabel?.text = "When do you want to travel from \(destinationsForTrip[fromDestination]) to \(destinationsForTrip[toDestination])?"
+//                    questionLabel?.text = "When do you want to travel from \(destinationsForTrip[fromDestination]) to \(destinationsForTrip[toDestination])?"
                     fromDestination += 1
                     toDestination += 1
                 }
@@ -503,7 +549,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                 travelDates.append(date)
                 fromDestination = 0
                 toDestination = 1
-                questionLabel?.text = "When do you want to travel from \(destinationsForTrip[fromDestination]) to \(destinationsForTrip[toDestination])?"
+//                questionLabel?.text = "When do you want to travel from \(destinationsForTrip[fromDestination]) to \(destinationsForTrip[toDestination])?"
                 fromDestination += 1
                 toDestination += 1
             }
@@ -514,13 +560,14 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         if (destinationsForTrip.count - 1) >= toDestination {
         
             UIView.animate(withDuration: 1) {
-                self.questionLabel?.text = "When do you want to travel from \(destinationsForTrip[self.fromDestination]) to \(destinationsForTrip[self.toDestination])?"
+//                self.questionLabel?.text = "When do you want to travel from \(destinationsForTrip[self.fromDestination]) to \(destinationsForTrip[self.toDestination])?"
             }
             fromDestination += 1
             toDestination += 1
         } else {
+            destinationDaysTableView?.reloadData()
             parseTripDatesByTravelDates()
-            let when = DispatchTime.now() + 0.5
+            let when = DispatchTime.now() + 2.0
             DispatchQueue.main.asyncAfter(deadline: when) {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsComplete"), object: nil)
             }

@@ -8,13 +8,14 @@
 
 import UIKit
 
-class destinationDaysTableViewCell: UITableViewCell {
+class destinationDaysTableViewCell: UITableViewCell, UITextFieldDelegate {
     
     // MARK: Outlets
     
     // MARK: Class vars
     var cellButton: UIButton!
     var cellTextField: UITextField!
+    var daysLabel: UILabel!
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -23,19 +24,28 @@ class destinationDaysTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        cellButton = UIButton(frame: CGRect(x: 5, y: 5, width: 60, height: 30))
+        cellButton = UIButton(frame: CGRect(x: 115, y: 5, width: 180, height: 30))
         cellButton?.isEnabled = false
         cellButton.setTitle("title", for: UIControlState.normal)
         cellButton?.setTitleColor(UIColor.white, for: .normal)
         cellButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-//        cellButton?.layer.borderWidth = 1
-//        cellButton?.layer.borderColor = UIColor.white.cgColor
-        cellButton?.layer.masksToBounds = true
         cellButton?.titleLabel?.numberOfLines = 0
         cellButton?.titleLabel?.textAlignment = .left
-        cellButton?.translatesAutoresizingMaskIntoConstraints = false
-//        cellButton?.addTarget(self, action: #selector(self.chooseDestinationButtonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        cellButton?.titleLabel?.adjustsFontSizeToFitWidth = true
+//        cellButton?.translatesAutoresizingMaskIntoConstraints = false
         addSubview(cellButton)
+        
+        cellTextField = UITextField(frame: CGRect(x: 10, y: 5, width: 35, height: 30))
+        cellTextField.borderStyle = .none
+        cellTextField.textAlignment = .center
+        cellTextField.textColor = UIColor.white
+        cellTextField.setBottomBorder(borderColor: UIColor.white)
+        addSubview(cellTextField)
+        
+        daysLabel = UILabel(frame: CGRect(x: 53, y: 5, width: 60, height: 30))
+        daysLabel.textColor = UIColor.white
+        daysLabel.text = "nights"
+        addSubview(daysLabel)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -43,4 +53,8 @@ class destinationDaysTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    //UITextfield delegate
+    func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
+        return true
+    }
 }

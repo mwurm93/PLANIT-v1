@@ -938,6 +938,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         } else {
             self.scrollUpButton.isHidden = false
         }
+        
+        // kill scrolling buttons
+        self.scrollUpButton.isHidden = true
+        self.scrollDownButton.isHidden = true
     }
     
     func addSubviewsBasedOnProgress() {
