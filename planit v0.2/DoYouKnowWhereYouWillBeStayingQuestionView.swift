@@ -58,6 +58,10 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         button3?.frame.origin.y = 270
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
 
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        questionLabel?.text = "Do you know where you'll be staying in \(destinationsForTrip[indexOfDestinationBeingPlanned])?"
     }
     
     
@@ -70,7 +74,7 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Great, now let's make sure you have a comfy pillow under your head!\n\nDo you know where you'll be staying?"
+        
         self.addSubview(questionLabel!)
         
         //Button2
@@ -99,7 +103,7 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.numberOfLines = 0
         button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("Not yet, help me find a place", for: .normal)
+        button2?.setTitle("Not yet, help me", for: .normal)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)
@@ -118,7 +122,7 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         button3?.layer.masksToBounds = true
         button3?.titleLabel?.numberOfLines = 0
         button3?.titleLabel?.textAlignment = .center
-        button3?.setTitle("Not yet, we'll figure it out later", for: .normal)
+        button3?.setTitle("Figure it out later", for: .normal)
         button3?.translatesAutoresizingMaskIntoConstraints = false
         button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button3!)

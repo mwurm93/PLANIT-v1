@@ -68,7 +68,7 @@ class WhatTypeOfPlaceToStayQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Alright, let's find an awesome place to stay!\n\nWhat type of place are you thinking?"
+        questionLabel?.text = "What type of place are you thinking?"
         self.addSubview(questionLabel!)
         
         //Button1

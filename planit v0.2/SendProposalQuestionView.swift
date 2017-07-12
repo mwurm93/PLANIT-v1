@@ -15,6 +15,7 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
     var questionLabel: UILabel?
     var button1: UIButton?
     var button2: UIButton?
+    var button3: UIButton?
     var contactsTableView: UITableView?
         //Contacts vars COPY
     fileprivate var addressBookStore: CNContactStore!
@@ -61,6 +62,13 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
         button2?.frame.origin.y = 510
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
+        
+        button3?.sizeToFit()
+        button3?.frame.size.height = 30
+        button3?.frame.size.width += 20
+        button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2
+        button3?.frame.origin.y = 560
+        button3?.layer.cornerRadius = (button3?.frame.height)! / 2
         
         contactsTableView?.frame = CGRect(x: (bounds.size.width - 300) / 2, y: 200, width: 300, height: 286)
         
@@ -115,6 +123,22 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)
+        
+        //Button2
+        button3 = UIButton(type: .custom)
+        button3?.frame = CGRect.zero
+        button3?.setTitleColor(UIColor.white, for: .normal)
+        button3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button3?.layer.borderWidth = 1
+        button3?.layer.borderColor = UIColor.white.cgColor
+        button3?.layer.masksToBounds = true
+        button3?.titleLabel?.numberOfLines = 0
+        button3?.titleLabel?.textAlignment = .center
+        button3?.setTitle("Review itinerary first", for: .normal)
+        button3?.translatesAutoresizingMaskIntoConstraints = false
+        button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button3!)
+
     }
     
     func setUpTable() {
@@ -277,6 +301,8 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "contactPickerVC"), object: nil)
         } else if sender == button2 {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
+        } else if sender == button3 {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reviewItinerary"), object: nil)
         }
     }
 

@@ -73,7 +73,7 @@ class StayWithSomeoneIKnowQuestionView: UIView, UITextViewDelegate {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Please enter your plan to share with your group."
+        questionLabel?.text = "Share your plan with your group?"
         self.addSubview(questionLabel!)
         
         //Button2
@@ -102,7 +102,7 @@ class StayWithSomeoneIKnowQuestionView: UIView, UITextViewDelegate {
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.numberOfLines = 0
         button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("I'll add my plans later", for: .normal)
+        button2?.setTitle("Add later", for: .normal)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)

@@ -55,6 +55,8 @@
 		FA4EA8D11EE86AA6005FCE91 /* GetTripMessages.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FA4EA8D01EE86AA6005FCE91 /* GetTripMessages.graphql */; };
 		FA4EA8D41EE87DBC005FCE91 /* common.js in Resources */ = {isa = PBXBuildFile; fileRef = FA4EA8D31EE87DBC005FCE91 /* common.js */; };
 		FA4EA8D61EE881D3005FCE91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA4EA8D51EE881D3005FCE91 /* GoogleService-Info.plist */; };
+		FA4EEF1A1F166C9100C188BE /* InstructionsQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EEF191F166C9100C188BE /* InstructionsQuestionView.swift */; };
+		FA4EEF1E1F166CB200C188BE /* InstructionsQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4EEF1D1F166CB200C188BE /* InstructionsQuestionView.xib */; };
 		FA5201061EC4CE6F001EA849 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201051EC4CE6F001EA849 /* CoreLocation.framework */; };
 		FA5201081EC4CE84001EA849 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201071EC4CE84001EA849 /* libc++.tbd */; };
 		FA52010A1EC4CE91001EA849 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201091EC4CE91001EA849 /* libz.tbd */; };
@@ -251,6 +253,8 @@
 		FA4EA8D01EE86AA6005FCE91 /* GetTripMessages.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GetTripMessages.graphql; sourceTree = "<group>"; };
 		FA4EA8D31EE87DBC005FCE91 /* common.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = common.js; sourceTree = "<group>"; };
 		FA4EA8D51EE881D3005FCE91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FA4EEF191F166C9100C188BE /* InstructionsQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsQuestionView.swift; sourceTree = "<group>"; };
+		FA4EEF1D1F166CB200C188BE /* InstructionsQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InstructionsQuestionView.xib; sourceTree = "<group>"; };
 		FA5200F91EC4CE2E001EA849 /* WhirlyGlobeMaplyComponent.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WhirlyGlobeMaplyComponent.xcodeproj; path = "libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/WhirlyGlobeMaplyComponent.xcodeproj"; sourceTree = "<group>"; };
 		FA5201031EC4CE65001EA849 /* libWhirlyGlobeLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWhirlyGlobeLib.a; path = "libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobeLib/build/Debug-iphoneos/libWhirlyGlobeLib.a"; sourceTree = "<group>"; };
 		FA5201051EC4CE6F001EA849 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -529,6 +533,8 @@
 			children = (
 				FAE83F6A1EF46A700009A020 /* UserNameQuestionView.swift */,
 				FAE83F6C1EF4853B0009A020 /* UserNameQuestionView.xib */,
+				FA4EEF191F166C9100C188BE /* InstructionsQuestionView.swift */,
+				FA4EEF1D1F166CB200C188BE /* InstructionsQuestionView.xib */,
 				FAE83F701EF49F380009A020 /* TripNameQuestionView.swift */,
 				FAE83F6E1EF49F190009A020 /* TripNameQuestionView.xib */,
 			);
@@ -1086,6 +1092,7 @@
 				FAE83F8D1EF7ACBE0009A020 /* WhatTypeOfTripQuestionView.xib in Resources */,
 				FAE83F891EF7AA840009A020 /* PlanTripToIdeaQuestionView.xib in Resources */,
 				FAE83F7D1EF6D40B0009A020 /* DatesPickedOutCalendarView.xib in Resources */,
+				FA4EEF1E1F166CB200C188BE /* InstructionsQuestionView.xib in Resources */,
 				FAE83F911EF7B1500009A020 /* HowFarAwayQuestionView.xib in Resources */,
 				FA4887831F01B4310015F078 /* StayWithSomeoneIKnowQuestionView.xib in Resources */,
 			);
@@ -1317,6 +1324,7 @@
 				FAD50DDA1EE9C4AB0006C3AA /* instructionsCollectionViewCell.swift in Sources */,
 				FA48878E1F02C6320015F078 /* contactsTableViewCellForScrolling.swift in Sources */,
 				FAC1BD301EAE7707008AB7C4 /* ViewManager.swift in Sources */,
+				FA4EEF1A1F166C9100C188BE /* InstructionsQuestionView.swift in Sources */,
 				FA4E922B1E3526DD00231C72 /* API.swift in Sources */,
 				FA14B22E1EFB2D33004E0E29 /* FlightSearchQuestionView.swift in Sources */,
 				FA25F1F91EBB6DA9005D29E5 /* exploreHotelsViewController.swift in Sources */,

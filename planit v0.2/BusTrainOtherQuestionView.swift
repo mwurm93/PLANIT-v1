@@ -102,7 +102,7 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.numberOfLines = 0
         button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("I'll add my travel plans later", for: .normal)
+        button2?.setTitle("Add later", for: .normal)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)

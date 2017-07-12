@@ -73,7 +73,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "We’re still working on integrating short term rentals.\nPlease enter any plans or ideas to share with your group."
+        questionLabel?.text = "We’re still working on short term rentals.\nShare any plans or ideas with your group?"
         self.addSubview(questionLabel!)
         
         //Button2
@@ -102,7 +102,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.numberOfLines = 0
         button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("I'll add my plans later", for: .normal)
+        button2?.setTitle("Add later", for: .normal)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)
@@ -116,7 +116,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         textView?.returnKeyType = .next
         textView?.backgroundColor = UIColor.clear
         textView?.font = UIFont.systemFont(ofSize: 18)
-        let textViewPlaceholder = "\nExample: A few Airbnb options I found:\n Link 1\nLink 2\nLink 3"
+        let textViewPlaceholder = "\nExample: A few Airbnb options:\nLink 1\nLink 2\nLink 3"
         textView?.text = textViewPlaceholder
         textView?.indicatorStyle = .white
         textView?.clearsOnInsertion = true

@@ -68,7 +68,7 @@ class AboutWhatTimeWillYouStartDrivingQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "About what time do you expect to start driving (so we can let your group know)?"
+        questionLabel?.text = "Let your group know what\ntime you'll start driving?"
         self.addSubview(questionLabel!)
         
         //Button1

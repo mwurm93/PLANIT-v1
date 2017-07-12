@@ -70,7 +70,7 @@ class PlaceForGroupOrJustYouQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Is this a place to stay for your group too?"
+        questionLabel?.text = "Who will be staying with you?"
         self.addSubview(questionLabel!)
         
         //Button1

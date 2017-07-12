@@ -14,7 +14,7 @@ class idkHowToGetThereQuestionView: UIView {
     var button1: UIButton?
     var linkLabel1: UIButton?
     var linkLabel2: UIButton?
-    var linkLabel3: UIButton?
+//    var linkLabel3: UIButton?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,11 +56,11 @@ class idkHowToGetThereQuestionView: UIView {
         linkLabel2?.frame.origin.x = (bounds.size.width - (linkLabel1?.frame.width)!) / 2
         linkLabel2?.frame.origin.y = 260
         
-        linkLabel3?.sizeToFit()
-        linkLabel3?.frame.size.height = 30
-        linkLabel3?.frame.size.width += 20
-        linkLabel3?.frame.origin.x = (bounds.size.width - (linkLabel1?.frame.width)!) / 2
-        linkLabel3?.frame.origin.y = 310
+//        linkLabel3?.sizeToFit()
+//        linkLabel3?.frame.size.height = 30
+//        linkLabel3?.frame.size.width += 20
+//        linkLabel3?.frame.origin.x = (bounds.size.width - (linkLabel1?.frame.width)!) / 2
+//        linkLabel3?.frame.origin.y = 310
 
     }
     
@@ -115,24 +115,24 @@ class idkHowToGetThereQuestionView: UIView {
         linkLabel2?.layer.masksToBounds = true
         linkLabel2?.titleLabel?.numberOfLines = 0
         linkLabel2?.titleLabel?.textAlignment = .center
-        linkLabel2?.setTitle("Rome2Rio", for: .normal)
-        linkLabel2?.setTitle("Rome2Rio", for: .selected)
+        linkLabel2?.setTitle("Google Maps", for: .normal)
+        linkLabel2?.setTitle("Google Maps", for: .selected)
         linkLabel2?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(linkLabel2!)
-        //Link3
-        linkLabel3 = UIButton(type: .custom)
-        linkLabel3?.frame = CGRect.zero
-        linkLabel3?.setTitleColor(UIColor.white, for: .normal)
-        linkLabel3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        linkLabel3?.setTitleColor(UIColor.lightGray, for: .highlighted)
-        linkLabel3?.layer.masksToBounds = true
-        linkLabel3?.titleLabel?.numberOfLines = 0
-        linkLabel3?.titleLabel?.textAlignment = .center
-        linkLabel3?.setTitle("Rome2Rio", for: .normal)
-        linkLabel3?.setTitle("Rome2Rio", for: .selected)
-        linkLabel3?.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(linkLabel3!)
-        
+//        //Link3
+//        linkLabel3 = UIButton(type: .custom)
+//        linkLabel3?.frame = CGRect.zero
+//        linkLabel3?.setTitleColor(UIColor.white, for: .normal)
+//        linkLabel3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+//        linkLabel3?.setTitleColor(UIColor.lightGray, for: .highlighted)
+//        linkLabel3?.layer.masksToBounds = true
+//        linkLabel3?.titleLabel?.numberOfLines = 0
+//        linkLabel3?.titleLabel?.textAlignment = .center
+//        linkLabel3?.setTitle("Rome2Rio", for: .normal)
+//        linkLabel3?.setTitle("Rome2Rio", for: .selected)
+//        linkLabel3?.translatesAutoresizingMaskIntoConstraints = false
+//        self.addSubview(linkLabel3!)
+//        
         
     }
     
