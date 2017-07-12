@@ -1507,6 +1507,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobeLib/build/Debug-iphoneos",
 				);
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.planit-v0-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include/MaplyBridge.h";
@@ -1535,6 +1536,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobeLib/build/Debug-iphoneos",
 				);
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.planit-v0-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include/MaplyBridge.h";

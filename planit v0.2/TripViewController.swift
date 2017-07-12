@@ -97,10 +97,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var travelItem: FloatyItem?
     var placeToStayItem: FloatyItem?
     var progressRing: UICircularProgressRingView?
+    
         //BookingMode
     var bookingMode = "flight"
         //Date formatting
     var formatter = DateFormatter()
+    
     //PPN Cities
     var ppnCarRentalCities = [Dictionary<String, String>]()
     var ppnHotelCities = [Dictionary<String, String>]()
@@ -261,7 +263,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                             }
                         }
                         if countTripsMadeToday != 0 {
-                            tripNameValue = "Trip " + ("#\(countTripsMadeToday + 1) ") + tripNameValue.substring(from: 5)
+                            tripNameValue = "Trip #\(countTripsMadeToday + 1) \(tripNameValue.substring(from: 5))"
                         }
                     }
                     
@@ -602,7 +604,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         floaty = Floaty()
         floaty?.autoCloseOnTap = false
-        floaty?.buttonColor = UIColor.white
+        floaty?.buttonColor = UIColor.clear
+        floaty?.buttonImage = #imageLiteral(resourceName: "transparent")
         floaty?.fabDelegate = self
         floaty?.rotationDegrees = 0
         
@@ -651,22 +654,28 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         floaty?.addItem(item: datesItem!)
 
         self.view.addSubview(floaty!)
-        floaty?.isHidden = true
+        floaty?.isHidden = false
         
         
         progressRing = UICircularProgressRingView(frame: (floaty?.frame)!)
         progressRing?.maxValue = 100
         progressRing?.outerRingColor = UIColor.white
-        progressRing?.outerRingWidth = 7
+        progressRing?.outerRingWidth = 1
         progressRing?.innerRingColor = UIColor.flatTurquoise()
-        progressRing?.innerRingWidth = 7
-        progressRing?.setProgress(value: 49, animationDuration: 2.0) {
+        progressRing?.innerRingWidth = 5
+        progressRing?.fontColor = UIColor.white
+        progressRing?.setProgress(value: 0, animationDuration: 0.1) {
             // Do anything your heart desires...
         }
-        self.floaty?.addSubview(progressRing!)
-        progressRing.frame.origin = CGPoint(x: 0, y: 0)
-        let test = progressRing?.frame
+        self.view.insertSubview(progressRing!, belowSubview: floaty!)
+        progressRing?.isHidden = true
         
+        progressRing?.layer.shadowColor = UIColor.black.cgColor
+        progressRing?.layer.shadowRadius = 1
+        progressRing?.layer.masksToBounds = false
+        progressRing?.layer.shadowOpacity = 0.4
+        progressRing?.layer.shadowOffset = CGSize(width: 1, height: 1)
+
     }
     
     
@@ -686,49 +695,49 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         enableDatesItem()
 //        self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
 //        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
-        self.floaty?.removeItem(item: self.placeToStayItem!)
-        self.floaty?.removeItem(item: self.travelItem!)
-        self.floaty?.removeItem(item: self.destinationItem!)
-        self.floaty?.removeItem(item: self.datesItem!)
-        self.floaty?.addItem(item: self.placeToStayItem!)
-        self.floaty?.addItem(item: self.travelItem!)
-        self.floaty?.addItem(item: self.destinationItem!)
+//        self.floaty?.removeItem(item: self.placeToStayItem!)
+//        self.floaty?.removeItem(item: self.travelItem!)
+//        self.floaty?.removeItem(item: self.destinationItem!)
+//        self.floaty?.removeItem(item: self.datesItem!)
+//        self.floaty?.addItem(item: self.placeToStayItem!)
+//        self.floaty?.addItem(item: self.travelItem!)
+//        self.floaty?.addItem(item: self.destinationItem!)
     }
     func scrolledToDestinationItem() {
         enableDestinationItem()
 //        self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
 //        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
-        self.floaty?.removeItem(item: self.placeToStayItem!)
-        self.floaty?.removeItem(item: self.travelItem!)
-        self.floaty?.removeItem(item: self.destinationItem!)
-        self.floaty?.removeItem(item: self.datesItem!)
-        self.floaty?.addItem(item: self.placeToStayItem!)
-        self.floaty?.addItem(item: self.travelItem!)
-        self.floaty?.addItem(item: self.datesItem!)
+//        self.floaty?.removeItem(item: self.placeToStayItem!)
+//        self.floaty?.removeItem(item: self.travelItem!)
+//        self.floaty?.removeItem(item: self.destinationItem!)
+//        self.floaty?.removeItem(item: self.datesItem!)
+//        self.floaty?.addItem(item: self.placeToStayItem!)
+//        self.floaty?.addItem(item: self.travelItem!)
+//        self.floaty?.addItem(item: self.datesItem!)
     }
     func scrolledToTravelItem() {
         enableTravelItem()
 //        self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
 //        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
-        self.floaty?.removeItem(item: self.placeToStayItem!)
-        self.floaty?.removeItem(item: self.travelItem!)
-        self.floaty?.removeItem(item: self.destinationItem!)
-        self.floaty?.removeItem(item: self.datesItem!)
-        self.floaty?.addItem(item: self.placeToStayItem!)
-        self.floaty?.addItem(item: self.destinationItem!)
-        self.floaty?.addItem(item: self.datesItem!)
+//        self.floaty?.removeItem(item: self.placeToStayItem!)
+//        self.floaty?.removeItem(item: self.travelItem!)
+//        self.floaty?.removeItem(item: self.destinationItem!)
+//        self.floaty?.removeItem(item: self.datesItem!)
+//        self.floaty?.addItem(item: self.placeToStayItem!)
+//        self.floaty?.addItem(item: self.destinationItem!)
+//        self.floaty?.addItem(item: self.datesItem!)
     }
     func scrolledToPlaceToStayItem() {
         enablePlaceToStayItem()
 //        self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
 //        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
-        self.floaty?.removeItem(item: self.placeToStayItem!)
-        self.floaty?.removeItem(item: self.travelItem!)
-        self.floaty?.removeItem(item: self.destinationItem!)
-        self.floaty?.removeItem(item: self.datesItem!)
-        self.floaty?.addItem(item: self.travelItem!)
-        self.floaty?.addItem(item: self.destinationItem!)
-        self.floaty?.addItem(item: self.datesItem!)
+//        self.floaty?.removeItem(item: self.placeToStayItem!)
+//        self.floaty?.removeItem(item: self.travelItem!)
+//        self.floaty?.removeItem(item: self.destinationItem!)
+//        self.floaty?.removeItem(item: self.datesItem!)
+//        self.floaty?.addItem(item: self.travelItem!)
+//        self.floaty?.addItem(item: self.destinationItem!)
+//        self.floaty?.addItem(item: self.datesItem!)
     }
     
     func disableDatesItem() {
@@ -761,15 +770,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         datesItem?.handler = { item in
             self.spawnDatesPickedOutCalendarView()
             self.floaty?.close()
-            self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
-            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
-            self.floaty?.removeItem(item: self.placeToStayItem!)
-            self.floaty?.removeItem(item: self.travelItem!)
-            self.floaty?.removeItem(item: self.destinationItem!)
-            self.floaty?.removeItem(item: self.datesItem!)
-            self.floaty?.addItem(item: self.placeToStayItem!)
-            self.floaty?.addItem(item: self.travelItem!)
-            self.floaty?.addItem(item: self.destinationItem!)
+//            self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
+//            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
+//            self.floaty?.removeItem(item: self.placeToStayItem!)
+//            self.floaty?.removeItem(item: self.travelItem!)
+//            self.floaty?.removeItem(item: self.destinationItem!)
+//            self.floaty?.removeItem(item: self.datesItem!)
+//            self.floaty?.addItem(item: self.placeToStayItem!)
+//            self.floaty?.addItem(item: self.travelItem!)
+//            self.floaty?.addItem(item: self.destinationItem!)
         }
         datesItem?.setNeedsDisplay()
     }
@@ -779,15 +788,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         destinationItem?.handler = { item in
             self.spawnWhereTravellingFromQuestionView()
             self.floaty?.close()
-            self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
-            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
-            self.floaty?.removeItem(item: self.placeToStayItem!)
-            self.floaty?.removeItem(item: self.travelItem!)
-            self.floaty?.removeItem(item: self.destinationItem!)
-            self.floaty?.removeItem(item: self.datesItem!)
-            self.floaty?.addItem(item: self.placeToStayItem!)
-            self.floaty?.addItem(item: self.travelItem!)
-            self.floaty?.addItem(item: self.datesItem!)
+//            self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
+//            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
+//            self.floaty?.removeItem(item: self.placeToStayItem!)
+//            self.floaty?.removeItem(item: self.travelItem!)
+//            self.floaty?.removeItem(item: self.destinationItem!)
+//            self.floaty?.removeItem(item: self.datesItem!)
+//            self.floaty?.addItem(item: self.placeToStayItem!)
+//            self.floaty?.addItem(item: self.travelItem!)
+//            self.floaty?.addItem(item: self.datesItem!)
         }
         destinationItem?.setNeedsDisplay()
     }
@@ -797,15 +806,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         travelItem?.handler = { item in
             self.spawnHowDoYouWantToGetThereQuestionView()
             self.floaty?.close()
-            self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
-            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
-            self.floaty?.removeItem(item: self.placeToStayItem!)
-            self.floaty?.removeItem(item: self.travelItem!)
-            self.floaty?.removeItem(item: self.destinationItem!)
-            self.floaty?.removeItem(item: self.datesItem!)
-            self.floaty?.addItem(item: self.placeToStayItem!)
-            self.floaty?.addItem(item: self.destinationItem!)
-            self.floaty?.addItem(item: self.datesItem!)
+//            self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
+//            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
+//            self.floaty?.removeItem(item: self.placeToStayItem!)
+//            self.floaty?.removeItem(item: self.travelItem!)
+//            self.floaty?.removeItem(item: self.destinationItem!)
+//            self.floaty?.removeItem(item: self.datesItem!)
+//            self.floaty?.addItem(item: self.placeToStayItem!)
+//            self.floaty?.addItem(item: self.destinationItem!)
+//            self.floaty?.addItem(item: self.datesItem!)
         }
         travelItem?.setNeedsDisplay()
     }
@@ -815,15 +824,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         placeToStayItem?.handler = { item in
             self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
             self.floaty?.close()
-            self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
-            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
-            self.floaty?.removeItem(item: self.placeToStayItem!)
-            self.floaty?.removeItem(item: self.travelItem!)
-            self.floaty?.removeItem(item: self.destinationItem!)
-            self.floaty?.removeItem(item: self.datesItem!)
-            self.floaty?.addItem(item: self.travelItem!)
-            self.floaty?.addItem(item: self.destinationItem!)
-            self.floaty?.addItem(item: self.datesItem!)
+//            self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
+//            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
+//            self.floaty?.removeItem(item: self.placeToStayItem!)
+//            self.floaty?.removeItem(item: self.travelItem!)
+//            self.floaty?.removeItem(item: self.destinationItem!)
+//            self.floaty?.removeItem(item: self.datesItem!)
+//            self.floaty?.addItem(item: self.travelItem!)
+//            self.floaty?.addItem(item: self.destinationItem!)
+//            self.floaty?.addItem(item: self.datesItem!)
         }
         placeToStayItem?.setNeedsDisplay()
     }
@@ -870,25 +879,26 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         var fromDate = Date()
         var toDate = Date()
+        formatter.dateFormat = "MM/dd/yy"
         if bookingMode == "flight" {
             if flightSearchQuestionView?.returnDate?.text != nil {
                 let fromDateInTextfield = (flightSearchQuestionView?.departureDate?.text)!
                 let toDateInTextfield = (flightSearchQuestionView?.returnDate?.text)!
-                fromDate = formatter.date(from: fromDateInTextfield)!
-                toDate = formatter.date(from: toDateInTextfield)!
+                fromDate = formatter.date(from: fromDateInTextfield)
+                toDate = formatter.date(from: toDateInTextfield)
                 calendarView.selectDates(from: fromDate, to: toDate)
             } else  {
                 let fromDateInTextfield = (flightSearchQuestionView?.departureDate?.text)!
-                fromDate = formatter.date(from: fromDateInTextfield)!
+                fromDate = formatter.date(from: fromDateInTextfield)
                 calendarView.selectDates([fromDate])
             }
         } else if bookingMode == "carRental" {
-            fromDate = formatter.date(from: (carRentalSearchQuestionView?.pickUpDate?.text)!)!
-            toDate = formatter.date(from: (carRentalSearchQuestionView?.dropOffDate?.text)!)!
+            fromDate = formatter.date(from: (carRentalSearchQuestionView?.pickUpDate?.text)!)
+            toDate = formatter.date(from: (carRentalSearchQuestionView?.dropOffDate?.text)!)
             calendarView.selectDates(from: fromDate, to: toDate)
         } else if bookingMode == "hotel" {
-            fromDate = formatter.date(from: (hotelSearchQuestionView?.checkInDate?.text)!)!
-            toDate = formatter.date(from: (hotelSearchQuestionView?.checkOutDate?.text)!)!
+            fromDate = formatter.date(from: (hotelSearchQuestionView?.checkInDate?.text)!)
+            toDate = formatter.date(from: (hotelSearchQuestionView?.checkOutDate?.text)!)
             calendarView.selectDates(from: fromDate, to: toDate)
         }
         //Animate In Subview
@@ -1039,6 +1049,21 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         updateProgress()
     }
     
+    func increaseProgressCircle(byPercent: CGFloat, onlyIfFirstDestination: Bool) {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        if onlyIfFirstDestination {
+            if indexOfDestinationBeingPlanned == 0 {
+                let currentProgress = self.progressRing?.currentValue
+                self.progressRing?.setProgress(value: currentProgress! + byPercent, animationDuration: 1.0) {
+                }
+            }
+        } else {
+            let currentProgress = self.progressRing?.currentValue
+            self.progressRing?.setProgress(value: currentProgress! + byPercent, animationDuration: 1.0) {
+            }
+        }
+    }
     
     
     
@@ -1122,7 +1147,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             updateHeightOfScrollView()
             scrollDownToTopSubview()
             updateProgress()
-        } else {        
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
+        } else {
             scrollToSubviewWithTag(tag: 0)
         }
 //        whereTravellingFromQuestionView?.searchController?.searchBar.becomeFirstResponder()
@@ -1137,10 +1163,18 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             disablePlaceToStayItem()
             floaty?.alpha = 0
             floaty?.isHidden = false
+            progressRing?.frame = (floaty?.frame)!
+            progressRing?.frame.size.height -= 15
+            progressRing?.frame.size.width -= 15
+            progressRing?.alpha = 0
+            progressRing?.isHidden = false
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
+            
             let when_1 = DispatchTime.now() + 0.8
             DispatchQueue.main.asyncAfter(deadline: when_1) {
                 UIView.animate(withDuration: 1) {
                     self.floaty?.alpha = 1
+                    self.progressRing?.alpha = 1
                 }
             }
             //Load next question
@@ -1188,9 +1222,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 decidedOnCityToVisitQuestionView?.questionLabel?.text = "Great, have you already decided\nwhere else to visit?"
             }
         
-        updateHeightOfScrollView()
-        scrollDownToTopSubview()
-        updateProgress()
+            updateHeightOfScrollView()
+            scrollDownToTopSubview()
+            updateProgress()
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
         } else {
             scrollToSubviewWithTag(tag: 2)
         }
@@ -1208,6 +1243,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.noCityDecidedAnyIdeasQuestionView!.frame = CGRect(x: 0, y: (decidedOnCityToVisitQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: noCityDecidedAnyIdeasQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (noCityDecidedAnyIdeasQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 3)
@@ -1228,6 +1265,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.planTripToIdeaQuestionView!.frame = CGRect(x: 0, y: (noCityDecidedAnyIdeasQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: planTripToIdeaQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (planTripToIdeaQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 4)
@@ -1252,6 +1290,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             whatTypeOfTripQuestionView?.button5?.addTarget(self, action: #selector(self.whatTypeOfTripQuestionView_foodieHavens(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: whatTypeOfTripQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whatTypeOfTripQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 5)
@@ -1270,6 +1309,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.howFarAwayQuestionView!.frame = CGRect(x: 0, y: (whatTypeOfTripQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: howFarAwayQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howFarAwayQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 6)
@@ -1287,6 +1327,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.destinationOptionsCardView!.frame = CGRect(x: 0, y: (howFarAwayQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: destinationOptionsCardView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (destinationOptionsCardView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 7)
@@ -1348,6 +1389,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.yesCityDecidedQuestionView!.frame = CGRect(x: 0, y: (decidedOnCityToVisitQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: yesCityDecidedQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (yesCityDecidedQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 9)
@@ -1373,6 +1415,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             howDoYouWantToGetThereQuestionView?.button5?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: howDoYouWantToGetThereQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howDoYouWantToGetThereQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 10)
@@ -1407,6 +1451,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                 }
             }
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
 
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -1733,6 +1778,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             doYouKnowWhereYouWillBeStayingQuestionView?.button3?.addTarget(self, action: #selector(self.doYouKnowWhereYouWillBeStaying_noPlanLater(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: doYouKnowWhereYouWillBeStayingQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (doYouKnowWhereYouWillBeStayingQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 18)
@@ -1771,6 +1817,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.busTrainOtherQuestionView!.frame = CGRect(x: 0, y: (howDoYouWantToGetThereQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: busTrainOtherQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (busTrainOtherQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 20)
@@ -1801,10 +1848,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let bounds = UIScreen.main.bounds
             whatTypeOfPlaceToStayQuestionView?.button1?.addTarget(self, action: #selector(self.whatTypeOfPlaceToStayQuestionView_hotel(sender:)), for: UIControlEvents.touchUpInside)
             whatTypeOfPlaceToStayQuestionView?.button2?.addTarget(self, action: #selector(self.whatTypeOfPlaceToStayQuestionView_shortTermRental(sender:)), for: UIControlEvents.touchUpInside)
-            whatTypeOfPlaceToStayQuestionView?.button3?.addTarget(self, action: #selector(self.whatTypeOfPlaceToStayQuestionView_stayWithSomeoneIKnow(sender:)), for: UIControlEvents.touchUpInside)
+//            whatTypeOfPlaceToStayQuestionView?.button3?.addTarget(self, action: #selector(self.whatTypeOfPlaceToStayQuestionView_stayWithSomeoneIKnow(sender:)), for: UIControlEvents.touchUpInside)
             self.whatTypeOfPlaceToStayQuestionView!.frame = CGRect(x: 0, y: (doYouKnowWhereYouWillBeStayingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: whatTypeOfPlaceToStayQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whatTypeOfPlaceToStayQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 22)
@@ -1826,6 +1874,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             hotelSearchQuestionView?.searchButton?.addTarget(self, action: #selector(self.hotelSearchQuestionView_searchButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: hotelSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (hotelSearchQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 23)
@@ -1847,6 +1896,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             shortTermRentalSearchQuestionView?.button2?.addTarget(self, action: #selector(self.shortTermRentalSearchQuestionView_addLater(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: shortTermRentalSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (shortTermRentalSearchQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 24)
@@ -1868,6 +1918,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             stayWithSomeoneIKnowQuestionView?.button2?.addTarget(self, action: #selector(self.stayWithSomeoneIKnowQuestionView_addLater(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: stayWithSomeoneIKnowQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (stayWithSomeoneIKnowQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 25)
@@ -1995,6 +2046,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             updateHeightOfScrollView()
             scrollDownToTopSubview()
             updateProgress()
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         } else {
             scrollToSubviewWithTag(tag: 28)
         }
@@ -2016,6 +2068,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             sendProposalQuestionView?.tag = 29
             let heightConstraint = NSLayoutConstraint(item: sendProposalQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (sendProposalQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 29)
@@ -2035,6 +2088,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.yesIKnowWhereImStayingQuestionView!.frame = CGRect(x: 0, y: (doYouKnowWhereYouWillBeStayingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: yesIKnowWhereImStayingQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (yesIKnowWhereImStayingQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 30)
@@ -2053,6 +2107,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.doYouNeedHelpBookingAHotelQuestionView!.frame = CGRect(x: 0, y: (yesIKnowWhereImStayingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: doYouNeedHelpBookingAHotelQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (doYouNeedHelpBookingAHotelQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 31)
@@ -2070,6 +2125,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.parseDatesForMultipleDestinationsCalendarView!.frame = CGRect(x: 0, y: (addAnotherDestinationQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: parseDatesForMultipleDestinationsCalendarView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (parseDatesForMultipleDestinationsCalendarView?.frame.height)!)
             view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
             
             
         }
@@ -2887,32 +2943,32 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             spawnShortTermRentalSearchQuestionView()
         }
     }
-    func whatTypeOfPlaceToStayQuestionView_stayWithSomeoneIKnow(sender:UIButton) {
-        if sender.isSelected == true {
-            if yesIKnowWhereImStayingQuestionView != nil {
-                yesIKnowWhereImStayingQuestionView?.removeFromSuperview()
-                yesIKnowWhereImStayingQuestionView = nil
-            }
-            if doYouNeedHelpBookingAHotelQuestionView != nil {
-                doYouNeedHelpBookingAHotelQuestionView?.removeFromSuperview()
-                doYouNeedHelpBookingAHotelQuestionView = nil
-            }
-            if hotelSearchQuestionView != nil {
-                hotelSearchQuestionView?.removeFromSuperview()
-                hotelSearchQuestionView = nil
-            }
-            if shortTermRentalSearchQuestionView != nil {
-                shortTermRentalSearchQuestionView?.removeFromSuperview()
-                shortTermRentalSearchQuestionView = nil
-            }
-            if placeForGroupOrJustYouQuestionView != nil {
-                placeForGroupOrJustYouQuestionView?.removeFromSuperview()
-                placeForGroupOrJustYouQuestionView = nil
-            }
-
-            spawnStayWithSomeoneIKnowQuestionView()
-        }
-    }
+//    func whatTypeOfPlaceToStayQuestionView_stayWithSomeoneIKnow(sender:UIButton) {
+//        if sender.isSelected == true {
+//            if yesIKnowWhereImStayingQuestionView != nil {
+//                yesIKnowWhereImStayingQuestionView?.removeFromSuperview()
+//                yesIKnowWhereImStayingQuestionView = nil
+//            }
+//            if doYouNeedHelpBookingAHotelQuestionView != nil {
+//                doYouNeedHelpBookingAHotelQuestionView?.removeFromSuperview()
+//                doYouNeedHelpBookingAHotelQuestionView = nil
+//            }
+//            if hotelSearchQuestionView != nil {
+//                hotelSearchQuestionView?.removeFromSuperview()
+//                hotelSearchQuestionView = nil
+//            }
+//            if shortTermRentalSearchQuestionView != nil {
+//                shortTermRentalSearchQuestionView?.removeFromSuperview()
+//                shortTermRentalSearchQuestionView = nil
+//            }
+//            if placeForGroupOrJustYouQuestionView != nil {
+//                placeForGroupOrJustYouQuestionView?.removeFromSuperview()
+//                placeForGroupOrJustYouQuestionView = nil
+//            }
+//
+//            spawnStayWithSomeoneIKnowQuestionView()
+//        }
+//    }
     
     func hotelSearchQuestionView_searchButtonTouchedUpInside(sender:UIButton) {
         if sender.isSelected == true {
