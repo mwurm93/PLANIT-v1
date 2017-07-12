@@ -29,8 +29,8 @@ class TripNameQuestionView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-        self.layer.borderColor = UIColor.green.cgColor
-        self.layer.borderWidth = 2
+//        self.layer.borderColor = UIColor.green.cgColor
+//        self.layer.borderWidth = 2
     }
     
     override func layoutSubviews() {
@@ -57,11 +57,6 @@ class TripNameQuestionView: UIView {
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
         button1?.frame.origin.y = 240
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
-        
-        tripNameQuestionButton?.isHidden = true
-        tripNameQuestionTextfield?.isHidden = true
-        questionLabel3?.isHidden = true
-        
     }
     
     func addViews() {

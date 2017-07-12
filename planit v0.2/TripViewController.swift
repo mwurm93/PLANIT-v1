@@ -1121,6 +1121,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! I'm here to help…"
                 tripNameQuestionView?.questionLabel?.text = questionLabelValue
             }
+            tripNameQuestionButton?.isHidden = true
+            tripNameQuestionTextfield?.isHidden = true
+            questionLabel3?.isHidden = true
         }
         
         updateHeightOfScrollView()
@@ -1185,13 +1188,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             view.addConstraints([heightConstraint])
         
         updateHeightOfScrollView()
-//        scrollDownToTopSubview()
         updateProgress()
         }
-//        else {
-            scrollToSubviewWithTag(tag: 1)
-//        }
-
+        scrollToSubviewWithTag(tag: 1)
         
         let when = DispatchTime.now() + 1.4
         DispatchQueue.main.asyncAfter(deadline: when) {
