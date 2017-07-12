@@ -43,15 +43,15 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 160)
+        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
         
-        subView?.frame = CGRect(x: (bounds.size.width-275)/2, y: 193, width: 275, height: 30)
+        subView?.frame = CGRect(x: (bounds.size.width-275)/2, y: 100, width: 275, height: 30)
         
         button?.sizeToFit()
         button?.frame.size.height = 30
         button?.frame.size.width += 20
         button?.frame.origin.x = (bounds.size.width - (button?.frame.width)!) / 2
-        button?.frame.origin.y = 260
+        button?.frame.origin.y = 170
         button?.layer.cornerRadius = (button?.frame.height)! / 2
         
     }
@@ -65,7 +65,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         //        questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Awesome!\n\nWhere do you want to go?"
+        questionLabel?.text = "Where do you want to travel?"
         self.addSubview(questionLabel!)
         
         //GOOGLE PLACES SEARCH
@@ -114,10 +114,10 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         //Button
         button = UIButton(type: .custom)
         button?.frame = CGRect.zero
-        button?.setTitleColor(UIColor.white, for: .normal)
+        button?.setTitleColor(UIColor.lightGray, for: .normal)
         button?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         button?.layer.borderWidth = 1
-        button?.layer.borderColor = UIColor.white.cgColor
+        button?.layer.borderColor = UIColor.lightGray.cgColor
         button?.layer.masksToBounds = true
         button?.titleLabel?.textAlignment = .center
         button?.setTitle("Actually, help me discover more options", for: .normal)

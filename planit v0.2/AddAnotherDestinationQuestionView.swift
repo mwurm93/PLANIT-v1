@@ -65,7 +65,7 @@ class AddAnotherDestinationQuestionView: UIView {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
         if destinationsForTrip.count != 0 {
-            questionLabel?.text = "Woohoo! Let's plan a trip to \(destinationsForTrip[0]).\n\nWill this be your only destination for this trip?"
+            questionLabel?.text = "Woohoo! Let's plan a trip to \(destinationsForTrip[0]).\n\nWill this be your only destination?"
         }
         self.addSubview(questionLabel!)
         

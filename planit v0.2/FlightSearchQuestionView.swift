@@ -409,10 +409,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         return true
     }
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField == departureDate {
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Departure"), object: nil)
-            return false
-        } else if textField == returnDate {
+        if textField == departureDate || textField == returnDate{
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "animateInDatePickingSubview_Departure"), object: nil)
             return false
         }

@@ -654,7 +654,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         floaty?.addItem(item: datesItem!)
 
         self.view.addSubview(floaty!)
-        floaty?.isHidden = false
         
         
         progressRing = UICircularProgressRingView(frame: (floaty?.frame)!)
@@ -664,11 +663,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         progressRing?.innerRingColor = UIColor.flatTurquoise()
         progressRing?.innerRingWidth = 5
         progressRing?.fontColor = UIColor.white
+        progressRing?.isHidden = true
         progressRing?.setProgress(value: 0, animationDuration: 0.1) {
             // Do anything your heart desires...
         }
         self.view.insertSubview(progressRing!, belowSubview: floaty!)
-        progressRing?.isHidden = true
         
         progressRing?.layer.shadowColor = UIColor.black.cgColor
         progressRing?.layer.shadowRadius = 1
@@ -877,30 +876,30 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func animateInSubview_Departure(){
         
-        var fromDate = Date()
-        var toDate = Date()
-        formatter.dateFormat = "MM/dd/yy"
-        if bookingMode == "flight" {
-            if flightSearchQuestionView?.returnDate?.text != nil {
-                let fromDateInTextfield = (flightSearchQuestionView?.departureDate?.text)!
-                let toDateInTextfield = (flightSearchQuestionView?.returnDate?.text)!
-                fromDate = formatter.date(from: fromDateInTextfield)
-                toDate = formatter.date(from: toDateInTextfield)
-                calendarView.selectDates(from: fromDate, to: toDate)
-            } else  {
-                let fromDateInTextfield = (flightSearchQuestionView?.departureDate?.text)!
-                fromDate = formatter.date(from: fromDateInTextfield)
-                calendarView.selectDates([fromDate])
-            }
-        } else if bookingMode == "carRental" {
-            fromDate = formatter.date(from: (carRentalSearchQuestionView?.pickUpDate?.text)!)
-            toDate = formatter.date(from: (carRentalSearchQuestionView?.dropOffDate?.text)!)
-            calendarView.selectDates(from: fromDate, to: toDate)
-        } else if bookingMode == "hotel" {
-            fromDate = formatter.date(from: (hotelSearchQuestionView?.checkInDate?.text)!)
-            toDate = formatter.date(from: (hotelSearchQuestionView?.checkOutDate?.text)!)
-            calendarView.selectDates(from: fromDate, to: toDate)
-        }
+//        var fromDate = Date()
+//        var toDate = Date()
+//        formatter.dateFormat = "MM/dd/yy"
+//        if bookingMode == "flight" {
+//            if flightSearchQuestionView?.returnDate?.isHidden == false {
+//                let fromDateInTextfield = (flightSearchQuestionView?.departureDate?.text)!
+//                let toDateInTextfield = (flightSearchQuestionView?.returnDate?.text)!
+//                fromDate = formatter.date(from: fromDateInTextfield)!
+//                toDate = formatter.date(from: toDateInTextfield)!
+//                calendarView.selectDates(from: fromDate, to: toDate)
+//            } else  {
+//                let fromDateInTextfield = (flightSearchQuestionView?.departureDate?.text)!
+//                fromDate = formatter.date(from: fromDateInTextfield)!
+//                calendarView.selectDates([fromDate])
+//            }
+//        } else if bookingMode == "carRental" {
+//            fromDate = formatter.date(from: (carRentalSearchQuestionView?.pickUpDate?.text)!)!
+//            toDate = formatter.date(from: (carRentalSearchQuestionView?.dropOffDate?.text)!)!
+//            calendarView.selectDates(from: fromDate, to: toDate)
+//        } else if bookingMode == "hotel" {
+//            fromDate = formatter.date(from: (hotelSearchQuestionView?.checkInDate?.text)!)!
+//            toDate = formatter.date(from: (hotelSearchQuestionView?.checkOutDate?.text)!)!
+//            calendarView.selectDates(from: fromDate, to: toDate)
+//        }
         //Animate In Subview
         dateEditing = "departureDate"
         self.view.endEditing(true)
@@ -1087,14 +1086,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     func spawnTripNameQuestionView() {
         if userNameQuestionView != nil {
-            let questionLabelValue = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! I'm your personal\ntrip planning assistant,\nhere to help you:"
+            let questionLabelValue = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! I'm here to help…"
 
             userNameQuestionView?.userNameQuestionTextfield?.resignFirstResponder()
             if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
                 tripNameQuestionView?.questionLabel?.text = questionLabelValue
             }
         } else {
-            let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! I'm your personal\ntrip planning assistant,\nhere to help you:"
+            let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! I'm here to help…"
 
             tripNameQuestionView?.questionLabel?.text = questionLabelValue
         }
@@ -1115,14 +1114,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             view.addConstraints([heightConstraint])
             if userNameQuestionView != nil {
                 if userNameQuestionView?.userNameQuestionTextfield?.text != nil {
-                    let questionLabelValue = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! I'm your personal\ntrip planning assistant,\nhere to help you:"
+                    let questionLabelValue = "Hi \((userNameQuestionView?.userNameQuestionTextfield?.text!)!)! I'm here to help…"
                     tripNameQuestionView?.questionLabel?.text = questionLabelValue
                 }
             } else {
-                let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! I'm your personal\ntrip planning assistant,\nhere to help you:"
+                let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! I'm here to help…"
                 tripNameQuestionView?.questionLabel?.text = questionLabelValue
             }
-            tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
         }
         
         updateHeightOfScrollView()
@@ -1162,19 +1160,18 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             disableTravelItem()
             disablePlaceToStayItem()
             floaty?.alpha = 0
-            floaty?.isHidden = false
             progressRing?.frame = (floaty?.frame)!
             progressRing?.frame.size.height -= 15
             progressRing?.frame.size.width -= 15
             progressRing?.alpha = 0
             progressRing?.isHidden = false
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
             
             let when_1 = DispatchTime.now() + 0.8
             DispatchQueue.main.asyncAfter(deadline: when_1) {
-                UIView.animate(withDuration: 1) {
+                UIView.animate(withDuration: 0.3) {
                     self.floaty?.alpha = 1
                     self.progressRing?.alpha = 1
+                    self.increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
                 }
             }
             //Load next question
@@ -1188,11 +1185,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             view.addConstraints([heightConstraint])
         
         updateHeightOfScrollView()
-        scrollDownToTopSubview()
+//        scrollDownToTopSubview()
         updateProgress()
-        } else {
-            scrollToSubviewWithTag(tag: 1)
         }
+//        else {
+            scrollToSubviewWithTag(tag: 1)
+//        }
 
         
         let when = DispatchTime.now() + 1.4
@@ -1219,7 +1217,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
             if indexOfDestinationBeingPlanned > 0 {
-                decidedOnCityToVisitQuestionView?.questionLabel?.text = "Great, have you already decided\nwhere else to visit?"
+                decidedOnCityToVisitQuestionView?.questionLabel?.text = "Great, have you decided\nwhere else to visit?"
+                decidedOnCityToVisitQuestionView?.questionLabel?.frame.size.height = 60
             }
         
             updateHeightOfScrollView()

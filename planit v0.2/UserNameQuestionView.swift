@@ -51,7 +51,7 @@ class UserNameQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Hey there, what's your name?"
+        questionLabel?.text = "Hey! What's your name?"
         self.addSubview(questionLabel!)
         
         userNameQuestionTextfield = UITextField(frame: CGRect.zero)

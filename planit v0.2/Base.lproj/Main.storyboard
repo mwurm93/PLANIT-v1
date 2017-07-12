@@ -399,7 +399,7 @@
                                     <constraint firstItem="EeG-2u-mWE" firstAttribute="top" secondItem="SNF-xw-05H" secondAttribute="top" id="aPe-Hh-VKx"/>
                                 </constraints>
                             </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cvm-VN-7u9">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cvm-VN-7u9">
                                 <rect key="frame" x="335" y="65" width="40" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="▲"/>
@@ -407,7 +407,7 @@
                                     <action selector="scrollUpButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="uSc-eQ-QQd"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5lv-hC-A2u">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5lv-hC-A2u">
                                 <rect key="frame" x="335" y="90" width="40" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="▼"/>
@@ -642,6 +642,12 @@
                             <constraint firstAttribute="trailing" secondItem="SNF-xw-05H" secondAttribute="trailing" id="iOS-Ta-8lF"/>
                             <constraint firstItem="SNF-xw-05H" firstAttribute="leading" secondItem="muN-a6-dmD" secondAttribute="leading" id="p4B-UB-W6a"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="Cvm-VN-7u9"/>
+                                <exclude reference="5lv-hC-A2u"/>
+                            </mask>
+                        </variation>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>

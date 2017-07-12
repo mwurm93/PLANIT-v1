@@ -11,10 +11,8 @@
 		191BF7D83FF5218C958D0EDB /* Pods_planit_v0_2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C09738698217841A11CBDB /* Pods_planit_v0_2.framework */; };
 		AF4CFEF2E9465786DE56CC42 /* Pods_planit_v0_2Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF99F8DC1EC030B0E3C827B0 /* Pods_planit_v0_2Tests.framework */; };
 		FA09A3EA1EB110A6007F64A3 /* ToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA09A3E91EB110A6007F64A3 /* ToDoViewController.swift */; };
-		FA09A3ED1EB23694007F64A3 /* ToDoCardContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA09A3EB1EB23694007F64A3 /* ToDoCardContentView.xib */; };
 		FA09A3EE1EB23694007F64A3 /* ToDoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */; };
 		FA09A3F11EB23894007F64A3 /* CardContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA09A3EF1EB23893007F64A3 /* CardContentView.xib */; };
-		FA09A3F21EB23894007F64A3 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA09A3F01EB23894007F64A3 /* CardView.swift */; };
 		FA14B2241EFAE5F9004E0E29 /* savingToSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA14B2231EFAE5F9004E0E29 /* savingToSingleton.swift */; };
 		FA14B2261EFB1073004E0E29 /* YesCityDecidedQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA14B2251EFB1073004E0E29 /* YesCityDecidedQuestionView.swift */; };
 		FA14B2281EFB107C004E0E29 /* YesCityDecidedQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA14B2271EFB107C004E0E29 /* YesCityDecidedQuestionView.xib */; };
@@ -209,10 +207,8 @@
 		BA83D88C34C8633D819ABD13 /* Pods-planit v0.2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-planit v0.2.release.xcconfig"; path = "Pods/Target Support Files/Pods-planit v0.2/Pods-planit v0.2.release.xcconfig"; sourceTree = "<group>"; };
 		ED4A2134146D2128C7538337 /* Pods_planit_v0_2UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_planit_v0_2UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA09A3E91EB110A6007F64A3 /* ToDoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoViewController.swift; sourceTree = "<group>"; };
-		FA09A3EB1EB23694007F64A3 /* ToDoCardContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToDoCardContentView.xib; sourceTree = "<group>"; };
 		FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCardView.swift; sourceTree = "<group>"; };
 		FA09A3EF1EB23893007F64A3 /* CardContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardContentView.xib; sourceTree = "<group>"; };
-		FA09A3F01EB23894007F64A3 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		FA14B2231EFAE5F9004E0E29 /* savingToSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = savingToSingleton.swift; sourceTree = "<group>"; };
 		FA14B2251EFB1073004E0E29 /* YesCityDecidedQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YesCityDecidedQuestionView.swift; sourceTree = "<group>"; };
 		FA14B2271EFB107C004E0E29 /* YesCityDecidedQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YesCityDecidedQuestionView.xib; sourceTree = "<group>"; };
@@ -542,12 +538,11 @@
 		FA4887771F01AE870015F078 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
-				FAE83F761EF654950009A020 /* DatesPickedOutQuestionView.swift */,
-				FAE83F781EF6549E0009A020 /* DatesPickedOutQuestionView.xib */,
 				FAE83F7A1EF6D3F70009A020 /* DatesPickedOutCalendarView.swift */,
 				FAE83F7C1EF6D40B0009A020 /* DatesPickedOutCalendarView.xib */,
 				FA8DBAC81F0DA6D9005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.swift */,
 				FA8DBACA1F0DA6FA005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.xib */,
+				FA6429221F15DC1D000403AE /* Unused */,
 			);
 			name = Calendar;
 			sourceTree = "<group>";
@@ -578,7 +573,51 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FA6897001F0FFB0B00602D17 /* PPN Cities */ = {
+		FA64291F1F15D600000403AE /* Unused */ = {
+			isa = PBXGroup;
+			children = (
+				FAA8F2901E351DCD00CD7337 /* ActivitiesCollectionViewCell.swift */,
+				FAD50DD91EE9C4AB0006C3AA /* instructionsCollectionViewCell.swift */,
+				FAA8F2911E351DCD00CD7337 /* ActivityItem.swift */,
+				FADF09FC1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift */,
+			);
+			name = Unused;
+			sourceTree = "<group>";
+		};
+		FA6429201F15D656000403AE /* Unused */ = {
+			isa = PBXGroup;
+			children = (
+				FAA8F2961E351DDE00CD7337 /* contactsTableViewCell.swift */,
+				FAA8F2981E351DDE00CD7337 /* itemizedItineraryTableViewCell.swift */,
+				FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */,
+				FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */,
+				FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */,
+				FA16B3C41ECC7743005E4DEF /* flightSearchResultTableViewCell.swift */,
+				FA77D1EC1EFDB58A00A37A05 /* carRentalSearchResultTableViewCell.swift */,
+				FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */,
+				FADF0A001ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift */,
+			);
+			name = Unused;
+			sourceTree = "<group>";
+		};
+		FA6429211F15D665000403AE /* Unused */ = {
+			isa = PBXGroup;
+			children = (
+				FAA8F2A01E351DEB00CD7337 /* items.plist */,
+			);
+			name = Unused;
+			sourceTree = "<group>";
+		};
+		FA6429221F15DC1D000403AE /* Unused */ = {
+			isa = PBXGroup;
+			children = (
+				FAE83F761EF654950009A020 /* DatesPickedOutQuestionView.swift */,
+				FAE83F781EF6549E0009A020 /* DatesPickedOutQuestionView.xib */,
+			);
+			name = Unused;
+			sourceTree = "<group>";
+		};
+		FA6897001F0FFB0B00602D17 /* CSVs */ = {
 			isa = PBXGroup;
 			children = (
 				FA4E22D61F1309550077CCD3 /* Car-Cities.csv */,
@@ -587,14 +626,7 @@
 				FA4E22D01F106D400077CCD3 /* Hotel-Cities.csv */,
 				FA4E22D81F131CDE0077CCD3 /* countryAbbreviations.csv */,
 			);
-			name = "PPN Cities";
-			sourceTree = "<group>";
-		};
-		FA9E39831EBBF7D100F6CB0B /* Google Maps */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Google Maps";
+			name = CSVs;
 			sourceTree = "<group>";
 		};
 		FAA8F2161E35194100CD7337 = {
@@ -622,16 +654,15 @@
 		FAA8F2211E35194100CD7337 /* planit v0.2 */ = {
 			isa = PBXGroup;
 			children = (
-				FA6897001F0FFB0B00602D17 /* PPN Cities */,
+				FA6897001F0FFB0B00602D17 /* CSVs */,
 				FA14B2221EFAE5D1004E0E29 /* Extensions */,
 				FAE83F691EF467790009A020 /* Scrolling Views */,
 				FAD50DD41EE9BFC40006C3AA /* Instructions */,
 				FAD50DC91EE8864F0006C3AA /* Firebase */,
 				FA4978191EC2A35700435392 /* WhirlyGlobe Resources */,
-				FA9E39831EBBF7D100F6CB0B /* Google Maps */,
 				FAC1BD1B1EAE4D4C008AB7C4 /* Swiping View */,
 				FA187E431E37003600971D47 /* Message */,
-				FAA8F2A31E3521BC00CD7337 /* API */,
+				FAA8F2A31E3521BC00CD7337 /* GraphQL API */,
 				FAA8F2811E351C8A00CD7337 /* Data Models */,
 				FAA8F27E1E351C3C00CD7337 /* GraphQL */,
 				FAA8F27D1E351C1600CD7337 /* Calendar View */,
@@ -708,8 +739,8 @@
 			isa = PBXGroup;
 			children = (
 				FA4EA8D51EE881D3005FCE91 /* GoogleService-Info.plist */,
-				FAA8F2A01E351DEB00CD7337 /* items.plist */,
 				FAA8F22E1E35194100CD7337 /* Info.plist */,
+				FA6429211F15D665000403AE /* Unused */,
 			);
 			name = "Property Lists";
 			sourceTree = "<group>";
@@ -717,19 +748,11 @@
 		FAA8F27B1E351C0100CD7337 /* Table View */ = {
 			isa = PBXGroup;
 			children = (
-				FAA8F2961E351DDE00CD7337 /* contactsTableViewCell.swift */,
 				FA70D01E1EFA5CB000126176 /* destinationsSwipedRightTableViewCell.swift */,
 				FA1EC52E1F14354A00110167 /* destinationDaysTableViewCell.swift */,
 				FA48878D1F02C6320015F078 /* contactsTableViewCellForScrolling.swift */,
 				FAA8F2971E351DDE00CD7337 /* ExistingTripTableViewCell.swift */,
-				FAA8F2981E351DDE00CD7337 /* itemizedItineraryTableViewCell.swift */,
-				FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */,
-				FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */,
-				FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */,
-				FA16B3C41ECC7743005E4DEF /* flightSearchResultTableViewCell.swift */,
-				FA77D1EC1EFDB58A00A37A05 /* carRentalSearchResultTableViewCell.swift */,
-				FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */,
-				FADF0A001ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift */,
+				FA6429201F15D656000403AE /* Unused */,
 			);
 			name = "Table View";
 			sourceTree = "<group>";
@@ -737,13 +760,10 @@
 		FAA8F27C1E351C0F00CD7337 /* Collection View */ = {
 			isa = PBXGroup;
 			children = (
-				FAA8F2901E351DCD00CD7337 /* ActivitiesCollectionViewCell.swift */,
 				FA4E361F1EE0B1E000CE15E3 /* destinationPhotosCollectionViewCell.swift */,
-				FAD50DD91EE9C4AB0006C3AA /* instructionsCollectionViewCell.swift */,
 				FA4887911F033F070015F078 /* destinationsDatesCollectionViewCell.swift */,
-				FAA8F2911E351DCD00CD7337 /* ActivityItem.swift */,
 				FAA8F2921E351DCD00CD7337 /* contactsCollectionViewCell.swift */,
-				FADF09FC1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift */,
+				FA64291F1F15D600000403AE /* Unused */,
 			);
 			name = "Collection View";
 			sourceTree = "<group>";
@@ -798,12 +818,12 @@
 			name = "Data Models";
 			sourceTree = "<group>";
 		};
-		FAA8F2A31E3521BC00CD7337 /* API */ = {
+		FAA8F2A31E3521BC00CD7337 /* GraphQL API */ = {
 			isa = PBXGroup;
 			children = (
 				FA4E922A1E3526DD00231C72 /* API.swift */,
 			);
-			name = API;
+			name = "GraphQL API";
 			sourceTree = "<group>";
 		};
 		FAAE62611E3A423200A2A6B7 /* View Controllers (unused) */ = {
@@ -836,8 +856,6 @@
 			children = (
 				FA09A3EF1EB23893007F64A3 /* CardContentView.xib */,
 				FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */,
-				FA09A3F01EB23894007F64A3 /* CardView.swift */,
-				FA09A3EB1EB23694007F64A3 /* ToDoCardContentView.xib */,
 				FAC1BD2A1EAE7707008AB7C4 /* Direction.swift */,
 				FAC1BD2B1EAE7707008AB7C4 /* Scheduler.swift */,
 				FAC1BD2C1EAE7707008AB7C4 /* ViewManager.swift */,
@@ -1045,7 +1063,6 @@
 				FA8DBAC71F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib in Resources */,
 				FA4EA8D41EE87DBC005FCE91 /* common.js in Resources */,
 				FAE83F831EF79E9B0009A020 /* NoCityDecidedAnyIdeasQuestionView.xib in Resources */,
-				FA09A3ED1EB23694007F64A3 /* ToDoCardContentView.xib in Resources */,
 				FABEACFE1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib in Resources */,
 				FA4EA8D61EE881D3005FCE91 /* GoogleService-Info.plist in Resources */,
 				FA4EA8C91EE7A4AE005FCE91 /* CreateTrip.graphql in Resources */,
@@ -1259,7 +1276,6 @@
 				FAA8F29D1E351DDE00CD7337 /* itemizedItineraryTableViewCell.swift in Sources */,
 				FAA8F29C1E351DDE00CD7337 /* ExistingTripTableViewCell.swift in Sources */,
 				FA09A3EA1EB110A6007F64A3 /* ToDoViewController.swift in Sources */,
-				FA09A3F21EB23894007F64A3 /* CardView.swift in Sources */,
 				FADF0A011ED7FAF600BFDF39 /* hotelReviewTableViewCell.swift in Sources */,
 				FA4887901F033DCB0015F078 /* hideKeyboardWhenTappedAround.swift in Sources */,
 				FABEACFC1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift in Sources */,

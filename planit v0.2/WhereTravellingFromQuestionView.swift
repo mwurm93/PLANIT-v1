@@ -48,7 +48,7 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 190
+        button1?.frame.origin.y = 170
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         if DataContainerSingleton.sharedDataContainer.homeAirport != nil && DataContainerSingleton.sharedDataContainer.homeAirport != "" {
             button1?.isHidden = false
@@ -56,7 +56,7 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
             button1?.isHidden = true
         }
         
-        subView?.frame = CGRect(x: (bounds.size.width-275)/2, y: 120, width: 275, height: 30)
+        subView?.frame = CGRect(x: (bounds.size.width-275)/2, y: 100, width: 275, height: 30)
     }
     
     
@@ -150,18 +150,18 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         }
     }
     
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        UIView.animate(withDuration: 0.25) {
-            self.subView?.frame.origin.y = 0
-            self.questionLabel?.isHidden = true
-            self.button1?.isHidden = true
-        }
-    }
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-            self.subView?.frame.origin.y = 120
-            self.questionLabel?.isHidden = false
-            self.button1?.isHidden = false
-    }
+//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+//        UIView.animate(withDuration: 0.25) {
+//            self.subView?.frame.origin.y = 0
+//            self.questionLabel?.isHidden = true
+//            self.button1?.isHidden = true
+//        }
+//    }
+//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+//            self.subView?.frame.origin.y = 120
+//            self.questionLabel?.isHidden = false
+//            self.button1?.isHidden = false
+//    }
 }
 // Handle the user's selection GOOGLE PLACES SEARCH
 extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerDelegate {

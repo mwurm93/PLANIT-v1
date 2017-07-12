@@ -62,7 +62,7 @@ class DecidedOnCityToVisitQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Have you decided on a city to visit?"
+        questionLabel?.text = "Have you decided where to travel?"
         self.addSubview(questionLabel!)
 
         //Button1
