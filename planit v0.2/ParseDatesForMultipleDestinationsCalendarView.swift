@@ -373,11 +373,13 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         colors.remove(at: sourceIndexPath.row)
         colors.insert(movedColor, at: destinationIndexPath.row)
     
+//        let test = datesDestinationsDictionary as! [String:[Date]]
+        
         //Save
         SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
         SavedPreferencesForTrip["destinationsForTripStates"] = destinationsForTripStates
         SavedPreferencesForTrip["travelDictionary"] = travelDictionary
-        SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+//        SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         timesLoaded -= 1
@@ -636,7 +638,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     
     
     
-    
+    //Customer functions
     func colorForName(_ name: String) -> UIColor {
         let sanitizedName = name.replacingOccurrences(of: " ", with: "")
         let selector = "flat\(sanitizedName)Color"
