@@ -57,6 +57,8 @@
 		FA4EA8D61EE881D3005FCE91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA4EA8D51EE881D3005FCE91 /* GoogleService-Info.plist */; };
 		FA4EEF1A1F166C9100C188BE /* InstructionsQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EEF191F166C9100C188BE /* InstructionsQuestionView.swift */; };
 		FA4EEF1E1F166CB200C188BE /* InstructionsQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4EEF1D1F166CB200C188BE /* InstructionsQuestionView.xib */; };
+		FA4EEF201F16A28D00C188BE /* AlreadyHaveFlightsQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EEF1F1F16A28D00C188BE /* AlreadyHaveFlightsQuestionView.swift */; };
+		FA4EEF221F16A2D100C188BE /* AlreadyHaveFlightsQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4EEF211F16A2D100C188BE /* AlreadyHaveFlightsQuestionView.xib */; };
 		FA5201061EC4CE6F001EA849 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201051EC4CE6F001EA849 /* CoreLocation.framework */; };
 		FA5201081EC4CE84001EA849 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201071EC4CE84001EA849 /* libc++.tbd */; };
 		FA52010A1EC4CE91001EA849 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201091EC4CE91001EA849 /* libz.tbd */; };
@@ -255,6 +257,8 @@
 		FA4EA8D51EE881D3005FCE91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA4EEF191F166C9100C188BE /* InstructionsQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsQuestionView.swift; sourceTree = "<group>"; };
 		FA4EEF1D1F166CB200C188BE /* InstructionsQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InstructionsQuestionView.xib; sourceTree = "<group>"; };
+		FA4EEF1F1F16A28D00C188BE /* AlreadyHaveFlightsQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlreadyHaveFlightsQuestionView.swift; sourceTree = "<group>"; };
+		FA4EEF211F16A2D100C188BE /* AlreadyHaveFlightsQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlreadyHaveFlightsQuestionView.xib; sourceTree = "<group>"; };
 		FA5200F91EC4CE2E001EA849 /* WhirlyGlobeMaplyComponent.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WhirlyGlobeMaplyComponent.xcodeproj; path = "libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/WhirlyGlobeMaplyComponent.xcodeproj"; sourceTree = "<group>"; };
 		FA5201031EC4CE65001EA849 /* libWhirlyGlobeLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWhirlyGlobeLib.a; path = "libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobeLib/build/Debug-iphoneos/libWhirlyGlobeLib.a"; sourceTree = "<group>"; };
 		FA5201051EC4CE6F001EA849 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -489,6 +493,8 @@
 				FA14B2291EFB22BE004E0E29 /* HowDoYouWantToGetThereQuestionView.xib */,
 				FA14B22D1EFB2D33004E0E29 /* FlightSearchQuestionView.swift */,
 				FA14B22F1EFB2D3D004E0E29 /* FlightSearchQuestionView.xib */,
+				FA4EEF1F1F16A28D00C188BE /* AlreadyHaveFlightsQuestionView.swift */,
+				FA4EEF211F16A2D100C188BE /* AlreadyHaveFlightsQuestionView.xib */,
 				FA8A20B71EFD94E900EB0360 /* DoYouNeedARentalCarQuestionView.swift */,
 				FA8A20B91EFD94F100EB0360 /* DoYouNeedARentalCarQuestionView.xib */,
 				FA77D1EE1EFDCE6E00A37A05 /* CarRentalSearchQuestionView.swift */,
@@ -1073,6 +1079,7 @@
 				FA4EA8D61EE881D3005FCE91 /* GoogleService-Info.plist in Resources */,
 				FA4EA8C91EE7A4AE005FCE91 /* CreateTrip.graphql in Resources */,
 				FA14B22A1EFB22BE004E0E29 /* HowDoYouWantToGetThereQuestionView.xib in Resources */,
+				FA4EEF221F16A2D100C188BE /* AlreadyHaveFlightsQuestionView.xib in Resources */,
 				FAA8F2851E351DA300CD7337 /* CreateNewUser.graphql in Resources */,
 				FADEF0EE1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib in Resources */,
 				FAA8F28F1E351DBF00CD7337 /* monthHeaderView.xib in Resources */,
@@ -1292,6 +1299,7 @@
 				FAA8F26C1E351B9500CD7337 /* EmailViewController.swift in Sources */,
 				FA4887851F01B95A0015F078 /* PlaceForGroupOrJustYouQuestionView.swift in Sources */,
 				FAA8F2711E351B9500CD7337 /* PasswordViewController.swift in Sources */,
+				FA4EEF201F16A28D00C188BE /* AlreadyHaveFlightsQuestionView.swift in Sources */,
 				FAE83F871EF7AA780009A020 /* PlanTripToIdeaQuestionView.swift in Sources */,
 				FA8DBAC91F0DA6D9005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.swift in Sources */,
 				FAE83F651EF461500009A020 /* TripViewController.swift in Sources */,

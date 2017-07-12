@@ -83,7 +83,7 @@ class DoYouNeedHelpBookingAHotelQuestionView: UIView, UITextViewDelegate {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Do you need help\nbooking a hotel?\n\n\nIf you already have one booked, share the details with your group below!"
+        questionLabel?.text = "Need help booking a hotel?\n\n\n\nAlready booked? Share the details with your group!"
         self.addSubview(questionLabel!)
         
         //Button1
@@ -127,7 +127,7 @@ class DoYouNeedHelpBookingAHotelQuestionView: UIView, UITextViewDelegate {
         button3?.layer.masksToBounds = true
         button3?.titleLabel?.numberOfLines = 0
         button3?.titleLabel?.textAlignment = .center
-        button3?.setTitle("I'll add my hotel details later", for: .normal)
+        button3?.setTitle("Add later", for: .normal)
         button3?.translatesAutoresizingMaskIntoConstraints = false
         button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button3!)

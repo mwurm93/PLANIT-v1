@@ -35,27 +35,27 @@ class PlaceForGroupOrJustYouQuestionView: UIView {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 100)
+        questionLabel?.frame = CGRect(x: 10, y: 15, width: bounds.size.width - 20, height: 100)
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 170
+        button1?.frame.origin.y = 120
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         button2?.sizeToFit()
         button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 220
+        button2?.frame.origin.y = 170
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
         button3?.sizeToFit()
         button3?.frame.size.height = 30
         button3?.frame.size.width += 20
         button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2
-        button3?.frame.origin.y = 270
+        button3?.frame.origin.y = 220
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
         
     }

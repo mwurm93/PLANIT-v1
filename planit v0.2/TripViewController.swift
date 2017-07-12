@@ -61,6 +61,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var doYouNeedHelpBookingAHotelQuestionView: DoYouNeedHelpBookingAHotelQuestionView?
     var parseDatesForMultipleDestinationsCalendarView: ParseDatesForMultipleDestinationsCalendarView?
     var instructionsQuestionView: InstructionsQuestionView?
+    var alreadyHaveFlightsQuestionView: AlreadyHaveFlightsQuestionView?
         //CalendarView vars
     var leftDates = [Date]()
     var rightDates = [Date]()
@@ -190,6 +191,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         functionsToLoadSubviewsDictionary[32] = spawnParseDatesForMultipleDestinationsCalendarView
         functionsToLoadSubviewsDictionary[33] = spawnInstructionsQuestionView
         functionsToLoadSubviewsDictionary[34] = spawnTripNameQuestionView
+        functionsToLoadSubviewsDictionary[35] = spawnAlreadyHaveFlightsQuestionView
         
 //        hideKeyboardWhenTappedAround()
         
@@ -1018,7 +1020,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //UPDATE WHEN ADDING SUBVIEWS TO SCROLLVIEW
         let datesSubviews = [1,32]
         let destinationSubviews = [0,2,3,4,5,6,7,8,9]
-        let travelSubviews = [10,11,12,13,14,15,16,17,19,20,21]
+        let travelSubviews = [10,11,12,13,14,15,16,17,19,20,21,35]
         let placeToStaySubviews = [18,22,23,24,25,26,27,28,30,31]
         let otherSubviews = [29,33,34]
         
@@ -1121,6 +1123,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.scrollContentView.insertSubview(tripNameQuestionView!, aboveSubview: instructionsQuestionView!)
             tripNameQuestionView?.tripNameQuestionTextfield?.delegate = self
             tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
+
             tripNameQuestionView?.tag = 34
             let bounds = UIScreen.main.bounds
             
@@ -1128,35 +1131,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 
             let heightConstraint = NSLayoutConstraint(item: tripNameQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (tripNameQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            
-            //handle floaty
-            disableDestinationItem()
-            disableTravelItem()
-            disablePlaceToStayItem()
-            floaty?.alpha = 0
-            progressRing?.frame = (floaty?.frame)!
-            progressRing?.frame.size.height -= 15
-            progressRing?.frame.size.width -= 15
-            progressRing?.alpha = 0
-            progressRing?.isHidden = false
-            
-            let when = DispatchTime.now() + 0.8
-            DispatchQueue.main.asyncAfter(deadline: when) {
-                UIView.animate(withDuration: 0.3) {
-                    self.floaty?.alpha = 1
-                    self.progressRing?.alpha = 1
-                    self.increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
-                }
-            }
         }
-        
-        updateProgress()
+        alignSubviews()
         scrollToSubviewWithTag(tag: 34)
     }
     
     func spawnWhereTravellingFromQuestionView(){
         tripNameQuestionView?.tripNameQuestionTextfield?.resignFirstResponder()
         if whereTravellingFromQuestionView == nil {
+            
             //Load next question
             whereTravellingFromQuestionView = Bundle.main.loadNibNamed("WhereTravellingFromQuestionView", owner: self, options: nil)?.first! as? WhereTravellingFromQuestionView
             whereTravellingFromQuestionView?.tag = 0
@@ -1179,6 +1162,25 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func spawnDatesPickedOutCalendarView() {
         self.view.endEditing(true)
         if datesPickedOutCalendarView == nil  {
+            //handle floaty
+            disableDestinationItem()
+            disableTravelItem()
+            disablePlaceToStayItem()
+            floaty?.alpha = 0
+            progressRing?.frame = (floaty?.frame)!
+            progressRing?.frame.size.height -= 15
+            progressRing?.frame.size.width -= 15
+            progressRing?.alpha = 0
+            progressRing?.isHidden = false
+            let when = DispatchTime.now() + 0.8
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                UIView.animate(withDuration: 0.3) {
+                    self.floaty?.alpha = 1
+                    self.progressRing?.alpha = 1
+                }
+            }
+
+            
             scrolledToDatesItem()
             //Load next question
             datesPickedOutCalendarView = Bundle.main.loadNibNamed("DatesPickedOutCalendarView", owner: self, options: nil)?.first! as? DatesPickedOutCalendarView
@@ -1431,7 +1433,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             flightSearchQuestionView?.tag = 11
             let bounds = UIScreen.main.bounds
             flightSearchQuestionView?.searchButton?.addTarget(self, action: #selector(self.searchFlights(sender:)), for: UIControlEvents.touchUpInside)
-            flightSearchQuestionView?.addButton?.addTarget(self, action: #selector(self.addFlightsAlreadyHad(sender:)), for: UIControlEvents.touchUpInside)
+            flightSearchQuestionView?.addButton?.addTarget(self, action: #selector(self.flightSearchQuestionView_alreadyHaveFlights(sender:)), for: UIControlEvents.touchUpInside)
             self.flightSearchQuestionView!.frame = CGRect(x: 0, y: (howDoYouWantToGetThereQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: flightSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (flightSearchQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
@@ -2113,7 +2115,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 31)
-        
     }
     func spawnParseDatesForMultipleDestinationsCalendarView() {
         self.view.endEditing(true)
@@ -2138,6 +2139,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         DispatchQueue.main.asyncAfter(deadline: when) {
             self.parseDatesForMultipleDestinationsCalendarView?.calendarView.flashScrollIndicators()
         }
+    }
+    func spawnAlreadyHaveFlightsQuestionView() {
+        self.view.endEditing(true)
+        if alreadyHaveFlightsQuestionView == nil {
+            //Load next question
+            alreadyHaveFlightsQuestionView = Bundle.main.loadNibNamed("AlreadyHaveFlightsQuestionView", owner: self, options: nil)?.first! as? AlreadyHaveFlightsQuestionView
+            self.scrollContentView.insertSubview(alreadyHaveFlightsQuestionView!, aboveSubview: flightSearchQuestionView!)
+            alreadyHaveFlightsQuestionView?.tag = 35
+            let bounds = UIScreen.main.bounds
+            alreadyHaveFlightsQuestionView?.addButton?.addTarget(self, action: #selector(self.alreadyHaveFlightsQuestionView_save(sender:)), for: UIControlEvents.touchUpInside)
+            self.alreadyHaveFlightsQuestionView!.frame = CGRect(x: 0, y: (flightSearchQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: alreadyHaveFlightsQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (alreadyHaveFlightsQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+        }
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 35)
     }
 
     
@@ -2582,6 +2600,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     if flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
+                        alreadyHaveFlightsQuestionView?.removeFromSuperview()
+                        alreadyHaveFlightsQuestionView = nil
                         if doYouNeedARentalCarQuestionView != nil {
                             doYouNeedARentalCarQuestionView?.removeFromSuperview()
                             doYouNeedARentalCarQuestionView = nil
@@ -2621,6 +2641,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     if  flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
+                        alreadyHaveFlightsQuestionView?.removeFromSuperview()
+                        alreadyHaveFlightsQuestionView = nil
                         if doYouNeedARentalCarQuestionView != nil {
                             doYouNeedARentalCarQuestionView?.removeFromSuperview()
                             doYouNeedARentalCarQuestionView = nil
@@ -2668,6 +2690,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     if flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
+                        alreadyHaveFlightsQuestionView?.removeFromSuperview()
+                        alreadyHaveFlightsQuestionView = nil
                         if doYouNeedARentalCarQuestionView != nil {
                             doYouNeedARentalCarQuestionView?.removeFromSuperview()
                             doYouNeedARentalCarQuestionView = nil
@@ -2715,6 +2739,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     if flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
+                        alreadyHaveFlightsQuestionView?.removeFromSuperview()
+                        alreadyHaveFlightsQuestionView = nil
                         if doYouNeedARentalCarQuestionView != nil {
                             doYouNeedARentalCarQuestionView?.removeFromSuperview()
                             doYouNeedARentalCarQuestionView = nil
@@ -2754,10 +2780,21 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     func searchFlights(sender:UIButton) {
+        if alreadyHaveFlightsQuestionView != nil {
+            alreadyHaveFlightsQuestionView?.removeFromSuperview()
+            alreadyHaveFlightsQuestionView = nil
+        }
         spawnFlightResultsQuestionView()
     }
-    func addFlightsAlreadyHad(sender:UIButton) {
-        spawnDoYouNeedARentalCarQuestionView()
+    func flightSearchQuestionView_alreadyHaveFlights(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnAlreadyHaveFlightsQuestionView()
+        }
+    }
+    func alreadyHaveFlightsQuestionView_save(sender:UIButton) {
+        if sender.isSelected == true {
+            spawnDoYouNeedARentalCarQuestionView()
+        }
     }
     func doYouNeedARentalCarQuestionView_yes(sender:UIButton) {
         if sender.isSelected == true {
@@ -3231,13 +3268,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     func textFieldShouldReturn(_ textField:  UITextField) -> Bool {
         
-        if textField == tripNameTextField {
-            tripNameTextField.resignFirstResponder()
-            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            SavedPreferencesForTrip["trip_name"] = tripNameTextField.text
-            //Save
-            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-        }
         if textField == userNameQuestionView?.userNameQuestionTextfield {
             if userNameQuestionView?.userNameQuestionTextfield?.text == nil || userNameQuestionView?.userNameQuestionTextfield?.text == "" {
                 return false
@@ -3257,6 +3287,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 spawnDatesPickedOutCalendarView()
             }
         }
+        //Itinerary view
+        if textField == tripNameTextField {
+            tripNameTextField.resignFirstResponder()
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["trip_name"] = tripNameTextField.text
+            //Save
+            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
+        textField.resignFirstResponder()
         return true
     }
     

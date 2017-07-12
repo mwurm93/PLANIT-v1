@@ -37,7 +37,7 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 100)
+        questionLabel?.frame = CGRect(x: 10, y: 15, width: bounds.size.width - 20, height: 60)
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
@@ -89,7 +89,7 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         if destinationsForTrip.count != 0 {
-            questionLabel?.text = "Time to plan your travel!\n\nHow do you want to get to\n\(destinationsForTrip[indexOfDestinationBeingPlanned])?"
+            questionLabel?.text = "How do you want to get to\n\(destinationsForTrip[indexOfDestinationBeingPlanned])?"
         }
         self.addSubview(questionLabel!)
         
