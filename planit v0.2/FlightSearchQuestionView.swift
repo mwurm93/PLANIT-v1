@@ -47,7 +47,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
 //
-        questionLabel?.frame = CGRect(x: 10, y: 20, width: bounds.size.width - 20, height: 50)
+        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 50)
         
         departureDate?.frame = CGRect(x: (bounds.size.width-303-18*2)/2, y: 95, width: 101, height: 30)
         departureDate?.setBottomBorder(borderColor: UIColor.white)

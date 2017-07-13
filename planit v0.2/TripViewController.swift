@@ -144,6 +144,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var travelSummaryDescriptionButton: UIButton!
     @IBOutlet weak var placeToStayButton: UIButton!
     @IBOutlet weak var placetoStaySummaryDescriptionButton: UIButton!
+    @IBOutlet weak var startingPointButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -209,29 +210,29 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.view.addSubview(borderLine)
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
-//            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
-//                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
-//            } else {
-//                //Load from server
-//                var rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["miami_1","miami_2"],"topThingsToDo":["Vizcaya Museum and Gardens", "American Airlines Arena", "Wynwood Walls", "Boat tours","Zoological Wildlife Foundation"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"]]
-//                
-//                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Washington DC","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["washingtonDC_1","washingtonDC_2","washingtonDC_3","washingtonDC_4"],"topThingsToDo":["National Mall", "Smithsonian Air and Space Museum" ,"Logan Circle"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
-//                
-//                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["sanDiego_1","sanDiego_2","sanDiego_3","sanDiego_4"],"topThingsToDo":["Sunset Cliffs", "San Diego Zoo" ,"Petco Park"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
-//                
-//                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Nashville","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["nashville_1","nashville_2","nashville_3","nashville_4"],"topThingsToDo":["Grand Ole Opry", "Broadway" ,"Country Music Hall of Fame"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
-//                
-//                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"New Orleans","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["newOrleans_1","newOrleans_2","newOrleans_3","newOrleans_4"],"topThingsToDo":["Bourbon Street", "National WWII Museum" ,"Jackson Square"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
-//                
-//                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"Austin","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["austin_1","austin_2","austin_3","austin_4"],"topThingsToDo":["Zilker Park", "6th Street" ,"University of Texas"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
-//                
-//                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
-//            }
-//        }
-//        
-//        
-//        SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
+        if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
+            if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
+                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
+            } else {
+                //Load from server
+                var rankedPotentialTripsDictionaryFromServer = [["price":"$1,000","percentSwipedRight":"100","destination":"Miami","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["miami_1","miami_2"],"topThingsToDo":["Vizcaya Museum and Gardens", "American Airlines Arena", "Wynwood Walls", "Boat tours","Zoological Wildlife Foundation"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"]]
+                
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Washington DC","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["washingtonDC_1","washingtonDC_2","washingtonDC_3","washingtonDC_4"],"topThingsToDo":["National Mall", "Smithsonian Air and Space Museum" ,"Logan Circle"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
+                
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"San Diego","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["sanDiego_1","sanDiego_2","sanDiego_3","sanDiego_4"],"topThingsToDo":["Sunset Cliffs", "San Diego Zoo" ,"Petco Park"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
+                
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"75","destination":"Nashville","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["nashville_1","nashville_2","nashville_3","nashville_4"],"topThingsToDo":["Grand Ole Opry", "Broadway" ,"Country Music Hall of Fame"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
+                
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"New Orleans","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["newOrleans_1","newOrleans_2","newOrleans_3","newOrleans_4"],"topThingsToDo":["Bourbon Street", "National WWII Museum" ,"Jackson Square"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
+                
+                rankedPotentialTripsDictionaryFromServer.append(["price":"$???","percentSwipedRight":"50","destination":"Austin","flightOptions":[NSDictionary()],"hotelOptions":[NSDictionary()],"destinationPhotos":["austin_1","austin_2","austin_3","austin_4"],"topThingsToDo":["Zilker Park", "6th Street" ,"University of Texas"],"averageMonthlyHighs":[String()],"averageMonthlyLows":[String()],"swipedStatus":"unswiped"])
+                
+                rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromServer
+            }
+        }
+        
+        
+        SavedPreferencesForTrip["rankedPotentialTripsDictionary"] = self.rankedPotentialTripsDictionary
         //Save
         self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
@@ -499,8 +500,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         destinationsDatesCollectionView.dataSource = self
         destinationsDatesCollectionView.delegate = self
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 10
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 0
         destinationsDatesCollectionView.collectionViewLayout = layout
         travelButton.layer.cornerRadius = travelButton.frame.size.height / 2
         travelButton.backgroundColor = travelItem?.buttonColor
@@ -662,8 +663,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         progressRing = UICircularProgressRingView(frame: (floaty?.frame)!)
         progressRing?.maxValue = 100
-        progressRing?.outerRingColor = UIColor.white
-        progressRing?.outerRingWidth = 1
+        progressRing?.startAngle = 270
+        progressRing?.viewStyle = 5
+        progressRing?.outerRingColor = UIColor.white.withAlphaComponent(0.15)
+        progressRing?.outerRingWidth = 5
         progressRing?.innerRingColor = UIColor.flatTurquoise()
         progressRing?.innerRingWidth = 5
         progressRing?.fontColor = UIColor.white
@@ -1167,9 +1170,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             disableTravelItem()
             disablePlaceToStayItem()
             floaty?.alpha = 0
-            progressRing?.frame = (floaty?.frame)!
-            progressRing?.frame.size.height -= 15
-            progressRing?.frame.size.width -= 15
+            progressRing?.layer.frame = (floaty?.frame)!
+            progressRing?.layer.frame.size.height -= 15
+            progressRing?.layer.frame.size.width -= 15
             progressRing?.alpha = 0
             progressRing?.isHidden = false
             let when = DispatchTime.now() + 0.8
@@ -4214,11 +4217,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-            destinationsDatesCell.destinationLabel.text = destinationsForTrip[indexPath.row]
-            destinationsDatesCell.destinationLabel.font = UIFont.systemFont(ofSize: 22)
-            destinationsDatesCell.datesLabel.font = UIFont.systemFont(ofSize: 22)
-            destinationsDatesCell.destinationButton.layer.cornerRadius = destinationsDatesCell.destinationButton.frame.size.height / 2
-            destinationsDatesCell.destinationButton.backgroundColor = destinationItem?.buttonColor
+            destinationsDatesCell.destinationButton.setTitle(destinationsForTrip[indexPath.row], for: .normal)
+            destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.systemFont(ofSize: 22)
             destinationsDatesCell.destinationButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,12,10)
             destinationsDatesCell.destinationButton.layer.shadowColor = UIColor.black.cgColor
             destinationsDatesCell.destinationButton.layer.shadowRadius = 1
@@ -4236,17 +4236,35 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 rightDatesDestinations[destinationsForTrip[indexPath.row]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?[(datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?.count)! - 1]
                 formatter.dateFormat = "MM/dd"
                 let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexPath.row]]!)
-                let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row]]!)
-                destinationsDatesCell.datesLabel.text = "\(leftDateAsString) - \(rightDateAsString)"
+//                let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row]]!)
+//                destinationsDatesCell.datesLabel.text = "\(leftDateAsString) - \(rightDateAsString)"
+                destinationsDatesCell.travelDateButton.setTitle(leftDateAsString, for: .normal)
+                destinationsDatesCell.travelDateButton.titleLabel?.textAlignment = .center
+                destinationsDatesCell.travelDateButton.titleLabel?.numberOfLines = 0
+                destinationsDatesCell.travelDateButton.titleLabel?.textColor = UIColor.white
+                destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 22)
+                destinationsDatesCell.travelDateButton.layer.cornerRadius = destinationsDatesCell.travelDateButton.frame.size.height / 2
+                destinationsDatesCell.travelDateButton.backgroundColor = UIColor.green
             }
-            destinationsDatesCell.datesButton.layer.cornerRadius = destinationsDatesCell.datesButton.frame.size.height / 2
-            destinationsDatesCell.datesButton.backgroundColor = datesItem?.buttonColor
-            destinationsDatesCell.datesButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
-            destinationsDatesCell.datesButton.layer.shadowColor = UIColor.black.cgColor
-            destinationsDatesCell.datesButton.layer.shadowRadius = 1
-            destinationsDatesCell.datesButton.layer.masksToBounds = false
-            destinationsDatesCell.datesButton.layer.shadowOpacity = 0.4
-            destinationsDatesCell.datesButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+//            destinationsDatesCell.datesButton.layer.cornerRadius = destinationsDatesCell.datesButton.frame.size.height / 2
+//            destinationsDatesCell.datesButton.backgroundColor = datesItem?.buttonColor
+//            destinationsDatesCell.datesButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
+            destinationsDatesCell.travelDateButton.layer.shadowColor = UIColor.black.cgColor
+            destinationsDatesCell.travelDateButton.layer.shadowRadius = 1
+            destinationsDatesCell.travelDateButton.layer.masksToBounds = false
+            destinationsDatesCell.travelDateButton.layer.shadowOpacity = 0.4
+            destinationsDatesCell.travelDateButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+            
+            //draw top line
+            if indexPath.row != 0 {
+                let fromPoint = CGPoint(x: destinationsDatesCell.frame.midX, y: destinationsDatesCell.frame.minY)
+                let toPoint = CGPoint(x: destinationsDatesCell.frame.midX, y: destinationsDatesCell.travelDateButton.frame.minY)
+                destinationsDatesCell.addLine(fromPoint: fromPoint, toPoint: toPoint, color: UIColor.white)
+            }
+            //draw bottom line
+                let fromPoint = CGPoint(x: destinationsDatesCell.frame.midX, y: destinationsDatesCell.travelDateButton.frame.maxY)
+                let toPoint = CGPoint(x: destinationsDatesCell.frame.midX, y: destinationsDatesCell.frame.maxY)
+                destinationsDatesCell.addLine(fromPoint: fromPoint, toPoint: toPoint, color: UIColor.white)
             
             return destinationsDatesCell
         }
@@ -4359,7 +4377,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
     // MARK: - UICollectionViewFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == destinationsDatesCollectionView {
-            return CGSize(width: 300, height: 145)
+            let bounds = UIScreen.main.bounds
+            return CGSize(width: bounds.width, height: 325)
         }
         
         //        else if collectionView == contactsCollectionView {
@@ -4367,14 +4386,14 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return CGSize(width: picDimension, height: picDimension)
 //        }
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        if collectionView == destinationsDatesCollectionView {
-            return UIEdgeInsets(top: 0, left: 37.5, bottom: 0, right: 37.5)
-        }
-        //        else if collectionView == contactsCollectionView {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        // }
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        if collectionView == destinationsDatesCollectionView {
+//            return UIEdgeInsets(top: 0, left: 37.5, bottom: 0, right: 37.5)
+//        }
+//        //        else if collectionView == contactsCollectionView {
+//        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//        // }
+//    }
     
     // MARK: Custom functions
     // COPY for Contacts

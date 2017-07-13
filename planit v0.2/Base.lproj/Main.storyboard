@@ -442,63 +442,80 @@
                                             <action selector="addInviteesButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="EJu-mw-gg2"/>
                                         </connections>
                                     </button>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="white" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="DwN-9V-djF">
-                                        <rect key="frame" x="0.0" y="125" width="375" height="145"/>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="DwN-9V-djF">
+                                        <rect key="frame" x="0.0" y="160" width="375" height="325"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="I8E-3R-f3Y">
-                                            <size key="itemSize" width="300" height="145"/>
+                                            <size key="itemSize" width="375" height="200"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="destinationsDatesCollectionViewCell" id="eYf-7P-I45" customClass="destinationsDatesCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
-                                                <rect key="frame" x="37.5" y="0.0" width="300" height="145"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="145"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="changeFlight" translatesAutoresizingMaskIntoConstraints="NO" id="4mL-9v-uiO">
+                                                            <rect key="frame" x="7" y="20" width="50" height="44"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eIM-bF-muy">
+                                                            <rect key="frame" x="7" y="131" width="174" height="30"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                                            <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                                                            <state key="normal" title="BARCELONA">
+                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </state>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3EX-OX-aE7">
+                                                            <rect key="frame" x="0.0" y="0.0" width="152" height="95"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                                            <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                                                            <state key="normal" image="boardingPass">
+                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </state>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LFz-OB-hBX">
+                                                            <rect key="frame" x="214" y="98" width="152" height="95"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                                            <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                                                            <state key="normal" image="boardingPass2">
+                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </state>
+                                                        </button>
                                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xct-Xe-mbw">
-                                                            <rect key="frame" x="0.0" y="1" width="65" height="65"/>
+                                                            <rect key="frame" x="160" y="24" width="55" height="55"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <color key="backgroundColor" red="0.21242407915540984" green="0.69314098995127549" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <state key="normal" image="Calendar-Time">
+                                                            <state key="normal" title="16 AUG">
                                                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </state>
                                                         </button>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="12/30/17 - 12/30/18" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8w7-Ab-SXl">
-                                                            <rect key="frame" x="88" y="19" width="213" height="30"/>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="changeHotel" translatesAutoresizingMaskIntoConstraints="NO" id="9c8-3C-g99">
+                                                            <rect key="frame" x="318" y="124" width="50" height="44"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eIM-bF-muy">
-                                                            <rect key="frame" x="0.0" y="79" width="65" height="65"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <color key="backgroundColor" red="0.11526565862639437" green="1" blue="0.73134640536565532" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
-                                                            <state key="normal" image="map">
-                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            </state>
-                                                        </button>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Destination" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AMY-w3-yzm">
-                                                            <rect key="frame" x="88" y="97" width="212" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
+                                                        </imageView>
                                                     </subviews>
                                                 </view>
                                                 <connections>
-                                                    <outlet property="datesButton" destination="xct-Xe-mbw" id="3FK-NM-KIH"/>
-                                                    <outlet property="datesLabel" destination="8w7-Ab-SXl" id="YnI-DC-txd"/>
                                                     <outlet property="destinationButton" destination="eIM-bF-muy" id="8RX-JY-DEM"/>
-                                                    <outlet property="destinationLabel" destination="AMY-w3-yzm" id="0sg-ml-jTF"/>
+                                                    <outlet property="modeOfTransportationIcon" destination="4mL-9v-uiO" id="mbn-MF-oe4"/>
+                                                    <outlet property="placeToStaySummaryButton" destination="LFz-OB-hBX" id="F2C-dZ-Szs"/>
+                                                    <outlet property="placeToStayTypeIcon" destination="9c8-3C-g99" id="im4-oM-MWh"/>
+                                                    <outlet property="travelDateButton" destination="xct-Xe-mbw" id="hvE-Mh-hOH"/>
+                                                    <outlet property="travelSummaryButton" destination="3EX-OX-aE7" id="qfJ-0t-22H"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
@@ -518,7 +535,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="I'm out"/>
                                     </button>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HIn-iO-iMd">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HIn-iO-iMd">
                                         <rect key="frame" x="37.5" y="282" width="300" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -536,7 +553,7 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gc3-a2-3IK">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gc3-a2-3IK">
                                         <rect key="frame" x="37.5" y="373" width="300" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -630,8 +647,24 @@
                                             <outlet property="delegate" destination="JtR-jW-4x4" id="V60-Zg-2ZA"/>
                                         </connections>
                                     </collectionView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="odT-Wf-VSh">
+                                        <rect key="frame" x="8" y="125" width="182" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                        <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                                        <state key="normal" title="STARTING POINT">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="HIn-iO-iMd"/>
+                                        <exclude reference="Gc3-a2-3IK"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -676,6 +709,7 @@
                         <outlet property="scrollDownButton" destination="5lv-hC-A2u" id="z8T-NK-lO8"/>
                         <outlet property="scrollUpButton" destination="Cvm-VN-7u9" id="VzC-nF-CUJ"/>
                         <outlet property="scrollView" destination="SNF-xw-05H" id="cke-8Q-0oX"/>
+                        <outlet property="startingPointButton" destination="odT-Wf-VSh" id="HC7-4Q-POV"/>
                         <outlet property="topView" destination="Abn-lc-U4N" id="2gS-y6-rRx"/>
                         <outlet property="travelButton" destination="noG-Ux-dYx" id="68F-hK-jRX"/>
                         <outlet property="travelSummaryDescriptionButton" destination="1db-xh-3x4" id="YjR-Ng-D1h"/>
@@ -6141,6 +6175,8 @@
         <image name="bermudaSubsetTopDark" width="563" height="487"/>
         <image name="bermudaSunset" width="1500" height="1125"/>
         <image name="bermudaSunsetTop" width="563" height="487"/>
+        <image name="boardingPass" width="231" height="124"/>
+        <image name="boardingPass2" width="231" height="124"/>
         <image name="budgetICon" width="256" height="256"/>
         <image name="button:js9-Ot-WYO:image" width="256" height="256">
             <mutableData key="keyedArchiveRepresentation">

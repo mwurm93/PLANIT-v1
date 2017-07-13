@@ -59,6 +59,8 @@
 		FA4EEF1E1F166CB200C188BE /* InstructionsQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4EEF1D1F166CB200C188BE /* InstructionsQuestionView.xib */; };
 		FA4EEF201F16A28D00C188BE /* AlreadyHaveFlightsQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EEF1F1F16A28D00C188BE /* AlreadyHaveFlightsQuestionView.swift */; };
 		FA4EEF221F16A2D100C188BE /* AlreadyHaveFlightsQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4EEF211F16A2D100C188BE /* AlreadyHaveFlightsQuestionView.xib */; };
+		FA4EEF251F16FC1000C188BE /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4EEF231F16FC1000C188BE /* CardView.swift */; };
+		FA4EEF261F16FC1000C188BE /* TodoCardContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4EEF241F16FC1000C188BE /* TodoCardContentView.xib */; };
 		FA5201061EC4CE6F001EA849 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201051EC4CE6F001EA849 /* CoreLocation.framework */; };
 		FA5201081EC4CE84001EA849 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201071EC4CE84001EA849 /* libc++.tbd */; };
 		FA52010A1EC4CE91001EA849 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201091EC4CE91001EA849 /* libz.tbd */; };
@@ -259,6 +261,8 @@
 		FA4EEF1D1F166CB200C188BE /* InstructionsQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InstructionsQuestionView.xib; sourceTree = "<group>"; };
 		FA4EEF1F1F16A28D00C188BE /* AlreadyHaveFlightsQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlreadyHaveFlightsQuestionView.swift; sourceTree = "<group>"; };
 		FA4EEF211F16A2D100C188BE /* AlreadyHaveFlightsQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlreadyHaveFlightsQuestionView.xib; sourceTree = "<group>"; };
+		FA4EEF231F16FC1000C188BE /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		FA4EEF241F16FC1000C188BE /* TodoCardContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TodoCardContentView.xib; sourceTree = "<group>"; };
 		FA5200F91EC4CE2E001EA849 /* WhirlyGlobeMaplyComponent.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WhirlyGlobeMaplyComponent.xcodeproj; path = "libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/WhirlyGlobeMaplyComponent.xcodeproj"; sourceTree = "<group>"; };
 		FA5201031EC4CE65001EA849 /* libWhirlyGlobeLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWhirlyGlobeLib.a; path = "libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobeLib/build/Debug-iphoneos/libWhirlyGlobeLib.a"; sourceTree = "<group>"; };
 		FA5201051EC4CE6F001EA849 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -866,6 +870,8 @@
 		FAC1BD1B1EAE4D4C008AB7C4 /* Swiping View */ = {
 			isa = PBXGroup;
 			children = (
+				FA4EEF231F16FC1000C188BE /* CardView.swift */,
+				FA4EEF241F16FC1000C188BE /* TodoCardContentView.xib */,
 				FA09A3EF1EB23893007F64A3 /* CardContentView.xib */,
 				FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */,
 				FAC1BD2A1EAE7707008AB7C4 /* Direction.swift */,
@@ -1059,6 +1065,7 @@
 				FA97A3721EC530F4006E68EC /* country_json_50m in Resources */,
 				FA647D3F1EE775A100B36138 /* GetAllUsers.graphql in Resources */,
 				FAD50DD61EE9BFD60006C3AA /* instructionsView.xib in Resources */,
+				FA4EEF261F16FC1000C188BE /* TodoCardContentView.xib in Resources */,
 				FA4EA8CF1EE867E3005FCE91 /* GetUserID.graphql in Resources */,
 				FAE83F7F1EF75CB10009A020 /* DecidedOnCityToVisitQuestionView.xib in Resources */,
 				FA77D1F11EFDCED700A37A05 /* CarRentalSearchQuestionView.xib in Resources */,
@@ -1342,6 +1349,7 @@
 				FAA8F26F1E351B9500CD7337 /* InternationalViewController.swift in Sources */,
 				FA14B2241EFAE5F9004E0E29 /* savingToSingleton.swift in Sources */,
 				FA8DBAC51F06072B005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.swift in Sources */,
+				FA4EEF251F16FC1000C188BE /* CardView.swift in Sources */,
 				FA14B2261EFB1073004E0E29 /* YesCityDecidedQuestionView.swift in Sources */,
 				FAA8F2701E351B9500CD7337 /* NewTripNameViewController.swift in Sources */,
 				FA77D1F51EFDDA2900A37A05 /* buttonColor.swift in Sources */,

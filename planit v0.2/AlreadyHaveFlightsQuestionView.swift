@@ -129,6 +129,21 @@ class AlreadyHaveFlightsQuestionView: UIView, UITextFieldDelegate {
         alreadyHaveFlightsQuestionLabel?.text = "Enter your flight details to share with your group"
         self.addSubview(alreadyHaveFlightsQuestionLabel!)
         
+        //Button
+        addButton = UIButton(type: .custom)
+        addButton?.frame = CGRect.zero
+        addButton?.setTitleColor(UIColor.white, for: .normal)
+        addButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        addButton?.layer.borderWidth = 1
+        addButton?.layer.borderColor = UIColor.white.cgColor
+        addButton?.layer.masksToBounds = true
+        addButton?.titleLabel?.textAlignment = .center
+        addButton?.setTitle("Save", for: .normal)
+        addButton?.translatesAutoresizingMaskIntoConstraints = false
+        addButton?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(addButton!)
+
+        
         
     }
     

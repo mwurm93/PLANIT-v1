@@ -37,7 +37,7 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 15, width: bounds.size.width - 20, height: 60)
+        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 60)
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
