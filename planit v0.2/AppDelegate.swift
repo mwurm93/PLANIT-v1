@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSPlacesClient.provideAPIKey("AIzaSyDBeoCYKCWap5Ivpv_zTMkH1eVORKrjX8A")
 
         // Use Firebase library to configure APIs
-        FIRApp.configure()
+        FirebaseApp.configure()
         
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         

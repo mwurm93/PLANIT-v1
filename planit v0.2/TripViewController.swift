@@ -82,8 +82,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //Messaging var
     let messageComposer = MessageComposer()
         //Firebase channel
-    var channelsRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
-    var newChannelRef: FIRDatabaseReference?
+    var channelsRef: DatabaseReference = Database.database().reference().child("channels")
+    var newChannelRef: DatabaseReference?
         //Singleton
     var NewOrAddedTripFromSegue: Int?
         //City dict
@@ -664,7 +664,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         progressRing = UICircularProgressRingView(frame: (floaty?.frame)!)
         progressRing?.maxValue = 100
         progressRing?.startAngle = 270
-        progressRing?.viewStyle = 5
+        progressRing?.ringStyle = .dashed
         progressRing?.outerRingColor = UIColor.white.withAlphaComponent(0.15)
         progressRing?.outerRingWidth = 5
         progressRing?.innerRingColor = UIColor.flatTurquoise()

@@ -867,17 +867,25 @@
 			name = "View Controllers (unused)";
 			sourceTree = "<group>";
 		};
-		FAC1BD1B1EAE4D4C008AB7C4 /* Swiping View */ = {
+		FAB144871F171B2C0062EBCC /* Unused */ = {
 			isa = PBXGroup;
 			children = (
 				FA4EEF231F16FC1000C188BE /* CardView.swift */,
 				FA4EEF241F16FC1000C188BE /* TodoCardContentView.xib */,
+			);
+			name = Unused;
+			sourceTree = "<group>";
+		};
+		FAC1BD1B1EAE4D4C008AB7C4 /* Swiping View */ = {
+			isa = PBXGroup;
+			children = (
 				FA09A3EF1EB23893007F64A3 /* CardContentView.xib */,
 				FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */,
 				FAC1BD2A1EAE7707008AB7C4 /* Direction.swift */,
 				FAC1BD2B1EAE7707008AB7C4 /* Scheduler.swift */,
 				FAC1BD2C1EAE7707008AB7C4 /* ViewManager.swift */,
 				FAC1BD2D1EAE7707008AB7C4 /* ZLSwipeableView.swift */,
+				FAB144871F171B2C0062EBCC /* Unused */,
 			);
 			name = "Swiping View";
 			sourceTree = "<group>";

@@ -24,9 +24,9 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var welcomeToPlanitLabel: UILabel!
     
     //Firebase channels
-    private var channelRefHandle: FIRDatabaseHandle?
+    private var channelRefHandle: DatabaseHandle?
     private var channels: [Channel] = []
-    private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
+    private lazy var channelRef: DatabaseReference = Database.database().reference().child("channels")
     
     //Times VC viewed
     var timesViewedNonTrip = [String: Int]()

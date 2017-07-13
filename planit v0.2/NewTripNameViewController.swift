@@ -19,8 +19,8 @@ class NewTripNameViewController: UIViewController, UITextFieldDelegate, CNContac
     var timesViewed = [String: Int]()
     
     //Firebase channel
-    var channelsRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
-    var newChannelRef: FIRDatabaseReference?
+    var channelsRef: DatabaseReference = Database.database().reference().child("channels")
+    var newChannelRef: DatabaseReference?
 
     //City dict
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
