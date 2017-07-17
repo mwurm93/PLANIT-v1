@@ -14,7 +14,7 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
     //Class vars
     var questionLabel: UILabel?
     var button1: UIButton?
-    var button2: UIButton?
+//    var button2: UIButton?
     var button3: UIButton?
     var contactsTableView: UITableView?
         //Contacts vars COPY
@@ -56,24 +56,24 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
         button1?.frame.origin.y = 80
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
-        button2?.sizeToFit()
-        button2?.frame.size.height = 30
-        button2?.frame.size.width += 20
-        button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 510
-        button2?.layer.cornerRadius = (button2?.frame.height)! / 2
+//        button2?.sizeToFit()
+//        button2?.frame.size.height = 30
+//        button2?.frame.size.width += 20
+//        button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
+//        button2?.frame.origin.y = 510
+//        button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
         button3?.sizeToFit()
         button3?.frame.size.height = 30
         button3?.frame.size.width += 20
         button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2
-        button3?.frame.origin.y = 560
+        button3?.frame.origin.y = 510
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
         
         contactsTableView?.frame = CGRect(x: (bounds.size.width - 300) / 2, y: 200, width: 300, height: 286)
         
         if contacts != nil && contacts?.count != 0 {
-            button2?.isHidden = false
+            button3?.isHidden = false
 //            button1?.frame.origin.y = CGFloat(60 * contacts!.count + 180)
         }
         
@@ -91,7 +91,7 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Add your friends to this trip!\n\n\nWhen you're ready, you can\nsend them the proposed itinerary!"
+        questionLabel?.text = "Add your travelmates!\n\n\nThen review your itinerary\nand send it!"
         self.addSubview(questionLabel!)
         
         //Button1
@@ -109,20 +109,20 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
         
-        //Button2
-        button2 = UIButton(type: .custom)
-        button2?.frame = CGRect.zero
-        button2?.setTitleColor(UIColor.white, for: .normal)
-        button2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        button2?.layer.borderWidth = 1
-        button2?.layer.borderColor = UIColor.white.cgColor
-        button2?.layer.masksToBounds = true
-        button2?.titleLabel?.numberOfLines = 0
-        button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("Send", for: .normal)
-        button2?.translatesAutoresizingMaskIntoConstraints = false
-        button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
-        self.addSubview(button2!)
+//        //Button2
+//        button2 = UIButton(type: .custom)
+//        button2?.frame = CGRect.zero
+//        button2?.setTitleColor(UIColor.white, for: .normal)
+//        button2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+//        button2?.layer.borderWidth = 1
+//        button2?.layer.borderColor = UIColor.white.cgColor
+//        button2?.layer.masksToBounds = true
+//        button2?.titleLabel?.numberOfLines = 0
+//        button2?.titleLabel?.textAlignment = .center
+//        button2?.setTitle("Send", for: .normal)
+//        button2?.translatesAutoresizingMaskIntoConstraints = false
+//        button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+//        self.addSubview(button2!)
         
         //Button2
         button3 = UIButton(type: .custom)
@@ -134,7 +134,7 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
         button3?.layer.masksToBounds = true
         button3?.titleLabel?.numberOfLines = 0
         button3?.titleLabel?.textAlignment = .center
-        button3?.setTitle("Review itinerary first", for: .normal)
+        button3?.setTitle("Review itinerary", for: .normal)
         button3?.translatesAutoresizingMaskIntoConstraints = false
         button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button3!)
@@ -291,7 +291,7 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
 //
         
         if contacts?.count == 0 || contacts == nil {
-            button2?.isHidden = true
+            button3?.isHidden = true
         }
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "contactsListChanged"), object: nil)
     }
@@ -299,9 +299,11 @@ class SendProposalQuestionView: UIView, UITableViewDelegate, UITableViewDataSour
     func buttonClicked(sender:UIButton) {
         if sender == button1 {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "contactPickerVC"), object: nil)
-        } else if sender == button2 {
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
-        } else if sender == button3 {
+        }
+//        else if sender == button2 {
+//            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
+//        }
+        else if sender == button3 {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reviewItinerary"), object: nil)
         }
     }

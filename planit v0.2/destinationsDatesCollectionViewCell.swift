@@ -17,6 +17,14 @@ class destinationsDatesCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var travelSummaryButton: UIButton!
     @IBOutlet weak var modeOfTransportationIcon: UIImageView!
     @IBOutlet weak var placeToStayTypeIcon: UIImageView!
+    @IBOutlet weak var numberOfNightsButton: UIButton!
+    @IBOutlet weak var inLabel: UILabel!
+    @IBOutlet weak var departureAirport: UILabel!
+    @IBOutlet weak var departureTime: UILabel!
+    @IBOutlet weak var returningAirport: UILabel!
+    @IBOutlet weak var returningTime: UILabel!
+    
+    var inBetweenDatesLine: UIView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,15 +34,4 @@ class destinationsDatesCollectionViewCell: UICollectionViewCell {
         super.init(coder: aDecoder)!
     }
     
-    func addLine(fromPoint start: CGPoint, toPoint end:CGPoint, color: UIColor) {
-        let line = CAShapeLayer()
-        let linePath = UIBezierPath()
-        linePath.move(to: start)
-        linePath.addLine(to: end)
-        line.path = linePath.cgPath
-        line.strokeColor = color.cgColor
-        line.lineWidth = 1
-        line.lineJoin = kCALineJoinRound
-        self.layer.addSublayer(line)
-    }
 }

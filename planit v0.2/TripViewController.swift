@@ -144,7 +144,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var travelSummaryDescriptionButton: UIButton!
     @IBOutlet weak var placeToStayButton: UIButton!
     @IBOutlet weak var placetoStaySummaryDescriptionButton: UIButton!
-    @IBOutlet weak var startingPointButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -355,6 +354,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         addChatViewController()
         assistant()
+        progressRing?.isHidden = true
         
         // MARK: Register notifications
         NotificationCenter.default.addObserver(self, selector: #selector(handleCalendarRangeSelected), name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
@@ -664,11 +664,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         progressRing = UICircularProgressRingView(frame: (floaty?.frame)!)
         progressRing?.maxValue = 100
         progressRing?.startAngle = 270
-        progressRing?.ringStyle = .dashed
-        progressRing?.outerRingColor = UIColor.white.withAlphaComponent(0.15)
-        progressRing?.outerRingWidth = 5
-        progressRing?.innerRingColor = UIColor.flatTurquoise()
-        progressRing?.innerRingWidth = 5
+        progressRing?.ringStyle = .inside
+        progressRing?.outerRingColor = UIColor.flatTurquoise()
+        progressRing?.outerRingWidth = 4
+        progressRing?.innerRingColor = UIColor.white
+        progressRing?.innerRingWidth = 4
         progressRing?.fontColor = UIColor.white
         progressRing?.isHidden = true
         progressRing?.setProgress(value: 0, animationDuration: 0.1) {
@@ -847,6 +847,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         sender.isSelected = !sender.isSelected
         if sender.isSelected {
             sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
+            if sender == itineraryButton2 {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
+            }
         } else {
             sender.removeMask(button:sender)
         }
@@ -992,11 +995,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         for subviewTag in subviewTags {
             self.functionsToLoadSubviewsDictionary[subviewTag]!()
         }
+        progressRing?.layer.frame = (floaty?.frame)!
+        progressRing?.layer.frame.size.height -= 15
+        progressRing?.layer.frame.size.width -= 15
     }
     func updateProgress() {
         var currentSubviewsInScrollContentView = [Int]()
         for subview in scrollContentView.subviews {
-            if subview != userNameQuestionView && subview != instructionsQuestionView {
+            if subview != userNameQuestionView {
                 currentSubviewsInScrollContentView.append(subview.tag)
                 subviewFramesDictionary[subview.tag] = subview.frame.origin
             }
@@ -1066,7 +1072,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 }
             }
         } else {
-            let currentProgress = self.progressRing?.currentValue
+            var currentProgress = self.progressRing?.currentValue
+            if currentProgress == nil {
+                currentProgress = 0
+            }
             self.progressRing?.setProgress(value: currentProgress! + byPercent, animationDuration: 1.0) {
             }
         }
@@ -1139,29 +1148,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollToSubviewWithTag(tag: 34)
     }
     
-    func spawnWhereTravellingFromQuestionView(){
-        tripNameQuestionView?.tripNameQuestionTextfield?.resignFirstResponder()
-        if whereTravellingFromQuestionView == nil {
-            
-            //Load next question
-            whereTravellingFromQuestionView = Bundle.main.loadNibNamed("WhereTravellingFromQuestionView", owner: self, options: nil)?.first! as? WhereTravellingFromQuestionView
-            whereTravellingFromQuestionView?.tag = 0
-            self.scrollContentView.insertSubview(whereTravellingFromQuestionView!, aboveSubview: datesPickedOutCalendarView!)
-            let bounds = UIScreen.main.bounds
-            whereTravellingFromQuestionView?.button1?.addTarget(self, action: #selector(self.spawnDecidedOnCityQuestionView), for: UIControlEvents.touchUpInside)
-            self.whereTravellingFromQuestionView!.frame = CGRect(x: 0, y: (datesPickedOutCalendarView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            let heightConstraint = NSLayoutConstraint(item: whereTravellingFromQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whereTravellingFromQuestionView?.frame.height)!)
-            view.addConstraints([heightConstraint])
-            
-            updateHeightOfScrollView()
-            scrollDownToTopSubview()
-            updateProgress()
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
-        } else {
-            scrollToSubviewWithTag(tag: 0)
-        }
-//        whereTravellingFromQuestionView?.searchController?.searchBar.becomeFirstResponder()
-    }
+    
     func spawnDatesPickedOutCalendarView() {
         self.view.endEditing(true)
         if datesPickedOutCalendarView == nil  {
@@ -1206,6 +1193,26 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.datesPickedOutCalendarView?.calendarView.flashScrollIndicators()
         }
     }
+    func spawnWhereTravellingFromQuestionView(){
+        tripNameQuestionView?.tripNameQuestionTextfield?.resignFirstResponder()
+        if whereTravellingFromQuestionView == nil {
+            
+            //Load next question
+            whereTravellingFromQuestionView = Bundle.main.loadNibNamed("WhereTravellingFromQuestionView", owner: self, options: nil)?.first! as? WhereTravellingFromQuestionView
+            whereTravellingFromQuestionView?.tag = 0
+            self.scrollContentView.insertSubview(whereTravellingFromQuestionView!, aboveSubview: datesPickedOutCalendarView!)
+            let bounds = UIScreen.main.bounds
+            whereTravellingFromQuestionView?.button1?.addTarget(self, action: #selector(self.spawnDecidedOnCityQuestionView), for: UIControlEvents.touchUpInside)
+            self.whereTravellingFromQuestionView!.frame = CGRect(x: 0, y: (datesPickedOutCalendarView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            let heightConstraint = NSLayoutConstraint(item: whereTravellingFromQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whereTravellingFromQuestionView?.frame.height)!)
+            view.addConstraints([heightConstraint])
+            
+            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
+        }
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 0)
+        //        whereTravellingFromQuestionView?.searchController?.searchBar.becomeFirstResponder()
+    }
     func spawnDecidedOnCityQuestionView() {
         // LINK TO ITINERARY
         // SHOW USER WHERE CHOSE DATES ARE SAVED
@@ -1229,14 +1236,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 decidedOnCityToVisitQuestionView?.questionLabel?.frame.size.height = 60
             }
         
-            updateHeightOfScrollView()
-            scrollDownToTopSubview()
-            updateProgress()
             increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
-        } else {
-            scrollToSubviewWithTag(tag: 2)
         }
-
+        alignSubviews()
+        scrollToSubviewWithTag(tag: 2)
     }
     
     func spawnNoCityDecidedAnyIdeasQuestionView() {
@@ -1473,112 +1476,112 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollToSubviewWithTag(tag: 11)
     }
     func spawnFlightResultsQuestionView() {
-        bookingMode = "flight"
-    
-        var originCity = String()
-        var originCityID = String()
-        var originStateAbbrev = String()
-        var isOriginCityInUS = true
-        var isOriginCityNearAirport = false
-        var destinationCity = String()
-        var destinationCityID = String()
-        var destinationStateAbbrev = String()
-        var isDestinationCityInUS = true
-        var isDestinationCityNearAirport = false
-        var originDay = String() //DD
-        var originMonth = String() //MM
-        var originYear = String() // YYYY
-        var returnDay = String() //DD
-        var returnMonth = String() //MM
-        var returnYear = String() //YYYY
-        
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-        var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
-        var destinationsForTripStates = SavedPreferencesForTrip["destinationsForTripStates"] as! [String]
-        
-        if indexOfDestinationBeingPlanned == 0 {
-            originCity = DataContainerSingleton.sharedDataContainer.homeAirport!
-            originStateAbbrev = findStateAbbreviationWith(state: DataContainerSingleton.sharedDataContainer.homeState!)
-            if originStateAbbrev == "noStateMatch" {
-                isOriginCityInUS = false
-                originStateAbbrev = findCountryAbbreviationWith(country:DataContainerSingleton.sharedDataContainer.homeState!)
-            }
-            originCityID = findCarCityIDWith(cityString: originCity, stateString: originStateAbbrev)
-            originCity = originCity.replacingOccurrences(of: " ", with: "+")
-            if !isOriginCityInUS {
-                originStateAbbrev = DataContainerSingleton.sharedDataContainer.homeState!
-            }
-            originStateAbbrev = originStateAbbrev.replacingOccurrences(of: " ", with: "+")
-        } else {
-            originCity = destinationsForTrip[indexOfDestinationBeingPlanned - 1]
-            originStateAbbrev = findStateAbbreviationWith(state: destinationsForTripStates[indexOfDestinationBeingPlanned - 1])
-            if originStateAbbrev == "noStateMatch" {
-                isOriginCityInUS = false
-                originStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned - 1])
-            }
-            originCityID = findCarCityIDWith(cityString: originCity, stateString: originStateAbbrev)
-            originCity = originCity.replacingOccurrences(of: " ", with: "+")
-            if !isOriginCityInUS {
-                originStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned - 1]
-            }
-            originStateAbbrev = originStateAbbrev.replacingOccurrences(of: " ", with: "+")
-        }
-        if findAirportWith(cityID: originCityID).count > 0 {
-            isOriginCityNearAirport = true
-        }
-        
-        destinationCity = destinationsForTrip[indexOfDestinationBeingPlanned]
-        destinationStateAbbrev = findStateAbbreviationWith(state: destinationsForTripStates[indexOfDestinationBeingPlanned])
-        if destinationStateAbbrev == "noStateMatch" {
-            isDestinationCityInUS = false
-            destinationStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned])
-        }
-        destinationCityID = findCarCityIDWith(cityString: destinationCity, stateString: destinationStateAbbrev)
-        destinationCity = destinationCity.replacingOccurrences(of: " ", with: "+")
-        if !isDestinationCityInUS {
-            destinationStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned]
-        }
-        destinationStateAbbrev = destinationStateAbbrev.replacingOccurrences(of: " ", with: "+")
-        if findAirportWith(cityID: destinationCityID).count > 0 {
-            isDestinationCityNearAirport = true
-        }
-        
-        let originDate = flightSearchQuestionView?.departureDate?.text
-        originMonth = (originDate?[0])! + (originDate?[1])!                   //DD
-        originDay = (originDate?[3])! + (originDate?[4])!                 //MM
-        originYear = (originDate?[6])! + (originDate?[7])! + (originDate?[8])! + (originDate?[9])!                   //YYYY
-        let returnDate = flightSearchQuestionView?.returnDate?.text
-        returnMonth = (returnDate?[0])! + (returnDate?[1])!                   //DD
-        returnDay = (returnDate?[3])! + (returnDate?[4])!                 //MM
-        returnYear = (returnDate?[6])! + (returnDate?[7])! + (returnDate?[8])! + (returnDate?[9])!                  //YYYY
-        
-        var stringForURL = "http://secure.rezserver.com/flights/home/?refid=8056"
-        if (originCityID != "noMatchingCity" && destinationCityID != "noMatchingCity") && flightSearchQuestionView?.searchMode == "roundtrip" {
-            stringForURL = "http://secure.rezserver.com/flights/results/depart/?rs_o_city=\(originCity)%2C+\(originStateAbbrev)&rs_d_city=\(destinationCity)%2C+\(destinationStateAbbrev)&rs_chk_in=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_chk_out=\(returnMonth)%2F\(returnDay)%2F\(returnYear)&rs_adults=1&rs_children=0&refid=8056&rs_o_aircode=\(originCityID)&rs_d_aircode=\(destinationCityID)&air_search_type=\((flightSearchQuestionView?.searchMode)!)&preferred_airline=&cabin_class="
-        } else if (originCityID != "noMatchingCity" && destinationCityID != "noMatchingCity")  && flightSearchQuestionView?.searchMode == "oneWay" {
-            stringForURL = "http://secure.rezserver.com/flights/results/depart/?rs_o_city1=\(originCity)%2C+\(originStateAbbrev)&rs_d_city1=\(destinationCity)%2C+\(destinationStateAbbrev)&rs_chk_in1=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_adults=1&rs_children=0&refid=8056&rs_o_aircode1=\(originCityID)&rs_d_aircode1=\(destinationCityID)&air_search_type=\((flightSearchQuestionView?.searchMode)!)&preferred_airline=&cabin_class="
-        }
-        let whiteLabelURL_FlightSearchQuery = URL(string: stringForURL)!
-        
-        
-        showWebsite(URL: whiteLabelURL_FlightSearchQuery)
-        
-//        flightResultsController = self.storyboard!.instantiateViewController(withIdentifier: "flightResultsViewController") as? flightResultsViewController
-//        flightResultsController?.willMove(toParentViewController: self)
-//        self.addChildViewController(flightResultsController!)
-//        flightResultsController?.searchMode = flightSearchQuestionView?.searchMode
-//        flightResultsController?.loadView()
-//        flightResultsController?.viewDidLoad()
-//        flightResultsController?.view.frame = self.view.bounds
-//        for subview in (flightSearchQuestionView?.subviews)! {
-//            subview.isHidden = true
-//        }
-//        self.flightSearchQuestionView?.addSubview((flightResultsController?.view)!)
-//        flightResultsController?.view.tag = 12
-//        flightResultsController?.didMove(toParentViewController: self)
+//        bookingMode = "flight"
+//    
+//        var originCity = String()
+//        var originCityID = String()
+//        var originStateAbbrev = String()
+//        var isOriginCityInUS = true
+//        var isOriginCityNearAirport = false
+//        var destinationCity = String()
+//        var destinationCityID = String()
+//        var destinationStateAbbrev = String()
+//        var isDestinationCityInUS = true
+//        var isDestinationCityNearAirport = false
+//        var originDay = String() //DD
+//        var originMonth = String() //MM
+//        var originYear = String() // YYYY
+//        var returnDay = String() //DD
+//        var returnMonth = String() //MM
+//        var returnYear = String() //YYYY
 //        
-//        updateProgress()
+//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+//        var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+//        var destinationsForTripStates = SavedPreferencesForTrip["destinationsForTripStates"] as! [String]
+//        
+//        if indexOfDestinationBeingPlanned == 0 {
+//            originCity = DataContainerSingleton.sharedDataContainer.homeAirport!
+//            originStateAbbrev = findStateAbbreviationWith(state: DataContainerSingleton.sharedDataContainer.homeState!)
+//            if originStateAbbrev == "noStateMatch" {
+//                isOriginCityInUS = false
+//                originStateAbbrev = findCountryAbbreviationWith(country:DataContainerSingleton.sharedDataContainer.homeState!)
+//            }
+//            originCityID = findCarCityIDWith(cityString: originCity, stateString: originStateAbbrev)
+//            originCity = originCity.replacingOccurrences(of: " ", with: "+")
+//            if !isOriginCityInUS {
+//                originStateAbbrev = DataContainerSingleton.sharedDataContainer.homeState!
+//            }
+//            originStateAbbrev = originStateAbbrev.replacingOccurrences(of: " ", with: "+")
+//        } else {
+//            originCity = destinationsForTrip[indexOfDestinationBeingPlanned - 1]
+//            originStateAbbrev = findStateAbbreviationWith(state: destinationsForTripStates[indexOfDestinationBeingPlanned - 1])
+//            if originStateAbbrev == "noStateMatch" {
+//                isOriginCityInUS = false
+//                originStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned - 1])
+//            }
+//            originCityID = findCarCityIDWith(cityString: originCity, stateString: originStateAbbrev)
+//            originCity = originCity.replacingOccurrences(of: " ", with: "+")
+//            if !isOriginCityInUS {
+//                originStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned - 1]
+//            }
+//            originStateAbbrev = originStateAbbrev.replacingOccurrences(of: " ", with: "+")
+//        }
+//        if findAirportWith(cityID: originCityID).count > 0 {
+//            isOriginCityNearAirport = true
+//        }
+//        
+//        destinationCity = destinationsForTrip[indexOfDestinationBeingPlanned]
+//        destinationStateAbbrev = findStateAbbreviationWith(state: destinationsForTripStates[indexOfDestinationBeingPlanned])
+//        if destinationStateAbbrev == "noStateMatch" {
+//            isDestinationCityInUS = false
+//            destinationStateAbbrev = findCountryAbbreviationWith(country: destinationsForTripStates[indexOfDestinationBeingPlanned])
+//        }
+//        destinationCityID = findCarCityIDWith(cityString: destinationCity, stateString: destinationStateAbbrev)
+//        destinationCity = destinationCity.replacingOccurrences(of: " ", with: "+")
+//        if !isDestinationCityInUS {
+//            destinationStateAbbrev = destinationsForTripStates[indexOfDestinationBeingPlanned]
+//        }
+//        destinationStateAbbrev = destinationStateAbbrev.replacingOccurrences(of: " ", with: "+")
+//        if findAirportWith(cityID: destinationCityID).count > 0 {
+//            isDestinationCityNearAirport = true
+//        }
+//        
+//        let originDate = flightSearchQuestionView?.departureDate?.text
+//        originMonth = (originDate?[0])! + (originDate?[1])!                   //DD
+//        originDay = (originDate?[3])! + (originDate?[4])!                 //MM
+//        originYear = (originDate?[6])! + (originDate?[7])! + (originDate?[8])! + (originDate?[9])!                   //YYYY
+//        let returnDate = flightSearchQuestionView?.returnDate?.text
+//        returnMonth = (returnDate?[0])! + (returnDate?[1])!                   //DD
+//        returnDay = (returnDate?[3])! + (returnDate?[4])!                 //MM
+//        returnYear = (returnDate?[6])! + (returnDate?[7])! + (returnDate?[8])! + (returnDate?[9])!                  //YYYY
+//        
+//        var stringForURL = "http://secure.rezserver.com/flights/home/?refid=8056"
+//        if (originCityID != "noMatchingCity" && destinationCityID != "noMatchingCity") && flightSearchQuestionView?.searchMode == "roundtrip" {
+//            stringForURL = "http://secure.rezserver.com/flights/results/depart/?rs_o_city=\(originCity)%2C+\(originStateAbbrev)&rs_d_city=\(destinationCity)%2C+\(destinationStateAbbrev)&rs_chk_in=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_chk_out=\(returnMonth)%2F\(returnDay)%2F\(returnYear)&rs_adults=1&rs_children=0&refid=8056&rs_o_aircode=\(originCityID)&rs_d_aircode=\(destinationCityID)&air_search_type=\((flightSearchQuestionView?.searchMode)!)&preferred_airline=&cabin_class="
+//        } else if (originCityID != "noMatchingCity" && destinationCityID != "noMatchingCity")  && flightSearchQuestionView?.searchMode == "oneWay" {
+//            stringForURL = "http://secure.rezserver.com/flights/results/depart/?rs_o_city1=\(originCity)%2C+\(originStateAbbrev)&rs_d_city1=\(destinationCity)%2C+\(destinationStateAbbrev)&rs_chk_in1=\(originMonth)%2F\(originDay)%2F\(originYear)&rs_adults=1&rs_children=0&refid=8056&rs_o_aircode1=\(originCityID)&rs_d_aircode1=\(destinationCityID)&air_search_type=\((flightSearchQuestionView?.searchMode)!)&preferred_airline=&cabin_class="
+//        }
+//        let whiteLabelURL_FlightSearchQuery = URL(string: stringForURL)!
+//        
+//        
+//        showWebsite(URL: whiteLabelURL_FlightSearchQuery)
+        
+        flightResultsController = createTicketsVC()
+        flightResultsController?.willMove(toParentViewController: self)
+        self.addChildViewController(flightResultsController!)
+        flightResultsController?.searchMode = flightSearchQuestionView?.searchMode
+        flightResultsController?.loadView()
+        flightResultsController?.viewDidLoad()
+        flightResultsController?.view.frame = self.view.bounds
+        for subview in (flightSearchQuestionView?.subviews)! {
+            subview.isHidden = true
+        }
+        self.flightSearchQuestionView?.addSubview((flightResultsController?.view)!)
+        flightResultsController?.view.tag = 12
+        flightResultsController?.didMove(toParentViewController: self)
+        
+        updateProgress()
     }
     func spawnFlightBookingQuestionView() {
 //        reviewAndBookFlightsController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
@@ -3516,12 +3519,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollUpButton.isHidden = true
         scrollDownButton.isHidden = true
         floaty?.isHidden = true
+        progressRing?.isHidden = true
     }
     func assistantViewIsHiddenFalse() {
         scrollView.isHidden = false
         scrollUpButton.isHidden = false
         scrollDownButton.isHidden = false
         floaty?.isHidden = false
+        progressRing?.isHidden = false
     }
     
     func assistant() {
@@ -4083,7 +4088,7 @@ extension TripViewController {
         }
         if sendProposalQuestionView != nil {
             sendProposalQuestionView?.contactsTableView?.isHidden = false
-            sendProposalQuestionView?.button2?.isHidden = false
+            sendProposalQuestionView?.button3?.isHidden = false
         }
         updateProgress()
         //        //Uncomment for testing on Simulator
@@ -4172,7 +4177,7 @@ extension TripViewController {
         
         if sendProposalQuestionView != nil {
             sendProposalQuestionView?.contactsTableView?.isHidden = false
-            sendProposalQuestionView?.button2?.isHidden = false
+            sendProposalQuestionView?.button3?.isHidden = false
             
         }
         updateProgress()
@@ -4200,6 +4205,10 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         if collectionView == destinationsDatesCollectionView {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             let countDestinations = (SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count
+            
+            if countDestinations != 0 {
+                return countDestinations + 2
+            }
             return countDestinations
         }
 //        else if collectionView == contactsCollectionView
@@ -4217,34 +4226,154 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-            destinationsDatesCell.destinationButton.setTitle(destinationsForTrip[indexPath.row], for: .normal)
-            destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.systemFont(ofSize: 22)
-            destinationsDatesCell.destinationButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,12,10)
-            destinationsDatesCell.destinationButton.layer.shadowColor = UIColor.black.cgColor
-            destinationsDatesCell.destinationButton.layer.shadowRadius = 1
-            destinationsDatesCell.destinationButton.layer.masksToBounds = false
-            destinationsDatesCell.destinationButton.layer.shadowOpacity = 0.4
-            destinationsDatesCell.destinationButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+            let datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+            
+            //Trip beginning date
+            if indexPath.row == 0 {
+                //Set start location
+                destinationsDatesCell.destinationButton.setTitle(DataContainerSingleton.sharedDataContainer.homeAirport, for: .normal)
+                destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
+                destinationsDatesCell.destinationButton.titleLabel?.textAlignment = .left
+                destinationsDatesCell.destinationButton.sizeToFit()
+                destinationsDatesCell.destinationButton.frame.size.height = 30
+                destinationsDatesCell.destinationButton.frame.size.width += 20
+                destinationsDatesCell.destinationButton.layer.cornerRadius = (destinationsDatesCell.destinationButton.frame.height) / 2
+                destinationsDatesCell.destinationButton.layer.borderWidth = 1
+                destinationsDatesCell.destinationButton.layer.borderColor = UIColor.white.cgColor
+                destinationsDatesCell.destinationButton.frame.origin.y = 0
+                
+                //Show destination
+                destinationsDatesCell.destinationButton.isHidden = false
+                
+                //Hide accomodation
+                destinationsDatesCell.placeToStaySummaryButton.isHidden = true
+//                destinationsDatesCell.placeToStayTypeIcon.isHidden = true
+                destinationsDatesCell.numberOfNightsButton.isHidden = true
+                destinationsDatesCell.placeToStayTypeIcon.isHidden = true
+                destinationsDatesCell.inLabel.isHidden = true
+                destinationsDatesCell.travelDateButton.isHidden = true
+                destinationsDatesCell.travelSummaryButton.isHidden = true
+//                destinationsDatesCell.modeOfTransportationIcon.isHidden = true
+                destinationsDatesCell.departureTime.isHidden = true
+                destinationsDatesCell.returningTime.isHidden = true
+                destinationsDatesCell.returningAirport.isHidden = true
+                destinationsDatesCell.departureAirport.isHidden = true
+                
+//                destinationsDatesCell.inBetweenDatesLine = nil
+                
+                return destinationsDatesCell
+            }
+            
+            //Trip end date
+            if indexPath.row == destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 {
+                var rightDatesDestinations = [String:Date]()
+                if datesDestinationsDictionary[destinationsForTrip[indexPath.row - 2]] != nil {
+                    
+                    //Set date
+                    rightDatesDestinations[destinationsForTrip[indexPath.row - 2]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row - 2]]?[(datesDestinationsDictionary[destinationsForTrip[indexPath.row - 2]]?.count)! - 1]
+                    formatter.dateFormat = "d MMM"
+                    let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row - 2]]!)
+                    destinationsDatesCell.travelDateButton.setTitle(rightDateAsString, for: .normal)
+                    destinationsDatesCell.travelDateButton.titleLabel?.textAlignment = .center
+                    destinationsDatesCell.travelDateButton.titleLabel?.numberOfLines = 0
+                    destinationsDatesCell.travelDateButton.titleLabel?.textColor = UIColor.white
+                    destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+                    destinationsDatesCell.travelDateButton.layer.cornerRadius = destinationsDatesCell.travelDateButton.frame.size.height / 2
+                    destinationsDatesCell.travelDateButton.backgroundColor = UIColor.flatMidnightBlue()
+                    
+                    //Set final location
+                    destinationsDatesCell.destinationButton.setTitle(DataContainerSingleton.sharedDataContainer.homeAirport, for: .normal)
+                    destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
+                    destinationsDatesCell.destinationButton.titleLabel?.textAlignment = .left
+                    destinationsDatesCell.destinationButton.sizeToFit()
+                    destinationsDatesCell.destinationButton.frame.size.height = 30
+                    destinationsDatesCell.destinationButton.frame.size.width += 20
+                    destinationsDatesCell.destinationButton.layer.cornerRadius = (destinationsDatesCell.destinationButton.frame.height) / 2
+                    destinationsDatesCell.destinationButton.layer.borderWidth = 1
+                    destinationsDatesCell.destinationButton.layer.borderColor = UIColor.white.cgColor
+                    destinationsDatesCell.destinationButton.frame.origin.y = 74
+                    
+                    destinationsDatesCell.travelSummaryButton.layer.shadowColor = UIColor.black.cgColor
+                    destinationsDatesCell.travelSummaryButton.layer.shadowRadius = 1
+                    destinationsDatesCell.travelSummaryButton.layer.masksToBounds = false
+                    destinationsDatesCell.travelSummaryButton.layer.shadowOpacity = 0.4
+                    destinationsDatesCell.travelSummaryButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+                    destinationsDatesCell.travelSummaryButton.layer.cornerRadius = 5
+                    
+                    //Show destination
+                    destinationsDatesCell.destinationButton.isHidden = false
+                    destinationsDatesCell.travelDateButton.isHidden = false
+                    destinationsDatesCell.travelSummaryButton.isHidden = false
+                    destinationsDatesCell.modeOfTransportationIcon.isHidden = false
+                    destinationsDatesCell.departureTime.isHidden = false
+                    destinationsDatesCell.returningTime.isHidden = false
+                    destinationsDatesCell.returningAirport.isHidden = false
+                    destinationsDatesCell.departureAirport.isHidden = false
+                    
+                    //Hide accomodation
+                    destinationsDatesCell.placeToStaySummaryButton.isHidden = true
+                    destinationsDatesCell.placeToStayTypeIcon.isHidden = true
+                    destinationsDatesCell.numberOfNightsButton.isHidden = true
+                    destinationsDatesCell.placeToStayTypeIcon.isHidden = true
+                    destinationsDatesCell.inLabel.isHidden = true
+                }
+                
+//                destinationsDatesCell.inBetweenDatesLine = nil
+                return destinationsDatesCell
+            }
+
+            
+            destinationsDatesCell.destinationButton.setTitle(destinationsForTrip[indexPath.row - 1], for: .normal)
+            destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
+            destinationsDatesCell.destinationButton.titleLabel?.textAlignment = .left
+            destinationsDatesCell.destinationButton.sizeToFit()
+            destinationsDatesCell.destinationButton.frame.size.height = 30
+            destinationsDatesCell.destinationButton.frame.size.width += 20
+//            button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
+//            destinationsDatesCell.destinationButton.frame.origin.y = 120
+            destinationsDatesCell.destinationButton.layer.cornerRadius = (destinationsDatesCell.destinationButton.frame.height) / 2
+            destinationsDatesCell.destinationButton.layer.borderWidth = 1
+            destinationsDatesCell.destinationButton.layer.borderColor = UIColor.white.cgColor
+            
+//            destinationsDatesCell.destinationButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,12,10)
+            
+            destinationsDatesCell.placeToStaySummaryButton.layer.shadowColor = UIColor.black.cgColor
+            destinationsDatesCell.placeToStaySummaryButton.layer.shadowRadius = 1
+            destinationsDatesCell.placeToStaySummaryButton.layer.masksToBounds = false
+            destinationsDatesCell.placeToStaySummaryButton.layer.shadowOpacity = 0.4
+            destinationsDatesCell.placeToStaySummaryButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+            destinationsDatesCell.placeToStaySummaryButton.layer.cornerRadius = 5
+            destinationsDatesCell.travelSummaryButton.layer.shadowColor = UIColor.black.cgColor
+            destinationsDatesCell.travelSummaryButton.layer.shadowRadius = 1
+            destinationsDatesCell.travelSummaryButton.layer.masksToBounds = false
+            destinationsDatesCell.travelSummaryButton.layer.shadowOpacity = 0.4
+            destinationsDatesCell.travelSummaryButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+            destinationsDatesCell.travelSummaryButton.layer.cornerRadius = 5
+            
+            destinationsDatesCell.numberOfNightsButton.titleLabel?.numberOfLines = 0
+            destinationsDatesCell.numberOfNightsButton.titleLabel?.textAlignment = .center
+            destinationsDatesCell.numberOfNightsButton.layer.borderColor = UIColor.white.cgColor
+//            destinationsDatesCell.numberOfNightsButton.layer.cornerRadius = 5
+//            destinationsDatesCell.numberOfNightsButton.layer.borderWidth = 1
             
             //Find left and right dates
-            let datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
             var leftDatesDestinations = [String:Date]()
             var rightDatesDestinations = [String:Date]()
             
-            if datesDestinationsDictionary[destinationsForTrip[indexPath.row]] != nil {
-                leftDatesDestinations[destinationsForTrip[indexPath.row]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?[0]
-                rightDatesDestinations[destinationsForTrip[indexPath.row]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?[(datesDestinationsDictionary[destinationsForTrip[indexPath.row]]?.count)! - 1]
-                formatter.dateFormat = "MM/dd"
-                let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexPath.row]]!)
+            if datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]] != nil {
+                leftDatesDestinations[destinationsForTrip[indexPath.row - 1]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]]?[0]
+                rightDatesDestinations[destinationsForTrip[indexPath.row - 1]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]]?[(datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]]?.count)! - 1]
+                formatter.dateFormat = "d MMM"
+                let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexPath.row - 1]]!)
 //                let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row]]!)
 //                destinationsDatesCell.datesLabel.text = "\(leftDateAsString) - \(rightDateAsString)"
                 destinationsDatesCell.travelDateButton.setTitle(leftDateAsString, for: .normal)
                 destinationsDatesCell.travelDateButton.titleLabel?.textAlignment = .center
                 destinationsDatesCell.travelDateButton.titleLabel?.numberOfLines = 0
                 destinationsDatesCell.travelDateButton.titleLabel?.textColor = UIColor.white
-                destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 22)
+                destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
                 destinationsDatesCell.travelDateButton.layer.cornerRadius = destinationsDatesCell.travelDateButton.frame.size.height / 2
-                destinationsDatesCell.travelDateButton.backgroundColor = UIColor.green
+                destinationsDatesCell.travelDateButton.backgroundColor = UIColor.flatMidnightBlue()
             }
 //            destinationsDatesCell.datesButton.layer.cornerRadius = destinationsDatesCell.datesButton.frame.size.height / 2
 //            destinationsDatesCell.datesButton.backgroundColor = datesItem?.buttonColor
@@ -4255,16 +4384,38 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.travelDateButton.layer.shadowOpacity = 0.4
             destinationsDatesCell.travelDateButton.layer.shadowOffset = CGSize(width: 1, height: 1)
             
-            //draw top line
-            if indexPath.row != 0 {
-                let fromPoint = CGPoint(x: destinationsDatesCell.frame.midX, y: destinationsDatesCell.frame.minY)
-                let toPoint = CGPoint(x: destinationsDatesCell.frame.midX, y: destinationsDatesCell.travelDateButton.frame.minY)
-                destinationsDatesCell.addLine(fromPoint: fromPoint, toPoint: toPoint, color: UIColor.white)
-            }
             //draw bottom line
-                let fromPoint = CGPoint(x: destinationsDatesCell.frame.midX, y: destinationsDatesCell.travelDateButton.frame.maxY)
-                let toPoint = CGPoint(x: destinationsDatesCell.frame.midX, y: destinationsDatesCell.frame.maxY)
-                destinationsDatesCell.addLine(fromPoint: fromPoint, toPoint: toPoint, color: UIColor.white)
+//                let fromPoint = CGPoint(x: destinationsDatesCell.travelDateButton.frame.midX, y: destinationsDatesCell.travelDateButton.frame.maxY)
+//                let toPoint = CGPoint(x: destinationsDatesCell.travelDateButton.frame.midX, y: destinationsDatesCell.frame.maxY)
+            
+            if indexPath.row != destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 && indexPath.row != 0 && destinationsDatesCell.inBetweenDatesLine == nil {
+                let width = CGFloat(2)
+                destinationsDatesCell.inBetweenDatesLine = UIView()
+                destinationsDatesCell.inBetweenDatesLine?.frame = CGRect(x: destinationsDatesCell.travelDateButton.frame.midX - width / 2, y: destinationsDatesCell.travelDateButton.frame.maxY, width: width, height: destinationsDatesCell.frame.maxY - destinationsDatesCell.travelDateButton.frame.maxY)
+                destinationsDatesCell.inBetweenDatesLine?.backgroundColor = UIColor.flatMidnightBlue()
+                destinationsDatesCell.contentView.addSubview(destinationsDatesCell.inBetweenDatesLine!)
+                
+            }
+//            let test = destinationsDatesCell.inBetweenDatesLine?.frame
+            
+            
+            //Show destination
+            destinationsDatesCell.destinationButton.isHidden = false
+            destinationsDatesCell.destinationButton.frame.origin.y = 94
+            
+            destinationsDatesCell.travelDateButton.isHidden = false
+            destinationsDatesCell.travelSummaryButton.isHidden = false
+            destinationsDatesCell.modeOfTransportationIcon.isHidden = false
+            destinationsDatesCell.departureTime.isHidden = false
+            destinationsDatesCell.returningTime.isHidden = false
+            destinationsDatesCell.returningAirport.isHidden = false
+            destinationsDatesCell.departureAirport.isHidden = false
+            destinationsDatesCell.placeToStaySummaryButton.isHidden = false
+            destinationsDatesCell.placeToStayTypeIcon.isHidden = false
+            destinationsDatesCell.numberOfNightsButton.isHidden = false
+            destinationsDatesCell.placeToStayTypeIcon.isHidden = false
+            destinationsDatesCell.inLabel.isHidden = false
+            
             
             return destinationsDatesCell
         }
@@ -4378,7 +4529,13 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == destinationsDatesCollectionView {
             let bounds = UIScreen.main.bounds
-            return CGSize(width: bounds.width, height: 325)
+            if indexPath.row == 0 {
+                return CGSize(width: bounds.width, height: 54)
+            } else if indexPath.row == destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 {
+                return CGSize(width: bounds.width, height: 104)
+            }
+
+            return CGSize(width: bounds.width, height: 173)
         }
         
         //        else if collectionView == contactsCollectionView {
@@ -4433,7 +4590,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         //Delete rows in sendProposalQuestionView
         sendProposalQuestionView?.contactsTableView?.deleteRows(at: [IndexPath(row: indexPath.row - 1, section: 0)], with: .left)
         if contacts?.count == 0 || contacts == nil {
-            sendProposalQuestionView?.button2?.isHidden = true
+            sendProposalQuestionView?.button3?.isHidden = true
         }
         
         contactsCollectionView.deleteItems(at: [indexPath])
@@ -4583,6 +4740,13 @@ extension TripViewController {
         }
         
         return "noCountryMatch"
+    }
+
+}
+extension TripViewController {
+    private func createTicketsVC() -> UIViewController {
+        let rootViewController = iPhone() ? ASTContainerSearchFormViewController() : ASTSearchFormSceneViewController()
+        return JRNavigationController(rootViewController: rootViewController)
     }
 
 }

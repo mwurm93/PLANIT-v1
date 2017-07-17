@@ -149,8 +149,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         settingsButton.layer.shadowRadius = 2
         settingsButton.layer.shadowOpacity = 0.5
         
-        handleModeButtonImages()
-        
         // Create an empty globe and add it to the view
         theViewC = WhirlyGlobeViewController()
         self.view.addSubview(theViewC!.view)
@@ -161,6 +159,8 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         self.view.sendSubview(toBack: backgroundView)
         
         globeViewC = theViewC as? WhirlyGlobeViewController
+        
+        handleModeButtonImages()
         
         theViewC!.clearColor = UIColor.clear
         
@@ -237,6 +237,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         beenThereCountries = DataContainerSingleton.sharedDataContainer.beenThereCountries ?? [String]()
 
         addPins()
+
     }
     private func handleSelection(selectedObject: NSObject) {
         
