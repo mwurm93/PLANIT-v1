@@ -93,6 +93,34 @@
 		FA9407781EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */; };
 		FA94077A1EFF0C6200E4EEE4 /* idkHowToGetThereQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9407791EFF0C6200E4EEE4 /* idkHowToGetThereQuestionView.swift */; };
 		FA94077C1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA94077B1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib */; };
+		FA978A611F1C9D0500ED5EB8 /* Source in Resources */ = {isa = PBXBuildFile; fileRef = FA978A601F1C9D0500ED5EB8 /* Source */; };
+		FA978A7E1F1C9E1B00ED5EB8 /* AVSLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA978A631F1C9E1B00ED5EB8 /* AVSLaunchScreen.xib */; };
+		FA978A7F1F1C9E1B00ED5EB8 /* fr.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A641F1C9E1B00ED5EB8 /* fr.lproj */; };
+		FA978A801F1C9E1B00ED5EB8 /* nl.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A651F1C9E1B00ED5EB8 /* nl.lproj */; };
+		FA978A811F1C9E1B00ED5EB8 /* tr.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A661F1C9E1B00ED5EB8 /* tr.lproj */; };
+		FA978A821F1C9E1B00ED5EB8 /* es.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A671F1C9E1B00ED5EB8 /* es.lproj */; };
+		FA978A831F1C9E1B00ED5EB8 /* el.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A681F1C9E1B00ED5EB8 /* el.lproj */; };
+		FA978A841F1C9E1B00ED5EB8 /* ms.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A691F1C9E1B00ED5EB8 /* ms.lproj */; };
+		FA978A851F1C9E1B00ED5EB8 /* sv.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A6A1F1C9E1B00ED5EB8 /* sv.lproj */; };
+		FA978A861F1C9E1B00ED5EB8 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A6B1F1C9E1B00ED5EB8 /* en.lproj */; };
+		FA978A871F1C9E1B00ED5EB8 /* it.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A6C1F1C9E1B00ED5EB8 /* it.lproj */; };
+		FA978A881F1C9E1B00ED5EB8 /* ja.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A6D1F1C9E1B00ED5EB8 /* ja.lproj */; };
+		FA978A891F1C9E1B00ED5EB8 /* ko.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A6E1F1C9E1B00ED5EB8 /* ko.lproj */; };
+		FA978A8A1F1C9E1B00ED5EB8 /* pt-PT.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A6F1F1C9E1B00ED5EB8 /* pt-PT.lproj */; };
+		FA978A8B1F1C9E1B00ED5EB8 /* nb.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A701F1C9E1B00ED5EB8 /* nb.lproj */; };
+		FA978A8C1F1C9E1B00ED5EB8 /* HLDefaultCities.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA978A711F1C9E1B00ED5EB8 /* HLDefaultCities.plist */; };
+		FA978A8D1F1C9E1B00ED5EB8 /* zh-Hant.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A721F1C9E1B00ED5EB8 /* zh-Hant.lproj */; };
+		FA978A8E1F1C9E1B00ED5EB8 /* DefaultTheme7 in Resources */ = {isa = PBXBuildFile; fileRef = FA978A731F1C9E1B00ED5EB8 /* DefaultTheme7 */; };
+		FA978A8F1F1C9E1B00ED5EB8 /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A741F1C9E1B00ED5EB8 /* zh-Hans.lproj */; };
+		FA978A901F1C9E1B00ED5EB8 /* pl.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A751F1C9E1B00ED5EB8 /* pl.lproj */; };
+		FA978A911F1C9E1B00ED5EB8 /* de.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A761F1C9E1B00ED5EB8 /* de.lproj */; };
+		FA978A921F1C9E1B00ED5EB8 /* id.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A771F1C9E1B00ED5EB8 /* id.lproj */; };
+		FA978A931F1C9E1B00ED5EB8 /* pt.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A781F1C9E1B00ED5EB8 /* pt.lproj */; };
+		FA978A941F1C9E1B00ED5EB8 /* th.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A791F1C9E1B00ED5EB8 /* th.lproj */; };
+		FA978A951F1C9E1B00ED5EB8 /* da.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A7A1F1C9E1B00ED5EB8 /* da.lproj */; };
+		FA978A961F1C9E1B00ED5EB8 /* ru.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A7B1F1C9E1B00ED5EB8 /* ru.lproj */; };
+		FA978A971F1C9E1B00ED5EB8 /* fi.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A7C1F1C9E1B00ED5EB8 /* fi.lproj */; };
+		FA978A981F1C9E1B00ED5EB8 /* vi.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A7D1F1C9E1B00ED5EB8 /* vi.lproj */; };
 		FA97A3721EC530F4006E68EC /* country_json_50m in Resources */ = {isa = PBXBuildFile; fileRef = FA97A3711EC530F4006E68EC /* country_json_50m */; };
 		FA97F84B1EE66A8B008358EF /* chatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97F84A1EE66A8B008358EF /* chatViewController.swift */; };
 		FA9E39811EBBD2A900F6CB0B /* bucketListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */; };
@@ -131,18 +159,6 @@
 		FAA8F29E1E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */; };
 		FAA8F29F1E351DDE00CD7337 /* timeOfDayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */; };
 		FAA8F2A11E351DEB00CD7337 /* items.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2A01E351DEB00CD7337 /* items.plist */; };
-		FAB144A21F1C7B370062EBCC /* Advertisement in Resources */ = {isa = PBXBuildFile; fileRef = FAB144961F1C7B370062EBCC /* Advertisement */; };
-		FAB144A31F1C7B370062EBCC /* AviasalesSource in Resources */ = {isa = PBXBuildFile; fileRef = FAB144971F1C7B370062EBCC /* AviasalesSource */; };
-		FAB144A41F1C7B370062EBCC /* Categories in Resources */ = {isa = PBXBuildFile; fileRef = FAB144981F1C7B370062EBCC /* Categories */; };
-		FAB144A51F1C7B370062EBCC /* CommonSource in Resources */ = {isa = PBXBuildFile; fileRef = FAB144991F1C7B370062EBCC /* CommonSource */; };
-		FAB144A61F1C7B370062EBCC /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB1449A1F1C7B370062EBCC /* Config.swift */; };
-		FAB144A71F1C7B370062EBCC /* Defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB1449B1F1C7B370062EBCC /* Defines.swift */; };
-		FAB144A81F1C7B370062EBCC /* Extensions in Resources */ = {isa = PBXBuildFile; fileRef = FAB1449C1F1C7B370062EBCC /* Extensions */; };
-		FAB144A91F1C7B370062EBCC /* HotelsSource in Resources */ = {isa = PBXBuildFile; fileRef = FAB1449D1F1C7B370062EBCC /* HotelsSource */; };
-		FAB144AA1F1C7B370062EBCC /* JRDefines.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB1449E1F1C7B370062EBCC /* JRDefines.swift */; };
-		FAB144AB1F1C7B370062EBCC /* JRHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB1449F1F1C7B370062EBCC /* JRHeader.swift */; };
-		FAB144AC1F1C7B370062EBCC /* RightSideImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB144A01F1C7B370062EBCC /* RightSideImageButton.swift */; };
-		FAB144AD1F1C7B370062EBCC /* Utils in Resources */ = {isa = PBXBuildFile; fileRef = FAB144A11F1C7B370062EBCC /* Utils */; };
 		FABEACFC1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEACFB1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift */; };
 		FABEACFE1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */; };
 		FABEAD001EFE4D630075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEACFF1EFE4D630075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.swift */; };
@@ -308,6 +324,35 @@
 		FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusTrainOtherQuestionView.xib; sourceTree = "<group>"; };
 		FA9407791EFF0C6200E4EEE4 /* idkHowToGetThereQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = idkHowToGetThereQuestionView.swift; sourceTree = "<group>"; };
 		FA94077B1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = idkHowToGetThereQuestionView.xib; sourceTree = "<group>"; };
+		FA978A601F1C9D0500ED5EB8 /* Source */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Source; sourceTree = "<group>"; };
+		FA978A631F1C9E1B00ED5EB8 /* AVSLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AVSLaunchScreen.xib; sourceTree = "<group>"; };
+		FA978A641F1C9E1B00ED5EB8 /* fr.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fr.lproj; sourceTree = "<group>"; };
+		FA978A651F1C9E1B00ED5EB8 /* nl.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = nl.lproj; sourceTree = "<group>"; };
+		FA978A661F1C9E1B00ED5EB8 /* tr.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tr.lproj; sourceTree = "<group>"; };
+		FA978A671F1C9E1B00ED5EB8 /* es.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = es.lproj; sourceTree = "<group>"; };
+		FA978A681F1C9E1B00ED5EB8 /* el.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = el.lproj; sourceTree = "<group>"; };
+		FA978A691F1C9E1B00ED5EB8 /* ms.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ms.lproj; sourceTree = "<group>"; };
+		FA978A6A1F1C9E1B00ED5EB8 /* sv.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sv.lproj; sourceTree = "<group>"; };
+		FA978A6B1F1C9E1B00ED5EB8 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
+		FA978A6C1F1C9E1B00ED5EB8 /* it.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = it.lproj; sourceTree = "<group>"; };
+		FA978A6D1F1C9E1B00ED5EB8 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ja.lproj; sourceTree = "<group>"; };
+		FA978A6E1F1C9E1B00ED5EB8 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ko.lproj; sourceTree = "<group>"; };
+		FA978A6F1F1C9E1B00ED5EB8 /* pt-PT.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "pt-PT.lproj"; sourceTree = "<group>"; };
+		FA978A701F1C9E1B00ED5EB8 /* nb.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = nb.lproj; sourceTree = "<group>"; };
+		FA978A711F1C9E1B00ED5EB8 /* HLDefaultCities.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HLDefaultCities.plist; sourceTree = "<group>"; };
+		FA978A721F1C9E1B00ED5EB8 /* zh-Hant.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hant.lproj"; sourceTree = "<group>"; };
+		FA978A731F1C9E1B00ED5EB8 /* DefaultTheme7 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DefaultTheme7; sourceTree = "<group>"; };
+		FA978A741F1C9E1B00ED5EB8 /* zh-Hans.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
+		FA978A751F1C9E1B00ED5EB8 /* pl.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pl.lproj; sourceTree = "<group>"; };
+		FA978A761F1C9E1B00ED5EB8 /* de.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = de.lproj; sourceTree = "<group>"; };
+		FA978A771F1C9E1B00ED5EB8 /* id.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = id.lproj; sourceTree = "<group>"; };
+		FA978A781F1C9E1B00ED5EB8 /* pt.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pt.lproj; sourceTree = "<group>"; };
+		FA978A791F1C9E1B00ED5EB8 /* th.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = th.lproj; sourceTree = "<group>"; };
+		FA978A7A1F1C9E1B00ED5EB8 /* da.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = da.lproj; sourceTree = "<group>"; };
+		FA978A7B1F1C9E1B00ED5EB8 /* ru.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ru.lproj; sourceTree = "<group>"; };
+		FA978A7C1F1C9E1B00ED5EB8 /* fi.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fi.lproj; sourceTree = "<group>"; };
+		FA978A7D1F1C9E1B00ED5EB8 /* vi.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = vi.lproj; sourceTree = "<group>"; };
+		FA978A991F1C9E7700ED5EB8 /* planitBridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = planitBridgingHeader.h; sourceTree = "<group>"; };
 		FA97A3711EC530F4006E68EC /* country_json_50m */ = {isa = PBXFileReference; lastKnownFileType = folder; path = country_json_50m; sourceTree = "<group>"; };
 		FA97F84A1EE66A8B008358EF /* chatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatViewController.swift; sourceTree = "<group>"; };
 		FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bucketListViewController.swift; sourceTree = "<group>"; };
@@ -352,18 +397,6 @@
 		FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rankedRecommendationsTableViewCell.swift; sourceTree = "<group>"; };
 		FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = timeOfDayTableViewCell.swift; sourceTree = "<group>"; };
 		FAA8F2A01E351DEB00CD7337 /* items.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = items.plist; sourceTree = "<group>"; };
-		FAB144961F1C7B370062EBCC /* Advertisement */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Advertisement; sourceTree = "<group>"; };
-		FAB144971F1C7B370062EBCC /* AviasalesSource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AviasalesSource; sourceTree = "<group>"; };
-		FAB144981F1C7B370062EBCC /* Categories */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Categories; sourceTree = "<group>"; };
-		FAB144991F1C7B370062EBCC /* CommonSource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CommonSource; sourceTree = "<group>"; };
-		FAB1449A1F1C7B370062EBCC /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		FAB1449B1F1C7B370062EBCC /* Defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defines.swift; sourceTree = "<group>"; };
-		FAB1449C1F1C7B370062EBCC /* Extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Extensions; sourceTree = "<group>"; };
-		FAB1449D1F1C7B370062EBCC /* HotelsSource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HotelsSource; sourceTree = "<group>"; };
-		FAB1449E1F1C7B370062EBCC /* JRDefines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JRDefines.swift; sourceTree = "<group>"; };
-		FAB1449F1F1C7B370062EBCC /* JRHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JRHeader.swift; sourceTree = "<group>"; };
-		FAB144A01F1C7B370062EBCC /* RightSideImageButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RightSideImageButton.swift; sourceTree = "<group>"; };
-		FAB144A11F1C7B370062EBCC /* Utils */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Utils; sourceTree = "<group>"; };
 		FABEACFB1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoYouKnowWhereYouWillBeStayingQuestionView.swift; sourceTree = "<group>"; };
 		FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoYouKnowWhereYouWillBeStayingQuestionView.xib; sourceTree = "<group>"; };
 		FABEACFF1EFE4D630075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutWhatTimeWillYouStartDrivingQuestionView.swift; sourceTree = "<group>"; };
@@ -487,6 +520,16 @@
 				FA187E441E37005200971D47 /* messageComposer.swift */,
 			);
 			name = Message;
+			sourceTree = "<group>";
+		};
+		FA3C564B1F1C9B1E00621AC4 /* Travelpayouts */ = {
+			isa = PBXGroup;
+			children = (
+				FA978A621F1C9D0A00ED5EB8 /* Resources */,
+				FA978A601F1C9D0500ED5EB8 /* Source */,
+				FA978A991F1C9E7700ED5EB8 /* planitBridgingHeader.h */,
+			);
+			name = Travelpayouts;
 			sourceTree = "<group>";
 		};
 		FA4887721F01AE050015F078 /* Place to stay */ = {
@@ -669,6 +712,40 @@
 			name = CSVs;
 			sourceTree = "<group>";
 		};
+		FA978A621F1C9D0A00ED5EB8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FA978A631F1C9E1B00ED5EB8 /* AVSLaunchScreen.xib */,
+				FA978A641F1C9E1B00ED5EB8 /* fr.lproj */,
+				FA978A651F1C9E1B00ED5EB8 /* nl.lproj */,
+				FA978A661F1C9E1B00ED5EB8 /* tr.lproj */,
+				FA978A671F1C9E1B00ED5EB8 /* es.lproj */,
+				FA978A681F1C9E1B00ED5EB8 /* el.lproj */,
+				FA978A691F1C9E1B00ED5EB8 /* ms.lproj */,
+				FA978A6A1F1C9E1B00ED5EB8 /* sv.lproj */,
+				FA978A6B1F1C9E1B00ED5EB8 /* en.lproj */,
+				FA978A6C1F1C9E1B00ED5EB8 /* it.lproj */,
+				FA978A6D1F1C9E1B00ED5EB8 /* ja.lproj */,
+				FA978A6E1F1C9E1B00ED5EB8 /* ko.lproj */,
+				FA978A6F1F1C9E1B00ED5EB8 /* pt-PT.lproj */,
+				FA978A701F1C9E1B00ED5EB8 /* nb.lproj */,
+				FA978A711F1C9E1B00ED5EB8 /* HLDefaultCities.plist */,
+				FA978A721F1C9E1B00ED5EB8 /* zh-Hant.lproj */,
+				FA978A731F1C9E1B00ED5EB8 /* DefaultTheme7 */,
+				FA978A741F1C9E1B00ED5EB8 /* zh-Hans.lproj */,
+				FA978A751F1C9E1B00ED5EB8 /* pl.lproj */,
+				FA978A761F1C9E1B00ED5EB8 /* de.lproj */,
+				FA978A771F1C9E1B00ED5EB8 /* id.lproj */,
+				FA978A781F1C9E1B00ED5EB8 /* pt.lproj */,
+				FA978A791F1C9E1B00ED5EB8 /* th.lproj */,
+				FA978A7A1F1C9E1B00ED5EB8 /* da.lproj */,
+				FA978A7B1F1C9E1B00ED5EB8 /* ru.lproj */,
+				FA978A7C1F1C9E1B00ED5EB8 /* fi.lproj */,
+				FA978A7D1F1C9E1B00ED5EB8 /* vi.lproj */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		FAA8F2161E35194100CD7337 = {
 			isa = PBXGroup;
 			children = (
@@ -694,7 +771,7 @@
 		FAA8F2211E35194100CD7337 /* planit v0.2 */ = {
 			isa = PBXGroup;
 			children = (
-				FAB1448A1F1C79880062EBCC /* TravelPayouts */,
+				FA3C564B1F1C9B1E00621AC4 /* Travelpayouts */,
 				FA6897001F0FFB0B00602D17 /* CSVs */,
 				FA14B2221EFAE5D1004E0E29 /* Extensions */,
 				FAE83F691EF467790009A020 /* Scrolling Views */,
@@ -901,25 +978,6 @@
 			name = Unused;
 			sourceTree = "<group>";
 		};
-		FAB1448A1F1C79880062EBCC /* TravelPayouts */ = {
-			isa = PBXGroup;
-			children = (
-				FAB144961F1C7B370062EBCC /* Advertisement */,
-				FAB144971F1C7B370062EBCC /* AviasalesSource */,
-				FAB144981F1C7B370062EBCC /* Categories */,
-				FAB144991F1C7B370062EBCC /* CommonSource */,
-				FAB1449A1F1C7B370062EBCC /* Config.swift */,
-				FAB1449B1F1C7B370062EBCC /* Defines.swift */,
-				FAB1449C1F1C7B370062EBCC /* Extensions */,
-				FAB1449D1F1C7B370062EBCC /* HotelsSource */,
-				FAB1449E1F1C7B370062EBCC /* JRDefines.swift */,
-				FAB1449F1F1C7B370062EBCC /* JRHeader.swift */,
-				FAB144A01F1C7B370062EBCC /* RightSideImageButton.swift */,
-				FAB144A11F1C7B370062EBCC /* Utils */,
-			);
-			name = TravelPayouts;
-			sourceTree = "<group>";
-		};
 		FAC1BD1B1EAE4D4C008AB7C4 /* Swiping View */ = {
 			isa = PBXGroup;
 			children = (
@@ -1107,60 +1165,81 @@
 				FA4EA8D11EE86AA6005FCE91 /* GetTripMessages.graphql in Resources */,
 				FAA8F2551E351A2700CD7337 /* Main.storyboard in Resources */,
 				FAA8F22A1E35194100CD7337 /* Assets.xcassets in Resources */,
+				FA978A8F1F1C9E1B00ED5EB8 /* zh-Hans.lproj in Resources */,
 				FA8DBACB1F0DA6FA005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.xib in Resources */,
 				FA14B2281EFB107C004E0E29 /* YesCityDecidedQuestionView.xib in Resources */,
 				FAE83F751EF64AA30009A020 /* WhereTravellingFromQuestionView.xib in Resources */,
 				FAE83F791EF6549E0009A020 /* DatesPickedOutQuestionView.xib in Resources */,
+				FA978A901F1C9E1B00ED5EB8 /* pl.lproj in Resources */,
 				FA8A20BA1EFD94F100EB0360 /* DoYouNeedARentalCarQuestionView.xib in Resources */,
-				FAB144A91F1C7B370062EBCC /* HotelsSource in Resources */,
 				FA4887711F01AC000015F078 /* WhatTypeOfPlaceToStayQuestionView.xib in Resources */,
 				FA647D3D1EE7666E00B36138 /* LoginUser.graphql in Resources */,
 				FA97A3721EC530F4006E68EC /* country_json_50m in Resources */,
 				FA647D3F1EE775A100B36138 /* GetAllUsers.graphql in Resources */,
-				FAB144A41F1C7B370062EBCC /* Categories in Resources */,
-				FAB144A21F1C7B370062EBCC /* Advertisement in Resources */,
 				FAD50DD61EE9BFD60006C3AA /* instructionsView.xib in Resources */,
+				FA978A891F1C9E1B00ED5EB8 /* ko.lproj in Resources */,
+				FA978A7F1F1C9E1B00ED5EB8 /* fr.lproj in Resources */,
 				FA4EEF261F16FC1000C188BE /* TodoCardContentView.xib in Resources */,
+				FA978A8C1F1C9E1B00ED5EB8 /* HLDefaultCities.plist in Resources */,
 				FA4EA8CF1EE867E3005FCE91 /* GetUserID.graphql in Resources */,
 				FAE83F7F1EF75CB10009A020 /* DecidedOnCityToVisitQuestionView.xib in Resources */,
 				FA77D1F11EFDCED700A37A05 /* CarRentalSearchQuestionView.xib in Resources */,
 				FAE83F6F1EF49F190009A020 /* TripNameQuestionView.xib in Resources */,
 				FA94077C1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib in Resources */,
-				FAB144AD1F1C7B370062EBCC /* Utils in Resources */,
 				FABEAD021EFE4D700075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.xib in Resources */,
 				FA14B2301EFB2D3D004E0E29 /* FlightSearchQuestionView.xib in Resources */,
+				FA978A881F1C9E1B00ED5EB8 /* ja.lproj in Resources */,
+				FA978A611F1C9D0500ED5EB8 /* Source in Resources */,
+				FA978A971F1C9E1B00ED5EB8 /* fi.lproj in Resources */,
+				FA978A911F1C9E1B00ED5EB8 /* de.lproj in Resources */,
 				FA4EA8CD1EE86608005FCE91 /* GetTripName.graphql in Resources */,
-				FAB144A51F1C7B370062EBCC /* CommonSource in Resources */,
 				FAA8F2541E351A2700CD7337 /* LaunchScreen.storyboard in Resources */,
-				FAB144A81F1C7B370062EBCC /* Extensions in Resources */,
 				FA9407781EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib in Resources */,
 				FA48877F1F01B3C00015F078 /* ShortTermRentalSearchQuestionView.xib in Resources */,
+				FA978A931F1C9E1B00ED5EB8 /* pt.lproj in Resources */,
 				FA4887871F01B9780015F078 /* PlaceForGroupOrJustYouQuestionView.xib in Resources */,
+				FA978A841F1C9E1B00ED5EB8 /* ms.lproj in Resources */,
+				FA978A951F1C9E1B00ED5EB8 /* da.lproj in Resources */,
+				FA978A7E1F1C9E1B00ED5EB8 /* AVSLaunchScreen.xib in Resources */,
+				FA978A801F1C9E1B00ED5EB8 /* nl.lproj in Resources */,
 				FAE83F6D1EF4853B0009A020 /* UserNameQuestionView.xib in Resources */,
+				FA978A961F1C9E1B00ED5EB8 /* ru.lproj in Resources */,
 				FA8DBAC71F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib in Resources */,
 				FA4EA8D41EE87DBC005FCE91 /* common.js in Resources */,
+				FA978A811F1C9E1B00ED5EB8 /* tr.lproj in Resources */,
 				FAE83F831EF79E9B0009A020 /* NoCityDecidedAnyIdeasQuestionView.xib in Resources */,
 				FABEACFE1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib in Resources */,
 				FA4EA8D61EE881D3005FCE91 /* GoogleService-Info.plist in Resources */,
+				FA978A921F1C9E1B00ED5EB8 /* id.lproj in Resources */,
 				FA4EA8C91EE7A4AE005FCE91 /* CreateTrip.graphql in Resources */,
 				FA14B22A1EFB22BE004E0E29 /* HowDoYouWantToGetThereQuestionView.xib in Resources */,
 				FA4EEF221F16A2D100C188BE /* AlreadyHaveFlightsQuestionView.xib in Resources */,
 				FAA8F2851E351DA300CD7337 /* CreateNewUser.graphql in Resources */,
 				FADEF0EE1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib in Resources */,
 				FAA8F28F1E351DBF00CD7337 /* monthHeaderView.xib in Resources */,
+				FA978A941F1C9E1B00ED5EB8 /* th.lproj in Resources */,
 				FA8DBAC31F06035D005D2B61 /* YesIKnowWhereImStayingQuestionView.xib in Resources */,
 				FA4E22D31F106D400077CCD3 /* Hotel-Cities.csv in Resources */,
+				FA978A8E1F1C9E1B00ED5EB8 /* DefaultTheme7 in Resources */,
 				FA09A3F11EB23894007F64A3 /* CardContentView.xib in Resources */,
-				FAB144A31F1C7B370062EBCC /* AviasalesSource in Resources */,
+				FA978A831F1C9E1B00ED5EB8 /* el.lproj in Resources */,
 				FAA8F28D1E351DBF00CD7337 /* CellView.xib in Resources */,
 				FA5201171EC4DC4C001EA849 /* geography-class_medres.mbtiles in Resources */,
 				FA4E22D71F1309550077CCD3 /* Car-Cities.csv in Resources */,
 				FA4E22D11F106D400077CCD3 /* Air-Airports.csv in Resources */,
+				FA978A851F1C9E1B00ED5EB8 /* sv.lproj in Resources */,
+				FA978A8A1F1C9E1B00ED5EB8 /* pt-PT.lproj in Resources */,
 				FA48877B1F01B3930015F078 /* HotelSearchQuestionView.xib in Resources */,
 				FAA8F2A11E351DEB00CD7337 /* items.plist in Resources */,
+				FA978A821F1C9E1B00ED5EB8 /* es.lproj in Resources */,
 				FA4E22D51F106D710077CCD3 /* states.csv in Resources */,
 				FA4E22D91F131CDE0077CCD3 /* countryAbbreviations.csv in Resources */,
+				FA978A8B1F1C9E1B00ED5EB8 /* nb.lproj in Resources */,
+				FA978A981F1C9E1B00ED5EB8 /* vi.lproj in Resources */,
+				FA978A871F1C9E1B00ED5EB8 /* it.lproj in Resources */,
+				FA978A8D1F1C9E1B00ED5EB8 /* zh-Hant.lproj in Resources */,
 				FAE83F951EF7B2F70009A020 /* DestinationOptionsCardView.xib in Resources */,
+				FA978A861F1C9E1B00ED5EB8 /* en.lproj in Resources */,
 				FA48878B1F021FFC0015F078 /* SendProposalQuestionView.xib in Resources */,
 				FAE83F8D1EF7ACBE0009A020 /* WhatTypeOfTripQuestionView.xib in Resources */,
 				FAE83F891EF7AA840009A020 /* PlanTripToIdeaQuestionView.xib in Resources */,
@@ -1379,7 +1458,6 @@
 				FAA8F2761E351B9500CD7337 /* SuggestDestinationViewController.swift in Sources */,
 				FAA8F29F1E351DDE00CD7337 /* timeOfDayTableViewCell.swift in Sources */,
 				FAA8F28E1E351DBF00CD7337 /* monthHeaderView.swift in Sources */,
-				FAB144AB1F1C7B370062EBCC /* JRHeader.swift in Sources */,
 				FA1EC52F1F14354A00110167 /* destinationDaysTableViewCell.swift in Sources */,
 				FA97F84B1EE66A8B008358EF /* chatViewController.swift in Sources */,
 				FAA8F2691E351B9500CD7337 /* BirthdayGenderViewController.swift in Sources */,
@@ -1392,13 +1470,11 @@
 				FAA8F2951E351DCD00CD7337 /* contactsCollectionViewCell.swift in Sources */,
 				FAA8F2231E35194100CD7337 /* AppDelegate.swift in Sources */,
 				FAA8F2681E351B9500CD7337 /* ActivitiesViewController.swift in Sources */,
-				FAB144A71F1C7B370062EBCC /* Defines.swift in Sources */,
 				FA48876B1F01AAEF0015F078 /* WhatTypeOfPlaceToStayQuestionView.swift in Sources */,
 				FADEF0EC1EF9F32C0005D147 /* AddAnotherDestinationQuestionView.swift in Sources */,
 				FADF09FD1ED7F36C00BFDF39 /* hotelPhotosCollectionViewCell.swift in Sources */,
 				FAE83F851EF79EAA0009A020 /* NoCityDecidedAnyIdeasQuestionView.swift in Sources */,
 				FAD50DDA1EE9C4AB0006C3AA /* instructionsCollectionViewCell.swift in Sources */,
-				FAB144AC1F1C7B370062EBCC /* RightSideImageButton.swift in Sources */,
 				FA48878E1F02C6320015F078 /* contactsTableViewCellForScrolling.swift in Sources */,
 				FAC1BD301EAE7707008AB7C4 /* ViewManager.swift in Sources */,
 				FA4EEF1A1F166C9100C188BE /* InstructionsQuestionView.swift in Sources */,
@@ -1418,7 +1494,6 @@
 				FAA8F2831E351D8D00CD7337 /* DataContainerSingleton.swift in Sources */,
 				FAE83F771EF654950009A020 /* DatesPickedOutQuestionView.swift in Sources */,
 				FAA8F29E1E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift in Sources */,
-				FAB144AA1F1C7B370062EBCC /* JRDefines.swift in Sources */,
 				FA730B941EC9EEBA004F310A /* flightResultsViewController.swift in Sources */,
 				FAE83F6B1EF46A700009A020 /* UserNameQuestionView.swift in Sources */,
 				FAA8F29B1E351DDE00CD7337 /* contactsTableViewCell.swift in Sources */,
@@ -1427,7 +1502,6 @@
 				FA16B3C51ECC7743005E4DEF /* flightSearchResultTableViewCell.swift in Sources */,
 				FAA8F26A1E351B9500CD7337 /* BudgetViewController.swift in Sources */,
 				FAA8F2721E351B9500CD7337 /* RankingViewController.swift in Sources */,
-				FAB144A61F1C7B370062EBCC /* Config.swift in Sources */,
 				FA2CFC0A1E3E57A200527405 /* UnbookedTripSummaryViewController.swift in Sources */,
 				FA730B901EC9E88E004F310A /* flightSearchViewController.swift in Sources */,
 				FAA8F2931E351DCD00CD7337 /* ActivitiesCollectionViewCell.swift in Sources */,
@@ -1614,7 +1688,7 @@
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.planit-v0-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include/MaplyBridge.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/planit v0.2/planitBridgingHeader.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1643,7 +1717,7 @@
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.planit-v0-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/libs/WhirlyGlobeMaply/WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include/MaplyBridge.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/planit v0.2/planitBridgingHeader.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

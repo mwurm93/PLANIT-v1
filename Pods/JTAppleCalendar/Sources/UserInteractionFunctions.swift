@@ -217,8 +217,7 @@ extension JTAppleCalendarView {
         
         // Before reloading, set the proposal path,
         // so that in the event targetContentOffset gets called. We know the path
-        //CUSTOMIZATION
-//        calendarViewLayout.setMinVisibleDate()
+        calendarViewLayout.setMinVisibleDate()
         batchReloadIndexPaths(paths)
     }
     

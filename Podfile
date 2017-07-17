@@ -10,8 +10,8 @@ target 'planit v0.2' do
 # Pods for planit v0.2
 pod 'pop', '~> 1.0'
 pod 'Apollo'
-pod 'JTAppleCalendar', '~> 7.0’
 pod 'SMCalloutView', '~> 2.1'
+pod 'JTAppleCalendar', '~> 7.0'
 
 # Pods for ZLswipeableview
 pod 'UIColor+FlatColors'
