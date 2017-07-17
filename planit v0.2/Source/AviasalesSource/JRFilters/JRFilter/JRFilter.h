@@ -6,6 +6,9 @@
 //
 
 #import "JRFilterTask.h"
+#import <UIKit/UIKit.h>
+#import <HotellookSDK/HotellookSDK.h>
+#import <AviasalesSDK/AviasalesSDK.h>
 
 #define kJRFilterBoundsDidChangeNotificationName    @"kJRFilterBoundsDidChangeNotificationName"
 #define kJRFilterBoundsDidResetNotificationName     @"kJRFilterBoundsDidResetNotificationName"

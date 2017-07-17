@@ -5,7 +5,7 @@ import UIKit
     case userLocation
 }
 
-class HLDistanceBadge: HLPopularHotelBadge {
+@objc class HLDistanceBadge: HLPopularHotelBadge {
     let distance: Double
     let pointType: DistancePointType
 

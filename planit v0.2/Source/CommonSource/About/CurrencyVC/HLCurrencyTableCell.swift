@@ -1,6 +1,6 @@
 import UIKit
 
-class HLCurrencyTableCell: UITableViewCell {
+@objc class HLCurrencyTableCell: UITableViewCell {
 
     @IBOutlet fileprivate weak var detailLabel: UILabel!
     @IBOutlet fileprivate weak var titleLabel: UILabel!

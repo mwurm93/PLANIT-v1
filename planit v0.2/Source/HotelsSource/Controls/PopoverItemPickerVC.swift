@@ -6,7 +6,7 @@ struct PopoverItem {
     let action: (() -> Void)?
 }
 
-class PopoverItemPickerVC: HLCommonVC, UITableViewDataSource, UITableViewDelegate {
+@objc class PopoverItemPickerVC: HLCommonVC, UITableViewDataSource, UITableViewDelegate {
 
     private var items: [PopoverItem]
     private var tableView: UITableView!

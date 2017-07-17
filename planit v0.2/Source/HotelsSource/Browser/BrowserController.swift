@@ -1,4 +1,4 @@
-class BrowserController: HLCommonVC, HLWebBrowserDelegate {
+@objc class BrowserController: HLCommonVC, HLWebBrowserDelegate {
 
     var webBrowser: HLWebBrowser?
     @IBOutlet weak var browserBackground: UIView?

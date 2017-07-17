@@ -14,7 +14,7 @@
     func updateSearchInfo(city: HDKCity, adults: UInt, checkIn: Date, checkOut: Date)
 }
 
-class InteractionManager: NSObject, AviasalesAirportsGeoSearchPerformerDelegate {
+@objc class InteractionManager: NSObject, AviasalesAirportsGeoSearchPerformerDelegate {
 
     private struct SearchHotelsInfo {
         let checkIn: Date

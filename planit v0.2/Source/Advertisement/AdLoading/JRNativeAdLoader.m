@@ -8,6 +8,7 @@
 #import <Appodeal/APDNativeAdLoader.h>
 
 #import "JRNativeAdLoader.h"
+#import "JRHeader.h"
 
 @interface JRNativeAdLoader () <APDNativeAdLoaderDelegate>
 

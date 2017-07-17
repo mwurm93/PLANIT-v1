@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ASTPassengersPickerViewController: UIViewController {
+@objc class ASTPassengersPickerViewController: UIViewController {
 
     fileprivate let presenter: ASTPassengersPickerPresenter
     fileprivate var viewModel: ASTPassengersPickerViewModel?

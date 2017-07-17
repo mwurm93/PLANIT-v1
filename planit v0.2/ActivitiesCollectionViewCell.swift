@@ -14,7 +14,7 @@ class ActivitiesCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var activityImage: UIImageView!
     @IBOutlet weak var activityLabel: UILabel!
     
-    func setActivityItem(_ item:ActivityItem) {
+    func setActivityItem(_ item:MWActivityItem) {
         activityImage.image = UIImage(named: item.itemImage)
         activityLabel.text = item.itemImage
     }

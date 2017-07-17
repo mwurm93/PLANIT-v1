@@ -1,6 +1,6 @@
 import HotellookSDK
 
-class BookBrowserController: BrowserController {
+@objc class BookBrowserController: BrowserController {
 
     var room: HDKRoom?
     var loadDeeplinkToken: CancelToken?

@@ -6,7 +6,6 @@
 //
 
 #import "DateUtil.h"
-#import "AviasalesSDKTemplate-Swift.h"
 
 #define kDateFormatterThreadDictionaryKey @"JRDateFomatter"
 

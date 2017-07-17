@@ -1,6 +1,6 @@
 import UIKit
 
-class HLPopularHotelBadge: NSObject {
+@objc class HLPopularHotelBadge: NSObject {
     var name: String?
     var systemName: String?
     var color: UIColor?

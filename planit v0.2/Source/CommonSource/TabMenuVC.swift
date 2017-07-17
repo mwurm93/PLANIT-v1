@@ -1,6 +1,6 @@
 import UIKit
 
-class TabMenuVC: UITabBarController {
+@objc class TabMenuVC: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

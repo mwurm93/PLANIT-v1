@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ASTGateBrowserViewProtocol: NSObjectProtocol {
+@objc protocol ASTGateBrowserViewProtocol: NSObjectProtocol {
 
     func showLoading()
     func hideLoading()
@@ -22,7 +22,7 @@ protocol ASTGateBrowserViewProtocol: NSObjectProtocol {
     func showError(title: String, message: String, cancel: String)
 }
 
-class ASTGateBrowserPresenter: NSObject {
+@objc class ASTGateBrowserPresenter: NSObject {
 
     fileprivate weak var view: ASTGateBrowserViewProtocol?
 

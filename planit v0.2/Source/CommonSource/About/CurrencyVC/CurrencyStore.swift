@@ -1,6 +1,6 @@
 import HotellookSDK
 
-class CurrencyStore: NSObject {
+@objc class CurrencyStore: NSObject {
 
     fileprivate (set) var currencyInfo: HDKCurrencyInfo
 

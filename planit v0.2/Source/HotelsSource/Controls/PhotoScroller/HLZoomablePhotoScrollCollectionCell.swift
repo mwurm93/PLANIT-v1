@@ -1,6 +1,6 @@
 import UIKit
 
-class HLZoomablePhotoScrollCollectionCell: HLPhotoScrollCollectionCell {
+@objc class HLZoomablePhotoScrollCollectionCell: HLPhotoScrollCollectionCell {
 
     fileprivate var zoomablePhotoView: HLZoomablePhotoView {
         return self.photoView as! HLZoomablePhotoView

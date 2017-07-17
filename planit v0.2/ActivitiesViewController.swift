@@ -132,17 +132,17 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
     
     // MARK: Activities collection View item init
     fileprivate func initActivityItems() {
-        
-        var items = [ActivityItem]()
-        let inputFile = Bundle.main.path(forResource: "items", ofType: "plist")
-        
-        let inputDataArray = NSArray(contentsOfFile: inputFile!)
-        
-        for inputItem in inputDataArray as! [Dictionary<String, String>] {
-            let activityItem = ActivityItem(dataDictionary: inputItem)
-            items.append(activityItem)
-        }
-        activityItems = items
+//        
+//        var items = [ActivityItem]()
+//        let inputFile = Bundle.main.path(forResource: "items", ofType: "plist")
+//        
+//        let inputDataArray = NSArray(contentsOfFile: inputFile!)
+//        
+//        for inputItem in inputDataArray as! [Dictionary<String, String>] {
+//            let activityItem = ActivityItem(dataDictionary: inputItem)
+//            items.append(activityItem)
+//        }
+//        activityItems = items
     }
     
     // MARK: - UICollectionViewDataSource
@@ -158,7 +158,7 @@ class ActivitiesViewController: UIViewController, UICollectionViewDataSource, UI
 //        if collectionView == activitiesCollectionView {
             activitiesCollectionView.allowsMultipleSelection = true
             let cell = activitiesCollectionView.dequeueReusableCell(withReuseIdentifier: "activitiesViewPrototypeCell", for: indexPath) as! ActivitiesCollectionViewCell
-            cell.setActivityItem(activityItems[indexPath.row])
+//            cell.setActivityItem(activityItems[indexPath.row])
             cell.activityImage.image = cell.activityImage.image?.withRenderingMode(.alwaysTemplate)
 
             return cell

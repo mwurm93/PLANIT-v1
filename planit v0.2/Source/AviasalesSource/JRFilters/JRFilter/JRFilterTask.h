@@ -6,6 +6,8 @@
 //
 
 #import "JRFilterTicketBounds.h"
+#import <HotellookSDK/HotellookSDK.h>
+#import <AviasalesSDK/AviasalesSDK.h>
 
 
 @protocol JRFilterTaskDelegate<NSObject>

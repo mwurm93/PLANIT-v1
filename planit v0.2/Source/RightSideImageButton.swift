@@ -1,6 +1,6 @@
 import Foundation
 
-class RightSideImageButton: UIButton {
+@objc class RightSideImageButton: UIButton {
 
     override func awakeFromNib() {
         super.awakeFromNib()

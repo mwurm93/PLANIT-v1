@@ -6,7 +6,7 @@ protocol HLScrollableSegmentedControlDelegate: class, NSObjectProtocol {
 
 }
 
-@IBDesignable class HLScrollableSegmentedControl: UIView {
+@objc @IBDesignable class HLScrollableSegmentedControl: UIView {
 
     var selectedIndex: Int {
         return currentIndex

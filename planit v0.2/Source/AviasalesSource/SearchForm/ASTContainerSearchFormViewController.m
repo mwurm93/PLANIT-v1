@@ -16,7 +16,7 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 };
 
 
-@interface ASTContainerSearchFormViewController () <HotelsSearchDelegate>
+@interface ASTContainerSearchFormViewController () <HotelsSearchDelegate> 
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *searchFormTypeSegmentedControl;
 @property (weak, nonatomic) IBOutlet UIView *containerView;

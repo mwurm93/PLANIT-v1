@@ -10,6 +10,7 @@
 #import "JRNativeAdLoader.h"
 #import "JRNewsFeedNativeAdView.h"
 
+
 @interface JRNewsFeedAdLoader ()
 
 @property (strong, nonatomic) JRNativeAdLoader *loader;

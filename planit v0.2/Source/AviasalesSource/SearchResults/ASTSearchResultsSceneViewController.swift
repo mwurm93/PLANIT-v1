@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ASTSearchResultsSceneViewController: UIViewController {
+@objc class ASTSearchResultsSceneViewController: UIViewController {
 
     @IBOutlet weak var ticketsContainerView: UIView!
     @IBOutlet weak var ticketContainerView: UIView!

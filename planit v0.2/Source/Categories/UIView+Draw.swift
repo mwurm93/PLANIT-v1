@@ -1,6 +1,6 @@
 import Foundation
 
-private enum BadgeType: Int {
+@objc private enum BadgeType: Int {
     case ratingBadge
     case hotelBadge
     case discountBadge

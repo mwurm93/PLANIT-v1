@@ -7,7 +7,7 @@
     @objc optional func photoGridViewCellDidHighlight(_ cell: HLPhotoScrollCollectionCell)
 }
 
-class HLPhotoGridView: HLPhotoCollectionView, HLPhotoScrollCollectionCellProtocol {
+@objc class HLPhotoGridView: HLPhotoCollectionView, HLPhotoScrollCollectionCellProtocol {
 
     private let defaultColumnCount: Int = 3
     private let defaultColumnInset: CGFloat = 0.0

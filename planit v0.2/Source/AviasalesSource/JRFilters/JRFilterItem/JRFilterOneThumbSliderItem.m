@@ -6,13 +6,18 @@
 //
 
 #import "JRFilterOneThumbSliderItem.h"
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
+#import "JRDefines.h"
 
 #import "DateUtil.h"
+
+#include <stdlib.h>
 
 
 @implementation JRFilterOneThumbSliderItem
 
-- (instancetype)initWithMinValue:(CGFloat)minValue maxValue:(CGFloat)maxValue currentValue:(CGFloat)currentValue {
+- (instancetype)initWithMinValue:(float)minValue maxValue:(float)maxValue currentValue:(float)currentValue {
     self = [super init];
     if (self) {
         _minValue = minValue;

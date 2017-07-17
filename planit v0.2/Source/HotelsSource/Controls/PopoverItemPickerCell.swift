@@ -1,6 +1,6 @@
 import Foundation
 
-class PopoverItemPickerCell: UITableViewCell {
+@objc class PopoverItemPickerCell: UITableViewCell {
     let activeImageView = UIImageView()
     let nameLabel = UILabel()
 

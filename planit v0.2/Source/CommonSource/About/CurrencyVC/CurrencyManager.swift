@@ -1,6 +1,6 @@
 import HotellookSDK
 
-class CurrencyManager: NSObject {
+@objc class CurrencyManager: NSObject {
 
     static let shared = CurrencyManager()
 

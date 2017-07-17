@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ASTPassengersPickerTableViewCell: UITableViewCell {
+@objc class ASTPassengersPickerTableViewCell: UITableViewCell {
 
     @IBOutlet weak var passengersTitleLabel: UILabel!
     @IBOutlet weak var passengersSubtitleLabel: UILabel!

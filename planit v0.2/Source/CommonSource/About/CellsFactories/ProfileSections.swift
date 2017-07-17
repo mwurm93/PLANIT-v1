@@ -1,4 +1,4 @@
-class ProfileSections: NSObject {
+@objc class ProfileSections: NSObject {
 
     var rateSectionIndex: NSInteger = 0
     var mainSectionIndex: NSInteger = 0

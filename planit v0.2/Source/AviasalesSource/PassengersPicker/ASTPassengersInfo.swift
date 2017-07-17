@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ASTPassengersInfo: NSObject {
+@objc class ASTPassengersInfo: NSObject {
 
     let adults: Int
     let children: Int

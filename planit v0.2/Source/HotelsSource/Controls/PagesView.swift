@@ -1,6 +1,6 @@
 import UIKit
 
-class PagesView: UICollectionView {
+@objc class PagesView: UICollectionView {
 
     typealias GestureFilterFunc = (_ view: UIView, _ gestureRecognizer: UIGestureRecognizer) -> Bool
 

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HLIconBadge: HLPopularHotelBadge {
+@objc class HLIconBadge: HLPopularHotelBadge {
     var imageName: String?
     init(imageName: String, systemName: String, color: UIColor) {
         super.init()

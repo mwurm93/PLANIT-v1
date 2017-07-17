@@ -1,6 +1,6 @@
 import Foundation
 
-class HLProfileSelectableCell: SelectionFilterCell, HLProfileCellProtocol {
+@objc class HLProfileSelectableCell: SelectionFilterCell, HLProfileCellProtocol {
 
     func setup(with item: HLProfileTableItem) {
         active = item.active

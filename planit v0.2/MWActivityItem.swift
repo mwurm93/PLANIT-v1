@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ActivityItem {
+class MWActivityItem {
     
     var itemImage: String
     
@@ -16,7 +16,7 @@ class ActivityItem {
         itemImage = dataDictionary["itemImage"]!
     }
     
-    class func newActivityItem(_ dataDictionary:Dictionary<String,String>) -> ActivityItem {
-        return ActivityItem(dataDictionary: dataDictionary)
+    class func newActivityItem(_ dataDictionary:Dictionary<String,String>) -> MWActivityItem {
+        return MWActivityItem(dataDictionary: dataDictionary)
     }
 }

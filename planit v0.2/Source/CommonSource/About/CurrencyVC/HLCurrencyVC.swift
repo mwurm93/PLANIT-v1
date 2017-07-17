@@ -1,4 +1,4 @@
-class HLCurrencyVC: ASTGroupedSearchVC {
+@objc class HLCurrencyVC: ASTGroupedSearchVC {
 
     var filterText: String?
 

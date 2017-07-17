@@ -13,7 +13,7 @@ struct Item {
     let scheme: ColorScheme
 }
 
-class ASTDevSettingsVC: UIViewController {
+@objc class ASTDevSettingsVC: UIViewController {
 
     var items = [Item]()
 
@@ -33,12 +33,12 @@ class ASTDevSettingsVC: UIViewController {
         return [black, blue, purple, custom]
     }
 
-    func refreshTabBarVC() {
-        if let delegate = UIApplication.shared.delegate as? JRAppDelegate, let tabBarVC = delegate.window.rootViewController as? TabMenuVC {
-            UIApplication.shared.keyWindow?.tintColor = JRColorScheme.tintColor()
-            tabBarVC.createItems()
-        }
-    }
+//    func refreshTabBarVC() {
+//        if let delegate = UIApplication.shared.delegate, let tabBarVC = delegate.window.rootViewController as! TabMenuVC {
+//            UIApplication.shared.keyWindow?.tintColor = JRColorScheme.tintColor()
+////            tabBarVC.createItems()
+//        }
+//    }
 }
 
 extension ASTDevSettingsVC: UITableViewDataSource {
@@ -61,6 +61,6 @@ extension ASTDevSettingsVC: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let item = items[indexPath.row]
         ColorSchemeConfigurator.shared.currentColorScheme = item.scheme
-        refreshTabBarVC()
+//        refreshTabBarVC()
     }
 }

@@ -8,6 +8,8 @@
 #import "JRDefines.h"
 #import <Foundation/Foundation.h>
 #import "SLLocalization.h"
+#import <UIKit/UIKit.h>
+#import <Config.h>
 
 NSString * const kHotelsStringsTable = @"HotelsLocalizable";
 

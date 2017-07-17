@@ -10,14 +10,14 @@
 
 @interface JRFilterOneThumbSliderItem : NSObject <JRFilterItemProtocol>
 
-@property (nonatomic, assign, readonly) CGFloat minValue;
-@property (nonatomic, assign, readonly) CGFloat maxValue;
+@property (nonatomic, assign, readonly) float minValue;
+@property (nonatomic, assign, readonly) float maxValue;
 
-@property (nonatomic, assign) CGFloat currentValue;
+@property (nonatomic, assign) float currentValue;
 
 @property (nonatomic, copy) void (^filterAction)();
 
-- (instancetype)initWithMinValue:(CGFloat)minValue maxValue:(CGFloat)maxValue currentValue:(CGFloat)currentValue;
+- (instancetype)initWithMinValue:(float)minValue maxValue:(float)maxValue currentValue:(float)currentValue;
 
 @end
 

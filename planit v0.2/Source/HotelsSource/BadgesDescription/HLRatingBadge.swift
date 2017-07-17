@@ -1,6 +1,6 @@
 import UIKit
 
-class HLRatingBadge: HLPopularHotelBadge {
+@objc class HLRatingBadge: HLPopularHotelBadge {
     let ratingText: NSAttributedString
 
     init(rating: Int, isFull: Bool) {

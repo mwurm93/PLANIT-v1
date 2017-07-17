@@ -1,6 +1,8 @@
 #import "HLProfileCurrencyCell.h"
 #import "HLProfileCurrencyItem.h"
 #import <HotellookSDK/HotellookSDK.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import "JRColorScheme.h"
 
 @interface HLProfileCurrencyCell()
 @property (nonatomic, weak) IBOutlet UILabel *currencyLabel;

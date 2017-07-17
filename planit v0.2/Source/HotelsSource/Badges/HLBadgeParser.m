@@ -1,5 +1,6 @@
 #import <HotellookSDK/HotellookSDK.h>
-#import "AviasalesSDKTemplate-Swift.h"
+//#import "AviasalesSDKTemplate-Swift.h"
+#import <AviasalesSDK/AviasalesSDK.h>
 #import "HLBadgeParser.h"
 #import "HLResultVariant.h"
 #import "NSDictionary+Parsing.h"

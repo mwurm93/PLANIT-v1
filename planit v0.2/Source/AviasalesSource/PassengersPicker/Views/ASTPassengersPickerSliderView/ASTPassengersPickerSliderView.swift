@@ -8,7 +8,7 @@
 import UIKit
 import GCXSteppedSlider
 
-class ASTPassengersPickerSliderView: UIView {
+@objc class ASTPassengersPickerSliderView: UIView {
 
     @IBOutlet private var view: UIView!
     @IBOutlet private weak var sliderView: UIView!

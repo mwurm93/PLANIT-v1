@@ -8,6 +8,6 @@
 
 import UIKit
 
-class HLPhotoGridCollectionCell: HLPhotoScrollCollectionCell {
+@objc class HLPhotoGridCollectionCell: HLPhotoScrollCollectionCell {
 
 }

@@ -24,7 +24,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var scrollContentViewHeight: NSLayoutConstraint?
         //View controllers
     var chatController: ChatViewController?
-    var flightResultsController: flightResultsViewController?
+    var flightResultsController: UIViewController?
     var reviewAndBookFlightsController: ReviewAndBookViewController?
     var carRentalResultsController: carRentalResultsViewController?
     var reviewAndBookCarRentalController: ReviewAndBookViewController?
@@ -1570,7 +1570,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         flightResultsController = createTicketsVC()
         flightResultsController?.willMove(toParentViewController: self)
         self.addChildViewController(flightResultsController!)
-        flightResultsController?.searchMode = flightSearchQuestionView?.searchMode
+//        flightResultsController?.searchMode = flightSearchQuestionView?.searchMode
         flightResultsController?.loadView()
         flightResultsController?.viewDidLoad()
         flightResultsController?.view.frame = self.view.bounds
@@ -4744,7 +4744,7 @@ extension TripViewController {
 
 }
 extension TripViewController {
-    private func createTicketsVC() -> UIViewController {
+    func createTicketsVC() -> UIViewController {
         let rootViewController = iPhone() ? ASTContainerSearchFormViewController() : ASTSearchFormSceneViewController()
         return JRNavigationController(rootViewController: rootViewController)
     }

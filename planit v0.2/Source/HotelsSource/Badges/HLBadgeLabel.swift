@@ -1,6 +1,6 @@
 import UIKit
 
-class HLBadgeLabel: UILabel {
+@objc class HLBadgeLabel: UILabel {
     let iconLayer = CALayer()
 
     override init(frame: CGRect) {

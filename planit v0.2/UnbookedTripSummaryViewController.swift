@@ -211,33 +211,33 @@ class UnbookedTripSummaryViewController: UIViewController, UICollectionViewDataS
     
     // MARK: Activities collection View item init
     fileprivate func initActivityItems() {
-        
-        var items = [ActivityItem]()
-        let inputFile = Bundle.main.path(forResource: "items", ofType: "plist")
-        
-        let inputDataArray = NSArray(contentsOfFile: inputFile!)
-        
-        for inputItem in inputDataArray as! [Dictionary<String, String>] {
-            let activityItem = ActivityItem(dataDictionary: inputItem)
-            items.append(activityItem)
-        }
-        
-        let selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [String]
-        var indexesToRemove = [Int]()
-        
-        if selectedActivities != nil {
-        for index in (0...(items.count - 1)).reversed() {
-            
-                let searchString = items[index].itemImage
-                if !selectedActivities!.contains(searchString) {
-                    indexesToRemove.append(index)
-                }
-        }
-            for item in indexesToRemove {
-                items.remove(at: item)
-            }
-        }
-        activityItems = items
+//        
+//        var items = [ActivityItem]()
+//        let inputFile = Bundle.main.path(forResource: "items", ofType: "plist")
+//        
+//        let inputDataArray = NSArray(contentsOfFile: inputFile!)
+//        
+//        for inputItem in inputDataArray as! [Dictionary<String, String>] {
+//            let activityItem = ActivityItem(dataDictionary: inputItem)
+//            items.append(activityItem)
+//        }
+//        
+//        let selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [String]
+//        var indexesToRemove = [Int]()
+//        
+//        if selectedActivities != nil {
+//        for index in (0...(items.count - 1)).reversed() {
+//            
+//                let searchString = items[index].itemImage
+//                if !selectedActivities!.contains(searchString) {
+//                    indexesToRemove.append(index)
+//                }
+//        }
+//            for item in indexesToRemove {
+//                items.remove(at: item)
+//            }
+//        }
+//        activityItems = items
     }
     
     // MARK: - UICollectionViewDataSource
@@ -261,7 +261,7 @@ class UnbookedTripSummaryViewController: UIViewController, UICollectionViewDataS
             activitiesCollectionView.allowsMultipleSelection = true
             
             let cell = activitiesCollectionView.dequeueReusableCell(withReuseIdentifier: "activitiesViewPrototypeCell", for: indexPath) as! ActivitiesCollectionViewCell
-            cell.setActivityItem(activityItems[indexPath.row])
+//            cell.setActivityItem(activityItems[indexPath.row])
             cell.activityImage.image = cell.activityImage.image?.withRenderingMode(.alwaysTemplate)
             
             return cell

@@ -1,7 +1,7 @@
 import UIKit
 import Foundation
 
-class HLToastView: UIView {
+@objc class HLToastView: UIView {
 
     var presented: Bool = false
 	var animated: Bool = false

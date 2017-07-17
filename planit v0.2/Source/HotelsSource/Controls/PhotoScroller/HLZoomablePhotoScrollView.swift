@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HLZoomablePhotoScrollView: HLPhotoScrollView {
+@objc class HLZoomablePhotoScrollView: HLPhotoScrollView {
 
     // MARK: - Override methods
 

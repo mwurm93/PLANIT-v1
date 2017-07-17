@@ -1,6 +1,6 @@
 import UIKit
 
-class HLBadgeView: UIView {
+@objc class HLBadgeView: UIView {
     func configure(for variant: HLResultVariant) {
     }
 }

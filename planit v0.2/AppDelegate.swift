@@ -41,7 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
         
+        //TopBar
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+        
+        //TravelPayouts
+        JRAppLauncher.startServices(withAPIToken: kJRAPIToken, partnerMarker: kJRPartnerMarker, appodealAPIKey: kAppodealApiKey)
         
         return true
     }

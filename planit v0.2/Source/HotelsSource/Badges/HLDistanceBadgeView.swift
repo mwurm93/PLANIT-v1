@@ -1,6 +1,6 @@
 import UIKit
 
-class HLDistanceBadgeView: HLBadgeView {
+@objc class HLDistanceBadgeView: HLBadgeView {
     @IBOutlet var label: UILabel!
     @IBOutlet var iconView: UIImageView!
 

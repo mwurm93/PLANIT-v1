@@ -6,6 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <HotellookSDK/HotellookSDK.h>
+#import <AviasalesSDK/AviasalesSDK.h>
 
 @class JRFilterTicketBounds;
 

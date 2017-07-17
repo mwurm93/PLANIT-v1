@@ -1,4 +1,4 @@
-class HLDiscountHotelBadge: HLPopularHotelBadge {
+@objc class HLDiscountHotelBadge: HLPopularHotelBadge {
 
     init(discount: Int) {
         super.init()

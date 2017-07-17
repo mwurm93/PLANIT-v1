@@ -9,6 +9,8 @@
 #import "JRNativeAdLoader.h"
 #import <Appodeal/APDMediaView.h>
 #import <Appodeal/APDNativeAd.h>
+#import "JRHeader.h"
+
 
 @interface JRVideoAdLoader()
 

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HLSpinnerProgressView: UIView {
+@objc class HLSpinnerProgressView: UIView {
 
     @IBOutlet fileprivate weak var contentView: UIView!
     @IBOutlet fileprivate weak var activityIndicatorView: UIActivityIndicatorView!

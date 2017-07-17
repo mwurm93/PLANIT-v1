@@ -3,7 +3,7 @@ protocol HLPhotoScrollCollectionCellProtocol: class {
     func cellDidHighlight(_ cell: HLPhotoScrollCollectionCell)
 }
 
-class HLPhotoScrollCollectionCell: UICollectionViewCell {
+@objc class HLPhotoScrollCollectionCell: UICollectionViewCell {
 
     lazy var photoView: HLPhotoView = self.createPhotoView()
     weak var delegate: HLPhotoScrollCollectionCellProtocol?

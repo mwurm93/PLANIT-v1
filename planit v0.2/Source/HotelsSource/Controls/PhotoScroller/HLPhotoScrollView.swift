@@ -5,7 +5,7 @@
     @objc optional func photoScrollDidEndDragging()
 }
 
-class HLPhotoScrollView: HLPhotoCollectionView {
+@objc class HLPhotoScrollView: HLPhotoCollectionView {
 
     static func preferredHeight() -> CGFloat {
         if iPhone35Inch() {

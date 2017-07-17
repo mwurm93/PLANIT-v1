@@ -9,6 +9,7 @@
 #import "JRFilterTask.h"
 #import "JRFilterBoundsBuilder.h"
 #import "JRFilterTravelSegmentBounds.h"
+#import <UIKit/UIKit.h>
 
 #define kJRFilterLastTaskStartDelay 0.3
 

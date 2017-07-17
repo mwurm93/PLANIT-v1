@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-class ASTGateBrowserViewController: UIViewController {
+@objc class ASTGateBrowserViewController: UIViewController {
 
     let presenter: ASTGateBrowserPresenter
 

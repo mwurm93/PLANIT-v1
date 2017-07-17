@@ -6,6 +6,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <HotellookSDK/HotellookSDK.h>
+#import <AviasalesSDK/AviasalesSDK.h>
 
 @interface JRFilterTicketBounds : NSObject
 

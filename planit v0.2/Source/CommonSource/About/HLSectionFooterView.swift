@@ -1,6 +1,6 @@
 import UIKit
 
-class HLSectionFooterView: UIView {
+@objc class HLSectionFooterView: UIView {
 
     @IBOutlet weak var footerLabel: UILabel!
 
