@@ -1,5 +1,5 @@
 #import "HLLocationManager.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 #import "HLNearbyCitiesDetector.h"
 #import "HLAlertsFabric.h"
 //#import "HLDevSettingsVC.h"

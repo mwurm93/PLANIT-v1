@@ -1,5 +1,5 @@
 #import "HLPriceFilterCardCell.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 #import "NSArray+Functional.h"
 
 @interface HLPriceFilterCardCell () <PriceFilterViewDelegate>

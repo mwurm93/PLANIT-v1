@@ -9,6 +9,7 @@
 #import "UIImage+JRUIImage.h"
 #import "JRColorScheme.h"
 #import "JRViewController.h"
+#import "planit_v0_2-Swift.h"
 
 @interface JRNavigationController ()<UIGestureRecognizerDelegate, UINavigationControllerDelegate>
 

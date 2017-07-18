@@ -9,6 +9,7 @@
 #import "JRFilterTicketBounds.h"
 #import "JRFilterTravelSegmentBounds.h"
 #import "DateUtil.h"
+#import "planit_v0_2-Swift.h"
 
 
 @interface JRFilterTask ()

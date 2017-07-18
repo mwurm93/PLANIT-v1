@@ -1,6 +1,6 @@
 #import <HotellookSDK/HotellookSDK.h>
 #import <PromiseKit/PromiseKit.h>
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 
 #import "HLLocaleInspector.h"
 #import "HLVariantsManager.h"

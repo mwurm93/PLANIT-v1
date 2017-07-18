@@ -3,6 +3,7 @@
 #import "HLResultVariant.h"
 #import "AviasalesSDKTemplate-Bridging-Header.h"
 #import <PureLayout/PureLayout.h>
+#import "planit_v0_2-Swift.h"
 
 @interface HLMapGroupDetailsCell ()
 

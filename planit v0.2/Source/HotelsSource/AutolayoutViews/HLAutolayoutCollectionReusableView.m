@@ -1,4 +1,5 @@
 #import "HLAutolayoutCollectionReusableView.h"
+#import "planit_v0_2-Swift.h"
 
 @interface HLAutolayoutCollectionReusableView()
 @property(nonatomic) BOOL didSetupConstraints;

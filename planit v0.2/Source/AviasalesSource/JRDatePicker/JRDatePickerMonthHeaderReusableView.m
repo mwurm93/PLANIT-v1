@@ -8,6 +8,11 @@
 #import "JRDatePickerMonthHeaderReusableView.h"
 #import "JRViewController.h"
 #import "DateUtil.h"
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
+#import "planit_v0_2-Swift.h"
 
 static const NSInteger kWeekDayLabelTagOffset = 1000;
 

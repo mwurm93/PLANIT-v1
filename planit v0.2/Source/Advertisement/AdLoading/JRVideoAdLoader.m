@@ -10,6 +10,8 @@
 #import <Appodeal/APDMediaView.h>
 #import <Appodeal/APDNativeAd.h>
 #import "JRHeader.h"
+#import "planit_v0_2-Swift.h"
+
 
 
 @interface JRVideoAdLoader()

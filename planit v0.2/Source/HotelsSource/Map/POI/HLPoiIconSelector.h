@@ -1,5 +1,10 @@
+#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
+#import <UIKit/UIKit.h>
 
+@class HLPoiIconSelector;
 @class HDKCity;
 @class PoiAnnotation;
 @class MKAnnotationView;

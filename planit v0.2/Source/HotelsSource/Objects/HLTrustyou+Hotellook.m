@@ -1,6 +1,7 @@
 #import "HLTrustyou+Hotellook.h"
 #import "NSDictionary+Parsing.h"
-//#import "HLLocaleInspector.h"
+#import "planit_v0_2-Swift.h"
+#import "HLLocaleInspector.h"
 
 @implementation HDKTrustyou (HL)
 

@@ -8,6 +8,8 @@
 #import "JRFilterTicketBounds.h"
 
 #import "JRFilter.h"
+#import "planit_v0_2-Swift.h"
+
 
 
 @interface JRFilterTicketBounds ()

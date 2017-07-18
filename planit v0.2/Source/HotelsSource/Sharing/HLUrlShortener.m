@@ -1,5 +1,7 @@
 #import "HLUrlShortener.h"
 #import "HLUrlUtils.h"
+#import "JRDefines.h"
+#import "planit_v0_2-Swift.h"
 
 @interface HLUrlShortener()
 

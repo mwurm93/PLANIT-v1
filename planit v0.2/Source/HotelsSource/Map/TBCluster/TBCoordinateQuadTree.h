@@ -6,7 +6,10 @@
 //  Copyright (c) 2013 Theodore Calmes. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
 #import "TBQuadTree.h"
 
 @interface TBCoordinateQuadTree : NSObject

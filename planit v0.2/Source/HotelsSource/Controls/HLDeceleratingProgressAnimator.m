@@ -1,3 +1,4 @@
+#import "planit_v0_2-Swift.h"
 #import "HLDeceleratingProgressAnimator.h"
 
 @interface HLDeceleratingProgressAnimator ()

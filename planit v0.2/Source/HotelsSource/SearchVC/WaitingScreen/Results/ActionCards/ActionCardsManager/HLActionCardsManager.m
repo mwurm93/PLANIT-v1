@@ -1,5 +1,5 @@
+#import "planit_v0_2-Swift.h"
 #import "HLActionCardsManager.h"
-#import "AviasalesSDKTemplate-Swift.h"
 #import "NSArray+Functional.h"
 
 NSInteger const kMaxVariantsToShowNearbyCitiesSearchCard = 25;

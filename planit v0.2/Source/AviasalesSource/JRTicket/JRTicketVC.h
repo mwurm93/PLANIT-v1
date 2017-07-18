@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "JRViewController.h"
 
+
 @interface JRTicketVC : JRViewController
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;

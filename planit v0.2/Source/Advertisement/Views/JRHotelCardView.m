@@ -6,6 +6,7 @@
 //  Copyright © 2017 Go Travel Un LImited. All rights reserved.
 //
 
+#import "planit_v0_2-Swift.h"
 #import "JRHotelCardView.h"
 
 @interface JRHotelCardView ()

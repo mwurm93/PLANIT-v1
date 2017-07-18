@@ -8,7 +8,7 @@
 #import "JRColorScheme.h"
 #import "UIImage+JRUIImage.h"
 #import "AviasalesSDKTemplate-Bridging-Header.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 
 #define COLOR_WITH_WHITE(A) [[UIColor alloc] initWithWhite : ((float)A/255.0f)alpha : 1]
 #define COLOR_WITH_RED(A, B, C) COLOR_WITH_ALPHA(A, B, C, 1)

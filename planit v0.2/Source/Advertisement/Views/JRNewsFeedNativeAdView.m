@@ -6,6 +6,7 @@
 //  Copyright © 2016 Go Travel Un LImited. All rights reserved.
 //
 
+#import "planit_v0_2-Swift.h"
 #import <Appodeal/APDNativeAd.h>
 #import <AXRatingView/AXRatingView.h>
 #import <SDWebImage/UIImageView+WebCache.h>

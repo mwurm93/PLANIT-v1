@@ -1,5 +1,5 @@
 #import "HLDistanceFilterCardCell.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 #import "NSString+HLSizeCalculation.h"
 
 @interface HLDistanceFilterCardCell ()

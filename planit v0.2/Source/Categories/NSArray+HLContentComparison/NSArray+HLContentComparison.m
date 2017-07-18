@@ -1,3 +1,6 @@
+
+#import "planit_v0_2-Swift.h"
+
 #import "NSArray+HLContentComparison.h"
 
 @implementation NSArray (HLContentComparison)

@@ -6,7 +6,10 @@
 //  Copyright (c) 2014 Anton Chebotov. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
 

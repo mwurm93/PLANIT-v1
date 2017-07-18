@@ -5,6 +5,8 @@
 //  This code is distributed under the terms and conditions of the MIT license.
 //
 
+#import "planit_v0_2-Swift.h"
+
 #import "JRFilterCheckBoxItem.h"
 #import "DateUtil.h"
 

@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Anton Chebotov. All rights reserved.
 //
 
+#import "planit_v0_2-Swift.h"
 #import "NSError+HLCustomErrors.h"
 
 NSString * const kHLServerErrorDomain = @"HLServerErrorDomain";

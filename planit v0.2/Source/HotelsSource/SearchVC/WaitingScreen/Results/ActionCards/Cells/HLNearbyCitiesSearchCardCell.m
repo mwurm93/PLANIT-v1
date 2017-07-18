@@ -1,5 +1,5 @@
 #import "HLNearbyCitiesSearchCardCell.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 #import <HotellookSDK/HotellookSDK.h>
 
 @interface HLNearbyCitiesSearchCardCell ()

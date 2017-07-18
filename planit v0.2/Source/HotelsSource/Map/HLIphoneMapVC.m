@@ -1,6 +1,6 @@
 #import "HLIphoneMapVC.h"
 #import "HLFilter.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 #import "HLSliderCalculatorFactory.h"
 #import "HLSliderCalculator.h"
 

@@ -2,6 +2,7 @@
 //  UIColor+Hex
 //
 
+#import "planit_v0_2-Swift.h"
 #import "UIColor+Hex.h"
 
 @implementation NSString (LeftPadding)

@@ -1,4 +1,7 @@
 #import "HLVariantScrollablePhotoCell.h"
+#import "HLCommonVC.h"
+
+@class HLMapGroupDetailsVC;
 
 @interface HLMapGroupDetailsVC : HLCommonVC <HLShowHotelProtocol>
 

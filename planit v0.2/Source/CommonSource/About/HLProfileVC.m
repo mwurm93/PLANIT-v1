@@ -1,5 +1,5 @@
 #import "HLProfileVC.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 #import "UIViewCell+ReuseIdentifier.h"
 #import "Collections+HLNibLoading.h"
 #import "UIViewController+UIScrollView.h"

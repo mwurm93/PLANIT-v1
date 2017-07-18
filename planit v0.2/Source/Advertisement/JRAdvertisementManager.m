@@ -5,8 +5,8 @@
 //  This code is distributed under the terms and conditions of the MIT license.
 //
 
+#import "planit_v0_2-Swift.h"
 #import <Appodeal/Appodeal.h>
-
 #import "JRAdvertisementManager.h"
 #import "JRVideoAdLoader.h"
 #import "JRNewsFeedAdLoader.h"

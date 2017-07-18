@@ -1,10 +1,14 @@
 #import "HLCommonVC.h"
 #import <objc/runtime.h>
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 #import "NSObject+Notifications.h"
 #import "Collections+HLNibLoading.h"
 #import <PureLayout/PureLayout.h>
 #import "HLAlertsFabric.h"
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
 
 @interface HLCommonVC () <UIPopoverPresentationControllerDelegate>
 

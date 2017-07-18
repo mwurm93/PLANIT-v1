@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "planit_v0_2-Swift.h"
 
 @interface JRFlightsSegmentHeaderView : UITableViewHeaderFooterView
 

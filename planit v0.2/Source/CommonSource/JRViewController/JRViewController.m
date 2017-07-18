@@ -8,6 +8,7 @@
 #import "JRViewController.h"
 #import "UIImage+JRUIImage.h"
 #import "JRColorScheme.h"
+#import "planit_v0_2-Swift.h"
 
 
 @interface JRViewController ()

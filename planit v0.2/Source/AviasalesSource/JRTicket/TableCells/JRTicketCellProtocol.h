@@ -7,6 +7,8 @@
 
 #ifndef ASTTicketCellProtocol_h
 #define ASTTicketCellProtocol_h
+#import "planit_v0_2-Swift.h"
+
 
 @protocol JRTicketCellProtocol <NSObject>
 

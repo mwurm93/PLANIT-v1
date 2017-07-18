@@ -5,6 +5,7 @@
 //  Created by Theodore Calmes on 10/8/13.
 //  Copyright (c) 2013 Theodore Calmes. All rights reserved.
 //
+#import "planit_v0_2-Swift.h"
 
 #import "TBClusterAnnotation.h"
 

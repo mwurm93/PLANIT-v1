@@ -1,3 +1,4 @@
+#import "planit_v0_2-Swift.h"
 #import "HLGroupAnnotationView.h"
 #import "HLResultVariant.h"
 #import "StringUtils.h"

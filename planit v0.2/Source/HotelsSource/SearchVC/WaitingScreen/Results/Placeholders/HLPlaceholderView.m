@@ -1,5 +1,5 @@
 #import "HLPlaceholderView.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 
 @implementation HLPlaceholderView
 

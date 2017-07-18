@@ -1,4 +1,10 @@
 #import "HLAboutFooterView.h"
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
+#import "planit_v0_2-Swift.h"
+
 
 @interface  HLAboutFooterView()
 @property (nonatomic, weak) IBOutlet UILabel * versionLabel;

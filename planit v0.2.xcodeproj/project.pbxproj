@@ -5365,6 +5365,7 @@
 				FA94077A1EFF0C6200E4EEE4 /* idkHowToGetThereQuestionView.swift in Sources */,
 				FA2532521F1D3B6D002BCE29 /* HotelDetailsMoreVC.swift in Sources */,
 				FA2531B11F1D3B6D002BCE29 /* CommonAmenityFilterView.swift in Sources */,
+				FA2532E61F1D3B6E002BCE29 /* HLActionCardsManager.m in Sources */,
 				FA25316E1F1D3B6D002BCE29 /* TabMenuVC.swift in Sources */,
 				FA2531C51F1D3B6D002BCE29 /* HLDistanceFilterCell.swift in Sources */,
 				FA2533061F1D3B6E002BCE29 /* HLIphoneResultsVC.swift in Sources */,
@@ -5392,7 +5393,6 @@
 				FA09A3EA1EB110A6007F64A3 /* ToDoViewController.swift in Sources */,
 				FA2531A71F1D3B6D002BCE29 /* HLZoomablePhotoScrollView.swift in Sources */,
 				FA25331F1F1D3B6E002BCE29 /* HLDistanceSortCell.swift in Sources */,
-				FA2532E61F1D3B6E002BCE29 /* HLActionCardsManager.m in Sources */,
 				FA2532E01F1D3B6E002BCE29 /* WaitingGateCell.swift in Sources */,
 				FA2531E11F1D3B6D002BCE29 /* FilterSection.swift in Sources */,
 				FA2532951F1D3B6E002BCE29 /* HLGroupAnnotationView.m in Sources */,
@@ -5957,6 +5957,7 @@
 		FAA8F2451E35194100CD7337 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -5978,6 +5979,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -6007,6 +6009,7 @@
 		FAA8F2461E35194100CD7337 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -6028,6 +6031,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -6053,6 +6057,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ATC5M6XDB6;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
@@ -6083,6 +6088,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ATC5M6XDB6;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (

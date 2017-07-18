@@ -10,6 +10,7 @@
 #import "JRFilterBoundsBuilder.h"
 #import "JRFilterTravelSegmentBounds.h"
 #import <UIKit/UIKit.h>
+#import "planit_v0_2-Swift.h"
 
 #define kJRFilterLastTaskStartDelay 0.3
 

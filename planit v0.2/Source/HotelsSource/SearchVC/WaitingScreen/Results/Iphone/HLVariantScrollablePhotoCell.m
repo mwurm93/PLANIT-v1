@@ -1,6 +1,6 @@
 #import "HLVariantScrollablePhotoCell.h"
 #import "HLResultVariant.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 
 @interface HLVariantScrollablePhotoCell () <HLPhotoScrollViewDelegate>
 

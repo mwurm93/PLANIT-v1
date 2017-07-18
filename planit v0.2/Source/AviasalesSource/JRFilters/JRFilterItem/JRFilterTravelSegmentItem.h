@@ -6,6 +6,7 @@
 //
 
 #import "JRFilterItemProtocol.h"
+#import "planit_v0_2-Swift.h"
 
 
 @class JRFilter;

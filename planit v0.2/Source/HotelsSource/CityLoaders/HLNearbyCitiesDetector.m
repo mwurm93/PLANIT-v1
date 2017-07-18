@@ -5,6 +5,7 @@
 #import "NSObject+Notifications.h"
 #import "HLLocationManager.h"
 #import "HLUrlUtils.h"
+#import "planit_v0_2-Swift.h"
 
 @interface HLNearbyCitiesDetector() <HLLocationManagerDelegate>
 

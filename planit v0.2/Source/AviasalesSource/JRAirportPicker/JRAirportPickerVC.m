@@ -5,6 +5,7 @@
 //  This code is distributed under the terms and conditions of the MIT license.
 //
 
+#import "planit_v0_2-Swift.h"
 #import "JRColorScheme.h"
 #import "JRAirportPickerCellWithAirport.h"
 #import "JRAirportPickerCellWithInfo.h"
@@ -14,6 +15,7 @@
 #import "JRAirportSearchResultVC.h"
 #import "JRNavigationController.h"
 #import "JRSearchedAirportsManager.h"
+
 
 #define kJRAirportPickerMaxSearchedCount (iPhone() ? 5 : 10)
 #define kJRAirportPickerHeightForTitledHeader   44

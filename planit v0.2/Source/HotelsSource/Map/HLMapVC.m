@@ -1,5 +1,5 @@
 #import "HLMapVC.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 
 #import "TBClusterAnnotationView.h"
 #import "TBClusterAnnotation.h"

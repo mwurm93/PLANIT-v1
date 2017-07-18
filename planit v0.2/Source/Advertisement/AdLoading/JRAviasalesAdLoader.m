@@ -6,6 +6,7 @@
 //
 
 #import "JRAviasalesAdLoader.h"
+#import "planit_v0_2-Swift.h"
 
 #import <AviasalesSDK/AviasalesSDK.h>
 

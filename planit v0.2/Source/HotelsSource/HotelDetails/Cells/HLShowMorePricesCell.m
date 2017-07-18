@@ -1,5 +1,5 @@
 #import "HLShowMorePricesCell.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 
 @interface HLShowMorePricesCell()
 @property (strong, nonatomic) SeparatorView *separatorView;

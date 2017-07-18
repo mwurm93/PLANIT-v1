@@ -1,3 +1,4 @@
+#import "planit_v0_2-Swift.h"
 #import "HLDefaultCitiesFactory.h"
 #import <HotellookSDK/HotellookSDK.h>
 #import "NSDictionary+Parsing.h"

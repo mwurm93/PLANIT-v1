@@ -1,3 +1,4 @@
+#import "planit_v0_2-Swift.h"
 #import "NSArray+Functional.h"
 
 @implementation NSArray (Functional)

@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Theodore Calmes. All rights reserved.
 //
 
+#import "planit_v0_2-Swift.h"
 #import "TBQuadTree.h"
 
 #pragma mark - Constructors

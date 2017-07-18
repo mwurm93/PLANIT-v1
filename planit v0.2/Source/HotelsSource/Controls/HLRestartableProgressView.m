@@ -1,5 +1,5 @@
 #import "HLRestartableProgressView.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 
 static NSTimeInterval const animationDuration = 0.3;
 

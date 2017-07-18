@@ -1,5 +1,5 @@
 #import "HLVariantCollectionViewCell.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 #import "StringUtils.h"
 
 CGFloat const kStarsOffset = 2.0;

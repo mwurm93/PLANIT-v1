@@ -12,6 +12,14 @@
 #import "DateUtil.h"
 #import "JRColorScheme.h"
 
+#import "planit_v0_2-Swift.h"
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
+#import "ASTSimpleSearchFormPresenter.h"
+#import <BlocksKit/BlocksKit.h>
+
 
 static const NSInteger kDatePickerCollectionHeaderHeight = 65;
 

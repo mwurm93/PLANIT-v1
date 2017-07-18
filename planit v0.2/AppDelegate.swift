@@ -20,6 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
+    class func openSettings() {
+        UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         

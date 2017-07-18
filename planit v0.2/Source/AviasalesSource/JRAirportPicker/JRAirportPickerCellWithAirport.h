@@ -8,6 +8,8 @@
 #import <UIKit/UIKit.h>
 #import "JRTableViewCell.h"
 
+@class JRAirportPickerCellWithAirport;
+
 @interface JRAirportPickerCellWithAirport : JRTableViewCell
 
 @property (strong, nonatomic) JRSDKAirport *airport;

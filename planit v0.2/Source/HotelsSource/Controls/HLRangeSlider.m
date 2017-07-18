@@ -1,3 +1,4 @@
+#import "planit_v0_2-Swift.h"
 #import "HLRangeSlider.h"
 
 #define HL_THUMB_IMAGE_OFFSET 2.0f

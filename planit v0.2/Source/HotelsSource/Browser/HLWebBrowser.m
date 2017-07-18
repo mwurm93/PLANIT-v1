@@ -2,7 +2,12 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <WebKit/WebKit.h>
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
 
 #import "HLRestartableProgressView.h"
 

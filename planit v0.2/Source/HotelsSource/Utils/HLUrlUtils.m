@@ -1,6 +1,6 @@
 #import "HLUrlUtils.h"
 #import <HotellookSDK/HotellookSDK.h>
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 #import "DateUtil.h"
 #import "HLLocaleInspector.h"
 

@@ -12,6 +12,12 @@
 #import "JRViewController.h"
 #import "JRColorScheme.h"
 
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
+#import "planit_v0_2-Swift.h"
+
 
 static const NSInteger kDateViewTagOffset = 1000;
 static const NSInteger kNumberOfDaysInWeek = 7;

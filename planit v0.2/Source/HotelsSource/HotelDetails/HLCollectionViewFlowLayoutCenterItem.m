@@ -6,6 +6,7 @@
 //  Copyright © 2015 Anton Chebotov. All rights reserved.
 //
 
+#import "planit_v0_2-Swift.h"
 #import "HLCollectionViewFlowLayoutCenterItem.h"
 
 @implementation HLCollectionViewFlowLayoutCenterItem

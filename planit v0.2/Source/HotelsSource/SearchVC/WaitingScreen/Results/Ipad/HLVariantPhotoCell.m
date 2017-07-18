@@ -1,5 +1,5 @@
 #import "HLVariantPhotoCell.h"
-#import "AviasalesSDKTemplate-Swift.h"
+#import "planit_v0_2-Swift.h"
 #import "UIImageView+WebCache.h"
 #import "HLUrlUtils.h"
 

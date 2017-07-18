@@ -6,10 +6,15 @@
 //
 
 #import "JRDefines.h"
+#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <AviasalesSDK/AviasalesSDK.h>
+#import <HotellookSDK/HotellookSDK.h>
 #import "SLLocalization.h"
 #import <UIKit/UIKit.h>
-#import <Config.h>
+#import "Config.h"
+#import "planit_v0_2-Swift.h"
+
 
 NSString * const kHotelsStringsTable = @"HotelsLocalizable";
 

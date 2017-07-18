@@ -5,6 +5,9 @@
 //  This code is distributed under the terms and conditions of the MIT license.
 //
 
+
+#import "planit_v0_2-Swift.h"
+
 #import "JRFilterTravelSegmentItem.h"
 
 #import "DateUtil.h"
