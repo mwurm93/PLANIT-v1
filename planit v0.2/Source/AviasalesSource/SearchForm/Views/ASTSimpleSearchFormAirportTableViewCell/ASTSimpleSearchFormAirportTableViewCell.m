@@ -12,7 +12,7 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.iconImageView.tintColor = [JRColorScheme searchFormTintColor];
+    self.iconImageView.tintColor = [UIColor whiteColor];
 }
 
 @end

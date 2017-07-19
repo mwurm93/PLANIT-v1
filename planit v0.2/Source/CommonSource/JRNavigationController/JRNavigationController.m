@@ -31,7 +31,7 @@
 }
 
 - (void)setupNavigationBar {
-    self.navigationBar.barTintColor = [JRColorScheme navigationBarBackgroundColor];
+    self.navigationBar.barTintColor = [UIColor lightGrayColor];
     self.navigationBar.tintColor = [JRColorScheme navigationBarItemColor];
     self.navigationBar.translucent = NO;
     [self.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];

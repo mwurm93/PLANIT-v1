@@ -4,7 +4,9 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,14 +16,14 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2" id="FsB-Es-UEH">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="78.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="78"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gc9-JP-YyS">
-                        <rect key="frame" x="10" y="0.0" width="300" height="78"/>
+                        <rect key="frame" x="30" y="0.0" width="280" height="78"/>
                         <subviews>
                             <tableView userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TEp-Jg-Xjf">
-                                <rect key="frame" x="0.0" y="0.0" width="300" height="78"/>
+                                <rect key="frame" x="0.0" y="0.0" width="280" height="78"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="420" id="Bgk-yM-cOW"/>
@@ -51,13 +53,26 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="os1-n1-n4P">
+                        <rect key="frame" x="3" y="26" width="25" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="25" id="GCx-IW-G3Z"/>
+                            <constraint firstAttribute="height" constant="25" id="ud9-Rw-8dV"/>
+                        </constraints>
+                        <state key="normal" title="Save" image="emptyHeart"/>
+                        <connections>
+                            <action selector="saveButtonTouchedUpInside:" destination="2" eventType="touchUpInside" id="Jz2-Nf-Csq"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 <constraints>
-                    <constraint firstItem="Gc9-JP-YyS" firstAttribute="leading" secondItem="FsB-Es-UEH" secondAttribute="leading" constant="10" id="HfG-D7-m5X"/>
+                    <constraint firstItem="Gc9-JP-YyS" firstAttribute="leading" secondItem="FsB-Es-UEH" secondAttribute="leading" constant="30" id="HfG-D7-m5X"/>
                     <constraint firstAttribute="trailing" secondItem="Gc9-JP-YyS" secondAttribute="trailing" constant="10" id="I93-rG-6fg"/>
                     <constraint firstAttribute="bottom" secondItem="Gc9-JP-YyS" secondAttribute="bottom" constant="0.5" id="KqB-bw-6iP"/>
+                    <constraint firstItem="os1-n1-n4P" firstAttribute="leading" secondItem="FsB-Es-UEH" secondAttribute="leadingMargin" constant="-5" id="VJ1-Eu-bJ3"/>
                     <constraint firstItem="Gc9-JP-YyS" firstAttribute="top" secondItem="FsB-Es-UEH" secondAttribute="top" id="nmP-Fu-5aH"/>
+                    <constraint firstItem="os1-n1-n4P" firstAttribute="centerY" secondItem="FsB-Es-UEH" secondAttribute="centerY" id="v9A-1J-yUW"/>
                 </constraints>
                 <userDefinedRuntimeAttributes>
                     <userDefinedRuntimeAttribute type="string" keyPath="JRBackgroundColorKey" value="mainBackgroundColor"/>
@@ -65,10 +80,14 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="containerView" destination="Gc9-JP-YyS" id="czq-n4-YSb"/>
+                <outlet property="saveButton" destination="os1-n1-n4P" id="dtV-XZ-HUN"/>
                 <outlet property="tableView" destination="TEp-Jg-Xjf" id="zo8-Ys-5yL"/>
             </connections>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="emptyHeart" width="71" height="71"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

@@ -75,7 +75,7 @@ static CGFloat const separatorRightInset = 20.0;
 }
 
 - (void)setupLayoutVariables {
-    self.tableViewSectionHeaderHeight = deviceSizeTypeValue(1.0, 5.0, 20.0, 20.0, 20.0);
+    self.tableViewSectionHeaderHeight = deviceSizeTypeValue(1.0, 5.0, 5.0, 5.0, 5.0);
     self.tableViewSectionFooterHeight = deviceSizeTypeValue(5.0, 10.0, 20.0, 20.0, 20.0);
     self.tableViewRowHeight = deviceSizeTypeValue(55.0, 60.0, 65.0, 65.0, 65.0);
     self.swapButtonTopInsetDelta = deviceSizeTypeValue(14.0, 10.0, 8.0, 8.0, 8.0);
@@ -159,7 +159,7 @@ static CGFloat const separatorRightInset = 20.0;
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return self.tableViewSectionHeaderHeight;
+    return _tableViewSectionHeaderHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -171,8 +171,8 @@ static CGFloat const separatorRightInset = 20.0;
     separatorView.style = ASTSearchFormSeparatorViewStyleBottom;
     separatorView.leftInset = separatorLeftInset;
     separatorView.rightInset = separatorRightInset;
-    separatorView.backgroundColor = [JRColorScheme searchFormBackgroundColor];
-    separatorView.separatorColor = [JRColorScheme searchFormSeparatorColor];
+    separatorView.backgroundColor = [UIColor clearColor];
+    separatorView.separatorColor = [UIColor whiteColor];
     return separatorView;
 }
 

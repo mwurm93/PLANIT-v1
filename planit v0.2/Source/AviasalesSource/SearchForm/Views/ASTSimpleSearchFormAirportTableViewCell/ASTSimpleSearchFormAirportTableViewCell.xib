@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,7 +15,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="64.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="origin_icon" translatesAutoresizingMaskIntoConstraints="NO" id="qxw-fE-El6">
@@ -63,7 +63,7 @@
                         </userDefinedRuntimeAttributes>
                     </label>
                 </subviews>
-                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstItem="QOm-MG-XZs" firstAttribute="top" secondItem="dCy-jo-vBh" secondAttribute="bottom" constant="8" id="7Sx-ys-VJv"/>
                     <constraint firstItem="QOm-MG-XZs" firstAttribute="leading" secondItem="qxw-fE-El6" secondAttribute="trailing" constant="26" id="7xS-7I-GtD"/>
@@ -76,13 +76,8 @@
                     <constraint firstItem="6bT-7d-PH1" firstAttribute="leading" secondItem="QOm-MG-XZs" secondAttribute="trailing" priority="250" constant="8" id="mvd-pF-1oS"/>
                     <constraint firstItem="6bT-7d-PH1" firstAttribute="top" secondItem="dCy-jo-vBh" secondAttribute="bottom" constant="8" id="nSS-gp-4HY"/>
                 </constraints>
-                <userDefinedRuntimeAttributes>
-                    <userDefinedRuntimeAttribute type="string" keyPath="JRBackgroundColorKey" value="searchFormBackgroundColor"/>
-                </userDefinedRuntimeAttributes>
             </tableViewCellContentView>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="string" keyPath="JRBackgroundColorKey" value="searchFormBackgroundColor"/>
-            </userDefinedRuntimeAttributes>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="cityLabel" destination="QOm-MG-XZs" id="sWe-uw-8FB"/>
                 <outlet property="hintLabel" destination="dCy-jo-vBh" id="kJY-dT-LKz"/>

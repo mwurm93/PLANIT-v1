@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -75,7 +76,7 @@
                         </userDefinedRuntimeAttributes>
                     </label>
                 </subviews>
-                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstItem="rrb-yV-2Rl" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="IIq-Rv-eIY"/>
                     <constraint firstItem="FFm-tz-Urp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="76" id="IPw-Ya-Mwa"/>
@@ -90,13 +91,8 @@
                     <constraint firstAttribute="trailing" secondItem="JNM-IA-I89" secondAttribute="trailing" constant="20" id="y6C-2k-OzA"/>
                     <constraint firstItem="d0R-W8-vnQ" firstAttribute="top" secondItem="JNM-IA-I89" secondAttribute="bottom" constant="2" id="ygl-2p-xen"/>
                 </constraints>
-                <userDefinedRuntimeAttributes>
-                    <userDefinedRuntimeAttribute type="string" keyPath="JRBackgroundColorKey" value="searchFormBackgroundColor"/>
-                </userDefinedRuntimeAttributes>
             </tableViewCellContentView>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="string" keyPath="JRBackgroundColorKey" value="searchFormBackgroundColor"/>
-            </userDefinedRuntimeAttributes>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="dateLabel" destination="N8w-D2-t9m" id="Ar1-nn-hmH"/>
                 <outlet property="hintLabel" destination="FFm-tz-Urp" id="CGM-6r-naa"/>

@@ -35,8 +35,8 @@
 }
 
 - (void)applyStyle {
-    self.view.backgroundColor = [JRColorScheme searchFormBackgroundColor];
-    self.shadowView.backgroundColor = [JRColorScheme searchFormBackgroundColor];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.shadowView.backgroundColor = [UIColor clearColor];
     [self.shadowView applyShadowLayer];
 }
 

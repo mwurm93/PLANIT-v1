@@ -38,14 +38,15 @@ class ASTWaitingScreenViewController: UIViewController {
         super.viewDidLoad()
         setupViewController()
         presenter.handleLoad(view: self)
+        infoLabel.textColor = UIColor.white
     }
 
     // MARK: - Setup
 
     func setupViewController() {
         edgesForExtendedLayout = .top
-        view.backgroundColor = JRColorScheme.mainBackgroundColor()
-        progressView.backgroundColor = JRColorScheme.mainBackgroundColor()
+        view.backgroundColor = UIColor.clear
+        progressView.backgroundColor = UIColor.clear
         progressView.progressColor = JRColorScheme.mainButtonBackgroundColor()
     }
 
@@ -53,7 +54,7 @@ class ASTWaitingScreenViewController: UIViewController {
 
     func updateInfoLabel(text: String, range: NSRange) {
         let attributedText = NSMutableAttributedString(string: text)
-        attributedText.addAttribute(NSForegroundColorAttributeName, value: JRColorScheme.navigationBarBackgroundColor(), range: range)
+        attributedText.addAttribute(NSForegroundColorAttributeName, value: UIColor.white, range: range)
         infoLabel.attributedText = attributedText
     }
 

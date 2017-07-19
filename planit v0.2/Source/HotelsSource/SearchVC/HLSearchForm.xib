@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clipsSubviews="YES" contentMode="scaleToFill" id="iN0-l3-epB" customClass="HLSearchForm" customModule="AviasalesSDKTemplate" customModuleProvider="target">
+        <view clipsSubviews="YES" contentMode="scaleToFill" id="iN0-l3-epB" customClass="HLSearchForm" customModule="planit_v0_2" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="417"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -79,7 +80,7 @@
                             <rect key="frame" x="0.0" y="37" width="24" height="24"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="centerY" secondItem="Maf-2L-GF8" secondAttribute="centerY" id="4Ja-jX-wWL"/>
                         <constraint firstItem="QIz-eQ-OBM" firstAttribute="top" secondItem="79I-cx-mXi" secondAttribute="top" id="4TV-wE-Tuh"/>
@@ -146,7 +147,7 @@
                             <rect key="frame" x="0.0" y="37" width="24" height="24"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="U1r-DX-WaH" secondAttribute="bottom" id="4dE-lL-2QN"/>
                         <constraint firstItem="U1r-DX-WaH" firstAttribute="leading" secondItem="jmg-Vh-O8c" secondAttribute="leading" id="Du5-Cw-Mkl"/>
@@ -269,10 +270,10 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                         <imageView userInteractionEnabled="NO" alpha="0.60000002384185791" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="passengers_icon" translatesAutoresizingMaskIntoConstraints="NO" id="BoV-J8-cIV">
-                            <rect key="frame" x="0.0" y="50.5" width="24" height="24"/>
+                            <rect key="frame" x="0.0" y="51" width="24" height="24"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="0Hi-Ze-Y5h" secondAttribute="trailing" id="3KX-dW-ypX"/>
                         <constraint firstItem="MZ0-jV-3sA" firstAttribute="centerY" secondItem="ObH-fw-ppy" secondAttribute="centerY" id="5ny-84-X1a"/>
@@ -312,7 +313,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="UGT-rE-Orc" firstAttribute="top" secondItem="e90-2q-sZh" secondAttribute="top" constant="15" id="2gx-xj-NST"/>
                         <constraint firstAttribute="bottom" secondItem="UGT-rE-Orc" secondAttribute="bottom" constant="30" id="C7l-Wr-gdw"/>
@@ -347,7 +348,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="e90-2q-sZh" secondAttribute="trailing" id="2xB-Sa-0wH"/>
                 <constraint firstItem="8Jh-e6-89V" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="5G0-EV-9me"/>

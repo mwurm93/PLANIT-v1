@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ASTWaitingScreenViewController" customModule="AviasalesSDKTemplate" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ASTWaitingScreenViewController" customModule="planit_v0_2" customModuleProvider="target">
             <connections>
                 <outlet property="appodealAdvertisementView" destination="Z9f-TT-1jX" id="U9F-jn-fSZ"/>
                 <outlet property="aviasalesAdvertisementView" destination="4WT-Bt-cnt" id="gLb-ca-Qfg"/>
@@ -24,7 +25,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fn8-XV-tTx" customClass="ASTWaitingScreenProgressView" customModule="AviasalesSDKTemplate" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fn8-XV-tTx" customClass="ASTWaitingScreenProgressView" customModule="planit_v0_2" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="3"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
@@ -34,19 +35,19 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ldz-tJ-D51">
                     <rect key="frame" x="0.0" y="3" width="375" height="514"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rE7-nT-pch" customClass="ASTWaitingScreenPlaneSceneView" customModule="AviasalesSDKTemplate" customModuleProvider="target">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rE7-nT-pch" customClass="ASTWaitingScreenPlaneSceneView" customModule="planit_v0_2" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="117" width="375" height="280"/>
-                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="lessThanOrEqual" constant="280" id="eAq-Hu-voX"/>
                             </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zBa-xq-UQb">
-                            <rect key="frame" x="16" y="476.5" width="343" height="21.5"/>
+                            <rect key="frame" x="16" y="477" width="343" height="21"/>
                             <attributedString key="attributedText">
                                 <fragment content="Info">
                                     <attributes>
-                                        <font key="NSFont" size="18" name=".AppleSystemUIFont"/>
+                                        <font key="NSFont" size="18" name=".SFNSText"/>
                                         <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                     </attributes>
                                 </fragment>
@@ -54,6 +55,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="zBa-xq-UQb" firstAttribute="leading" secondItem="ldz-tJ-D51" secondAttribute="leading" constant="16" id="2Xd-SZ-RmB"/>
                         <constraint firstAttribute="bottom" secondItem="rE7-nT-pch" secondAttribute="bottom" priority="750" id="93a-CS-LAy"/>
@@ -67,6 +69,7 @@
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z9f-TT-1jX">
                     <rect key="frame" x="0.0" y="517" width="375" height="150"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="150" id="kgd-0S-vN9"/>
                     </constraints>
@@ -78,7 +81,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="ldz-tJ-D51" firstAttribute="top" secondItem="fn8-XV-tTx" secondAttribute="bottom" id="2QL-JR-YCK"/>
                 <constraint firstItem="4WT-Bt-cnt" firstAttribute="top" secondItem="Z9f-TT-1jX" secondAttribute="bottom" id="MsG-ZH-Mbt"/>

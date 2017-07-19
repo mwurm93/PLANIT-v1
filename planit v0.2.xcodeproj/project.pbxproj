@@ -696,6 +696,9 @@
 		FA25F1F91EBB6DA9005D29E5 /* exploreHotelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */; };
 		FA25F1FB1EBB7B9F005D29E5 /* hotelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */; };
 		FA2CFC0A1E3E57A200527405 /* UnbookedTripSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2CFC091E3E57A200527405 /* UnbookedTripSummaryViewController.swift */; };
+		FA31CB0F1F1E66F4000F6E64 /* Hotel.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA31CB0D1F1E66F4000F6E64 /* Hotel.xcassets */; };
+		FA31CB101F1E66F4000F6E64 /* App.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA31CB0E1F1E66F4000F6E64 /* App.xcassets */; };
+		FA31CB121F1E8DED000F6E64 /* JRResultsTicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA31CB111F1E8DED000F6E64 /* JRResultsTicketCell.swift */; };
 		FA35EF311EA5506D0029E462 /* HotelPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA35EF301EA5506D0029E462 /* HotelPreferencesViewController.swift */; };
 		FA48876B1F01AAEF0015F078 /* WhatTypeOfPlaceToStayQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA48876A1F01AAEF0015F078 /* WhatTypeOfPlaceToStayQuestionView.swift */; };
 		FA4887711F01AC000015F078 /* WhatTypeOfPlaceToStayQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4887701F01AC000015F078 /* WhatTypeOfPlaceToStayQuestionView.xib */; };
@@ -1804,6 +1807,9 @@
 		FA25F1F81EBB6DA9005D29E5 /* exploreHotelsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = exploreHotelsViewController.swift; sourceTree = "<group>"; };
 		FA25F1FA1EBB7B9F005D29E5 /* hotelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hotelTableViewCell.swift; sourceTree = "<group>"; };
 		FA2CFC091E3E57A200527405 /* UnbookedTripSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnbookedTripSummaryViewController.swift; sourceTree = "<group>"; };
+		FA31CB0D1F1E66F4000F6E64 /* Hotel.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Hotel.xcassets; sourceTree = "<group>"; };
+		FA31CB0E1F1E66F4000F6E64 /* App.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = App.xcassets; sourceTree = "<group>"; };
+		FA31CB111F1E8DED000F6E64 /* JRResultsTicketCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JRResultsTicketCell.swift; sourceTree = "<group>"; };
 		FA35EF301EA5506D0029E462 /* HotelPreferencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HotelPreferencesViewController.swift; sourceTree = "<group>"; };
 		FA48876A1F01AAEF0015F078 /* WhatTypeOfPlaceToStayQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhatTypeOfPlaceToStayQuestionView.swift; sourceTree = "<group>"; };
 		FA4887701F01AC000015F078 /* WhatTypeOfPlaceToStayQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WhatTypeOfPlaceToStayQuestionView.xib; sourceTree = "<group>"; };
@@ -2579,6 +2585,7 @@
 				FA252D721F1D3B6B002BCE29 /* JRResultsFlightSegmentCell.xib */,
 				FA252D731F1D3B6B002BCE29 /* JRResultsTicketCell.h */,
 				FA252D741F1D3B6B002BCE29 /* JRResultsTicketCell.m */,
+				FA31CB111F1E8DED000F6E64 /* JRResultsTicketCell.swift */,
 				FA252D751F1D3B6B002BCE29 /* JRResultsTicketCell.xib */,
 				FA252D761F1D3B6B002BCE29 /* JRResultsTicketPriceCell.h */,
 				FA252D771F1D3B6B002BCE29 /* JRResultsTicketPriceCell.m */,
@@ -4428,6 +4435,8 @@
 		FA978A621F1C9D0A00ED5EB8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FA31CB0D1F1E66F4000F6E64 /* Hotel.xcassets */,
+				FA31CB0E1F1E66F4000F6E64 /* App.xcassets */,
 				FA978A631F1C9E1B00ED5EB8 /* AVSLaunchScreen.xib */,
 				FA978A641F1C9E1B00ED5EB8 /* fr.lproj */,
 				FA978A651F1C9E1B00ED5EB8 /* nl.lproj */,
@@ -4905,6 +4914,7 @@
 				FA2530E61F1D3B6D002BCE29 /* JRInfoPanelView.xib in Resources */,
 				FA2531111F1D3B6D002BCE29 /* ASTSimpleSearchFormDateTableViewCell.xib in Resources */,
 				FA2532B21F1D3B6E002BCE29 /* PeekFullInfoCell.xib in Resources */,
+				FA31CB0F1F1E66F4000F6E64 /* Hotel.xcassets in Resources */,
 				FAD50DD61EE9BFD60006C3AA /* instructionsView.xib in Resources */,
 				FA2530D91F1D3B6D002BCE29 /* JRFilterListSeparatorCell.xib in Resources */,
 				FA2530B61F1D3B6D002BCE29 /* JRAirportPickerCellWithAirport.xib in Resources */,
@@ -4933,6 +4943,7 @@
 				FA25322D1F1D3B6D002BCE29 /* HLHotelDetailsRatingDetailsCell.xib in Resources */,
 				FA2531651F1D3B6D002BCE29 /* ASTDevSettingsVC.xib in Resources */,
 				FA2533141F1D3B6E002BCE29 /* HLNoSearchResultsPlaceholderView.xib in Resources */,
+				FA31CB101F1E66F4000F6E64 /* App.xcassets in Resources */,
 				FABEAD021EFE4D700075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.xib in Resources */,
 				FA2532E11F1D3B6E002BCE29 /* WaitingGateCell.xib in Resources */,
 				FA14B2301EFB2D3D004E0E29 /* FlightSearchQuestionView.xib in Resources */,
@@ -5578,6 +5589,7 @@
 				FA25312F1F1D3B6D002BCE29 /* NSString+HLCapitalization.m in Sources */,
 				FA2532B31F1D3B6E002BCE29 /* PeekHotelMapCell.swift in Sources */,
 				FA2532431F1D3B6D002BCE29 /* HotelDetailsTargetConfiguration.swift in Sources */,
+				FA31CB121F1E8DED000F6E64 /* JRResultsTicketCell.swift in Sources */,
 				FA2530EB1F1D3B6D002BCE29 /* JRFlightsSegmentHeaderView.m in Sources */,
 				FA2532BB1F1D3B6E002BCE29 /* PeekTableCell.swift in Sources */,
 				FA25316C1F1D3B6D002BCE29 /* StringUtils.m in Sources */,

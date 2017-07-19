@@ -44,6 +44,7 @@ import Foundation
         view?.stopLoading()
         view?.hideActivity()
         view?.dismiss()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "JRSDKFlightBrowserClosed"), object: nil)
     }
 
     func handleStartNavigation() {

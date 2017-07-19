@@ -4,11 +4,12 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12121"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ASTSearchResultsSceneViewController" customModule="AviasalesSDKTemplate" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ASTSearchResultsSceneViewController" customModule="planit_v0_2" customModuleProvider="target">
             <connections>
                 <outlet property="ticketContainerView" destination="Tqb-QY-ksw" id="U0L-2f-OXU"/>
                 <outlet property="ticketsContainerView" destination="0uv-dI-tVi" id="CdF-e4-Yqn"/>
@@ -22,14 +23,14 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0uv-dI-tVi">
                     <rect key="frame" x="0.0" y="0.0" width="384" height="1024"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tqb-QY-ksw">
                     <rect key="frame" x="384" y="0.0" width="384" height="1024"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="0uv-dI-tVi" secondAttribute="bottom" id="1qD-ei-CID"/>
                 <constraint firstItem="0uv-dI-tVi" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="4ms-hq-72q"/>

@@ -7,15 +7,15 @@
 
 #import "planit_v0_2-Swift.h"
 
-
 #import "ASTContainerSearchFormViewController.h"
 #import "ASTSimpleSearchFormViewController.h"
 #import "ASTComplexSearchFormViewController.h"
 
 
 NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
-    ASTContainerSearchFormSearchTypeSimple  = 0,
-    ASTContainerSearchFormSearchTypeComplex = 1
+    ASTContainerSearchFormSearchTypeOneWay = 0,
+    ASTContainerSearchFormSearchTypeRoundtrip = 1,
+    ASTContainerSearchFormSearchTypeComplex = 2
 };
 
 
@@ -47,13 +47,13 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    self.searchButtonBottomLayoutConstraint.constant = self.bottomLayoutGuide.length;
+    self.searchButtonBottomLayoutConstraint.constant = 100;
 }
 
 #pragma mark - Setup
 
 - (void)setupViewController {
-    [self.view setBackgroundColor:[JRColorScheme searchFormBackgroundColor]];
+    [self.view setBackgroundColor:[UIColor clearColor]];
     [self setupNavigationItems];
     [self setupSegmentedControl];
     [self setupSearchButton];
@@ -62,14 +62,16 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 
 - (void)setupSegmentedControl {
     self.searchFormTypeSegmentedControl.tintColor = [JRColorScheme searchFormTintColor];
-    [self.searchFormTypeSegmentedControl setTitle:NSLS(@"JR_SEARCH_FORM_SIMPLE_SEARCH_SEGMENT_TITLE") forSegmentAtIndex:ASTContainerSearchFormSearchTypeSimple];
-    [self.searchFormTypeSegmentedControl setTitle:NSLS(@"JR_SEARCH_FORM_COMPLEX_SEARCH_SEGMENT_TITLE") forSegmentAtIndex:ASTContainerSearchFormSearchTypeComplex];
+//    [self.searchFormTypeSegmentedControl setTitle:NSLS(@"JR_SEARCH_FORM_SIMPLE_SEARCH_SEGMENT_TITLE") forSegmentAtIndex:ASTContainerSearchFormSearchTypeSimple];
+//    [self.searchFormTypeSegmentedControl setTitle:NSLS(@"JR_SEARCH_FORM_COMPLEX_SEARCH_SEGMENT_TITLE") forSegmentAtIndex:ASTContainerSearchFormSearchTypeComplex];
 }
 
 - (void)setupSearchButton {
     self.searchButton.tintColor = [JRColorScheme mainButtonTitleColor];
-    self.searchButton.backgroundColor = [JRColorScheme mainButtonBackgroundColor];
+    self.searchButton.backgroundColor = [UIColor clearColor];
     self.searchButton.layer.cornerRadius = 20.0;
+    self.searchButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.searchButton.layer.borderWidth = 1;
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:NSLS(@"JR_SEARCH_FORM_SEARCH_BUTTON") attributes:@{NSFontAttributeName : [UIFont fontWithName:@".SFUIText-Bold" size:16.0]}];
     [self.searchButton setAttributedTitle:attributedString forState:UIControlStateNormal];
 }
@@ -117,7 +119,10 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 
 - (IBAction)searchFormTypeSegmentChanged:(UISegmentedControl *)sender {
     switch (sender.selectedSegmentIndex) {
-        case ASTContainerSearchFormSearchTypeSimple:
+        case ASTContainerSearchFormSearchTypeOneWay:
+            [self showSimpleSearchForm];
+            break;
+        case ASTContainerSearchFormSearchTypeRoundtrip:
             [self showSimpleSearchForm];
             break;
         case ASTContainerSearchFormSearchTypeComplex:
@@ -138,7 +143,7 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 
 - (void)updateSearchInfoWithDestination:(JRSDKAirport *)destination checkIn:(NSDate *)checkIn checkOut:(NSDate *)checkOut passengers:(ASTPassengersInfo *)passengers {
     [self showSimpleSearchForm];
-    [self.searchFormTypeSegmentedControl setSelectedSegmentIndex:ASTContainerSearchFormSearchTypeSimple];
+    [self.searchFormTypeSegmentedControl setSelectedSegmentIndex:ASTContainerSearchFormSearchTypeRoundtrip];
     [self.simpleSearchFormViewController updateSearchInfoWithDestination:destination checkIn:checkIn checkOut:checkOut passengers:passengers];
     [self.navigationController popToRootViewControllerAnimated:NO];
     [self.tabBarController setSelectedViewController:self.navigationController];

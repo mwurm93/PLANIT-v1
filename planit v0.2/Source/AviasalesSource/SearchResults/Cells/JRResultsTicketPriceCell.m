@@ -90,4 +90,5 @@ static const CGSize kAirlineLogoSize = (CGSize){85, 25};
         }
     }];
 }
+
 @end

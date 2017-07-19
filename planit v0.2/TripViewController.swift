@@ -28,7 +28,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var reviewAndBookFlightsController: ReviewAndBookViewController?
     var carRentalResultsController: carRentalResultsViewController?
     var reviewAndBookCarRentalController: ReviewAndBookViewController?
-    var hotelResultsController: exploreHotelsViewController?
+    var hotelResultsController: UIViewController?
     var reviewAndBookHotelController: ReviewAndBookViewController?
         //Views
     var userNameQuestionView: UserNameQuestionView?
@@ -369,7 +369,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(removeFlightResultsViewController), name: NSNotification.Name(rawValue: "editFlightSearchButtonTouchedUpInside"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(spawnFlightBookingQuestionView), name: NSNotification.Name(rawValue: "flightSelectButtonTouchedUpInside"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(flightSelectedBooked), name: NSNotification.Name(rawValue: "bookFlightButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flightSelectedBooked), name: NSNotification.Name(rawValue: "JRSDKFlightBrowserClosed"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(flightSelectedSavedForLater), name: NSNotification.Name(rawValue: "saveFlightForLaterButtonTouchedUpInside"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedFlightToFlightResults), name: NSNotification.Name(rawValue: "bookSelectedFlightToFlightResults"), object: nil)
         
@@ -1432,6 +1432,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollToSubviewWithTag(tag: 10)
     }
     func spawnFlightSearchQuestionView(){
+        
+        
+        
         if flightSearchQuestionView == nil {
             //Load next question
             flightSearchQuestionView = Bundle.main.loadNibNamed("FlightSearchQuestionView", owner: self, options: nil)?.first! as? FlightSearchQuestionView
@@ -1471,6 +1474,24 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             flightSearchQuestionView?.handleSearchMode()
             flightSearchQuestionView?.searchModeControl.selectedSegmentIndex = 0
         }
+        
+        //TRAVELPAYOUTS
+        flightResultsController = createTicketsVC()
+        flightResultsController?.willMove(toParentViewController: self)
+        self.addChildViewController(flightResultsController!)
+        //        flightResultsController?.searchMode = flightSearchQuestionView?.searchMode
+        flightResultsController?.loadView()
+        flightResultsController?.viewDidLoad()
+        flightResultsController?.view.frame = self.view.bounds
+        for subview in (flightSearchQuestionView?.subviews)! {
+            subview.isHidden = true
+        }
+        self.flightSearchQuestionView?.addSubview((flightResultsController?.view)!)
+        flightResultsController?.view.tag = 12
+        flightResultsController?.didMove(toParentViewController: self)
+        
+        updateProgress()
+
         
         alignSubviews()
         scrollToSubviewWithTag(tag: 11)
@@ -1567,21 +1588,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        
 //        showWebsite(URL: whiteLabelURL_FlightSearchQuery)
         
-        flightResultsController = createTicketsVC()
-        flightResultsController?.willMove(toParentViewController: self)
-        self.addChildViewController(flightResultsController!)
-//        flightResultsController?.searchMode = flightSearchQuestionView?.searchMode
-        flightResultsController?.loadView()
-        flightResultsController?.viewDidLoad()
-        flightResultsController?.view.frame = self.view.bounds
-        for subview in (flightSearchQuestionView?.subviews)! {
-            subview.isHidden = true
-        }
-        self.flightSearchQuestionView?.addSubview((flightResultsController?.view)!)
-        flightResultsController?.view.tag = 12
-        flightResultsController?.didMove(toParentViewController: self)
-        
-        updateProgress()
     }
     func spawnFlightBookingQuestionView() {
 //        reviewAndBookFlightsController = self.storyboard!.instantiateViewController(withIdentifier: "ReviewAndBookViewController") as? ReviewAndBookViewController
@@ -1886,6 +1892,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             view.addConstraints([heightConstraint])
             increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
+        
+        //TRAVELPAYOUTS
+        hotelResultsController = createHotelsVC()
+        hotelResultsController?.willMove(toParentViewController: self)
+        self.addChildViewController(hotelResultsController!)
+        //        flightResultsController?.searchMode = flightSearchQuestionView?.searchMode
+        hotelResultsController?.loadView()
+        hotelResultsController?.viewDidLoad()
+        hotelResultsController?.view.frame = self.view.bounds
+        for subview in (hotelSearchQuestionView?.subviews)! {
+            subview.isHidden = true
+        }
+        self.hotelSearchQuestionView?.addSubview((hotelResultsController?.view)!)
+        hotelResultsController?.view.tag = 12
+        hotelResultsController?.didMove(toParentViewController: self)
+
+        
         alignSubviews()
         scrollToSubviewWithTag(tag: 23)
     }
@@ -4748,5 +4771,8 @@ extension TripViewController {
         let rootViewController = iPhone() ? ASTContainerSearchFormViewController() : ASTSearchFormSceneViewController()
         return JRNavigationController(rootViewController: rootViewController)
     }
-
+    func createHotelsVC() -> UIViewController {
+        let searchVC = iPad() ? HLIpadSearchVC() : HLSearchVC()
+        return JRNavigationController(rootViewController: searchVC)
+    }
 }

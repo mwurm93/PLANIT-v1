@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,17 +23,15 @@
             <subviews>
                 <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="9" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="veO-Fa-Y7M">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="659"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="JRBackgroundColorKey" value="mainBackgroundColor"/>
-                    </userDefinedRuntimeAttributes>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="g7x-Pp-SGF"/>
                         <outlet property="delegate" destination="-1" id="Zmt-MV-LUo"/>
                     </connections>
                 </tableView>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.61568627450000002" blue="0.76862745099999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottomMargin" secondItem="veO-Fa-Y7M" secondAttribute="bottom" id="Oos-nG-9Am"/>
                 <constraint firstItem="veO-Fa-Y7M" firstAttribute="top" secondItem="1" secondAttribute="top" id="agT-hb-h41"/>

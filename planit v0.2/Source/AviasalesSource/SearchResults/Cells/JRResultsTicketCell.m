@@ -13,6 +13,9 @@
 #import "JRResultsTicketPriceCell.h"
 #import "JRResultsFlightSegmentCell.h"
 #import "JRColorScheme.h"
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
 
 static NSString *const kPriceCellReusableId = @"JRResultsTicketPriceCell";
 static NSString *const kFlightSegmentCellReusableID = @"JRResultsFlightSegmentCell";
@@ -23,6 +26,7 @@ static CGFloat const kBottomPadding = 12;
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 @end
 
@@ -98,6 +102,7 @@ static CGFloat const kBottomPadding = 12;
         case 0: {
             JRResultsTicketPriceCell *const cell = [tableView dequeueReusableCellWithIdentifier:kPriceCellReusableId];
             cell.airline = self.ticket.mainAirline;
+            
             JRSDKProposal *minProposal = [JRSDKModelUtils ticketMinimalPriceProposal:self.ticket];
             cell.price = minProposal.price;
             return cell;
@@ -140,6 +145,14 @@ static CGFloat const kBottomPadding = 12;
     } else {
         self.backgroundColor = [JRColorScheme itemsBackgroundColor];
     }
+}
+- (IBAction)saveButtonTouchedUpInside:(id)sender {
+    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
+    NSDictionary *flightResultDictionary = [convertTicketForSavePerformer convertTicketForSaveWithTicket:self.ticket];
+    //Save to NSUserDefaults
+    
+    //Fetch and rebuild ticket
+//    [convertTicketForSavePerformer rebuildTicketFromFlightResultDictionary:flightResultDictionary];
 }
 
 @end
