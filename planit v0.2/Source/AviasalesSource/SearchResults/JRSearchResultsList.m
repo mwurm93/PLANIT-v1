@@ -40,7 +40,14 @@
     
     cell.flightSegmentsLayoutParameters = self.flightSegmentLayoutParameters;
     cell.ticket = [self ticketAtIndexPath:indexPath];
-
+    
+    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
+    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
+    int *isSavedPreviously = [convertTicketForSavePerformer checkIfSavedFlightTicketsContainsWithTicket:cell.ticket savedFlightTickets:savedFlightTickets];
+    if (isSavedPreviously) {
+        [cell.saveButton setSelected:YES];
+    }
+    
     return cell;
 }
 

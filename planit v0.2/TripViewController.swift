@@ -16,9 +16,11 @@ import Floaty
 import SafariServices
 import CSVImporter
 import UICircularProgressRing
+import TwicketSegmentedControl
+import TLYShyNavBar
 
 
-class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate {
+class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate, TwicketSegmentedControlDelegate,TLYShyNavBarManagerDelegate {
 
     //MARK: Class variables
     var scrollContentViewHeight: NSLayoutConstraint?
@@ -98,11 +100,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var travelItem: FloatyItem?
     var placeToStayItem: FloatyItem?
     var progressRing: UICircularProgressRingView?
-    
+        //Navbar
+    var navBar: UINavigationBar?
+//    var navItem: UINavigationItem?
         //BookingMode
     var bookingMode = "flight"
         //Date formatting
     var formatter = DateFormatter()
+
     
     //PPN Cities
     var ppnCarRentalCities = [Dictionary<String, String>]()
@@ -145,8 +150,54 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var placeToStayButton: UIButton!
     @IBOutlet weak var placetoStaySummaryDescriptionButton: UIButton!
 
+    func back() {
+        self.performSegue(withIdentifier: "tripVCtoTripListVC", sender: self)
+    }
+    
+    func didSelect(_ segmentIndex: Int) {
+        if segmentIndex == 0 {
+            assistant()
+            self.shyNavBarManager.stickyNavigationBar = false
+        } else if segmentIndex == 1 {
+            itinerary()
+            self.shyNavBarManager.stickyNavigationBar = true
+        } else if segmentIndex == 2 {
+            chat()
+            self.shyNavBarManager.stickyNavigationBar = true
+        }
+    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.shyNavBarManager.scrollView = self.scrollView;
+        self.shyNavBarManager.delegate = self
+//        self.shyNavBarManager.expansionResistance = 2
+//        self.shyNavBarManager.contractionResistance = 2
+        
+        navBar = self.navigationController?.navigationBar
+        navBar?.isTranslucent = true
+//        navBar?.backgroundColor = UIColor.lightGray
+        navBar?.barTintColor = UIColor.lightGray
+        view.addSubview(navBar!)
+//        navItem = UINavigationItem()
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        let button:UIButton = UIButton(frame: CGRect(x: 0,y: 0,width: 25, height: 20))
+        button.setBackgroundImage(backButtonImage, for: .normal)
+        button.addTarget(self, action: #selector(back), for: UIControlEvents.touchUpInside)
+        
+        //        navigItem.leftBarButtonItem = UIBarButtonItem(customView: button)
+        UIBarButtonItem.appearance().tintColor = UIColor.blue
+        self.navigationController?.hidesBarsOnSwipe = true
+        let segmentedControlTitles = ["Assistant","Itinerary","Chat"]
+        let segmentedControl = TwicketSegmentedControl(frame: CGRect(x: 0, y: 100, width: 270, height: 40))
+        segmentedControl.setSegmentItems(segmentedControlTitles)
+        segmentedControl.delegate = self
+        segmentedControl.backgroundColor = .clear // This is important!
+        //        navigItem.titleView = segmentedControl
+        self.navigationItem.setLeftBarButton(UIBarButtonItem(customView: button), animated: false)
+        self.navigationItem.titleView = segmentedControl
         
         //import PPN cities csv
         getCarRentalCities()
@@ -197,16 +248,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         setUpFloaty()
         
-        //Add shadow to topview
-        let borderLine = UIView()
-        borderLine.frame = CGRect(x: 0, y: Double(topView.frame.height)-0.5, width: Double(topView.frame.width), height: 0.5)
-        borderLine.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
-        borderLine.layer.shadowColor = UIColor.black.cgColor
-        borderLine.layer.shadowRadius = 2.5
-        borderLine.layer.masksToBounds = false
-        borderLine.layer.shadowOpacity = 1
-        borderLine.layer.shadowOffset = CGSize(width: 0, height: 3)
-        self.view.addSubview(borderLine)
+//        //Add shadow to topview
+//        let borderLine = UIView()
+//        borderLine.frame = CGRect(x: 0, y: Double(topView.frame.height)-0.5, width: Double(topView.frame.width), height: 0.5)
+//        borderLine.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
+//        borderLine.layer.shadowColor = UIColor.black.cgColor
+//        borderLine.layer.shadowRadius = 2.5
+//        borderLine.layer.masksToBounds = false
+//        borderLine.layer.shadowOpacity = 1
+//        borderLine.layer.shadowOffset = CGSize(width: 0, height: 3)
+//        self.view.addSubview(borderLine)
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
@@ -547,11 +598,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     override func viewWillAppear(_ animated: Bool) {
-
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override func viewWillLayoutSubviews() {
+    }
+    override func viewWillDisappear(_ animated: Bool) {
     }
     
     // MARK: Custom functions
@@ -1095,8 +1150,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         userNameQuestionView?.userNameQuestionTextfield?.delegate = self
         userNameQuestionView?.userNameQuestionTextfield?.becomeFirstResponder()
         let bounds = UIScreen.main.bounds
-        self.userNameQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+        self.userNameQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height)
         let heightConstraint = NSLayoutConstraint(item: userNameQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (userNameQuestionView?.frame.height)!)
+        let test = (userNameQuestionView?.frame.height)!
         view.addConstraints([heightConstraint])
         updateHeightOfScrollView()
     }
@@ -1112,11 +1168,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let bounds = UIScreen.main.bounds
             
             if userNameQuestionView != nil {
-                self.instructionsQuestionView!.frame = CGRect(x: 0, y: (userNameQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+                self.instructionsQuestionView!.frame = CGRect(x: 0, y: (userNameQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height)
             } else {
                 self.instructionsQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
             let heightConstraint = NSLayoutConstraint(item: instructionsQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (instructionsQuestionView?.frame.height)!)
+            let test = (instructionsQuestionView?.frame.height)!
+            let test2 = scrollView.frame
             view.addConstraints([heightConstraint])
             let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! I'm here to help…"
             instructionsQuestionView?.questionLabel1?.text = questionLabelValue
@@ -1139,9 +1197,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             tripNameQuestionView?.tag = 34
             let bounds = UIScreen.main.bounds
             
-            self.tripNameQuestionView!.frame = CGRect(x: 0, y: (instructionsQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            self.tripNameQuestionView!.frame = CGRect(x: 0, y: (instructionsQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height)
 
             let heightConstraint = NSLayoutConstraint(item: tripNameQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (tripNameQuestionView?.frame.height)!)
+            let test = (tripNameQuestionView?.frame.height)!
             view.addConstraints([heightConstraint])
         }
         alignSubviews()
@@ -1180,6 +1239,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let bounds = UIScreen.main.bounds
             self.datesPickedOutCalendarView!.frame = CGRect(x: 0, y: (tripNameQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: datesPickedOutCalendarView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (datesPickedOutCalendarView?.frame.height)!)
+            let test = (datesPickedOutCalendarView?.frame.height)!
             view.addConstraints([heightConstraint])
         
         updateHeightOfScrollView()
@@ -1477,6 +1537,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         //TRAVELPAYOUTS
         flightResultsController = createTicketsVC()
+//        let heightConstraint = NSLayoutConstraint(item: flightResultsController!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (flightSearchQuestionView?.frame.height)!)
+//        view.addConstraints([heightConstraint])
+
         flightResultsController?.willMove(toParentViewController: self)
         self.addChildViewController(flightResultsController!)
         //        flightResultsController?.searchMode = flightSearchQuestionView?.searchMode
@@ -3362,6 +3425,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
         }        
     }
+//    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+//        
+//        return true
+//    }
+
     
     // MARK: SAVE TO SINGLETON
     ////// ADD NEW TRIP VARS (NS ONLY) HERE ///////////////////////////////////////////////////////////////////////////
@@ -3406,6 +3474,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var isInitiator = NSNumber(value: 1)
         var currentAssistantSubview = NSNumber(value: 0)
         var datesDestinationsDictionary  = NSDictionary()
+        var savedFlightTickets  = [NSData]()
+
 
         //Activities VC
         var selectedActivities = [NSString]()
@@ -3452,6 +3522,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             isInitiator = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "isInitiator") as? NSNumber ?? NSNumber()
             currentAssistantSubview = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "currentAssistantSubview") as? NSNumber ?? NSNumber()
             datesDestinationsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "datesDestinationsDictionary") as? NSDictionary ?? NSDictionary()
+            savedFlightTickets = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "savedFlightTickets") as? [NSData] ?? [NSData]()
 
 
             //Activities VC
@@ -3589,15 +3660,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBAction func addInviteesButtonTouchedUpInside(_ sender: Any) {
         checkContactsAccess()
     }
-    @IBAction func assistantButtonTouchedUpInside(_ sender: Any) {
-        assistant()
-    }
-    @IBAction func itineraryButtonTouchedUpInside(_ sender: Any) {
-        itinerary()
-    }
-    @IBAction func chatButtonTouchedUpInside(_ sender: Any) {
-        chat()
-    }
+//    @IBAction func assistantButtonTouchedUpInside(_ sender: Any) {
+//        assistant()
+//    }
+//    @IBAction func itineraryButtonTouchedUpInside(_ sender: Any) {
+//        itinerary()
+//    }
+//    @IBAction func chatButtonTouchedUpInside(_ sender: Any) {
+//        chat()
+//    }
     @IBAction func scrollUpButtonTouchedUpInside(_ sender: Any) {
         scrollUpOneSubview()
     }

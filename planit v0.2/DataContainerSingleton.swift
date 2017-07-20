@@ -30,8 +30,6 @@ struct DefaultKeys {
         static let beenThereCountries = "beenThereCountries"
         static let token = "token"
         static let timesViewedNonTrip = "timesViewedNonTrip"
-
-    
     }
 
 class DataContainerSingleton {

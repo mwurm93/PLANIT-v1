@@ -63,7 +63,7 @@
 
     [self.searchForm autoPinEdgesToSuperviewEdges];
 
-    self.view.backgroundColor = [JRColorScheme searchFormBackgroundColor];
+    self.view.backgroundColor = [UIColor clearColor];
 }
 
 -(void)viewDidAppear:(BOOL)animated

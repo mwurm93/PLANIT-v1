@@ -43,6 +43,8 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     [InteractionManager shared].ticketsSearchForm = self;
     [self setupViewController];
     [self showChildViewController:self.simpleSearchFormViewController];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -77,8 +79,16 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 }
 
 - (void)setupNavigationItems {
-    self.navigationItem.title = NSLS(@"JR_SEARCH_FORM_TITLE");
-    self.navigationItem.backBarButtonItem = [UIBarButtonItem backBarButtonItem];
+    
+    UIViewController *tripViewControllerAsViewController = self.parentViewController.parentViewController;
+    ObjCAccessoryMethods *objCAccessoryMethods = [[ObjCAccessoryMethods alloc] init];
+    TripViewController *tripViewController = [objCAccessoryMethods getTripViewControllerWithViewController:tripViewControllerAsViewController];
+    tripViewController.navigationItem.titleView = nil;
+    tripViewController.navigationItem.title = NSLS(@"JR_SEARCH_FORM_TITLE");
+    tripViewController.navigationItem.backBarButtonItem = [UIBarButtonItem backBarButtonItem];
+    
+//    self.navigationItem.title = NSLS(@"JR_SEARCH_FORM_TITLE");
+//    self.navigationItem.backBarButtonItem = [UIBarButtonItem backBarButtonItem];
 }
 
 - (void)setupChildViewControllers {
@@ -145,7 +155,7 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     [self showSimpleSearchForm];
     [self.searchFormTypeSegmentedControl setSelectedSegmentIndex:ASTContainerSearchFormSearchTypeRoundtrip];
     [self.simpleSearchFormViewController updateSearchInfoWithDestination:destination checkIn:checkIn checkOut:checkOut passengers:passengers];
-    [self.navigationController popToRootViewControllerAnimated:NO];
+//    [self.navigationController popToRootViewControllerAnimated:NO];
     [self.tabBarController setSelectedViewController:self.navigationController];
 }
 

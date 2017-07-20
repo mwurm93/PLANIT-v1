@@ -5,16 +5,17 @@
 //  This code is distributed under the terms and conditions of the MIT license.
 //
 #import "planit_v0_2-Swift.h"
-
-#import "JRResultsTicketCell.h"
-
-#import <AviasalesSDK/AviasalesSDK.h>
-
-#import "JRResultsTicketPriceCell.h"
-#import "JRResultsFlightSegmentCell.h"
 #import "JRColorScheme.h"
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+
+
+#import "JRResultsTicketCell.h"
+#import "JRNavigationController.h"
+#import "JRTicketVC.h"
+#import <AviasalesSDK/AviasalesSDK.h>
+#import "JRResultsTicketPriceCell.h"
+#import "JRResultsFlightSegmentCell.h"
 
 
 static NSString *const kPriceCellReusableId = @"JRResultsTicketPriceCell";
@@ -26,7 +27,7 @@ static CGFloat const kBottomPadding = 12;
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
+//@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 @end
 
@@ -148,7 +149,15 @@ static CGFloat const kBottomPadding = 12;
 }
 - (IBAction)saveButtonTouchedUpInside:(id)sender {
     ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
-    NSDictionary *flightResultDictionary = [convertTicketForSavePerformer convertTicketForSaveWithTicket:self.ticket];
+//    NSDictionary *flightResultDictionary = [convertTicketForSavePerformer convertTicketForSaveWithTicket:self.ticket];
+      [convertTicketForSavePerformer saveFlightTicketsWithTicket:self.ticket];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"test"
+                                                        object:nil];
+    
+    
+    
+
     //Save to NSUserDefaults
     
     //Fetch and rebuild ticket

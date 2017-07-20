@@ -11,7 +11,7 @@ import Apollo
 import GoogleMaps
 import GooglePlaces
 import Firebase
-
+//import CoreData
 
 var apollo = ApolloClient(url: URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!)
 
@@ -73,5 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        // Saves changes in the application's managed object context before the application terminates.
     }
+    
 }

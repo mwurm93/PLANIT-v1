@@ -95,7 +95,11 @@ extension ASTWaitingScreenViewController: ASTWaitingScreenViewProtocol {
     }
 
     func update(title: String) {
-        navigationItem.title = title
+        let tripViewController = self.parent?.parent as! TripViewController
+        tripViewController.navigationItem.titleView = nil
+        tripViewController.navigationItem.title = title
+        tripViewController.shyNavBarManager.stickyNavigationBar = true
+//        navigationItem.title = title
     }
 
     func updateInfo(text: String, range: NSRange) {

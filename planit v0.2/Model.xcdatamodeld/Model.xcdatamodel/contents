@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16F73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Trips" representedClassName="TripsMO" syncable="YES" codeGenerationType="class">
+        <attribute name="savedFlightTickets" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <relationship name="oneUserToManyTrips" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="manyTripsToOneUser" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="User" representedClassName="UserMO" syncable="YES" codeGenerationType="class">
+        <relationship name="manyTripsToOneUser" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Trips" inverseName="oneUserToManyTrips" inverseEntity="Trips" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="User" positionX="-63" positionY="-18" width="128" height="58"/>
+        <element name="Trips" positionX="171" positionY="-3" width="128" height="73"/>
+    </elements>
+</model>

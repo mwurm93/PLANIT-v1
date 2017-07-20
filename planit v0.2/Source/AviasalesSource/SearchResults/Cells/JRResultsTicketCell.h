@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) JRSDKTicket *ticket;
 @property (strong, nonatomic) JRSearchResultsFlightSegmentCellLayoutParameters *flightSegmentsLayoutParameters;
+@property (strong, nonatomic) UIButton *saveButton;
 
 + (NSString *)nibFileName;
 + (CGFloat)heightWithTicket:(JRSDKTicket *)ticket;

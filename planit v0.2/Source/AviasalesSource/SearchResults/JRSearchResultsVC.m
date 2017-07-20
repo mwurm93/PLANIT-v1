@@ -153,6 +153,23 @@ static const NSInteger kHotelCardIndex = 5;
     if (iPad()) {
         [self setFirstTicketSelected];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveTestNotification)
+                                                 name:@"test"
+                                               object:nil];
+}
+
+- (void)receiveTestNotification {
+    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
+    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
+    
+    JRSDKTicket *flightTicket = savedFlightTickets[0];
+    
+    JRTicketVC *const ticketVC = [[JRTicketVC alloc] initWithSearchInfo: flightTicket.searchResultInfo.searchInfo searchID: flightTicket.searchResultInfo.searchID];
+    [ticketVC setTicket:savedFlightTickets[0]];
+    [self.navigationController pushViewController:ticketVC animated:YES];
+
 }
 
 - (void)viewDidLayoutSubviews {
@@ -167,6 +184,12 @@ static const NSInteger kHotelCardIndex = 5;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
+    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
+    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
+    if (savedFlightTickets.count > 0) {
+        //RELOAD DATA
+    }
+    
     if (iPhone() && self.tableView.indexPathForSelectedRow) {
         [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
     }
@@ -194,7 +217,10 @@ static const NSInteger kHotelCardIndex = 5;
     SEL showFilters = @selector(showFilters:);
     
     if (iPhone()) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_icon"] style:UIBarButtonItemStylePlain target:self action:showFilters];
+//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_icon"] style:UIBarButtonItemStylePlain target:self action:showFilters];
+        UIViewController *tripViewController = self.parentViewController;
+        tripViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_icon"] style:UIBarButtonItemStylePlain target:self action:showFilters];
+        
     } else {
         self.parentViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLS(@"JR_FILTER_BUTTON") style:UIBarButtonItemStylePlain target:self action:showFilters];
     }

@@ -796,6 +796,9 @@
 		FA97A3721EC530F4006E68EC /* country_json_50m in Resources */ = {isa = PBXBuildFile; fileRef = FA97A3711EC530F4006E68EC /* country_json_50m */; };
 		FA97F84B1EE66A8B008358EF /* chatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97F84A1EE66A8B008358EF /* chatViewController.swift */; };
 		FA9E39811EBBD2A900F6CB0B /* bucketListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */; };
+		FAA677851F1FAD25001BCFC4 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FAA677831F1FAD25001BCFC4 /* Model.xcdatamodeld */; };
+		FAA677891F1FB2DB001BCFC4 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA677881F1FB2DB001BCFC4 /* DataController.swift */; };
+		FAA6778B1F1FB75F001BCFC4 /* TripsMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6778A1F1FB75F001BCFC4 /* TripsMO.swift */; };
 		FAA8F2231E35194100CD7337 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2221E35194100CD7337 /* AppDelegate.swift */; };
 		FAA8F22A1E35194100CD7337 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2291E35194100CD7337 /* Assets.xcassets */; };
 		FAA8F2381E35194100CD7337 /* planit_v0_2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2371E35194100CD7337 /* planit_v0_2Tests.swift */; };
@@ -870,6 +873,7 @@
 		FAE83F911EF7B1500009A020 /* HowFarAwayQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F901EF7B1500009A020 /* HowFarAwayQuestionView.xib */; };
 		FAE83F931EF7B2EE0009A020 /* DestinationOptionsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F921EF7B2EE0009A020 /* DestinationOptionsCardView.swift */; };
 		FAE83F951EF7B2F70009A020 /* DestinationOptionsCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F941EF7B2F70009A020 /* DestinationOptionsCardView.xib */; };
+		FAEA195E1F21403600BB2E15 /* ObjCAccessoryMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEA195D1F21403600BB2E15 /* ObjCAccessoryMethods.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1909,6 +1913,9 @@
 		FA97A3711EC530F4006E68EC /* country_json_50m */ = {isa = PBXFileReference; lastKnownFileType = folder; path = country_json_50m; sourceTree = "<group>"; };
 		FA97F84A1EE66A8B008358EF /* chatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chatViewController.swift; sourceTree = "<group>"; };
 		FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bucketListViewController.swift; sourceTree = "<group>"; };
+		FAA677841F1FAD25001BCFC4 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		FAA677881F1FB2DB001BCFC4 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		FAA6778A1F1FB75F001BCFC4 /* TripsMO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripsMO.swift; sourceTree = "<group>"; };
 		FAA8F21F1E35194100CD7337 /* planit v0.2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "planit v0.2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAA8F2221E35194100CD7337 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FAA8F2291E35194100CD7337 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1989,6 +1996,7 @@
 		FAE83F901EF7B1500009A020 /* HowFarAwayQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HowFarAwayQuestionView.xib; sourceTree = "<group>"; };
 		FAE83F921EF7B2EE0009A020 /* DestinationOptionsCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestinationOptionsCardView.swift; sourceTree = "<group>"; };
 		FAE83F941EF7B2F70009A020 /* DestinationOptionsCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DestinationOptionsCardView.xib; sourceTree = "<group>"; };
+		FAEA195D1F21403600BB2E15 /* ObjCAccessoryMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjCAccessoryMethods.swift; sourceTree = "<group>"; };
 		FF99F8DC1EC030B0E3C827B0 /* Pods_planit_v0_2Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_planit_v0_2Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -2379,6 +2387,7 @@
 				FA252D2D1F1D3B6B002BCE29 /* ASTContainerSearchFormChildViewControllerProtocol.h */,
 				FA252D2E1F1D3B6B002BCE29 /* ASTContainerSearchFormViewController.h */,
 				FA252D2F1F1D3B6B002BCE29 /* ASTContainerSearchFormViewController.m */,
+				FAEA195D1F21403600BB2E15 /* ObjCAccessoryMethods.swift */,
 				FA252D301F1D3B6B002BCE29 /* ASTContainerSearchFormViewController.xib */,
 				FA252D311F1D3B6B002BCE29 /* ASTSearchFormSceneViewController.h */,
 				FA252D321F1D3B6B002BCE29 /* ASTSearchFormSceneViewController.m */,
@@ -4468,6 +4477,48 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		FAA6778C1F1FB764001BCFC4 /* Custom Managed Objects */ = {
+			isa = PBXGroup;
+			children = (
+				FAA6778A1F1FB75F001BCFC4 /* TripsMO.swift */,
+			);
+			name = "Custom Managed Objects";
+			sourceTree = "<group>";
+		};
+		FAA6778D1F1FB771001BCFC4 /* Singleton */ = {
+			isa = PBXGroup;
+			children = (
+				FAA8F2821E351D8D00CD7337 /* DataContainerSingleton.swift */,
+			);
+			name = Singleton;
+			sourceTree = "<group>";
+		};
+		FAA6778E1F1FB77C001BCFC4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FAA6778C1F1FB764001BCFC4 /* Custom Managed Objects */,
+				FAA677831F1FAD25001BCFC4 /* Model.xcdatamodeld */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		FAA6778F1F1FB783001BCFC4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FAA677881F1FB2DB001BCFC4 /* DataController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		FAA677901F1FB795001BCFC4 /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				FAA6778E1F1FB77C001BCFC4 /* Model */,
+				FAA6778F1F1FB783001BCFC4 /* Controller */,
+			);
+			name = "Core Data";
+			sourceTree = "<group>";
+		};
 		FAA8F2161E35194100CD7337 = {
 			isa = PBXGroup;
 			children = (
@@ -4653,7 +4704,8 @@
 		FAA8F2811E351C8A00CD7337 /* Data Models */ = {
 			isa = PBXGroup;
 			children = (
-				FAA8F2821E351D8D00CD7337 /* DataContainerSingleton.swift */,
+				FAA6778D1F1FB771001BCFC4 /* Singleton */,
+				FAA677901F1FB795001BCFC4 /* Core Data */,
 			);
 			name = "Data Models";
 			sourceTree = "<group>";
@@ -5360,6 +5412,7 @@
 				FA2532AD1F1D3B6E002BCE29 /* HLTrustyou+Hotellook.m in Sources */,
 				FA2530FF1F1D3B6D002BCE29 /* ASTComplexSearchFormViewModel.m in Sources */,
 				FA2530E91F1D3B6D002BCE29 /* JRFlightCell.m in Sources */,
+				FAA677851F1FAD25001BCFC4 /* Model.xcdatamodeld in Sources */,
 				FA2533361F1D3B6E002BCE29 /* HLUrlUtils.m in Sources */,
 				FA25324B1F1D3B6D002BCE29 /* HLIpadHotelDetailsVC.swift in Sources */,
 				FA4887921F033F070015F078 /* destinationsDatesCollectionViewCell.swift in Sources */,
@@ -5698,6 +5751,7 @@
 				FA2533341F1D3B6E002BCE29 /* HLLocaleInspector.m in Sources */,
 				FA2530AA1F1D3B6D002BCE29 /* JRNewsFeedAdLoader.m in Sources */,
 				FA2533321F1D3B6E002BCE29 /* HLCommonVC.m in Sources */,
+				FAA677891F1FB2DB001BCFC4 /* DataController.swift in Sources */,
 				FA2531681F1D3B6D002BCE29 /* JRNavigationController.m in Sources */,
 				FAA8F26F1E351B9500CD7337 /* InternationalViewController.swift in Sources */,
 				FA25310E1F1D3B6D002BCE29 /* ASTSimpleSearchFormAirportTableViewCell.m in Sources */,
@@ -5711,6 +5765,7 @@
 				FA14B2241EFAE5F9004E0E29 /* savingToSingleton.swift in Sources */,
 				FA2531F01F1D3B6D002BCE29 /* HLScrollView.swift in Sources */,
 				FA8DBAC51F06072B005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.swift in Sources */,
+				FAA6778B1F1FB75F001BCFC4 /* TripsMO.swift in Sources */,
 				FA2532A71F1D3B6E002BCE29 /* HDKCity+Hotellook.m in Sources */,
 				FA4EEF251F16FC1000C188BE /* CardView.swift in Sources */,
 				FA2531D41F1D3B6D002BCE29 /* StarFilterCell.swift in Sources */,
@@ -5892,6 +5947,7 @@
 				FA2530F81F1D3B6D002BCE29 /* ASTContainerSearchFormViewController.m in Sources */,
 				FA25332B1F1D3B6E002BCE29 /* HotellookSortItemsFactory.swift in Sources */,
 				FA2531DD1F1D3B6D002BCE29 /* FilterRatingItem.swift in Sources */,
+				FAEA195E1F21403600BB2E15 /* ObjCAccessoryMethods.swift in Sources */,
 				FA25314D1F1D3B6D002BCE29 /* CurrencyManager.swift in Sources */,
 				FA2532681F1D3B6E002BCE29 /* ExpandPriceItem.swift in Sources */,
 				FA2531521F1D3B6D002BCE29 /* HLCurrencyVC.swift in Sources */,
@@ -6223,6 +6279,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		FAA677831F1FAD25001BCFC4 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				FAA677841F1FAD25001BCFC4 /* Model.xcdatamodel */,
+			);
+			currentVersion = FAA677841F1FAD25001BCFC4 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = FAA8F2171E35194100CD7337 /* Project object */;
 }
