@@ -64,6 +64,11 @@ static const NSTimeInterval kSearchResultsTTL = 15 * 60;
 
 #pragma mark - Lifecycle
 
+- (void)JRSDKFlightBrowserClosed {
+    [self.navigationController popViewControllerAnimated:NO];
+    [self.navigationController popViewControllerAnimated:NO];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -73,7 +78,10 @@ static const NSTimeInterval kSearchResultsTTL = 15 * 60;
                                              selector:@selector(popFromTicketViewControllerToFlightResults)
                                                  name:@"popFromTicketViewControllerToFlightResults"
                                                object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(JRSDKFlightBrowserClosed)
+                                                 name:@"JRSDKFlightBrowserClosed"
+                                               object:nil];    
     [self setupViewController];
     
     if (iPhone()) {

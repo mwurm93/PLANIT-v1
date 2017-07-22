@@ -18,7 +18,6 @@ import CSVImporter
 import UICircularProgressRing
 import TwicketSegmentedControl
 
-
 class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate, TwicketSegmentedControlDelegate {
 
     //MARK: Class variables
@@ -99,9 +98,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var travelItem: FloatyItem?
     var placeToStayItem: FloatyItem?
     var progressRing: UICircularProgressRingView?
-        //Navbar
-//    var navBar: UINavigationBar?
-//    var navItem: UINavigationItem?
         //BookingMode
     var bookingMode = "flight"
         //Date formatting
@@ -237,27 +233,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         super.viewDidLoad()
         
         self.addBackButtonPointedAtTripList()
-        
-//        navBar = navigationBar
-//        navBar?.isTranslucent = true
-////        navBar?.backgroundColor = UIColor.lightGray
-//        navBar?.barTintColor = UIColor.lightGray
-//        view.addSubview(navBar!)
-////        navItem = UINavigationItem()
-        
-        //        navigItem.leftBarButtonItem = UIBarButtonItem(customView: button)
-//        UIBarButtonItem.appearance().tintColor = UIColor.blue
-//        self.navigationController?.hidesBarsOnSwipe = true
-        let segmentedControlTitles = ["Assistant","Itinerary","Chat"]
-        let segmentedControl = TwicketSegmentedControl(frame: CGRect(x: UIScreen.main.bounds.width / 2 - 135, y: 20, width: 270, height: 40))
-        segmentedControl.setSegmentItems(segmentedControlTitles)
-        segmentedControl.delegate = self
-        segmentedControl.backgroundColor = .clear // This is important!
-        //        navigItem.titleView = segmentedControl
-//        self.navigationItem.setLeftBarButton(UIBarButtonItem(customView: button), animated: false)
-//        self.navigationItem.titleView = segmentedControl
-        self.topView.addSubview(segmentedControl)
-        
         
         //import PPN cities csv
         getCarRentalCities()
