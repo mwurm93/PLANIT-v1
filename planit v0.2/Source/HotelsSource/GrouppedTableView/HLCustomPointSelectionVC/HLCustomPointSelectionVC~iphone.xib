@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HLCustomPointSelectionVC" customModule="AviasalesSDKTemplate" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HLCustomPointSelectionVC" customModule="planit_v0_2" customModuleProvider="target">
             <connections>
                 <outlet property="locateMeMapView" destination="GsK-eH-aiZ" id="ibD-oG-X2z"/>
                 <outlet property="mapView" destination="HMJ-xU-dG4" id="AX7-Lv-kho"/>
@@ -24,21 +25,21 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="HMJ-xU-dG4">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="602"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="eCA-1n-aNw"/>
                     </connections>
                 </mapView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="customPointSelectionShadow" translatesAutoresizingMaskIntoConstraints="NO" id="aZC-HQ-RjW">
-                    <rect key="frame" x="183" y="335.5" width="29" height="35"/>
+                    <rect key="frame" x="183" y="303" width="29" height="35"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="customPointSelectionOval" translatesAutoresizingMaskIntoConstraints="NO" id="Kcz-X3-XsY">
-                    <rect key="frame" x="186" y="364.5" width="4" height="2"/>
+                    <rect key="frame" x="186" y="332" width="4" height="2"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="customPointSelectionPin" translatesAutoresizingMaskIntoConstraints="NO" id="ywo-C5-W26">
-                    <rect key="frame" x="181" y="329.5" width="14" height="36"/>
+                    <rect key="frame" x="181" y="297" width="14" height="36"/>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GsK-eH-aiZ" customClass="HLLocateMeMapView" customModule="AviasalesSDKTemplate" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GsK-eH-aiZ" customClass="HLLocateMeMapView" customModule="planit_v0_2" customModuleProvider="target">
                     <rect key="frame" x="315" y="610" width="50" height="50"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
@@ -54,7 +55,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="Kcz-X3-XsY" firstAttribute="top" secondItem="aZC-HQ-RjW" secondAttribute="bottom" constant="-6" id="14b-zV-47R"/>
                 <constraint firstItem="HMJ-xU-dG4" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="6Hu-8P-DVu"/>
@@ -66,7 +67,7 @@
                 <constraint firstItem="Kcz-X3-XsY" firstAttribute="top" secondItem="ywo-C5-W26" secondAttribute="bottom" constant="-1" id="WkN-wY-YT1"/>
                 <constraint firstItem="Kcz-X3-XsY" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="XEZ-Gk-31a"/>
                 <constraint firstItem="HMJ-xU-dG4" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="YQb-HD-fTa"/>
-                <constraint firstAttribute="bottom" secondItem="HMJ-xU-dG4" secondAttribute="bottom" id="ash-mw-djC"/>
+                <constraint firstAttribute="bottom" secondItem="HMJ-xU-dG4" secondAttribute="bottom" constant="65" id="ash-mw-djC"/>
                 <constraint firstItem="Kcz-X3-XsY" firstAttribute="centerX" secondItem="HMJ-xU-dG4" secondAttribute="centerX" id="esg-Uu-2s6"/>
                 <constraint firstAttribute="bottom" secondItem="GsK-eH-aiZ" secondAttribute="bottom" constant="7" id="fxn-An-Kbl"/>
                 <constraint firstItem="AVX-dR-fkD" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="nUv-Rg-n9b"/>

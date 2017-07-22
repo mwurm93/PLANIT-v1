@@ -4,11 +4,12 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WaitingVC" customModule="AviasalesSDKTemplate" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WaitingVC" customModule="planit_v0_2" customModuleProvider="target">
             <connections>
                 <outlet property="appodealAdContainerView" destination="Ahe-dC-zLa" id="0tn-et-x8Y"/>
                 <outlet property="collectionView" destination="FhN-3N-AVl" id="BPz-CJ-tpG"/>
@@ -35,7 +36,7 @@
                     </userDefinedRuntimeAttributes>
                 </progressView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="FhN-3N-AVl">
-                    <rect key="frame" x="15" y="15" width="345" height="652"/>
+                    <rect key="frame" x="15" y="15" width="345" height="587"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="lessThanOrEqual" constant="506" id="fb9-MH-cgH"/>
@@ -77,9 +78,9 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.44313725490196076" green="0.76470588235294112" blue="0.29019607843137252" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="FhN-3N-AVl" secondAttribute="bottom" id="BNb-u9-GMc"/>
+                <constraint firstAttribute="bottom" secondItem="FhN-3N-AVl" secondAttribute="bottom" constant="65" id="BNb-u9-GMc"/>
                 <constraint firstItem="tzg-NE-5Ft" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="JbV-0K-bDV"/>
                 <constraint firstItem="FhN-3N-AVl" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" priority="999" constant="15" id="KCe-49-z3x"/>
                 <constraint firstItem="tzg-NE-5Ft" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="TgF-Pd-rRu"/>

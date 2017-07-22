@@ -64,6 +64,9 @@
     [self.searchForm autoPinEdgesToSuperviewEdges];
 
     self.view.backgroundColor = [UIColor clearColor];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+
 }
 
 -(void)viewDidAppear:(BOOL)animated

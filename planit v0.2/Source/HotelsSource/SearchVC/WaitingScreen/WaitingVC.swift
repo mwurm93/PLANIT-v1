@@ -27,7 +27,10 @@ class WaitingVC: HLCommonVC, HLVariantsManagerDelegate, HLCityInfoLoadingProtoco
 
         title = searchInfo.city?.name
 
-        collectionView.backgroundColor = JRColorScheme.mainBackgroundColor()
+        collectionView.backgroundColor = UIColor.clear
+        collectionView.layer.backgroundColor = UIColor.clear.cgColor
+        self.view.backgroundColor = UIColor.clear
+        self.view.layer.backgroundColor = UIColor.clear.cgColor
         cellFactory.registerNibs(collectionView)
         var insets = collectionView.contentInset
         insets.bottom += 10.0 + appodealAdContainerView.frame.height + kNavBarHeight

@@ -65,8 +65,7 @@ static const NSTimeInterval kSearchResultsTTL = 15 * 60;
 #pragma mark - Lifecycle
 
 - (void)JRSDKFlightBrowserClosed {
-    [self.navigationController popViewControllerAnimated:NO];
-    [self.navigationController popViewControllerAnimated:NO];
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
 - (void)viewDidLoad {

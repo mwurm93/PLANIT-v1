@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HLPhotoScrollVC" customModule="AviasalesSDKTemplate" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HLPhotoScrollVC" customModule="planit_v0_2" customModuleProvider="target">
             <connections>
                 <outlet property="counterIcon" destination="mYU-uU-lee" id="0Wx-LV-aDL"/>
                 <outlet property="counterLabel" destination="8n3-2N-M32" id="TMD-r0-Akn"/>
@@ -21,8 +22,8 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FIK-pY-LH6" customClass="HLZoomablePhotoScrollView" customModule="AviasalesSDKTemplate" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FIK-pY-LH6" customClass="HLZoomablePhotoScrollView" customModule="planit_v0_2" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="602"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1/20" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8n3-2N-M32">
@@ -35,12 +36,12 @@
                     <rect key="frame" x="148" y="22.5" width="15" height="12"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="FIK-pY-LH6" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0pG-ZV-jAH"/>
                 <constraint firstItem="8n3-2N-M32" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="2TH-wt-YJy"/>
                 <constraint firstItem="FIK-pY-LH6" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Ahg-a8-iR5"/>
-                <constraint firstAttribute="bottom" secondItem="FIK-pY-LH6" secondAttribute="bottom" id="Gzo-jH-qjC"/>
+                <constraint firstAttribute="bottom" secondItem="FIK-pY-LH6" secondAttribute="bottom" constant="65" id="Gzo-jH-qjC"/>
                 <constraint firstItem="8n3-2N-M32" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Jkh-JG-U1n"/>
                 <constraint firstItem="8n3-2N-M32" firstAttribute="leading" secondItem="mYU-uU-lee" secondAttribute="trailing" constant="10" id="KX2-MG-PGb"/>
                 <constraint firstAttribute="trailing" secondItem="FIK-pY-LH6" secondAttribute="trailing" id="hGv-lG-lZj"/>
