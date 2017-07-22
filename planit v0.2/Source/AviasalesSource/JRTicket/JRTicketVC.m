@@ -67,6 +67,13 @@ static const NSTimeInterval kSearchResultsTTL = 15 * 60;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"flightTicketViewViewController_ViewDidLoad"
+                                                        object:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(popFromTicketViewControllerToFlightResults)
+                                                 name:@"popFromTicketViewControllerToFlightResults"
+                                               object:nil];
+    
     [self setupViewController];
     
     if (iPhone()) {
@@ -74,6 +81,12 @@ static const NSTimeInterval kSearchResultsTTL = 15 * 60;
     }
     
     [self updateContent];
+    
+    self.view.layer.backgroundColor = [UIColor clearColor].CGColor;
+}
+
+- (void)popFromTicketViewControllerToFlightResults {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewDidLayoutSubviews {

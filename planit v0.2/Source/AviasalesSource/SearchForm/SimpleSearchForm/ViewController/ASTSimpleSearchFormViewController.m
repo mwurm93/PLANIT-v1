@@ -274,7 +274,7 @@ static CGFloat const separatorRightInset = 20.0;
 
 - (void)showWaitingScreenViewControllerWithSeachInfo:(JRSDKSearchInfo *)searchInfo {
     ASTWaitingScreenViewController *waitingScreenViewController = [[ASTWaitingScreenViewController alloc] initWithSearchInfo:searchInfo];
-    [self.navigationController pushViewController:waitingScreenViewController animated:YES];
+    [self.navigationController pushViewController:waitingScreenViewController animated:NO];
 }
 
 #pragma mark - Actions

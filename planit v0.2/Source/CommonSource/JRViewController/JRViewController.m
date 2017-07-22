@@ -65,7 +65,7 @@
 }
 
 - (BOOL)shouldShowNavigationBar {
-    return YES;
+    return NO;
 }
 
 @end

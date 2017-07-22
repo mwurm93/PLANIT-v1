@@ -39,6 +39,9 @@ class ASTWaitingScreenViewController: UIViewController {
         setupViewController()
         presenter.handleLoad(view: self)
         infoLabel.textColor = UIColor.white
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pop), name: NSNotification.Name(rawValue: "popFromWaitingScreenViewControllerToFlightSearch"), object: nil)
     }
 
     // MARK: - Setup
@@ -98,7 +101,7 @@ extension ASTWaitingScreenViewController: ASTWaitingScreenViewProtocol {
         let tripViewController = self.parent?.parent as! TripViewController
         tripViewController.navigationItem.titleView = nil
         tripViewController.navigationItem.title = title
-        tripViewController.shyNavBarManager.stickyNavigationBar = true
+//        tripViewController.shyNavBarManager.stickyNavigationBar = true
 //        navigationItem.title = title
     }
 

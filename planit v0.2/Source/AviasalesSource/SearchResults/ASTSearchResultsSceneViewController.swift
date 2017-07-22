@@ -31,6 +31,7 @@ import UIKit
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
+        self.view.layer.backgroundColor = UIColor.clear.cgColor        
     }
 
     // MARK: - Setup

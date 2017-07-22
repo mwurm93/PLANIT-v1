@@ -343,12 +343,12 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             destination?.newChannelRef = channelRef
         }
         if segue.identifier == "tripListToTripViewController" {
-            let navVC = segue.destination as? UINavigationController
+//            let navVC = segue.destination as? UINavigationController
+//            
+//            let destination = navVC?.viewControllers.first as? TripViewController
+//
             
-            let destination = navVC?.viewControllers.first as? TripViewController
-
-            
-//            let destination = segue.destination as? TripViewController
+            let destination = segue.destination as? TripViewController
             
             var NewOrAddedTripForSegue = Int()
             

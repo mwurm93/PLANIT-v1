@@ -39,7 +39,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="0.787109375" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="TEp-Jg-Xjf" firstAttribute="centerX" secondItem="Gc9-JP-YyS" secondAttribute="centerX" id="3PJ-78-sAo"/>
                             <constraint firstItem="TEp-Jg-Xjf" firstAttribute="leading" secondItem="Gc9-JP-YyS" secondAttribute="leading" priority="750" id="GTt-KI-ifb"/>
@@ -67,7 +67,7 @@
                         </connections>
                     </button>
                 </subviews>
-                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstItem="Gc9-JP-YyS" firstAttribute="leading" secondItem="FsB-Es-UEH" secondAttribute="leading" constant="8" id="HfG-D7-m5X"/>
                     <constraint firstAttribute="trailing" secondItem="Gc9-JP-YyS" secondAttribute="trailing" constant="8" id="I93-rG-6fg"/>
@@ -76,10 +76,8 @@
                     <constraint firstItem="os1-n1-n4P" firstAttribute="leading" secondItem="FsB-Es-UEH" secondAttribute="leadingMargin" constant="3" id="VJ1-Eu-bJ3"/>
                     <constraint firstItem="Gc9-JP-YyS" firstAttribute="top" secondItem="FsB-Es-UEH" secondAttribute="top" id="nmP-Fu-5aH"/>
                 </constraints>
-                <userDefinedRuntimeAttributes>
-                    <userDefinedRuntimeAttribute type="string" keyPath="JRBackgroundColorKey" value="mainBackgroundColor"/>
-                </userDefinedRuntimeAttributes>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="containerView" destination="Gc9-JP-YyS" id="czq-n4-YSb"/>
                 <outlet property="saveButton" destination="os1-n1-n4P" id="dtV-XZ-HUN"/>

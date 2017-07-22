@@ -17,12 +17,12 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="1">
+        <view opaque="NO" contentMode="scaleToFill" id="1">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="9" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="veO-Fa-Y7M">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="659"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="594"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <connections>
@@ -33,7 +33,7 @@
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="bottomMargin" secondItem="veO-Fa-Y7M" secondAttribute="bottom" id="Oos-nG-9Am"/>
+                <constraint firstAttribute="bottomMargin" secondItem="veO-Fa-Y7M" secondAttribute="bottom" constant="65" id="Oos-nG-9Am"/>
                 <constraint firstItem="veO-Fa-Y7M" firstAttribute="top" secondItem="1" secondAttribute="top" id="agT-hb-h41"/>
                 <constraint firstItem="veO-Fa-Y7M" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="fbZ-um-UUD"/>
                 <constraint firstAttribute="trailing" secondItem="veO-Fa-Y7M" secondAttribute="trailing" id="h0o-gv-FtP"/>

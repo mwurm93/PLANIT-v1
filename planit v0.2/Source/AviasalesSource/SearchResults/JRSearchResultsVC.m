@@ -158,6 +158,19 @@ static const NSInteger kHotelCardIndex = 5;
                                              selector:@selector(receiveTestNotification)
                                                  name:@"test"
                                                object:nil];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"flightSearchResultsSceneViewController_ViewDidLoad"
+                                                        object:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(popFromFlightSearchResultsSceneViewControllerToFlightSearch)
+                                                 name:@"popFromFlightSearchResultsSceneViewControllerToFlightSearch"
+                                               object:nil];
+    
+    self.view.layer.backgroundColor = [UIColor clearColor].CGColor;
+}
+
+- (void)popFromFlightSearchResultsSceneViewControllerToFlightSearch {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)receiveTestNotification {

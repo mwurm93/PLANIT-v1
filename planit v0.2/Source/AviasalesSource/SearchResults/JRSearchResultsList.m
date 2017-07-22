@@ -37,6 +37,10 @@
     if (cell == nil) {
         cell = [[AVIASALES_BUNDLE loadNibNamed:self.ticketCellNibName owner:self options:nil] objectAtIndex:0];
     }
+    cell.layer.backgroundColor = [UIColor clearColor].CGColor;
+    cell.backgroundColor = [UIColor clearColor];
+    cell.contentView.backgroundColor = [UIColor clearColor];
+    cell.contentView.layer.backgroundColor = [UIColor clearColor].CGColor;
     
     cell.flightSegmentsLayoutParameters = self.flightSegmentLayoutParameters;
     cell.ticket = [self ticketAtIndexPath:indexPath];

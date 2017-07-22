@@ -67,14 +67,14 @@ static CGFloat const kBottomPadding = 12;
     [self.tableView reloadData];
 }
 
-- (void)setBackgroundColor:(UIColor *)backgroundColor {
-    [super setBackgroundColor:backgroundColor];
-    self.tableView.backgroundColor = backgroundColor;
-    self.containerView.backgroundColor = backgroundColor;
-    for (UITableViewCell *cell in self.tableView.visibleCells) {
-        cell.backgroundColor = backgroundColor;
-    }
-}
+//- (void)setBackgroundColor:(UIColor *)backgroundColor {
+//    [super setBackgroundColor:backgroundColor];
+//    self.tableView.backgroundColor = backgroundColor;
+//    self.containerView.backgroundColor = backgroundColor;
+//    for (UITableViewCell *cell in self.tableView.visibleCells) {
+//        cell.backgroundColor = backgroundColor;
+//    }
+//}
 
 #pragma mark - Static methods
 

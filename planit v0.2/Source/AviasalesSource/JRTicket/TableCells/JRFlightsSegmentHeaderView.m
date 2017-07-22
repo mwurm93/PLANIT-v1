@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *testLabel;
 
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *separatorLineHeightConstraint;
+@property (weak, nonatomic) IBOutlet UIView *originDepartureView;
 
 @end
 
@@ -58,6 +59,7 @@
     self.directionLabel.text = [airports componentsJoinedByString:@" • "];
 
     self.durationLabel.text = [DateUtil duration:self.flightSegment.totalDurationInMinutes durationStyle:JRDateUtilDurationShortStyle];
+    self.originDepartureView.layer.backgroundColor = [UIColor clearColor].CGColor;
 }
 
 @end

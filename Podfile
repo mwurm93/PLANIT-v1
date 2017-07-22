@@ -41,7 +41,6 @@ pod 'CSVImporter', '~> 1.7'
 
 # Pod for custom segmented control and navbar
 pod 'TwicketSegmentedControl'
-pod 'TLYShyNavBar', '~> 1.1'
 
 # Pods for TravelPayouts
 pod 'AviasalesSDK', '~> 3.0.0'

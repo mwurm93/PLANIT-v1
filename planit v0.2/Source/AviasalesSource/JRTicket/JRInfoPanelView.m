@@ -144,6 +144,9 @@ static const CGFloat kAgencyInfoLabelMaxCenterConstraint = 15.0;
     }
 
     [self.buyButton setTitle:AVIASALES_(@"JR_TICKET_BUY_BUTTON").uppercaseString forState:UIControlStateNormal];
+    self.layer.backgroundColor = [UIColor clearColor].CGColor;
+    self.backgroundColor = [UIColor clearColor];
+    self.opaque = false;
 }
 
 #pragma mark IBAction methods

@@ -240,7 +240,6 @@ PODS:
   - SwiftGifOrigin (1.6.1)
   - SwiftLint (0.20.1)
   - SwiftProtobuf (0.9.901)
-  - TLYShyNavBar (1.1.1)
   - TwicketSegmentedControl (0.1.2)
   - UICircularProgressRing (1.6.2)
   - UIColor+FlatColors (0.0.2)
@@ -282,7 +281,6 @@ DEPENDENCIES:
   - SwiftGifOrigin (~> 1.6.1)
   - SwiftLint
   - SwiftProtobuf (from `https://github.com/apple/swift-protobuf.git`, tag `0.9.901`)
-  - TLYShyNavBar (~> 1.1)
   - TwicketSegmentedControl
   - UICircularProgressRing
   - UIColor+FlatColors
@@ -344,11 +342,10 @@ SPEC CHECKSUMS:
   SwiftGifOrigin: d6679d3ebe9df2e049a84bc52582635107b581f6
   SwiftLint: f60095dc173a3f3ec505bb34f5229c3dfd779a54
   SwiftProtobuf: b631e0ba39ee42cbd5f4897c6883b9839e6d9703
-  TLYShyNavBar: d200e598923fbc2bd21a5c5efdfabf4898b11da0
   TwicketSegmentedControl: 6d7a4cf243657e0ac3f00d06d873a25334c04042
   UICircularProgressRing: f25e366e0624d87973192b67e572c0712acbae85
   UIColor+FlatColors: 6c699df7a575281794c688c64cee6c44fd1f93b4
 
-PODFILE CHECKSUM: 4ed6906751bf1df1b6dffd4658fe39ac82c5c1f6
+PODFILE CHECKSUM: 655e72131374e938eac75db730c07f8c4c0f7f27
 
 COCOAPODS: 1.1.1
