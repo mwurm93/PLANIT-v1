@@ -130,7 +130,7 @@ static CGFloat const kBottomPadding = 12;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = self.backgroundColor;
+//    cell.backgroundColor = self.backgroundColor;
 }
 
 #pragma mark - Private
@@ -142,18 +142,24 @@ static CGFloat const kBottomPadding = 12;
 
 - (void)updateBackground {
     if (self.selected || self.highlighted) {
-        self.backgroundColor = [JRColorScheme itemsSelectedBackgroundColor];
+//        self.backgroundColor = [JRColorScheme itemsSelectedBackgroundColor];
     } else {
-        self.backgroundColor = [JRColorScheme itemsBackgroundColor];
+//        self.backgroundColor = [JRColorScheme itemsBackgroundColor];
     }
 }
 - (IBAction)saveButtonTouchedUpInside:(id)sender {
     ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
-//    NSDictionary *flightResultDictionary = [convertTicketForSavePerformer convertTicketForSaveWithTicket:self.ticket];
-      [convertTicketForSavePerformer saveFlightTicketsWithTicket:self.ticket];
+    if (_saveButton.selected == NO) {
+        _saveButton.selected = YES;
+        //    NSDictionary *flightResultDictionary = [convertTicketForSavePerformer convertTicketForSaveWithTicket:self.ticket];
+        [convertTicketForSavePerformer saveFlightTicketsWithTicket:self.ticket];
+    } else {
+        _saveButton.selected = NO;
+        [convertTicketForSavePerformer removeSavedFlightTicketsWithTicket:self.ticket];
+    }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"test"
-                                                        object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"test"
+//                                                        object:nil];
     
     
     

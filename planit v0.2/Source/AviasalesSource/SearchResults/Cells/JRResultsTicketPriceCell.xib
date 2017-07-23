@@ -19,10 +19,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WRX-yi-gfg">
-                        <rect key="frame" x="22" y="10" width="276" height="25"/>
+                        <rect key="frame" x="35" y="10" width="250" height="25"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c2d-na-Eeq">
-                                <rect key="frame" x="5" y="0.0" width="178" height="25"/>
+                                <rect key="frame" x="5" y="0.0" width="152" height="25"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                 <nil key="highlightedColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -30,7 +30,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2Ua-jJ-yei">
-                                <rect key="frame" x="191" y="0.0" width="85" height="25"/>
+                                <rect key="frame" x="165" y="0.0" width="85" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="85" id="Hwx-d7-5NO"/>
                                     <constraint firstAttribute="height" constant="25" id="Vt2-wZ-BFe"/>
@@ -54,7 +54,7 @@
                     <constraint firstItem="WRX-yi-gfg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="9Fj-jE-xf2"/>
                     <constraint firstAttribute="trailing" secondItem="WRX-yi-gfg" secondAttribute="trailing" priority="750" constant="16" id="B3C-9e-cHo"/>
                     <constraint firstItem="WRX-yi-gfg" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="Dmd-nQ-xu5"/>
-                    <constraint firstItem="WRX-yi-gfg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="750" constant="22" id="Nbk-jC-ZTI"/>
+                    <constraint firstItem="WRX-yi-gfg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="750" constant="35" id="Nbk-jC-ZTI"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

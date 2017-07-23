@@ -412,7 +412,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             firstDayOfWeek: .sunday)
         return parameters
     }
-    func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {
+    func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) -> Bool {
         return false
     }
     func calendar(_ calendar: JTAppleCalendarView, shouldDeselectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {

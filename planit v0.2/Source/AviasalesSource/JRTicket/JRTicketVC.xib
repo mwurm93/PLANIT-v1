@@ -35,7 +35,7 @@
                 </tableView>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A3x-bZ-pKv" userLabel="Info Panel">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="150" id="joq-Pi-duE"/>
                     </constraints>

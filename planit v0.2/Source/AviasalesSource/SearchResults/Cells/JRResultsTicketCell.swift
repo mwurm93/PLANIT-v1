@@ -19,6 +19,23 @@ import AviasalesSDK
         SavedPreferencesForTrip["savedFlightTickets"] = savedFlightTickets
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
+    func removeSavedFlightTickets(ticket: JRSDKTicket) {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var savedFlightTicketsAsData = SavedPreferencesForTrip["savedFlightTickets"] as! [Data]
+        var savedFlightTickets = [JRSDKTicket]()
+        for savedFlightTicketAsData in savedFlightTicketsAsData {
+            let savedFlightTicket = NSKeyedUnarchiver.unarchiveObject(with: savedFlightTicketAsData) as? JRSDKTicket
+            savedFlightTickets.append(savedFlightTicket!)
+        }
+        for i in 0 ... savedFlightTickets.count - 1 {
+            if ticket == savedFlightTickets[i] {
+                savedFlightTicketsAsData.remove(at: i)
+            }
+        }
+        SavedPreferencesForTrip["savedFlightTickets"] = savedFlightTicketsAsData
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
     func fetchSavedFlightTickets() -> [JRSDKTicket] {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var savedFlightTicketsAsData = SavedPreferencesForTrip["savedFlightTickets"] as! [Data]
@@ -30,8 +47,10 @@ import AviasalesSDK
         return savedFlightTickets
     }
     func checkIfSavedFlightTicketsContains(ticket:JRSDKTicket, savedFlightTickets: [JRSDKTicket]) -> Int {
-        if savedFlightTickets.contains(ticket) {
-            return 1
+        for savedFlightTicket in savedFlightTickets {
+            if savedFlightTicket == ticket {
+                return 1
+            }
         }
         return 0
     }

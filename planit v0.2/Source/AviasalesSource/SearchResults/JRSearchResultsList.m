@@ -41,14 +41,16 @@
     cell.backgroundColor = [UIColor clearColor];
     cell.contentView.backgroundColor = [UIColor clearColor];
     cell.contentView.layer.backgroundColor = [UIColor clearColor].CGColor;
+    cell.tintColor = [UIColor clearColor];
+    cell.backgroundView = nil;
     
     cell.flightSegmentsLayoutParameters = self.flightSegmentLayoutParameters;
     cell.ticket = [self ticketAtIndexPath:indexPath];
     
     ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
     NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
-    int *isSavedPreviously = [convertTicketForSavePerformer checkIfSavedFlightTicketsContainsWithTicket:cell.ticket savedFlightTickets:savedFlightTickets];
-    if (isSavedPreviously) {
+    
+    if ([convertTicketForSavePerformer checkIfSavedFlightTicketsContainsWithTicket:cell.ticket savedFlightTickets:savedFlightTickets] == 1) {
         [cell.saveButton setSelected:YES];
     }
     

@@ -35,7 +35,7 @@ class ASTWaitingScreenPresenter: NSObject {
     func handleLoad(view: ASTWaitingScreenViewProtocol) {
         self.view = view
         view.update(title: JRSearchInfoUtils.formattedIatasAndDatesExcludeYearComponent(for: searchInfo))
-        view.animateProgress(duration: kJRSDKSearchPerformerAverageSearchTime)
+        view.animateProgress(duration: kJRSDKSearchPerformerAverageSearchTime / 2)
         view.startAnimating()
         view.updateInfo(text: NSLS("JR_WAITING_TITLE"), range: NSRange())
         if ShowAppodealAds() {

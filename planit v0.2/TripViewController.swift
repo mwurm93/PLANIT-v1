@@ -92,11 +92,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var functionsToLoadSubviewsDictionary = Dictionary<Int,() -> ()>()
     var subviewFramesDictionary = Dictionary<Int,CGPoint>()
         //FAB
-    var floaty: Floaty?
-    var datesItem: FloatyItem?
-    var destinationItem: FloatyItem?
-    var travelItem: FloatyItem?
-    var placeToStayItem: FloatyItem?
+//    var floaty: Floaty?
+//    var datesItem: FloatyItem?
+//    var destinationItem: FloatyItem?
+//    var travelItem: FloatyItem?
+//    var placeToStayItem: FloatyItem?
     var progressRing: UICircularProgressRingView?
         //BookingMode
     var bookingMode = "flight"
@@ -223,6 +223,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         segmentedControl = TwicketSegmentedControl(frame: CGRect(x: UIScreen.main.bounds.width / 2 - 135, y: 20, width: 270, height: 40))
         segmentedControl?.setSegmentItems(segmentedControlTitles)
         segmentedControl?.delegate = self
+        segmentedControl?.segmentsBackgroundColor = UIColor.white.withAlphaComponent(0.8)
         segmentedControl?.backgroundColor = .clear // This is important!
         
         self.topView.addSubview(segmentedControl!)
@@ -281,7 +282,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
 //        hideKeyboardWhenTappedAround()
         
-        setUpFloaty()
+        setUpProgressRing()
         
         //Add shadow to topview
         let borderLine = UIView()
@@ -596,22 +597,22 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 0
         destinationsDatesCollectionView.collectionViewLayout = layout
-        travelButton.layer.cornerRadius = travelButton.frame.size.height / 2
-        travelButton.backgroundColor = travelItem?.buttonColor
-        travelButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
-        travelButton.layer.shadowColor = UIColor.black.cgColor
-        travelButton.layer.shadowRadius = 1
-        travelButton.layer.masksToBounds = false
-        travelButton.layer.shadowOpacity = 0.4
-        travelButton.layer.shadowOffset = CGSize(width: 1, height: 1)
-        placeToStayButton.layer.cornerRadius = placeToStayButton.frame.size.height / 2
-        placeToStayButton.backgroundColor = placeToStayItem?.buttonColor
-        placeToStayButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
-        placeToStayButton.layer.shadowColor = UIColor.black.cgColor
-        placeToStayButton.layer.shadowRadius = 1
-        placeToStayButton.layer.masksToBounds = false
-        placeToStayButton.layer.shadowOpacity = 0.4
-        placeToStayButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+//        travelButton.layer.cornerRadius = travelButton.frame.size.height / 2
+//        travelButton.backgroundColor = travelItem?.buttonColor
+//        travelButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
+//        travelButton.layer.shadowColor = UIColor.black.cgColor
+//        travelButton.layer.shadowRadius = 1
+//        travelButton.layer.masksToBounds = false
+//        travelButton.layer.shadowOpacity = 0.4
+//        travelButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+//        placeToStayButton.layer.cornerRadius = placeToStayButton.frame.size.height / 2
+//        placeToStayButton.backgroundColor = placeToStayItem?.buttonColor
+//        placeToStayButton.imageEdgeInsets = UIEdgeInsetsMake(10,10,10,10)
+//        placeToStayButton.layer.shadowColor = UIColor.black.cgColor
+//        placeToStayButton.layer.shadowRadius = 1
+//        placeToStayButton.layer.masksToBounds = false
+//        placeToStayButton.layer.shadowOpacity = 0.4
+//        placeToStayButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         //END ITINERARY viewDidLoad
 
         handleScrollUpAndDownButtons()
@@ -702,83 +703,86 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     
-    func setUpFloaty() {
+    func setUpProgressRing() {
+//
+//        
+//        floaty = Floaty()
+//        floaty?.autoCloseOnTap = false
+//        floaty?.buttonColor = UIColor.clear
+//        floaty?.buttonImage = #imageLiteral(resourceName: "transparent")
+//        floaty?.fabDelegate = self
+//        floaty?.rotationDegrees = 0
+//        
+//        placeToStayItem = FloatyItem()
+//        placeToStayItem?.buttonColor = UIColor.flatSunFlower()
+//        placeToStayItem?.title = "Place to stay"
+//        placeToStayItem?.icon = UIImage(named: "changeHotel")
+//        placeToStayItem?.handler = { item in
+//            self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+//            self.floaty?.close()
+//            self.scrolledToPlaceToStayItem()
+//        }
+//        floaty?.addItem(item: placeToStayItem!)
+//        
+//        travelItem = FloatyItem()
+//        travelItem?.buttonColor = UIColor.flatCarrot()
+//        travelItem?.title = "Travel"
+//        travelItem?.icon = UIImage(named: "changeFlight")
+//        travelItem?.handler = { item in
+//            self.spawnHowDoYouWantToGetThereQuestionView()
+////            self.floaty?.close()
+//            self.scrolledToTravelItem()
+//        }
+//        floaty?.addItem(item: travelItem!)
+//        
+//        destinationItem = FloatyItem()
+//        destinationItem?.buttonColor = UIColor.flatTurquoise()
+//        destinationItem?.title = "Destination"
+//        destinationItem?.icon = UIImage(named: "map")
+//        destinationItem?.handler = { item in
+//            self.spawnWhereTravellingFromQuestionView()
+////            self.floaty?.close()
+//            self.scrolledToDestinationItem()
+//        }
+//        floaty?.addItem(item: destinationItem!)
+//        
+//        datesItem = FloatyItem()
+//        datesItem?.buttonColor = UIColor.flatPeterRiver()
+//        datesItem?.title = "Dates"
+//        datesItem?.icon = UIImage(named: "Calendar-Time")
+//        datesItem?.handler = { item in
+//            self.spawnDatesPickedOutCalendarView()
+//            self.floaty?.close()
+//            self.scrolledToDatesItem()
+//        }
+////        floaty?.addItem(item: datesItem!)
+//
+//        self.view.addSubview(floaty!)
+    
         
-        
-        floaty = Floaty()
-        floaty?.autoCloseOnTap = false
-        floaty?.buttonColor = UIColor.clear
-        floaty?.buttonImage = #imageLiteral(resourceName: "transparent")
-        floaty?.fabDelegate = self
-        floaty?.rotationDegrees = 0
-        
-        placeToStayItem = FloatyItem()
-        placeToStayItem?.buttonColor = UIColor.flatSunFlower()
-        placeToStayItem?.title = "Place to stay"
-        placeToStayItem?.icon = UIImage(named: "changeHotel")
-        placeToStayItem?.handler = { item in
-            self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
-            self.floaty?.close()
-            self.scrolledToPlaceToStayItem()
-        }
-        floaty?.addItem(item: placeToStayItem!)
-        
-        travelItem = FloatyItem()
-        travelItem?.buttonColor = UIColor.flatCarrot()
-        travelItem?.title = "Travel"
-        travelItem?.icon = UIImage(named: "changeFlight")
-        travelItem?.handler = { item in
-            self.spawnHowDoYouWantToGetThereQuestionView()
-            self.floaty?.close()
-            self.scrolledToTravelItem()
-        }
-        floaty?.addItem(item: travelItem!)
-        
-        destinationItem = FloatyItem()
-        destinationItem?.buttonColor = UIColor.flatTurquoise()
-        destinationItem?.title = "Destination"
-        destinationItem?.icon = UIImage(named: "map")
-        destinationItem?.handler = { item in
-            self.spawnWhereTravellingFromQuestionView()
-            self.floaty?.close()
-            self.scrolledToDestinationItem()
-        }
-        floaty?.addItem(item: destinationItem!)
-        
-        datesItem = FloatyItem()
-        datesItem?.buttonColor = UIColor.flatPeterRiver()
-        datesItem?.title = "Dates"
-        datesItem?.icon = UIImage(named: "Calendar-Time")
-        datesItem?.handler = { item in
-            self.spawnDatesPickedOutCalendarView()
-            self.floaty?.close()
-            self.scrolledToDatesItem()
-        }
-        floaty?.addItem(item: datesItem!)
-
-        self.view.addSubview(floaty!)
-        
-        
-        progressRing = UICircularProgressRingView(frame: (floaty?.frame)!)
+        progressRing = UICircularProgressRingView(frame: CGRect(x: UIScreen.main.bounds.width - 10 - 40, y: 23, width: 40, height: 40))
         progressRing?.maxValue = 100
         progressRing?.startAngle = 270
-        progressRing?.ringStyle = .inside
-        progressRing?.outerRingColor = UIColor.flatTurquoise()
-        progressRing?.outerRingWidth = 4
+        progressRing?.ringStyle = .ontop
+        progressRing?.outerRingColor = UIColor.white.withAlphaComponent(0.2)
+        progressRing?.outerRingWidth = 3
         progressRing?.innerRingColor = UIColor.white
-        progressRing?.innerRingWidth = 4
+        progressRing?.innerRingWidth = 3
         progressRing?.fontColor = UIColor.white
+        progressRing?.font = UIFont.systemFont(ofSize: 13)
         progressRing?.isHidden = true
+        progressRing?.layer.frame.size.height -= 3
+        progressRing?.layer.frame.size.width -= 3
         progressRing?.setProgress(value: 0, animationDuration: 0.1) {
             // Do anything your heart desires...
         }
-        self.view.insertSubview(progressRing!, belowSubview: floaty!)
+        self.view.addSubview(progressRing!)
         
-        progressRing?.layer.shadowColor = UIColor.black.cgColor
-        progressRing?.layer.shadowRadius = 1
-        progressRing?.layer.masksToBounds = false
-        progressRing?.layer.shadowOpacity = 0.4
-        progressRing?.layer.shadowOffset = CGSize(width: 2, height: 2)
+//        progressRing?.layer.shadowColor = UIColor.black.cgColor
+//        progressRing?.layer.shadowRadius = 1
+//        progressRing?.layer.masksToBounds = false
+//        progressRing?.layer.shadowOpacity = 0.4
+//        progressRing?.layer.shadowOffset = CGSize(width: 2, height: 2)
 
     }
     
@@ -795,152 +799,152 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         return newImage!
     }
     
-    func scrolledToDatesItem() {
-        enableDatesItem()
-//        self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
-//        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
-//        self.floaty?.removeItem(item: self.placeToStayItem!)
-//        self.floaty?.removeItem(item: self.travelItem!)
-//        self.floaty?.removeItem(item: self.destinationItem!)
-//        self.floaty?.removeItem(item: self.datesItem!)
-//        self.floaty?.addItem(item: self.placeToStayItem!)
-//        self.floaty?.addItem(item: self.travelItem!)
-//        self.floaty?.addItem(item: self.destinationItem!)
-    }
-    func scrolledToDestinationItem() {
-        enableDestinationItem()
-//        self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
-//        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
-//        self.floaty?.removeItem(item: self.placeToStayItem!)
-//        self.floaty?.removeItem(item: self.travelItem!)
-//        self.floaty?.removeItem(item: self.destinationItem!)
-//        self.floaty?.removeItem(item: self.datesItem!)
-//        self.floaty?.addItem(item: self.placeToStayItem!)
-//        self.floaty?.addItem(item: self.travelItem!)
-//        self.floaty?.addItem(item: self.datesItem!)
-    }
-    func scrolledToTravelItem() {
-        enableTravelItem()
-//        self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
-//        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
-//        self.floaty?.removeItem(item: self.placeToStayItem!)
-//        self.floaty?.removeItem(item: self.travelItem!)
-//        self.floaty?.removeItem(item: self.destinationItem!)
-//        self.floaty?.removeItem(item: self.datesItem!)
-//        self.floaty?.addItem(item: self.placeToStayItem!)
-//        self.floaty?.addItem(item: self.destinationItem!)
-//        self.floaty?.addItem(item: self.datesItem!)
-    }
-    func scrolledToPlaceToStayItem() {
-        enablePlaceToStayItem()
-//        self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
-//        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
-//        self.floaty?.removeItem(item: self.placeToStayItem!)
-//        self.floaty?.removeItem(item: self.travelItem!)
-//        self.floaty?.removeItem(item: self.destinationItem!)
-//        self.floaty?.removeItem(item: self.datesItem!)
-//        self.floaty?.addItem(item: self.travelItem!)
-//        self.floaty?.addItem(item: self.destinationItem!)
-//        self.floaty?.addItem(item: self.datesItem!)
-    }
-    
-    func disableDatesItem() {
-        datesItem?.handler = nil
-        datesItem?.buttonColor = UIColor.lightGray
-        datesItem?.titleColor = UIColor.lightGray
-        datesItem?.setNeedsDisplay()
-    }
-    func disableDestinationItem() {
-        destinationItem?.handler = nil
-        destinationItem?.buttonColor = UIColor.lightGray
-        destinationItem?.titleColor = UIColor.lightGray
-        destinationItem?.setNeedsDisplay()
-    }
-    func disableTravelItem() {
-        travelItem?.handler = nil
-        travelItem?.buttonColor = UIColor.lightGray
-        travelItem?.titleColor = UIColor.lightGray
-        travelItem?.setNeedsDisplay()
-    }
-    func disablePlaceToStayItem() {
-        placeToStayItem?.handler = nil
-        placeToStayItem?.buttonColor = UIColor.lightGray
-        placeToStayItem?.titleColor = UIColor.lightGray
-        placeToStayItem?.setNeedsDisplay()
-    }
-    func enableDatesItem() {
-        datesItem?.buttonColor = UIColor.flatPeterRiver()
-        datesItem?.titleColor = UIColor.white
-        datesItem?.handler = { item in
-            self.spawnDatesPickedOutCalendarView()
-            self.floaty?.close()
-//            self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
-//            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
-//            self.floaty?.removeItem(item: self.placeToStayItem!)
-//            self.floaty?.removeItem(item: self.travelItem!)
-//            self.floaty?.removeItem(item: self.destinationItem!)
-//            self.floaty?.removeItem(item: self.datesItem!)
-//            self.floaty?.addItem(item: self.placeToStayItem!)
-//            self.floaty?.addItem(item: self.travelItem!)
-//            self.floaty?.addItem(item: self.destinationItem!)
-        }
-        datesItem?.setNeedsDisplay()
-    }
-    func enableDestinationItem() {
-        destinationItem?.buttonColor = UIColor.flatTurquoise()
-        destinationItem?.titleColor = UIColor.white
-        destinationItem?.handler = { item in
-            self.spawnWhereTravellingFromQuestionView()
-            self.floaty?.close()
-//            self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
-//            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
-//            self.floaty?.removeItem(item: self.placeToStayItem!)
-//            self.floaty?.removeItem(item: self.travelItem!)
-//            self.floaty?.removeItem(item: self.destinationItem!)
-//            self.floaty?.removeItem(item: self.datesItem!)
-//            self.floaty?.addItem(item: self.placeToStayItem!)
-//            self.floaty?.addItem(item: self.travelItem!)
-//            self.floaty?.addItem(item: self.datesItem!)
-        }
-        destinationItem?.setNeedsDisplay()
-    }
-    func enableTravelItem() {
-        travelItem?.buttonColor = UIColor.flatCarrot()
-        travelItem?.titleColor = UIColor.white
-        travelItem?.handler = { item in
-            self.spawnHowDoYouWantToGetThereQuestionView()
-            self.floaty?.close()
-//            self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
-//            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
-//            self.floaty?.removeItem(item: self.placeToStayItem!)
-//            self.floaty?.removeItem(item: self.travelItem!)
-//            self.floaty?.removeItem(item: self.destinationItem!)
-//            self.floaty?.removeItem(item: self.datesItem!)
-//            self.floaty?.addItem(item: self.placeToStayItem!)
-//            self.floaty?.addItem(item: self.destinationItem!)
-//            self.floaty?.addItem(item: self.datesItem!)
-        }
-        travelItem?.setNeedsDisplay()
-    }
-    func enablePlaceToStayItem() {
-        placeToStayItem?.buttonColor = UIColor.flatSunFlower()
-        placeToStayItem?.titleColor = UIColor.white
-        placeToStayItem?.handler = { item in
-            self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
-            self.floaty?.close()
-//            self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
-//            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
-//            self.floaty?.removeItem(item: self.placeToStayItem!)
-//            self.floaty?.removeItem(item: self.travelItem!)
-//            self.floaty?.removeItem(item: self.destinationItem!)
-//            self.floaty?.removeItem(item: self.datesItem!)
-//            self.floaty?.addItem(item: self.travelItem!)
-//            self.floaty?.addItem(item: self.destinationItem!)
-//            self.floaty?.addItem(item: self.datesItem!)
-        }
-        placeToStayItem?.setNeedsDisplay()
-    }
-    
+//    func scrolledToDatesItem() {
+//        enableDatesItem()
+////        self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
+////        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
+////        self.floaty?.removeItem(item: self.placeToStayItem!)
+////        self.floaty?.removeItem(item: self.travelItem!)
+////        self.floaty?.removeItem(item: self.destinationItem!)
+////        self.floaty?.removeItem(item: self.datesItem!)
+////        self.floaty?.addItem(item: self.placeToStayItem!)
+////        self.floaty?.addItem(item: self.travelItem!)
+////        self.floaty?.addItem(item: self.destinationItem!)
+//    }
+//    func scrolledToDestinationItem() {
+//        enableDestinationItem()
+////        self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
+////        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
+////        self.floaty?.removeItem(item: self.placeToStayItem!)
+////        self.floaty?.removeItem(item: self.travelItem!)
+////        self.floaty?.removeItem(item: self.destinationItem!)
+////        self.floaty?.removeItem(item: self.datesItem!)
+////        self.floaty?.addItem(item: self.placeToStayItem!)
+////        self.floaty?.addItem(item: self.travelItem!)
+////        self.floaty?.addItem(item: self.datesItem!)
+//    }
+//    func scrolledToTravelItem() {
+//        enableTravelItem()
+////        self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
+////        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
+////        self.floaty?.removeItem(item: self.placeToStayItem!)
+////        self.floaty?.removeItem(item: self.travelItem!)
+////        self.floaty?.removeItem(item: self.destinationItem!)
+////        self.floaty?.removeItem(item: self.datesItem!)
+////        self.floaty?.addItem(item: self.placeToStayItem!)
+////        self.floaty?.addItem(item: self.destinationItem!)
+////        self.floaty?.addItem(item: self.datesItem!)
+//    }
+//    func scrolledToPlaceToStayItem() {
+//        enablePlaceToStayItem()
+////        self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
+////        self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
+////        self.floaty?.removeItem(item: self.placeToStayItem!)
+////        self.floaty?.removeItem(item: self.travelItem!)
+////        self.floaty?.removeItem(item: self.destinationItem!)
+////        self.floaty?.removeItem(item: self.datesItem!)
+////        self.floaty?.addItem(item: self.travelItem!)
+////        self.floaty?.addItem(item: self.destinationItem!)
+////        self.floaty?.addItem(item: self.datesItem!)
+//    }
+
+//    func disableDatesItem() {
+//        datesItem?.handler = nil
+//        datesItem?.buttonColor = UIColor.lightGray
+//        datesItem?.titleColor = UIColor.lightGray
+//        datesItem?.setNeedsDisplay()
+//    }
+//    func disableDestinationItem() {
+//        destinationItem?.handler = nil
+//        destinationItem?.buttonColor = UIColor.lightGray
+//        destinationItem?.titleColor = UIColor.lightGray
+//        destinationItem?.setNeedsDisplay()
+//    }
+//    func disableTravelItem() {
+//        travelItem?.handler = nil
+//        travelItem?.buttonColor = UIColor.lightGray
+//        travelItem?.titleColor = UIColor.lightGray
+//        travelItem?.setNeedsDisplay()
+//    }
+//    func disablePlaceToStayItem() {
+//        placeToStayItem?.handler = nil
+//        placeToStayItem?.buttonColor = UIColor.lightGray
+//        placeToStayItem?.titleColor = UIColor.lightGray
+//        placeToStayItem?.setNeedsDisplay()
+//    }
+//    func enableDatesItem() {
+//        datesItem?.buttonColor = UIColor.flatPeterRiver()
+//        datesItem?.titleColor = UIColor.white
+//        datesItem?.handler = { item in
+//            self.spawnDatesPickedOutCalendarView()
+//            self.floaty?.close()
+////            self.floaty?.buttonColor = (self.datesItem?.buttonColor)!
+////            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "Calendar-Time")!, newWidth: ((self.floaty?.size)! - 25))
+////            self.floaty?.removeItem(item: self.placeToStayItem!)
+////            self.floaty?.removeItem(item: self.travelItem!)
+////            self.floaty?.removeItem(item: self.destinationItem!)
+////            self.floaty?.removeItem(item: self.datesItem!)
+////            self.floaty?.addItem(item: self.placeToStayItem!)
+////            self.floaty?.addItem(item: self.travelItem!)
+////            self.floaty?.addItem(item: self.destinationItem!)
+//        }
+//        datesItem?.setNeedsDisplay()
+//    }
+//    func enableDestinationItem() {
+//        destinationItem?.buttonColor = UIColor.flatTurquoise()
+//        destinationItem?.titleColor = UIColor.white
+//        destinationItem?.handler = { item in
+//            self.spawnWhereTravellingFromQuestionView()
+//            self.floaty?.close()
+////            self.floaty?.buttonColor = (self.destinationItem?.buttonColor)!
+////            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "map")!, newWidth: ((self.floaty?.size)! - 25))
+////            self.floaty?.removeItem(item: self.placeToStayItem!)
+////            self.floaty?.removeItem(item: self.travelItem!)
+////            self.floaty?.removeItem(item: self.destinationItem!)
+////            self.floaty?.removeItem(item: self.datesItem!)
+////            self.floaty?.addItem(item: self.placeToStayItem!)
+////            self.floaty?.addItem(item: self.travelItem!)
+////            self.floaty?.addItem(item: self.datesItem!)
+//        }
+//        destinationItem?.setNeedsDisplay()
+//    }
+//    func enableTravelItem() {
+//        travelItem?.buttonColor = UIColor.flatCarrot()
+//        travelItem?.titleColor = UIColor.white
+//        travelItem?.handler = { item in
+//            self.spawnHowDoYouWantToGetThereQuestionView()
+//            self.floaty?.close()
+////            self.floaty?.buttonColor = (self.travelItem?.buttonColor)!
+////            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeFlight")!, newWidth: ((self.floaty?.size)! - 25))
+////            self.floaty?.removeItem(item: self.placeToStayItem!)
+////            self.floaty?.removeItem(item: self.travelItem!)
+////            self.floaty?.removeItem(item: self.destinationItem!)
+////            self.floaty?.removeItem(item: self.datesItem!)
+////            self.floaty?.addItem(item: self.placeToStayItem!)
+////            self.floaty?.addItem(item: self.destinationItem!)
+////            self.floaty?.addItem(item: self.datesItem!)
+//        }
+//        travelItem?.setNeedsDisplay()
+//    }
+//    func enablePlaceToStayItem() {
+//        placeToStayItem?.buttonColor = UIColor.flatSunFlower()
+//        placeToStayItem?.titleColor = UIColor.white
+//        placeToStayItem?.handler = { item in
+//            self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+//            self.floaty?.close()
+////            self.floaty?.buttonColor = (self.placeToStayItem?.buttonColor)!
+////            self.floaty?.buttonImage = self.resizeImage(image: UIImage(named: "changeHotel")!, newWidth: ((self.floaty?.size)! - 25))
+////            self.floaty?.removeItem(item: self.placeToStayItem!)
+////            self.floaty?.removeItem(item: self.travelItem!)
+////            self.floaty?.removeItem(item: self.destinationItem!)
+////            self.floaty?.removeItem(item: self.datesItem!)
+////            self.floaty?.addItem(item: self.travelItem!)
+////            self.floaty?.addItem(item: self.destinationItem!)
+////            self.floaty?.addItem(item: self.datesItem!)
+//        }
+//        placeToStayItem?.setNeedsDisplay()
+//    }
+
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
         if sender.isSelected {
@@ -1093,9 +1097,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         for subviewTag in subviewTags {
             self.functionsToLoadSubviewsDictionary[subviewTag]!()
         }
-        progressRing?.layer.frame = (floaty?.frame)!
-        progressRing?.layer.frame.size.height -= 15
-        progressRing?.layer.frame.size.width -= 15
+//        progressRing?.layer.frame = (floaty?.frame)!
+//        progressRing?.layer.frame.size.height -= 15
+//        progressRing?.layer.frame.size.width -= 15
     }
     func updateProgress() {
         var currentSubviewsInScrollContentView = [Int]()
@@ -1120,27 +1124,27 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         SavedPreferencesForTrip["currentAssistantSubview"] = currentSubview as NSNumber
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
-    func handleFloatyBasedOnProgressOfInitiator() {
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        let currentSubview = SavedPreferencesForTrip["currentAssistantSubview"] as! Int
-        
-        //UPDATE WHEN ADDING SUBVIEWS TO SCROLLVIEW
-        let datesSubviews = [1,32]
-        let destinationSubviews = [0,2,3,4,5,6,7,8,9]
-        let travelSubviews = [10,11,12,13,14,15,16,17,19,20,21,35]
-        let placeToStaySubviews = [18,22,23,24,25,26,27,28,30,31]
-        let otherSubviews = [29,33,34]
-        
-        if datesSubviews.contains(currentSubview) {
-            scrolledToDatesItem()
-        } else if destinationSubviews.contains(currentSubview) {
-            scrolledToDestinationItem()
-        } else if travelSubviews.contains(currentSubview) {
-            scrolledToTravelItem()
-        } else if placeToStaySubviews.contains(currentSubview) {
-            scrolledToPlaceToStayItem()
-        }
-    }
+//    func handleFloatyBasedOnProgressOfInitiator() {
+//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//        let currentSubview = SavedPreferencesForTrip["currentAssistantSubview"] as! Int
+//        
+//        //UPDATE WHEN ADDING SUBVIEWS TO SCROLLVIEW
+//        let datesSubviews = [1,32]
+//        let destinationSubviews = [0,2,3,4,5,6,7,8,9]
+//        let travelSubviews = [10,11,12,13,14,15,16,17,19,20,21,35]
+//        let placeToStaySubviews = [18,22,23,24,25,26,27,28,30,31]
+//        let otherSubviews = [29,33,34]
+//        
+//        if datesSubviews.contains(currentSubview) {
+//            scrolledToDatesItem()
+//        } else if destinationSubviews.contains(currentSubview) {
+//            scrolledToDestinationItem()
+//        } else if travelSubviews.contains(currentSubview) {
+//            scrolledToTravelItem()
+//        } else if placeToStaySubviews.contains(currentSubview) {
+//            scrolledToPlaceToStayItem()
+//        }
+//    }
     func scrollToSubviewWithTag(tag:Int){
         let topOfSubview = subviewFramesDictionary[tag]
         UIView.animate(withDuration: 1) {
@@ -1195,13 +1199,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let bounds = UIScreen.main.bounds
         self.userNameQuestionView!.frame = CGRect(x: 0, y: self.topView.frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
         let heightConstraint = NSLayoutConstraint(item: userNameQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (userNameQuestionView?.frame.height)!)
-        let test = (userNameQuestionView?.frame.height)!
         view.addConstraints([heightConstraint])
         updateHeightOfScrollView()
     }
     
     func spawnInstructionsQuestionView() {
         self.view.endEditing(true)
+        if userNameQuestionView != nil {
+            userNameQuestionView?.removeFromSuperview()
+            userNameQuestionView = nil
+        }
         if instructionsQuestionView == nil  {
             //Load next question
             instructionsQuestionView = Bundle.main.loadNibNamed("InstructionsQuestionView", owner: self, options: nil)?.first! as? InstructionsQuestionView
@@ -1252,25 +1259,25 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.view.endEditing(true)
         if datesPickedOutCalendarView == nil  {
             //handle floaty
-            disableDestinationItem()
-            disableTravelItem()
-            disablePlaceToStayItem()
-            floaty?.alpha = 0
-            progressRing?.layer.frame = (floaty?.frame)!
-            progressRing?.layer.frame.size.height -= 15
-            progressRing?.layer.frame.size.width -= 15
+//            disableDestinationItem()
+//            disableTravelItem()
+//            disablePlaceToStayItem()
+//            floaty?.alpha = 0
+//            progressRing?.layer.frame = CGRect(x: UIScreen.main.bounds.width - 10 - 30, y: 28, width: 30, height: 30)
+//            progressRing?.layer.frame.size.height -= 15
+//            progressRing?.layer.frame.size.width -= 15
             progressRing?.alpha = 0
             progressRing?.isHidden = false
             let when = DispatchTime.now() + 0.8
             DispatchQueue.main.asyncAfter(deadline: when) {
                 UIView.animate(withDuration: 0.3) {
-                    self.floaty?.alpha = 1
+//                    self.floaty?.alpha = 1
                     self.progressRing?.alpha = 1
                 }
             }
 
             
-            scrolledToDatesItem()
+//            scrolledToDatesItem()
             //Load next question
             datesPickedOutCalendarView = Bundle.main.loadNibNamed("DatesPickedOutCalendarView", owner: self, options: nil)?.first! as? DatesPickedOutCalendarView
             datesPickedOutCalendarView?.tag = 1
@@ -3458,7 +3465,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         animateOutSubview()
         getCurrentSubview()
-        handleFloatyBasedOnProgressOfInitiator()
+//        handleFloatyBasedOnProgressOfInitiator()
         if parseDatesForMultipleDestinationsCalendarView != nil {
             if (parseDatesForMultipleDestinationsCalendarView?.frame.intersects(scrollView.bounds))! {
                 parseDatesForMultipleDestinationsCalendarView?.loadDates()
@@ -3652,14 +3659,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollView.isHidden = true
         scrollUpButton.isHidden = true
         scrollDownButton.isHidden = true
-        floaty?.isHidden = true
+//        floaty?.isHidden = true
         progressRing?.isHidden = true
     }
     func assistantViewIsHiddenFalse() {
         scrollView.isHidden = false
         scrollUpButton.isHidden = false
         scrollDownButton.isHidden = false
-        floaty?.isHidden = false
+//        floaty?.isHidden = false
         progressRing?.isHidden = false
     }
     
