@@ -27,7 +27,6 @@ static CGFloat const kBottomPadding = 12;
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-//@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 @end
 
@@ -149,25 +148,22 @@ static CGFloat const kBottomPadding = 12;
 }
 - (IBAction)saveButtonTouchedUpInside:(id)sender {
     ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
-    if (_saveButton.selected == NO) {
-        _saveButton.selected = YES;
-        //    NSDictionary *flightResultDictionary = [convertTicketForSavePerformer convertTicketForSaveWithTicket:self.ticket];
+    
+    if (_saveButton.currentBackgroundImage.imageAsset == [UIImage imageNamed:@"emptyHeartGray"].imageAsset) {
+        [_saveButton setBackgroundImage:[UIImage imageNamed:@"fullHeartRed"] forState:UIControlStateNormal];
         [convertTicketForSavePerformer saveFlightTicketsWithTicket:self.ticket];
     } else {
-        _saveButton.selected = NO;
+        [_saveButton setBackgroundImage:[UIImage imageNamed:@"emptyHeartGray"] forState:UIControlStateNormal];
         [convertTicketForSavePerformer removeSavedFlightTicketsWithTicket:self.ticket];
     }
-    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"test"
-//                                                        object:nil];
-    
-    
-    
-
-    //Save to NSUserDefaults
-    
-    //Fetch and rebuild ticket
-//    [convertTicketForSavePerformer rebuildTicketFromFlightResultDictionary:flightResultDictionary];
 }
+
+//[cell.saveButton setBackgroundImage:[UIImage imageNamed:@"fullHeartRed"] forState:UIControlStateNormal];
+////        [cell.saveButton setSelected:YES];
+//
+//NSArray *test2 = [convertTicketForSavePerformer fetchSavedFlightTickets];
+//
+//} else {
+//    [cell.saveButton setBackgroundImage:[UIImage imageNamed:@"emptyHeartGray"] forState:UIControlStateNormal];
 
 @end

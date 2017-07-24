@@ -19,6 +19,7 @@ import AviasalesSDK
         SavedPreferencesForTrip["savedFlightTickets"] = savedFlightTickets
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
+
     func removeSavedFlightTickets(ticket: JRSDKTicket) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var savedFlightTicketsAsData = SavedPreferencesForTrip["savedFlightTickets"] as! [Data]
@@ -48,7 +49,7 @@ import AviasalesSDK
     }
     func checkIfSavedFlightTicketsContains(ticket:JRSDKTicket, savedFlightTickets: [JRSDKTicket]) -> Int {
         for savedFlightTicket in savedFlightTickets {
-            if savedFlightTicket == ticket {
+            if ticket == savedFlightTicket {
                 return 1
             }
         }

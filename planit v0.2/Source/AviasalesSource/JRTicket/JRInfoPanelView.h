@@ -15,6 +15,8 @@
 
 @property (nonatomic, copy) void (^buyHandler)(void);
 @property (nonatomic, copy) void (^showOtherAgencyHandler)(void);
+@property (strong, nonatomic) UIButton *saveButton;
+
 
 - (void)expand;
 - (void)collapse;

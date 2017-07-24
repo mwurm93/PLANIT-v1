@@ -51,12 +51,14 @@
     NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
     
     if ([convertTicketForSavePerformer checkIfSavedFlightTicketsContainsWithTicket:cell.ticket savedFlightTickets:savedFlightTickets] == 1) {
-        [cell.saveButton setSelected:YES];
+        [cell.saveButton setBackgroundImage:[UIImage imageNamed:@"fullHeartRed"] forState:UIControlStateNormal];
+        
+    } else {
+        [cell.saveButton setBackgroundImage:[UIImage imageNamed:@"emptyHeartGray"] forState:UIControlStateNormal];
     }
     
     return cell;
 }
-
 #pragma mark - <UITableViewDelegate>
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

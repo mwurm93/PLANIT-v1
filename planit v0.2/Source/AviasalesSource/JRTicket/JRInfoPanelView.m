@@ -147,6 +147,17 @@ static const CGFloat kAgencyInfoLabelMaxCenterConstraint = 15.0;
     self.layer.backgroundColor = [UIColor clearColor].CGColor;
     self.backgroundColor = [UIColor clearColor];
     self.opaque = false;
+    
+    
+    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
+    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
+    
+    if ([convertTicketForSavePerformer checkIfSavedFlightTicketsContainsWithTicket:self.ticket savedFlightTickets:savedFlightTickets] == 1) {
+        [_saveButton setBackgroundImage:[UIImage imageNamed:@"fullHeartRed"] forState:UIControlStateNormal];
+        
+    } else {
+        [_saveButton setBackgroundImage:[UIImage imageNamed:@"emptyHeartGray"] forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark IBAction methods
@@ -157,6 +168,17 @@ static const CGFloat kAgencyInfoLabelMaxCenterConstraint = 15.0;
 
 - (IBAction)showOtherAgencies:(id)sender {
     self.showOtherAgencyHandler();
+}
+- (IBAction)saveButtonTouchedUpInside:(id)sender {
+    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
+    
+    if (_saveButton.currentBackgroundImage.imageAsset == [UIImage imageNamed:@"emptyHeartGray"].imageAsset) {
+        [_saveButton setBackgroundImage:[UIImage imageNamed:@"fullHeartRed"] forState:UIControlStateNormal];
+        [convertTicketForSavePerformer saveFlightTicketsWithTicket:self.ticket];
+    } else {
+        [_saveButton setBackgroundImage:[UIImage imageNamed:@"emptyHeartGray"] forState:UIControlStateNormal];
+        [convertTicketForSavePerformer removeSavedFlightTicketsWithTicket:self.ticket];
+    }
 }
 
 @end

@@ -50,7 +50,7 @@ class ASTWaitingScreenViewController: UIViewController {
         edgesForExtendedLayout = .top
         view.backgroundColor = UIColor.clear
         progressView.backgroundColor = UIColor.clear
-        progressView.progressColor = UIColor(colorLiteralRed: 220/255, green: 143/255, blue: 91/255, alpha: 1)
+        progressView.progressColor = UIColor(colorLiteralRed: 200/255, green: 213/255, blue: 221/255, alpha: 1)
     }
 
     // MARK: - Update

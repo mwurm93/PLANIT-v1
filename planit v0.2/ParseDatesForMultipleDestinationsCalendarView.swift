@@ -413,6 +413,9 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         return parameters
     }
     func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) -> Bool {
+        if (tripDates?.contains(date))! {
+            return true
+        }
         return false
     }
     func calendar(_ calendar: JTAppleCalendarView, shouldDeselectDate date: Date, cell: JTAppleCell, cellState: CellState) -> Bool {

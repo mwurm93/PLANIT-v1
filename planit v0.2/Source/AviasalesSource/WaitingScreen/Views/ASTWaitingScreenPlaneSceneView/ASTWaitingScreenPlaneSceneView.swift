@@ -39,7 +39,7 @@ class ASTWaitingScreenPlaneSceneView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         cloudSceneView.backgroundColor = UIColor.clear
-        planeImageView.tintColor = UIColor(colorLiteralRed: 220/255, green: 143/255, blue: 91/255, alpha: 1)
+        planeImageView.tintColor = UIColor(colorLiteralRed: 200/255, green: 213/255, blue: 221/255, alpha: 1)
     }
 
     func startAnimating() {

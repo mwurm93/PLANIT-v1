@@ -171,7 +171,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     
-    func flightSearchResultsSceneViewController_ViewDidLoad() {
+    func flightSearchResultsSceneViewController_ViewDidAppear() {
         
         self.backButton?.removeFromSuperview()
         backButton = nil
@@ -223,7 +223,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         segmentedControl = TwicketSegmentedControl(frame: CGRect(x: UIScreen.main.bounds.width / 2 - 135, y: 20, width: 270, height: 40))
         segmentedControl?.setSegmentItems(segmentedControlTitles)
         segmentedControl?.delegate = self
-        segmentedControl?.segmentsBackgroundColor = UIColor.white.withAlphaComponent(0.8)
+        segmentedControl?.segmentsBackgroundColor = UIColor.white
         segmentedControl?.backgroundColor = .clear // This is important!
         
         self.topView.addSubview(segmentedControl!)
@@ -485,7 +485,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(delete), name: NSNotification.Name(rawValue: "deleteInvitee"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(itinerary), name: NSNotification.Name(rawValue: "reviewItinerary"), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(flightSearchResultsSceneViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightSearchResultsSceneViewController_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flightSearchResultsSceneViewController_ViewDidAppear), name: NSNotification.Name(rawValue: "flightSearchResultsSceneViewController_ViewDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightSearchWaitingScreenViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightTicketViewViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightTicketViewViewController_ViewDidLoad"), object: nil)
 
@@ -641,7 +641,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        addBackButtonPointedAtTripList()
+        
     }
     
     override func didReceiveMemoryWarning() {

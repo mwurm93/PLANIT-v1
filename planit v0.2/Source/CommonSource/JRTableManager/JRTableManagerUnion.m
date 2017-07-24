@@ -6,6 +6,8 @@
 //
 
 #import "JRTableManagerUnion.h"
+#import "planit_v0_2-Swift.h"
+
 
 @interface JRTableManagerUnion ()
 
@@ -91,6 +93,7 @@
     } else {
         NSIndexPath *const pathInFirstTable = [self indexPathFromFirstTableWithIndex:index];
         result = [self.first tableView:tableView cellForRowAtIndexPath:pathInFirstTable];
+    
     }
     return result;
 }

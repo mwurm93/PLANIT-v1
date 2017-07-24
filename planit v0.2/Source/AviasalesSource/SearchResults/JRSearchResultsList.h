@@ -19,6 +19,7 @@
 
 @interface JRSearchResultsList : NSObject <JRTableManager>
 
+@property NSMutableArray *savedTicketTags;
 @property (weak, nonatomic) id<JRSearchResultsListDelegate> delegate;
 @property (strong, nonatomic, readonly) NSString *ticketCellNibName;
 @property (strong, nonatomic) JRSearchResultsFlightSegmentCellLayoutParameters *flightSegmentLayoutParameters;

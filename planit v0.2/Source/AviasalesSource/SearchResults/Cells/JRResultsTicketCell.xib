@@ -59,7 +59,7 @@
                             <constraint firstAttribute="width" constant="22" id="GCx-IW-G3Z"/>
                             <constraint firstAttribute="height" constant="22" id="ud9-Rw-8dV"/>
                         </constraints>
-                        <state key="normal" title="Save" image="emptyHeartGray"/>
+                        <state key="normal" backgroundImage="emptyHeartGray"/>
                         <state key="selected" image="fullHeartRed"/>
                         <state key="highlighted" image="fullHeartRed"/>
                         <connections>

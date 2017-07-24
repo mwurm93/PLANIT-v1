@@ -16,13 +16,39 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q0s-hy-h22">
                     <rect key="frame" x="10" y="10" width="336" height="130"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="на Biletix" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eog-HV-JQy">
+                            <rect key="frame" x="20" y="45" width="52" height="15"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" red="0.36470588240000001" green="0.36470588240000001" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="eog-HV-JQy" firstAttribute="leading" secondItem="q0s-hy-h22" secondAttribute="leading" constant="20" id="6kZ-mR-LW8"/>
+                        <constraint firstItem="eog-HV-JQy" firstAttribute="top" secondItem="q0s-hy-h22" secondAttribute="top" constant="45" id="uTJ-7V-MdZ"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="eog-HV-JQy" secondAttribute="trailing" constant="20" id="zMN-v3-tcC"/>
+                    </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="JRCornerRadius">
                             <real key="value" value="5"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mom-ML-gee">
+                    <rect key="frame" x="132" y="32" width="33" height="33"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="33" id="A0D-7W-RNA"/>
+                        <constraint firstAttribute="height" constant="33" id="H19-c4-dYM"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="emptyHeartGray"/>
+                    <state key="selected" image="fullHeartRed"/>
+                    <state key="highlighted" image="fullHeartRed"/>
+                    <connections>
+                        <action selector="saveButtonTouchedUpInside:" destination="siT-Cf-Nzc" eventType="touchUpInside" id="tno-lc-oIi"/>
+                    </connections>
+                </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" horizontalCompressionResistancePriority="1000" text="77 442 ₽" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Xi-ve-Jbc">
                     <rect key="frame" x="30" y="30" width="90" height="26"/>
                     <fontDescription key="fontDescription" type="system" pointSize="22"/>
@@ -49,12 +75,6 @@
                         <action selector="showOtherAgencies:" destination="siT-Cf-Nzc" eventType="touchUpInside" id="xee-mK-rRK"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="на Biletix" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eog-HV-JQy">
-                    <rect key="frame" x="128" y="39" width="52" height="15"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                    <color key="textColor" red="0.36470588240000001" green="0.36470588240000001" blue="0.36470588240000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wT0-eD-j9g">
                     <rect key="frame" x="30" y="75" width="296" height="50"/>
                     <color key="backgroundColor" red="0.88235294119999996" green="0.88235294119999996" blue="0.88235294119999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -95,19 +115,17 @@
             <constraints>
                 <constraint firstItem="wT0-eD-j9g" firstAttribute="leading" secondItem="siT-Cf-Nzc" secondAttribute="leading" constant="30" id="2uq-Dl-7c6"/>
                 <constraint firstItem="qtv-gi-Drx" firstAttribute="top" secondItem="siT-Cf-Nzc" secondAttribute="top" priority="750" constant="25" id="55r-UU-wfv"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="eog-HV-JQy" secondAttribute="trailing" constant="20" id="6FD-0e-lfl"/>
-                <constraint firstItem="eog-HV-JQy" firstAttribute="baseline" secondItem="2Xi-ve-Jbc" secondAttribute="baseline" id="Gcr-zk-clN"/>
+                <constraint firstItem="Mom-ML-gee" firstAttribute="leading" secondItem="2Xi-ve-Jbc" secondAttribute="trailing" constant="12" id="Fny-OR-4nG"/>
                 <constraint firstAttribute="trailing" secondItem="q0s-hy-h22" secondAttribute="trailing" constant="10" id="S8l-k2-Qnu"/>
                 <constraint firstItem="2Xi-ve-Jbc" firstAttribute="top" secondItem="siT-Cf-Nzc" secondAttribute="top" constant="30" id="TFU-bi-yDv"/>
                 <constraint firstAttribute="bottom" secondItem="q0s-hy-h22" secondAttribute="bottom" constant="10" id="UAm-Yv-N5X"/>
                 <constraint firstItem="wT0-eD-j9g" firstAttribute="top" secondItem="qtv-gi-Drx" secondAttribute="bottom" constant="15" id="V8f-BC-ND5"/>
-                <constraint firstItem="eog-HV-JQy" firstAttribute="leading" secondItem="2Xi-ve-Jbc" secondAttribute="trailing" priority="750" constant="8" id="bb1-Qb-LqV"/>
-                <constraint firstItem="eog-HV-JQy" firstAttribute="leading" secondItem="siT-Cf-Nzc" secondAttribute="leading" priority="250" constant="30" id="cvP-Mc-U9n"/>
                 <constraint firstItem="2Xi-ve-Jbc" firstAttribute="leading" secondItem="siT-Cf-Nzc" secondAttribute="leading" constant="30" id="gl0-g4-jLv"/>
                 <constraint firstItem="q0s-hy-h22" firstAttribute="leading" secondItem="siT-Cf-Nzc" secondAttribute="leading" constant="10" id="jsL-1R-e7z"/>
                 <constraint firstItem="wT0-eD-j9g" firstAttribute="top" secondItem="siT-Cf-Nzc" secondAttribute="top" priority="750" constant="75" id="pWs-1X-Jem"/>
                 <constraint firstAttribute="trailing" secondItem="wT0-eD-j9g" secondAttribute="trailing" constant="30" id="rKb-AE-xzP"/>
                 <constraint firstAttribute="trailing" secondItem="qtv-gi-Drx" secondAttribute="trailing" constant="30" id="rM5-g2-QzZ"/>
+                <constraint firstItem="Mom-ML-gee" firstAttribute="top" secondItem="siT-Cf-Nzc" secondAttribute="top" constant="32" id="y5B-vP-xFX"/>
                 <constraint firstItem="q0s-hy-h22" firstAttribute="top" secondItem="siT-Cf-Nzc" secondAttribute="top" constant="10" id="z17-Qi-0ra"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
@@ -116,9 +134,6 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="agencyInfoLabel" destination="eog-HV-JQy" id="fcZ-Xw-SGz"/>
-                <outlet property="agencyInfoLabelCenterConstraint" destination="Gcr-zk-clN" id="9mD-yc-fmj"/>
-                <outlet property="agencyInfoLabelLeftConstraint" destination="bb1-Qb-LqV" id="QCC-Kr-0ac"/>
-                <outlet property="agencyInfoLabelLeftContainerConstraint" destination="cvP-Mc-U9n" id="289-B3-vnh"/>
                 <outlet property="buyButton" destination="wT0-eD-j9g" id="0Rh-mw-XAt"/>
                 <outlet property="buyButtonLeftConstraint" destination="2uq-Dl-7c6" id="YUp-hv-ifK"/>
                 <outlet property="buyButtonTopConstraint" destination="pWs-1X-Jem" id="kAp-u2-bHG"/>
@@ -128,4 +143,8 @@
             </connections>
         </view>
     </objects>
+    <resources>
+        <image name="emptyHeartGray" width="71" height="71"/>
+        <image name="fullHeartRed" width="71" height="71"/>
+    </resources>
 </document>

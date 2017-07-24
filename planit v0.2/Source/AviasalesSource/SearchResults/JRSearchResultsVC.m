@@ -149,6 +149,8 @@ static const NSInteger kHotelCardIndex = 5;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _tableView.bounces = NO;
+    
     [self setupViewController];
     if (iPad()) {
         [self setFirstTicketSelected];
@@ -159,8 +161,6 @@ static const NSInteger kHotelCardIndex = 5;
                                                  name:@"test"
                                                object:nil];
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"flightSearchResultsSceneViewController_ViewDidLoad"
-                                                        object:self];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(popFromFlightSearchResultsSceneViewControllerToFlightSearch)
                                                  name:@"popFromFlightSearchResultsSceneViewControllerToFlightSearch"
@@ -168,22 +168,21 @@ static const NSInteger kHotelCardIndex = 5;
     
     self.view.layer.backgroundColor = [UIColor clearColor].CGColor;
 }
-
 - (void)popFromFlightSearchResultsSceneViewControllerToFlightSearch {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)receiveTestNotification {
-    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
-    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
-    
-    JRSDKTicket *flightTicket = savedFlightTickets[0];
-    
-    JRTicketVC *const ticketVC = [[JRTicketVC alloc] initWithSearchInfo: flightTicket.searchResultInfo.searchInfo searchID: flightTicket.searchResultInfo.searchID];
-    [ticketVC setTicket:savedFlightTickets[0]];
-    [self.navigationController pushViewController:ticketVC animated:YES];
-
-}
+//- (void)receiveTestNotification {
+//    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
+//    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
+//    
+//    JRSDKTicket *flightTicket = savedFlightTickets[0];
+//    
+//    JRTicketVC *const ticketVC = [[JRTicketVC alloc] initWithSearchInfo: flightTicket.searchResultInfo.searchInfo searchID: flightTicket.searchResultInfo.searchID];
+//    [ticketVC setTicket:savedFlightTickets[0]];
+//    [self.navigationController pushViewController:ticketVC animated:YES];
+//
+//}
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
@@ -196,12 +195,15 @@ static const NSInteger kHotelCardIndex = 5;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"flightSearchResultsSceneViewController_ViewDidAppear"
+                                                        object:self];
 
     ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
-    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
-    if (savedFlightTickets.count > 0) {
-        //RELOAD DATA
-    }
+//    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
+//    if (savedFlightTickets.count > 0) {
+//        [self.tableView reloadData];
+//    }
     
     if (iPhone() && self.tableView.indexPathForSelectedRow) {
         [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
@@ -300,7 +302,7 @@ static const NSInteger kHotelCardIndex = 5;
     if (iPhone()) {
         JRTicketVC *const ticketVC = [[JRTicketVC alloc] initWithSearchInfo:self.searchInfo searchID:self.response.searchResultInfo.searchID];
         [ticketVC setTicket:ticket];
-        [self.navigationController pushViewController:ticketVC animated:YES];
+        [self.navigationController pushViewController:ticketVC animated:NO];
     } else {
         if (self.selectionBlock) {
             self.selectionBlock(ticket);
