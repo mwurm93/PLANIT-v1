@@ -138,6 +138,7 @@
                 <outlet property="buyButtonLeftConstraint" destination="2uq-Dl-7c6" id="YUp-hv-ifK"/>
                 <outlet property="buyButtonTopConstraint" destination="pWs-1X-Jem" id="kAp-u2-bHG"/>
                 <outlet property="priceLabel" destination="2Xi-ve-Jbc" id="IAL-CA-Bd2"/>
+                <outlet property="saveButton" destination="Mom-ML-gee" id="Kvu-SO-fJR"/>
                 <outlet property="showOtherAgenciesButton" destination="qtv-gi-Drx" id="4hP-QG-U1z"/>
                 <outlet property="showOtherAgenciesButtonTopConstraint" destination="55r-UU-wfv" id="EKT-r3-Nqg"/>
             </connections>

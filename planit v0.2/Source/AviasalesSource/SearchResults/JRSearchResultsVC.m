@@ -197,13 +197,13 @@ static const NSInteger kHotelCardIndex = 5;
     [super viewDidAppear:animated];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"flightSearchResultsSceneViewController_ViewDidAppear"
-                                                        object:self];
+                                                    object:self];
 
     ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
-//    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
-//    if (savedFlightTickets.count > 0) {
-//        [self.tableView reloadData];
-//    }
+    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
+    if (savedFlightTickets.count > 0) {
+        [self.tableView reloadData];
+    }
     
     if (iPhone() && self.tableView.indexPathForSelectedRow) {
         [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];

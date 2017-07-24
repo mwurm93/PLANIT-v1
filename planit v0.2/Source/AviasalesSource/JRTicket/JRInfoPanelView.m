@@ -37,6 +37,7 @@ static const CGFloat kAgencyInfoLabelMaxCenterConstraint = 15.0;
 @property (nonatomic, weak) IBOutlet UILabel *priceLabel;
 @property (nonatomic, weak) IBOutlet UILabel *agencyInfoLabel;
 @property (nonatomic, weak) IBOutlet UIButton *buyButton;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 @end
 
