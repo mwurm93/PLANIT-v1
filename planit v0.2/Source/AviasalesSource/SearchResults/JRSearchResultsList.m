@@ -47,10 +47,10 @@
     cell.flightSegmentsLayoutParameters = self.flightSegmentLayoutParameters;
     cell.ticket = [self ticketAtIndexPath:indexPath];
     
-    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
-    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    NSArray *savedFlightTickets = [flightTicketsAccessoryMethodPerformer fetchSavedFlightTickets];
     
-    if ([convertTicketForSavePerformer checkIfSavedFlightTicketsContainsWithTicket:cell.ticket savedFlightTickets:savedFlightTickets] == 1) {
+    if ([flightTicketsAccessoryMethodPerformer checkIfSavedFlightTicketsContainsWithTicket:cell.ticket savedFlightTickets:savedFlightTickets] == 1) {
         [cell.saveButton setBackgroundImage:[UIImage imageNamed:@"fullHeartRed"] forState:UIControlStateNormal];
         
     } else {

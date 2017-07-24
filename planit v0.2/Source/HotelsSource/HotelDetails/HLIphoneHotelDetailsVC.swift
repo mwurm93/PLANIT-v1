@@ -3,6 +3,7 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
 
     @IBOutlet fileprivate weak var photosViewTopConstraint: NSLayoutConstraint!
     @IBOutlet fileprivate weak var photosViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var saveButton: UIButton!
 
     fileprivate var photosCollectionExpanded: Bool = true
 
@@ -26,6 +27,15 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
                 guard let `self` = self else { return }
                 self.showPhotosScreen()
                 })
+        }
+        
+        let hotelItemsAccessoryMethodsPerformer = HotelItemsAccessoryMethodsPerformer()
+        let savedHotelItems = hotelItemsAccessoryMethodsPerformer.fetchSavedHotelItems()
+        
+        if hotelItemsAccessoryMethodsPerformer.checkIfSavedHotelItemsContains(hotelItem: super.variant, savedHotelItems: savedHotelItems) == 1 {
+            saveButton.setBackgroundImage(#imageLiteral(resourceName: "fullHeartRed"), for: UIControlState.normal)
+        } else {
+            saveButton.setBackgroundImage(#imageLiteral(resourceName: "emptyHeart"), for: UIControlState.normal)
         }
 
         decoratorDelegate?.viewDidLoad()
@@ -247,6 +257,17 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
         }
 
         return cellIndexPath.section == ratingIndex ? expandCell : nil
+    }
+    @IBAction func saveButtonTouchedUpInside(_ sender: Any) {
+        var hotelItemsAccessoryMethodsPerformer = HotelItemsAccessoryMethodsPerformer()
+        if saveButton.currentBackgroundImage?.imageAsset == UIImage(named: "emptyHeart")?.imageAsset {
+            saveButton.setBackgroundImage(UIImage(named: "fullHeartRed"), for: .normal)
+            hotelItemsAccessoryMethodsPerformer.saveHotelItems(hotelItem: super.variant)
+        }
+        else {
+            saveButton.setBackgroundImage(UIImage(named: "emptyHeart"), for: .normal)
+            hotelItemsAccessoryMethodsPerformer.removeSavedHotelItems(hotelItem: super.variant)
+        }
     }
 }
 

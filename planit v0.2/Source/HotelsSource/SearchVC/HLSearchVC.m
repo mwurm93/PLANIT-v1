@@ -74,6 +74,9 @@
     [super viewDidAppear:animated];
 
     self.hotelDetailsDecorator = nil;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"hotelSearchFormViewViewController_ViewDidAppear"
+                                                        object:self];
 }
 
 - (void)updateControls
@@ -106,7 +109,7 @@
                                                                           photoIndexUpdater:nil
                                                                                      filter:nil];
 
-        [self.navigationController pushViewController:self.hotelDetailsDecorator.detailsVC animated:YES];
+        [self.navigationController pushViewController:self.hotelDetailsDecorator.detailsVC animated:NO];
     } else {
         WaitingVC *waitingVC = [[WaitingVC alloc] initWithNibName:@"WaitingVC" bundle:nil];
         waitingVC.searchInfo = searchInfo;

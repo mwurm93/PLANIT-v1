@@ -11,6 +11,7 @@ import UIKit
 class HLIphoneResultsVC: HLCommonResultsVC {
 
     @IBOutlet weak var buttonsBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var mapDrawerButton: UIButton!
 
     var sortBottomDrawer: BottomDrawer?
 
@@ -19,6 +20,10 @@ class HLIphoneResultsVC: HLCommonResultsVC {
 
         sortButton.backgroundColor = JRColorScheme.mainButtonBackgroundColor()
         sortButton.setTitleColor(JRColorScheme.mainButtonTitleColor(), for: .normal)
+        
+        mapDrawerButton.backgroundColor = JRColorScheme.mainButtonBackgroundColor()
+        mapDrawerButton.setTitleColor(JRColorScheme.mainButtonTitleColor(), for: .normal)
+        mapDrawerButton.addTarget(self, action: #selector(super.showMap), for: UIControlEvents.touchUpInside)
     }
 
     override func updateContentWithVariants(_ variants: [HLResultVariant], filteredVariants: [HLResultVariant]) {

@@ -9,9 +9,9 @@ target 'planit v0.2' do
 
 # Pods for planit v0.2
 pod 'pop', '~> 1.0'
-pod 'Apollo'
 pod 'SMCalloutView', '~> 2.1'
-pod 'JTAppleCalendar', '~> 7.0'
+pod 'Apollo', '~> 0.5.6'
+pod 'JTAppleCalendar', :git => 'https://github.com/patchthecode/JTAppleCalendar.git', :branch => 'master'
 
 # Pods for ZLswipeableview
 pod 'UIColor+FlatColors'

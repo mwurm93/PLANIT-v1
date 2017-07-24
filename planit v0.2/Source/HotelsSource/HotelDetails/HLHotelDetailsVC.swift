@@ -120,6 +120,9 @@ class HLHotelDetailsCollectionView: UICollectionView {
         registerCells()
         createSections()
 
+        contentTableView.layer.backgroundColor = UIColor.clear.cgColor
+        contentTableView.backgroundColor = UIColor.clear
+        
         hotelView.photoIndexChangeHandler = { [weak self] (index: Int) -> Void in
             self?.photoIndex = index
         }

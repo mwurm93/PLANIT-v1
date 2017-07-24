@@ -118,6 +118,10 @@ class HLSortVC: HLCommonVC, UITableViewDataSource, UITableViewDelegate, PointSel
         filter?.filter()
         sortDidApply?()
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        if indexPath.row != 3 {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
 }
 
@@ -129,6 +133,7 @@ extension HLSortVC {
             filter.distanceLocationPoint = point
             filter.filter()
             tableView.reloadData()
+            self.navigationController?.popViewController(animated: false)
         }
         sortDidApply?()
 

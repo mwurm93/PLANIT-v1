@@ -298,7 +298,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e90-2q-sZh" userLabel="searchView">
                     <rect key="frame" x="0.0" y="332" width="320" height="85"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGT-rE-Orc">
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGT-rE-Orc">
                             <rect key="frame" x="0.0" y="15" width="320" height="40"/>
                             <color key="backgroundColor" red="0.44313725490196076" green="0.76470588235294112" blue="0.29019607843137252" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
@@ -317,20 +317,6 @@
                     <constraints>
                         <constraint firstItem="UGT-rE-Orc" firstAttribute="top" secondItem="e90-2q-sZh" secondAttribute="top" constant="15" id="2gx-xj-NST"/>
                         <constraint firstAttribute="bottom" secondItem="UGT-rE-Orc" secondAttribute="bottom" constant="30" id="C7l-Wr-gdw"/>
-                        <constraint firstAttribute="trailing" secondItem="UGT-rE-Orc" secondAttribute="trailing" id="c68-cL-WXS">
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="ipadConstant">
-                                    <real key="value" value="0.0"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </constraint>
-                        <constraint firstItem="UGT-rE-Orc" firstAttribute="leading" secondItem="e90-2q-sZh" secondAttribute="leading" id="odz-HW-aF1">
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="ipadConstant">
-                                    <real key="value" value="0.0"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </constraint>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="gTm-WK-FAs" userLabel="Divider">

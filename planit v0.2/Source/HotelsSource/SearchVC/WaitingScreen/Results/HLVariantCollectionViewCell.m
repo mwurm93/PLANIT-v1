@@ -93,6 +93,26 @@ CGFloat const kPriceValueFontSize = 20.0;
     [self updateDiscountViews];
     [self drawBadges];
     [self updatePrice];
+
+    if (_saveButton == nil) {
+        _saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _saveButton.frame = CGRectMake(336, 10, 30, 30);
+        [_saveButton addTarget:self action:@selector(handleSaveButtonTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_saveButton];
+    }
+    
+}
+
+- (void)handleSaveButtonTouchUpInside {
+    HotelItemsAccessoryMethodsPerformer *hotelItemsAccessoryMethodsPerformer = [[HotelItemsAccessoryMethodsPerformer alloc] init];
+    
+    if (_saveButton.currentBackgroundImage.imageAsset == [UIImage imageNamed:@"emptyHeart"].imageAsset) {
+        [_saveButton setBackgroundImage:[UIImage imageNamed:@"fullHeartRed"] forState:UIControlStateNormal];
+        [hotelItemsAccessoryMethodsPerformer saveHotelItemsWithHotelItem:self.item.variant];
+    } else {
+        [_saveButton setBackgroundImage:[UIImage imageNamed:@"emptyHeart"] forState:UIControlStateNormal];
+        [hotelItemsAccessoryMethodsPerformer removeSavedHotelItemsWithHotelItem:self.item.variant];
+    }
 }
 
 - (void)resetContent

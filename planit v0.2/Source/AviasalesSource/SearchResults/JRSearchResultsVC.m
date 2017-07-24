@@ -42,6 +42,8 @@ static const NSInteger kHotelCardIndex = 5;
 @property (nonatomic, assign) BOOL tableViewInsetsDidSet;
 
 @property (strong, nonatomic) JRSearchResultsFlightSegmentCellLayoutParameters *flightSegmentLayoutParameters;
+@property (weak, nonatomic) IBOutlet UIButton *filterButton;
+@property (weak, nonatomic) IBOutlet UIButton *sortButton;
 
 @end
 
@@ -149,6 +151,9 @@ static const NSInteger kHotelCardIndex = 5;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _filterButton.backgroundColor = [UIColor colorWithRed:200/255 green:213/255 blue:221/255 alpha:1];
+    _sortButton.backgroundColor = [UIColor colorWithRed:200/255 green:213/255 blue:221/255 alpha:1];
+    
     _tableView.bounces = NO;
     
     [self setupViewController];
@@ -156,10 +161,10 @@ static const NSInteger kHotelCardIndex = 5;
         [self setFirstTicketSelected];
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveTestNotification)
-                                                 name:@"test"
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(receiveTestNotification)
+//                                                 name:@"test"
+//                                               object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(popFromFlightSearchResultsSceneViewControllerToFlightSearch)
@@ -199,11 +204,9 @@ static const NSInteger kHotelCardIndex = 5;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"flightSearchResultsSceneViewController_ViewDidAppear"
                                                     object:self];
 
-    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
-    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
-    if (savedFlightTickets.count > 0) {
-        [self.tableView reloadData];
-    }
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    NSArray *savedFlightTickets = [flightTicketsAccessoryMethodPerformer fetchSavedFlightTickets];
+    [self.tableView reloadData];
     
     if (iPhone() && self.tableView.indexPathForSelectedRow) {
         [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
@@ -319,7 +322,11 @@ static const NSInteger kHotelCardIndex = 5;
     if (iPad()) {
         filtersNavigationVC.modalPresentationStyle = UIModalPresentationFormSheet;
     }
-    [self presentViewController:filtersNavigationVC animated:YES completion:nil];
+    [self.navigationController pushViewController:filterVC animated:true];
+//     presentViewController:filtersNavigationVC animated:YES completion:nil];
+}
+- (IBAction)filterButtonTouchedUpInside:(id)sender {
+    [self showFilters:_filterButton];
 }
 
 #pragma mark - JRFilterDelegate

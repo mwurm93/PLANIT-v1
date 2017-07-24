@@ -46,19 +46,19 @@ class ASTGroupedSearchVC: ASTBaseSearchTableVC, UISearchBarDelegate, UISearchCon
     func locationRequestItem() -> GroupedTableItem {
         return LocationRequestItem(title: NSLS("HL_LOC_FILTERS_GIVE_LOCATION_ACCESS"), action: { [weak self] in
             self?.requestUserLocation()
-            }, icon: UIImage(named: "locateMeSmall"))
+            }, icon: #imageLiteral(resourceName: "locateMeFull"))
     }
 
     func userLocationItem() -> GroupedTableItem {
         return GroupedTableItem(title: NSLS("HL_LOC_FILTERS_POINT_MY_LOCATION_TEXT"), action: { [weak self] in
             self?.userLocationSelected()
-            }, icon: UIImage(named: "locateMeSmall"))
+            }, icon: #imageLiteral(resourceName: "locateMeEmpty"))
     }
 
     func customLocationPointItem() -> GroupedTableItem {
         return GroupedTableItem(title: NSLS("HL_LOC_POINT_ON_MAP_TEXT"), action: { [weak self] in
             self?.moveToCustomPointSelection()
-            }, icon: UIImage(named: "pointOnMapIcon"))
+            }, icon: #imageLiteral(resourceName: "map"))
     }
 
     func moveToCustomPointSelection() {

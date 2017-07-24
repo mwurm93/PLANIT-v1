@@ -86,6 +86,13 @@ class HLCommonResultsVC: HLCommonVC,
 
         filtersButton.setTitle(NSLS("HL_FILTER_BUTTON_TITLE_LABEL"), for: .normal)
         sortButton.setTitle(NSLS("HL_SORT_BUTTON_TITLE_LABEL"), for: .normal)
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(popFromHotelResultsViewControllerToHotelSearch), name: NSNotification.Name(rawValue: "popFromHotelResultsViewControllerToHotelSearch"), object: nil)
+    }
+    
+    func popFromHotelResultsViewControllerToHotelSearch(){
+        self.navigationController?.popViewController(animated: false)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -94,7 +101,15 @@ class HLCommonResultsVC: HLCommonVC,
         updateContentIfNeeded()
         filter.delegate = self
         setFiltersButtonSelected(filter.canDropFilters())
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "HLCommonResultsVC_viewWillAppear"), object: nil)
+        
+     
+        let hotelItemsAccessoryMethodsPerformer = HotelItemsAccessoryMethodsPerformer()
+        let savedHotelItems = hotelItemsAccessoryMethodsPerformer.fetchSavedHotelItems()
+        self.collectionView.reloadData()
     }
+    
 
     func setFiltersButtonSelected(_ selected: Bool) {
         filtersButton?.isSelected = selected
@@ -312,7 +327,17 @@ class HLCommonResultsVC: HLCommonVC,
                 guard let collection  = collectionView, let `self` = self else { return }
                 self.collectionView(collection, didSelectItemAt: self.collectionView.indexPath(for: cell)!)
             }
-
+            
+            let hotelItemsAccessoryMethodsPerformer = HotelItemsAccessoryMethodsPerformer()
+            let savedHotelItems = hotelItemsAccessoryMethodsPerformer.fetchSavedHotelItems()
+            
+            if hotelItemsAccessoryMethodsPerformer.checkIfSavedHotelItemsContains(hotelItem: cell.item.variant, savedHotelItems: savedHotelItems) == 1 {
+                cell.saveButton.setBackgroundImage(#imageLiteral(resourceName: "fullHeartRed"), for: UIControlState.normal)
+                
+            } else {
+                cell.saveButton.setBackgroundImage(#imageLiteral(resourceName: "emptyHeart"), for: UIControlState.normal)
+            }
+            
             return cell
         } else if let actionItem = item as? HLActionCardItem {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: actionItem.cellReuseIdentifier, for: indexPath) as! HLResultCardCell

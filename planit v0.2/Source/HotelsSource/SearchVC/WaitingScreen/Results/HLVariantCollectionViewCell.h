@@ -17,6 +17,9 @@ typedef void (^CellSelectionBlock)(HLResultVariant *variant, NSUInteger index);
 @property (nonatomic, assign) BOOL lazyLoadingContent;
 @property (nonatomic, assign) BOOL badgesEnabled;
 
+@property (nonatomic, strong) UIButton* saveButton;
+
+
 - (void)initialize;
 - (void)resetContent;
 - (void)setupWithItem:(HLVariantItem *)item;

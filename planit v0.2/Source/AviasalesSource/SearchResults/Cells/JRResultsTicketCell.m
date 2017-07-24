@@ -147,14 +147,14 @@ static CGFloat const kBottomPadding = 12;
     }
 }
 - (IBAction)saveButtonTouchedUpInside:(id)sender {
-    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
     
     if (_saveButton.currentBackgroundImage.imageAsset == [UIImage imageNamed:@"emptyHeartGray"].imageAsset) {
         [_saveButton setBackgroundImage:[UIImage imageNamed:@"fullHeartRed"] forState:UIControlStateNormal];
-        [convertTicketForSavePerformer saveFlightTicketsWithTicket:self.ticket];
+        [flightTicketsAccessoryMethodPerformer saveFlightTicketsWithTicket:self.ticket];
     } else {
         [_saveButton setBackgroundImage:[UIImage imageNamed:@"emptyHeartGray"] forState:UIControlStateNormal];
-        [convertTicketForSavePerformer removeSavedFlightTicketsWithTicket:self.ticket];
+        [flightTicketsAccessoryMethodPerformer removeSavedFlightTicketsWithTicket:self.ticket];
     }
 }
 

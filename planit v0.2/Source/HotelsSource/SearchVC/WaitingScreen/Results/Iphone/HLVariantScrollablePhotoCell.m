@@ -109,6 +109,5 @@
 {
     return (self.item.variant.hotel.photosIds.count == 0) ? UIViewContentModeCenter : UIViewContentModeScaleAspectFill;
 }
-
 @end
 

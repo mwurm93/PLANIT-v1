@@ -150,10 +150,10 @@ static const CGFloat kAgencyInfoLabelMaxCenterConstraint = 15.0;
     self.opaque = false;
     
     
-    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
-    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    NSArray *savedFlightTickets = [flightTicketsAccessoryMethodPerformer fetchSavedFlightTickets];
     
-    if ([convertTicketForSavePerformer checkIfSavedFlightTicketsContainsWithTicket:self.ticket savedFlightTickets:savedFlightTickets] == 1) {
+    if ([flightTicketsAccessoryMethodPerformer checkIfSavedFlightTicketsContainsWithTicket:self.ticket savedFlightTickets:savedFlightTickets] == 1) {
         [_saveButton setBackgroundImage:[UIImage imageNamed:@"fullHeartRed"] forState:UIControlStateNormal];
         
     } else {
@@ -171,14 +171,14 @@ static const CGFloat kAgencyInfoLabelMaxCenterConstraint = 15.0;
     self.showOtherAgencyHandler();
 }
 - (IBAction)saveButtonTouchedUpInside:(id)sender {
-    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
     
     if (_saveButton.currentBackgroundImage.imageAsset == [UIImage imageNamed:@"emptyHeartGray"].imageAsset) {
         [_saveButton setBackgroundImage:[UIImage imageNamed:@"fullHeartRed"] forState:UIControlStateNormal];
-        [convertTicketForSavePerformer saveFlightTicketsWithTicket:self.ticket];
+        [flightTicketsAccessoryMethodPerformer saveFlightTicketsWithTicket:self.ticket];
     } else {
         [_saveButton setBackgroundImage:[UIImage imageNamed:@"emptyHeartGray"] forState:UIControlStateNormal];
-        [convertTicketForSavePerformer removeSavedFlightTicketsWithTicket:self.ticket];
+        [flightTicketsAccessoryMethodPerformer removeSavedFlightTicketsWithTicket:self.ticket];
     }
 }
 

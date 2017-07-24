@@ -25,6 +25,10 @@ class WaitingVC: HLCommonVC, HLVariantsManagerDelegate, HLCityInfoLoadingProtoco
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pop), name: NSNotification.Name(rawValue: "popFromWaitingScreenViewControllerToHotelSearch"), object: nil)
+
+        
         title = searchInfo.city?.name
 
         collectionView.backgroundColor = UIColor.clear
@@ -55,6 +59,9 @@ class WaitingVC: HLCommonVC, HLVariantsManagerDelegate, HLCityInfoLoadingProtoco
         startProgress()
     }
 
+    func pop(){
+        self.navigationController?.popViewController(animated: true)
+    }
     private func addLongSearchSection() {
         let longSearchSection = WaitingSection()
         longSearchSection.items = [WaitingLongSearchItem()]

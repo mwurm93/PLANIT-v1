@@ -45,11 +45,17 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     [self showChildViewController:self.simpleSearchFormViewController];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     self.searchButtonBottomLayoutConstraint.constant = 100;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"flightSearchFormViewViewController_ViewDidAppear"
+                                                        object:self];
 }
 
 #pragma mark - Setup

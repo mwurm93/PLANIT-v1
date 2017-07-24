@@ -161,6 +161,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromTicketViewControllerToFlightResults"), object: nil)
     }
     
+    
     func didSelect(_ segmentIndex: Int) {
         if segmentIndex == 0 {
             assistant()
@@ -229,6 +230,37 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.topView.addSubview(segmentedControl!)
     }
     
+    func HLCommonResultsVC_viewWillAppear(){
+        self.backButton?.removeFromSuperview()
+        backButton = nil
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton?.addTarget(self, action: #selector(popFromHotelResultsViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
+        
+        self.segmentedControl = nil
+        self.segmentedControl?.removeFromSuperview()
+    }
+    func popFromHotelResultsViewControllerToHotelSearch(){
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromHotelResultsViewControllerToHotelSearch"), object: nil)
+
+    }
+    func hotelSearchWaitingScreenViewController_ViewDidLoad() {
+        self.backButton?.removeFromSuperview()
+        backButton = nil
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton?.addTarget(self, action: #selector(popFromWaitingViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
+        
+        self.segmentedControl = nil
+        self.segmentedControl?.removeFromSuperview()
+    }
+    func popFromWaitingViewControllerToHotelSearch() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromWaitingScreenViewControllerToHotelSearch"), object: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -485,10 +517,19 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(delete), name: NSNotification.Name(rawValue: "deleteInvitee"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(itinerary), name: NSNotification.Name(rawValue: "reviewItinerary"), object: nil)
         
+        //Flight Nav
         NotificationCenter.default.addObserver(self, selector: #selector(flightSearchResultsSceneViewController_ViewDidAppear), name: NSNotification.Name(rawValue: "flightSearchResultsSceneViewController_ViewDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightSearchWaitingScreenViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightTicketViewViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightTicketViewViewController_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addBackButtonPointedAtTripList), name: NSNotification.Name(rawValue: "flightSearchFormViewViewController_ViewDidAppear"), object: nil)
+        
+        //Hotel Nav
+        NotificationCenter.default.addObserver(self, selector: #selector(HLCommonResultsVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLCommonResultsVC_viewWillAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addBackButtonPointedAtTripList), name: NSNotification.Name(rawValue: "hotelSearchFormViewViewController_ViewDidAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchWaitingScreenViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "hotelSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
 
+
+        
         
         //MARK: Itinerary viewDidLoad
         self.tripNameTextField.delegate = self
@@ -3521,8 +3562,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var isInitiator = NSNumber(value: 1)
         var currentAssistantSubview = NSNumber(value: 0)
         var datesDestinationsDictionary  = NSDictionary()
-        var savedFlightTickets  = [NSData]()
-
+        var savedFlightTickets = [NSData]()
+        var savedHotelItems = [NSData]()
 
         //Activities VC
         var selectedActivities = [NSString]()
@@ -3570,6 +3611,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             currentAssistantSubview = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "currentAssistantSubview") as? NSNumber ?? NSNumber()
             datesDestinationsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "datesDestinationsDictionary") as? NSDictionary ?? NSDictionary()
             savedFlightTickets = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "savedFlightTickets") as? [NSData] ?? [NSData]()
+            savedHotelItems = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "savedHotelItems") as? [NSData] ?? [NSData]()
 
 
             //Activities VC
@@ -3582,7 +3624,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         

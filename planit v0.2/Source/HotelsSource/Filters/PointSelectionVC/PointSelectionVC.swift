@@ -21,6 +21,7 @@ class PointSelectionVC: ASTGroupedSearchVC {
 
         title = NSLS("HL_LOC_FILTER_DISTANCE_CRITERIA")
         searchController.searchBar.placeholder = NSLS("HL_LOC_FILTERS_POINT_PLACEHOLDER_TEXT")
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     override func resetTableContent() {

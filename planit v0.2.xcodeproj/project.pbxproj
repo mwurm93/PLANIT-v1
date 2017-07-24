@@ -742,6 +742,8 @@
 		FA52010F1EC4D2FB001EA849 /* WhirlyGlobeMaplyComponent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201001EC4CE2E001EA849 /* WhirlyGlobeMaplyComponent.framework */; };
 		FA5201171EC4DC4C001EA849 /* geography-class_medres.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = FA5201161EC4DC4C001EA849 /* geography-class_medres.mbtiles */; };
 		FA5F13AB1EB92E310003A992 /* amenityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */; };
+		FA6361201F267BE4003F9477 /* FlightTicketsAccessoryMethodPerformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63611F1F267BE4003F9477 /* FlightTicketsAccessoryMethodPerformer.swift */; };
+		FA6361241F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6361231F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift */; };
 		FA647D3D1EE7666E00B36138 /* LoginUser.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FA647D3C1EE7666E00B36138 /* LoginUser.graphql */; };
 		FA647D3F1EE775A100B36138 /* GetAllUsers.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FA647D3E1EE775A100B36138 /* GetAllUsers.graphql */; };
 		FA70D01F1EFA5CB000126176 /* destinationsSwipedRightTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA70D01E1EFA5CB000126176 /* destinationsSwipedRightTableViewCell.swift */; };
@@ -1858,6 +1860,8 @@
 		FA52010D1EC4CEA9001EA849 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		FA5201161EC4DC4C001EA849 /* geography-class_medres.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class_medres.mbtiles"; sourceTree = "<group>"; };
 		FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = amenityTableViewCell.swift; sourceTree = "<group>"; };
+		FA63611F1F267BE4003F9477 /* FlightTicketsAccessoryMethodPerformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlightTicketsAccessoryMethodPerformer.swift; sourceTree = "<group>"; };
+		FA6361231F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HotelItemsAccessoryMethodsPerformer.swift; sourceTree = "<group>"; };
 		FA647D3C1EE7666E00B36138 /* LoginUser.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LoginUser.graphql; sourceTree = "<group>"; };
 		FA647D3E1EE775A100B36138 /* GetAllUsers.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GetAllUsers.graphql; sourceTree = "<group>"; };
 		FA70D01E1EFA5CB000126176 /* destinationsSwipedRightTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = destinationsSwipedRightTableViewCell.swift; sourceTree = "<group>"; };
@@ -2601,6 +2605,7 @@
 				FA252D781F1D3B6B002BCE29 /* JRResultsTicketPriceCell.xib */,
 				FA252D791F1D3B6B002BCE29 /* JRSearchResultsFlightSegmentCellLayoutParameters.h */,
 				FA252D7A1F1D3B6B002BCE29 /* JRSearchResultsFlightSegmentCellLayoutParameters.m */,
+				FA63611F1F267BE4003F9477 /* FlightTicketsAccessoryMethodPerformer.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -3070,6 +3075,7 @@
 				FA2530781F1D3B6C002BCE29 /* UIColor */,
 				FA25307B1F1D3B6C002BCE29 /* UIImage+HLImages.swift */,
 				FA25307C1F1D3B6C002BCE29 /* Utils */,
+				FA6361231F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift */,
 			);
 			path = HotelsSource;
 			sourceTree = "<group>";
@@ -5547,6 +5553,7 @@
 				FA14B22C1EFB22D7004E0E29 /* HowDoYouWantToGetThereQuestionView.swift in Sources */,
 				FA25316B1F1D3B6D002BCE29 /* JRViewController.m in Sources */,
 				FA2531351F1D3B6D002BCE29 /* UIImage+JRUIImage.m in Sources */,
+				FA6361201F267BE4003F9477 /* FlightTicketsAccessoryMethodPerformer.swift in Sources */,
 				FA25312D1F1D3B6D002BCE29 /* NSArray+HLContentComparison.m in Sources */,
 				FA2531191F1D3B6D002BCE29 /* JRResultsTicketPriceCell.m in Sources */,
 				FA2531F41F1D3B6D002BCE29 /* PointSelectionVC.swift in Sources */,
@@ -5576,6 +5583,7 @@
 				FA2530A81F1D3B6D002BCE29 /* JRAviasalesAdLoader.m in Sources */,
 				FA2531571F1D3B6D002BCE29 /* HLProfileVC.m in Sources */,
 				FA25325C1F1D3B6D002BCE29 /* AccommodationSummaryItem.swift in Sources */,
+				FA6361241F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift in Sources */,
 				FA25314C1F1D3B6D002BCE29 /* ProfileSections.swift in Sources */,
 				FA25320C1F1D3B6D002BCE29 /* HLHotelDetailsAmenityCellFactory.swift in Sources */,
 				FAA8F29F1E351DDE00CD7337 /* timeOfDayTableViewCell.swift in Sources */,

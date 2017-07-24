@@ -15,6 +15,7 @@
                 <outlet property="hotelView" destination="PBM-cQ-fDc" id="57N-dG-HHJ"/>
                 <outlet property="photosViewHeightConstraint" destination="25P-dX-92U" id="gYl-yd-Y9N"/>
                 <outlet property="photosViewTopConstraint" destination="Tgt-kg-AV9" id="o7o-De-nKf"/>
+                <outlet property="saveButton" destination="hZq-bH-tfs" id="esW-i3-f4y"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="oft-ae-HCQ"/>
             </connections>
         </placeholder>
@@ -45,11 +46,26 @@
                         <constraint firstAttribute="width" constant="20" id="10j-ED-SRx"/>
                     </constraints>
                 </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hZq-bH-tfs">
+                    <rect key="frame" x="315" y="207" width="40" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="0mI-wh-61Y"/>
+                        <constraint firstAttribute="height" constant="40" id="o1z-YS-baU"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="emptyHeart"/>
+                    <state key="selected" image="fullHeartRed"/>
+                    <state key="highlighted" image="fullHeartRed"/>
+                    <connections>
+                        <action selector="saveButtonTouchedUpInside:" destination="-1" eventType="touchUpInside" id="fVZ-k5-umL"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="PBM-cQ-fDc" secondAttribute="trailing" id="5ZX-li-xAg"/>
+                <constraint firstAttribute="trailing" secondItem="hZq-bH-tfs" secondAttribute="trailing" constant="20" id="HqN-2j-r9r"/>
                 <constraint firstItem="PBM-cQ-fDc" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Tgt-kg-AV9"/>
+                <constraint firstItem="hZq-bH-tfs" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="207" id="W4G-hA-wPk"/>
                 <constraint firstItem="PBM-cQ-fDc" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Y7c-Yy-6lf"/>
                 <constraint firstAttribute="bottom" secondItem="utj-M8-f6o" secondAttribute="bottom" constant="65" id="Zdd-am-SC7"/>
                 <constraint firstAttribute="bottom" secondItem="Zyc-pf-XX5" secondAttribute="bottom" id="afl-ho-B7s"/>
@@ -65,6 +81,10 @@
             <point key="canvasLocation" x="235.5" y="302.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="emptyHeart" width="71" height="71"/>
+        <image name="fullHeartRed" width="71" height="71"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

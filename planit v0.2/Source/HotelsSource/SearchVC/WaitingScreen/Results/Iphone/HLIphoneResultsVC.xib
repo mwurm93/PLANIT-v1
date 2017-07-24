@@ -15,6 +15,7 @@
                 <outlet property="buttonsView" destination="DBP-9g-zvJ" id="xck-gP-oGo"/>
                 <outlet property="collectionView" destination="1g7-TH-BMx" id="MqS-3W-z9e"/>
                 <outlet property="filtersButton" destination="xVW-cz-NRY" id="tqH-2z-HP2"/>
+                <outlet property="mapDrawerButton" destination="4jr-G3-ee8" id="hBe-ER-Y16"/>
                 <outlet property="sortButton" destination="S9l-Ua-dam" id="Dx8-L0-aXD"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="ohV-MP-Z52"/>
             </connections>
@@ -39,12 +40,15 @@
                     </connections>
                 </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DBP-9g-zvJ" userLabel="Buttons View">
-                    <rect key="frame" x="0.0" y="537" width="375" height="55"/>
+                    <rect key="frame" x="0.0" y="542" width="375" height="50"/>
                     <subviews>
                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVW-cz-NRY" userLabel="Filter Button">
-                            <rect key="frame" x="15" y="0.0" width="165" height="40"/>
+                            <rect key="frame" x="20" y="0.0" width="98" height="30"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <accessibility key="accessibilityConfiguration" identifier="HL_FILTER_BUTTON_TITLE_LABEL"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="98" id="mTr-BD-zBf"/>
+                            </constraints>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
                             <state key="normal" title="Фильтры"/>
@@ -58,11 +62,11 @@
                             </connections>
                         </button>
                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S9l-Ua-dam" userLabel="Sort Button">
-                            <rect key="frame" x="195" y="0.0" width="165" height="40"/>
+                            <rect key="frame" x="138" y="0.0" width="98" height="30"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <accessibility key="accessibilityConfiguration" identifier="HL_SORT_BUTTON_TITLE_LABEL" label="Filters"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="40" id="DQ4-6Y-QVM"/>
+                                <constraint firstAttribute="width" constant="98" id="ex4-xw-OjS"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                             <state key="normal" title="Сортировка"/>
@@ -75,16 +79,30 @@
                                 <action selector="showSort" destination="-1" eventType="touchUpInside" id="Fwx-zf-cpV"/>
                             </connections>
                         </button>
+                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4jr-G3-ee8" userLabel="Map Button">
+                            <rect key="frame" x="256" y="0.0" width="98" height="30"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            <accessibility key="accessibilityConfiguration" identifier="HL_SORT_BUTTON_TITLE_LABEL" label="Filters"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="98" id="QnJ-2L-gpr"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                            <state key="normal" title="Map"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="JRCornerRadius">
+                                    <real key="value" value="6"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstItem="S9l-Ua-dam" firstAttribute="leading" secondItem="xVW-cz-NRY" secondAttribute="trailing" constant="15" id="5yE-6K-rZ5"/>
-                        <constraint firstItem="xVW-cz-NRY" firstAttribute="leading" secondItem="DBP-9g-zvJ" secondAttribute="leading" constant="15" id="6Re-Sr-MDH"/>
-                        <constraint firstItem="xVW-cz-NRY" firstAttribute="width" secondItem="S9l-Ua-dam" secondAttribute="width" id="C1D-hK-yhm"/>
-                        <constraint firstAttribute="bottom" secondItem="S9l-Ua-dam" secondAttribute="bottom" constant="15" id="EQ7-G9-2mT"/>
-                        <constraint firstAttribute="trailing" secondItem="S9l-Ua-dam" secondAttribute="trailing" constant="15" id="SFn-hv-e4T"/>
+                        <constraint firstItem="4jr-G3-ee8" firstAttribute="leading" secondItem="S9l-Ua-dam" secondAttribute="trailing" constant="20" id="00S-YE-aiR"/>
+                        <constraint firstItem="S9l-Ua-dam" firstAttribute="leading" secondItem="xVW-cz-NRY" secondAttribute="trailing" constant="20" id="3ts-PI-oOt"/>
                         <constraint firstItem="xVW-cz-NRY" firstAttribute="top" secondItem="DBP-9g-zvJ" secondAttribute="top" id="VpD-L3-Tnm"/>
-                        <constraint firstAttribute="bottom" secondItem="xVW-cz-NRY" secondAttribute="bottom" constant="15" id="fDv-xO-hko"/>
+                        <constraint firstItem="xVW-cz-NRY" firstAttribute="leading" secondItem="DBP-9g-zvJ" secondAttribute="leading" constant="20" id="bnz-ax-QlD"/>
+                        <constraint firstAttribute="bottom" secondItem="xVW-cz-NRY" secondAttribute="bottom" constant="20" id="fDv-xO-hko"/>
+                        <constraint firstItem="4jr-G3-ee8" firstAttribute="top" secondItem="DBP-9g-zvJ" secondAttribute="top" id="lpD-LH-ceu"/>
                         <constraint firstItem="S9l-Ua-dam" firstAttribute="top" secondItem="DBP-9g-zvJ" secondAttribute="top" id="n4q-le-8sK"/>
                     </constraints>
                 </view>

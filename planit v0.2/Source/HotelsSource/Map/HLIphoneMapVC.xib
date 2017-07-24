@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -25,7 +26,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fsb-QZ-IW4" customClass="HLMapView">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="602"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="f5a-7y-URp"/>
@@ -34,7 +35,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tx6-H3-Vh4">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZAj-R0-QRf" userLabel="PriceSliderView" customClass="PriceFilterView" customModule="AviasalesSDKTemplate" customModuleProvider="target">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZAj-R0-QRf" userLabel="PriceSliderView" customClass="PriceFilterView" customModule="planit_v0_2" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="4" width="375" height="67"/>
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
@@ -49,7 +50,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zS0-nV-aZi" userLabel="Filter Button">
-                    <rect key="frame" x="105" y="563" width="166" height="40"/>
+                    <rect key="frame" x="105" y="537" width="166" height="40"/>
                     <color key="backgroundColor" red="1" green="0.70588235294117641" blue="0.20000000000000001" alpha="0.94999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration" label="Filters"/>
                     <constraints>
@@ -70,8 +71,8 @@
                         <action selector="showFullFilters" destination="-1" eventType="touchUpInside" id="QQu-Wo-WpS"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kmk-9X-1wv" customClass="HLLocateMeMapView" customModule="AviasalesSDKTemplate" customModuleProvider="target">
-                    <rect key="frame" x="315" y="558" width="50" height="50"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kmk-9X-1wv" customClass="HLLocateMeMapView" customModule="planit_v0_2" customModuleProvider="target">
+                    <rect key="frame" x="315" y="532" width="50" height="50"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="50" id="3Zf-B6-kDI"/>
@@ -82,17 +83,17 @@
                     </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="Fsb-QZ-IW4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="1aB-50-fh2"/>
                 <constraint firstAttribute="trailing" secondItem="kmk-9X-1wv" secondAttribute="trailing" constant="10" id="4C7-nA-vdg"/>
                 <constraint firstItem="zS0-nV-aZi" firstAttribute="centerY" secondItem="kmk-9X-1wv" secondAttribute="centerY" id="6Vw-AT-IDv"/>
                 <constraint firstAttribute="trailing" secondItem="tx6-H3-Vh4" secondAttribute="trailing" id="AKV-dS-OJG"/>
                 <constraint firstItem="zS0-nV-aZi" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="DA6-09-eX1"/>
-                <constraint firstAttribute="bottom" secondItem="Fsb-QZ-IW4" secondAttribute="bottom" id="H0K-WC-TtQ"/>
+                <constraint firstAttribute="bottom" secondItem="Fsb-QZ-IW4" secondAttribute="bottom" constant="65" id="H0K-WC-TtQ"/>
                 <constraint firstAttribute="trailing" secondItem="Fsb-QZ-IW4" secondAttribute="trailing" id="JYd-dV-sGx"/>
                 <constraint firstItem="tx6-H3-Vh4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="L7c-Yc-CNp"/>
-                <constraint firstAttribute="bottom" secondItem="kmk-9X-1wv" secondAttribute="bottom" constant="59" id="UqG-d6-zGR"/>
+                <constraint firstAttribute="bottom" secondItem="kmk-9X-1wv" secondAttribute="bottom" constant="85" id="UqG-d6-zGR"/>
                 <constraint firstItem="tx6-H3-Vh4" firstAttribute="top" secondItem="1" secondAttribute="top" id="fxI-53-LsK"/>
                 <constraint firstItem="Fsb-QZ-IW4" firstAttribute="top" secondItem="1" secondAttribute="top" id="goH-LT-cf8"/>
             </constraints>
