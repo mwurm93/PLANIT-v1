@@ -162,7 +162,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
         self.didYouBuyTheFlightQuestionPopover?.layer.cornerRadius = 7
         self.view.addSubview(didYouBuyTheFlightQuestionPopover!)
-        self.view.addSubview(popupBackgroundFilterView)
+        self.view.insertSubview(popupBackgroundFilterView, belowSubview: didYouBuyTheFlightQuestionPopover!)
         self.popupBackgroundFilterView.isHidden = false
         let when = DispatchTime.now() + 0.6
         DispatchQueue.main.asyncAfter(deadline: when) {
@@ -172,6 +172,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     func flightBookingBrowserClosed_FlightBooked(){
+        UIView.animate(withDuration: 1) {
+            self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
+        }
         self.didYouBuyTheFlightQuestionPopover?.removeFromSuperview()
         self.popupBackgroundFilterView.removeFromSuperview()
         self.popupBackgroundFilterView.isHidden = true
@@ -179,6 +182,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //tag flight as booked
     }
     func flightBookingBrowserClosed_FlightNotBooked(){
+        UIView.animate(withDuration: 1) {
+            self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
+        }
         self.didYouBuyTheFlightQuestionPopover?.removeFromSuperview()
         self.popupBackgroundFilterView.removeFromSuperview()
         self.popupBackgroundFilterView.isHidden = true
