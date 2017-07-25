@@ -64,6 +64,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var alreadyHaveFlightsQuestionView: AlreadyHaveFlightsQuestionView?
         //Popover Views
     var didYouBuyTheFlightQuestionPopover: DidYouBuyTheFlightQuestionPopover?
+    var didYouBuyTheHotelQuestionView: DidYouBuyTheHotelQuestionView?
+
         //CalendarView vars
     var leftDates = [Date]()
     var rightDates = [Date]()
@@ -152,8 +154,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 
     
     func flightBookingBrowserClosed() {
+        //scrollView.isScrollEnabled = true
         spawnDidYouBuyTheFlightQuestionPopover()
-        spawnDoYouNeedARentalCarQuestionView()
     }
     func spawnDidYouBuyTheFlightQuestionPopover (){
         didYouBuyTheFlightQuestionPopover = Bundle.main.loadNibNamed("DidYouBuyTheFlightQuestionPopover", owner: self, options: nil)?.first! as? DidYouBuyTheFlightQuestionPopover
@@ -165,30 +167,98 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.view.insertSubview(popupBackgroundFilterView, belowSubview: didYouBuyTheFlightQuestionPopover!)
         self.popupBackgroundFilterView.isHidden = false
         let when = DispatchTime.now() + 0.6
+        self.popupBackgroundFilterView.alpha = 0
         DispatchQueue.main.asyncAfter(deadline: when) {
             UIView.animate(withDuration: 1) {
+                self.popupBackgroundFilterView.alpha = 0.75
                 self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -40, width: 325, height: 240)
             }
         }
+        
     }
     func flightBookingBrowserClosed_FlightBooked(){
         UIView.animate(withDuration: 1) {
             self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
+            self.popupBackgroundFilterView.alpha = 0
         }
-        self.didYouBuyTheFlightQuestionPopover?.removeFromSuperview()
-        self.popupBackgroundFilterView.removeFromSuperview()
-        self.popupBackgroundFilterView.isHidden = true
-        
-        //tag flight as booked
+        let when = DispatchTime.now() + 1
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.didYouBuyTheFlightQuestionPopover?.removeFromSuperview()
+            self.didYouBuyTheFlightQuestionPopover = nil
+            self.popupBackgroundFilterView.removeFromSuperview()
+            self.popupBackgroundFilterView.isHidden = true
+            self.spawnDoYouNeedARentalCarQuestionView()
+        }
     }
     func flightBookingBrowserClosed_FlightNotBooked(){
         UIView.animate(withDuration: 1) {
             self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
+            self.popupBackgroundFilterView.alpha = 0
         }
-        self.didYouBuyTheFlightQuestionPopover?.removeFromSuperview()
-        self.popupBackgroundFilterView.removeFromSuperview()
-        self.popupBackgroundFilterView.isHidden = true
+        let when = DispatchTime.now() + 1
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.didYouBuyTheFlightQuestionPopover?.removeFromSuperview()
+            self.didYouBuyTheFlightQuestionPopover = nil
+            self.popupBackgroundFilterView.removeFromSuperview()
+            self.popupBackgroundFilterView.isHidden = true
+            self.spawnDoYouNeedARentalCarQuestionView()
+        }
     }
+    
+    
+    func hotelBookingBrowserClosed() {
+        spawnDidYouBuyTheHotelQuestionPopover()
+    }
+    func spawnDidYouBuyTheHotelQuestionPopover (){
+        didYouBuyTheHotelQuestionView = Bundle.main.loadNibNamed("DidYouBuyTheHotelQuestionView", owner: self, options: nil)?.first! as? DidYouBuyTheHotelQuestionView
+        
+        let bounds = UIScreen.main.bounds
+        self.didYouBuyTheHotelQuestionView!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
+        self.didYouBuyTheHotelQuestionView?.layer.cornerRadius = 7
+        self.view.addSubview(didYouBuyTheHotelQuestionView!)
+        self.view.insertSubview(popupBackgroundFilterView, belowSubview: didYouBuyTheHotelQuestionView!)
+        self.popupBackgroundFilterView.isHidden = false
+        let when = DispatchTime.now() + 0.6
+        self.popupBackgroundFilterView.alpha = 0
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            UIView.animate(withDuration: 1) {
+                self.popupBackgroundFilterView.alpha = 0.75
+                self.didYouBuyTheHotelQuestionView!.frame = CGRect(x: 25, y: -40, width: 325, height: 240)
+            }
+        }
+        
+    }
+    func hotelBookingBrowserClosed_HotelBooked(){
+        UIView.animate(withDuration: 1) {
+            self.didYouBuyTheHotelQuestionView!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
+            self.popupBackgroundFilterView.alpha = 0
+        }
+        let when = DispatchTime.now() + 1
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.didYouBuyTheHotelQuestionView?.removeFromSuperview()
+            self.didYouBuyTheHotelQuestionView = nil
+            self.popupBackgroundFilterView.removeFromSuperview()
+            self.popupBackgroundFilterView.isHidden = true
+            self.spawnPlaceForGroupOrJustYouQuestionView()
+        }
+    }
+    func hotelBookingBrowserClosed_HotelNotBooked(){
+        UIView.animate(withDuration: 1) {
+            self.didYouBuyTheHotelQuestionView!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
+            self.popupBackgroundFilterView.alpha = 0
+        }
+        let when = DispatchTime.now() + 1
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.didYouBuyTheHotelQuestionView?.removeFromSuperview()
+            self.didYouBuyTheHotelQuestionView = nil
+            self.popupBackgroundFilterView.removeFromSuperview()
+            self.popupBackgroundFilterView.isHidden = true
+            self.spawnPlaceForGroupOrJustYouQuestionView()
+        }
+    }
+
+    
+    
     func back() {
         self.performSegue(withIdentifier: "tripVCtoTripListVC", sender: self)
     }
@@ -574,7 +644,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(HLCommonResultsVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLCommonResultsVC_viewWillAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addBackButtonPointedAtTripList), name: NSNotification.Name(rawValue: "hotelSearchFormViewViewController_ViewDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchWaitingScreenViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "hotelSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(hotelSelectedBooked), name: NSNotification.Name(rawValue: "HLWebBrowserClosed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed), name: NSNotification.Name(rawValue: "HLWebBrowserClosed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed_HotelBooked), name: NSNotification.Name(rawValue: "hotelBookingBrowserClosed_HotelBooked"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed_HotelNotBooked), name: NSNotification.Name(rawValue: "hotelBookingBrowserClosed_HotelNotBooked"), object: nil)
 
 
         
@@ -1694,6 +1766,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         alignSubviews()
         scrollToSubviewWithTag(tag: 11)
+        
+        
+        //disable scrolling
+        //scrollView.isScrollEnabled = false
+
     }
     func spawnFlightResultsQuestionView() {
 //        bookingMode = "flight"
@@ -2518,13 +2595,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        removeBookSelectedHotelViewController()
 //        hotelResultsController?.view.isHidden = false
 //    }
-    func hotelSelectedBooked() {
+    //func hotelSelectedBooked() {
 //        removeHotelResultsViewController()
 //        removeBookSelectedHotelViewController()
-        spawnPlaceForGroupOrJustYouQuestionView()
+      //  spawnPlaceForGroupOrJustYouQuestionView()
         // LINK TO ITINERARY
         // SHOW USER WHERE ITINERARY SAVED
-    }
+    //}
 //    func hotelSelectedSavedForLater() {
 //        spawnPlaceForGroupOrJustYouQuestionView()
 //        
@@ -3613,6 +3690,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var savedFlightTickets = [NSData]()
         var savedHotelItems = [NSData]()
         var lastFlightOpenInBrowser = NSDictionary()
+        var lastHotelOpenInBrowser = NSDictionary()
         
         //Activities VC
         var selectedActivities = [NSString]()
@@ -3662,6 +3740,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             savedFlightTickets = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "savedFlightTickets") as? [NSData] ?? [NSData]()
             savedHotelItems = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "savedHotelItems") as? [NSData] ?? [NSData]()
             lastFlightOpenInBrowser = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastFlightOpenInBrowser") as? NSDictionary ?? NSDictionary()
+            lastHotelOpenInBrowser = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastHotelOpenInBrowser") as? NSDictionary ?? NSDictionary()
 
 
             //Activities VC
@@ -3674,7 +3753,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems,"lastFlightOpenInBrowser":lastFlightOpenInBrowser] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems,"lastFlightOpenInBrowser":lastFlightOpenInBrowser,"lastHotelOpenInBrowser":lastHotelOpenInBrowser] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         

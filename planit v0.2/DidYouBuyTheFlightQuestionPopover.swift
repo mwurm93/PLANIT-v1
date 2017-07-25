@@ -31,21 +31,20 @@ class DidYouBuyTheFlightQuestionPopover: UIView {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        
-        questionLabel?.frame = CGRect(x: 10, y: 20, width: super.frame.width - 20, height: 60)
+        questionLabel?.frame = CGRect(x: 20, y: 50, width: super.frame.width - 20, height: 60)
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (super.frame.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 100
+        button1?.frame.origin.y = 140
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         button2?.sizeToFit()
         button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (super.frame.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 150
+        button2?.frame.origin.y = 190
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2        
     }
     
@@ -102,7 +101,6 @@ class DidYouBuyTheFlightQuestionPopover: UIView {
             sender.removeMask(button:sender)
         }
         if sender == button1 {
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightBooked"), object: nil)
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var lastFlightOpenInBrowser = SavedPreferencesForTrip["lastFlightOpenInBrowser"] as! [String:Any]
             let lastFlightOpen = lastFlightOpenInBrowser["unbooked"]
@@ -110,6 +108,9 @@ class DidYouBuyTheFlightQuestionPopover: UIView {
             lastFlightOpenInBrowser["booked"] = lastFlightOpen
             SavedPreferencesForTrip["lastFlightOpenInBrowser"] = lastFlightOpenInBrowser
             saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightBooked"), object: nil)
+
         } else if sender == button2 {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightNotBooked"), object: nil)
         }

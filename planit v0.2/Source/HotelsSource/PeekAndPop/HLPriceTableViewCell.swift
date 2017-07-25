@@ -45,7 +45,7 @@ class HLPriceTableViewCell: HLHotelDetailsTableCell {
         return 13.0
     }
 
-    class func calculateCellHeight(_ tableWidth: CGFloat, room: HDKRoom, currency: HDKCurrency) -> CGFloat {
+    class func calculateCellHeight(_ tableWidth: CGFloat, room: HDKRoom, currency: HDKCurrency) -> CGFloat {        
         let widthLimit = maxDescriptionLabelWidth(tableWidth)
         let optionsRects = createOptionsRects(room, widthLimit: widthLimit)
 

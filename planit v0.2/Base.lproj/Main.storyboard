@@ -960,7 +960,7 @@
                 <view contentMode="scaleToFill" id="bSI-Ve-jcH">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.37490085659898476" green="0.37490085659898476" blue="0.37490085659898476" alpha="0.74242829623287676" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.72795376712328763" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VFw-mZ-VwK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

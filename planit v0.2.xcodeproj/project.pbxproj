@@ -763,6 +763,8 @@
 		FA8DBAC71F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8DBAC61F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib */; };
 		FA8DBAC91F0DA6D9005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8DBAC81F0DA6D9005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.swift */; };
 		FA8DBACB1F0DA6FA005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8DBACA1F0DA6FA005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.xib */; };
+		FA8F0DDB1F27A04C005CAC9D /* DIdYouBuyTheHotelQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F0DDA1F27A04C005CAC9D /* DIdYouBuyTheHotelQuestionView.swift */; };
+		FA8F0DDF1F27CE8F005CAC9D /* DidYouBuyTheHotelQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8F0DDE1F27CE8F005CAC9D /* DidYouBuyTheHotelQuestionView.xib */; };
 		FA90F1D41EEB4B9F00094878 /* SwipingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */; };
 		FA9407741EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9407731EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift */; };
 		FA9407781EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */; };
@@ -1883,6 +1885,8 @@
 		FA8DBAC61F06073D005D2B61 /* DoYouNeedHelpBookingAHotelQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoYouNeedHelpBookingAHotelQuestionView.xib; sourceTree = "<group>"; };
 		FA8DBAC81F0DA6D9005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseDatesForMultipleDestinationsCalendarView.swift; sourceTree = "<group>"; };
 		FA8DBACA1F0DA6FA005D2B61 /* ParseDatesForMultipleDestinationsCalendarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ParseDatesForMultipleDestinationsCalendarView.xib; sourceTree = "<group>"; };
+		FA8F0DDA1F27A04C005CAC9D /* DIdYouBuyTheHotelQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIdYouBuyTheHotelQuestionView.swift; sourceTree = "<group>"; };
+		FA8F0DDE1F27CE8F005CAC9D /* DidYouBuyTheHotelQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DidYouBuyTheHotelQuestionView.xib; sourceTree = "<group>"; };
 		FA90F1D31EEB4B9F00094878 /* SwipingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipingViewController.swift; sourceTree = "<group>"; };
 		FA9407731EFF02BF00E4EEE4 /* BusTrainOtherQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusTrainOtherQuestionView.swift; sourceTree = "<group>"; };
 		FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusTrainOtherQuestionView.xib; sourceTree = "<group>"; };
@@ -4315,8 +4319,7 @@
 				FA9407771EFF033C00E4EEE4 /* BusTrainOtherQuestionView.xib */,
 				FA9407791EFF0C6200E4EEE4 /* idkHowToGetThereQuestionView.swift */,
 				FA94077B1EFF0C7400E4EEE4 /* idkHowToGetThereQuestionView.xib */,
-				FAD4E8C31F271043000B6B38 /* DidYouBuyTheFlightQuestionPopover.swift */,
-				FAD4E8C71F27107B000B6B38 /* DidYouBuyTheFlightQuestionPopover.xib */,
+				FA8F0DD91F2797D9005CAC9D /* Popovers */,
 			);
 			name = Travel;
 			sourceTree = "<group>";
@@ -4451,6 +4454,17 @@
 				FA4E22D81F131CDE0077CCD3 /* countryAbbreviations.csv */,
 			);
 			name = CSVs;
+			sourceTree = "<group>";
+		};
+		FA8F0DD91F2797D9005CAC9D /* Popovers */ = {
+			isa = PBXGroup;
+			children = (
+				FAD4E8C31F271043000B6B38 /* DidYouBuyTheFlightQuestionPopover.swift */,
+				FAD4E8C71F27107B000B6B38 /* DidYouBuyTheFlightQuestionPopover.xib */,
+				FA8F0DDA1F27A04C005CAC9D /* DIdYouBuyTheHotelQuestionView.swift */,
+				FA8F0DDE1F27CE8F005CAC9D /* DidYouBuyTheHotelQuestionView.xib */,
+			);
+			name = Popovers;
 			sourceTree = "<group>";
 		};
 		FA978A621F1C9D0A00ED5EB8 /* Resources */ = {
@@ -5072,6 +5086,7 @@
 				FABEACFE1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib in Resources */,
 				FA2532221F1D3B6D002BCE29 /* HLHotelDetailsLocationHeaderView.xib in Resources */,
 				FA4EA8D61EE881D3005FCE91 /* GoogleService-Info.plist in Resources */,
+				FA8F0DDF1F27CE8F005CAC9D /* DidYouBuyTheHotelQuestionView.xib in Resources */,
 				FA2530D71F1D3B6D002BCE29 /* JRFilterListHeaderCell.xib in Resources */,
 				FA2531021F1D3B6D002BCE29 /* ASTSimpleSearchFormViewController.xib in Resources */,
 				FA978A921F1C9E1B00ED5EB8 /* id.lproj in Resources */,
@@ -5736,6 +5751,7 @@
 				FA2532C21F1D3B6E002BCE29 /* PeekTableVC.swift in Sources */,
 				FA2532251F1D3B6D002BCE29 /* HLHotelDetailsNoPriceCell.swift in Sources */,
 				FA2533021F1D3B6E002BCE29 /* HLIpadResultsVC.swift in Sources */,
+				FA8F0DDB1F27A04C005CAC9D /* DIdYouBuyTheHotelQuestionView.swift in Sources */,
 				FA2530C31F1D3B6D002BCE29 /* JRDatePickerMonthHeaderReusableView.m in Sources */,
 				FA14B22E1EFB2D33004E0E29 /* FlightSearchQuestionView.swift in Sources */,
 				FA25313E1F1D3B6D002BCE29 /* UIView+Nib.m in Sources */,

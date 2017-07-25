@@ -19,7 +19,16 @@ import AviasalesSDK
         SavedPreferencesForTrip["savedHotelItems"] = savedHotelItems
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
-    
+    func saveLastOpenHotelRoom(hotelRoom: HDKRoom) {
+        let hotelRoomToSave  = NSKeyedArchiver.archivedData(withRootObject: hotelRoom)
+        var lastHotelOpenInBrowserDict = Dictionary<String, Any>()
+        lastHotelOpenInBrowserDict["unbooked"] = hotelRoomToSave
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["lastHotelOpenInBrowser"] = lastHotelOpenInBrowserDict
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+
     func removeSavedHotelItems(hotelItem: HLResultVariant) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var savedHotelItemsAsData = SavedPreferencesForTrip["savedHotelItems"] as! [Data]

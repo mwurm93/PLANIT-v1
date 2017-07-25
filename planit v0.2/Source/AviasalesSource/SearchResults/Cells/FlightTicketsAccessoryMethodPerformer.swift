@@ -27,6 +27,7 @@ import AviasalesSDK
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["lastFlightOpenInBrowser"] = lastFlightOpenInBrowserDict
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
     }
     
     func removeSavedFlightTickets(ticket: JRSDKTicket) {

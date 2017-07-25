@@ -11,6 +11,10 @@ class HLHotelDetailsPriceCTACell: HLPriceTableViewCell {
 
     @IBAction fileprivate func bookButtonPressed(_ sender: AnyObject) {
         bookHandler()
+        let hotelItemsAccessoryMethodsPerformer = HotelItemsAccessoryMethodsPerformer()
+        let hlPriceTableViewCell = self as HLPriceTableViewCell
+        
+        hotelItemsAccessoryMethodsPerformer.saveLastOpenHotelRoom(hotelRoom: hlPriceTableViewCell.room)
     }
 
     @IBAction fileprivate func photoButtonPressed(_ sender: AnyObject) {
