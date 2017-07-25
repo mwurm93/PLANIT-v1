@@ -62,6 +62,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var parseDatesForMultipleDestinationsCalendarView: ParseDatesForMultipleDestinationsCalendarView?
     var instructionsQuestionView: InstructionsQuestionView?
     var alreadyHaveFlightsQuestionView: AlreadyHaveFlightsQuestionView?
+        //Popover Views
+    var didYouBuyTheFlightQuestionPopover: DidYouBuyTheFlightQuestionPopover?
         //CalendarView vars
     var leftDates = [Date]()
     var rightDates = [Date]()
@@ -129,6 +131,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var datePickingSubviewDoneButton: UIButton!
     @IBOutlet weak var chatView: UIView!
     @IBOutlet weak var itineraryView: UIView!
+    @IBOutlet var popupBackgroundFilterView: UIView!
     //Itinerary View Outlets
     @IBOutlet weak var tripNameTextField: UITextField!
     @IBOutlet weak var contactsCollectionView: UICollectionView!
@@ -147,6 +150,39 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var placeToStayButton: UIButton!
     @IBOutlet weak var placetoStaySummaryDescriptionButton: UIButton!
 
+    
+    func flightBookingBrowserClosed() {
+        spawnDidYouBuyTheFlightQuestionPopover()
+        spawnDoYouNeedARentalCarQuestionView()
+    }
+    func spawnDidYouBuyTheFlightQuestionPopover (){
+        didYouBuyTheFlightQuestionPopover = Bundle.main.loadNibNamed("DidYouBuyTheFlightQuestionPopover", owner: self, options: nil)?.first! as? DidYouBuyTheFlightQuestionPopover
+        
+        let bounds = UIScreen.main.bounds
+        self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
+        self.didYouBuyTheFlightQuestionPopover?.layer.cornerRadius = 7
+        self.view.addSubview(didYouBuyTheFlightQuestionPopover!)
+        self.view.addSubview(popupBackgroundFilterView)
+        self.popupBackgroundFilterView.isHidden = false
+        let when = DispatchTime.now() + 0.6
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            UIView.animate(withDuration: 1) {
+                self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -40, width: 325, height: 240)
+            }
+        }
+    }
+    func flightBookingBrowserClosed_FlightBooked(){
+        self.didYouBuyTheFlightQuestionPopover?.removeFromSuperview()
+        self.popupBackgroundFilterView.removeFromSuperview()
+        self.popupBackgroundFilterView.isHidden = true
+        
+        //tag flight as booked
+    }
+    func flightBookingBrowserClosed_FlightNotBooked(){
+        self.didYouBuyTheFlightQuestionPopover?.removeFromSuperview()
+        self.popupBackgroundFilterView.removeFromSuperview()
+        self.popupBackgroundFilterView.isHidden = true
+    }
     func back() {
         self.performSegue(withIdentifier: "tripVCtoTripListVC", sender: self)
     }
@@ -264,6 +300,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.popupBackgroundFilterView.isHidden = true
         
         self.addBackButtonPointedAtTripList()
         
@@ -521,7 +559,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(flightSearchWaitingScreenViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightTicketViewViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightTicketViewViewController_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addBackButtonPointedAtTripList), name: NSNotification.Name(rawValue: "flightSearchFormViewViewController_ViewDidAppear"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(flightSelectedBooked), name: NSNotification.Name(rawValue: "JRSDKFlightBrowserClosed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flightBookingBrowserClosed), name: NSNotification.Name(rawValue: "JRSDKFlightBrowserClosed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flightBookingBrowserClosed_FlightBooked), name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightBooked"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flightBookingBrowserClosed_FlightNotBooked), name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightNotBooked"), object: nil)
+        
         
         //Hotel Nav
         NotificationCenter.default.addObserver(self, selector: #selector(HLCommonResultsVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLCommonResultsVC_viewWillAppear"), object: nil)
@@ -2374,15 +2415,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        flightResultsController?.view.isHidden = false
 //    }
 //    
-    func flightSelectedBooked() {
+//    func flightSelectedBooked() {
 //        removeFlightResultsViewController()
 //        removeBookSelectedFlightViewController()
-        spawnDoYouNeedARentalCarQuestionView()
+//        spawnDoYouNeedARentalCarQuestionView()
         
         // LINK TO ITINERARY
         // SHOW USER WHERE ITINERARY SAVED
-    }
-//    
+//    }
+//
 //    func flightSelectedSavedForLater() {
 //        spawnDoYouNeedARentalCarQuestionView()
 //        
@@ -3562,10 +3603,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var indexOfDestinationBeingPlanned = NSNumber(value: 0)
         var isInitiator = NSNumber(value: 1)
         var currentAssistantSubview = NSNumber(value: 0)
-        var datesDestinationsDictionary  = NSDictionary()
+        var datesDestinationsDictionary = NSDictionary()
         var savedFlightTickets = [NSData]()
         var savedHotelItems = [NSData]()
-
+        var lastFlightOpenInBrowser = NSDictionary()
+        
         //Activities VC
         var selectedActivities = [NSString]()
         //Ranking VC
@@ -3613,6 +3655,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             datesDestinationsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "datesDestinationsDictionary") as? NSDictionary ?? NSDictionary()
             savedFlightTickets = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "savedFlightTickets") as? [NSData] ?? [NSData]()
             savedHotelItems = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "savedHotelItems") as? [NSData] ?? [NSData]()
+            lastFlightOpenInBrowser = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastFlightOpenInBrowser") as? NSDictionary ?? NSDictionary()
 
 
             //Activities VC
@@ -3625,7 +3668,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems,"lastFlightOpenInBrowser":lastFlightOpenInBrowser] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
@@ -4822,13 +4865,15 @@ extension TripViewController: SFSafariViewControllerDelegate {
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         controller.dismiss(animated: true, completion: nil)
         
-        if bookingMode == "flight" {
-            flightSelectedBooked()
-        } else if bookingMode == "carRental" {
+//        if bookingMode == "flight" {
+//            flightSelectedBooked()
+//        } else
+            if bookingMode == "carRental" {
             carRentalSelectedBooked()
-        } else if bookingMode == "hotel" {
-            hotelSelectedBooked()
         }
+//            else if bookingMode == "hotel" {
+//            hotelSelectedBooked()
+//        }
     }
 }
 

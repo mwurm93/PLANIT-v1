@@ -19,6 +19,15 @@ import AviasalesSDK
         SavedPreferencesForTrip["savedFlightTickets"] = savedFlightTickets
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
+    func saveLastOpenFlightTicket(ticket: JRSDKTicket) {
+        let flightTicketToSave  = NSKeyedArchiver.archivedData(withRootObject: ticket)
+        var lastFlightOpenInBrowserDict = Dictionary<String, Any>()
+        lastFlightOpenInBrowserDict["unbooked"] = flightTicketToSave
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["lastFlightOpenInBrowser"] = lastFlightOpenInBrowserDict
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
     
     func removeSavedFlightTickets(ticket: JRSDKTicket) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()

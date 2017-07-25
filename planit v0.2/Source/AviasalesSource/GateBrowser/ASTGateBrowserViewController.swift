@@ -7,6 +7,8 @@
 
 import UIKit
 import WebKit
+import SafariServices
+
 
 @objc class ASTGateBrowserViewController: UIViewController {
 
@@ -160,3 +162,25 @@ extension ASTGateBrowserViewController: WKNavigationDelegate {
         presenter.handleFail(error: error)
     }
 }
+
+//extension ASTGateBrowserViewController: SFSafariViewControllerDelegate {
+//    func showWebsite(URL: URL) {
+//        let webVC = SFSafariViewController(url: URL)
+//        webVC.delegate = self
+//        webVC.preferredBarTintColor = UIColor(red: 25/255, green: 134/255, blue: 191/255, alpha: 1)
+//        webVC.preferredControlTintColor = UIColor.white
+//        self.present(webVC, animated: true, completion: nil)
+//    }
+//    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+//        controller.dismiss(animated: true, completion: nil)
+//        
+//        if bookingMode == "flight" {
+//            flightSelectedBooked()
+//        } else if bookingMode == "carRental" {
+//            carRentalSelectedBooked()
+//        } else if bookingMode == "hotel" {
+//            hotelSelectedBooked()
+//        }
+//    }
+//}
+

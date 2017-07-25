@@ -417,7 +417,7 @@ class HLCommonResultsVC: HLCommonVC,
         }
 
         let decorator = HLHotelDetailsDecorator(variant: variant, photoIndex: currentPhotoIndex, photoIndexUpdater: nil, filter: filter)
-        navigationController?.pushViewController(decorator.detailsVC, animated: true)
+        navigationController?.pushViewController(decorator.detailsVC, animated: false)
     }
 
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
