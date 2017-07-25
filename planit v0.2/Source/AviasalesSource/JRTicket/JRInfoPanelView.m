@@ -166,7 +166,7 @@ static const CGFloat kAgencyInfoLabelMaxCenterConstraint = 15.0;
 - (IBAction)buyBest:(id)sender {
     self.buyHandler();
     FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
-    [flightTicketsAccessoryMethodPerformer sa];
+    [flightTicketsAccessoryMethodPerformer saveLastOpenFlightTicketWithTicket:self.ticket];
 }
 
 - (IBAction)showOtherAgencies:(id)sender {

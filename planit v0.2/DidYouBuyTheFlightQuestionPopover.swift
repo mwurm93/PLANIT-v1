@@ -104,7 +104,7 @@ class DidYouBuyTheFlightQuestionPopover: UIView {
         if sender == button1 {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightBooked"), object: nil)
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var lastFlightOpenInBrowser = SavedPreferencesForTrip["lastFlightOpenInBrowser"] as? Dictionary
+            var lastFlightOpenInBrowser = SavedPreferencesForTrip["lastFlightOpenInBrowser"] as! [String:Any]
             let lastFlightOpen = lastFlightOpenInBrowser["unbooked"]
             lastFlightOpenInBrowser.removeValue(forKey: "unbooked")
             lastFlightOpenInBrowser["booked"] = lastFlightOpen
