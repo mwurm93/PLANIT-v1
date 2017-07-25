@@ -35,6 +35,7 @@
 
     func close() {
         presentingViewController?.dismiss(animated: true, completion: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "HLWebBrowserClosed"), object: nil)
     }
 
     func reload() {

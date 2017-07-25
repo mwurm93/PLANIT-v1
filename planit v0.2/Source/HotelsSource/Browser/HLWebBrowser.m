@@ -168,6 +168,7 @@ static CGFloat kFinalFontSize = 12.0f;
     [self.webView evaluateJavaScript:@"window.alert=null;" completionHandler:nil];;
     [self.webView stopLoading];
     [self.delegate close];
+    
 }
 
 - (IBAction)reload

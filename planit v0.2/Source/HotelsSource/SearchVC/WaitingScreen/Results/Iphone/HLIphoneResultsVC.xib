@@ -40,13 +40,14 @@
                     </connections>
                 </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DBP-9g-zvJ" userLabel="Buttons View">
-                    <rect key="frame" x="0.0" y="542" width="375" height="50"/>
+                    <rect key="frame" x="0.0" y="537" width="375" height="55"/>
                     <subviews>
                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVW-cz-NRY" userLabel="Filter Button">
-                            <rect key="frame" x="20" y="0.0" width="98" height="30"/>
+                            <rect key="frame" x="20" y="0.0" width="98" height="35"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <accessibility key="accessibilityConfiguration" identifier="HL_FILTER_BUTTON_TITLE_LABEL"/>
                             <constraints>
+                                <constraint firstAttribute="height" constant="35" id="XaN-kR-tLH"/>
                                 <constraint firstAttribute="width" constant="98" id="mTr-BD-zBf"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
@@ -62,11 +63,12 @@
                             </connections>
                         </button>
                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S9l-Ua-dam" userLabel="Sort Button">
-                            <rect key="frame" x="138" y="0.0" width="98" height="30"/>
+                            <rect key="frame" x="138" y="0.0" width="98" height="35"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <accessibility key="accessibilityConfiguration" identifier="HL_SORT_BUTTON_TITLE_LABEL" label="Filters"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="98" id="ex4-xw-OjS"/>
+                                <constraint firstAttribute="height" constant="35" id="gA1-x2-5uE"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                             <state key="normal" title="Сортировка"/>
@@ -80,11 +82,12 @@
                             </connections>
                         </button>
                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4jr-G3-ee8" userLabel="Map Button">
-                            <rect key="frame" x="256" y="0.0" width="98" height="30"/>
+                            <rect key="frame" x="256" y="0.0" width="98" height="35"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <accessibility key="accessibilityConfiguration" identifier="HL_SORT_BUTTON_TITLE_LABEL" label="Filters"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="98" id="QnJ-2L-gpr"/>
+                                <constraint firstAttribute="height" constant="35" id="qac-aq-Tsb"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                             <state key="normal" title="Map"/>

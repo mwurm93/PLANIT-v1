@@ -12,7 +12,7 @@ class HLGroupedTableHeaderView: UITableViewHeaderFooterView {
         super.awakeFromNib()
 
         titleLabel.text = title
-        titleLabel.textColor = JRColorScheme.darkTextColor()
+        titleLabel.textColor = UIColor.white
         titleLabel.font = UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightBold)
     }
 

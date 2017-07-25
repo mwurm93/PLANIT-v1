@@ -24,6 +24,10 @@ class HLIphoneResultsVC: HLCommonResultsVC {
         mapDrawerButton.backgroundColor = JRColorScheme.mainButtonBackgroundColor()
         mapDrawerButton.setTitleColor(JRColorScheme.mainButtonTitleColor(), for: .normal)
         mapDrawerButton.addTarget(self, action: #selector(super.showMap), for: UIControlEvents.touchUpInside)
+        
+        self.view.backgroundColor = UIColor.clear
+        self.view.layer.backgroundColor = UIColor.clear.cgColor
+        self.view.tintColor = UIColor.clear
     }
 
     override func updateContentWithVariants(_ variants: [HLResultVariant], filteredVariants: [HLResultVariant]) {

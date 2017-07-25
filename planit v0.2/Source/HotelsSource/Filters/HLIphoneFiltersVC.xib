@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="BCV-Kx-yde">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="535"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Mkc-ix-Q5x"/>
@@ -29,7 +30,7 @@
                     </connections>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yaw-Be-3fg">
-                    <rect key="frame" x="10" y="492" width="580" height="48"/>
+                    <rect key="frame" x="10" y="467" width="580" height="48"/>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="48" id="2rO-kb-hlb"/>
@@ -47,14 +48,14 @@
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="BCV-Kx-yde" secondAttribute="trailing" id="06P-Ne-nRW"/>
                 <constraint firstItem="yaw-Be-3fg" firstAttribute="leading" secondItem="anH-6f-Vha" secondAttribute="leading" constant="10" id="8yo-OS-fwU"/>
-                <constraint firstAttribute="bottom" secondItem="BCV-Kx-yde" secondAttribute="bottom" id="Cdh-D0-J7b"/>
+                <constraint firstAttribute="bottom" secondItem="BCV-Kx-yde" secondAttribute="bottom" constant="65" id="Cdh-D0-J7b"/>
                 <constraint firstAttribute="trailing" secondItem="yaw-Be-3fg" secondAttribute="trailing" constant="10" id="FLo-qT-VDC"/>
                 <constraint firstItem="BCV-Kx-yde" firstAttribute="top" secondItem="anH-6f-Vha" secondAttribute="top" id="OAR-0a-duz"/>
-                <constraint firstAttribute="bottom" secondItem="yaw-Be-3fg" secondAttribute="bottom" constant="60" id="vth-o5-zSh"/>
+                <constraint firstAttribute="bottom" secondItem="yaw-Be-3fg" secondAttribute="bottom" constant="85" id="vth-o5-zSh"/>
                 <constraint firstItem="BCV-Kx-yde" firstAttribute="leading" secondItem="anH-6f-Vha" secondAttribute="leading" id="vvx-Ij-2hy"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

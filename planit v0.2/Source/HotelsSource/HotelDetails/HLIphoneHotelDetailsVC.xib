@@ -34,7 +34,7 @@
                 </tableView>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PBM-cQ-fDc" userLabel="HotelCardView" customClass="HLHotelCardView" customModule="planit_v0_2" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="250"/>
-                    <color key="backgroundColor" red="0.21199023723602295" green="0.21522575616836548" blue="0.21864497661590576" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="250" id="25P-dX-92U"/>
                     </constraints>
@@ -47,7 +47,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hZq-bH-tfs">
-                    <rect key="frame" x="315" y="207" width="40" height="40"/>
+                    <rect key="frame" x="315" y="20" width="40" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="40" id="0mI-wh-61Y"/>
                         <constraint firstAttribute="height" constant="40" id="o1z-YS-baU"/>
@@ -63,15 +63,15 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="PBM-cQ-fDc" secondAttribute="trailing" id="5ZX-li-xAg"/>
-                <constraint firstAttribute="trailing" secondItem="hZq-bH-tfs" secondAttribute="trailing" constant="20" id="HqN-2j-r9r"/>
+                <constraint firstItem="hZq-bH-tfs" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="Mm7-hv-UJV"/>
                 <constraint firstItem="PBM-cQ-fDc" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Tgt-kg-AV9"/>
-                <constraint firstItem="hZq-bH-tfs" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="207" id="W4G-hA-wPk"/>
                 <constraint firstItem="PBM-cQ-fDc" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Y7c-Yy-6lf"/>
                 <constraint firstAttribute="bottom" secondItem="utj-M8-f6o" secondAttribute="bottom" constant="65" id="Zdd-am-SC7"/>
                 <constraint firstAttribute="bottom" secondItem="Zyc-pf-XX5" secondAttribute="bottom" id="afl-ho-B7s"/>
                 <constraint firstItem="Zyc-pf-XX5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="59" id="dv3-DO-NJG"/>
                 <constraint firstAttribute="trailing" secondItem="utj-M8-f6o" secondAttribute="trailing" id="fZv-t1-AZ4"/>
                 <constraint firstItem="Zyc-pf-XX5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="hHN-6x-MIh"/>
+                <constraint firstAttribute="trailing" secondItem="hZq-bH-tfs" secondAttribute="trailing" constant="20" id="k1g-5h-1Iy"/>
                 <constraint firstItem="utj-M8-f6o" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="qDA-SQ-2R5"/>
                 <constraint firstItem="utj-M8-f6o" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="yRk-Tr-8s3"/>
             </constraints>

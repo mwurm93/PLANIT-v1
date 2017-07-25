@@ -490,7 +490,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(removeFlightResultsViewController), name: NSNotification.Name(rawValue: "editFlightSearchButtonTouchedUpInside"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(spawnFlightBookingQuestionView), name: NSNotification.Name(rawValue: "flightSelectButtonTouchedUpInside"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(flightSelectedBooked), name: NSNotification.Name(rawValue: "JRSDKFlightBrowserClosed"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(flightSelectedSavedForLater), name: NSNotification.Name(rawValue: "saveFlightForLaterButtonTouchedUpInside"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(bookSelectedFlightToFlightResults), name: NSNotification.Name(rawValue: "bookSelectedFlightToFlightResults"), object: nil)
         
@@ -522,11 +521,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(flightSearchWaitingScreenViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightTicketViewViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightTicketViewViewController_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addBackButtonPointedAtTripList), name: NSNotification.Name(rawValue: "flightSearchFormViewViewController_ViewDidAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flightSelectedBooked), name: NSNotification.Name(rawValue: "JRSDKFlightBrowserClosed"), object: nil)
         
         //Hotel Nav
         NotificationCenter.default.addObserver(self, selector: #selector(HLCommonResultsVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLCommonResultsVC_viewWillAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addBackButtonPointedAtTripList), name: NSNotification.Name(rawValue: "hotelSearchFormViewViewController_ViewDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchWaitingScreenViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "hotelSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelSelectedBooked), name: NSNotification.Name(rawValue: "HLWebBrowserClosed"), object: nil)
 
 
         

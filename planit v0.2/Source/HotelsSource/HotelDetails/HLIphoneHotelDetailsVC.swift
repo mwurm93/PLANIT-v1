@@ -16,6 +16,10 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
         hotelView.setNeedsLayout()
         hotelView.layoutIfNeeded()
         hotelView.overlayView.backgroundColor = UIColor.clear
+        
+        self.view.backgroundColor = UIColor.clear
+        self.view.layer.backgroundColor = UIColor.clear.cgColor
+        self.view.tintColor = UIColor.clear
 
         hideControls(animated: false)
 

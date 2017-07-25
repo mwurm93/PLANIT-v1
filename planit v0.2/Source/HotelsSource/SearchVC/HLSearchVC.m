@@ -113,7 +113,7 @@
     } else {
         WaitingVC *waitingVC = [[WaitingVC alloc] initWithNibName:@"WaitingVC" bundle:nil];
         waitingVC.searchInfo = searchInfo;
-        [self.navigationController pushViewController:waitingVC animated:YES];
+        [self.navigationController pushViewController:waitingVC animated:NO];
     }
 }
 
