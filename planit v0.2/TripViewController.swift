@@ -865,7 +865,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
 
     func updateHeightOfScrollView(){
-        var heightOfScrollView = 0
+        var heightOfScrollView: CGFloat = 0
         if scrollContentView.subviews.count > 0 {
             heightOfScrollView = scrollContentView.subviews[scrollContentView.subviews.count - 1].frame.maxY
         }
@@ -1722,11 +1722,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        updateProgress()
     }
     func spawnDoYouKnowWhereYouWillBeStayingQuestionView() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+
         if doYouKnowWhereYouWillBeStayingQuestionView == nil {
             //Load next question
             doYouKnowWhereYouWillBeStayingQuestionView = Bundle.main.loadNibNamed("DoYouKnowWhereYouWillBeStayingQuestionView", owner: self, options: nil)?.first! as? DoYouKnowWhereYouWillBeStayingQuestionView
             let bounds = UIScreen.main.bounds
-            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
 
@@ -1757,7 +1758,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             view.addConstraints([heightConstraint])
             increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
         }
-        alignSubviews()
+        
+        if SavedPreferencesForTrip["assistantMode"] as! String == "placeToStay" {
+            updateHeightOfScrollView()
+        } else {
+            alignSubviews()
+        }
         scrollToSubviewWithTag(tag: 18)
     }
 
