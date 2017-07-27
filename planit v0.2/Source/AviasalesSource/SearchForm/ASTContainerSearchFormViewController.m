@@ -24,6 +24,7 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 @property (weak, nonatomic) IBOutlet UISegmentedControl *searchFormTypeSegmentedControl;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIButton *searchButton;
+@property (weak, nonatomic) IBOutlet UIButton *alreadyHaveFlightsButton;
 
 @property (nonatomic, strong) ASTSimpleSearchFormViewController *simpleSearchFormViewController;
 @property (nonatomic, strong) ASTComplexSearchFormViewController *complexSearchFormViewController;
@@ -66,6 +67,7 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     [self setupSegmentedControl];
     [self setupSearchButton];
     [self setupChildViewControllers];
+    [self setupAlreadyHaveFlightsButton];
 }
 
 - (void)setupSegmentedControl {
@@ -83,6 +85,16 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:NSLS(@"JR_SEARCH_FORM_SEARCH_BUTTON") attributes:@{NSFontAttributeName : [UIFont fontWithName:@".SFUIText-Bold" size:16.0]}];
     [self.searchButton setAttributedTitle:attributedString forState:UIControlStateNormal];
 }
+
+- (void)setupAlreadyHaveFlightsButton {
+    self.alreadyHaveFlightsButton.tintColor = [UIColor lightGrayColor];
+    self.alreadyHaveFlightsButton.backgroundColor = [UIColor clearColor];
+    self.alreadyHaveFlightsButton.layer.cornerRadius = 15.0;
+    self.alreadyHaveFlightsButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.alreadyHaveFlightsButton.layer.borderWidth = 1;
+}
+
+
 
 - (void)setupNavigationItems {
     
@@ -132,6 +144,9 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 }
 
 #pragma mark - Actions
+- (IBAction)iAlreadyHaveFlightsButtonTouchedUpInside:(id)sender {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"iAlreadyHaveFlightsButtonTouchedUpInside"                                  object:self];
+}
 
 - (IBAction)searchFormTypeSegmentChanged:(UISegmentedControl *)sender {
     switch (sender.selectedSegmentIndex) {

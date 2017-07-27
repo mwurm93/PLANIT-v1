@@ -269,6 +269,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     cell.layer.masksToBounds = true
 
                     cell.existingTripTableViewLabel.text = DataContainerSingleton.sharedDataContainer.usertrippreferences?[addedRowInUnbookedSection].object(forKey: "trip_name") as? String
+                    cell.existingTripTableViewLabel.numberOfLines = 0
+                    cell.existingTripTableViewLabel.adjustsFontSizeToFitWidth = true
                     existingTripsTable.isHidden = false
                     lastUnbookedStatusIndexAddedToTable = unbookedIndex
                     

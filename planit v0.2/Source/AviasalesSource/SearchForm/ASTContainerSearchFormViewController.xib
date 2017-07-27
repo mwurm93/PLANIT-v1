@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ASTContainerSearchFormViewController">
             <connections>
+                <outlet property="alreadyHaveFlightsButton" destination="AT2-MJ-TiA" id="tgK-2F-weO"/>
                 <outlet property="containerView" destination="Egt-lc-B4J" id="A5x-ed-l3h"/>
                 <outlet property="searchButton" destination="f1b-3P-zi7" id="ghN-7L-e2O"/>
                 <outlet property="searchButtonBottomLayoutConstraint" destination="iix-gM-Z9s" id="dUu-3V-3bl"/>
@@ -66,14 +67,14 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="I already have flights"/>
                             <connections>
-                                <action selector="searchButtonTapped:" destination="-1" eventType="touchUpInside" id="HXR-f8-0zr"/>
+                                <action selector="iAlreadyHaveFlightsButtonTouchedUpInside:" destination="-1" eventType="touchUpInside" id="WHJ-Fb-Zc0"/>
                             </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="f1b-3P-zi7" firstAttribute="top" secondItem="cqV-0M-8QT" secondAttribute="top" constant="1" id="0c6-2K-gfg"/>
-                        <constraint firstAttribute="bottom" secondItem="f1b-3P-zi7" secondAttribute="bottom" constant="30" id="l1R-2N-ZL8"/>
+                        <constraint firstAttribute="bottom" secondItem="f1b-3P-zi7" secondAttribute="bottom" constant="40" id="l1R-2N-ZL8"/>
                         <constraint firstItem="f1b-3P-zi7" firstAttribute="leading" secondItem="cqV-0M-8QT" secondAttribute="leading" constant="100" id="n3V-86-34E"/>
                         <constraint firstAttribute="height" constant="80" id="rEj-64-FyU"/>
                         <constraint firstAttribute="trailing" secondItem="f1b-3P-zi7" secondAttribute="trailing" constant="100" id="yjz-Pl-9GK"/>

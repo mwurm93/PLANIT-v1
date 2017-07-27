@@ -23,8 +23,9 @@ class destinationsDatesCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var departureTime: UILabel!
     @IBOutlet weak var returningAirport: UILabel!
     @IBOutlet weak var returningTime: UILabel!
-    
-    var inBetweenDatesLine: UIView?
+    @IBOutlet weak var inBetweenDatesLine: UIView!
+    @IBOutlet weak var travelButton: UIButton!
+    @IBOutlet weak var placeToStayButton: UIButton!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,5 +34,7 @@ class destinationsDatesCollectionViewCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
     }
+    
+    
     
 }
