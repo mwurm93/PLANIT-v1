@@ -865,7 +865,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
 
     func updateHeightOfScrollView(){
-        let heightOfScrollView = scrollContentView.subviews[scrollContentView.subviews.count - 1].frame.maxY
+        var heightOfScrollView = 0
+        if scrollContentView.subviews.count > 0 {
+            heightOfScrollView = scrollContentView.subviews[scrollContentView.subviews.count - 1].frame.maxY
+        }
         scrollContentViewHeight?.constant = heightOfScrollView
         scrollContentView.frame.size.height = heightOfScrollView
         scrollView.contentSize.height = heightOfScrollView
@@ -1726,7 +1729,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
+
+            //PlaceToStayEdit
+            if SavedPreferencesForTrip["assistantMode"] as! String == "placeToStay" {
+                self.scrollContentView.addSubview(doYouKnowWhereYouWillBeStayingQuestionView!)
+                self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: self.topView.frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            } else if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
                 self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: aboutWhatTimeWillYouStartDrivingQuestionView!)
                 self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (aboutWhatTimeWillYouStartDrivingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             } else if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "busTrainOther" || travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "fly" {
@@ -2024,6 +2032,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             placeForGroupOrJustYouQuestionView?.tag = 28
 
+            //PlaceToStayEdit
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             if SavedPreferencesForTrip["assistantMode"] as! String == "placeToStay" {
                 placeForGroupOrJustYouQuestionView?.button1?.addTarget(self, action: #selector(self.placeForGroupOrJustYouQuestionView_entireGroup_backToItinerary(sender:)), for: UIControlEvents.touchUpInside)
@@ -3574,7 +3583,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         //delete all subviews in assistant
         scrollContentView.removeAllSubviews()
-        alignSubviews()
+        updateHeightOfScrollView()
+        updateProgress()
         progressRing?.setProgress(value: 0, animationDuration: 0.1)
     }
     func reviewItinerary() {
@@ -4253,6 +4263,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func placeToStayButtonTouchedUpInside(sender:UIButton) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
+        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
         segmentedControl?.move(to: 0)
