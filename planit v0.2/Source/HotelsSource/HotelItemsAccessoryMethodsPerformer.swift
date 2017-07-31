@@ -16,8 +16,16 @@ import AviasalesSDK
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var savedHotelItems = SavedPreferencesForTrip["savedHotelItems"] as! [Data]
         savedHotelItems.append(hotelItemToSave)
+
+        //placeToStayDictArray
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+        placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["hotelsSavedOnPlanit"] = savedHotelItems
+        SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+        
         SavedPreferencesForTrip["savedHotelItems"] = savedHotelItems
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
     }
     func saveLastOpenHotelRoom(hotelRoom: HDKRoom) {
         let hotelRoomToSave  = NSKeyedArchiver.archivedData(withRootObject: hotelRoom)
@@ -42,6 +50,13 @@ import AviasalesSDK
                 savedHotelItemsAsData.remove(at: i)
             }
         }
+        
+        //placeToStayDictArray
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+        placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["hotelsSavedOnPlanit"] = savedHotelItems
+        SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+        
         SavedPreferencesForTrip["savedHotelItems"] = savedHotelItemsAsData
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }

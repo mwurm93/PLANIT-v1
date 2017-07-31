@@ -103,10 +103,15 @@ class DidYouBuyTheHotelQuestionView: UIView {
             if sender == button1 {
                 let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
                 var lastHotelOpenInBrowser = SavedPreferencesForTrip["lastHotelOpenInBrowser"] as! [String:Any]
+                let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+                var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+
                 let lastHotelOpen = lastHotelOpenInBrowser["unbooked"]
                 lastHotelOpenInBrowser.removeValue(forKey: "unbooked")
                 lastHotelOpenInBrowser["booked"] = lastHotelOpen
+                placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["hotelBookedOnPlanit"] = lastHotelOpen
                 SavedPreferencesForTrip["lastHotelOpenInBrowser"] = lastHotelOpenInBrowser
+                SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
                 saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
                 
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelBookingBrowserClosed_HotelBooked"), object: nil)

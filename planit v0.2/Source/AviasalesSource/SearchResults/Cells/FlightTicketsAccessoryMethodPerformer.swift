@@ -16,6 +16,14 @@ import AviasalesSDK
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var savedFlightTickets = SavedPreferencesForTrip["savedFlightTickets"] as! [Data]
         savedFlightTickets.append(flightTicketToSave)
+        
+        //travelDictArray
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+        placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["hotelsSavedOnPlanit"] = savedFlightTickets
+        SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
+        
+        
         SavedPreferencesForTrip["savedFlightTickets"] = savedFlightTickets
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
@@ -43,6 +51,14 @@ import AviasalesSDK
                 savedFlightTicketsAsData.remove(at: i)
             }
         }
+        
+        //travelDictArray
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+        placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["hotelsSavedOnPlanit"] = savedFlightTickets
+        SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
+
+        
         SavedPreferencesForTrip["savedFlightTickets"] = savedFlightTicketsAsData
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
