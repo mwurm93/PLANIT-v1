@@ -109,7 +109,7 @@ class DidYouBuyTheHotelQuestionView: UIView {
                 let lastHotelOpen = lastHotelOpenInBrowser["unbooked"]
                 lastHotelOpenInBrowser.removeValue(forKey: "unbooked")
                 lastHotelOpenInBrowser["booked"] = lastHotelOpen
-                placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["hotelBookedOnPlanit"] = lastHotelOpen
+                placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["placeToStayBookedOnPlanit"] = lastHotelOpen
                 SavedPreferencesForTrip["lastHotelOpenInBrowser"] = lastHotelOpenInBrowser
                 SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
                 saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)

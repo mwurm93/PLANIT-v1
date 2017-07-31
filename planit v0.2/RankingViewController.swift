@@ -253,7 +253,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                             cell.changeFlightsButton.setImage(nil, for: .normal)
                             cell.changeFlightsButton.setTitle("FLIGHTS", for: .normal)
                             cell.changeFlightsButton.frame = CGRect(x: 28, y: 40, width: 300, height: 50)
-                            cell.changeFlightsButton.addDashedBorder()
+                            cell.changeFlightsButton.addDashedBorder(lineWidth: 3, lineColor: UIColor.white, height: cell.changeFlightsButton.frame.height)
                             
                         }
                     }
@@ -281,7 +281,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                             cell.changeAccomodationButton.setImage(nil, for: .normal)
                             cell.changeAccomodationButton.setTitle("PLACE TO STAY", for: .normal)
                             cell.changeAccomodationButton.frame = CGRect(x: 28, y: 110, width: 300, height: 50)
-                            cell.changeAccomodationButton.addDashedBorder()
+                            cell.changeAccomodationButton.addDashedBorder(lineWidth: 3, lineColor: UIColor.white, height: cell.changeAccomodationButton.frame.height)
                         }
                     }
 
@@ -598,23 +598,3 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
 }
 
-extension UIButton {
-    func addDashedBorder() {
-        let color = UIColor.white.cgColor
-        
-        let shapeLayer:CAShapeLayer = CAShapeLayer()
-        let frameSize = self.frame.size
-        let shapeRect = CGRect(x: 0, y: 0, width: frameSize.width, height: frameSize.height)
-        
-        shapeLayer.bounds = shapeRect
-        shapeLayer.position = CGPoint(x: frameSize.width/2, y: frameSize.height/2)
-        shapeLayer.fillColor = UIColor.clear.cgColor
-        shapeLayer.strokeColor = color
-        shapeLayer.lineWidth = 3
-        shapeLayer.lineJoin = kCALineJoinRound
-        shapeLayer.lineDashPattern = [18,10]
-        shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: 5).cgPath
-        
-        self.layer.addSublayer(shapeLayer)
-    }
-}

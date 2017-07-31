@@ -10,6 +10,8 @@ import UIKit
 
 class destinationsDatesCollectionViewCell: UICollectionViewCell {
     
+    var shakeEnabled = false
+    
     //MARK: Outlets
     @IBOutlet weak var travelDateButton: UIButton!
     @IBOutlet weak var destinationButton: UIButton!
@@ -26,6 +28,7 @@ class destinationsDatesCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var inBetweenDatesLine: UIView!
     @IBOutlet weak var travelButton: UIButton!
     @IBOutlet weak var placeToStayButton: UIButton!
+    @IBOutlet weak var popupBackgroundViewEditItineraryWithinCell: UIVisualEffectView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,5 +39,31 @@ class destinationsDatesCollectionViewCell: UICollectionViewCell {
     }
     
     
+    func shakeIcons() {
+        let shakeAnim = CABasicAnimation(keyPath: "transform.rotation")
+        shakeAnim.duration = 0.05
+        shakeAnim.repeatCount = 2
+        shakeAnim.autoreverses = true
+        let startAngle: Float = (-2) * 3.14159/180
+        var stopAngle = -startAngle
+        shakeAnim.fromValue = NSNumber(value: startAngle)
+        shakeAnim.toValue = NSNumber(value: 3 * stopAngle)
+        shakeAnim.autoreverses = true
+        shakeAnim.duration = 0.2
+        shakeAnim.repeatCount = 10000
+        shakeAnim.timeOffset = 290 * drand48()
+        
+        //Create layer, then add animation to the element's layer
+        let layer: CALayer = self.layer
+        layer.add(shakeAnim, forKey:"shaking")
+        shakeEnabled = true
+    }
     
+    // This function stop shaking the collection view cells
+    func stopShakingIcons() {
+        let layer: CALayer = self.layer
+        layer.removeAnimation(forKey: "shaking")
+        shakeEnabled = false
+    }
+
 }

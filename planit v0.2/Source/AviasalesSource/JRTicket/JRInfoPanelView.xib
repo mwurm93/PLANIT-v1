@@ -35,9 +35,14 @@
                             <real key="value" value="5"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
+                    <variation key="default">
+                        <mask key="subviews">
+                            <exclude reference="eog-HV-JQy"/>
+                        </mask>
+                    </variation>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mom-ML-gee">
-                    <rect key="frame" x="132" y="32" width="33" height="33"/>
+                    <rect key="frame" x="132" y="27" width="33" height="33"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="33" id="A0D-7W-RNA"/>
                         <constraint firstAttribute="height" constant="33" id="H19-c4-dYM"/>
@@ -125,13 +130,18 @@
                 <constraint firstItem="wT0-eD-j9g" firstAttribute="top" secondItem="siT-Cf-Nzc" secondAttribute="top" priority="750" constant="75" id="pWs-1X-Jem"/>
                 <constraint firstAttribute="trailing" secondItem="wT0-eD-j9g" secondAttribute="trailing" constant="30" id="rKb-AE-xzP"/>
                 <constraint firstAttribute="trailing" secondItem="qtv-gi-Drx" secondAttribute="trailing" constant="30" id="rM5-g2-QzZ"/>
-                <constraint firstItem="Mom-ML-gee" firstAttribute="top" secondItem="siT-Cf-Nzc" secondAttribute="top" constant="32" id="y5B-vP-xFX"/>
+                <constraint firstItem="Mom-ML-gee" firstAttribute="top" secondItem="siT-Cf-Nzc" secondAttribute="top" constant="27" id="y5B-vP-xFX"/>
                 <constraint firstItem="q0s-hy-h22" firstAttribute="top" secondItem="siT-Cf-Nzc" secondAttribute="top" constant="10" id="z17-Qi-0ra"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="qtv-gi-Drx"/>
+                </mask>
+            </variation>
             <connections>
                 <outlet property="agencyInfoLabel" destination="eog-HV-JQy" id="fcZ-Xw-SGz"/>
                 <outlet property="buyButton" destination="wT0-eD-j9g" id="0Rh-mw-XAt"/>

@@ -741,6 +741,7 @@
 		FA52010E1EC4CEA9001EA849 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA52010D1EC4CEA9001EA849 /* libsqlite3.tbd */; };
 		FA52010F1EC4D2FB001EA849 /* WhirlyGlobeMaplyComponent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201001EC4CE2E001EA849 /* WhirlyGlobeMaplyComponent.framework */; };
 		FA5201171EC4DC4C001EA849 /* geography-class_medres.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = FA5201161EC4DC4C001EA849 /* geography-class_medres.mbtiles */; };
+		FA5D5CD31F2F893E00E4653A /* buttonDashedBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D5CD21F2F893D00E4653A /* buttonDashedBorder.swift */; };
 		FA5F13AB1EB92E310003A992 /* amenityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */; };
 		FA6361201F267BE4003F9477 /* FlightTicketsAccessoryMethodPerformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63611F1F267BE4003F9477 /* FlightTicketsAccessoryMethodPerformer.swift */; };
 		FA6361241F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6361231F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift */; };
@@ -1863,6 +1864,7 @@
 		FA52010B1EC4CE9E001EA849 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		FA52010D1EC4CEA9001EA849 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		FA5201161EC4DC4C001EA849 /* geography-class_medres.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class_medres.mbtiles"; sourceTree = "<group>"; };
+		FA5D5CD21F2F893D00E4653A /* buttonDashedBorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = buttonDashedBorder.swift; sourceTree = "<group>"; };
 		FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = amenityTableViewCell.swift; sourceTree = "<group>"; };
 		FA63611F1F267BE4003F9477 /* FlightTicketsAccessoryMethodPerformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FlightTicketsAccessoryMethodPerformer.swift; path = SearchResults/Cells/FlightTicketsAccessoryMethodPerformer.swift; sourceTree = "<group>"; };
 		FA6361231F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HotelItemsAccessoryMethodsPerformer.swift; sourceTree = "<group>"; };
@@ -2080,6 +2082,7 @@
 			isa = PBXGroup;
 			children = (
 				FA14B2231EFAE5F9004E0E29 /* savingToSingleton.swift */,
+				FA5D5CD21F2F893D00E4653A /* buttonDashedBorder.swift */,
 				FA77D1F21EFDD9D600A37A05 /* textfieldUnderline.swift */,
 				FA77D1F41EFDDA2900A37A05 /* buttonColor.swift */,
 				FA48878F1F033DCB0015F078 /* hideKeyboardWhenTappedAround.swift */,
@@ -5887,6 +5890,7 @@
 				FA2531A31F1D3B6D002BCE29 /* HLPhotoGridView.swift in Sources */,
 				FA2531741F1D3B6D002BCE29 /* UIViewController+Navigation.swift in Sources */,
 				FA25324F1F1D3B6D002BCE29 /* HLTableViewCell.swift in Sources */,
+				FA5D5CD31F2F893E00E4653A /* buttonDashedBorder.swift in Sources */,
 				FA2530E21F1D3B6D002BCE29 /* JRFilterTwoThumbSliderItem.m in Sources */,
 				FA2532C41F1D3B6E002BCE29 /* PeekVCProtocol.swift in Sources */,
 				FA25320B1F1D3B6D002BCE29 /* HLVariantsManager.m in Sources */,

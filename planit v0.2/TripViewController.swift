@@ -83,7 +83,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var contactIDs: [NSString]?
     var contactPhoneNumbers = [NSString]()
     var editModeEnabled = false
-        //Messaging var
+    var editItineraryModeEnabled = false
+    //Messaging var
     let messageComposer = MessageComposer()
         //Firebase channel
     var channelsRef: DatabaseReference = Database.database().reference().child("channels")
@@ -146,10 +147,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var itineraryButton3: UIButton!
     @IBOutlet weak var destinationsDatesCollectionView: UICollectionView!
     @IBOutlet var detailedInformationSubview: UIView!
+    @IBOutlet weak var popupBackgroundViewEditItineraryWithinCollectionView: UIVisualEffectView!
     @IBOutlet weak var travelSummaryView: UIView!
     @IBOutlet weak var placeToStaySummaryView: UIView!
     @IBOutlet weak var travelSummaryDescriptionButton: UIButton!
     @IBOutlet weak var placetoStaySummaryDescriptionButton: UIButton!
+    @IBOutlet weak var infoKeyButton_1: UIButton!
+    @IBOutlet weak var infoKeyButton_2: UIButton!
+    @IBOutlet weak var infoKeyButton_3: UIButton!
+    @IBOutlet weak var infoButton: UIButton!
     
     
     override func viewDidLoad() {
@@ -485,7 +491,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
 //        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
         var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
-//        var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+//        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
         if datesDestinationsDictionary.count == 0 {
             //hide dates and destination
         } else if datesDestinationsDictionary["destinationTBD"] != nil {
@@ -1623,8 +1629,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
         var destinationsForTripStates = SavedPreferencesForTrip["destinationsForTripStates"] as! [String]
-        var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
-        if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
+        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+        if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
             originCity = DataContainerSingleton.sharedDataContainer.homeAirport!
             originStateAbbrev = findStateAbbreviationWith(state: DataContainerSingleton.sharedDataContainer.homeState!)
             if originStateAbbrev == "noStateMatch" {
@@ -1728,17 +1734,17 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             //Load next question
             doYouKnowWhereYouWillBeStayingQuestionView = Bundle.main.loadNibNamed("DoYouKnowWhereYouWillBeStayingQuestionView", owner: self, options: nil)?.first! as? DoYouKnowWhereYouWillBeStayingQuestionView
             let bounds = UIScreen.main.bounds
-            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+            var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
 
             //PlaceToStayEdit
             if SavedPreferencesForTrip["assistantMode"] as! String == "placeToStay" {
                 self.scrollContentView.addSubview(doYouKnowWhereYouWillBeStayingQuestionView!)
                 self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: self.topView.frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            } else if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
+            } else if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
                 self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: aboutWhatTimeWillYouStartDrivingQuestionView!)
                 self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (aboutWhatTimeWillYouStartDrivingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
-            } else if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "busTrainOther" || travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "fly" {
+            } else if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "busTrainOther" || travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "fly" {
                 if carRentalSearchQuestionView == nil {
                     self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: doYouNeedARentalCarQuestionView!)
                     self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (doYouNeedARentalCarQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
@@ -1746,7 +1752,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: carRentalSearchQuestionView!)
                     self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (carRentalSearchQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
                 }
-            } else if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "illAlreadyBeThere" {
+            } else if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "illAlreadyBeThere" {
                 self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: howDoYouWantToGetThereQuestionView!)
                 self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (howDoYouWantToGetThereQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
@@ -2250,9 +2256,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        removeCarRentalResultsViewController()
 //        removeBookSelectedCarRentalViewController()
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-        if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
+        if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
             spawnAboutWhatTimeWillYouStartDrivingQuestionView()
         } else {
             spawnDoYouKnowWhereYouWillBeStayingQuestionView()
@@ -2559,12 +2565,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func howDoYouWantToGetThereQuestionView_fly(sender:UIButton) {
         if sender.isSelected == true {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+            var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned >= travelDictionary.count {
-                travelDictionary.append(["modeOfTransportation":"fly"])
-            } else if indexOfDestinationBeingPlanned < travelDictionary.count {
-                if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "fly" {
+            if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
+                travelDictionaryArray.append(["modeOfTransportation":"fly"])
+            } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
+                if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "fly" {
                     if doYouNeedARentalCarQuestionView != nil {
                         doYouNeedARentalCarQuestionView?.removeFromSuperview()
                         doYouNeedARentalCarQuestionView = nil
@@ -2586,9 +2592,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                         idkHowToGetThereQuestionView = nil
                     }
                 }
-                travelDictionary[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"fly"]
+                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"fly"]
             }
-            SavedPreferencesForTrip["travelDictionary"] = travelDictionary
+            SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             spawnFlightSearchQuestionView()
@@ -2597,12 +2603,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func howDoYouWantToGetThereQuestionView_drive(sender:UIButton) {
         if sender.isSelected == true {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+            var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned >= travelDictionary.count {
-                travelDictionary.append(["modeOfTransportation":"drive"])
-            } else if indexOfDestinationBeingPlanned < travelDictionary.count {
-                if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "drive" {
+            if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
+                travelDictionaryArray.append(["modeOfTransportation":"drive"])
+            } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
+                if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "drive" {
                     if flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
@@ -2627,9 +2633,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                         
                 }
-                travelDictionary[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"drive"]
+                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"drive"]
             }
-            SavedPreferencesForTrip["travelDictionary"] = travelDictionary
+            SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             spawnDoYouNeedARentalCarQuestionView()
@@ -2638,12 +2644,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func howDoYouWantToGetThereQuestionView_busTrainOther(sender:UIButton) {
         if sender.isSelected == true {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+            var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned >= travelDictionary.count {
-                travelDictionary.append(["modeOfTransportation":"busTrainOther"])
-            } else if indexOfDestinationBeingPlanned < travelDictionary.count {
-                if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "busTrainOther" {
+            if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
+                travelDictionaryArray.append(["modeOfTransportation":"busTrainOther"])
+            } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
+                if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "busTrainOther" {
                     if  flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
@@ -2676,9 +2682,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                 }
 
-                travelDictionary[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"busTrainOther"]
+                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"busTrainOther"]
             }
-            SavedPreferencesForTrip["travelDictionary"] = travelDictionary
+            SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             spawnBusTrainOtherQuestionView()
@@ -2687,12 +2693,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func howDoYouWantToGetThereQuestionView_iDontKnowHelpMe(sender:UIButton) {
         if sender.isSelected == true {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+            var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned >= travelDictionary.count {
-                travelDictionary.append(["modeOfTransportation":"iDontKnowHelpMe"])
-            } else if indexOfDestinationBeingPlanned < travelDictionary.count {
-                if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "iDontKnowHelpMe" {
+            if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
+                travelDictionaryArray.append(["modeOfTransportation":"iDontKnowHelpMe"])
+            } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
+                if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "iDontKnowHelpMe" {
                     if flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
@@ -2725,9 +2731,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                 }
 
-                travelDictionary[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"iDontKnowHelpMe"]
+                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"iDontKnowHelpMe"]
             }
-            SavedPreferencesForTrip["travelDictionary"] = travelDictionary
+            SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             spawnidkHowToGetThereQuestionView()
@@ -2736,12 +2742,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:UIButton) {
         if sender.isSelected == true {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+            var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if indexOfDestinationBeingPlanned >= travelDictionary.count {
-                travelDictionary.append(["modeOfTransportation":"illAlreadyBeThere"])
-            } else if indexOfDestinationBeingPlanned < travelDictionary.count {
-                if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "illAlreadyBeThere" {
+            if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
+                travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere"])
+            } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
+                if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "illAlreadyBeThere" {
                     if flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
@@ -2777,9 +2783,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                         idkHowToGetThereQuestionView = nil
                     }
                 }
-                travelDictionary[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"illAlreadyBeThere"]
+                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"illAlreadyBeThere"]
             }
-            SavedPreferencesForTrip["travelDictionary"] = travelDictionary
+            SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             spawnDoYouKnowWhereYouWillBeStayingQuestionView()
@@ -2815,9 +2821,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var travelDictionary = SavedPreferencesForTrip["travelDictionary"] as! [[String:Any]]
+            var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            if travelDictionary[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
+            if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
                 spawnAboutWhatTimeWillYouStartDrivingQuestionView()
             } else {
                 spawnDoYouKnowWhereYouWillBeStayingQuestionView()
@@ -3289,6 +3295,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     // MARK: UITextFieldDelegate
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == tripNameQuestionView?.tripNameQuestionTextfield {
+            tripNameQuestionView?.tripNameQuestionButton?.setTitle("Done", for: .normal)
+        }
+        return true
+    }
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         
         return true
@@ -3405,7 +3417,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         var destinationsForTrip = [NSString]()
         var destinationsForTripStates = [NSString]()
-        var travelDictionary = [NSDictionary]()
+        var travelDictionaryArray = [NSDictionary]()
         var placeToStayDictionaryArray = [NSDictionary]()
         var indexOfDestinationBeingPlanned = NSNumber(value: 0)
         var isInitiator = NSNumber(value: 1)
@@ -3457,7 +3469,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             
             destinationsForTrip = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTrip") as? [NSString] ?? [NSString]()
             destinationsForTripStates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTripStates") as? [NSString] ?? [NSString]()
-            travelDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "travelDictionary") as? [NSDictionary] ?? [NSDictionary]()
+            travelDictionaryArray = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "travelDictionaryArray") as? [NSDictionary] ?? [NSDictionary]()
             placeToStayDictionaryArray = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "placeToStayDictionaryArray") as? [NSDictionary] ?? [NSDictionary]()
             indexOfDestinationBeingPlanned = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "indexOfDestinationBeingPlanned") as? NSNumber ?? NSNumber()
             isInitiator = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "isInitiator") as? NSNumber ?? NSNumber()
@@ -3480,7 +3492,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems,"lastFlightOpenInBrowser":lastFlightOpenInBrowser,"lastHotelOpenInBrowser":lastHotelOpenInBrowser,"assistantMode":assistantMode, "placeToStayDictionaryArray":placeToStayDictionaryArray] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionaryArray":travelDictionaryArray, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems,"lastFlightOpenInBrowser":lastFlightOpenInBrowser,"lastHotelOpenInBrowser":lastHotelOpenInBrowser,"assistantMode":assistantMode, "placeToStayDictionaryArray":placeToStayDictionaryArray] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
@@ -3574,6 +3586,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         assistantViewIsHiddenFalse()
         itineraryView.isHidden = true
+        infoButton.isHidden = true
         chatView.isHidden = true
         self.view.endEditing(true)
     }
@@ -3584,6 +3597,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         handleItinerary()
         assistantViewIsHiddenTrue()
         itineraryView.isHidden = false
+        infoButton.isHidden = false
         retrieveContactsWithStore(store: addressBookStore)
         contactsCollectionView.reloadData()
         destinationsDatesCollectionView.reloadData()
@@ -3649,14 +3663,38 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         assistantViewIsHiddenTrue()
         itineraryView.isHidden = true
+        infoButton.isHidden = true
         chatView.isHidden = false
         self.view.endEditing(true)
         chatController?.inputToolbar.contentView.textView.becomeFirstResponder()
     }
+    func animateInInfoView() {
+        
+        popupBackgroundFilterView.alpha = 0
+        popupBackgroundFilterView.isHidden = false
+        self.view.addSubview(popupBackgroundFilterView)
+        UIView.animate(withDuration: 0.4) {
+            self.popupBackgroundFilterView.alpha = 1
+        }
+    }
+    func animateOutInfoView() {
+        popupBackgroundFilterView.alpha = 0
+        self.popupBackgroundFilterView.removeFromSuperview()
+        UIView.animate(withDuration: 0.4) {
+            self.popupBackgroundFilterView.alpha = 0
+        }
+        popupBackgroundFilterView.isHidden = true
+    }
     
     // MARK: Actions
+    @IBAction func infoViewCloseButtonTouchedUpInside(_ sender: Any) {
+        animateOutInfoView()
+    }
     @IBAction func addInviteesButtonTouchedUpInside(_ sender: Any) {
         checkContactsAccess()
+    }
+    @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
+        animateInInfoView()
     }
 //    @IBAction func assistantButtonTouchedUpInside(_ sender: Any) {
 //        assistant()
@@ -4296,12 +4334,13 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == destinationsDatesCollectionView {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            let countDestinations = (SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count
+            var countDestinations = (SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count
+            
             
             if countDestinations != 0 {
                 return countDestinations + 2
             }
-            return countDestinations
+            return 3
         }
 //        else if collectionView == contactsCollectionView
         //This includes the user
@@ -4315,27 +4354,72 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func placeToStayButtonTouchedUpInside(sender:UIButton) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
-        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-
-        spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+        if editItineraryModeEnabled {
+            SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
+            SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
+            spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+            
+            segmentedControl?.move(to: 0)
+            assistant()
+        } else if !editItineraryModeEnabled {
+            if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]).count > 0 {
+                if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["placeToStayBookedOnPlanit"] != nil {
+                    //TRAVELPAYOUTS
+                    let variantAsData = (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["placeToStayBookedOnPlanit"] as! Data
+                    let variant = NSKeyedUnarchiver.unarchiveObject(with: variantAsData) as? HLResultVariant
+                    var filter = Filter()
+                    
+                    let decorator = HLHotelDetailsDecorator(variant: variant, photoIndex: 0, photoIndexUpdater: nil, filter: filter)
+                    let hotelBookedOnPlanitController = JRNavigationController(rootViewController: decorator.detailsVC)
+                    
+                    hotelBookedOnPlanitController.willMove(toParentViewController: self)
+                    self.addChildViewController(hotelBookedOnPlanitController)
+                    hotelBookedOnPlanitController.loadView()
+                    hotelBookedOnPlanitController.viewDidLoad()
+                    hotelBookedOnPlanitController.view.frame = self.view.bounds
+                    for subview in (hotelSearchQuestionView?.subviews)! {
+                        subview.isHidden = true
+                    }
+                    self.itineraryView?.addSubview((hotelBookedOnPlanitController.view)!)
+                    hotelBookedOnPlanitController.didMove(toParentViewController: self)
+                }
+            } else if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["hotelsSavedOnPlanit"] != nil {
+                
+            }
+        }
         
-        segmentedControl?.move(to: 0)
-        assistant()
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == destinationsDatesCollectionView {
             let destinationsDatesCell = destinationsDatesCollectionView.dequeueReusableCell(withReuseIdentifier: "destinationsDatesCollectionViewCell", for: indexPath) as! destinationsDatesCollectionViewCell
             
+            //Editing
+            let tapDeadSpaceInItineraryCollectionViewCell = UITapGestureRecognizer(target: self, action: #selector(self.dismissEditItineraryMode))
+            tapDeadSpaceInItineraryCollectionViewCell.numberOfTapsRequired = 1
+            tapDeadSpaceInItineraryCollectionViewCell.delegate = self
+            destinationsDatesCell.popupBackgroundViewEditItineraryWithinCell.addGestureRecognizer(tapDeadSpaceInItineraryCollectionViewCell)
+            destinationsDatesCell.popupBackgroundViewEditItineraryWithinCell.isHidden = true
+            destinationsDatesCell.popupBackgroundViewEditItineraryWithinCell.isUserInteractionEnabled = true
+
+            
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
             let datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+            let travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+            let placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+
             
             //Trip beginning date
             if indexPath.row == 0 {
+                
                 //Set start location
-                destinationsDatesCell.destinationButton.setTitle(DataContainerSingleton.sharedDataContainer.homeAirport, for: .normal)
+                if DataContainerSingleton.sharedDataContainer.homeAirport != nil && DataContainerSingleton.sharedDataContainer.homeAirport != "" {
+                    destinationsDatesCell.destinationButton.setTitle(DataContainerSingleton.sharedDataContainer.homeAirport, for: .normal)
+                } else {
+                    destinationsDatesCell.destinationButton.setTitle("Add starting point", for: .normal)
+                }
                 destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
                 destinationsDatesCell.destinationButton.titleLabel?.textAlignment = .left
                 destinationsDatesCell.destinationButton.sizeToFit()
@@ -4345,6 +4429,14 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.destinationButton.layer.borderWidth = 2
                 destinationsDatesCell.destinationButton.layer.borderColor = UIColor.white.cgColor
                 destinationsDatesCell.destinationButton.frame.origin.y = 0
+//                if (destinationsDatesCell.destinationButton.layer.sublayers?.count)! > 0 {
+//                    destinationsDatesCell.destinationButton.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+//                }
+                if DataContainerSingleton.sharedDataContainer.homeAirport == nil || DataContainerSingleton.sharedDataContainer.homeAirport == "" {
+//                    destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.destinationButton.frame.height)
+                    destinationsDatesCell.destinationButton.layer.borderWidth = 0
+                }
+
                 
                 //Show destination
                 destinationsDatesCell.destinationButton.isHidden = false
@@ -4358,60 +4450,22 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             //Trip end date
             if indexPath.row == destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 {
-                var rightDatesDestinations = [String:Date]()
-                if datesDestinationsDictionary[destinationsForTrip[indexPath.row - 2]] != nil {
-                    
-                    //Set date
-                    rightDatesDestinations[destinationsForTrip[indexPath.row - 2]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row - 2]]?[(datesDestinationsDictionary[destinationsForTrip[indexPath.row - 2]]?.count)! - 1]
-                    formatter.dateFormat = "d\nMMM"
-                    let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row - 2]]!)
-                    destinationsDatesCell.travelDateButton.setTitle(rightDateAsString, for: .normal)
-                    destinationsDatesCell.travelDateButton.titleLabel?.textAlignment = .center
-                    destinationsDatesCell.travelDateButton.titleLabel?.numberOfLines = 0
-                    destinationsDatesCell.travelDateButton.titleLabel?.textColor = UIColor.white
-                    destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-                    destinationsDatesCell.travelDateButton.layer.cornerRadius = destinationsDatesCell.travelDateButton.frame.size.height / 2
-                    destinationsDatesCell.travelDateButton.backgroundColor = UIColor.clear
-                    destinationsDatesCell.travelDateButton.layer.borderColor = UIColor.white.cgColor
-                    destinationsDatesCell.travelDateButton.layer.borderWidth = 2
-                    
-                    //Set final location
+                //Set final location
+                if DataContainerSingleton.sharedDataContainer.homeAirport != nil && DataContainerSingleton.sharedDataContainer.homeAirport != "" {
                     destinationsDatesCell.destinationButton.setTitle(DataContainerSingleton.sharedDataContainer.homeAirport, for: .normal)
-                    destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
-                    destinationsDatesCell.destinationButton.titleLabel?.textAlignment = .left
-                    destinationsDatesCell.destinationButton.sizeToFit()
-                    destinationsDatesCell.destinationButton.frame.size.height = 30
-                    destinationsDatesCell.destinationButton.frame.size.width += 20
-                    destinationsDatesCell.destinationButton.layer.cornerRadius = (destinationsDatesCell.destinationButton.frame.height) / 2
-                    destinationsDatesCell.destinationButton.layer.borderWidth = 2
-                    destinationsDatesCell.destinationButton.layer.borderColor = UIColor.white.cgColor
-                    destinationsDatesCell.destinationButton.frame.origin.y = 74
-                    
-                    //Show destination
-                    destinationsDatesCell.destinationButton.isHidden = false
-                    destinationsDatesCell.travelDateButton.isHidden = false
-                    destinationsDatesCell.inBetweenDatesLine.isHidden = true
-                    destinationsDatesCell.travelButton.isHidden = false
-                    
-                    //Hide accomodation
-                    destinationsDatesCell.placeToStayButton.isHidden = true
+                } else {
+                    destinationsDatesCell.destinationButton.setTitle("Add ending point", for: .normal)
                 }
-                return destinationsDatesCell
-            }
-            
-            //Find left and right dates
-            var leftDatesDestinations = [String:Date]()
-            var rightDatesDestinations = [String:Date]()
-            
-            if datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]] != nil {
-                leftDatesDestinations[destinationsForTrip[indexPath.row - 1]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]]?[0]
-                rightDatesDestinations[destinationsForTrip[indexPath.row - 1]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]]?[(datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]]?.count)! - 1]
-                formatter.dateFormat = "d\nMMM"
+                destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
+                destinationsDatesCell.destinationButton.titleLabel?.textAlignment = .left
+                destinationsDatesCell.destinationButton.sizeToFit()
+                destinationsDatesCell.destinationButton.frame.size.height = 30
+                destinationsDatesCell.destinationButton.frame.size.width += 20
+                destinationsDatesCell.destinationButton.layer.cornerRadius = (destinationsDatesCell.destinationButton.frame.height) / 2
+                destinationsDatesCell.destinationButton.layer.borderWidth = 2
+                destinationsDatesCell.destinationButton.layer.borderColor = UIColor.white.cgColor
+                destinationsDatesCell.destinationButton.frame.origin.y = 74
                 
-                let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexPath.row - 1]]!)
-//                let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row]]!)
-//                destinationsDatesCell.datesLabel.text = "\(leftDateAsString) - \(rightDateAsString)"
-                destinationsDatesCell.travelDateButton.setTitle(leftDateAsString, for: .normal)
                 destinationsDatesCell.travelDateButton.titleLabel?.textAlignment = .center
                 destinationsDatesCell.travelDateButton.titleLabel?.numberOfLines = 0
                 destinationsDatesCell.travelDateButton.titleLabel?.textColor = UIColor.white
@@ -4420,21 +4474,96 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.travelDateButton.backgroundColor = UIColor.clear
                 destinationsDatesCell.travelDateButton.layer.borderColor = UIColor.white.cgColor
                 destinationsDatesCell.travelDateButton.layer.borderWidth = 2
-             
-
-            }
-            
-            let tripDates = SavedPreferencesForTrip["selected_dates"] as? [Date]
-            var segmentDates = [Date]()
-            //second to (n - 1)th segment
-            for tripDate in tripDates! {
-                if tripDate <= rightDatesDestinations[destinationsForTrip[indexPath.row - 1]]! && tripDate >= leftDatesDestinations[destinationsForTrip[indexPath.row - 1]]! {
-                    segmentDates.append(tripDate)
+                
+                //Show destination
+                destinationsDatesCell.destinationButton.isHidden = false
+                destinationsDatesCell.travelDateButton.isHidden = false
+                destinationsDatesCell.travelButton.isHidden = false
+                
+                //Hide accomodation
+                destinationsDatesCell.placeToStayButton.isHidden = true
+                destinationsDatesCell.inBetweenDatesLine.isHidden = true
+                
+                var rightDatesDestinations = [String:Date]()
+                if destinationsForTrip.count > 0 {
+                    if datesDestinationsDictionary[destinationsForTrip[indexPath.row - 2]] != nil {
+                        
+                        //Set date
+                        rightDatesDestinations[destinationsForTrip[indexPath.row - 2]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row - 2]]?[(datesDestinationsDictionary[destinationsForTrip[indexPath.row - 2]]?.count)! - 1]
+                        formatter.dateFormat = "MMM\nd"
+                        let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row - 2]]!)
+                        destinationsDatesCell.travelDateButton.setTitle(rightDateAsString, for: .normal)
+                    
+                    }
+                } else {
+                    destinationsDatesCell.travelDateButton.setTitle("Add\ndates", for: .normal)
+                    destinationsDatesCell.travelDateButton.layer.borderWidth = 0
                 }
+
+              
+                
+                if DataContainerSingleton.sharedDataContainer.homeAirport == nil || DataContainerSingleton.sharedDataContainer.homeAirport == "" {
+                    destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.destinationButton.frame.height)
+                    destinationsDatesCell.destinationButton.layer.borderWidth = 0
+                }
+
+                if travelDictionaryArray.count == 0 {
+                    destinationsDatesCell.travelButton.setImage(#imageLiteral(resourceName: "airplaneTakingOffDashed"), for: .normal)
+                }
+
+
+                
+                return destinationsDatesCell
             }
             
-            destinationsDatesCell.destinationButton.titleLabel?.numberOfLines = 0
-            destinationsDatesCell.destinationButton.setTitle("\(destinationsForTrip[indexPath.row - 1])\nfor \(segmentDates.count - 1) nights", for: .normal)
+            //second to (n - 1)th segment
+
+            
+            //Find left and right dates
+            var leftDatesDestinations = [String:Date]()
+            var rightDatesDestinations = [String:Date]()
+            if destinationsForTrip.count > 0 {
+                if datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]] != nil {
+                    leftDatesDestinations[destinationsForTrip[indexPath.row - 1]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]]?[0]
+                    rightDatesDestinations[destinationsForTrip[indexPath.row - 1]] = datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]]?[(datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]]?.count)! - 1]
+                    formatter.dateFormat = "MMM\nd"
+                    
+                    let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexPath.row - 1]]!)
+                    destinationsDatesCell.travelDateButton.setTitle(leftDateAsString, for: .normal)
+                    
+                    
+                    let tripDates = SavedPreferencesForTrip["selected_dates"] as? [Date]
+                    var segmentDates = [Date]()
+                    for tripDate in tripDates! {
+                        if tripDate <= rightDatesDestinations[destinationsForTrip[indexPath.row - 1]]! && tripDate >= leftDatesDestinations[destinationsForTrip[indexPath.row - 1]]! {
+                            segmentDates.append(tripDate)
+                        }
+                    }
+                    
+                    destinationsDatesCell.destinationButton.titleLabel?.numberOfLines = 0
+                    destinationsDatesCell.destinationButton.setTitle("\(destinationsForTrip[indexPath.row - 1])\nfor \(segmentDates.count - 1) nights", for: .normal)
+                }
+            } else {
+                destinationsDatesCell.travelDateButton.setTitle("Add\ndates", for: .normal)
+                destinationsDatesCell.travelDateButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.travelDateButton.frame.height)
+                destinationsDatesCell.travelDateButton.layer.borderWidth = 0
+
+
+                destinationsDatesCell.destinationButton.setTitle("Add\ndestination", for: .normal)
+                destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.destinationButton.frame.height)
+                destinationsDatesCell.destinationButton.layer.borderWidth = 0
+            }
+            
+            
+            destinationsDatesCell.travelDateButton.titleLabel?.textAlignment = .center
+            destinationsDatesCell.travelDateButton.titleLabel?.numberOfLines = 0
+            destinationsDatesCell.travelDateButton.titleLabel?.textColor = UIColor.white
+            destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+            destinationsDatesCell.travelDateButton.layer.cornerRadius = destinationsDatesCell.travelDateButton.frame.size.height / 2
+            destinationsDatesCell.travelDateButton.backgroundColor = UIColor.clear
+            destinationsDatesCell.travelDateButton.layer.borderColor = UIColor.white.cgColor
+            destinationsDatesCell.travelDateButton.layer.borderWidth = 2
+            
             destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
             destinationsDatesCell.destinationButton.titleLabel?.textAlignment = .center
             destinationsDatesCell.destinationButton.sizeToFit()
@@ -4445,11 +4574,28 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.destinationButton.layer.borderWidth = 2
             destinationsDatesCell.destinationButton.layer.borderColor = UIColor.white.cgColor
             
+            if destinationsForTrip.count == 0 {
+                destinationsDatesCell.travelDateButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.travelDateButton.frame.height)
+                destinationsDatesCell.travelDateButton.layer.borderWidth = 0
+                
+                destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.destinationButton.frame.height)
+                destinationsDatesCell.destinationButton.layer.borderWidth = 0
+            }
+            
+            if travelDictionaryArray.count == 0 {
+                destinationsDatesCell.travelButton.setImage(#imageLiteral(resourceName: "airplaneTakingOffDashed"), for: .normal)
+            }
+            if placeToStayDictionaryArray.count == 0 {
+                destinationsDatesCell.travelButton.setImage(#imageLiteral(resourceName: "apartmentAngledRoofDashed"), for: .normal)
+            }
             destinationsDatesCell.placeToStayButton.frame.origin.x = destinationsDatesCell.destinationButton.frame.maxX + 30
             destinationsDatesCell.placeToStayButton.frame.origin.y = destinationsDatesCell.destinationButton.frame.midY - destinationsDatesCell.placeToStayButton.frame.size.height / 2
             destinationsDatesCell.placeToStayButton.tag = indexPath.row
+            destinationsDatesCell.travelButton.tag = indexPath.row
+            destinationsDatesCell.travelDateButton.tag = indexPath.row
+            destinationsDatesCell.destinationButton.tag = indexPath.row
             destinationsDatesCell.placeToStayButton.addTarget(self, action: #selector(self.placeToStayButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
-            
+
             
             if indexPath.row != destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 && indexPath.row != 0 {
                 
@@ -4527,6 +4673,18 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return contactsCell
     }
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if collectionView == destinationsDatesCollectionView {
+            let visibleCells = self.destinationsDatesCollectionView.visibleCells
+            if editItineraryModeEnabled == true {
+                for cell in visibleCells {
+                    let visibleCellIndexPath = destinationsDatesCollectionView.indexPath(for: cell)
+                    let visibleCell = destinationsDatesCollectionView.cellForItem(at: visibleCellIndexPath!) as! destinationsDatesCollectionViewCell
+                    // Shake all of the collection view cells
+                    visibleCell.shakeIcons()
+                }
+            }
+        }
+        
         if collectionView == contactsCollectionView {
             let visibleCells = self.contactsCollectionView.visibleCells
             
@@ -4542,6 +4700,18 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     // This function is fired when the collection view stop scrolling
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if collectionView == destinationsDatesCollectionView {
+            let visibleCells = self.destinationsDatesCollectionView.visibleCells
+            
+            if editItineraryModeEnabled == true {
+                for cell in visibleCells {
+                    let visibleCellIndexPath = destinationsDatesCollectionView.indexPath(for: cell)
+                    let visibleCell = destinationsDatesCollectionView.cellForItem(at: visibleCellIndexPath!) as! destinationsDatesCollectionViewCell
+                    // Shake all of the collection view cells
+                    visibleCell.shakeIcons()
+                }
+            }
+        }
         if collectionView == contactsCollectionView {
             
             let visibleCells = self.contactsCollectionView.visibleCells
@@ -4624,6 +4794,21 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             }
         }
     }
+    
+    func handleLongPressItinerary(gestureReconizer: UILongPressGestureRecognizer) {
+        if gestureReconizer.state == UIGestureRecognizerState.began {
+            editItineraryModeEnabled = true
+            popupBackgroundViewEditItineraryWithinCollectionView.isHidden = false
+            
+            
+            for item in self.destinationsDatesCollectionView!.visibleCells as! [destinationsDatesCollectionViewCell] {
+                let indexPath: IndexPath = self.destinationsDatesCollectionView!.indexPath(for: item as destinationsDatesCollectionViewCell)!
+                let cell: destinationsDatesCollectionViewCell = self.destinationsDatesCollectionView!.cellForItem(at: indexPath) as! destinationsDatesCollectionViewCell!
+                    cell.shakeIcons()
+                cell.popupBackgroundViewEditItineraryWithinCell.isHidden = false
+            }
+        }
+    }
     func deleteContact(indexPath: IndexPath) {
         
         contacts?.remove(at: indexPath.row - 1)
@@ -4673,6 +4858,20 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             cell.stopShakingIcons()
         }
         editModeEnabled = false
+    }
+    
+    func dismissEditItineraryMode(){
+        self.popupBackgroundViewEditItineraryWithinCollectionView.isHidden = true
+        
+        for item in self.destinationsDatesCollectionView!.visibleCells as! [destinationsDatesCollectionViewCell] {
+            let indexPath: IndexPath = self.destinationsDatesCollectionView!.indexPath(for: item as destinationsDatesCollectionViewCell)!
+            let cell: destinationsDatesCollectionViewCell = self.destinationsDatesCollectionView!.cellForItem(at: indexPath) as! destinationsDatesCollectionViewCell!
+            cell.popupBackgroundViewEditItineraryWithinCell.isHidden = true
+
+            cell.stopShakingIcons()
+        }
+        editItineraryModeEnabled = false
+
     }
 
 }
@@ -5042,6 +5241,8 @@ extension TripViewController {
 }
 
 extension TripViewController {
+    
+    
     func setUpItinerary() {
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -5069,6 +5270,20 @@ extension TripViewController {
         contactsCollectionView.dataSource = self
         contactsCollectionView.delegate = self
         self.contactsCollectionView.addGestureRecognizer(lpgr)
+        //
+        let lpgrItinerary = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongPressItinerary(gestureReconizer:)))
+        lpgrItinerary.minimumPressDuration = 0.5
+        lpgrItinerary.delaysTouchesBegan = true
+        lpgrItinerary.delegate = self
+        self.destinationsDatesCollectionView.addGestureRecognizer(lpgrItinerary)
+        //
+        let tapDeadSpaceInItineraryCollectionView = UITapGestureRecognizer(target: self, action: #selector(self.dismissEditItineraryMode))
+        tapDeadSpaceInItineraryCollectionView.numberOfTapsRequired = 1
+        tapDeadSpaceInItineraryCollectionView.delegate = self
+        self.popupBackgroundViewEditItineraryWithinCollectionView.addGestureRecognizer(tapDeadSpaceInItineraryCollectionView)
+        popupBackgroundViewEditItineraryWithinCollectionView.isHidden = true
+        popupBackgroundViewEditItineraryWithinCollectionView.isUserInteractionEnabled = true
+
         //
         let tapOutsideContacts = UITapGestureRecognizer(target: self, action: #selector(self.dismissDeleteContactsMode))
         tapOutsideContacts.numberOfTapsRequired = 1

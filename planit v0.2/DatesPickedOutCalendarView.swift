@@ -77,7 +77,12 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
             if selectedDatesValue.count > 0 {
                 self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
+                self.calendarView.scrollToDate(selectedDatesValue[0], animateScroll: true)
             }
+        } else {
+            let today = Date()
+            let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
+            self.calendarView.scrollToDate(tomorrow!, animateScroll: true)
         }
     }
 //    func scrollToDate() {
