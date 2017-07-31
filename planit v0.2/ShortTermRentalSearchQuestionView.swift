@@ -76,7 +76,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         questionLabel?.text = "We’re still working on short term rentals.\nShare any plans or ideas with your group?"
         self.addSubview(questionLabel!)
         
-        //Button2
+        //Button1
         button1 = UIButton(type: .custom)
         button1?.frame = CGRect.zero
         button1?.setTitleColor(UIColor.white, for: .normal)
