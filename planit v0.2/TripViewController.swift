@@ -1760,6 +1760,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         if SavedPreferencesForTrip["assistantMode"] as! String == "placeToStay" {
+            updateProgress()
             updateHeightOfScrollView()
         } else {
             alignSubviews()
@@ -2901,7 +2902,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func doYouKnowWhereYouWillBeStaying_noPlanLater(sender:UIButton) {
         if sender.isSelected == true {
-            if whatTypeOfPlaceToStayQuestionView != nil {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            if SavedPreferencesForTrip["assistantMode"] as! String == "placeToStay" {
+                disableAndResetAssistant_moveToItinerary()
+            } else if whatTypeOfPlaceToStayQuestionView != nil {
                 whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
                 whatTypeOfPlaceToStayQuestionView = nil
                 if hotelSearchQuestionView != nil {
@@ -2920,8 +2924,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     placeForGroupOrJustYouQuestionView?.removeFromSuperview()
                     placeForGroupOrJustYouQuestionView = nil
                 }
+        
+                planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
+                
+            } else {
+                planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
             }
-            planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
         }
     }
     
@@ -3398,6 +3406,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var destinationsForTrip = [NSString]()
         var destinationsForTripStates = [NSString]()
         var travelDictionary = [NSDictionary]()
+        var placeToStayDictionaryArray = [NSDictionary]()
         var indexOfDestinationBeingPlanned = NSNumber(value: 0)
         var isInitiator = NSNumber(value: 1)
         var currentAssistantSubview = NSNumber(value: 0)
@@ -3449,6 +3458,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             destinationsForTrip = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTrip") as? [NSString] ?? [NSString]()
             destinationsForTripStates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTripStates") as? [NSString] ?? [NSString]()
             travelDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "travelDictionary") as? [NSDictionary] ?? [NSDictionary]()
+            placeToStayDictionaryArray = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "placeToStayDictionaryArray") as? [NSDictionary] ?? [NSDictionary]()
             indexOfDestinationBeingPlanned = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "indexOfDestinationBeingPlanned") as? NSNumber ?? NSNumber()
             isInitiator = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "isInitiator") as? NSNumber ?? NSNumber()
             currentAssistantSubview = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "currentAssistantSubview") as? NSNumber ?? NSNumber()
@@ -3470,7 +3480,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems,"lastFlightOpenInBrowser":lastFlightOpenInBrowser,"lastHotelOpenInBrowser":lastHotelOpenInBrowser,"assistantMode":assistantMode] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionary":travelDictionary, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems,"lastFlightOpenInBrowser":lastFlightOpenInBrowser,"lastHotelOpenInBrowser":lastHotelOpenInBrowser,"assistantMode":assistantMode, "placeToStayDictionaryArray":placeToStayDictionaryArray] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
@@ -3588,6 +3598,43 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         //delete all subviews in assistant
+        userNameQuestionView = nil
+        tripNameQuestionView = nil
+        whereTravellingFromQuestionView = nil
+        datesPickedOutCalendarView = nil
+        decidedOnCityToVisitQuestionView = nil
+        yesCityDecidedQuestionView = nil
+        noCityDecidedAnyIdeasQuestionView = nil
+        planTripToIdeaQuestionView = nil
+        whatTypeOfTripQuestionView = nil
+        howFarAwayQuestionView = nil
+        destinationOptionsCardView = nil
+        addAnotherDestinationQuestionView = nil
+        howDoYouWantToGetThereQuestionView = nil
+        flightSearchQuestionView = nil
+        doYouNeedARentalCarQuestionView = nil
+        carRentalSearchQuestionView = nil
+        doYouKnowWhereYouWillBeStayingQuestionView = nil
+        aboutWhatTimeWillYouStartDrivingQuestionView = nil
+        busTrainOtherQuestionView = nil
+        idkHowToGetThereQuestionView = nil
+        whatTypeOfPlaceToStayQuestionView = nil
+        hotelSearchQuestionView = nil
+        shortTermRentalSearchQuestionView = nil
+        stayWithSomeoneIKnowQuestionView = nil
+        placeForGroupOrJustYouQuestionView = nil
+        sendProposalQuestionView = nil
+        yesIKnowWhereImStayingQuestionView = nil
+        doYouNeedHelpBookingAHotelQuestionView = nil
+        parseDatesForMultipleDestinationsCalendarView = nil
+        instructionsQuestionView = nil
+        alreadyHaveFlightsQuestionView = nil
+        //Popover Views
+        didYouBuyTheFlightQuestionPopover = nil
+        didYouBuyTheHotelQuestionView = nil
+        
+        
+        
         scrollContentView.removeAllSubviews()
         updateHeightOfScrollView()
         updateProgress()
@@ -4270,11 +4317,12 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
         SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
-        segmentedControl?.move(to: 0)
         spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+        
+        segmentedControl?.move(to: 0)
+        assistant()
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == destinationsDatesCollectionView {
