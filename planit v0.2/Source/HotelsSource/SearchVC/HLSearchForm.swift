@@ -73,7 +73,7 @@ import UIKit
 
     // MARK: - Private methods
 
-    @objc private func updateExpiredDates() {
+    @objc func updateExpiredDates() {
         searchInfo?.updateExpiredDates()
         updateControls()
     }

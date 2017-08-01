@@ -416,6 +416,9 @@ class HLCommonResultsVC: HLCommonVC,
             currentPhotoIndex = cell.visiblePhotoIndex
         }
 
+        let hotelItemsAccessoryMethodsPerformer = HotelItemsAccessoryMethodsPerformer()        
+        hotelItemsAccessoryMethodsPerformer.saveLastOpenHotelItem(hotelItem: variant)
+        
         let decorator = HLHotelDetailsDecorator(variant: variant, photoIndex: currentPhotoIndex, photoIndexUpdater: nil, filter: filter)
         navigationController?.pushViewController(decorator.detailsVC, animated: false)
     }

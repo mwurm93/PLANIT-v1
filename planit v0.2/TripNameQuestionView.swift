@@ -46,6 +46,12 @@ class TripNameQuestionView: UIView {
         tripNameQuestionButton?.frame.origin.y = 125
         tripNameQuestionButton?.layer.cornerRadius = (tripNameQuestionButton?.frame.height)! / 2
         
+        let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
+        //Install the value into the label.
+        if tripNameValue != nil {
+            self.tripNameQuestionTextfield?.text =  "\(tripNameValue!)"
+            tripNameQuestionButton?.setTitle("Done", for: .normal)
+        }
     }
     
     func addViews() {
@@ -66,6 +72,8 @@ class TripNameQuestionView: UIView {
         tripNameQuestionTextfield?.layer.masksToBounds = true
         tripNameQuestionTextfield?.textAlignment = .center
         tripNameQuestionTextfield?.returnKeyType = .next
+        tripNameQuestionTextfield?.clearButtonMode = .whileEditing
+        tripNameQuestionTextfield?.clearsOnBeginEditing = true
         let userNameQuestionTextfieldPlaceholder = tripNameQuestionTextfield!.value(forKey: "placeholderLabel") as? UILabel
         userNameQuestionTextfieldPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         userNameQuestionTextfieldPlaceholder?.text = "Name"

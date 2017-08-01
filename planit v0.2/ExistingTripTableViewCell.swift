@@ -26,8 +26,6 @@ class ExistingTripTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        existingTripTableViewImage.isHidden = true
-        existingTripTableViewLabel.isHidden = true
     }
 
 }

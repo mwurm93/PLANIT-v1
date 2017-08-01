@@ -24,7 +24,7 @@ extension UIButton {
         shapeLayer.lineDashPattern = [18,10]
         shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: height / 2).cgPath
         
-        self.layer.addSublayer(shapeLayer)
+        self.layer.addSublayer(shapeLayer)        
     }
 }
 

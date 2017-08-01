@@ -30,6 +30,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var reviewAndBookCarRentalController: ReviewAndBookViewController?
     var hotelResultsController: UIViewController?
     var reviewAndBookHotelController: ReviewAndBookViewController?
+        //Itinerary View Controllers
+    var hotelBookedOnPlanitController: JRNavigationController?
+    var flightBookedOnPlanitController: JRNavigationController?
         //Views
     var userNameQuestionView: UserNameQuestionView?
     var tripNameQuestionView: TripNameQuestionView?
@@ -114,7 +117,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //Itinerary Detailed information subview
     var button1: UIButton?
     var textView: UITextView?
-    
+    var incompleteColor = UIColor(red: 250/255, green: 190/255, blue: 190/255, alpha: 1)
+    var completeColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     //PPN Cities
     var ppnCarRentalCities = [Dictionary<String, String>]()
     var ppnHotelCities = [Dictionary<String, String>]()
@@ -159,6 +163,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var infoKeyButton_2: UIButton!
     @IBOutlet weak var infoKeyButton_3: UIButton!
     @IBOutlet weak var infoButton: UIButton!
+    @IBOutlet weak var popupBackgroundFilterViewVisualEffectView: UIVisualEffectView!
     
     
     override func viewDidLoad() {
@@ -166,6 +171,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         self.popupBackgroundFilterView.isHidden = true
         self.addBackButtonPointedAtTripList()
+        self.addTwicketSegmentedControl()
         
         //import PPN cities csv
         getCarRentalCities()
@@ -1083,6 +1089,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             tripNameQuestionView = Bundle.main.loadNibNamed("TripNameQuestionView", owner: self, options: nil)?.first! as? TripNameQuestionView
             tripNameQuestionView?.tripNameQuestionButton?.addTarget(self, action: #selector(self.tripNameQuestionButtonClicked(sender:)), for: UIControlEvents.touchUpInside)
             self.scrollContentView.insertSubview(tripNameQuestionView!, aboveSubview: instructionsQuestionView!)
+            
             tripNameQuestionView?.tripNameQuestionTextfield?.delegate = self
             tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
 
@@ -1097,6 +1104,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         alignSubviews()
         scrollToSubviewWithTag(tag: 34)
         increaseProgressCircle(byPercent: 10, onlyIfFirstDestination: false)
+        
+        tripNameQuestionView?.tripNameQuestionTextfield?.delegate = self
+        tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
     }
     
     
@@ -1146,7 +1156,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     func spawnWhereTravellingFromQuestionView(){
-        tripNameQuestionView?.tripNameQuestionTextfield?.resignFirstResponder()
         if whereTravellingFromQuestionView == nil {
             
             //Load next question
@@ -2331,6 +2340,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func tripNameQuestionButtonClicked(sender:UIButton) {
         if sender.isSelected == true {
+            tripNameQuestionView?.tripNameQuestionTextfield?.resignFirstResponder()
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["trip_name"] = tripNameQuestionView?.tripNameQuestionTextfield?.text
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             spawnDatesPickedOutCalendarView()
         }
     }
@@ -2990,9 +3003,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     
                     placeToStayDictionaryArray[indexOfDestinationBeingPlanned] = ["typeOfPlaceToStay":"hotel"]
                 }
-                SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
-                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             }
+            SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
         
             
             spawnHotelSearchQuestionView()
@@ -3030,10 +3044,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     
                     placeToStayDictionaryArray[indexOfDestinationBeingPlanned] = ["typeOfPlaceToStay":"shortTermRental"]
                 }
-                SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
-                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
             }
-            
+            SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
             spawnShortTermRentalSearchQuestionView()
         }
@@ -3350,14 +3364,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         if textField == tripNameQuestionView?.tripNameQuestionTextfield {
-            if tripNameQuestionView?.tripNameQuestionTextfield?.text == nil || tripNameQuestionView?.tripNameQuestionTextfield?.text == "" {
-                return false
-            } else {
-                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-                SavedPreferencesForTrip["trip_name"] = textField.text
-                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                spawnDatesPickedOutCalendarView()
-            }
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["trip_name"] = textField.text
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            return true
         }
         //Itinerary view
         if textField == tripNameTextField {
@@ -3611,11 +3621,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        floaty?.isHidden = false
         progressRing?.isHidden = false
     }
-    
     func assistant() {
-        UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 36, y: 25, width: 90, height: 51)
-        }
+//        UIView.animate(withDuration: 0.4) {
+//            self.underline.layer.frame = CGRect(x: 36, y: 25, width: 90, height: 51)
+//        }
         assistantViewIsHiddenFalse()
         itineraryView.isHidden = true
         infoButton.isHidden = true
@@ -3623,19 +3632,73 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.view.endEditing(true)
     }
     func itinerary() {
-        UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 163, y: 25, width: 85, height: 51)
-        }
+//        UIView.animate(withDuration: 0.4) {
+//            self.underline.layer.frame = CGRect(x: 163, y: 25, width: 85, height: 51)
+//        }
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var tripName = SavedPreferencesForTrip["trip_name"] as! String
+        tripNameTextField.text = tripName
         handleItinerary()
         assistantViewIsHiddenTrue()
         itineraryView.isHidden = false
         infoButton.isHidden = false
         retrieveContactsWithStore(store: addressBookStore)
         contactsCollectionView.reloadData()
+        handleAddInviteesButton()
+        editItineraryModeEnabled = false
+        for visibleCell in (self.destinationsDatesCollectionView!.visibleCells as! [destinationsDatesCollectionViewCell]) {
+            visibleCell.stopShakingIcons()
+        }
         destinationsDatesCollectionView.reloadData()
         chatView.isHidden = true
         segmentedControl?.move(to: 1)
         self.view.endEditing(true)
+    }
+    func handleAddInviteesButton(){
+        let bounds = UIScreen.main.bounds
+        var numberOfContacts = 0
+        if contacts != nil {
+            numberOfContacts += contacts!.count
+        }
+        addInviteeButton.setTitleColor(UIColor.white, for: .normal)
+        addInviteeButton.setBackgroundColor(color: UIColor.clear, forState: .normal)
+//        addInviteeButton.layer.masksToBounds = false
+        addInviteeButton.titleLabel?.numberOfLines = 0
+        addInviteeButton.titleLabel?.textAlignment = .center
+//        addInviteeButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        if numberOfContacts == 0 {
+            contactsCollectionView.isHidden = true
+            addInviteeButton.setTitle("Invite travelmates", for: .normal)
+            addInviteeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
+            addInviteeButton.frame.size.height = 30
+            addInviteeButton.frame.size.width = 200
+            addInviteeButton.frame.origin.x = (bounds.size.width - (addInviteeButton.frame.width)) / 2
+            addInviteeButton.frame.origin.y = 60
+            addInviteeButton.setTitleColor(incompleteColor, for: .normal)
+            addInviteeButton.layer.cornerRadius = (addInviteeButton.frame.height) / 2
+            addInviteeButton.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:addInviteeButton.frame.height)
+        } else {
+            contactsCollectionView.isHidden = false
+            if addInviteeButton.layer.sublayers != nil {
+                for sublayer in addInviteeButton.layer.sublayers! {
+                    if sublayer.isKind(of: CAShapeLayer.self) {
+                        sublayer.removeFromSuperlayer()
+                    }
+                }
+            }
+            addInviteeButton.setTitle("+", for: .normal)
+            addInviteeButton.titleLabel?.font = UIFont.systemFont(ofSize: 39)
+            addInviteeButton.setTitleColor(completeColor, for: .normal)
+            addInviteeButton.frame.size.height = 47
+            addInviteeButton.frame.size.width = 43
+            if numberOfContacts < 4 {
+                addInviteeButton.frame.origin.x = CGFloat(100 + 65 * numberOfContacts)
+            } else {
+                addInviteeButton.frame.origin.x = bounds.size.width - 53
+            }
+            addInviteeButton.frame.origin.y = 63
+        }
     }
     func disableAndResetAssistant_moveToItinerary() {
         itinerary()
@@ -3690,9 +3753,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         disableAndResetAssistant_moveToItinerary()
     }
     func chat() {
-        UIView.animate(withDuration: 0.4) {
-            self.underline.layer.frame = CGRect(x: 288, y: 25, width: 50, height: 51)
-        }
+//        UIView.animate(withDuration: 0.4) {
+//            self.underline.layer.frame = CGRect(x: 288, y: 25, width: 50, height: 51)
+//        }
         assistantViewIsHiddenTrue()
         itineraryView.isHidden = true
         infoButton.isHidden = true
@@ -3700,18 +3763,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.view.endEditing(true)
         chatController?.inputToolbar.contentView.textView.becomeFirstResponder()
     }
-    func animateInBackgroundFilterView(withInfoView: Bool) {
+    func animateInBackgroundFilterView(withInfoView: Bool, withBlurEffect: Bool) {
         
         popupBackgroundFilterView.alpha = 0
         popupBackgroundFilterView.isHidden = false
-        if withInfoView {
-            infoKeyButton_1.isHidden = true
-            infoKeyButton_2.isHidden = true
-            infoKeyButton_3.isHidden = true
+        if withBlurEffect {
+            popupBackgroundFilterViewVisualEffectView.isHidden = false
         } else {
+            popupBackgroundFilterViewVisualEffectView.isHidden = true
+        }
+        if withInfoView {
             infoKeyButton_1.isHidden = false
             infoKeyButton_2.isHidden = false
             infoKeyButton_3.isHidden = false
+        } else {
+            infoKeyButton_1.isHidden = true
+            infoKeyButton_2.isHidden = true
+            infoKeyButton_3.isHidden = true
         }
         self.view.addSubview(popupBackgroundFilterView)
         UIView.animate(withDuration: 0.4) {
@@ -3735,7 +3803,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         checkContactsAccess()
     }
     @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
-        animateInBackgroundFilterView(withInfoView: true)
+        animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true)
     }
 //    @IBAction func assistantButtonTouchedUpInside(_ sender: Any) {
 //        assistant()
@@ -4262,6 +4330,7 @@ extension TripViewController {
             sendProposalQuestionView?.button3?.isHidden = false
         }
         updateProgress()
+        handleAddInviteesButton()
         //        //Uncomment for testing on Simulator
         //        //        chatButton.isHidden = true
         //        //        subviewDoneButton.isHidden = false
@@ -4352,6 +4421,7 @@ extension TripViewController {
             
         }
         updateProgress()
+        handleAddInviteesButton()
         //        //Uncomment for testing on Simulator
         //        //        chatButton.isHidden = true
         //        //        subviewDoneButton.isHidden = false
@@ -4387,7 +4457,9 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         //This includes the user
         var numberOfContacts = 0
         if contacts != nil {
-            numberOfContacts += contacts!.count + 1
+            if (contacts?.count)! != 0 {
+                numberOfContacts += contacts!.count + 1
+            }
         }
         
         return numberOfContacts
@@ -4407,29 +4479,31 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             segmentedControl?.move(to: 0)
             assistant()
         } else if !editItineraryModeEnabled {
-            if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]).count > 0 {
-                let test = placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String
+            if sender.tag <= (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]).count  {
                 var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
                 if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "hotel" {
                     if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["placeToStayBookedOnPlanit"] != nil {
                         //TRAVELPAYOUTS
+                        for subview in itineraryView.subviews {
+                            subview.isHidden = true
+                        }
+                        
                         let variantAsData = (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["placeToStayBookedOnPlanit"] as! Data
                         let variant = NSKeyedUnarchiver.unarchiveObject(with: variantAsData) as? HLResultVariant
                         let filter = Filter()
                         
                         let decorator = HLHotelDetailsDecorator(variant: variant, photoIndex: 0, photoIndexUpdater: nil, filter: filter)
-                        let hotelBookedOnPlanitController = JRNavigationController(rootViewController: decorator.detailsVC)
+                        hotelBookedOnPlanitController = JRNavigationController(rootViewController: decorator.detailsVC)
+                        hotelBookedOnPlanitController?.isNavigationBarHidden = true
+                        hotelBookedOnPlanitController?.willMove(toParentViewController: self)
+                        self.addChildViewController(hotelBookedOnPlanitController!)
+                        hotelBookedOnPlanitController?.loadView()
+                        hotelBookedOnPlanitController?.viewDidLoad()
+                        hotelBookedOnPlanitController?.view.frame = self.view.bounds
+                        self.itineraryView?.addSubview((hotelBookedOnPlanitController?.view)!)
+                        hotelBookedOnPlanitController?.didMove(toParentViewController: self)
                         
-                        hotelBookedOnPlanitController.willMove(toParentViewController: self)
-                        self.addChildViewController(hotelBookedOnPlanitController)
-                        hotelBookedOnPlanitController.loadView()
-                        hotelBookedOnPlanitController.viewDidLoad()
-                        hotelBookedOnPlanitController.view.frame = self.view.bounds
-                        for subview in (hotelSearchQuestionView?.subviews)! {
-                            subview.isHidden = true
-                        }
-                        self.itineraryView?.addSubview((hotelBookedOnPlanitController.view)!)
-                        hotelBookedOnPlanitController.didMove(toParentViewController: self)
+                        addBackButtonPointedAtItineraryFromHotelDetails()
                         
                     } else if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["hotelsSavedOnPlanit"] != nil {
                         //SHOW SAVED HOTELS in Assistant
@@ -4438,7 +4512,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                         
                         spawnHotelSearchQuestionView()
-                        self.hotelSearchQuestionView?.searchButton?.sendActions(for: .touchUpInside)
                         
                         segmentedControl?.move(to: 0)
                         assistant()
@@ -4450,7 +4523,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                         
                         spawnHotelSearchQuestionView()
-
                         
                         segmentedControl?.move(to: 0)
                         assistant()
@@ -4460,14 +4532,14 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 
                 } else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "shortTermRental"{
                     //Show texted entered, with clickable links
-                    animateInBackgroundFilterView(withInfoView: false)
+                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true)
                     setupNonHotelPlaceToStayDetailView()
                     detailedInformationSubview.isHidden = false
                     self.view.addSubview(detailedInformationSubview)
                     
                 } else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "withFriend"{
                     //Show texted entered
-                    animateInBackgroundFilterView(withInfoView: false)
+                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true)
                     setupNonHotelPlaceToStayDetailView()
                     detailedInformationSubview.isHidden = false
                     self.view.addSubview(detailedInformationSubview)
@@ -4475,6 +4547,9 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     segmentedControl?.move(to: 0)
                     assistant()
                 }
+            } else {
+                segmentedControl?.move(to: 0)
+                assistant()
             }
         }
         
@@ -4569,10 +4644,24 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-            let datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
-            let travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
-            let placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+            var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+            var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+            var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
 
+            if destinationsDatesCell.travelDateButton.layer.sublayers != nil {
+                for sublayer in destinationsDatesCell.travelDateButton.layer.sublayers! {
+                    if sublayer.isKind(of: CAShapeLayer.self) {
+                        sublayer.removeFromSuperlayer()
+                    }
+                }
+            }
+            if destinationsDatesCell.destinationButton.layer.sublayers != nil {
+                for sublayer in destinationsDatesCell.destinationButton.layer.sublayers! {
+                    if sublayer.isKind(of: CAShapeLayer.self) {
+                        sublayer.removeFromSuperlayer()
+                    }
+                }
+            }
             
             //Trip beginning date
             if indexPath.row == 0 {
@@ -4590,14 +4679,15 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.destinationButton.frame.size.width += 20
                 destinationsDatesCell.destinationButton.layer.cornerRadius = (destinationsDatesCell.destinationButton.frame.height) / 2
                 destinationsDatesCell.destinationButton.layer.borderWidth = 2
-                destinationsDatesCell.destinationButton.layer.borderColor = UIColor.white.cgColor
-                destinationsDatesCell.destinationButton.frame.origin.y = 0
-//                if (destinationsDatesCell.destinationButton.layer.sublayers?.count)! > 0 {
-//                    destinationsDatesCell.destinationButton.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-//                }
+                destinationsDatesCell.destinationButton.layer.borderColor = completeColor.cgColor
+                destinationsDatesCell.destinationButton.frame.origin.y = 1
+                
                 if DataContainerSingleton.sharedDataContainer.homeAirport == nil || DataContainerSingleton.sharedDataContainer.homeAirport == "" {
-//                    destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.destinationButton.frame.height)
+                    destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:destinationsDatesCell.destinationButton.frame.height)
                     destinationsDatesCell.destinationButton.layer.borderWidth = 0
+                    destinationsDatesCell.destinationButton.setTitleColor(incompleteColor, for: .normal)
+                } else {
+                    destinationsDatesCell.destinationButton.setTitleColor(completeColor, for: .normal)
                 }
 
                 
@@ -4626,16 +4716,16 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.destinationButton.frame.size.width += 20
                 destinationsDatesCell.destinationButton.layer.cornerRadius = (destinationsDatesCell.destinationButton.frame.height) / 2
                 destinationsDatesCell.destinationButton.layer.borderWidth = 2
-                destinationsDatesCell.destinationButton.layer.borderColor = UIColor.white.cgColor
-                destinationsDatesCell.destinationButton.frame.origin.y = 74
+                destinationsDatesCell.destinationButton.layer.borderColor = completeColor.cgColor
+                destinationsDatesCell.destinationButton.frame.origin.y = 73
                 
                 destinationsDatesCell.travelDateButton.titleLabel?.textAlignment = .center
                 destinationsDatesCell.travelDateButton.titleLabel?.numberOfLines = 0
-                destinationsDatesCell.travelDateButton.titleLabel?.textColor = UIColor.white
-                destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+                destinationsDatesCell.travelDateButton.setTitleColor(completeColor, for: .normal)
+                destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 19)
                 destinationsDatesCell.travelDateButton.layer.cornerRadius = destinationsDatesCell.travelDateButton.frame.size.height / 2
                 destinationsDatesCell.travelDateButton.backgroundColor = UIColor.clear
-                destinationsDatesCell.travelDateButton.layer.borderColor = UIColor.white.cgColor
+                destinationsDatesCell.travelDateButton.layer.borderColor = completeColor.cgColor
                 destinationsDatesCell.travelDateButton.layer.borderWidth = 2
                 
                 //Show destination
@@ -4656,25 +4746,46 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         formatter.dateFormat = "MMM\nd"
                         let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row - 2]]!)
                         destinationsDatesCell.travelDateButton.setTitle(rightDateAsString, for: .normal)
-                    
+                        destinationsDatesCell.travelDateButton.setTitleColor(completeColor, for: .normal)
                     }
                 } else {
                     destinationsDatesCell.travelDateButton.setTitle("Add\ndates", for: .normal)
                     destinationsDatesCell.travelDateButton.layer.borderWidth = 0
+                    destinationsDatesCell.travelDateButton.setTitleColor(incompleteColor, for: .normal)
                 }
 
               
                 
                 if DataContainerSingleton.sharedDataContainer.homeAirport == nil || DataContainerSingleton.sharedDataContainer.homeAirport == "" {
-                    destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.destinationButton.frame.height)
+                    destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:destinationsDatesCell.destinationButton.frame.height)
                     destinationsDatesCell.destinationButton.layer.borderWidth = 0
+                    destinationsDatesCell.destinationButton.setTitleColor(incompleteColor, for: .normal)
+                }else {
+                    destinationsDatesCell.destinationButton.setTitleColor(completeColor, for: .normal)
+                    destinationsDatesCell.destinationButton.layer.borderWidth = 2
+                }
+                if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
+                    if selectedDatesValue.count == 0 {
+                        destinationsDatesCell.travelDateButton.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:destinationsDatesCell.travelDateButton.frame.height)
+                        destinationsDatesCell.travelDateButton.layer.borderWidth = 0
+                        destinationsDatesCell.travelDateButton.setTitleColor(incompleteColor, for: .normal)
+                    } else if selectedDatesValue.count != 0 {
+                        let endDate = selectedDatesValue[selectedDatesValue.count - 1]
+                        formatter.dateFormat = "MMM\nd"
+                        let endDateAsString = formatter.string(from: endDate)
+                        destinationsDatesCell.travelDateButton.setTitle(endDateAsString, for: .normal)
+                        destinationsDatesCell.travelDateButton.setTitleColor(completeColor, for: .normal)
+                        destinationsDatesCell.travelDateButton.layer.borderWidth = 2
+                    }
                 }
 
-                if travelDictionaryArray.count == 0 {
-                    destinationsDatesCell.travelButton.setImage(#imageLiteral(resourceName: "airplaneTakingOffDashed"), for: .normal)
+                if travelDictionaryArray.count < indexPath.row {
+                    destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOffDashed").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                    destinationsDatesCell.travelButton.tintColor = incompleteColor
+                } else {
+                    destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                    destinationsDatesCell.travelButton.tintColor = completeColor
                 }
-
-
                 
                 return destinationsDatesCell
             }
@@ -4705,26 +4816,33 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     
                     destinationsDatesCell.destinationButton.titleLabel?.numberOfLines = 0
                     destinationsDatesCell.destinationButton.setTitle("\(destinationsForTrip[indexPath.row - 1])\nfor \(segmentDates.count - 1) nights", for: .normal)
+                    destinationsDatesCell.inBetweenDatesLine.backgroundColor = completeColor
                 }
+            } else if ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! != 0 {
+                let startDate = (SavedPreferencesForTrip["selected_dates"] as? [Date])?[0]
+                formatter.dateFormat = "MMM\nd"
+                let startDateAsString = formatter.string(from: startDate!)
+                destinationsDatesCell.destinationButton.setTitle("Add destination", for: .normal)
+                destinationsDatesCell.destinationButton.setTitleColor(incompleteColor, for: .normal)
+                destinationsDatesCell.travelDateButton.setTitle(startDateAsString, for: .normal)
+                destinationsDatesCell.travelDateButton.setTitleColor(completeColor, for: .normal)
+                destinationsDatesCell.inBetweenDatesLine.backgroundColor = completeColor
+                
             } else {
+                destinationsDatesCell.destinationButton.setTitle("Add destination", for: .normal)
+                destinationsDatesCell.destinationButton.setTitleColor(incompleteColor, for: .normal)
                 destinationsDatesCell.travelDateButton.setTitle("Add\ndates", for: .normal)
-                destinationsDatesCell.travelDateButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.travelDateButton.frame.height)
-                destinationsDatesCell.travelDateButton.layer.borderWidth = 0
-
-
-                destinationsDatesCell.destinationButton.setTitle("Add\ndestination", for: .normal)
-                destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.destinationButton.frame.height)
-                destinationsDatesCell.destinationButton.layer.borderWidth = 0
+                destinationsDatesCell.travelDateButton.setTitleColor(incompleteColor, for: .normal)
+                destinationsDatesCell.inBetweenDatesLine.backgroundColor = incompleteColor
             }
             
             
             destinationsDatesCell.travelDateButton.titleLabel?.textAlignment = .center
             destinationsDatesCell.travelDateButton.titleLabel?.numberOfLines = 0
-            destinationsDatesCell.travelDateButton.titleLabel?.textColor = UIColor.white
-            destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+            destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 19)
             destinationsDatesCell.travelDateButton.layer.cornerRadius = destinationsDatesCell.travelDateButton.frame.size.height / 2
             destinationsDatesCell.travelDateButton.backgroundColor = UIColor.clear
-            destinationsDatesCell.travelDateButton.layer.borderColor = UIColor.white.cgColor
+            destinationsDatesCell.travelDateButton.layer.borderColor = completeColor.cgColor
             destinationsDatesCell.travelDateButton.layer.borderWidth = 2
             
             destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
@@ -4735,23 +4853,33 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.destinationButton.frame.origin.y = 83
             destinationsDatesCell.destinationButton.layer.cornerRadius = (destinationsDatesCell.destinationButton.frame.height) / 2
             destinationsDatesCell.destinationButton.layer.borderWidth = 2
-            destinationsDatesCell.destinationButton.layer.borderColor = UIColor.white.cgColor
+            destinationsDatesCell.destinationButton.layer.borderColor = completeColor.cgColor
             
-            if destinationsForTrip.count == 0 {
-                destinationsDatesCell.travelDateButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.travelDateButton.frame.height)
+            if destinationsForTrip.count == 0 && indexPath.row != destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 && indexPath.row != 0 && ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! == 0 {
+                destinationsDatesCell.travelDateButton.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:destinationsDatesCell.travelDateButton.frame.height)
                 destinationsDatesCell.travelDateButton.layer.borderWidth = 0
-                
-                destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: UIColor.white, height:destinationsDatesCell.destinationButton.frame.height)
+                destinationsDatesCell.inBetweenDatesLine.backgroundColor = incompleteColor
+            }
+            if destinationsForTrip.count == 0 && indexPath.row != destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 && indexPath.row != 0 {
+                destinationsDatesCell.destinationButton.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:destinationsDatesCell.destinationButton.frame.height)
                 destinationsDatesCell.destinationButton.layer.borderWidth = 0
             }
             
-            if travelDictionaryArray.count == 0 {
-                destinationsDatesCell.travelButton.setImage(#imageLiteral(resourceName: "airplaneTakingOffDashed"), for: .normal)
+            if travelDictionaryArray.count < indexPath.row {
+                destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOffDashed").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                destinationsDatesCell.travelButton.tintColor = incompleteColor
+            } else {
+                destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                destinationsDatesCell.travelButton.tintColor = completeColor
             }
-            if placeToStayDictionaryArray.count == 0 {
-                destinationsDatesCell.travelButton.setImage(#imageLiteral(resourceName: "apartmentAngledRoofDashed"), for: .normal)
+            if placeToStayDictionaryArray.count < indexPath.row {
+                destinationsDatesCell.placeToStayButton.setBackgroundImage(#imageLiteral(resourceName: "apartmentAngledRoofDashed").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                destinationsDatesCell.placeToStayButton.tintColor = incompleteColor
+            } else {
+                destinationsDatesCell.placeToStayButton.setBackgroundImage(#imageLiteral(resourceName: "apartmentAngledRoof").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                destinationsDatesCell.placeToStayButton.tintColor = completeColor
             }
-            destinationsDatesCell.placeToStayButton.frame.origin.x = destinationsDatesCell.destinationButton.frame.maxX + 30
+            destinationsDatesCell.placeToStayButton.frame.origin.x = destinationsDatesCell.destinationButton.frame.maxX + 18
             destinationsDatesCell.placeToStayButton.frame.origin.y = destinationsDatesCell.destinationButton.frame.midY - destinationsDatesCell.placeToStayButton.frame.size.height / 2
 
             
@@ -4968,7 +5096,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
     }
     func deleteContact(indexPath: IndexPath) {
-        
         contacts?.remove(at: indexPath.row - 1)
         contactIDs?.remove(at: indexPath.row - 1)
         contactPhoneNumbers.remove(at: indexPath.row - 1)
@@ -4986,7 +5113,13 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             sendProposalQuestionView?.button3?.isHidden = true
         }
         
-        contactsCollectionView.deleteItems(at: [indexPath])
+        //Delete user contact bubble if last contact deleted
+        if (contacts?.count)! == 0 {
+            contactsCollectionView.deleteItems(at: [indexPath,IndexPath(item:0,section:0)])
+        } else {
+            contactsCollectionView.deleteItems(at: [indexPath])
+        }
+        
         let visibleContactsCells = contactsCollectionView.visibleCells as! [contactsCollectionViewCell]
         for visibleContactCell in visibleContactsCells {
             let newIndexPathForItem = contactsCollectionView.indexPath(for: visibleContactCell)
@@ -4996,6 +5129,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         if contacts?.count == 0 || contacts == nil {
             dismissDeleteContactsMode()
         }
+        handleAddInviteesButton()
     }
 
     //    func leaveDeleteContactsMode(touch: UITapGestureRecognizer) {
@@ -5176,6 +5310,9 @@ extension TripViewController {
         self.view.addSubview(didYouBuyTheFlightQuestionPopover!)
         self.view.insertSubview(popupBackgroundFilterView, belowSubview: didYouBuyTheFlightQuestionPopover!)
         self.popupBackgroundFilterView.isHidden = false
+        self.infoKeyButton_1.isHidden = true
+        self.infoKeyButton_2.isHidden = true
+        self.infoKeyButton_3.isHidden = true
         let when = DispatchTime.now() + 0.6
         self.popupBackgroundFilterView.alpha = 0
         DispatchQueue.main.asyncAfter(deadline: when) {
@@ -5315,9 +5452,6 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromFlightSearchResultsSceneViewControllerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
-        
-        self.segmentedControl = nil
-        self.segmentedControl?.removeFromSuperview()
     }
     func flightSearchWaitingScreenViewController_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -5327,9 +5461,6 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromWaitingScreenViewControllerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
-        
-        self.segmentedControl = nil
-        self.segmentedControl?.removeFromSuperview()
     }
     func flightTicketViewViewController_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -5340,8 +5471,6 @@ extension TripViewController {
         backButton?.addTarget(self, action: #selector(popFromTicketViewViewControllerToFlightResults), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         
-        self.segmentedControl = nil
-        self.segmentedControl?.removeFromSuperview()
     }
     func addBackButtonPointedAtTripList() {
         if backButton != nil {
@@ -5354,6 +5483,8 @@ extension TripViewController {
         backButton?.addTarget(self, action: #selector(back), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         
+    }
+    func addTwicketSegmentedControl() {
         let segmentedControlTitles = ["Assistant","Itinerary","Chat"]
         segmentedControl = TwicketSegmentedControl(frame: CGRect(x: UIScreen.main.bounds.width / 2 - 135, y: 20, width: 270, height: 40))
         segmentedControl?.setSegmentItems(segmentedControlTitles)
@@ -5364,7 +5495,6 @@ extension TripViewController {
         
         self.topView.addSubview(segmentedControl!)
     }
-    
     func HLCommonResultsVC_viewWillAppear(){
         self.backButton?.removeFromSuperview()
         backButton = nil
@@ -5374,8 +5504,6 @@ extension TripViewController {
         backButton?.addTarget(self, action: #selector(popFromHotelResultsViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         
-        self.segmentedControl = nil
-        self.segmentedControl?.removeFromSuperview()
     }
     func popFromHotelResultsViewControllerToHotelSearch(){
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromHotelResultsViewControllerToHotelSearch"), object: nil)
@@ -5389,12 +5517,32 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromWaitingViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
-        
-        self.segmentedControl = nil
-        self.segmentedControl?.removeFromSuperview()
     }
     func popFromWaitingViewControllerToHotelSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromWaitingScreenViewControllerToHotelSearch"), object: nil)
+    }
+    func addBackButtonPointedAtItineraryFromHotelDetails() {
+        if backButton != nil {
+            self.backButton?.removeFromSuperview()
+            backButton = nil
+        }
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton?.addTarget(self, action: #selector(bookedHotelDetailsBackToItinerary), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
+    }
+    func bookedHotelDetailsBackToItinerary() {
+        for subview in itineraryView.subviews {
+            subview.isHidden = false
+        }
+        
+        self.willMove(toParentViewController: nil)
+        hotelBookedOnPlanitController?.view.removeFromSuperview()
+        hotelBookedOnPlanitController?.removeFromParentViewController()
+        hotelBookedOnPlanitController = nil
+        
+        addBackButtonPointedAtTripList()
     }
 }
 
@@ -5402,7 +5550,7 @@ extension TripViewController {
     
     
     func setUpItinerary() {
-        
+        handleAddInviteesButton()
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         
         //MARK: Itinerary viewDidLoad
