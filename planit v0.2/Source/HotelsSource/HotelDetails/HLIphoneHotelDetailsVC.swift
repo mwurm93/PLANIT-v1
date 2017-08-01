@@ -53,11 +53,11 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
     }
 
     func addHotelInfoView(){
-        hotelInfoView = Bundle.main.loadNibNamed("HLHotelInfoView", owner: self, options: nil)?.first! as? HLHotelInfoView
-        hotelInfoView?.hotel = super.variant.hotel
-        self.view.addSubview(hotelInfoView!)
-        
-        let test = hotelInfoView?.frame
+//        hotelInfoView = Bundle.main.loadNibNamed("HLHotelInfoView", owner: self, options: nil)?.first! as? HLHotelInfoView
+//        hotelInfoView?.hotel = super.variant.hotel
+//        self.view.addSubview(hotelInfoView!)
+//        
+//        let test = hotelInfoView?.frame
         
     }
     

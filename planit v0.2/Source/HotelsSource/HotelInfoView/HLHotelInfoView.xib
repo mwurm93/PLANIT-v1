@@ -64,11 +64,6 @@
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <variation key="default">
-                <mask key="subviews">
-                    <exclude reference="BYy-p7-55M"/>
-                </mask>
-            </variation>
             <point key="canvasLocation" x="110" y="55"/>
         </view>
     </objects>
