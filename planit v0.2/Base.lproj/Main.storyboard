@@ -781,6 +781,7 @@
                         <outlet property="itineraryButton3" destination="YVR-ox-cup" id="WRx-0r-9n8"/>
                         <outlet property="itineraryView" destination="4vl-6q-KSK" id="v0S-3z-TTO"/>
                         <outlet property="popupBackgroundFilterView" destination="bSI-Ve-jcH" id="o7L-fB-bmY"/>
+                        <outlet property="popupBackgroundFilterViewCloseButton" destination="x3J-JX-kJY" id="U9u-sh-HQG"/>
                         <outlet property="popupBackgroundFilterViewVisualEffectView" destination="aHw-9I-xVR" id="6gv-N6-3HM"/>
                         <outlet property="popupBackgroundViewDeleteContacts" destination="f3k-Cv-gwz" id="Ja5-a0-BKm"/>
                         <outlet property="popupBackgroundViewDeleteContactsWithinCollectionView" destination="oNr-Ee-1LP" id="Enh-27-L61"/>
@@ -888,7 +889,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="310" height="380"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sE8-L8-fPg">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sE8-L8-fPg">
                             <rect key="frame" x="0.0" y="135" width="310" height="110"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -1002,6 +1003,11 @@
                         </view>
                     </subviews>
                     <color key="backgroundColor" red="0.32534942140000001" green="0.33106171680000002" blue="0.35767922009999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <variation key="default">
+                        <mask key="subviews">
+                            <exclude reference="sE8-L8-fPg"/>
+                        </mask>
+                    </variation>
                 </view>
                 <view contentMode="scaleToFill" id="bSI-Ve-jcH">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -1015,7 +1021,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </view>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <blurEffect style="dark"/>
+                            <blurEffect style="light"/>
                         </visualEffectView>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aob-Fq-l69">
                             <rect key="frame" x="164" y="100" width="46" height="30"/>
@@ -1033,7 +1039,7 @@
                             <state key="normal" title="Planned &amp; confirmed by group"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x3J-JX-kJY">
-                            <rect key="frame" x="0.0" y="0.0" width="79" height="74"/>
+                            <rect key="frame" x="10" y="10" width="60" height="60"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                             <state key="normal" title="╳"/>

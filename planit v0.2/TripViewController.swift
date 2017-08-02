@@ -119,6 +119,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var textView: UITextView?
     var incompleteColor = UIColor(red: 250/255, green: 190/255, blue: 190/255, alpha: 1)
     var completeColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+    var detailedInformationSubviewMode = ""
     //PPN Cities
     var ppnCarRentalCities = [Dictionary<String, String>]()
     var ppnHotelCities = [Dictionary<String, String>]()
@@ -164,6 +165,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var infoKeyButton_3: UIButton!
     @IBOutlet weak var infoButton: UIButton!
     @IBOutlet weak var popupBackgroundFilterViewVisualEffectView: UIVisualEffectView!
+    @IBOutlet weak var popupBackgroundFilterViewCloseButton: UIButton!
     
     
     override func viewDidLoad() {
@@ -3007,8 +3009,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
-        
-            
             spawnHotelSearchQuestionView()
         }
     }
@@ -3044,7 +3044,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     
                     placeToStayDictionaryArray[indexOfDestinationBeingPlanned] = ["typeOfPlaceToStay":"shortTermRental"]
                 }
-                
             }
             SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -3086,6 +3085,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func shortTermRentalSearchQuestionView_done(sender:UIButton) {
         if sender.isSelected == true {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["shortTermRentalText"] = shortTermRentalSearchQuestionView?.textView?.text
+            SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
             spawnPlaceForGroupOrJustYouQuestionView()
         }
     }
@@ -3096,6 +3102,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func stayWithSomeoneIKnowQuestionView_done(sender:UIButton) {
         if sender.isSelected == true {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["stayWithSomeoneIKnowText"] = stayWithSomeoneIKnowQuestionView?.textView?.text
+            SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
             spawnPlaceForGroupOrJustYouQuestionView()
         }
     }
@@ -3136,84 +3149,128 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func yesIKnowWhereImStayingQuestionView_hotel(sender:UIButton) {
         if sender.isSelected == true {
-            if hotelSearchQuestionView != nil {
-                hotelSearchQuestionView?.removeFromSuperview()
-                hotelSearchQuestionView = nil
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned >= placeToStayDictionaryArray.count {
+                placeToStayDictionaryArray.append(["typeOfPlaceToStay":"hotel"])
+            } else if indexOfDestinationBeingPlanned < placeToStayDictionaryArray.count {
+                if placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["typeOfPlaceToStay"] as! String != "hotel" {
+
+                    if hotelSearchQuestionView != nil {
+                        hotelSearchQuestionView?.removeFromSuperview()
+                        hotelSearchQuestionView = nil
+                    }
+                    if stayWithSomeoneIKnowQuestionView != nil {
+                        stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
+                        stayWithSomeoneIKnowQuestionView = nil
+                    }
+                    if placeForGroupOrJustYouQuestionView != nil {
+                        placeForGroupOrJustYouQuestionView?.removeFromSuperview()
+                        placeForGroupOrJustYouQuestionView = nil
+                    }
+                    if whatTypeOfPlaceToStayQuestionView != nil {
+                        whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
+                        whatTypeOfPlaceToStayQuestionView = nil
+                    }
+                    if shortTermRentalSearchQuestionView != nil {
+                        shortTermRentalSearchQuestionView?.removeFromSuperview()
+                        shortTermRentalSearchQuestionView = nil
+                    }
+                    placeToStayDictionaryArray[indexOfDestinationBeingPlanned] = ["typeOfPlaceToStay":"hotel"]
+                }
             }
-            if stayWithSomeoneIKnowQuestionView != nil {
-                stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
-                stayWithSomeoneIKnowQuestionView = nil
-            }
-            if placeForGroupOrJustYouQuestionView != nil {
-                placeForGroupOrJustYouQuestionView?.removeFromSuperview()
-                placeForGroupOrJustYouQuestionView = nil
-            }
-            if whatTypeOfPlaceToStayQuestionView != nil {
-                whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
-                whatTypeOfPlaceToStayQuestionView = nil
-            }
-            if shortTermRentalSearchQuestionView != nil {
-                shortTermRentalSearchQuestionView?.removeFromSuperview()
-                shortTermRentalSearchQuestionView = nil
-            }
+            SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            
             spawnDoYouNeedHelpBookingAHotelQuestionView()
         }
     }
     func yesIKnowWhereImStayingQuestionView_shortTermRental(sender:UIButton) {
         if sender.isSelected == true {
-            if doYouNeedHelpBookingAHotelQuestionView != nil {
-                doYouNeedHelpBookingAHotelQuestionView?.removeFromSuperview()
-                doYouNeedHelpBookingAHotelQuestionView = nil
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned >= placeToStayDictionaryArray.count {
+                placeToStayDictionaryArray.append(["typeOfPlaceToStay":"shortTermRental"])
+            } else if indexOfDestinationBeingPlanned < placeToStayDictionaryArray.count {
+                if placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["typeOfPlaceToStay"] as! String != "shortTermRental" {
+
+                    if doYouNeedHelpBookingAHotelQuestionView != nil {
+                        doYouNeedHelpBookingAHotelQuestionView?.removeFromSuperview()
+                        doYouNeedHelpBookingAHotelQuestionView = nil
+                    }
+                    if hotelSearchQuestionView != nil {
+                        hotelSearchQuestionView?.removeFromSuperview()
+                        hotelSearchQuestionView = nil
+                    }
+                    if stayWithSomeoneIKnowQuestionView != nil {
+                        stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
+                        stayWithSomeoneIKnowQuestionView = nil
+                    }
+                    if placeForGroupOrJustYouQuestionView != nil {
+                        placeForGroupOrJustYouQuestionView?.removeFromSuperview()
+                        placeForGroupOrJustYouQuestionView = nil
+                    }
+                    if whatTypeOfPlaceToStayQuestionView != nil {
+                        whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
+                        whatTypeOfPlaceToStayQuestionView = nil
+                    }
+                    if shortTermRentalSearchQuestionView != nil {
+                        shortTermRentalSearchQuestionView?.removeFromSuperview()
+                        shortTermRentalSearchQuestionView = nil
+                    }
+                    
+                    placeToStayDictionaryArray[indexOfDestinationBeingPlanned] = ["typeOfPlaceToStay":"shortTermRental"]
+                }
             }
-            if hotelSearchQuestionView != nil {
-                hotelSearchQuestionView?.removeFromSuperview()
-                hotelSearchQuestionView = nil
-            }
-            if stayWithSomeoneIKnowQuestionView != nil {
-                stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
-                stayWithSomeoneIKnowQuestionView = nil
-            }
-            if placeForGroupOrJustYouQuestionView != nil {
-                placeForGroupOrJustYouQuestionView?.removeFromSuperview()
-                placeForGroupOrJustYouQuestionView = nil
-            }
-            if whatTypeOfPlaceToStayQuestionView != nil {
-                whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
-                whatTypeOfPlaceToStayQuestionView = nil
-            }
-            if shortTermRentalSearchQuestionView != nil {
-                shortTermRentalSearchQuestionView?.removeFromSuperview()
-                shortTermRentalSearchQuestionView = nil
-            }
+            SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
             spawnShortTermRentalSearchQuestionView()
         }
     }
     func yesIKnowWhereImStayingQuestionView_stayWithSomeoneIKnow(sender:UIButton) {
         if sender.isSelected == true {
-            if doYouNeedHelpBookingAHotelQuestionView != nil {
-                doYouNeedHelpBookingAHotelQuestionView?.removeFromSuperview()
-                doYouNeedHelpBookingAHotelQuestionView = nil
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned >= placeToStayDictionaryArray.count {
+                placeToStayDictionaryArray.append(["typeOfPlaceToStay":"stayWithSomeoneIKnow"])
+            } else if indexOfDestinationBeingPlanned < placeToStayDictionaryArray.count {
+                if placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["typeOfPlaceToStay"] as! String != "stayWithSomeoneIKnow" {
+                    
+                    if doYouNeedHelpBookingAHotelQuestionView != nil {
+                        doYouNeedHelpBookingAHotelQuestionView?.removeFromSuperview()
+                        doYouNeedHelpBookingAHotelQuestionView = nil
+                    }
+                    if hotelSearchQuestionView != nil {
+                        hotelSearchQuestionView?.removeFromSuperview()
+                        hotelSearchQuestionView = nil
+                    }
+                    if stayWithSomeoneIKnowQuestionView != nil {
+                        stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
+                        stayWithSomeoneIKnowQuestionView = nil
+                    }
+                    if placeForGroupOrJustYouQuestionView != nil {
+                        placeForGroupOrJustYouQuestionView?.removeFromSuperview()
+                        placeForGroupOrJustYouQuestionView = nil
+                    }
+                    if whatTypeOfPlaceToStayQuestionView != nil {
+                        whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
+                        whatTypeOfPlaceToStayQuestionView = nil
+                    }
+                    if shortTermRentalSearchQuestionView != nil {
+                        shortTermRentalSearchQuestionView?.removeFromSuperview()
+                        shortTermRentalSearchQuestionView = nil
+                    }
+                    
+                    placeToStayDictionaryArray[indexOfDestinationBeingPlanned] = ["typeOfPlaceToStay":"stayWithSomeoneIKnow"]
+                }
             }
-            if hotelSearchQuestionView != nil {
-                hotelSearchQuestionView?.removeFromSuperview()
-                hotelSearchQuestionView = nil
-            }
-            if stayWithSomeoneIKnowQuestionView != nil {
-                stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
-                stayWithSomeoneIKnowQuestionView = nil
-            }
-            if placeForGroupOrJustYouQuestionView != nil {
-                placeForGroupOrJustYouQuestionView?.removeFromSuperview()
-                placeForGroupOrJustYouQuestionView = nil
-            }
-            if whatTypeOfPlaceToStayQuestionView != nil {
-                whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
-                whatTypeOfPlaceToStayQuestionView = nil
-            }
-            if shortTermRentalSearchQuestionView != nil {
-                shortTermRentalSearchQuestionView?.removeFromSuperview()
-                shortTermRentalSearchQuestionView = nil
-            }
+            SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+
             spawnStayWithSomeoneIKnowQuestionView()
         }
     }
@@ -3340,6 +3397,32 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             spawnSendProposalQuestionView()
         }
     }
+    
+    //MARK: UITextViewDelegate
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if (text == "\n") {
+            textView.resignFirstResponder()
+            if detailedInformationSubviewMode == "stayWithSomeoneIKnow" {
+                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+                let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+                placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["stayWithSomeoneIKnowText"] = textView.text
+                SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            } else if detailedInformationSubviewMode == "shortTermRental" {
+                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+                let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+                placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["shortTermRentalText"] = textView.text
+                SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+            }
+            return false
+        }
+        return true
+    }
+
     // MARK: UITextFieldDelegate
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == tripNameQuestionView?.tripNameQuestionTextfield {
@@ -3763,15 +3846,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.view.endEditing(true)
         chatController?.inputToolbar.contentView.textView.becomeFirstResponder()
     }
-    func animateInBackgroundFilterView(withInfoView: Bool, withBlurEffect: Bool) {
-        
-        popupBackgroundFilterView.alpha = 0
-        popupBackgroundFilterView.isHidden = false
+    func animateInBackgroundFilterView(withInfoView: Bool, withBlurEffect: Bool, withCloseButton: Bool) {
         if withBlurEffect {
             popupBackgroundFilterViewVisualEffectView.isHidden = false
         } else {
             popupBackgroundFilterViewVisualEffectView.isHidden = true
         }
+        popupBackgroundFilterView.isHidden = false
         if withInfoView {
             infoKeyButton_1.isHidden = false
             infoKeyButton_2.isHidden = false
@@ -3781,18 +3862,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             infoKeyButton_2.isHidden = true
             infoKeyButton_3.isHidden = true
         }
-        self.view.addSubview(popupBackgroundFilterView)
-        UIView.animate(withDuration: 0.4) {
-            self.popupBackgroundFilterView.alpha = 1
+        if withCloseButton {
+            popupBackgroundFilterViewCloseButton.isHidden = false
+        } else {
+            popupBackgroundFilterViewCloseButton.isHidden = true
         }
+        self.view.addSubview(popupBackgroundFilterView)
     }
     func animateOutBackgroundFilterView() {
-        popupBackgroundFilterView.alpha = 0
         self.popupBackgroundFilterView.removeFromSuperview()
-        UIView.animate(withDuration: 0.4) {
-            self.popupBackgroundFilterView.alpha = 0
-        }
-        popupBackgroundFilterView.isHidden = true
+        popupBackgroundFilterView.isHidden = true        
     }
     
     // MARK: Actions
@@ -3803,7 +3882,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         checkContactsAccess()
     }
     @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
-        animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true)
+        animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true, withCloseButton: true)
     }
 //    @IBAction func assistantButtonTouchedUpInside(_ sender: Any) {
 //        assistant()
@@ -4515,7 +4594,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         
                         segmentedControl?.move(to: 0)
                         assistant()
-
                     } else {
                         //No hotel booked, no saved hotels, should hotel search in Assistant
                         SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
@@ -4526,22 +4604,35 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         
                         segmentedControl?.move(to: 0)
                         assistant()
-                    
                     }
-                    
                 
                 } else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "shortTermRental"{
+                    detailedInformationSubviewMode = "shortTermRental"
                     //Show texted entered, with clickable links
-                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true)
+                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                     setupNonHotelPlaceToStayDetailView()
                     detailedInformationSubview.isHidden = false
+                    detailedInformationSubview.frame.size = CGSize(width: 250, height: 350)
+                    let bounds = UIScreen.main.bounds
+                    detailedInformationSubview.frame.origin = CGPoint(x: (bounds.width - detailedInformationSubview.frame.width) / 2, y: (bounds.height - detailedInformationSubview.frame.height) / 2)
+//                    let test = placeToStayDictionaryArray
+//                    let test2 = placeToStayDictionaryArray[sender.tag - 1] as! [String:String]
+                    
+                    textView?.text = placeToStayDictionaryArray[sender.tag - 1]["shortTermRentalText"] as! String
+                    textView?.resignFirstResponder()
                     self.view.addSubview(detailedInformationSubview)
                     
-                } else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "withFriend"{
+                } else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "stayWithSomeoneIKnow"{
+                    detailedInformationSubviewMode = "stayWithSomeoneIKnow"
                     //Show texted entered
-                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true)
+                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                     setupNonHotelPlaceToStayDetailView()
                     detailedInformationSubview.isHidden = false
+                    detailedInformationSubview.frame.size = CGSize(width: 250, height: 350)
+                    let bounds = UIScreen.main.bounds
+                    detailedInformationSubview.frame.origin = CGPoint(x: (bounds.width - detailedInformationSubview.frame.width) / 2, y: (bounds.height - detailedInformationSubview.frame.height) / 2)
+                    textView?.text = placeToStayDictionaryArray[sender.tag - 1]["stayWithSomeoneIKnowText"] as! String
+                    textView?.resignFirstResponder()
                     self.view.addSubview(detailedInformationSubview)
                 } else {
                     segmentedControl?.move(to: 0)
@@ -4562,6 +4653,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     func setupNonHotelPlaceToStayDetailView(){
         let bounds = UIScreen.main.bounds
+        detailedInformationSubview.layer.cornerRadius = 5
         
         //Button1
         button1 = UIButton(type: .custom)
@@ -4570,17 +4662,17 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         button1?.layer.borderWidth = 1
         button1?.layer.borderColor = UIColor.white.cgColor
-        button1?.layer.masksToBounds = true
+//        button1?.layer.masksToBounds = true
         button1?.titleLabel?.numberOfLines = 0
         button1?.titleLabel?.textAlignment = .center
         button1?.setTitle("Done", for: .normal)
-        button1?.translatesAutoresizingMaskIntoConstraints = false
+//        button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.detailedInformationDoneButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
         detailedInformationSubview.addSubview(button1!)
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
-        button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
+        button1?.frame.origin.x = ((bounds.width) - (button1?.frame.width)!) / 2
         button1?.frame.origin.y = 300
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
@@ -4600,7 +4692,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         textView?.clearsOnInsertion = true
         textView?.translatesAutoresizingMaskIntoConstraints = false
         detailedInformationSubview.addSubview(textView!)
-        textView?.frame = CGRect(x: 10, y: 130, width: bounds.size.width - 20, height: 140)
+        textView?.frame = CGRect(x: 25, y: 130, width: 200, height: 140)
         let width = 1.0
         let borderLine = UIView()
         borderLine.frame = CGRect(x: Double((textView?.frame.minX)!), y: Double((textView?.frame.maxY)!) - width, width: Double((textView?.frame.width)!), height: width)
@@ -4612,12 +4704,12 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         textView?.contentOffset.x = 0
         textView?.contentOffset.y = -topCorrect!
 
-
     }
     func detailedInformationDoneButtonTouchedUpInside(sender:UIButton) {
         animateOutBackgroundFilterView()
         detailedInformationSubview.isHidden = true
         self.detailedInformationSubview.removeFromSuperview()
+        self.detailedInformationSubview.removeAllSubviews()
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == destinationsDatesCollectionView {
@@ -4881,7 +4973,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             }
             destinationsDatesCell.placeToStayButton.frame.origin.x = destinationsDatesCell.destinationButton.frame.maxX + 18
             destinationsDatesCell.placeToStayButton.frame.origin.y = destinationsDatesCell.destinationButton.frame.midY - destinationsDatesCell.placeToStayButton.frame.size.height / 2
-
             
             if indexPath.row != destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 && indexPath.row != 0 {
                 
