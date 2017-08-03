@@ -3484,7 +3484,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             return false
         }
+        
         return true
+    }
+    func textViewDidChange(_ textView: UITextView) {
+        var topCorrect: CGFloat? = textView.bounds.size.height - textView.contentSize.height
+        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+        textView.contentOffset = CGPoint()
+        textView.contentOffset.x = 0
+        textView.contentOffset.y = -topCorrect!
     }
 
     // MARK: UITextFieldDelegate
@@ -4705,7 +4713,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         setupDetailedInformationView(size: CGSize(width: bounds.width-6, height: 650), withTextView:false,withDoneButton:true)
                         button1?.frame.origin.y = 610
                         self.detailedInformationSubview.addSubview((hotelBookedOnPlanitController?.view)!)
-                      hotelBookedOnPlanitController?.view.frame = CGRect(x: -3, y: 0, width: self.detailedInformationSubview.bounds.width, height: self.detailedInformationSubview.bounds.height - 50)
+                        hotelBookedOnPlanitController?.view.frame = CGRect(x: 5, y: 0, width: self.detailedInformationSubview.bounds.width-10, height: self.detailedInformationSubview.bounds.height - 80)
+                        hotelBookedOnPlanitController?.view.layer.cornerRadius = 5
 
                         
                         self.itineraryView?.addSubview((hotelBookedOnPlanitController?.view)!)
@@ -4761,6 +4770,11 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                     setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
                     textView?.text = placeToStayDictionaryArray[sender.tag - 1]["shortTermRentalText"] as! String
+                    var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+                    topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+                    textView?.contentOffset = CGPoint()
+                    textView?.contentOffset.x = 0
+                    textView?.contentOffset.y = -topCorrect!
                     textView?.resignFirstResponder()
                     self.view.addSubview(detailedInformationSubview)
                     
@@ -4770,6 +4784,11 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                     setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
                     textView?.text = placeToStayDictionaryArray[sender.tag - 1]["stayWithSomeoneIKnowText"] as! String
+                    var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+                    topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+                    textView?.contentOffset = CGPoint()
+                    textView?.contentOffset.x = 0
+                    textView?.contentOffset.y = -topCorrect!
                     textView?.resignFirstResponder()
                     self.view.addSubview(detailedInformationSubview)
                 } else {
@@ -4828,7 +4847,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             button1?.sizeToFit()
             button1?.frame.size.height = 30
             button1?.frame.size.width += 20
-            button1?.frame.origin.x = ((bounds.width) - (button1?.frame.width)!) / 2
+            button1?.frame.origin.x = ((bounds.width) - (button1?.frame.width)!) / 2 - detailedInformationSubview.frame.minX
             button1?.frame.origin.y = 300
             button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         }
@@ -4856,11 +4875,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             borderLine.frame = CGRect(x: Double((textView?.frame.minX)!), y: Double((textView?.frame.maxY)!) - width, width: Double((textView?.frame.width)!), height: width)
             borderLine.backgroundColor = UIColor.white
             self.detailedInformationSubview.addSubview(borderLine)
-            var topCorrect: CGFloat? = ((textView?.bounds.size.height)! - (textView?.contentSize.height)!)
-            topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
-            textView?.contentOffset = CGPoint()
-            textView?.contentOffset.x = 0
-            textView?.contentOffset.y = -topCorrect!
+
         }
 
     }

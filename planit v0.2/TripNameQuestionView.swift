@@ -36,7 +36,7 @@ class TripNameQuestionView: UIView {
         
         questionLabel3?.frame = CGRect(x: 10, y: 15, width: bounds.size.width - 20, height: 60)
         
-        tripNameQuestionTextfield?.frame = CGRect(x: (bounds.size.width-275)/2, y: 70, width: 275, height: 30)
+        tripNameQuestionTextfield?.frame = CGRect(x: (bounds.size.width-240)/2, y: 70, width: 240, height: 30)
         tripNameQuestionTextfield?.setBottomBorder(borderColor: UIColor.white)
         
         tripNameQuestionButton?.sizeToFit()
