@@ -147,6 +147,7 @@ class DoYouNeedHelpBookingAHotelQuestionView: UIView, UITextViewDelegate {
         let textViewPlaceholder = "\nExample: Staying at the Westin!"
         textView?.text = textViewPlaceholder
         textView?.indicatorStyle = .white
+        textView?.dataDetectorTypes = .all
         textView?.clearsOnInsertion = true
         textView?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(textView!)

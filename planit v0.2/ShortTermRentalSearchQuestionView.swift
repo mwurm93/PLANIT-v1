@@ -120,6 +120,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         textView?.text = textViewPlaceholder
         textView?.indicatorStyle = .white
         textView?.clearsOnInsertion = true
+        textView?.dataDetectorTypes = .all
         textView?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(textView!)
         

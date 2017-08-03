@@ -114,6 +114,7 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         textView?.layer.masksToBounds = true
         textView?.textAlignment = .left
         textView?.returnKeyType = .next
+        textView?.dataDetectorTypes = .all
         textView?.backgroundColor = UIColor.clear
         textView?.font = UIFont.systemFont(ofSize: 18)
         let textViewPlaceholder = "\nExample: Amtrak Acela Train #12 departing from New York Penn Station on July 7th at 9:30pm and arriving in Boston at 12:30pm"

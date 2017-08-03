@@ -110,6 +110,7 @@ class StayWithSomeoneIKnowQuestionView: UIView, UITextViewDelegate {
         textView = UITextView(frame: CGRect.zero)
         textView?.delegate = self
         textView?.textColor = UIColor.white
+        textView?.dataDetectorTypes = .all
         textView?.contentMode = .bottomLeft
         textView?.layer.masksToBounds = true
         textView?.textAlignment = .left

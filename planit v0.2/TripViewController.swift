@@ -3333,6 +3333,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     func doYouNeedHelpBookingAHotelQuestionView_Done(sender:UIButton) {
         if sender.isSelected == true {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["hotelText"] = doYouNeedHelpBookingAHotelQuestionView?.textView?.text
+            SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+
+            
+            
             spawnPlaceForGroupOrJustYouQuestionView()
         }        
     }
@@ -3481,6 +3490,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
                 saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                 
+            } else if detailedInformationSubviewMode == "hotel" {
+                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+                let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+                placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["hotelText"] = textView.text
+                SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+
             }
             return false
         }
@@ -4710,17 +4727,35 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         
                         animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                         let bounds = UIScreen.main.bounds
-                        setupDetailedInformationView(size: CGSize(width: bounds.width-6, height: 650), withTextView:false,withDoneButton:true)
+                        setupDetailedInformationView(size: CGSize(width: bounds.width-6, height: 650), withTextView:false,withDoneButton:false)
                         button1?.frame.origin.y = 610
                         self.detailedInformationSubview.addSubview((hotelBookedOnPlanitController?.view)!)
-                        hotelBookedOnPlanitController?.view.frame = CGRect(x: 5, y: 0, width: self.detailedInformationSubview.bounds.width-10, height: self.detailedInformationSubview.bounds.height - 80)
+                        hotelBookedOnPlanitController?.view.frame = CGRect(x: 10, y: 15, width: bounds.width-20, height: bounds.height - 100)
                         hotelBookedOnPlanitController?.view.layer.cornerRadius = 5
-
+                       
+                        let doneButton: UIButton?
+                        doneButton = UIButton(type: .custom)
+                        doneButton?.frame = CGRect.zero
+                        doneButton?.setTitleColor(UIColor.white, for: .normal)
+                        doneButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+                        doneButton?.layer.borderWidth = 1
+                        doneButton?.layer.borderColor = UIColor.white.cgColor
+                        doneButton?.titleLabel?.numberOfLines = 0
+                        doneButton?.titleLabel?.textAlignment = .center
+                        doneButton?.setTitle("Done", for: .normal)
+                        doneButton?.addTarget(self, action: #selector(self.bookedHotelDetailsBackToItinerary), for: UIControlEvents.touchUpInside)
+                        itineraryView.addSubview(doneButton!)
+                        doneButton?.sizeToFit()
+                        doneButton?.frame.size.height = 30
+                        doneButton?.frame.size.width += 20
+                        doneButton?.frame.origin.x = ((bounds.width) - (doneButton?.frame.width)!) / 2 - itineraryView.frame.minX
+                        doneButton?.frame.origin.y = 550
+                        doneButton?.layer.cornerRadius = (doneButton?.frame.height)! / 2
                         
                         self.itineraryView?.addSubview((hotelBookedOnPlanitController?.view)!)
                         hotelBookedOnPlanitController?.didMove(toParentViewController: self)
                         
-                        addBackButtonPointedAtItineraryFromHotelDetails()
+//                        addBackButtonPointedAtItineraryFromHotelDetails()
                         
                     } else if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["hotelsSavedOnPlanit"] != nil {
                         let alertController = UIAlertController(title: "Choose a flight!", message: "Just click search and your saved flights will be in the refreshed results.", preferredStyle: .alert)
@@ -4743,6 +4778,19 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         alertController.addAction(cancelAction)
                         alertController.addAction(okAction)
                         self.present(alertController, animated: true, completion: nil)
+                    } else if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["hotelText"] != nil {
+                        detailedInformationSubviewMode = "hotel"
+                        //Show texted entered
+                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+                        setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
+                        textView?.text = placeToStayDictionaryArray[sender.tag - 1]["hotelText"] as! String
+                        var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+                        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+                        textView?.contentOffset = CGPoint()
+                        textView?.contentOffset.x = 0
+                        textView?.contentOffset.y = -topCorrect!
+                        textView?.resignFirstResponder()
+                        self.view.addSubview(detailedInformationSubview)
                     } else {
                         let alertController = UIAlertController(title: "Check out flights!", message: "", preferredStyle: .alert)
                         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
@@ -4856,6 +4904,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             //Textview
             textView = UITextView(frame: CGRect.zero)
             textView?.delegate = self
+            textView?.dataDetectorTypes = .all
             textView?.textColor = UIColor.white
             textView?.contentMode = .bottomLeft
             textView?.layer.masksToBounds = true
@@ -5800,17 +5849,17 @@ extension TripViewController {
     func popFromWaitingViewControllerToHotelSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromWaitingScreenViewControllerToHotelSearch"), object: nil)
     }
-    func addBackButtonPointedAtItineraryFromHotelDetails() {
-        if backButton != nil {
-            self.backButton?.removeFromSuperview()
-            backButton = nil
-        }
-        let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
-        backButton?.addTarget(self, action: #selector(bookedHotelDetailsBackToItinerary), for: UIControlEvents.touchUpInside)
-        self.topView.addSubview(backButton!)
-    }
+//    func addBackButtonPointedAtItineraryFromHotelDetails() {
+//        if backButton != nil {
+//            self.backButton?.removeFromSuperview()
+//            backButton = nil
+//        }
+//        let backButtonImage = #imageLiteral(resourceName: "backButton")
+//        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+//        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+//        backButton?.addTarget(self, action: #selector(bookedHotelDetailsBackToItinerary), for: UIControlEvents.touchUpInside)
+//        self.topView.addSubview(backButton!)
+//    }
     func bookedHotelDetailsBackToItinerary() {
         for subview in itineraryView.subviews {
             subview.isHidden = false
