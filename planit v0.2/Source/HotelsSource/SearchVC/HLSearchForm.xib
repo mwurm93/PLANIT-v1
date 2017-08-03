@@ -295,7 +295,7 @@
                         <constraint firstItem="cnr-RR-h9D" firstAttribute="leading" secondItem="UPJ-cv-Meq" secondAttribute="leading" id="sa9-MN-zci"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e90-2q-sZh" userLabel="searchView">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e90-2q-sZh" userLabel="searchView">
                     <rect key="frame" x="0.0" y="330" width="375" height="139"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGT-rE-Orc">
@@ -315,12 +315,11 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YDp-nX-FGj">
-                            <rect key="frame" x="100" y="66" width="175" height="30"/>
+                            <rect key="frame" x="80" y="75" width="215" height="30"/>
                             <color key="backgroundColor" red="0.4431372549" green="0.76470588240000004" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="CWI-LX-gpg"/>
                                 <constraint firstAttribute="height" constant="30" id="FAx-gv-Dyl"/>
-                                <constraint firstAttribute="width" constant="175" id="HhC-Uf-gHW"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                             <state key="normal" title="Come back to this later">
@@ -334,12 +333,13 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="UGT-rE-Orc" firstAttribute="top" secondItem="e90-2q-sZh" secondAttribute="top" constant="15" id="2gx-xj-NST"/>
-                        <constraint firstAttribute="bottom" secondItem="UGT-rE-Orc" secondAttribute="bottom" constant="30" id="C7l-Wr-gdw"/>
+                        <constraint firstAttribute="bottom" secondItem="UGT-rE-Orc" secondAttribute="bottom" constant="84" id="C7l-Wr-gdw"/>
                         <constraint firstAttribute="trailing" secondItem="UGT-rE-Orc" secondAttribute="trailing" constant="100" id="NYp-XA-0ia"/>
-                        <constraint firstItem="YDp-nX-FGj" firstAttribute="leading" secondItem="e90-2q-sZh" secondAttribute="leading" constant="100" id="Vfd-zP-1ep"/>
+                        <constraint firstAttribute="height" constant="139" id="S6B-Qb-4CP"/>
+                        <constraint firstItem="YDp-nX-FGj" firstAttribute="leading" secondItem="e90-2q-sZh" secondAttribute="leading" constant="80" id="Vfd-zP-1ep"/>
                         <constraint firstItem="UGT-rE-Orc" firstAttribute="leading" secondItem="e90-2q-sZh" secondAttribute="leading" constant="100" id="dkg-bD-T5N"/>
-                        <constraint firstItem="YDp-nX-FGj" firstAttribute="top" secondItem="UGT-rE-Orc" secondAttribute="bottom" constant="11" id="ipf-Go-iqw"/>
-                        <constraint firstAttribute="trailing" secondItem="YDp-nX-FGj" secondAttribute="trailing" constant="100" id="zEh-bh-Sfc"/>
+                        <constraint firstItem="YDp-nX-FGj" firstAttribute="top" secondItem="UGT-rE-Orc" secondAttribute="bottom" constant="20" id="ipf-Go-iqw"/>
+                        <constraint firstAttribute="trailing" secondItem="YDp-nX-FGj" secondAttribute="trailing" constant="80" id="zEh-bh-Sfc"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="gTm-WK-FAs" userLabel="Divider">

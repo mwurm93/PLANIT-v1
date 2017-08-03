@@ -108,6 +108,8 @@ import UIKit
         comeBackToThisButton.layer.cornerRadius = 15
         comeBackToThisButton.layer.borderColor = UIColor.lightGray.cgColor
         comeBackToThisButton.layer.borderWidth = 1
+        comeBackToThisButton.titleLabel?.textColor = UIColor.lightGray
+        comeBackToThisButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
     }
 
     private func setTitlesColors() {
@@ -157,7 +159,7 @@ import UIKit
                 kidsButton?.setTitle("", for: .normal)
                 kidsButton.isSelected = false
             }
-            searchButton.setTitle(searchTitle(for: searchInfo), for: .normal)
+            searchButton.setTitle("SEARCH HOTELS", for: .normal)
         }
     }
 
