@@ -1648,6 +1648,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 self.doYouNeedARentalCarQuestionView!.frame = CGRect(x: 0, y: (busTrainOtherQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
             doYouNeedARentalCarQuestionView?.tag = 14
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             if SavedPreferencesForTrip["assistantMode"] as! String == "travel" {
                 doYouNeedARentalCarQuestionView?.button1?.addTarget(self, action: #selector(self.doYouNeedARentalCarQuestionView_yes_backToItinerary(sender:)), for: UIControlEvents.touchUpInside)
                 doYouNeedARentalCarQuestionView?.button2?.addTarget(self, action: #selector(self.doYouNeedARentalCarQuestionView_no_backToItinerary(sender:)), for: UIControlEvents.touchUpInside)
@@ -1861,6 +1862,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 self.aboutWhatTimeWillYouStartDrivingQuestionView!.frame = CGRect(x: 0, y: (carRentalSearchQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
                 aboutWhatTimeWillYouStartDrivingQuestionView?.tag = 19
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             if SavedPreferencesForTrip["assistantMode"] as! String == "travel" {
                 aboutWhatTimeWillYouStartDrivingQuestionView?.button1?.addTarget(self, action: #selector(self.notSureYetWhenStartDriving_backToItinerary(sender:)), for: UIControlEvents.touchUpInside)
                 aboutWhatTimeWillYouStartDrivingQuestionView?.button2?.addTarget(self, action: #selector(self.timeChosenWhenStartDriving_backToItinerary(sender:)), for: UIControlEvents.touchUpInside)
@@ -3073,7 +3075,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            travelDictionaryArray[indexOfDestinationBeingPlanned]["busTrainOtherText"] = shortTermRentalSearchQuestionView?.textView?.text
+            travelDictionaryArray[indexOfDestinationBeingPlanned]["busTrainOtherText"] = busTrainOtherQuestionView?.textView?.text
             SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
