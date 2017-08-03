@@ -477,7 +477,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             chatButton.isEnabled = true
         }
         
-        
+        let SavedPreferencesForTrip_updatedForViewDidLoad = fetchSavedPreferencesForTrip()
+        if SavedPreferencesForTrip_updatedForViewDidLoad["assistantMode"] as! String != "initialItineraryBuilding" {
+            self.disableAndResetAssistant_moveToItinerary()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -486,8 +489,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
                 updateHeightOfScrollView()
                 scrollDownToTopSubview()
-            } else {
-                self.disableAndResetAssistant_moveToItinerary()
             }
         }
     }
@@ -506,25 +507,25 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     // MARK: Custom functions
-    func handleItinerary() {
-        //Handle destinationDatesCollectionView
-        destinationChosenUpdateDatesDestinationsDict()
-
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
-//        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
-        if datesDestinationsDictionary.count == 0 {
-            //hide dates and destination
-        } else if datesDestinationsDictionary["destinationTBD"] != nil {
-            //Show dates
-            //hide destination
-        } else {
-            //Show dates
-            //Show destination
-        }
-        
-    }
+//    func handleItinerary() {
+//        //Handle destinationDatesCollectionView
+//        destinationChosenUpdateDatesDestinationsDict()
+//
+//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+////        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+//        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+////        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+//        if datesDestinationsDictionary.count == 0 {
+//            //hide dates and destination
+//        } else if datesDestinationsDictionary["destinationTBD"] != nil {
+//            //Show dates
+//            //hide destination
+//        } else {
+//            //Show dates
+//            //Show destination
+//        }
+//        
+//    }
     
     func destinationChosenUpdateDatesDestinationsDict() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -3337,6 +3338,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned >= placeToStayDictionaryArray.count {
+                placeToStayDictionaryArray.append(["typeOfPlaceToStay":"hotelText"])
+            } else if indexOfDestinationBeingPlanned < placeToStayDictionaryArray.count {
+                if placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["typeOfPlaceToStay"] as! String != "hotelText" {
+                    placeToStayDictionaryArray[indexOfDestinationBeingPlanned] = ["typeOfPlaceToStay":"hotelText"]
+                }
+            }
             placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["hotelText"] = doYouNeedHelpBookingAHotelQuestionView?.textView?.text
             SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -3369,7 +3377,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if SavedPreferencesForTrip["assistantMode"] as! String == "placeToStay" {
             disableAndResetAssistant_moveToItinerary()
         } else {
-            spawnSendProposalQuestionView()
+            planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
         }
     }
     func comeBackToPlanFlightLater() {
@@ -3811,7 +3819,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var tripName = SavedPreferencesForTrip["trip_name"] as! String
         tripNameTextField.text = tripName
-        handleItinerary()
+        destinationChosenUpdateDatesDestinationsDict()
         assistantViewIsHiddenTrue()
         itineraryView.isHidden = false
         infoButton.isHidden = false
@@ -3851,7 +3859,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             addInviteeButton.frame.size.height = 30
             addInviteeButton.frame.size.width = 200
             addInviteeButton.frame.origin.x = (bounds.size.width - (addInviteeButton.frame.width)) / 2
-            addInviteeButton.frame.origin.y = 60
+            addInviteeButton.frame.origin.y = 70
             addInviteeButton.setTitleColor(incompleteColor, for: .normal)
             addInviteeButton.layer.cornerRadius = (addInviteeButton.frame.height) / 2
             addInviteeButton.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:addInviteeButton.frame.height)
@@ -3952,6 +3960,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         chatController?.inputToolbar.contentView.textView.becomeFirstResponder()
     }
     func animateInBackgroundFilterView(withInfoView: Bool, withBlurEffect: Bool, withCloseButton: Bool) {
+        popupBackgroundViewDeleteContacts.isHidden = true
+        
         if withBlurEffect {
             popupBackgroundFilterViewVisualEffectView.isHidden = false
         } else {
@@ -3977,7 +3987,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func animateOutBackgroundFilterView() {
         self.popupBackgroundFilterView.removeFromSuperview()
-        popupBackgroundFilterView.isHidden = true        
+        popupBackgroundFilterView.isHidden = true
+        popupBackgroundViewDeleteContacts.isHidden = true
     }
     
     // MARK: Actions
@@ -4725,8 +4736,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         hotelBookedOnPlanitController?.loadView()
                         hotelBookedOnPlanitController?.viewDidLoad()
                         
-//                        hotelBookedOnPlanitController?.view.frame = self.view.bounds 
-                        
                         animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                         let bounds = UIScreen.main.bounds
                         setupDetailedInformationView(size: CGSize(width: bounds.width-6, height: 650), withTextView:false,withDoneButton:false)
@@ -4754,12 +4763,9 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         doneButton?.frame.origin.x = ((bounds.width) - (doneButton?.frame.width)!) / 2 - itineraryView.frame.minX
                         doneButton?.frame.origin.y = 600
                         doneButton?.layer.cornerRadius = (doneButton?.frame.height)! / 2
-                        
-                        
-//                        addBackButtonPointedAtItineraryFromHotelDetails()
-                        
+                                                
                     } else if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["hotelsSavedOnPlanit"] != nil {
-                        let alertController = UIAlertController(title: "Choose a flight!", message: "Just click search and your saved flights will be in the refreshed results.", preferredStyle: .alert)
+                        let alertController = UIAlertController(title: "Choose a place to stay!", message: "Search and see how your favorites stack up in the refreshed results.", preferredStyle: .alert)
                         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
                         }
                         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
@@ -4779,21 +4785,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         alertController.addAction(cancelAction)
                         alertController.addAction(okAction)
                         self.present(alertController, animated: true, completion: nil)
-                    } else if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["hotelText"] != nil {
-                        detailedInformationSubviewMode = "hotel"
-                        //Show texted entered
-                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                        setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
-                        textView?.text = placeToStayDictionaryArray[sender.tag - 1]["hotelText"] as! String
-                        var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
-                        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
-                        textView?.contentOffset = CGPoint()
-                        textView?.contentOffset.x = 0
-                        textView?.contentOffset.y = -topCorrect!
-                        textView?.resignFirstResponder()
-                        self.view.addSubview(detailedInformationSubview)
                     } else {
-                        let alertController = UIAlertController(title: "Check out flights!", message: "", preferredStyle: .alert)
+                        let alertController = UIAlertController(title: "Check out hotels!", message: "", preferredStyle: .alert)
                         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
                         }
                         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
@@ -4813,7 +4806,23 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         alertController.addAction(okAction)
                         self.present(alertController, animated: true, completion: nil)
                     }
-                } else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "shortTermRental"{
+                } else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "hotelText"{
+                    if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["hotelText"] != nil {
+                        detailedInformationSubviewMode = "hotel"
+                        //Show texted entered
+                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+                        setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
+                        textView?.text = placeToStayDictionaryArray[sender.tag - 1]["hotelText"] as! String
+                        var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+                        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+                        textView?.contentOffset = CGPoint()
+                        textView?.contentOffset.x = 0
+                        textView?.contentOffset.y = -topCorrect!
+                        textView?.resignFirstResponder()
+                        self.view.addSubview(detailedInformationSubview)
+                    }
+                }
+                else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "shortTermRental"{
                     detailedInformationSubviewMode = "shortTermRental"
                     //Show texted entered, with clickable links
                     animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
@@ -5106,7 +5115,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return destinationsDatesCell
             }
             
-            //second to (n - 1)th segment
+            //2nd to (n - 1)th cell
 
             
             //Find left and right dates
@@ -5120,6 +5129,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     
                     let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexPath.row - 1]]!)
                     destinationsDatesCell.travelDateButton.setTitle(leftDateAsString, for: .normal)
+                    destinationsDatesCell.travelDateButton.setTitleColor(completeColor, for: .normal)
                     
                     
                     let tripDates = SavedPreferencesForTrip["selected_dates"] as? [Date]
