@@ -4299,6 +4299,7 @@
 				FA4887861F01B9780015F078 /* PlaceForGroupOrJustYouQuestionView.xib */,
 				FA4887881F021FDD0015F078 /* SendProposalQuestionView.swift */,
 				FA48878A1F021FFC0015F078 /* SendProposalQuestionView.xib */,
+				FAEE69A21F33B6D200B50354 /* Popovers */,
 			);
 			name = "Place to stay";
 			sourceTree = "<group>";
@@ -4464,8 +4465,6 @@
 			children = (
 				FAD4E8C31F271043000B6B38 /* DidYouBuyTheFlightQuestionPopover.swift */,
 				FAD4E8C71F27107B000B6B38 /* DidYouBuyTheFlightQuestionPopover.xib */,
-				FA8F0DDA1F27A04C005CAC9D /* DIdYouBuyTheHotelQuestionView.swift */,
-				FA8F0DDE1F27CE8F005CAC9D /* DidYouBuyTheHotelQuestionView.xib */,
 			);
 			name = Popovers;
 			sourceTree = "<group>";
@@ -4822,6 +4821,15 @@
 				FA4887721F01AE050015F078 /* Place to stay */,
 			);
 			name = "Scrolling Views";
+			sourceTree = "<group>";
+		};
+		FAEE69A21F33B6D200B50354 /* Popovers */ = {
+			isa = PBXGroup;
+			children = (
+				FA8F0DDA1F27A04C005CAC9D /* DIdYouBuyTheHotelQuestionView.swift */,
+				FA8F0DDE1F27CE8F005CAC9D /* DidYouBuyTheHotelQuestionView.xib */,
+			);
+			name = Popovers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
