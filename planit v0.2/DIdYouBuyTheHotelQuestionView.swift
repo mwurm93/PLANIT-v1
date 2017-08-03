@@ -56,7 +56,7 @@ class DidYouBuyTheHotelQuestionView: UIView {
             questionLabel?.numberOfLines = 0
             questionLabel?.textAlignment = .center
             questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
-            questionLabel?.textColor = UIColor.blue
+            questionLabel?.textColor = UIColor.black
             questionLabel?.adjustsFontSizeToFitWidth = true
             questionLabel?.text = "Did you buy this hotel?"
             self.addSubview(questionLabel!)
@@ -64,10 +64,10 @@ class DidYouBuyTheHotelQuestionView: UIView {
             //Button2
             button1 = UIButton(type: .custom)
             button1?.frame = CGRect.zero
-            button1?.setTitleColor(UIColor.blue, for: .normal)
+            button1?.setTitleColor(UIColor.black, for: .normal)
             button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
             button1?.layer.borderWidth = 1
-            button1?.layer.borderColor = UIColor.blue.cgColor
+            button1?.layer.borderColor = UIColor.black.cgColor
             button1?.layer.masksToBounds = true
             button1?.titleLabel?.numberOfLines = 0
             button1?.titleLabel?.textAlignment = .center
@@ -80,10 +80,10 @@ class DidYouBuyTheHotelQuestionView: UIView {
             //Button2
             button2 = UIButton(type: .custom)
             button2?.frame = CGRect.zero
-            button2?.setTitleColor(UIColor.blue, for: .normal)
+            button2?.setTitleColor(UIColor.black, for: .normal)
             button2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
             button2?.layer.borderWidth = 1
-            button2?.layer.borderColor = UIColor.blue.cgColor
+            button2?.layer.borderColor = UIColor.black.cgColor
             button2?.layer.masksToBounds = true
             button2?.titleLabel?.numberOfLines = 0
             button2?.titleLabel?.textAlignment = .center
@@ -96,7 +96,7 @@ class DidYouBuyTheHotelQuestionView: UIView {
         func buttonClicked(sender:UIButton) {
             sender.isSelected = !sender.isSelected
             if sender.isSelected {
-                sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.blue)
+                sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.black)
             } else {
                 sender.removeMask(button:sender)
             }

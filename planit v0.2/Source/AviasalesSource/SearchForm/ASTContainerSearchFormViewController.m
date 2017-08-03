@@ -25,6 +25,7 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIButton *searchButton;
 @property (weak, nonatomic) IBOutlet UIButton *alreadyHaveFlightsButton;
+@property (weak, nonatomic) IBOutlet UIButton *comeBackToThisButton;
 
 @property (nonatomic, strong) ASTSimpleSearchFormViewController *simpleSearchFormViewController;
 @property (nonatomic, strong) ASTComplexSearchFormViewController *complexSearchFormViewController;
@@ -68,6 +69,8 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     [self setupSearchButton];
     [self setupChildViewControllers];
     [self setupAlreadyHaveFlightsButton];
+    [self setupComeBackToThisButton];
+
 }
 
 - (void)setupSegmentedControl {
@@ -92,6 +95,14 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     self.alreadyHaveFlightsButton.layer.cornerRadius = 15.0;
     self.alreadyHaveFlightsButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.alreadyHaveFlightsButton.layer.borderWidth = 1;
+}
+
+- (void)setupComeBackToThisButton {
+    self.comeBackToThisButton.tintColor = [UIColor lightGrayColor];
+    self.comeBackToThisButton.backgroundColor = [UIColor clearColor];
+    self.comeBackToThisButton.layer.cornerRadius = 15.0;
+    self.comeBackToThisButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.comeBackToThisButton.layer.borderWidth = 1;
 }
 
 
@@ -146,6 +157,9 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 #pragma mark - Actions
 - (IBAction)iAlreadyHaveFlightsButtonTouchedUpInside:(id)sender {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"iAlreadyHaveFlightsButtonTouchedUpInside"                                  object:self];
+}
+- (IBAction)comeBackToThisButtonTouchedUpInside:(id)sender {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"comeBackToThisFlightsButtonTouchedUpInside"                                  object:self];
 }
 
 - (IBAction)searchFormTypeSegmentChanged:(UISegmentedControl *)sender {

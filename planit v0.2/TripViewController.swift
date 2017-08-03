@@ -444,6 +444,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(flightBookingBrowserClosed_FlightBooked), name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightBooked"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightBookingBrowserClosed_FlightNotBooked), name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightNotBooked"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnAlreadyHaveFlightsQuestionView), name: NSNotification.Name(rawValue: "iAlreadyHaveFlightsButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnDoYouKnowWhereYouWillBeStayingQuestionView), name: NSNotification.Name(rawValue: "comeBackToThisFlightsButtonTouchedUpInside"), object: nil)
         
         //Hotel Nav
         NotificationCenter.default.addObserver(self, selector: #selector(HLCommonResultsVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLCommonResultsVC_viewWillAppear"), object: nil)
@@ -452,6 +453,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed), name: NSNotification.Name(rawValue: "HLWebBrowserClosed"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed_HotelBooked), name: NSNotification.Name(rawValue: "hotelBookingBrowserClosed_HotelBooked"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed_HotelNotBooked), name: NSNotification.Name(rawValue: "hotelBookingBrowserClosed_HotelNotBooked"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnSendProposalQuestionView), name: NSNotification.Name(rawValue: "comeBackToThisHotelsButtonTouchedUpInside"), object: nil)
+
+        
         
         setUpItinerary()
         
@@ -897,16 +901,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollView.contentSize.height = heightOfScrollView
     }
     func scrollDownToTopSubview(){
-        //Scroll to next question
-//        UIView.animate(withDuration: 1) {
-        
-            let test = self.scrollContentView.subviews
-            let test2 = self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].tag
-            let test3 = self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.minY
-            
-            self.scrollToSubviewWithTag(tag:test2)
-//            self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.minY), animated: false)
-//        }
+        let tagOfTopSubview = self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].tag
+        self.scrollToSubviewWithTag(tag:tagOfTopSubview)
     }
     
     func scrollUpOneSubview(){
@@ -1047,7 +1043,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let higherSubviewBottomY = scrollContentView.subviews[i - 1].frame.maxY
             let lowerSubviewTopY = scrollContentView.subviews[i].frame.minY
             let differenceToAdjustLowerSubviewBy = higherSubviewBottomY - lowerSubviewTopY
-            if differenceToAdjustLowerSubviewBy != 0 {
+            if differenceToAdjustLowerSubviewBy != 0 && scrollContentView.subviews[i - 1] != instructionsQuestionView {
                 scrollContentView.subviews[i].frame.origin.y += differenceToAdjustLowerSubviewBy
             }
         }
@@ -1141,7 +1137,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.scrollContentView.insertSubview(tripNameQuestionView!, aboveSubview: instructionsQuestionView!)
             
             tripNameQuestionView?.tripNameQuestionTextfield?.delegate = self
-            tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
+            if !isLoadingSubviews {
+                tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
+            }
 
             tripNameQuestionView?.tag = 34
             let bounds = UIScreen.main.bounds
@@ -1154,13 +1152,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         alignSubviews()
         scrollToSubviewWithTag(tag: 34)
         increaseProgressCircle(byPercent: 10, onlyIfFirstDestination: false)
-        
-        tripNameQuestionView?.tripNameQuestionTextfield?.delegate = self
-        tripNameQuestionView?.tripNameQuestionTextfield?.becomeFirstResponder()
     }
     
     
     func spawnDatesPickedOutCalendarView() {
+        tripNameQuestionView?.tripNameQuestionTextfield?.resignFirstResponder()
         self.view.endEditing(true)
         if datesPickedOutCalendarView == nil  {
             //handle floaty
@@ -1807,7 +1803,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: aboutWhatTimeWillYouStartDrivingQuestionView!)
                 self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (aboutWhatTimeWillYouStartDrivingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             } else if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "busTrainOther" || travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "fly" {
-                if carRentalSearchQuestionView == nil {
+                if doYouNeedARentalCarQuestionView == nil {
+                    self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: flightSearchQuestionView!)
+                    self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (flightSearchQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+                } else if carRentalSearchQuestionView == nil {
                     self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: doYouNeedARentalCarQuestionView!)
                     self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (doYouNeedARentalCarQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
                 } else {
@@ -2136,6 +2135,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             if placeForGroupOrJustYouQuestionView != nil {
                 self.scrollContentView.insertSubview(sendProposalQuestionView!, aboveSubview: placeForGroupOrJustYouQuestionView!)
                 self.sendProposalQuestionView!.frame = CGRect(x: 0, y: (placeForGroupOrJustYouQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            } else if hotelSearchQuestionView != nil {
+                self.scrollContentView.insertSubview(sendProposalQuestionView!, aboveSubview: hotelSearchQuestionView!)
+                self.sendProposalQuestionView!.frame = CGRect(x: 0, y: (hotelSearchQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             } else {
                 self.scrollContentView.insertSubview(sendProposalQuestionView!, aboveSubview: doYouKnowWhereYouWillBeStayingQuestionView!)
                 self.sendProposalQuestionView!.frame = CGRect(x: 0, y: (doYouKnowWhereYouWillBeStayingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
@@ -3871,13 +3873,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         yesIKnowWhereImStayingQuestionView = nil
         doYouNeedHelpBookingAHotelQuestionView = nil
         parseDatesForMultipleDestinationsCalendarView = nil
-        instructionsQuestionView = nil
+//        instructionsQuestionView = nil
         alreadyHaveFlightsQuestionView = nil
         //Popover Views
         didYouBuyTheFlightQuestionPopover = nil
         didYouBuyTheHotelQuestionView = nil
         
-        scrollContentView.removeAllSubviews()
+//        scrollContentView.removeAllSubviews()
+        for subview in scrollContentView.subviews {
+            if subview != instructionsQuestionView {
+                subview.removeFromSuperview()
+            }
+        }
+        if !(instructionsQuestionView?.subviews.isEmpty)! {
+            for subview in (instructionsQuestionView?.subviews)! {
+                subview.removeFromSuperview()
+            }
+        }
         updateHeightOfScrollView()
         updateProgress()
         progressRing?.setProgress(value: 0, animationDuration: 0.1)
@@ -4614,7 +4626,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
         //Go back to assistant where user left off if still building itinerary
         if isAssistantEnabled == true && assistantMode == "initialItineraryBuilding" {
-            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish buiilding your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
             return
         }
         //
@@ -4631,7 +4643,11 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
                     SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
                     self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
                     self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+//                    self.instructionsQuestionView?.removeFromSuperview()
+//                    self.alignSubviews()
+                    
                     self.isAssistantEnabled = true
                     self.handleTwicketSegmentedControl()
                     self.segmentedControl?.move(to: 0)
@@ -4646,6 +4662,28 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         } else if !editItineraryModeEnabled {
             if assistantMode == "placeToStay" {
                 showFinishPlanningTripAlert(title: "Change place to stay", message: "Let's finish changing your place to stay!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+            } else if assistantMode == "disabled" {
+                let alertController = UIAlertController(title: "Plan a place to stay?", message: "", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                    print("Cancel edit")
+                }
+                let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+                    //                    self.instructionsQuestionView?.removeFromSuperview()
+                    //                    self.alignSubviews()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                }
+                alertController.addAction(cancelAction)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
             }
             if sender.tag <= (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]).count  {
                 var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
@@ -4693,7 +4731,10 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
                         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                         
+
                         spawnHotelSearchQuestionView()
+//                        self.instructionsQuestionView?.removeFromSuperview()                        
+//                        self.alignSubviews()
                         
                         segmentedControl?.move(to: 0)
                         assistant()
@@ -4704,6 +4745,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                         
                         spawnHotelSearchQuestionView()
+//                        self.instructionsQuestionView?.removeFromSuperview()
+//                        self.alignSubviews()
                         
                         segmentedControl?.move(to: 0)
                         assistant()
@@ -4727,10 +4770,10 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     textView?.resignFirstResponder()
                     self.view.addSubview(detailedInformationSubview)
                 } else {
-                    showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish buiilding your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+                    showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
                 }
             } else {
-                showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish buiilding your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+                showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
             }
         }
         
@@ -5501,6 +5544,7 @@ extension TripViewController {
         self.infoKeyButton_1.isHidden = true
         self.infoKeyButton_2.isHidden = true
         self.infoKeyButton_3.isHidden = true
+        self.popupBackgroundFilterViewCloseButton.isHidden = true
         let when = DispatchTime.now() + 0.6
         self.popupBackgroundFilterView.alpha = 0
         DispatchQueue.main.asyncAfter(deadline: when) {
@@ -5553,6 +5597,10 @@ extension TripViewController {
         self.view.addSubview(didYouBuyTheHotelQuestionView!)
         self.view.insertSubview(popupBackgroundFilterView, belowSubview: didYouBuyTheHotelQuestionView!)
         self.popupBackgroundFilterView.isHidden = false
+        self.infoKeyButton_1.isHidden = true
+        self.infoKeyButton_2.isHidden = true
+        self.infoKeyButton_3.isHidden = true
+        self.popupBackgroundFilterViewCloseButton.isHidden = true
         let when = DispatchTime.now() + 0.6
         self.popupBackgroundFilterView.alpha = 0
         DispatchQueue.main.asyncAfter(deadline: when) {

@@ -20,6 +20,7 @@ import UIKit
     @IBOutlet fileprivate weak var citySelectorButton: UIButton!
 
     @IBOutlet fileprivate weak var searchButton: UIButton!
+    @IBOutlet weak var comeBackToThisButton: UIButton!
 
     @IBOutlet fileprivate weak var currentCityButton: UIButton!
     @IBOutlet fileprivate weak var currentCityActivityIndicator: UIActivityIndicatorView!
@@ -82,6 +83,7 @@ import UIKit
         backgroundColor = UIColor.clear
         setTitlesColors()
         setupSearchButton()
+        setupComeBackToThisButton()
         setupAdultsButtons()
         setupIconsTint()
         currentCityButton.tintColor = UIColor.white
@@ -98,6 +100,14 @@ import UIKit
         searchButton.layer.cornerRadius = 20.0
         searchButton.layer.borderColor = UIColor.white.cgColor
         searchButton.layer.borderWidth = 1
+    }
+    
+    private func setupComeBackToThisButton() {
+        comeBackToThisButton.tintColor = UIColor.lightGray
+        comeBackToThisButton.backgroundColor = UIColor.clear
+        comeBackToThisButton.layer.cornerRadius = 15
+        comeBackToThisButton.layer.borderColor = UIColor.lightGray.cgColor
+        comeBackToThisButton.layer.borderWidth = 1
     }
 
     private func setTitlesColors() {
@@ -169,6 +179,9 @@ import UIKit
     }
 
     // MARK: - IBActions methods
+    @IBAction func comeBackToThisButtonTouchedUpInside(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "comeBackToThisHotelsButtonTouchedUpInside"), object: nil)
+    }
 
     @IBAction fileprivate func onSearch(_ sender: AnyObject) {
         self.delegate?.onSearch(self)
