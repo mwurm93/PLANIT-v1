@@ -97,7 +97,7 @@ import UIKit
     private func setupSearchButton() {
         searchButton.tintColor = JRColorScheme.mainButtonTitleColor()
         searchButton.backgroundColor = UIColor.clear
-        searchButton.layer.cornerRadius = 20.0
+        searchButton.layer.cornerRadius = searchButton.frame.size.height / 2
         searchButton.layer.borderColor = UIColor.white.cgColor
         searchButton.layer.borderWidth = 1
     }

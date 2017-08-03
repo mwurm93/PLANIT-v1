@@ -121,6 +121,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var completeColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     var detailedInformationSubviewMode = ""
     var isAssistantEnabled = true
+    var doneButton: UIButton?
     //PPN Cities
     var ppnCarRentalCities = [Dictionary<String, String>]()
     var ppnHotelCities = [Dictionary<String, String>]()
@@ -3956,6 +3957,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         } else {
             popupBackgroundFilterViewVisualEffectView.isHidden = true
         }
+        popupBackgroundFilterView.alpha = 1
         popupBackgroundFilterView.isHidden = false
         if withInfoView {
             infoKeyButton_1.isHidden = false
@@ -4730,10 +4732,11 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         setupDetailedInformationView(size: CGSize(width: bounds.width-6, height: 650), withTextView:false,withDoneButton:false)
                         button1?.frame.origin.y = 610
                         self.detailedInformationSubview.addSubview((hotelBookedOnPlanitController?.view)!)
-                        hotelBookedOnPlanitController?.view.frame = CGRect(x: 10, y: 15, width: bounds.width-20, height: bounds.height - 100)
+                        hotelBookedOnPlanitController?.view.frame = CGRect(x: 10, y: 100, width: bounds.width-20, height: bounds.height - 150)
                         hotelBookedOnPlanitController?.view.layer.cornerRadius = 5
+                        self.popupBackgroundFilterView?.addSubview((hotelBookedOnPlanitController?.view)!)
+                        hotelBookedOnPlanitController?.didMove(toParentViewController: self)
                        
-                        let doneButton: UIButton?
                         doneButton = UIButton(type: .custom)
                         doneButton?.frame = CGRect.zero
                         doneButton?.setTitleColor(UIColor.white, for: .normal)
@@ -4743,17 +4746,15 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         doneButton?.titleLabel?.numberOfLines = 0
                         doneButton?.titleLabel?.textAlignment = .center
                         doneButton?.setTitle("Done", for: .normal)
-                        doneButton?.addTarget(self, action: #selector(self.bookedHotelDetailsBackToItinerary), for: UIControlEvents.touchUpInside)
-                        itineraryView.addSubview(doneButton!)
+                        doneButton?.addTarget(self, action: #selector(bookedHotelDetailsBackToItinerary), for: UIControlEvents.touchUpInside)
+                        popupBackgroundFilterView.addSubview(doneButton!)
                         doneButton?.sizeToFit()
                         doneButton?.frame.size.height = 30
                         doneButton?.frame.size.width += 20
                         doneButton?.frame.origin.x = ((bounds.width) - (doneButton?.frame.width)!) / 2 - itineraryView.frame.minX
-                        doneButton?.frame.origin.y = 550
+                        doneButton?.frame.origin.y = 600
                         doneButton?.layer.cornerRadius = (doneButton?.frame.height)! / 2
                         
-                        self.itineraryView?.addSubview((hotelBookedOnPlanitController?.view)!)
-                        hotelBookedOnPlanitController?.didMove(toParentViewController: self)
                         
 //                        addBackButtonPointedAtItineraryFromHotelDetails()
                         
@@ -5870,7 +5871,12 @@ extension TripViewController {
         hotelBookedOnPlanitController?.removeFromParentViewController()
         hotelBookedOnPlanitController = nil
         
-        addBackButtonPointedAtTripList()
+        self.doneButton?.removeFromSuperview()
+        doneButton = nil
+        
+        animateOutBackgroundFilterView()
+        
+//        addBackButtonPointedAtTripList()
     }
 }
 
