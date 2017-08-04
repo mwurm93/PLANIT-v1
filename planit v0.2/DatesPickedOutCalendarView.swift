@@ -19,6 +19,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
     var questionLabel: UILabel?
     var formatter = DateFormatter()
     var button1: UIButton?
+    var button2: UIButton?
     
     //Cache color vars
     static let transparentColor = UIColor(colorWithHexValue: 0xFFFFFF, alpha: 0).cgColor
@@ -68,16 +69,28 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         button1?.isHidden = true
         
+        button2?.sizeToFit()
+        button2?.frame.size.height = 30
+        button2?.frame.size.width += 20
+        button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
+        button2?.frame.origin.y = 520
+        button2?.layer.cornerRadius = (button2?.frame.height)! / 2
+        button2?.isHidden = false
+        
         loadDates()
     }
     
+    
     func loadDates() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        
+//        let unmutableLeftDateTimeArrays = SavedPreferencesForTrip["origin_departure_times"] as! NSDictionary
+//        let unmutableRightDateTimeArrays = SavedPreferencesForTrip["return_departure_times"] as! NSDictionary
         // Load trip preferences and install
-        if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
-            if selectedDatesValue.count > 0 {
-                self.calendarView.selectDates(selectedDatesValue as [Date],triggerSelectionDelegate: false)
-                self.calendarView.scrollToDate(selectedDatesValue[0], animateScroll: true)
+        if let selectedDates = SavedPreferencesForTrip["selected_dates"] as? [Date] {
+            if selectedDates.count > 0 {
+                self.calendarView.selectDates(selectedDates as [Date],triggerSelectionDelegate: false)
+                self.calendarView.scrollToDate(selectedDates[0], animateScroll: true)
             } else {
             let today = Date()
             let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
@@ -102,6 +115,22 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
+        
+        //Button2
+        button2 = UIButton(type: .custom)
+        button2?.frame = CGRect.zero
+        button2?.setTitleColor(UIColor.white, for: .normal)
+        button2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button2?.layer.borderWidth = 1
+        button2?.layer.borderColor = UIColor.white.cgColor
+        button2?.layer.masksToBounds = true
+        button2?.titleLabel?.numberOfLines = 0
+        button2?.titleLabel?.textAlignment = .center
+        button2?.setTitle("Done", for: .normal)
+        button2?.translatesAutoresizingMaskIntoConstraints = false
+        button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button2!)
+
         
         //Question label
         questionLabel = UILabel(frame: CGRect.zero)
@@ -229,12 +258,15 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
     
     func calendar(_ calendar: JTAppleCalendarView, didSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         
+        
         if leftDateTimeArrays.count >= 1 && rightDateTimeArrays.count >= 1 {
             calendarView?.deselectAllDates(triggerSelectionDelegate: false)
             rightDateTimeArrays.removeAllObjects()
             leftDateTimeArrays.removeAllObjects()
             calendarView?.selectDates([date], triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
         }
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         
         //UNCOMMENT FOR TWO CLICK RANGE SELECTION
         let leftKeys = leftDateTimeArrays.allKeys
@@ -244,10 +276,14 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
             let leftDate = formatter.date(from: leftKeys[0] as! String)
             if date > leftDate! {
                 calendarView?.selectDates(from: leftDate!, to: date,  triggerSelectionDelegate: false, keepSelectionIfMultiSelectionAllowed: true)
-                let when = DispatchTime.now() + 0.15
-                DispatchQueue.main.asyncAfter(deadline: when) {
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
-                }
+//                let when = DispatchTime.now() + 0.15
+//                DispatchQueue.main.asyncAfter(deadline: when) {
+//                    if SavedPreferencesForTrip["assistantMode"] as! String == "dates" {
+//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected_backToItinerary"), object: nil)
+//                    } else if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
+//                    }
+//                }
                 
             } else {
                 calendarView?.deselectAllDates(triggerSelectionDelegate: false)
@@ -265,7 +301,6 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
         getLengthOfSelectedAvailabilities()
         //Update trip preferences in dictionary
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["selected_dates"] = selectedDates as [Date]
         SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
         SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
@@ -288,13 +323,13 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
             rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
         }
         
-//        //Update trip preferences in dictionary
-//        let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
-//        SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
-//        SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
-//        
-//        //Save
-//        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+        //Update trip preferences in dictionary
+        let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+        SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
+        
+        //Save
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip2)
         
     }
     
@@ -355,14 +390,14 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
                     rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
                 }
                 
-//                //Update trip preferences in dictionary
-//                let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
-//                SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
-//                SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
-//                
-//                //Save
-//                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
-//                
+                //Update trip preferences in dictionary
+                let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+                SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+                SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
+                
+                //Save
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+//
             }
             //
             if rightDateTimeArrays[rightMostDateAsString] == nil {
@@ -384,13 +419,13 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
                     rightDateTimeArrays.setValue(timeOfDayToAddToArray as NSString, forKey: mostRecentSelectedCellDateAsNSString)
                 }
                 
-//                //Update trip preferences in dictionary
-//                let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
-//                SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
-//                SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
-//                
-//                //Save
-//                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+                //Update trip preferences in dictionary
+                let SavedPreferencesForTrip2 = fetchSavedPreferencesForTrip()
+                SavedPreferencesForTrip2["origin_departure_times"] = leftDateTimeArrays as NSDictionary
+                SavedPreferencesForTrip2["return_departure_times"] = rightDateTimeArrays as NSDictionary
+                
+                //Save
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip2)
             }
             
         }
@@ -483,6 +518,17 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
             if subview.isKind(of: UIButton.self) && subview != sender {
                 (subview as! UIButton).isSelected = false
                 (subview as! UIButton).removeMask(button: subview as! UIButton)
+            }
+        }
+        if sender == button2 {
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            let when = DispatchTime.now() + 0.15
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                if SavedPreferencesForTrip["assistantMode"] as! String == "dates" {
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected_backToItinerary"), object: nil)
+                } else if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
+                }
             }
         }
     }

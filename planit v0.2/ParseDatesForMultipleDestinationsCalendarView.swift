@@ -138,7 +138,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.numberOfLines = 0
         button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("Next", for: .normal)
+        button2?.setTitle("Done", for: .normal)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)
@@ -663,7 +663,11 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                 if !anyQuestionMarks.contains("?") {
                     let when = DispatchTime.now() + 0.3
                     DispatchQueue.main.asyncAfter(deadline: when) {
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsComplete"), object: nil)
+                        if SavedPreferencesForTrip["assistantMode"] as! String == "dates" {
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsComplete_backToItinerary"), object: nil)
+                        } else if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsComplete"), object: nil)
+                        }
                     }
                 }
 
