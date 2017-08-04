@@ -84,8 +84,10 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
     func loadDates() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         
-//        let unmutableLeftDateTimeArrays = SavedPreferencesForTrip["origin_departure_times"] as! NSDictionary
-//        let unmutableRightDateTimeArrays = SavedPreferencesForTrip["return_departure_times"] as! NSDictionary
+        let unmutableLeftDateTimeArrays = SavedPreferencesForTrip["origin_departure_times"] as! NSDictionary
+        let unmutableRightDateTimeArrays = SavedPreferencesForTrip["return_departure_times"] as! NSDictionary
+        leftDateTimeArrays = unmutableLeftDateTimeArrays.mutableCopy() as! NSMutableDictionary
+        rightDateTimeArrays = unmutableRightDateTimeArrays.mutableCopy() as! NSMutableDictionary
         // Load trip preferences and install
         if let selectedDates = SavedPreferencesForTrip["selected_dates"] as? [Date] {
             if selectedDates.count > 0 {
