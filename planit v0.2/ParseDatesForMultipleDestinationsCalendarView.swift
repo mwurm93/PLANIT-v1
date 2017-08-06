@@ -84,6 +84,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
         button2?.frame.origin.y = 490
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
+        button2?.isHidden = true
         
         calendarView?.frame = CGRect(x: 13, y: 250, width: 350, height: 200)
         calendarView?.cellSize = 50
@@ -220,10 +221,35 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                 calendarView.reloadDates(calendarView.selectedDates)
             }
         }
-                
+        
+        //Hide done button if any ? marks still
+        var anyQuestionMarks = String()
+        for i in 0 ... destinationsForTrip.count - 1 {
+            let cell = destinationDaysTableView?.cellForRow(at: IndexPath(row: i, section: 0)) as! destinationDaysTableViewCell
+            anyQuestionMarks.append(cell.cellTextField.text!)
+        }
+        if anyQuestionMarks.contains("?") {
+            button2?.isHidden = true
+        } else {
+            button2?.isHidden = false
+        }
         textField.resignFirstResponder()
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        //Hide done button if any ? marks still
+        var anyQuestionMarks = String()
+        for i in 0 ... destinationsForTrip.count - 1 {
+            let cell = destinationDaysTableView?.cellForRow(at: IndexPath(row: i, section: 0)) as! destinationDaysTableViewCell
+            anyQuestionMarks.append(cell.cellTextField.text!)
+        }
+        if anyQuestionMarks.contains("?") {
+            button2?.isHidden = true
+        } else {
+            button2?.isHidden = false
+        }
+
         textField.resignFirstResponder()
         return true
     }
@@ -303,6 +329,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             1)
         } else {
             cell.cellTextField.text = "?"
+            button2?.isHidden = true
         }
         
         cell.backgroundColor = UIColor.clear
@@ -343,6 +370,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
         var destinationsForTripStates = SavedPreferencesForTrip["destinationsForTripStates"] as! [String]
         var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+        var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
         var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
         
         let movedDestinationForTrip = destinationsForTrip[sourceIndexPath.row]
@@ -359,6 +387,12 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             travelDictionaryArray.insert(movedtravelDictionaryArray, at: destinationIndexPath.row)
         }
         
+        if placeToStayDictionaryArray.count == destinationsForTrip.count {
+            let movedPlaceToStayDictionaryArray = placeToStayDictionaryArray[sourceIndexPath.row]
+            placeToStayDictionaryArray.remove(at: sourceIndexPath.row)
+            placeToStayDictionaryArray.insert(movedPlaceToStayDictionaryArray, at: destinationIndexPath.row)
+        }
+        
         travelDates.removeAll()
         var sinceDate = tripDates?[0]
         for i in 0 ... destinationsForTrip.count - 2 {
@@ -367,19 +401,19 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             sinceDate = travelDateToAppend
             travelDates.append(travelDateToAppend)
         }
-        parseTripDatesByTravelDates()
         
         let movedColor = colors[sourceIndexPath.row]
         colors.remove(at: sourceIndexPath.row)
         colors.insert(movedColor, at: destinationIndexPath.row)
     
-//        let test = datesDestinationsDictionary as! [String:[Date]]
+        let datesDestinationsDictionaryTest = datesDestinationsDictionary as! [String:[Date]]
+        let destinationsForTripTest = destinationsForTrip as! [String]
         
         //Save
         SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
         SavedPreferencesForTrip["destinationsForTripStates"] = destinationsForTripStates
         SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
-//        SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+        SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         timesLoaded -= 1
@@ -387,6 +421,9 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             calendarView.reloadDates(calendarView.selectedDates)
         }
         tableView.reloadData()
+        
+        parseTripDatesByTravelDates()
+
     }
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         return .none
@@ -617,7 +654,17 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             parseTripDatesByTravelDates()
         }
         
-        
+        //Hide done button if any ? marks still
+        var anyQuestionMarks = String()
+        for i in 0 ... destinationsForTrip.count - 1 {
+            let cell = destinationDaysTableView?.cellForRow(at: IndexPath(row: i, section: 0)) as! destinationDaysTableViewCell
+            anyQuestionMarks.append(cell.cellTextField.text!)
+        }
+        if anyQuestionMarks.contains("?") {
+            button2?.isHidden = true
+        } else {
+            button2?.isHidden = false
+        }
     }
     
     // MARK: Calendar header functions

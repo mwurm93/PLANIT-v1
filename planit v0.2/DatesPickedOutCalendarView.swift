@@ -75,9 +75,17 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
         button2?.frame.origin.y = 520
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
-        button2?.isHidden = false
         
         loadDates()
+
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if let selectedDates = SavedPreferencesForTrip["selected_dates"] as? [Date] {
+            if selectedDates.count > 1 {
+                button2?.isHidden = false
+            } else {
+                button2?.isHidden = true
+            }
+        }
     }
     
     
@@ -94,9 +102,10 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
                 self.calendarView.selectDates(selectedDates as [Date],triggerSelectionDelegate: false)
                 self.calendarView.scrollToDate(selectedDates[0], animateScroll: true)
             } else {
-            let today = Date()
-            let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
-            self.calendarView.scrollToDate(tomorrow!, animateScroll: true)
+                let today = Date()
+                let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
+                self.calendarView.scrollToDate(tomorrow!, animateScroll: true)
+                
             }
         }
     }
@@ -333,6 +342,14 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         //Save
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip2)
         
+        //Hide done button if no dates selected
+        if selectedDates.count > 1 {
+            button2?.isHidden = false
+        } else {
+            button2?.isHidden = true
+        }
+        
+        
     }
     
     func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
@@ -444,7 +461,12 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         //Save
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
-        
+        //Hide done button if no dates selected
+        if selectedDates.count > 1 {
+            button2?.isHidden = false
+        } else {
+            button2?.isHidden = true
+        }
     }
     
     func calendar(_ calendar: JTAppleCalendarView, shouldSelectDate date: Date, cell: JTAppleCell?, cellState: CellState) -> Bool {

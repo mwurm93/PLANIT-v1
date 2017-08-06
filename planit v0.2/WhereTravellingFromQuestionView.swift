@@ -174,29 +174,35 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
 //        let test1 = place.addressComponents?[1].name
 //        let test2 = place.addressComponents?[2].name
 //        let test3 = place.addressComponents?[3].name
-                        
-        searchController?.searchBar.text = place.addressComponents?[0].name
-        DataContainerSingleton.sharedDataContainer.homeAirport = place.addressComponents?[0].name
-        if place.addressComponents?.count == 6 {
-            DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[5].name
-        } else if place.addressComponents?.count == 5 {
-            DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[4].name
-        } else if place.addressComponents?.count == 4 {
-            DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[3].name
-        } else if place.addressComponents?.count == 3 {
-            DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[2].name
-        } else if place.addressComponents?.count == 2 {
-            DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[1].name
-        }
-        if DataContainerSingleton.sharedDataContainer.homeState == "United States" {
-            for stateAbbreviationDict in stateAbbreviationsDict {
-                if stateAbbreviationDict["State"] == place.addressComponents?[1].name {
-                    DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[1].name
-                } else if stateAbbreviationDict["State"] == place.addressComponents?[2].name {
-                    DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[2].name
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" || SavedPreferencesForTrip["assistantMode"] as! String == "startingPoint" {
+
+            searchController?.searchBar.text = place.addressComponents?[0].name
+            DataContainerSingleton.sharedDataContainer.homeAirport = place.addressComponents?[0].name
+            if place.addressComponents?.count == 6 {
+                DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[5].name
+            } else if place.addressComponents?.count == 5 {
+                DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[4].name
+            } else if place.addressComponents?.count == 4 {
+                DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[3].name
+            } else if place.addressComponents?.count == 3 {
+                DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[2].name
+            } else if place.addressComponents?.count == 2 {
+                DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[1].name
+            }
+            if DataContainerSingleton.sharedDataContainer.homeState == "United States" {
+                for stateAbbreviationDict in stateAbbreviationsDict {
+                    if stateAbbreviationDict["State"] == place.addressComponents?[1].name {
+                        DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[1].name
+                    } else if stateAbbreviationDict["State"] == place.addressComponents?[2].name {
+                        DataContainerSingleton.sharedDataContainer.homeState = place.addressComponents?[2].name
+                    }
                 }
             }
+        } else if SavedPreferencesForTrip["assistantMode"] as! String == "endingPoint"{
+            SavedPreferencesForTrip["endingPoint"] = place.addressComponents?[0].name
         }
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
     }
