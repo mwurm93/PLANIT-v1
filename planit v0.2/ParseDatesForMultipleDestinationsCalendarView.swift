@@ -89,7 +89,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         calendarView?.frame = CGRect(x: 13, y: 250, width: 350, height: 200)
         calendarView?.cellSize = 50
         
-        destinationDaysTableView?.frame = CGRect(x: (bounds.size.width - 300) / 2, y: 48, width: 300, height: 200)
+        destinationDaysTableView?.frame = CGRect(x: (bounds.size.width - 300) / 2, y: 48, width: 300, height: 150)
     }
     
     func loadDates() {
@@ -117,10 +117,10 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         //Button1
         button1 = UIButton(type: .custom)
         button1?.frame = CGRect.zero
-        button1?.setTitleColor(UIColor.lightGray, for: .normal)
+        button1?.setTitleColor(UIColor.white, for: .normal)
         button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         button1?.layer.borderWidth = 1
-        button1?.layer.borderColor = UIColor.lightGray.cgColor
+        button1?.layer.borderColor = UIColor.white.cgColor
         button1?.layer.masksToBounds = true
         button1?.titleLabel?.numberOfLines = 0
         button1?.titleLabel?.textAlignment = .center
@@ -176,6 +176,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     }
     
     
+    //NEED TO FIX
     
     //UITextfield delegate
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -721,12 +722,12 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
             }
             sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle! as NSString, color: UIColor.white)
         } else {
-            sender.removeMask(button:sender)
+            sender.removeMask(button:sender, color: UIColor.white)
         }
         for subview in self.subviews {
             if subview.isKind(of: UIButton.self) && subview != sender {
                 (subview as! UIButton).isSelected = false
-                (subview as! UIButton).removeMask(button: subview as! UIButton)
+                (subview as! UIButton).removeMask(button: subview as! UIButton, color: UIColor.white)
             }
         }
     }

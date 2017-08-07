@@ -46,7 +46,7 @@ class destinationsSwipedRightTableViewCell: UITableViewCell {
         if sender.isSelected {
             sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.removeMask(button:sender)
+            sender.removeMask(button:sender, color: UIColor.white)
         }
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()

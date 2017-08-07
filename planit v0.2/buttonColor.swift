@@ -49,24 +49,28 @@ extension UIButton {
         maskLayer.frame = button.bounds
         button.layer.mask = maskLayer
         button.layer.borderWidth = 0
-
+        
+        let when = DispatchTime.now() + 1
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.removeMask(button: button, color: color)
+        }
     }
     
-    func removeMask(button:UIButton) {
+    func removeMask(button:UIButton, color: UIColor) {
         button.backgroundColor = UIColor.clear
         button.layer.mask = nil
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.white.cgColor
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.layer.borderColor = color.cgColor
+        button.setTitleColor(color, for: .normal)
 
     }
     
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
         if sender.isSelected {
-            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: (sender.titleLabel?.textColor)!)
         } else {
-            sender.removeMask(button:sender)
+            sender.removeMask(button:sender, color: (sender.titleLabel?.textColor)!)
         }
         for subview in self.subviews {
             if subview.isKind(of: UIButton.self) && subview != sender {

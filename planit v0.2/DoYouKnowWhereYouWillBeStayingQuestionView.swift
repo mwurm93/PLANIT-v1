@@ -111,14 +111,10 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         //Button2
         button3 = UIButton(type: .custom)
         button3?.frame = CGRect.zero
-        button3?.setTitleColor(UIColor.lightGray, for: .normal)
+        button3?.setTitleColor(UIColor.white, for: .normal)
         button3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        button3?.setTitleColor(UIColor.darkGray, for: .highlighted)
-        button3?.setBackgroundColor(color: UIColor.lightGray, forState: .highlighted)
-        button3?.setTitleColor(UIColor.darkGray, for: .selected)
-        button3?.setBackgroundColor(color: UIColor.lightGray, forState: .selected)
         button3?.layer.borderWidth = 1
-        button3?.layer.borderColor = UIColor.lightGray.cgColor
+        button3?.layer.borderColor = UIColor.white.cgColor
         button3?.layer.masksToBounds = true
         button3?.titleLabel?.numberOfLines = 0
         button3?.titleLabel?.textAlignment = .center
@@ -134,16 +130,12 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         if sender.isSelected {
             sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.removeMask(button:sender)
+            sender.removeMask(button:sender, color: UIColor.white)
         }
         for subview in self.subviews {
             if subview.isKind(of: UIButton.self) && subview != sender {
                 (subview as! UIButton).isSelected = false
-                (subview as! UIButton).removeMask(button: subview as! UIButton)
-                if subview == button3 {
-                    (subview as! UIButton).layer.borderColor = UIColor.lightGray.cgColor
-                    (subview as! UIButton).setTitleColor(UIColor.lightGray, for: .normal)
-                }
+                (subview as! UIButton).removeMask(button: subview as! UIButton, color: UIColor.white)
             }
         }
     }

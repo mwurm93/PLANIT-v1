@@ -568,10 +568,28 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 var keys = Array(datesDestinationsDictionary.keys)
                 var changedDestinationKey = String()
                 var changedDestinationIndex = -1
-                for i in 0 ... destinationsForTrip.count - 1 {
-                    if !keys.contains(destinationsForTrip[i]) {
-                        changedDestinationKey = keys[i]
+             //   for i in 0 ... destinationsForTrip.count - 1 {
+               //     if !keys.contains(destinationsForTrip[i]) {
+                 //       changedDestinationKey = keys[i]
+                   //     changedDestinationIndex = i
+                    //}
+                //}
+                var reorderedKeys = [String]()
+                for destination in destinationsForTrip {
+                    if keys.contains(destination) {
+                        reorderedKeys.append(destination)
+                    } else {
+                        reorderedKeys.append("changedDestinationKey")
+                    }
+                }
+                for i in 0 ... reorderedKeys.count - 1 {
+                    if reorderedKeys[i] == "changedDestinationKey" {
                         changedDestinationIndex = i
+                    }
+                }
+                for key in keys {
+                    if !reorderedKeys.contains(key) {
+                        changedDestinationKey = key
                     }
                 }
                 if changedDestinationIndex >= 0 {
@@ -835,12 +853,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
             }
         } else {
-            sender.removeMask(button:sender)
+            sender.removeMask(button:sender, color: UIColor.white)
         }
         for subview in self.itineraryView.subviews {
             if subview.isKind(of: UIButton.self) && subview != sender && subview.layer.mask != nil {
                 (subview as! UIButton).isSelected = false
-                (subview as! UIButton).removeMask(button: subview as! UIButton)
+                (subview as! UIButton).removeMask(button: subview as! UIButton, color: UIColor.white)
             }
         }
     }
@@ -1463,6 +1481,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             yesCityDecidedQuestionView = Bundle.main.loadNibNamed("YesCityDecidedQuestionView", owner: self, options: nil)?.first! as? YesCityDecidedQuestionView
             yesCityDecidedQuestionView?.tag = 9
             let bounds = UIScreen.main.bounds
+            
             if whereTravellingFromQuestionView != nil {
                 self.scrollContentView.insertSubview(yesCityDecidedQuestionView!, aboveSubview: whereTravellingFromQuestionView!)
                 self.yesCityDecidedQuestionView!.frame = CGRect(x: 0, y: (whereTravellingFromQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
@@ -2696,45 +2715,95 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             indexOfDestinationBeingPlanned += 1
             SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = indexOfDestinationBeingPlanned as NSNumber
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            if decidedOnCityToVisitQuestionView != nil {
-                decidedOnCityToVisitQuestionView?.removeFromSuperview()
-                decidedOnCityToVisitQuestionView = nil
-            }
-            if noCityDecidedAnyIdeasQuestionView != nil {
-                noCityDecidedAnyIdeasQuestionView?.removeFromSuperview()
-                noCityDecidedAnyIdeasQuestionView = nil
-                if planTripToIdeaQuestionView != nil {
-                    planTripToIdeaQuestionView?.removeFromSuperview()
-                    planTripToIdeaQuestionView = nil
-                }
-                if whatTypeOfTripQuestionView != nil {
-                    whatTypeOfTripQuestionView?.removeFromSuperview()
-                    whatTypeOfTripQuestionView = nil
-                }
-                if howFarAwayQuestionView != nil {
-                    howFarAwayQuestionView?.removeFromSuperview()
-                    howFarAwayQuestionView = nil
-                }
-                if destinationOptionsCardView != nil {
-                    destinationOptionsCardView?.removeFromSuperview()
-                    destinationOptionsCardView = nil
-                }
-            }
+            
+            let bounds = UIScreen.main.bounds
             if yesCityDecidedQuestionView != nil {
-                yesCityDecidedQuestionView?.removeFromSuperview()
-                yesCityDecidedQuestionView = nil
+                self.scrollContentView.bringSubview(toFront: yesCityDecidedQuestionView!)
+                self.yesCityDecidedQuestionView!.frame = CGRect(x: 0, y: (addAnotherDestinationQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+                self.yesCityDecidedQuestionView?.searchController?.searchBar.text = ""
+                updateProgress()
+                scrollToSubviewWithTag(tag: 9)
             }
-            if addAnotherDestinationQuestionView != nil {
-                addAnotherDestinationQuestionView?.removeFromSuperview()
-                addAnotherDestinationQuestionView = nil
+            
+            
+            let when = DispatchTime.now() + 1
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.alignSubviews()
+                self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.minY), animated: false)
             }
-            alignSubviews()
-            
-            //LINK TO ITINERARY AND SHOW WERE DESTINATION WAS SAVED
-            
-            //spawn new destination flow
-            spawnYesCityDecidedQuestionView()
+            let when2 = DispatchTime.now() + 1.2
+            DispatchQueue.main.asyncAfter(deadline: when2) {
+                if self.decidedOnCityToVisitQuestionView != nil {
+                    self.decidedOnCityToVisitQuestionView?.removeFromSuperview()
+                    self.decidedOnCityToVisitQuestionView = nil
+                }
+                if self.noCityDecidedAnyIdeasQuestionView != nil {
+                    self.noCityDecidedAnyIdeasQuestionView?.removeFromSuperview()
+                    self.noCityDecidedAnyIdeasQuestionView = nil
+                    if self.planTripToIdeaQuestionView != nil {
+                        self.planTripToIdeaQuestionView?.removeFromSuperview()
+                        self.planTripToIdeaQuestionView = nil
+                    }
+                    if self.whatTypeOfTripQuestionView != nil {
+                        self.whatTypeOfTripQuestionView?.removeFromSuperview()
+                        self.whatTypeOfTripQuestionView = nil
+                    }
+                    if self.howFarAwayQuestionView != nil {
+                        self.howFarAwayQuestionView?.removeFromSuperview()
+                        self.howFarAwayQuestionView = nil
+                    }
+                    if self.destinationOptionsCardView != nil {
+                        self.destinationOptionsCardView?.removeFromSuperview()
+                        self.destinationOptionsCardView = nil
+                    }
+                }
+                if self.addAnotherDestinationQuestionView != nil {
+                    self.addAnotherDestinationQuestionView?.removeFromSuperview()
+                    self.addAnotherDestinationQuestionView = nil
+                }
+                self.alignSubviews()
+                self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.minY), animated: false)
+            }
+
         }
+    }
+
+    func test() {
+        if decidedOnCityToVisitQuestionView != nil {
+            decidedOnCityToVisitQuestionView?.removeFromSuperview()
+            decidedOnCityToVisitQuestionView = nil
+        }
+        if noCityDecidedAnyIdeasQuestionView != nil {
+            noCityDecidedAnyIdeasQuestionView?.removeFromSuperview()
+            noCityDecidedAnyIdeasQuestionView = nil
+            if planTripToIdeaQuestionView != nil {
+                planTripToIdeaQuestionView?.removeFromSuperview()
+                planTripToIdeaQuestionView = nil
+            }
+            if whatTypeOfTripQuestionView != nil {
+                whatTypeOfTripQuestionView?.removeFromSuperview()
+                whatTypeOfTripQuestionView = nil
+            }
+            if howFarAwayQuestionView != nil {
+                howFarAwayQuestionView?.removeFromSuperview()
+                howFarAwayQuestionView = nil
+            }
+            if destinationOptionsCardView != nil {
+                destinationOptionsCardView?.removeFromSuperview()
+                destinationOptionsCardView = nil
+            }
+        }
+        if addAnotherDestinationQuestionView != nil {
+            addAnotherDestinationQuestionView?.removeFromSuperview()
+            addAnotherDestinationQuestionView = nil
+        }
+        alignSubviews()
+        
+        //LINK TO ITINERARY AND SHOW WERE DESTINATION WAS SAVED
+        
+        //spawn new destination flow
+        //spawnYesCityDecidedQuestionView()
+
     }
     func howDoYouWantToGetThereQuestionView_fly(sender:UIButton) {
         if sender.isSelected == true {
@@ -3595,79 +3664,120 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = indexOfDestinationBeingPlanned
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
-            //Remove travel and place to stay subviews
+            
+            let bounds = UIScreen.main.bounds
             if howDoYouWantToGetThereQuestionView != nil {
-                howDoYouWantToGetThereQuestionView?.removeFromSuperview()
-                howDoYouWantToGetThereQuestionView = nil
-                if flightSearchQuestionView != nil {
-                    flightSearchQuestionView?.removeFromSuperview()
-                    flightSearchQuestionView = nil
-                    if doYouNeedARentalCarQuestionView != nil {
-                        doYouNeedARentalCarQuestionView?.removeFromSuperview()
-                        doYouNeedARentalCarQuestionView = nil
-                        if carRentalSearchQuestionView != nil {
-                            carRentalSearchQuestionView?.removeFromSuperview()
-                            carRentalSearchQuestionView = nil
+                self.howDoYouWantToGetThereQuestionView!.frame = CGRect(x: 0, y: self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+                self.scrollContentView.bringSubview(toFront: howDoYouWantToGetThereQuestionView!)
+                updateProgress()
+                scrollToSubviewWithTag(tag: 10)
+            }
+            
+            let when = DispatchTime.now() + 1
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.alignSubviews()
+                self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.minY), animated: false)
+            }
+
+            let when2 = DispatchTime.now() + 1.2
+            DispatchQueue.main.asyncAfter(deadline: when2) {
+                
+                //Remove travel and place to stay subviews
+    //            if self.howDoYouWantToGetThereQuestionView != nil {
+//                    self.howDoYouWantToGetThereQuestionView?.removeFromSuperview()
+  //                  self.howDoYouWantToGetThereQuestionView = nil
+                    if self.flightSearchQuestionView != nil {
+                        self.flightSearchQuestionView?.removeFromSuperview()
+                        self.flightSearchQuestionView = nil
+                        if self.doYouNeedARentalCarQuestionView != nil {
+                            self.doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                            self.doYouNeedARentalCarQuestionView = nil
+                            if self.carRentalSearchQuestionView != nil {
+                                self.carRentalSearchQuestionView?.removeFromSuperview()
+                                self.carRentalSearchQuestionView = nil
+                            }
+                        }
+                    }
+                    if self.doYouNeedARentalCarQuestionView != nil {
+                        self.doYouNeedARentalCarQuestionView?.removeFromSuperview()
+                        self.doYouNeedARentalCarQuestionView = nil
+                        if self.carRentalSearchQuestionView != nil {
+                            self.carRentalSearchQuestionView?.removeFromSuperview()
+                            self.carRentalSearchQuestionView = nil
+                        }
+                        if self.aboutWhatTimeWillYouStartDrivingQuestionView != nil {
+                            self.aboutWhatTimeWillYouStartDrivingQuestionView?.removeFromSuperview()
+                            self.aboutWhatTimeWillYouStartDrivingQuestionView = nil
+                        }
+                    }
+                    if self.busTrainOtherQuestionView != nil {
+                        self.busTrainOtherQuestionView?.removeFromSuperview()
+                        self.busTrainOtherQuestionView = nil
+                    }
+                    if self.idkHowToGetThereQuestionView != nil {
+                        self.idkHowToGetThereQuestionView?.removeFromSuperview()
+                        self.idkHowToGetThereQuestionView = nil
+                    }
+          //      }
+                if self.doYouKnowWhereYouWillBeStayingQuestionView != nil {
+                    self.doYouKnowWhereYouWillBeStayingQuestionView?.removeFromSuperview()
+                    self.doYouKnowWhereYouWillBeStayingQuestionView = nil
+
+                    if self.yesIKnowWhereImStayingQuestionView != nil {
+                        self.yesIKnowWhereImStayingQuestionView?.removeFromSuperview()
+                        self.yesIKnowWhereImStayingQuestionView = nil
+                    }
+                    if self.doYouNeedHelpBookingAHotelQuestionView != nil {
+                        self.doYouNeedHelpBookingAHotelQuestionView?.removeFromSuperview()
+                        self.doYouNeedHelpBookingAHotelQuestionView = nil
+                    }
+                    if self.whatTypeOfPlaceToStayQuestionView != nil {
+                        self.whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
+                        self.whatTypeOfPlaceToStayQuestionView = nil
+                        if self.hotelSearchQuestionView != nil {
+                            self.hotelSearchQuestionView?.removeFromSuperview()
+                            self.hotelSearchQuestionView = nil
+                        }
+                        if self.shortTermRentalSearchQuestionView != nil {
+                            self.shortTermRentalSearchQuestionView?.removeFromSuperview()
+                            self.shortTermRentalSearchQuestionView = nil
+                        }
+                        if self.stayWithSomeoneIKnowQuestionView != nil {
+                            self.stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
+                            self.stayWithSomeoneIKnowQuestionView = nil
+                        }
+                        if self.placeForGroupOrJustYouQuestionView != nil {
+                            self.placeForGroupOrJustYouQuestionView?.removeFromSuperview()
+                            self.placeForGroupOrJustYouQuestionView = nil
                         }
                     }
                 }
-                if doYouNeedARentalCarQuestionView != nil {
-                    doYouNeedARentalCarQuestionView?.removeFromSuperview()
-                    doYouNeedARentalCarQuestionView = nil
-                    if carRentalSearchQuestionView != nil {
-                        carRentalSearchQuestionView?.removeFromSuperview()
-                        carRentalSearchQuestionView = nil
-                    }
-                    if aboutWhatTimeWillYouStartDrivingQuestionView != nil {
-                        aboutWhatTimeWillYouStartDrivingQuestionView?.removeFromSuperview()
-                        aboutWhatTimeWillYouStartDrivingQuestionView = nil
-                    }
-                }
-                if busTrainOtherQuestionView != nil {
-                    busTrainOtherQuestionView?.removeFromSuperview()
-                    busTrainOtherQuestionView = nil
-                }
-                if idkHowToGetThereQuestionView != nil {
-                    idkHowToGetThereQuestionView?.removeFromSuperview()
-                    idkHowToGetThereQuestionView = nil
-                }
-            }
-            if doYouKnowWhereYouWillBeStayingQuestionView != nil {
-                if yesIKnowWhereImStayingQuestionView != nil {
-                    yesIKnowWhereImStayingQuestionView?.removeFromSuperview()
-                    yesIKnowWhereImStayingQuestionView = nil
-                }
-                if doYouNeedHelpBookingAHotelQuestionView != nil {
-                    doYouNeedHelpBookingAHotelQuestionView?.removeFromSuperview()
-                    doYouNeedHelpBookingAHotelQuestionView = nil
-                }
-                if whatTypeOfPlaceToStayQuestionView != nil {
-                    whatTypeOfPlaceToStayQuestionView?.removeFromSuperview()
-                    whatTypeOfPlaceToStayQuestionView = nil
-                    if hotelSearchQuestionView != nil {
-                        hotelSearchQuestionView?.removeFromSuperview()
-                        hotelSearchQuestionView = nil
-                    }
-                    if shortTermRentalSearchQuestionView != nil {
-                        shortTermRentalSearchQuestionView?.removeFromSuperview()
-                        shortTermRentalSearchQuestionView = nil
-                    }
-                    if stayWithSomeoneIKnowQuestionView != nil {
-                        stayWithSomeoneIKnowQuestionView?.removeFromSuperview()
-                        stayWithSomeoneIKnowQuestionView = nil
-                    }
-                    if placeForGroupOrJustYouQuestionView != nil {
-                        placeForGroupOrJustYouQuestionView?.removeFromSuperview()
-                        placeForGroupOrJustYouQuestionView = nil
-                    }
-                }
+                
+                self.alignSubviews()
+                self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.minY), animated: false)
             }
             
+           // alignSubviews()
+            
             //spawn travel subview
-            spawnHowDoYouWantToGetThereQuestionView()
+            //spawnHowDoYouWantToGetThereQuestionView()
         } else {
-            spawnSendProposalQuestionView()
+            //spawnSendProposalQuestionView()
+            initialItineraryBuildingCompleteReviewItinerary()
         }
+    }
+    
+    func initialItineraryBuildingCompleteReviewItinerary() {
+        
+        let alert = UIAlertController(title: "Review and send",
+                                      message: "Great work! Time to review your itinerary and invite some friends!",
+                                      preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Got it", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+            self.disableAndResetAssistant_moveToItinerary()
+        }
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+        
     }
     
     //MARK: UITextViewDelegate
@@ -4040,6 +4150,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         contactsCollectionView.reloadData()
         handleAddInviteesButton()
         editItineraryModeEnabled = false
+        editSwitch.isOn = false
         for visibleCell in (self.destinationsDatesCollectionView!.visibleCells as! [destinationsDatesCollectionViewCell]) {
             visibleCell.stopShakingIcons()
         }

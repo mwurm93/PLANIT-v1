@@ -232,7 +232,7 @@ extension JTAppleCalendarView {
         
         // Before reloading, set the proposal path,
         // so that in the event targetContentOffset gets called. We know the path
-//        calendarViewLayout.setMinVisibleDate()
+        //calendarViewLayout.setMinVisibleDate()
         batchReloadIndexPaths(paths)
     }
     
@@ -494,7 +494,7 @@ extension JTAppleCalendarView {
         
         var point: CGPoint?
         switch self.scrollingMode {
-        case .stopAtEach, .stopAtEachSection, .stopAtEachCalendarFrameWidth, .nonStopToSection:
+        case .stopAtEach, .stopAtEachSection, .stopAtEachCalendarFrame, .nonStopToSection:
             if self.scrollDirection == .horizontal || (scrollDirection == .vertical && !calendarViewLayout.thereAreHeaders) {
                 point = self.targetPointForItemAt(indexPath: sectionIndexPath)
             }

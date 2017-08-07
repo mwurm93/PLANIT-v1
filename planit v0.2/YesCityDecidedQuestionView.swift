@@ -114,10 +114,10 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         //Button
         button = UIButton(type: .custom)
         button?.frame = CGRect.zero
-        button?.setTitleColor(UIColor.lightGray, for: .normal)
+        button?.setTitleColor(UIColor.white, for: .normal)
         button?.setBackgroundColor(color: UIColor.clear, forState: .normal)
         button?.layer.borderWidth = 1
-        button?.layer.borderColor = UIColor.lightGray.cgColor
+        button?.layer.borderColor = UIColor.white.cgColor
         button?.layer.masksToBounds = true
         button?.titleLabel?.textAlignment = .center
         button?.setTitle("Help me discover somewhere!", for: .normal)
@@ -131,12 +131,12 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         if sender.isSelected {
             sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.removeMask(button:sender)
+            sender.removeMask(button:sender, color: UIColor.white)
         }
         for subview in self.subviews {
             if subview.isKind(of: UIButton.self) && subview != sender {
                 (subview as! UIButton).isSelected = false
-                (subview as! UIButton).removeMask(button: subview as! UIButton)
+                (subview as! UIButton).removeMask(button: subview as! UIButton, color: UIColor.white)
             }
         }
     }

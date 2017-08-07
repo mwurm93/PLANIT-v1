@@ -545,7 +545,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
             swipeableView.isHidden = false
         } else {
             sender.layer.borderWidth = 1
-            sender.removeMask(button:sender)
+            sender.removeMask(button:sender, color: UIColor.white)
         }
     }
     

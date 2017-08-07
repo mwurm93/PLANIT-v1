@@ -86,12 +86,12 @@ open class JTAppleCalendarView: UICollectionView {
     }
     
     /// Initializes and returns a newly allocated collection view object with the specified frame and layout.
-    @available(*, unavailable, message: "Please use JTAppleCalendar() instead")
+    @available(*, unavailable, message: "Please use JTAppleCalendarView() instead. It manages its own layout.")
     public override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: UICollectionViewFlowLayout())
         setupNewLayout(from: collectionViewLayout as! JTAppleCalendarLayoutProtocol)
     }
-    
+
     /// Initializes using decoder object
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -155,7 +155,7 @@ open class JTAppleCalendarView: UICollectionView {
             
         } else {
             switch self.scrollingMode {
-            case .stopAtEach, .stopAtEachSection, .stopAtEachCalendarFrameWidth:
+            case .stopAtEach, .stopAtEachSection, .stopAtEachCalendarFrame:
                 if self.scrollDirection == .horizontal || (scrollDirection == .vertical && !calendarViewLayout.thereAreHeaders) {
                     retval = self.targetPointForItemAt(indexPath: sectionIndexPath) ?? .zero
                 }
@@ -182,16 +182,16 @@ open class JTAppleCalendarView: UICollectionView {
     }
     
     /// Configure the scrolling behavior
-    open var scrollingMode: ScrollingMode = .stopAtEachCalendarFrameWidth {
+    open var scrollingMode: ScrollingMode = .stopAtEachCalendarFrame {
         didSet {
             switch scrollingMode {
-            case .stopAtEachCalendarFrameWidth: decelerationRate = UIScrollViewDecelerationRateFast
+            case .stopAtEachCalendarFrame: decelerationRate = UIScrollViewDecelerationRateFast
             case .stopAtEach, .stopAtEachSection: decelerationRate = UIScrollViewDecelerationRateFast
             case .nonStopToSection, .nonStopToCell, .nonStopTo, .none: decelerationRate = UIScrollViewDecelerationRateNormal
             }
             #if os(iOS)
                 switch scrollingMode {
-                case .stopAtEachCalendarFrameWidth:
+                case .stopAtEachCalendarFrame:
                     isPagingEnabled = true
                 default:
                     isPagingEnabled = false
@@ -239,7 +239,7 @@ open class JTAppleCalendarView: UICollectionView {
         
         #if os(iOS)
             if isPagingEnabled {
-                scrollingMode = .stopAtEachCalendarFrameWidth
+                scrollingMode = .stopAtEachCalendarFrame
             } else {
                 scrollingMode = .none
             }
@@ -284,7 +284,7 @@ open class JTAppleCalendarView: UICollectionView {
         let theTargetContentOffset: CGFloat = scrollDirection == .horizontal ? targetCellFrame.origin.x : targetCellFrame.origin.y
         var fixedScrollSize: CGFloat = 0
         switch scrollingMode {
-        case .stopAtEachSection, .stopAtEachCalendarFrameWidth, .nonStopToSection:
+        case .stopAtEachSection, .stopAtEachCalendarFrame, .nonStopToSection:
             if self.scrollDirection == .horizontal || (scrollDirection == .vertical && !calendarViewLayout.thereAreHeaders) {
                 // Horizontal has a fixed width.
                 // Vertical with no header has fixed height
@@ -418,7 +418,7 @@ open class JTAppleCalendarView: UICollectionView {
                 newDateBoundary.firstDayOfWeek      != cachedConfiguration.firstDayOfWeek ||
                 newDateBoundary.hasStrictBoundaries != cachedConfiguration.hasStrictBoundaries ||
                 // Other layout information were changed
-                minimumInteritemSpacing  != calendarLayout.minimumLineSpacing ||
+                minimumInteritemSpacing  != calendarLayout.minimumInteritemSpacing ||
                 minimumLineSpacing       != calendarLayout.minimumLineSpacing ||
                 sectionInset             != calendarLayout.sectionInset ||
                 lastMonthSize            != newLastMonth ||
@@ -499,8 +499,7 @@ extension JTAppleCalendarView {
             default: break
             }
             
-            if
-                calendarViewLayout.thereAreHeaders,
+            if calendarViewLayout.thereAreHeaders,
                 scrollDirection == .vertical,
                 isNonConinuousScroll {
                 scrollToHeaderInSection(validIndexPath.section,

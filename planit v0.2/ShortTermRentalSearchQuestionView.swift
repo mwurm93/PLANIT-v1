@@ -148,12 +148,12 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         if sender.isSelected {
             sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
-            sender.removeMask(button:sender)
+            sender.removeMask(button:sender, color: UIColor.white)
         }
         for subview in self.subviews {
             if subview.isKind(of: UIButton.self) && subview != sender {
                 (subview as! UIButton).isSelected = false
-                (subview as! UIButton).removeMask(button: subview as! UIButton)
+                (subview as! UIButton).removeMask(button: subview as! UIButton, color: UIColor.white)
             }
         }
     }

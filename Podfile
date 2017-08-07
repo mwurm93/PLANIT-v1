@@ -42,6 +42,12 @@ pod 'CSVImporter', '~> 1.7'
 # Pod for custom segmented control and navbar
 pod 'TwicketSegmentedControl'
 
+# Pod for drawer
+pod 'DrawerController', '~> 3.2'
+
+# Pod for pulsing button
+pod 'ZKPulseView', '~> 0.0.1’
+
 # Pods for TravelPayouts
 pod 'AviasalesSDK', '~> 3.0.0'
 pod 'SDWebImage', '~> 3.7'
