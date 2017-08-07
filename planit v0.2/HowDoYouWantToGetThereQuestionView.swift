@@ -16,6 +16,7 @@ class HowDoYouWantToGetThereQuestionView: UIView {
     var button3: UIButton?
     var button4: UIButton?
     var button5: UIButton?
+    var button6: UIButton?
     
     
     override init(frame: CGRect) {
@@ -64,15 +65,23 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         button4?.frame.size.height = 30
         button4?.frame.size.width += 20
         button4?.frame.origin.x = (bounds.size.width - (button4?.frame.width)!) / 2
-        button4?.frame.origin.y = 315
+        button4?.frame.origin.y = 365
         button4?.layer.cornerRadius = (button4?.frame.height)! / 2
         
         button5?.sizeToFit()
         button5?.frame.size.height = 30
         button5?.frame.size.width += 20
         button5?.frame.origin.x = (bounds.size.width - (button5?.frame.width)!) / 2
-        button5?.frame.origin.y = 365
+        button5?.frame.origin.y = 315
         button5?.layer.cornerRadius = (button5?.frame.height)! / 2
+
+        button6?.sizeToFit()
+        button6?.frame.size.height = 30
+        button6?.frame.size.width += 20
+        button6?.frame.origin.x = (bounds.size.width - (button6?.frame.width)!) / 2
+        button6?.frame.origin.y = 435
+        button6?.layer.cornerRadius = (button6?.frame.height)! / 2
+        button6?.isHidden = true
     }
     
     
@@ -169,6 +178,20 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         button5?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button5!)
         
+        //Button6
+        button6 = UIButton(type: .custom)
+        button6?.frame = CGRect.zero
+        button6?.setTitleColor(UIColor.white, for: .normal)
+        button6?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button6?.layer.borderWidth = 1
+        button6?.layer.borderColor = UIColor.white.cgColor
+        button6?.layer.masksToBounds = true
+        button6?.titleLabel?.numberOfLines = 0
+        button6?.titleLabel?.textAlignment = .center
+        button6?.setTitle("Skip this, I planned roundtrip travel", for: .normal)
+        button6?.translatesAutoresizingMaskIntoConstraints = false
+        button6?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button6!)
         
     }
     

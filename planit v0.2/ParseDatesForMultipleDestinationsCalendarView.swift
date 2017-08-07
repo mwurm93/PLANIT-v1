@@ -103,6 +103,9 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                 
             }
         }
+        
+
+
     }
     func scrollToDate() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -184,10 +187,11 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
         var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
         
+                //Update textfields to match total
         var differenceInNightsCount = 0
         for i in 0 ... destinationsForTrip.count - 1 {
             if textField.tag == i {
-                //Update textfields to match total
+                
                 let previousNightsCount = (datesDestinationsDictionary[destinationsForTrip[i]]?.count)! - 1
                 differenceInNightsCount = previousNightsCount - Int(textField.text!)!
                 

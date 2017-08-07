@@ -305,15 +305,19 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         }
         
         handleSelection(cell: cell, cellState: cellState)
-        
+
         let selectedDates = calendarView?.selectedDates as! [NSDate]
         // Create dictionary of selected dates and destinations
-        var datesDestinationsDictionary = [String:[Date]]()
-        datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        if destinationsForTrip.count == 0 {
+            var datesDestinationsDictionary = [String:[Date]]()
+            datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
+            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+        }
+        
         getLengthOfSelectedAvailabilities()
         //Update trip preferences in dictionary
         SavedPreferencesForTrip["selected_dates"] = selectedDates as [Date]
-        SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
         SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)        
         
@@ -449,14 +453,17 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
             
         }
         
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         // Create dictionary of selected dates and destinations
-        var datesDestinationsDictionary = [String:[Date]]()
-        datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        if destinationsForTrip.count == 0 {
+            var datesDestinationsDictionary = [String:[Date]]()
+            datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
+            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+        }
         getLengthOfSelectedAvailabilities()
         //Update trip preferences in dictionary
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["selected_dates"] = selectedDates as [Date]
-        SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
         SavedPreferencesForTrip["Availability_segment_lengths"] = lengthOfAvailabilitySegmentsArray as [NSNumber]
         //Save
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -550,6 +557,22 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
             DispatchQueue.main.asyncAfter(deadline: when) {
                 if SavedPreferencesForTrip["assistantMode"] as! String == "dates" {
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected_backToItinerary"), object: nil)
+                    let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+                    // Create dictionary of selected dates and destinations
+                    //var datesDestinationsDictionary = [String:[Date]]()
+                    //                    if (SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]).isEmpty {
+                    //                      datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
+                    //                } else {
+                    //Reset datesDestinationsDictionary
+                    var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+                    for i in 0 ... destinationsForTrip.count - 1 {
+                        datesDestinationsDictionary[destinationsForTrip[i]] = SavedPreferencesForTrip["selected_dates"] as! [Date]
+                    }
+                    SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+                    //Save
+                    self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    //              }
+
                 } else if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
                 }

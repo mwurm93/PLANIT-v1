@@ -65,7 +65,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         //        questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Where do you want to travel?"
+        questionLabel?.text = "Where do you want to go?"
         self.addSubview(questionLabel!)
         
         //GOOGLE PLACES SEARCH
