@@ -38,6 +38,7 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
+        saveIsRoundTrip(isRoundtrip:false)
         
         //        self.layer.borderColor = UIColor.green.cgColor
         //        self.layer.borderWidth = 2
@@ -370,5 +371,13 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "animateOutDatePickingSubview"), object: nil)
         }
     }
-
+    func saveIsRoundTrip(isRoundtrip:Bool)  {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        
+        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["isRoundtrip"] = isRoundtrip
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+    }
 }

@@ -41,6 +41,7 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
+        saveIsRoundTrip(isRoundtrip: true)
         
         //        self.layer.borderColor = UIColor.green.cgColor
         //        self.layer.borderWidth = 2
@@ -255,9 +256,23 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
             differentDropOff?.isHidden = false
         }
     }
+    func saveIsRoundTrip(isRoundtrip:Bool)  {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        
+        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["isRoundtrip"] = isRoundtrip
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+    }
     
     @IBAction func searchModeControlValueChanged(_ sender: Any) {
         handleSearchMode()
+        if searchModeControl.selectedSegmentIndex == 0 {
+            saveIsRoundTrip(isRoundtrip: true)
+        } else {
+            saveIsRoundTrip(isRoundtrip: false)
+        }
     }
     
 }

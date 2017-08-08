@@ -98,7 +98,9 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         if destinationsForTrip.count != 0 {
-            questionLabel?.text = "How do you want to get to\n\(destinationsForTrip[indexOfDestinationBeingPlanned])?"
+            if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+                questionLabel?.text = "How do you want to get to\n\(destinationsForTrip[indexOfDestinationBeingPlanned])?"
+            }
         }
         self.addSubview(questionLabel!)
         

@@ -62,8 +62,34 @@ static CGFloat const separatorRightInset = 20.0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    //start with not roundtrip
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:NO];
+    [_tableView reloadData];
+
     [self setupViewController];
     [self.presenter handleViewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(hideReturnButtonForOneWaySearch)
+                                                 name:@"oneWayButtonTouchedUpInside"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showReturnButtonForRoundtripSearch)
+                                                 name:@"roundtripButtonTouchedUpInside"
+                                               object:nil];
+}
+- (void)hideReturnButtonForOneWaySearch {
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:NO];
+    
+    [_tableView reloadData];
+}
+- (void)showReturnButtonForRoundtripSearch {
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:YES];
+    [_tableView reloadData];
 }
 
 #pragma mark - Setup
@@ -143,8 +169,8 @@ static CGFloat const separatorRightInset = 20.0;
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-   return self.viewModel.sectionViewModels.count;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {    
+    return self.viewModel.sectionViewModels.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -157,6 +183,24 @@ static CGFloat const separatorRightInset = 20.0;
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    float heightForRow = self.tableViewRowHeight;
+    
+    
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    bool isRoundtrip = [flightTicketsAccessoryMethodPerformer fetchIsRoundtrip];
+
+    
+    
+    if(indexPath.section == 2 && !isRoundtrip) {
+        //ASTSimpleSearchFormDateTableViewCell *cell = (ASTSimpleSearchFormDateTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+        //[cell.returnButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+        return 0;
+    } else {
+        return heightForRow;
+    }
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return _tableViewSectionHeaderHeight;

@@ -2814,7 +2814,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
             if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
-                travelDictionaryArray.append(["modeOfTransportation":"fly"])
+                travelDictionaryArray.append(["modeOfTransportation":"fly","isRoundtrip":false])
             } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
                 if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "fly" {
                     if doYouNeedARentalCarQuestionView != nil {
@@ -2838,7 +2838,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                         idkHowToGetThereQuestionView = nil
                     }
                 }
-                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"fly"]
+                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"fly","isRoundtrip":false]
             }
             SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -2852,7 +2852,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
             if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
-                travelDictionaryArray.append(["modeOfTransportation":"drive"])
+                travelDictionaryArray.append(["modeOfTransportation":"drive","isRoundtrip":true])
             } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
                 if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "drive" {
                     if flightSearchQuestionView != nil {
@@ -2879,7 +2879,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                         
                 }
-                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"drive"]
+                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"drive","isRoundtrip":true]
             }
             SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -3674,10 +3674,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         } else if indexOfDestinationBeingPlanned == destinationsForTrip.count - 1 {
             var didPlanRoundTripTravel = false
             //PLANNED update didPlanRoundTripTravel bool based on travel dictionary "roundtrip" tag
-            if destinationsForTrip.count > 1 {
-                
-            } else {
-                
+            for i in 0 ... destinationsForTrip.count - 1 {
+                var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+                if travelDictionaryArray[i]["modeOfTransportation"] as! String == "illAlreadyBeThere" {
+                    didPlanRoundTripTravel = true
+                } else if travelDictionaryArray[i]["modeOfTransportation"] as! String == "fly" {
+                    if travelDictionaryArray[i]["isRoundtrip"] as! Bool != nil {
+                        if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
+                            didPlanRoundTripTravel = true
+                        }
+                    }
+                } else if travelDictionaryArray[i]["modeOfTransportation"] as! String == "drive" {
+                    if travelDictionaryArray[i]["isRoundtrip"] as! Bool != nil {
+                        if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
+                            didPlanRoundTripTravel = true
+                        }
+                    }
+                }
             }
             
             if didPlanRoundTripTravel {
@@ -3706,20 +3719,20 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.howDoYouWantToGetThereQuestionView!.frame = CGRect(x: 0, y: self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.maxY, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             if indexOfDestinationBeingPlanned == destinationsForTrip.count {
                 self.howDoYouWantToGetThereQuestionView?.questionLabel?.text = "How do you want to get back?"
+                howDoYouWantToGetThereQuestionView?.button6?.isHidden = false
             } else {
                 self.howDoYouWantToGetThereQuestionView?.questionLabel?.text = "How do you want to get to\n\(destinationsForTrip[indexOfDestinationBeingPlanned])?"
-            }
+            }            
             self.scrollContentView.bringSubview(toFront: howDoYouWantToGetThereQuestionView!)
             updateProgress()
             scrollToSubviewWithTag(tag: 10)
+            
         }
         
         let when = DispatchTime.now() + 1
         DispatchQueue.main.asyncAfter(deadline: when) {
             self.alignSubviews()
             self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].frame.minY), animated: false)
-            
-            let test = when
         }
         
         let when2 = DispatchTime.now() + 2
@@ -3798,16 +3811,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     func planPlaceToStayOrReviewItinerary() {
-        var isFinalDestinationTravelBeingPlanned = true
+        var isFinalDestinationTravelBeingPlanned = false
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
         
         if indexOfDestinationBeingPlanned == destinationsForTrip.count {
-            isFinalDestinationTravelBeingPlanned = false
+            isFinalDestinationTravelBeingPlanned = true
         }
         
-        if !isFinalDestinationTravelBeingPlanned {
+        if isFinalDestinationTravelBeingPlanned {
             initialItineraryBuildingCompleteReviewItinerary()
         } else {
             self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()

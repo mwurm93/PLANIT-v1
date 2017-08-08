@@ -70,6 +70,7 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     [self setupChildViewControllers];
     [self setupAlreadyHaveFlightsButton];
     [self setupComeBackToThisButton];
+    [_searchFormTypeSegmentedControl setSelectedSegmentIndex:0];
 
 }
 
@@ -90,18 +91,18 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
 }
 
 - (void)setupAlreadyHaveFlightsButton {
-    self.alreadyHaveFlightsButton.tintColor = [UIColor lightGrayColor];
+    self.alreadyHaveFlightsButton.tintColor = [UIColor whiteColor];
     self.alreadyHaveFlightsButton.backgroundColor = [UIColor clearColor];
     self.alreadyHaveFlightsButton.layer.cornerRadius = 15.0;
-    self.alreadyHaveFlightsButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.alreadyHaveFlightsButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.alreadyHaveFlightsButton.layer.borderWidth = 1;
 }
 
 - (void)setupComeBackToThisButton {
-    self.comeBackToThisButton.tintColor = [UIColor lightGrayColor];
+    self.comeBackToThisButton.tintColor = [UIColor whiteColor];
     self.comeBackToThisButton.backgroundColor = [UIColor clearColor];
     self.comeBackToThisButton.layer.cornerRadius = 15.0;
-    self.comeBackToThisButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.comeBackToThisButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.comeBackToThisButton.layer.borderWidth = 1;
 }
 
@@ -166,12 +167,16 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     switch (sender.selectedSegmentIndex) {
         case ASTContainerSearchFormSearchTypeOneWay:
             [self showSimpleSearchForm];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"oneWayButtonTouchedUpInside"                                  object:self];
+            
             break;
         case ASTContainerSearchFormSearchTypeRoundtrip:
             [self showSimpleSearchForm];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"roundtripButtonTouchedUpInside"                                  object:self];
             break;
         case ASTContainerSearchFormSearchTypeComplex:
             [self showComplexSearchForm];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"multiCityButtonTouchedUpInside"                                  object:self];
             break;
     }
 }

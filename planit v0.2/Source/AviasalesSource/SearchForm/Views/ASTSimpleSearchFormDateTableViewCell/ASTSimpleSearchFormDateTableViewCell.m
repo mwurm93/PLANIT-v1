@@ -16,7 +16,6 @@
     self.returnButton.tintColor = [JRColorScheme searchFormTintColor];
     self.returnLabel.textColor = [JRColorScheme searchFormTintColor];
 }
-
 - (IBAction)returnButtonTapped:(UIButton *)sender {
     if (self.returnButtonAction) {
         self.returnButtonAction(sender);

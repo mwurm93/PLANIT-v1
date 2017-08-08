@@ -80,4 +80,23 @@ import AviasalesSDK
         }
         return 0
     }
+    
+    
+    
+    func saveIsRoundTrip(isRoundtrip:Bool)  {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        
+        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["isRoundtrip"] = isRoundtrip
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+    }
+    func fetchIsRoundtrip() -> Bool {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+        let isRoundtrip = travelDictionaryArray[indexOfDestinationBeingPlanned]["isRoundtrip"] as? Bool
+        return isRoundtrip!
+    }
 }

@@ -64,6 +64,7 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         if indexOfDestinationBeingPlanned < destinationsForTrip.count {
             questionLabel?.text = "Do you know where you'll be staying in \(destinationsForTrip[indexOfDestinationBeingPlanned])?"
         }
+        
     }
     
     
