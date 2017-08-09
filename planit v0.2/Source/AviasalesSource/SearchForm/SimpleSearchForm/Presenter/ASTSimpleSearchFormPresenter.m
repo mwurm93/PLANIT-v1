@@ -40,7 +40,15 @@ static NSString * const kSimpleSearchInfoBuilderStorageKey = @"simpleSearchInfoB
     self.directTravelSegmentBuilder.destinationAirport = destination;
     self.directTravelSegmentBuilder.departureDate = checkIn;
     self.returnDate = checkOut;
-    self.shouldSetReturnDate = YES;
+    
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    bool isRoundtrip = [flightTicketsAccessoryMethodPerformer fetchIsRoundtrip];
+
+    if (isRoundtrip) {
+        self.shouldSetReturnDate = YES;
+    } else {
+        self.shouldSetReturnDate = NO;
+    }
 
     self.searchInfoBuilder.adults = passengers.adults;
     self.searchInfoBuilder.infants = passengers.infants;

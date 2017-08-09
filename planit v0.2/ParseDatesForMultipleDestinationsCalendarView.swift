@@ -374,9 +374,11 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
         var destinationsForTripStates = SavedPreferencesForTrip["destinationsForTripStates"] as! [String]
+        var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
         var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
         var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
         var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        
         
         let movedDestinationForTrip = destinationsForTrip[sourceIndexPath.row]
         destinationsForTrip.remove(at: sourceIndexPath.row)
@@ -385,6 +387,10 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         let movedDestinationForTripStates = destinationsForTripStates[sourceIndexPath.row]
         destinationsForTripStates.remove(at: sourceIndexPath.row)
         destinationsForTripStates.insert(movedDestinationForTripStates, at: destinationIndexPath.row)
+        
+        let movedDestinationForTripDictArray = destinationsForTripDictArray[sourceIndexPath.row]
+        destinationsForTripDictArray.remove(at: sourceIndexPath.row)
+        destinationsForTripDictArray.insert(movedDestinationForTripDictArray, at: destinationIndexPath.row)
         
         if travelDictionaryArray.count == destinationsForTrip.count {
             let movedtravelDictionaryArray = travelDictionaryArray[sourceIndexPath.row]
@@ -417,6 +423,7 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         //Save
         SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
         SavedPreferencesForTrip["destinationsForTripStates"] = destinationsForTripStates
+        SavedPreferencesForTrip["destinationsForTripDictArray"] = destinationsForTripDictArray
         SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
         SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)

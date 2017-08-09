@@ -26,7 +26,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hint" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FFm-tz-Urp">
-                        <rect key="frame" x="76" y="8" width="241" height="15"/>
+                        <rect key="frame" x="76" y="8" width="24" height="15"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="15" id="T4L-WU-qi9"/>
                         </constraints>
@@ -38,7 +38,7 @@
                         </userDefinedRuntimeAttributes>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N8w-D2-t9m">
-                        <rect key="frame" x="76" y="31" width="241" height="18"/>
+                        <rect key="frame" x="76" y="31" width="33" height="18"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="18" id="fgV-hk-3Uc"/>
                         </constraints>
@@ -91,6 +91,12 @@
                     <constraint firstAttribute="trailing" secondItem="JNM-IA-I89" secondAttribute="trailing" constant="20" id="y6C-2k-OzA"/>
                     <constraint firstItem="d0R-W8-vnQ" firstAttribute="top" secondItem="JNM-IA-I89" secondAttribute="bottom" constant="2" id="ygl-2p-xen"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="subviews">
+                        <exclude reference="JNM-IA-I89"/>
+                        <exclude reference="d0R-W8-vnQ"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>

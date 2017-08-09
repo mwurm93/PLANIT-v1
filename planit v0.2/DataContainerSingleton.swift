@@ -30,6 +30,7 @@ struct DefaultKeys {
         static let beenThereCountries = "beenThereCountries"
         static let token = "token"
         static let timesViewedNonTrip = "timesViewedNonTrip"
+        static let startingPointDict = "startingPointDict"
     }
 
 class DataContainerSingleton {
@@ -56,6 +57,7 @@ class DataContainerSingleton {
     var beenThereCountries: [String]?
     var token: String?
     var timesViewedNonTrip: NSDictionary?
+    var startingPointDict: NSDictionary?
     
     var goToBackgroundObserver: AnyObject?
     
@@ -84,6 +86,8 @@ class DataContainerSingleton {
         beenThereCountries = defaults.object(forKey: DefaultKeys.beenThereCountries) as! [String]?
         token = defaults.object(forKey: DefaultKeys.token) as! String?
         timesViewedNonTrip = defaults.object(forKey: DefaultKeys.timesViewedNonTrip) as! NSDictionary?
+        startingPointDict = defaults.object(forKey: DefaultKeys.startingPointDict) as! NSDictionary?
+
 
         
         //-----------------------------------------------------------------------------
@@ -119,6 +123,8 @@ class DataContainerSingleton {
             defaults.set( self.beenThereCountries, forKey: DefaultKeys.beenThereCountries)
             defaults.set( self.token, forKey: DefaultKeys.token)
             defaults.set( self.timesViewedNonTrip, forKey: DefaultKeys.timesViewedNonTrip)
+            defaults.set( self.startingPointDict, forKey: DefaultKeys.startingPointDict)
+
             
             //-----------------------------------------------------------------------------
             //Tell NSUserDefaults to save to disk now.

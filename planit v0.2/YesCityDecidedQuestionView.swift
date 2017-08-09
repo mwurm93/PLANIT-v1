@@ -22,6 +22,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
     var subView: UIView?
     var stateAbbreviationsDict = [Dictionary<String, String>]()
 
+    var geoLoader: AviasalesAirportsGeoSearchPerformer!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -215,6 +216,21 @@ extension YesCityDecidedQuestionView: GMSAutocompleteResultsViewControllerDelega
         }
         SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
         SavedPreferencesForTrip["destinationsForTripStates"] = destinationsForTripStates
+        
+        
+        //Travelpayouts airport search
+        geoLoader = AviasalesAirportsGeoSearchPerformer(delegate: self)
+        var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
+        if destinationsForTrip.count > destinationsForTripDictArray.count {
+            destinationsForTripDictArray.append(["latitude": place.coordinate.latitude as NSNumber])
+        } else {
+            destinationsForTripDictArray[indexOfDestinationBeingPlanned]["latitude"] = place.coordinate.latitude as NSNumber
+        }
+        destinationsForTripDictArray[indexOfDestinationBeingPlanned]["longitude"] = place.coordinate.longitude as NSNumber
+        SavedPreferencesForTrip["destinationsForTripDictArray"] = destinationsForTripDictArray
+        
+        geoLoader?.searchAirportsNearLatitude(place.coordinate.latitude, longitude: place.coordinate.longitude)
+
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         //Post notification
@@ -247,3 +263,24 @@ extension YesCityDecidedQuestionView: GMSAutocompleteResultsViewControllerDelega
         }
     }
 }
+
+extension YesCityDecidedQuestionView: AviasalesAirportsGeoSearchPerformerDelegate {
+    // MARK: - AviasalesAirportsGeoSearchPerformerDelegate
+    func airportsGeoSearchPerformer(_ airportsSearchPerformer: AviasalesAirportsGeoSearchPerformer!, didFound locations: [JRSDKLocation]!) {
+        let location = locations.first(where: { (location) -> Bool in return location is JRSDKAirport })
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        if let airport = location as? JRSDKAirport {
+            let airportAsData = NSKeyedArchiver.archivedData(withRootObject: airport)
+            var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
+            destinationsForTripDictArray[indexOfDestinationBeingPlanned]["JRSDKAirport"] = airportAsData
+            SavedPreferencesForTrip["destinationsForTripDictArray"] = destinationsForTripDictArray
+        } else {
+            var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
+            destinationsForTripDictArray[indexOfDestinationBeingPlanned]["JRSDKAirport"] = "noAirportFound"
+            SavedPreferencesForTrip["destinationsForTripDictArray"] = destinationsForTripDictArray
+        }
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+}
+

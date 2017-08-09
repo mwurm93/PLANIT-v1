@@ -21,6 +21,9 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
     var resultView: UITextView?
     var subView: UIView?
     var stateAbbreviationsDict = [Dictionary<String, String>]()
+    var startingPointQuestionLabelText = "Where will you be coming from?"
+    
+    var geoLoader: AviasalesAirportsGeoSearchPerformer!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,7 +72,7 @@ class WhereTravellingFromQuestionView: UIView, UISearchControllerDelegate, UISea
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Where will you be coming from?"
+        questionLabel?.text = startingPointQuestionLabelText
         self.addSubview(questionLabel!)
         
         //Button1
@@ -199,9 +202,29 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
                     }
                 }
             }
-        } else if SavedPreferencesForTrip["assistantMode"] as! String == "endingPoint"{
+        } else if SavedPreferencesForTrip["assistantMode"] as! String == "endingPoint" {
             SavedPreferencesForTrip["endingPoint"] = place.addressComponents?[0].name
         }
+        
+        
+        //Travelpayouts airport search
+        geoLoader = AviasalesAirportsGeoSearchPerformer(delegate: self)
+        if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" || SavedPreferencesForTrip["assistantMode"] as! String == "startingPoint" {
+            var startingPointDict = SavedPreferencesForTrip["startingPointDict"] as! [String:Any]
+            startingPointDict["latitude"] = place.coordinate.latitude as NSNumber
+            startingPointDict["longitude"] = place.coordinate.longitude as NSNumber
+            DataContainerSingleton.sharedDataContainer.startingPointDict = startingPointDict as NSDictionary
+            
+            geoLoader?.searchAirportsNearLatitude(place.coordinate.latitude, longitude: place.coordinate.longitude)
+        } else if SavedPreferencesForTrip["assistantMode"] as! String == "endingPoint"{
+            var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
+            endingPointDict["latitude"] = place.coordinate.latitude as NSNumber
+            endingPointDict["longitude"] = place.coordinate.longitude as NSNumber
+            SavedPreferencesForTrip["endingPointDict"] = endingPointDict
+            
+            geoLoader?.searchAirportsNearLatitude(place.coordinate.latitude, longitude: place.coordinate.longitude)
+        }
+        
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "whereTravellingFromEntered"), object: nil)
@@ -231,5 +254,35 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
         self.stateAbbreviationsDict = importedRecords
         
         }
+    }
+}
+extension WhereTravellingFromQuestionView: AviasalesAirportsGeoSearchPerformerDelegate {
+    // MARK: - AviasalesAirportsGeoSearchPerformerDelegate
+    func airportsGeoSearchPerformer(_ airportsSearchPerformer: AviasalesAirportsGeoSearchPerformer!, didFound locations: [JRSDKLocation]!) {
+        let location = locations.first(where: { (location) -> Bool in return location is JRSDKAirport })
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if let airport = location as? JRSDKAirport {
+            let airportAsData = NSKeyedArchiver.archivedData(withRootObject: airport)
+            if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" || SavedPreferencesForTrip["assistantMode"] as! String == "startingPoint" {
+                var startingPointDict = SavedPreferencesForTrip["startingPointDict"] as! [String:Any]
+                startingPointDict["JRSDKAirport"] = airportAsData
+                DataContainerSingleton.sharedDataContainer.startingPointDict = startingPointDict  as NSDictionary
+            } else if SavedPreferencesForTrip["assistantMode"] as! String == "endingPoint" {
+                var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
+                endingPointDict["JRSDKAirport"] = airportAsData
+                SavedPreferencesForTrip["endingPointDict"] = endingPointDict
+            }
+        } else {
+            if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" || SavedPreferencesForTrip["assistantMode"] as! String == "startingPoint" {
+                var startingPointDict = SavedPreferencesForTrip["startingPointDict"] as! [String:Any]
+                startingPointDict["JRSDKAirport"] = "noAirportFound"
+                SavedPreferencesForTrip["startingPointDict"] = startingPointDict
+            } else if SavedPreferencesForTrip["assistantMode"] as! String == "endingPoint" {
+                var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
+                endingPointDict["JRSDKAirport"] = "noAirportFound"
+                SavedPreferencesForTrip["endingPointDict"] = endingPointDict
+            }
+        }
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
 }

@@ -58,7 +58,7 @@ class ASTGroupedSearchVC: ASTBaseSearchTableVC, UISearchBarDelegate, UISearchCon
     func customLocationPointItem() -> GroupedTableItem {
         return GroupedTableItem(title: NSLS("HL_LOC_POINT_ON_MAP_TEXT"), action: { [weak self] in
             self?.moveToCustomPointSelection()
-            }, icon: #imageLiteral(resourceName: "map"))
+            }, icon: #imageLiteral(resourceName: "mapSmall"))
     }
 
     func moveToCustomPointSelection() {

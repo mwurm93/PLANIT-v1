@@ -79,18 +79,85 @@ static CGFloat const separatorRightInset = 20.0;
                                              selector:@selector(showReturnButtonForRoundtripSearch)
                                                  name:@"roundtripButtonTouchedUpInside"
                                                object:nil];
+    
+    NSInteger indexOfDestinationBeingPlanned = [flightTicketsAccessoryMethodPerformer fetchIndexOfDestinationBeingPlanned];
+    NSInteger numberDestinationsForTrip = [flightTicketsAccessoryMethodPerformer fetchNumberDestinationsForTrip];
+    
+    //Prefill dates
+    NSDate *departureDate = [flightTicketsAccessoryMethodPerformer fetchDepartureDate];
+    [_presenter handleSelectDate:departureDate withMode:0];
+    
+    //Prefill locations
+    if (indexOfDestinationBeingPlanned == 0) {
+        
+        if ([flightTicketsAccessoryMethodPerformer checkIfStartingPointAirportFound]) {
+            //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+            JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchStartingPointAirport];
+            [_presenter handleSelectAirport:nearbyAirport withMode:0];
+        }
+        if ([flightTicketsAccessoryMethodPerformer checkIfDestinationAirportFoundWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned]) {
+            //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+            JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchDestinationAirportWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned];
+            [_presenter handleSelectAirport:nearbyAirport withMode:1];
+        }
+    }
+    // return travel back to final destination (home)
+    else if (indexOfDestinationBeingPlanned == numberDestinationsForTrip) {
+        if ([flightTicketsAccessoryMethodPerformer checkIfDifferentEndingPoint]) {
+            if ([flightTicketsAccessoryMethodPerformer checkIfDestinationAirportFoundWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1]) {
+                //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+                JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchDestinationAirportWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1];
+                [_presenter handleSelectAirport:nearbyAirport withMode:0];
+            }
+            if ([flightTicketsAccessoryMethodPerformer checkIfEndingPointAirportFound]) {
+                //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+                JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchEndingPointAirport];
+                [_presenter handleSelectAirport:nearbyAirport withMode:1];
+            }
+
+        } else {
+            if ([flightTicketsAccessoryMethodPerformer checkIfDestinationAirportFoundWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1]) {
+                //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+                JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchDestinationAirportWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1];
+                [_presenter handleSelectAirport:nearbyAirport withMode:0];
+            }
+            if ([flightTicketsAccessoryMethodPerformer checkIfStartingPointAirportFound]) {
+                //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+                JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchStartingPointAirport];
+                [_presenter handleSelectAirport:nearbyAirport withMode:1];
+            }
+        }
+    } else {
+        if ([flightTicketsAccessoryMethodPerformer checkIfDestinationAirportFoundWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1]) {
+            //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+            JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchDestinationAirportWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1];
+            [_presenter handleSelectAirport:nearbyAirport withMode:0];
+        }
+        if ([flightTicketsAccessoryMethodPerformer checkIfDestinationAirportFoundWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned]) {
+            //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+            JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchDestinationAirportWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned];
+            [_presenter handleSelectAirport:nearbyAirport withMode:1];
+        }
+    }
+    
 }
+
+
+
 - (void)hideReturnButtonForOneWaySearch {
     FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
     [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:NO];
-    
-    [_tableView reloadData];
 }
 - (void)showReturnButtonForRoundtripSearch {
     FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
     [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:YES];
-    [_tableView reloadData];
+    
+    NSDate *returnDate = [flightTicketsAccessoryMethodPerformer fetchReturnDate];
+    [_presenter handleSelectDate:returnDate withMode:1];
+
 }
+
+
 
 #pragma mark - Setup
 
@@ -98,6 +165,7 @@ static CGFloat const separatorRightInset = 20.0;
     [self setupLayoutVariables];
     [self setupTableView];
     [self setupSwapButton];
+   // [self handleReturnButton];
 }
 
 - (void)setupLayoutVariables {
@@ -179,7 +247,8 @@ static CGFloat const separatorRightInset = 20.0;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ASTSimpleSearchFormCellViewModel *cellViewModel = self.viewModel.sectionViewModels[indexPath.section].cellViewModels[indexPath.row];
-    return [self buildCellFromCellViewModel:cellViewModel];
+    UITableViewCell *cell = [self buildCellFromCellViewModel:cellViewModel];
+    return cell;
 }
 
 #pragma mark - UITableViewDelegate
@@ -187,19 +256,7 @@ static CGFloat const separatorRightInset = 20.0;
 {
     float heightForRow = self.tableViewRowHeight;
     
-    
-    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
-    bool isRoundtrip = [flightTicketsAccessoryMethodPerformer fetchIsRoundtrip];
-
-    
-    
-    if(indexPath.section == 2 && !isRoundtrip) {
-        //ASTSimpleSearchFormDateTableViewCell *cell = (ASTSimpleSearchFormDateTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-        //[cell.returnButton sendActionsForControlEvents:UIControlEventTouchUpInside];
-        return 0;
-    } else {
-        return heightForRow;
-    }
+    return heightForRow;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -268,7 +325,26 @@ static CGFloat const separatorRightInset = 20.0;
     cell.dateLabel.text = cellViewModel.date;
     cell.returnButton.hidden = cell.returnLabel.hidden = cellViewModel.shouldHideReturnCheckbox;
     cell.returnButton.selected = cellViewModel.shouldSelectReturnCheckbox;
-    
+    BOOL isDeparture = cellViewModel.type == ASTSimpleSearchFormCellViewModelTypeDeparture;
+    if (isDeparture) {
+        cell.tag = 1;
+    } else {
+        cell.tag = 0;
+    }
+
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    bool isRoundtrip = [flightTicketsAccessoryMethodPerformer fetchIsRoundtrip];
+
+    if( !isRoundtrip && cell.tag == 0) {
+        [cell.returnButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+        for (UIView *subview in cell.subviews) {
+            [subview setHidden:true];
+        }
+    } else if ( isRoundtrip && cell.tag == 0) {
+        for (UIView *subview in cell.subviews) {
+            [subview setHidden:false];
+        }
+    }
     __weak typeof(self) weakSelf = self;
     cell.returnButtonAction = ^(UIButton *sender) {
         [weakSelf.presenter handleSwitchReturnCheckbox];

@@ -186,6 +186,7 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     if (![currencyCode isEqualToString:[AviasalesSDK sharedInstance].currencyCode]) {
         [[AviasalesSDK sharedInstance] updateCurrencyCode:currencyCode];
     }
+    
     [self.currentChildViewController performSearch];
 }
 

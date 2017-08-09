@@ -20,7 +20,7 @@ import AviasalesSDK
         //travelDictArray
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
-        travelDictionaryArray[indexOfDestinationBeingPlanned]["hotelsSavedOnPlanit"] = savedFlightTickets
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["flightsSavedOnPlanit"] = savedFlightTickets
         SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
         
         
@@ -37,7 +37,6 @@ import AviasalesSDK
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
     }
-    
     func removeSavedFlightTickets(ticket: JRSDKTicket) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var savedFlightTicketsAsData = SavedPreferencesForTrip["savedFlightTickets"] as! [Data]
@@ -55,13 +54,12 @@ import AviasalesSDK
         //travelDictArray
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
-        travelDictionaryArray[indexOfDestinationBeingPlanned]["hotelsSavedOnPlanit"] = savedFlightTickets
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["flightsSavedOnPlanit"] = savedFlightTickets
         SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
 
         SavedPreferencesForTrip["savedFlightTickets"] = savedFlightTicketsAsData
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
-    
     func fetchSavedFlightTickets() -> [JRSDKTicket] {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var savedFlightTicketsAsData = SavedPreferencesForTrip["savedFlightTickets"] as! [Data]
@@ -82,13 +80,14 @@ import AviasalesSDK
     }
     
     
-    
+    //Roundtrip functions
     func saveIsRoundTrip(isRoundtrip:Bool)  {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         
         var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
         travelDictionaryArray[indexOfDestinationBeingPlanned]["isRoundtrip"] = isRoundtrip
+        SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
     }
@@ -99,4 +98,139 @@ import AviasalesSDK
         let isRoundtrip = travelDictionaryArray[indexOfDestinationBeingPlanned]["isRoundtrip"] as? Bool
         return isRoundtrip!
     }
+    
+    
+    
+    //MARK: airport loading
+    
+    //Starting point
+    func checkIfStartingPointAirportFound() -> Bool {
+        var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
+        if let startingPointAirportAsString = startingPointDict["JRSDKAirport"] as? String {
+            if startingPointAirportAsString == "noAirportFound" {
+                return false
+            }
+        }
+        return true
+    }
+    func fetchStartingPointAirport() -> JRSDKAirport {
+        var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
+        let startingPointAirportAsData = startingPointDict["JRSDKAirport"] as! Data
+        let startingPointAirport = NSKeyedUnarchiver.unarchiveObject(with: startingPointAirportAsData) as? JRSDKAirport
+        
+        return startingPointAirport!
+    }
+    //Ending point
+    func checkIfDifferentEndingPoint() -> Bool {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let endingPoint = SavedPreferencesForTrip["endingPoint"] as! String
+        if endingPoint != "" {
+            return true
+        }
+        return false
+    }
+    func checkIfEndingPointAirportFound() -> Bool {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
+        if let endingPointAirportAsString = endingPointDict["JRSDKAirport"] as? String {
+            if endingPointAirportAsString == "noAirportFound" {
+                return false
+            }
+        }
+        return true
+    }
+    func fetchEndingPointAirport() -> JRSDKAirport {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
+        let endingPointAirportAsData = endingPointDict["JRSDKAirport"] as! Data
+        let endingPointAirport = NSKeyedUnarchiver.unarchiveObject(with: endingPointAirportAsData) as? JRSDKAirport
+        
+        return endingPointAirport!
+    }
+    //Destinations
+    func checkIfDestinationAirportFound(indexOfDestinationBeingPlanned:Int) -> Bool {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
+        if let destinationAirportAsString = destinationsForTripDictArray[indexOfDestinationBeingPlanned]["JRSDKAirport"] as? String {
+            if destinationAirportAsString == "noAirportFound" {
+                return false
+            }
+        }
+        return true
+    }
+    func fetchDestinationAirport(indexOfDestinationBeingPlanned:Int) -> JRSDKAirport {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
+        let destinationAirportAsData = destinationsForTripDictArray[indexOfDestinationBeingPlanned]["JRSDKAirport"] as! Data
+        let destinationAirport = NSKeyedUnarchiver.unarchiveObject(with: destinationAirportAsData) as? JRSDKAirport
+        
+        return destinationAirport!
+    }
+    //index and count destinations
+    func fetchIndexOfDestinationBeingPlanned() -> Int {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        return indexOfDestinationBeingPlanned
+    }
+    func fetchNumberDestinationsForTrip() -> Int {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        return destinationsForTrip.count
+    }
+    
+    func fetchDepartureDate() -> Date {
+        let dateFormatter = DateFormatter()
+
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        
+        var leftDatesDestinations = [String:Date]()
+        var rightDatesDestinations = [String:Date]()
+        
+        if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+            if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
+                leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
+                rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?.count)! - 1]
+                dateFormatter.dateFormat = "MM/dd/YYYY"
+                return leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!
+                //let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!
+            }
+        } else if indexOfDestinationBeingPlanned == destinationsForTrip.count {
+            leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned - 1]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned - 1]]?[0]
+            rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned - 1]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned - 1]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned - 1]]?.count)! - 1]
+            dateFormatter.dateFormat = "MM/dd/YYYY"
+            return rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned - 1]]!
+        }
+        return Date()
+    }
+    func fetchReturnDate() -> Date {
+        let dateFormatter = DateFormatter()
+
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        
+        var leftDatesDestinations = [String:Date]()
+        var rightDatesDestinations = [String:Date]()
+        
+        if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+            if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
+                leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
+                rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?.count)! - 1]
+                dateFormatter.dateFormat = "MM/dd/YYYY"
+                //return leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!
+                return rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!
+            }
+        } else if indexOfDestinationBeingPlanned == destinationsForTrip.count {
+            leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned - 1]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned - 1]]?[0]
+            rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned - 1]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned - 1]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned - 1]]?.count)! - 1]
+            dateFormatter.dateFormat = "MM/dd/YYYY"
+            return rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned - 1]]!
+        }
+        return Date()
+    }
+
 }

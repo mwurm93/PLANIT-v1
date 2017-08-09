@@ -92,16 +92,17 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         var leftDatesDestinations = [String:Date]()
         var rightDatesDestinations = [String:Date]()
         
-        if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
-            leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
-            rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?.count)! - 1]
-            formatter.dateFormat = "MM/dd/YYYY"
-            let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
-            let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
-            departureDate?.text = leftDateAsString
-            returnDate?.text = rightDateAsString
+        if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+            if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
+                leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
+                rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?.count)! - 1]
+                formatter.dateFormat = "MM/dd/YYYY"
+                let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
+                let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
+                departureDate?.text = leftDateAsString
+                returnDate?.text = rightDateAsString
+            }
         }
-        
         
         //UPDATE DESTINATIONS
         var departureOriginValue = String()
@@ -113,17 +114,17 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
         if departureOriginValue != "" {
             departureOrigin?.text = departureOriginValue
         }
-        
-        let returnOriginValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[indexOfDestinationBeingPlanned]
-        if returnOriginValue != nil && returnOriginValue != "" {
-            returnOrigin?.text = returnOriginValue
+        if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+            let returnOriginValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[indexOfDestinationBeingPlanned]
+            if returnOriginValue != nil && returnOriginValue != "" {
+                returnOrigin?.text = returnOriginValue
+            }
+            
+            let departureDestinationValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[indexOfDestinationBeingPlanned]
+            if departureDestinationValue != nil && departureDestinationValue != "" {
+                departureDestination?.text = departureDestinationValue
+            }
         }
-
-        let departureDestinationValue = (SavedPreferencesForTrip["destinationsForTrip"] as? [String])?[indexOfDestinationBeingPlanned]
-        if departureDestinationValue != nil && departureDestinationValue != "" {
-            departureDestination?.text = departureDestinationValue
-        }
-
     }
     
     
