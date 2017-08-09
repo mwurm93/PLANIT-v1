@@ -103,6 +103,17 @@ static NSString * const kJRAirportPickerCellWithAirport = @"JRAirportPickerCellW
                                                  selector:@selector(rebuildTableView)
                                                      name:kAviasalesNearestAirportsManagerDidUpdateNotificationName object:nil];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(popFromJRAirportPickerToFlightSearch)
+                                                 name:@"popFromJRAirportPickerToFlightSearch"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"JRAirportPicker_ViewDidLoad"
+                                                        object:self];
+    
+}
+- (void)popFromJRAirportPickerToFlightSearch {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) dealloc {

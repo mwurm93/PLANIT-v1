@@ -81,7 +81,20 @@ static NSString * const kMonthReusableHeaderViewIdentifier = @"JRDatePickerMonth
     
 	[self registerNibs];
 	[self setupTitle];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(popFromJRDatePickerToFlightSearch)
+                                                 name:@"popFromJRDatePickerToFlightSearch"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"JRDatePicker_ViewDidLoad"
+                                                        object:self];
+    
 }
+- (void)popFromJRDatePickerToFlightSearch {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];

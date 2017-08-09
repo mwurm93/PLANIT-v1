@@ -20,7 +20,8 @@ class ASTGroupedSearchVC: ASTBaseSearchTableVC, UISearchBarDelegate, UISearchCon
 
         initialCustomPointSelectionLocation = searchInfo?.searchLocation() ?? CLLocation()
 
-        tableView.backgroundColor = JRColorScheme.mainBackgroundColor()
+        tableView.backgroundColor = UIColor.clear
+        
 
         searchController = UISearchController(searchResultsController: resultsTableController)
         searchController.searchResultsUpdater = self
@@ -37,6 +38,16 @@ class ASTGroupedSearchVC: ASTBaseSearchTableVC, UISearchBarDelegate, UISearchCon
         extendedLayoutIncludesOpaqueBars = true
 
         navigationItem.backBarButtonItem = UIBarButtonItem.backBarButtonItem()
+        
+        navigationController?.isNavigationBarHidden = true
+
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelSearchCityPicker_ASTGroupedSearchVC_ViewDidLoad"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(popFromCityPickerToHotelSearch), name: NSNotification.Name(rawValue: "popFromCityPickerToHotelSearch"), object: nil)
+
+    }
+    func popFromCityPickerToHotelSearch() {
+        navigationController?.popViewController(animated: true)
     }
 
     func resetTableContent() {
@@ -58,7 +69,7 @@ class ASTGroupedSearchVC: ASTBaseSearchTableVC, UISearchBarDelegate, UISearchCon
     func customLocationPointItem() -> GroupedTableItem {
         return GroupedTableItem(title: NSLS("HL_LOC_POINT_ON_MAP_TEXT"), action: { [weak self] in
             self?.moveToCustomPointSelection()
-            }, icon: #imageLiteral(resourceName: "mapSmall"))
+            }, icon: #imageLiteral(resourceName: "mapSmallGray"))
     }
 
     func moveToCustomPointSelection() {

@@ -283,6 +283,7 @@ extension WhereTravellingFromQuestionView: AviasalesAirportsGeoSearchPerformerDe
                 SavedPreferencesForTrip["endingPointDict"] = endingPointDict
             }
         }
+        
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
 }

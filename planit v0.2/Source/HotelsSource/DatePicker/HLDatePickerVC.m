@@ -35,7 +35,22 @@ static NSString *kMonthReusableHeaderViewIdentifier = @"JRDatePickerMonthHeaderR
 
     self.needsToScrollToSelectedDates = YES;
     [self disableScrollForInteractivePopGesture:self.tableView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(popFromHLDatePickerToHotelSearch)
+                                                 name:@"popFromHLDatePickerToHotelSearch"
+                                               object:nil];
+
+     [[NSNotificationCenter defaultCenter] postNotificationName:@"HLDatePicker_ViewDidLoad"
+                                                         object:self];
+
+    
+    
 }
+- (void)popFromHLDatePickerToHotelSearch {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {

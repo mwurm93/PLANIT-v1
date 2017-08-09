@@ -450,6 +450,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(flightBookingBrowserClosed_FlightNotBooked), name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightNotBooked"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnAlreadyHaveFlightsQuestionView), name: NSNotification.Name(rawValue: "iAlreadyHaveFlightsButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(comeBackToPlanFlightLater), name: NSNotification.Name(rawValue: "comeBackToThisFlightsButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(JRAirportPicker_ViewDidLoad), name: NSNotification.Name(rawValue: "JRAirportPicker_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(JRDatePicker_ViewDidLoad), name: NSNotification.Name(rawValue: "JRDatePicker_ViewDidLoad"), object: nil)
+
         
         //Hotel Nav
         NotificationCenter.default.addObserver(self, selector: #selector(HLCommonResultsVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLCommonResultsVC_viewWillAppear"), object: nil)
@@ -459,6 +462,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed_HotelBooked), name: NSNotification.Name(rawValue: "hotelBookingBrowserClosed_HotelBooked"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed_HotelNotBooked), name: NSNotification.Name(rawValue: "hotelBookingBrowserClosed_HotelNotBooked"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(comeBackToPlanHotelLater), name: NSNotification.Name(rawValue: "comeBackToThisHotelsButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchCityPicker_ViewDidLoad), name: NSNotification.Name(rawValue: "hotelSearchCityPicker_ASTGroupedSearchVC_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(HLDatePicker_ViewDidLoad), name: NSNotification.Name(rawValue: "HLDatePicker_ViewDidLoad"), object: nil)
+
+        
+
 
         
         
@@ -5974,6 +5982,31 @@ extension TripViewController {
         self.topView.addSubview(backButton!)
         
     }
+    func JRDatePicker_ViewDidLoad() {
+        self.backButton?.removeFromSuperview()
+        backButton = nil
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton?.addTarget(self, action: #selector(popFromJRDatePickerToFlightSearch), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
+    }
+    func JRAirportPicker_ViewDidLoad() {
+        self.backButton?.removeFromSuperview()
+        backButton = nil
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton?.addTarget(self, action: #selector(popFromJRAirportPickerToFlightSearch), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
+    }
+    func popFromJRDatePickerToFlightSearch() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromJRDatePickerToFlightSearch"), object: nil)
+    }
+    func popFromJRAirportPickerToFlightSearch() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromJRAirportPickerToFlightSearch"), object: nil)
+
+    }
     func addBackButtonPointedAtTripList() {
         if backButton != nil {
             self.backButton?.removeFromSuperview()
@@ -6031,9 +6064,36 @@ extension TripViewController {
         self.topView.addSubview(backButton!)
         
     }
+    func hotelSearchCityPicker_ViewDidLoad() {
+        self.backButton?.removeFromSuperview()
+        backButton = nil
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton?.addTarget(self, action: #selector(popFromCityPickerToHotelSearch), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
+
+    }
+    func HLDatePicker_ViewDidLoad() {
+        self.backButton?.removeFromSuperview()
+        backButton = nil
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton?.addTarget(self, action: #selector(popFromHLDatePickerToHotelSearch), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
+
+    }
     func popFromWaitingViewControllerToHotelSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromWaitingScreenViewControllerToHotelSearch"), object: nil)
     }
+    func popFromCityPickerToHotelSearch() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromCityPickerToHotelSearch"), object: nil)
+    }
+    func popFromHLDatePickerToHotelSearch() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromHLDatePickerToHotelSearch"), object: nil)
+    }
+
 //    func addBackButtonPointedAtItineraryFromHotelDetails() {
 //        if backButton != nil {
 //            self.backButton?.removeFromSuperview()

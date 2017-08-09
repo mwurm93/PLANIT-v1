@@ -231,6 +231,25 @@ extension YesCityDecidedQuestionView: GMSAutocompleteResultsViewControllerDelega
         
         geoLoader?.searchAirportsNearLatitude(place.coordinate.latitude, longitude: place.coordinate.longitude)
 
+        let location = CLLocation(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude)
+        
+        var city: HDKCity?
+        ServiceLocator.shared.sdkFacade.loadNearbyCities(location: location, completion: {(_ nearbyCities: [HDKCity]?, _ error: Error?) -> Void in
+            if error != nil {
+                print(error?.localizedDescription)
+            }
+            let SavedPreferencesForTrip2 = self.fetchSavedPreferencesForTrip()
+            var destinationsForTripDictArray2 = SavedPreferencesForTrip2["destinationsForTripDictArray"] as! [[String:Any]]
+            let indexOfDestinationBeingPlanned2 = SavedPreferencesForTrip2["indexOfDestinationBeingPlanned"] as! Int
+            city = nearbyCities?[0]
+            let cityAsData = NSKeyedArchiver.archivedData(withRootObject: city)
+            destinationsForTripDictArray2[indexOfDestinationBeingPlanned2]["HDKCity"] = cityAsData
+            SavedPreferencesForTrip2["destinationsForTripDictArray"] = destinationsForTripDictArray2
+            self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+
+        })
+
+        
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         //Post notification
