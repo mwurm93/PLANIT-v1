@@ -64,6 +64,12 @@ fileprivate func <= <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
         let sel = #selector(HLKidsPickerVC.clean)
         cleanButton = UIBarButtonItem(title: NSLS("HL_CLEAN_BUTTON_TITLE"), style: .plain, target: self, action: sel)
         navigationItem.rightBarButtonItem = cleanButton
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelSearchKidsPickerViewController_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(popFromKidsPickerViewControllerToHotelSearch), name: NSNotification.Name(rawValue: "popFromKidsPickerToHotelSearch"), object: nil)
+    }
+    func popFromKidsPickerViewControllerToHotelSearch(){
+        self.navigationController?.popViewController(animated: true)
     }
 
     override func viewWillAppear(_ animated: Bool) {

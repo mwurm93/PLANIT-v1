@@ -80,6 +80,8 @@ static NSString * const kJRAirportPickerCellWithAirport = @"JRAirportPickerCellW
     UISearchController *searchController = [[UISearchController alloc] initWithSearchResultsController:airportSearchResultVC];
 
     searchController.searchResultsUpdater = airportSearchResultVC;
+    [searchController.searchBar sizeToFit];
+    [searchController.searchBar becomeFirstResponder];
     
     searchController.searchBar.placeholder =  NSLS(@"JR_AIRPORT_PICKER_PLACEHOLDER_TEXT");
 
@@ -92,7 +94,6 @@ static NSString * const kJRAirportPickerCellWithAirport = @"JRAirportPickerCellW
     [super viewDidLoad];
     
     self.definesPresentationContext = YES;
-
     [self setupTitle];
     [self setupSearchController];
 

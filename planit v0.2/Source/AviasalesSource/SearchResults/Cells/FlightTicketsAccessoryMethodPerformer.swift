@@ -98,6 +98,14 @@ import AviasalesSDK
         let isRoundtrip = travelDictionaryArray[indexOfDestinationBeingPlanned]["isRoundtrip"] as? Bool
         return isRoundtrip!
     }
+    func checkIfIsMultiDestinationTrip() -> Bool {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        if destinationsForTrip.count == 1 {
+            return false
+        }
+        return true
+    }
     
     
     
@@ -151,12 +159,16 @@ import AviasalesSDK
     func checkIfDestinationAirportFound(indexOfDestinationBeingPlanned:Int) -> Bool {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
-        if let destinationAirportAsString = destinationsForTripDictArray[indexOfDestinationBeingPlanned]["JRSDKAirport"] as? String {
-            if destinationAirportAsString == "noAirportFound" {
-                return false
+        if destinationsForTripDictArray.count > indexOfDestinationBeingPlanned {
+            if let destinationAirportAsString = destinationsForTripDictArray[indexOfDestinationBeingPlanned]["JRSDKAirport"] as? String {
+                if destinationAirportAsString == "noAirportFound" {
+                    return false
+                }
+            } else {
+                return true
             }
         }
-        return true
+        return false
     }
     func fetchDestinationAirport(indexOfDestinationBeingPlanned:Int) -> JRSDKAirport {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()

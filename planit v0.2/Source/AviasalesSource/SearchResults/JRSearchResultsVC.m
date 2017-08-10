@@ -161,11 +161,12 @@ static const NSInteger kHotelCardIndex = 5;
         [self setFirstTicketSelected];
     }
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(receiveTestNotification)
-//                                                 name:@"test"
-//                                               object:nil];
+    _sortButton.backgroundColor = [UIColor orangeColor];
+    [_sortButton setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
 
+    _filterButton.backgroundColor = [UIColor orangeColor];
+    [_filterButton setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(popFromFlightSearchResultsSceneViewControllerToFlightSearch)
                                                  name:@"popFromFlightSearchResultsSceneViewControllerToFlightSearch"
@@ -176,18 +177,6 @@ static const NSInteger kHotelCardIndex = 5;
 - (void)popFromFlightSearchResultsSceneViewControllerToFlightSearch {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
-//- (void)receiveTestNotification {
-//    ConvertTicketForSavePerformer *convertTicketForSavePerformer = [[ConvertTicketForSavePerformer alloc] init];
-//    NSArray *savedFlightTickets = [convertTicketForSavePerformer fetchSavedFlightTickets];
-//    
-//    JRSDKTicket *flightTicket = savedFlightTickets[0];
-//    
-//    JRTicketVC *const ticketVC = [[JRTicketVC alloc] initWithSearchInfo: flightTicket.searchResultInfo.searchInfo searchID: flightTicket.searchResultInfo.searchID];
-//    [ticketVC setTicket:savedFlightTickets[0]];
-//    [self.navigationController pushViewController:ticketVC animated:YES];
-//
-//}
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
@@ -328,6 +317,10 @@ static const NSInteger kHotelCardIndex = 5;
 - (IBAction)filterButtonTouchedUpInside:(id)sender {
     [self showFilters:_filterButton];
 }
+- (IBAction)sortButtonTouchedUpInside:(id)sender {
+}
+
+
 
 #pragma mark - JRFilterDelegate
 

@@ -38,7 +38,13 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-        saveIsRoundTrip(isRoundtrip:false)
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        if destinationsForTrip.count == 1 {
+            saveIsRoundTrip(isRoundtrip:true)
+        } else if destinationsForTrip.count > 1 {
+            saveIsRoundTrip(isRoundtrip:false)
+        }
         
         //        self.layer.borderColor = UIColor.green.cgColor
         //        self.layer.borderWidth = 2
@@ -283,14 +289,16 @@ class FlightSearchQuestionView: UIView, UITextFieldDelegate {
             }
         }
         if textField == departureDestination {
-            let datesOfDestinationForUpdate = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]
-            datesDestinationsDictionary.removeValue(forKey: destinationsForTrip[indexOfDestinationBeingPlanned])
-            datesDestinationsDictionary[textField.text!] = datesOfDestinationForUpdate
-            
-            destinationsForTrip[indexOfDestinationBeingPlanned] = textField.text!
-            SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
-            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
-            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+                let datesOfDestinationForUpdate = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]
+                datesDestinationsDictionary.removeValue(forKey: destinationsForTrip[indexOfDestinationBeingPlanned])
+                datesDestinationsDictionary[textField.text!] = datesOfDestinationForUpdate
+                
+                destinationsForTrip[indexOfDestinationBeingPlanned] = textField.text!
+                SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
+                SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            }
         }
         
         return true

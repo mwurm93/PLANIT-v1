@@ -464,6 +464,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(comeBackToPlanHotelLater), name: NSNotification.Name(rawValue: "comeBackToThisHotelsButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchCityPicker_ViewDidLoad), name: NSNotification.Name(rawValue: "hotelSearchCityPicker_ASTGroupedSearchVC_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(HLDatePicker_ViewDidLoad), name: NSNotification.Name(rawValue: "HLDatePicker_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchKidsPickerViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "hotelSearchKidsPickerViewController_ViewDidLoad"), object: nil)
 
         
 
@@ -2821,8 +2822,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
             if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
-                travelDictionaryArray.append(["modeOfTransportation":"fly","isRoundtrip":false])
+                if destinationsForTrip.count == 1 {
+                    travelDictionaryArray.append(["modeOfTransportation":"fly","isRoundtrip":true])
+                } else if destinationsForTrip.count > 1 {
+                    travelDictionaryArray.append(["modeOfTransportation":"fly","isRoundtrip":false])
+                }
             } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
                 if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "fly" {
                     if doYouNeedARentalCarQuestionView != nil {
@@ -2846,7 +2852,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                         idkHowToGetThereQuestionView = nil
                     }
                 }
-                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"fly","isRoundtrip":false]
+                if destinationsForTrip.count == 1 {
+                    travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"fly","isRoundtrip":true]
+                } else if destinationsForTrip.count > 1 {
+                    travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"fly","isRoundtrip":false]
+                }
+
             }
             SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -2859,8 +2870,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
             if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
-                travelDictionaryArray.append(["modeOfTransportation":"drive","isRoundtrip":true])
+                if destinationsForTrip.count == 1 {
+                    travelDictionaryArray.append(["modeOfTransportation":"fly","isRoundtrip":true])
+                } else if destinationsForTrip.count > 1 {
+                    travelDictionaryArray.append(["modeOfTransportation":"fly","isRoundtrip":false])
+                }
             } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
                 if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "drive" {
                     if flightSearchQuestionView != nil {
@@ -2887,7 +2903,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                         
                 }
-                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"drive","isRoundtrip":true]
+                if destinationsForTrip.count == 1 {
+                    travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"drive","isRoundtrip":true]
+                } else if destinationsForTrip.count > 1 {
+                    travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"drive","isRoundtrip":false]
+                }
             }
             SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -6084,6 +6104,16 @@ extension TripViewController {
         self.topView.addSubview(backButton!)
 
     }
+    func hotelSearchKidsPickerViewController_ViewDidLoad() {
+        self.backButton?.removeFromSuperview()
+        backButton = nil
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton?.addTarget(self, action: #selector(popFromKidsPickerToHotelSearch), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
+
+    }
     func popFromWaitingViewControllerToHotelSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromWaitingScreenViewControllerToHotelSearch"), object: nil)
     }
@@ -6092,6 +6122,9 @@ extension TripViewController {
     }
     func popFromHLDatePickerToHotelSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromHLDatePickerToHotelSearch"), object: nil)
+    }
+    func popFromKidsPickerToHotelSearch() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromKidsPickerToHotelSearch"), object: nil)
     }
 
 //    func addBackButtonPointedAtItineraryFromHotelDetails() {

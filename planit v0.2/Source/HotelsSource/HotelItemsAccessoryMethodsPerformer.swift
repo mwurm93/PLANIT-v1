@@ -137,12 +137,16 @@ import AviasalesSDK
     func checkIfCityFound(indexOfDestinationBeingPlanned:Int) -> Bool {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
-        if let destinationAirportAsString = destinationsForTripDictArray[indexOfDestinationBeingPlanned]["JRSDKAirport"] as? String {
-            if destinationAirportAsString == "noAirportFound" {
-                return false
+        if destinationsForTripDictArray.count > indexOfDestinationBeingPlanned {
+            if let destinationAirportAsString = destinationsForTripDictArray[indexOfDestinationBeingPlanned]["JRSDKAirport"] as? String {
+                if destinationAirportAsString == "noAirportFound" {
+                    return false
+                }
+            } else {
+                return true
             }
         }
-        return true
+        return false
     }
     func fetchDestinationAirport(indexOfDestinationBeingPlanned:Int) -> JRSDKAirport {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()

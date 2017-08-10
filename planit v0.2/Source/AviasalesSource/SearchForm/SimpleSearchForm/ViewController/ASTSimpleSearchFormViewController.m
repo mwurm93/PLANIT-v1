@@ -63,9 +63,20 @@ static CGFloat const separatorRightInset = 20.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    //start with not roundtrip
+    //start with  roundtrip if single destination
     FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
-    [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:NO];
+    if ([flightTicketsAccessoryMethodPerformer checkIfIsMultiDestinationTrip]) {
+        [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:NO];
+        //Prefill dates
+        NSDate *departureDate = [flightTicketsAccessoryMethodPerformer fetchDepartureDate];
+        [_presenter handleSelectDate:departureDate withMode:0];
+    } else {
+        [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:YES];
+        NSDate *departureDate = [flightTicketsAccessoryMethodPerformer fetchDepartureDate];
+        NSDate *returnDate = [flightTicketsAccessoryMethodPerformer fetchReturnDate];
+        [_presenter handleSelectDate:departureDate withMode:0];
+        [_presenter handleSelectDate:returnDate withMode:1];
+    }
     [_tableView reloadData];
 
     [self setupViewController];
@@ -82,10 +93,6 @@ static CGFloat const separatorRightInset = 20.0;
     
     NSInteger indexOfDestinationBeingPlanned = [flightTicketsAccessoryMethodPerformer fetchIndexOfDestinationBeingPlanned];
     NSInteger numberDestinationsForTrip = [flightTicketsAccessoryMethodPerformer fetchNumberDestinationsForTrip];
-    
-    //Prefill dates
-    NSDate *departureDate = [flightTicketsAccessoryMethodPerformer fetchDepartureDate];
-    [_presenter handleSelectDate:departureDate withMode:0];
     
     //Prefill locations
     if (indexOfDestinationBeingPlanned == 0) {

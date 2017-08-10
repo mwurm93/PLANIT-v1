@@ -22,7 +22,7 @@ class HLIphoneResultsVC: HLCommonResultsVC {
         sortButton.setTitleColor(JRColorScheme.mainButtonTitleColor(), for: .normal)
         
         mapDrawerButton.backgroundColor = JRColorScheme.mainButtonBackgroundColor()
-        mapDrawerButton.setTitleColor(JRColorScheme.mainButtonTitleColor(), for: .normal)
+    mapDrawerButton.setTitleColor(JRColorScheme.mainButtonTitleColor(), for: .normal)
         mapDrawerButton.addTarget(self, action: #selector(super.showMap), for: UIControlEvents.touchUpInside)
         
         self.view.backgroundColor = UIColor.clear

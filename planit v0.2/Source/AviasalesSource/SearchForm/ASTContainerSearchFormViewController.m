@@ -59,6 +59,10 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"flightSearchFormViewViewController_ViewDidAppear"
                                                         object:self];
 }
+-(void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
 
 #pragma mark - Setup
 
@@ -70,8 +74,12 @@ NS_ENUM(NSInteger, ASTContainerSearchFormSearchType) {
     [self setupChildViewControllers];
     [self setupAlreadyHaveFlightsButton];
     [self setupComeBackToThisButton];
-    [_searchFormTypeSegmentedControl setSelectedSegmentIndex:0];
-
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    if ([flightTicketsAccessoryMethodPerformer checkIfIsMultiDestinationTrip]) {
+        [_searchFormTypeSegmentedControl setSelectedSegmentIndex:0];
+    } else {
+        [_searchFormTypeSegmentedControl setSelectedSegmentIndex:1];
+    }
 }
 
 - (void)setupSegmentedControl {

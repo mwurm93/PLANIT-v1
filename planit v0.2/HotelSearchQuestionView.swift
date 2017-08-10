@@ -71,17 +71,17 @@ class HotelSearchQuestionView: UIView, UITextFieldDelegate {
         
         var leftDatesDestinations = [String:Date]()
         var rightDatesDestinations = [String:Date]()
-        
-        if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
-            leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
-            rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?.count)! - 1]
-            formatter.dateFormat = "MM/dd/YYYY"
-            let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
-            let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
-            checkInDate?.text = leftDateAsString
-            checkOutDate?.text = rightDateAsString
+        if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+            if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
+                leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
+                rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?.count)! - 1]
+                formatter.dateFormat = "MM/dd/YYYY"
+                let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
+                let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
+                checkInDate?.text = leftDateAsString
+                checkOutDate?.text = rightDateAsString
+            }
         }
-        
         
 //        numberOfRoomsPickerView.frame = CGRect(x: (checkOutDate?.frame.maxX)! + 25, y: 160, width: 150, height: 50)
 //        numberOfRoomsPickerView.setValue(UIColor.white, forKey: "textColor")

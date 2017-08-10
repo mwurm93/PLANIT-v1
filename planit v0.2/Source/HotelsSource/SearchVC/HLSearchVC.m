@@ -72,11 +72,13 @@
     NSDate *checkInDate = [hotelItemsAccessoryMethodsPerformer fetchCheckInDate];
     NSDate *checkOutDate = [hotelItemsAccessoryMethodsPerformer fetchCheckOutDate];
     NSInteger indexOfDestinationBeingPlanned = [hotelItemsAccessoryMethodsPerformer fetchIndexOfDestinationBeingPlanned];
-    HDKCity *city = [hotelItemsAccessoryMethodsPerformer fetchCityWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned];
+    if ([hotelItemsAccessoryMethodsPerformer checkIfCityFoundWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned]) {
+        HDKCity *city = [hotelItemsAccessoryMethodsPerformer fetchCityWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned];
+        self.searchInfo.city = city;
+    }
     
     self.searchInfo.checkInDate = checkInDate;
     self.searchInfo.checkOutDate = checkOutDate;
-    self.searchInfo.city = city;
     [self updateControls];
 }
 -(void)viewWillAppear:(BOOL)animated {

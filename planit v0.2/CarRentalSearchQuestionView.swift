@@ -41,7 +41,13 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         addViews()
-        saveIsRoundTrip(isRoundtrip: true)
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        if destinationsForTrip.count == 1 {
+            saveIsRoundTrip(isRoundtrip:true)
+        } else if destinationsForTrip.count > 1 {
+            saveIsRoundTrip(isRoundtrip:false)
+        }
         
         //        self.layer.borderColor = UIColor.green.cgColor
         //        self.layer.borderWidth = 2
@@ -80,15 +86,16 @@ class CarRentalSearchQuestionView: UIView, UITextFieldDelegate {
         
         var leftDatesDestinations = [String:Date]()
         var rightDatesDestinations = [String:Date]()
-        
-        if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
-            leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
-            rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?.count)! - 1]
-            formatter.dateFormat = "MM/dd/YYYY"
-            let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
-            let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
-            pickUpDate?.text = leftDateAsString
-            dropOffDate?.text = rightDateAsString
+        if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+            if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
+                leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
+                rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[(datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?.count)! - 1]
+                formatter.dateFormat = "MM/dd/YYYY"
+                let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
+                let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]]!)
+                pickUpDate?.text = leftDateAsString
+                dropOffDate?.text = rightDateAsString
+            }
         }
         
     }
