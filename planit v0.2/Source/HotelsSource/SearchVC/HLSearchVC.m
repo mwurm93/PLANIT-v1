@@ -79,14 +79,15 @@
     self.searchInfo.city = city;
     [self updateControls];
 }
+-(void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
 
     self.hotelDetailsDecorator = nil;
-    
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"hotelSearchFormViewViewController_ViewDidAppear"
                                                         object:self];
