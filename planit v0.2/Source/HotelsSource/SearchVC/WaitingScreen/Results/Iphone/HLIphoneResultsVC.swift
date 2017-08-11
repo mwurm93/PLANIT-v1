@@ -10,20 +10,10 @@ import UIKit
 
 class HLIphoneResultsVC: HLCommonResultsVC {
 
-    @IBOutlet weak var buttonsBottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var mapDrawerButton: UIButton!
-
     var sortBottomDrawer: BottomDrawer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        sortButton.backgroundColor = JRColorScheme.mainButtonBackgroundColor()
-        sortButton.setTitleColor(JRColorScheme.mainButtonTitleColor(), for: .normal)
-        
-        mapDrawerButton.backgroundColor = JRColorScheme.mainButtonBackgroundColor()
-    mapDrawerButton.setTitleColor(JRColorScheme.mainButtonTitleColor(), for: .normal)
-        mapDrawerButton.addTarget(self, action: #selector(super.showMap), for: UIControlEvents.touchUpInside)
         
         self.view.backgroundColor = UIColor.clear
         self.view.layer.backgroundColor = UIColor.clear.cgColor

@@ -52,6 +52,7 @@ class HLSortVC: HLCommonVC, UITableViewDataSource, UITableViewDelegate, PointSel
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "HLSortVC_viewWillAppear"), object: nil)
     }
 
     func contentHeight() -> CGFloat {

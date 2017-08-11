@@ -104,7 +104,10 @@
     [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
     [self.tableView flashScrollIndicators];
 }
-
+- (void)viewWillAppear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"JRFilterVC_viewWillAppear"
+                                                        object:self];
+}
 #pragma mark - Protected methds
 
 - (void)setupResetBarButton {

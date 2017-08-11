@@ -177,4 +177,12 @@ import AviasalesSDK
         return destinationsForTrip.count
     }
 
+    
+    func saveSearchInfo(searchInfo: HDKSearchInfo) {
+        let HDKSearchInfoToSave  = NSKeyedArchiver.archivedData(withRootObject: searchInfo)
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["HDKSearchInfo"] = HDKSearchInfoToSave
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
 }

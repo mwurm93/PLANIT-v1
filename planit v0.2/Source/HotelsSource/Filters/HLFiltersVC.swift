@@ -16,6 +16,7 @@ class HLFiltersVC: HLCommonVC, HLFilterDelegate, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
         registerNibs()
         setupButtons()
 
@@ -44,6 +45,8 @@ class HLFiltersVC: HLCommonVC, HLFilterDelegate, UITableViewDelegate, UITableVie
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "HLFiltersVC_viewWillAppear"), object: nil)
 
         filter?.delegate = self
         saveFilterState()

@@ -117,6 +117,9 @@
 
 - (void)performSearchWithSearchInfo:(HLSearchInfo *)searchInfo
 {
+    HotelItemsAccessoryMethodsPerformer *hotelItemsAccessoryMethodsPerformer = [[HotelItemsAccessoryMethodsPerformer alloc] init];
+    [hotelItemsAccessoryMethodsPerformer saveSearchInfoWithSearchInfo:searchInfo];
+    
     [HDKDefaultsSaver saveObject:searchInfo forKey:HL_DEFAULTS_SEARCH_INFO_KEY];
     if (searchInfo.hotel) {
         HLResultVariant *variant = [HLResultVariant createEmptyVariant:searchInfo hotel:searchInfo.hotel];

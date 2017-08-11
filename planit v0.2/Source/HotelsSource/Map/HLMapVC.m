@@ -64,6 +64,10 @@ static NSString *const HLGroupAnnotationViewReuseID = @"groupAnnotationView";
         [self showInitialRegionForVariants:self.variants];
         self.didSetInitialRegion = YES;
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"HLMapVC_viewWillAppear"
+                                                        object:self];
+
 }
 
 - (void)dealloc

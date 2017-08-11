@@ -63,20 +63,6 @@ static CGFloat const separatorRightInset = 20.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    //start with  roundtrip if single destination
-    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
-    if ([flightTicketsAccessoryMethodPerformer checkIfIsMultiDestinationTrip]) {
-        [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:NO];
-        //Prefill dates
-        NSDate *departureDate = [flightTicketsAccessoryMethodPerformer fetchDepartureDate];
-        [_presenter handleSelectDate:departureDate withMode:0];
-    } else {
-        [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:YES];
-        NSDate *departureDate = [flightTicketsAccessoryMethodPerformer fetchDepartureDate];
-        NSDate *returnDate = [flightTicketsAccessoryMethodPerformer fetchReturnDate];
-        [_presenter handleSelectDate:departureDate withMode:0];
-        [_presenter handleSelectDate:returnDate withMode:1];
-    }
     [_tableView reloadData];
 
     [self setupViewController];
@@ -90,6 +76,24 @@ static CGFloat const separatorRightInset = 20.0;
                                              selector:@selector(showReturnButtonForRoundtripSearch)
                                                  name:@"roundtripButtonTouchedUpInside"
                                                object:nil];
+    
+    
+}
+- (void)viewWillAppear:(BOOL)animated {
+    //start with  roundtrip if single destination
+    FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+    NSDate *departureDate = [flightTicketsAccessoryMethodPerformer fetchDepartureDate];
+    [_presenter handleSelectDate:departureDate withMode:0];
+    
+    if ([flightTicketsAccessoryMethodPerformer checkIfIsMultiDestinationTrip]) {
+        [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:NO];
+        //Prefill dates
+    } else {
+        [flightTicketsAccessoryMethodPerformer saveIsRoundTripWithIsRoundtrip:YES];
+        NSDate *returnDate = [flightTicketsAccessoryMethodPerformer fetchReturnDate];
+        [_presenter handleSelectDate:returnDate withMode:1];
+    }
+    
     
     NSInteger indexOfDestinationBeingPlanned = [flightTicketsAccessoryMethodPerformer fetchIndexOfDestinationBeingPlanned];
     NSInteger numberDestinationsForTrip = [flightTicketsAccessoryMethodPerformer fetchNumberDestinationsForTrip];
@@ -121,7 +125,7 @@ static CGFloat const separatorRightInset = 20.0;
                 JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchEndingPointAirport];
                 [_presenter handleSelectAirport:nearbyAirport withMode:1];
             }
-
+            
         } else {
             if ([flightTicketsAccessoryMethodPerformer checkIfDestinationAirportFoundWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1]) {
                 //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
@@ -146,10 +150,7 @@ static CGFloat const separatorRightInset = 20.0;
             [_presenter handleSelectAirport:nearbyAirport withMode:1];
         }
     }
-    
 }
-
-
 
 - (void)hideReturnButtonForOneWaySearch {
     FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
@@ -189,7 +190,7 @@ static CGFloat const separatorRightInset = 20.0;
 
 - (void)setupSwapButton {
     self.swapButton.tintColor = [JRColorScheme searchFormTintColor];
-    self.swapButtonTopConstraint.constant = 36 + self.tableViewSectionHeaderHeight + self.tableViewRowHeight + self.swapButtonTopInsetDelta - CGRectGetHeight(self.swapButton.bounds) / 2.0;
+    self.swapButtonTopConstraint.constant = self.tableViewSectionHeaderHeight + self.tableViewRowHeight + self.swapButtonTopInsetDelta - CGRectGetHeight(self.swapButton.bounds) / 2.0;
 }
 
 #pragma makr - Update
@@ -240,6 +241,7 @@ static CGFloat const separatorRightInset = 20.0;
 
 - (void)performSearch {
     [self.presenter handleSearch];
+    
 }
 
 #pragma mark - UITableViewDataSource

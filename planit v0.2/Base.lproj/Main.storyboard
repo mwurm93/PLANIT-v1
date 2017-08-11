@@ -400,6 +400,16 @@
                                             <action selector="sortButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="Fjd-e2-Fxn"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="upi-dD-Zgh">
+                                        <rect key="frame" x="48" y="22" width="35" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                        <inset key="imageEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                        <state key="normal" backgroundImage="map"/>
+                                        <connections>
+                                            <action selector="hotelMapButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="Rf5-Is-AS1"/>
+                                        </connections>
+                                    </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="WWW → WWW12/30 - 12-30 (00 nights)" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Vm-Wr-hNd">
                                         <rect key="frame" x="96" y="19" width="178" height="42"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -810,6 +820,7 @@
                         <outlet property="editSwitch" destination="lO4-vI-lbw" id="TnB-qW-llZ"/>
                         <outlet property="editSwitchLabel" destination="mzu-lJ-IMg" id="NHF-gU-lW4"/>
                         <outlet property="filterButton" destination="Pg3-ud-ZeT" id="qZe-Lz-DOr"/>
+                        <outlet property="hotelMapButton" destination="upi-dD-Zgh" id="5dO-dV-DmF"/>
                         <outlet property="infoButton" destination="iTX-0m-nyT" id="fsv-Bu-4eH"/>
                         <outlet property="infoKeyButton_1" destination="Aob-Fq-l69" id="Auv-X7-ZSb"/>
                         <outlet property="infoKeyButton_2" destination="gU7-Dn-rsc" id="5v0-a0-5LW"/>

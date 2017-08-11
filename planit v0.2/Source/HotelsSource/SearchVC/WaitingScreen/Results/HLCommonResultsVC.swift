@@ -19,9 +19,6 @@ class HLCommonResultsVC: HLCommonVC,
     UICollectionViewDelegate,
     HLMosaicCollectionViewLayoutItemsProtocol {
 
-    @IBOutlet weak var filtersButton: UIButton!
-    @IBOutlet weak var sortButton: UIButton!
-    @IBOutlet weak var buttonsView: UIView!
     @IBOutlet private(set) weak var collectionView: UICollectionView!
 
     var mapButton: UIBarButtonItem?
@@ -72,25 +69,26 @@ class HLCommonResultsVC: HLCommonVC,
         addSearchInfoView(searchInfo)
 
         if let markImage = UIImage(named:"filtersButtonActive") {
-            filtersButton?.setImage(markImage, for: .selected)
-            filtersButton?.setImage(markImage, for: [.selected, .highlighted])
+//            filtersButton?.setImage(markImage, for: .selected)
+  //          filtersButton?.setImage(markImage, for: [.selected, .highlighted])
         }
 
-        filtersButton.backgroundColor = JRColorScheme.mainButtonBackgroundColor()
-        filtersButton.setTitleColor(JRColorScheme.mainButtonTitleColor(), for: .normal)
+    //    filtersButton.backgroundColor = JRColorScheme.mainButtonBackgroundColor()
+      //  filtersButton.setTitleColor(JRColorScheme.mainButtonTitleColor(), for: .normal)
 
         collectionView.collectionViewLayout = collectionLayout
         collectionView.allowsSelection = false
         registerNibs()
         addPlaceholders()
 
-        filtersButton.setTitle(NSLS("HL_FILTER_BUTTON_TITLE_LABEL"), for: .normal)
-        sortButton.setTitle(NSLS("HL_SORT_BUTTON_TITLE_LABEL"), for: .normal)
+        //filtersButton.setTitle(NSLS("HL_FILTER_BUTTON_TITLE_LABEL"), for: .normal)
+        //sortButton.setTitle(NSLS("HL_SORT_BUTTON_TITLE_LABEL"), for: .normal)
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(popFromHotelResultsViewControllerToHotelSearch), name: NSNotification.Name(rawValue: "popFromHotelResultsViewControllerToHotelSearch"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelSortResultsButtonTouchedUpInside), name: NSNotification.Name(rawValue: "hotelSortResultsButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelFilterResultsButtonTouchedUpInside), name: NSNotification.Name(rawValue: "hotelFilterResultsButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelMapResultsButtonTouchedUpInside), name: NSNotification.Name(rawValue: "hotelMapResultsButtonTouchedUpInside"), object: nil)
     }
     
     func popFromHotelResultsViewControllerToHotelSearch(){
@@ -114,7 +112,7 @@ class HLCommonResultsVC: HLCommonVC,
     
 
     func setFiltersButtonSelected(_ selected: Bool) {
-        filtersButton?.isSelected = selected
+ //       filtersButton?.isSelected = selected
     }
 
     private func registerNibs() {
@@ -159,8 +157,8 @@ class HLCommonResultsVC: HLCommonVC,
             noSearchResultsView.isHidden = true
             noFiltersResultView.isHidden = true
             collectionView.isHidden = false
-            sortButton?.isHidden = false
-            filtersButton?.isHidden = false
+//            sortButton?.isHidden = false
+  //          filtersButton?.isHidden = false
 
             items = createItems(filteredVariants)
             collectionView.reloadData()
@@ -177,8 +175,8 @@ class HLCommonResultsVC: HLCommonVC,
             noSearchResultsView.isHidden = false
             noFiltersResultView.isHidden = true
             collectionView.isHidden = true
-            sortButton?.isHidden = true
-            filtersButton?.isHidden = true
+ //           sortButton?.isHidden = true
+   //         filtersButton?.isHidden = true
         }
         needUpdateContent = false
     }
@@ -264,6 +262,9 @@ class HLCommonResultsVC: HLCommonVC,
     }
     func hotelFilterResultsButtonTouchedUpInside() {
         showFilters(animated: true)
+    }
+    func hotelMapResultsButtonTouchedUpInside() {
+        showMap()
     }
     
     @IBAction func showSort() {

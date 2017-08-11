@@ -175,6 +175,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var searchSummaryLabelTopView: UILabel!
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var sortButton: UIButton!
+    @IBOutlet weak var hotelMapButton: UIButton!
     
     
     override func viewDidLoad() {
@@ -184,6 +185,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.searchSummaryLabelTopView.textAlignment = .center
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
         self.popupBackgroundFilterView.isHidden = true
         self.addBackButtonPointedAtTripList()
         self.addTwicketSegmentedControl()
@@ -460,7 +462,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(comeBackToPlanFlightLater), name: NSNotification.Name(rawValue: "comeBackToThisFlightsButtonTouchedUpInside"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(JRAirportPicker_ViewDidLoad), name: NSNotification.Name(rawValue: "JRAirportPicker_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(JRDatePicker_ViewDidLoad), name: NSNotification.Name(rawValue: "JRDatePicker_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(JRFilterVC_viewWillAppear), name: NSNotification.Name(rawValue: "JRFilterVC_viewWillAppear"), object: nil)
 
+
+        
         //Hotel Nav
         NotificationCenter.default.addObserver(self, selector: #selector(HLCommonResultsVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLCommonResultsVC_viewWillAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addBackButtonPointedAtTripList), name: NSNotification.Name(rawValue: "hotelSearchFormViewViewController_ViewDidAppear"), object: nil)
@@ -472,11 +477,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchCityPicker_ViewDidLoad), name: NSNotification.Name(rawValue: "hotelSearchCityPicker_ASTGroupedSearchVC_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(HLDatePicker_ViewDidLoad), name: NSNotification.Name(rawValue: "HLDatePicker_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchKidsPickerViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "hotelSearchKidsPickerViewController_ViewDidLoad"), object: nil)
-
-        
-
-
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(HLFiltersVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLFiltersVC_viewWillAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(HLMapVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLMapVC_viewWillAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(HLSortVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLSortVC_viewWillAppear"), object: nil)
         
         setUpItinerary()
         
@@ -4068,6 +4071,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var destinationsForTripDictArray = [NSDictionary]()
         var endingPointDict = NSDictionary()
         var startingPointDict = NSDictionary()
+        var JRSDKSearchInfo = NSData()
+        var HDKSearchInfo = NSData()
         
         //Activities VC
         var selectedActivities = [NSString]()
@@ -4124,8 +4129,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             destinationsForTripDictArray = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTripDictArray") as? [NSDictionary] ?? [NSDictionary]()
             endingPointDict = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "endingPointDict") as? NSDictionary ?? NSDictionary()
             startingPointDict = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "startingPointDict") as? NSDictionary ?? NSDictionary()
-
-
+            JRSDKSearchInfo = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "JRSDKSearchInfo") as? NSData ?? NSData()
+            HDKSearchInfo = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "HDKSearchInfo") as? NSData ?? NSData()
 
             //Activities VC
             selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [NSString] ?? [NSString]()
@@ -4137,7 +4142,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         
         //SavedPreferences
-        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionaryArray":travelDictionaryArray, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems,"lastFlightOpenInBrowser":lastFlightOpenInBrowser,"lastHotelOpenInBrowser":lastHotelOpenInBrowser,"assistantMode":assistantMode, "placeToStayDictionaryArray":placeToStayDictionaryArray,"endingPoint":endingPoint,"destinationsForTripDictArray":destinationsForTripDictArray,"startingPointDict":startingPointDict,"endingPointDict":endingPointDict] as NSMutableDictionary
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionaryArray":travelDictionaryArray, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems,"lastFlightOpenInBrowser":lastFlightOpenInBrowser,"lastHotelOpenInBrowser":lastHotelOpenInBrowser,"assistantMode":assistantMode, "placeToStayDictionaryArray":placeToStayDictionaryArray,"endingPoint":endingPoint,"destinationsForTripDictArray":destinationsForTripDictArray,"startingPointDict":startingPointDict,"endingPointDict":endingPointDict,"JRSDKSearchInfo":JRSDKSearchInfo,"HDKSearchInfo":HDKSearchInfo] as NSMutableDictionary
         
         return fetchedSavedPreferencesForTrip
         
@@ -4496,6 +4501,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBAction func sortButtonTouchedUpInside(_ sender: Any) {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelSortResultsButtonTouchedUpInside"), object: nil)
 
+    }
+    @IBAction func hotelMapButtonTouchedUpInside(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelMapResultsButtonTouchedUpInside"), object: nil)
     }
 //    @IBAction func assistantButtonTouchedUpInside(_ sender: Any) {
 //        assistant()
@@ -6071,63 +6079,33 @@ extension TripViewController {
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
         self.progressRing?.isHidden = true
-
         
         //Create searchSummaryLabelTopView text
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         let numberDestinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count
-        formatter.dateFormat = "MM/dd"
-        let flightTicketsAccessoryMethodPerformer = FlightTicketsAccessoryMethodPerformer()
-        let departureDate = flightTicketsAccessoryMethodPerformer.fetchDepartureDate()
-        let departureDateAsString = formatter.string(from: departureDate as Date)
-        let returnDate = flightTicketsAccessoryMethodPerformer.fetchReturnDate()
-        let returnDateAsString = formatter.string(from: returnDate as Date)
-        var departureAirport: JRSDKAirport?
-        var arrivalAirport: JRSDKAirport?
 
-        //Prefill locations
-        if (indexOfDestinationBeingPlanned == 0) {
-            
-            if (flightTicketsAccessoryMethodPerformer.checkIfStartingPointAirportFound()) {
-                departureAirport = flightTicketsAccessoryMethodPerformer.fetchStartingPointAirport()
-            }
-            if (flightTicketsAccessoryMethodPerformer.checkIfDestinationAirportFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned)) {
-                arrivalAirport = flightTicketsAccessoryMethodPerformer.fetchDestinationAirport(indexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned)
-            }
-        }
-            // return travel back to final destination (home)
-        else if (indexOfDestinationBeingPlanned == numberDestinationsForTrip) {
-            if (flightTicketsAccessoryMethodPerformer.checkIfDifferentEndingPoint()) {
-                if (flightTicketsAccessoryMethodPerformer.checkIfDestinationAirportFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned - 1)) {
-                    departureAirport = flightTicketsAccessoryMethodPerformer.fetchDestinationAirport(indexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1)
-                }
-                if (flightTicketsAccessoryMethodPerformer.checkIfEndingPointAirportFound()) {
-                    arrivalAirport = flightTicketsAccessoryMethodPerformer.fetchEndingPointAirport()
-                }
-                
-            } else {
-                if (flightTicketsAccessoryMethodPerformer.checkIfDestinationAirportFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned - 1)) {
-                    departureAirport = flightTicketsAccessoryMethodPerformer.fetchDestinationAirport(indexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1)
-                }
-                if (flightTicketsAccessoryMethodPerformer.checkIfStartingPointAirportFound()) {
-                    
-                    arrivalAirport = flightTicketsAccessoryMethodPerformer.fetchStartingPointAirport()
-                }
-            }
-        } else {
-            if (flightTicketsAccessoryMethodPerformer.checkIfDestinationAirportFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned - 1)) {
-                departureAirport = flightTicketsAccessoryMethodPerformer.fetchDestinationAirport(indexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1)
-            }
-            if (flightTicketsAccessoryMethodPerformer.checkIfDestinationAirportFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned)) {
-                arrivalAirport = flightTicketsAccessoryMethodPerformer.fetchDestinationAirport(indexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned)
-            }
-        }
+        let JRSDKSearchInfoAsData = SavedPreferencesForTrip["JRSDKSearchInfo"] as! Data
+        let JRSDKSearchInfo = NSKeyedUnarchiver.unarchiveObject(with: JRSDKSearchInfoAsData) as? JRSDKSearchInfo
+        let travelSegments = JRSDKSearchInfo?.travelSegments
+        let firstLeg = travelSegments?[0] as! JRSDKTravelSegment
+        let departureDate = firstLeg.departureDate
+        formatter.dateFormat = "MM/dd"
+        let departureDateAsString = formatter.string(from: departureDate as Date)
+
+        let departureAirport = firstLeg.originAirport
+        let arrivalAirport = firstLeg.destinationAirport
+        
+        let flightTicketsAccessoryMethodPerformer = FlightTicketsAccessoryMethodPerformer()
         
         if flightTicketsAccessoryMethodPerformer.fetchIsRoundtrip() {
-            self.searchSummaryLabelTopView.text = "\((arrivalAirport?.iata)!) ⇄ \((departureAirport?.iata)!)\n\(departureDateAsString) - \(returnDateAsString)"
+            let secondLeg = travelSegments?[1] as! JRSDKTravelSegment
+            let returnDate = secondLeg.departureDate
+            let returnDateAsString = formatter.string(from: returnDate as Date)
+
+            self.searchSummaryLabelTopView.text = "\((departureAirport.iata)) ⇄ \((arrivalAirport.iata))\n\(departureDateAsString) - \(returnDateAsString)"
         } else {
-            self.searchSummaryLabelTopView.text = "\((arrivalAirport?.iata)!) → \((departureAirport?.iata)!)\n\(departureDateAsString)"
+            self.searchSummaryLabelTopView.text = "\((departureAirport.iata)) → \((arrivalAirport.iata))\n\(departureDateAsString)"
 
         }
     }
@@ -6187,8 +6165,9 @@ extension TripViewController {
         } else {
             self.progressRing?.isHidden = true
         }
-        
-
+    }
+    func JRFilterVC_viewWillAppear() {
+        self.filterButton?.isHidden = true
     }
     func addBackButtonPointedAtTripList() {
         if backButton != nil {
@@ -6236,6 +6215,7 @@ extension TripViewController {
         self.searchSummaryLabelTopView.isHidden = false
         self.filterButton.isHidden = false
         self.sortButton.isHidden = false
+        self.hotelMapButton.isHidden = false
         self.progressRing?.isHidden = true
         
     }
@@ -6246,14 +6226,13 @@ extension TripViewController {
         self.searchSummaryLabelTopView.isHidden = true
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
             self.progressRing?.isHidden = false
         } else {
             self.progressRing?.isHidden = true
         }
-
-        
     }
     func hotelSearchWaitingScreenViewController_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -6268,24 +6247,20 @@ extension TripViewController {
         self.searchSummaryLabelTopView.isHidden = false
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
-        self.progressRing?.isHidden = true
+        self.hotelMapButton.isHidden = true
+        self.progressRing?.isHidden = true                    
         
+        //Create searchSummaryLabelTopView text
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-        let numberDestinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count
+        let HDKSearchInfoAsData = SavedPreferencesForTrip["HDKSearchInfo"] as! Data
+        let HDKSearchInfo = NSKeyedUnarchiver.unarchiveObject(with: HDKSearchInfoAsData) as? HDKSearchInfo
+        let checkInDate = HDKSearchInfo?.checkInDate
         formatter.dateFormat = "MM/dd"
-
-        var hotelItemsAccessoryMethodsPerformer = HotelItemsAccessoryMethodsPerformer()
-        var checkInDate = hotelItemsAccessoryMethodsPerformer.fetchCheckInDate()
-        let checkInDateAsString = formatter.string(from: checkInDate as Date)
-        var checkOutDate = hotelItemsAccessoryMethodsPerformer.fetchCheckOutDate()
-        let checkOutDateAsString = formatter.string(from: checkOutDate as Date)
-        var city: HDKCity?
-        if hotelItemsAccessoryMethodsPerformer.checkIfCityFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned) {
-            city = hotelItemsAccessoryMethodsPerformer.fetchCity(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned)
-        }
-        
-        self.searchSummaryLabelTopView.text = "\((city?.fullName)!)\n\(checkInDateAsString)\n\(checkOutDateAsString)"
+        let checkInDateAsString = formatter.string(from: checkInDate as! Date)
+        let checkOutDate = HDKSearchInfo?.checkOutDate
+        let checkOutDateAsString = formatter.string(from: checkOutDate as! Date)
+        let city = HDKSearchInfo?.city
+        self.searchSummaryLabelTopView.text = "\((city?.name)!)\n\(checkInDateAsString) - \(checkOutDateAsString)"
 
     }
     func hotelSearchCityPicker_ViewDidLoad() {
@@ -6318,6 +6293,17 @@ extension TripViewController {
         self.topView.addSubview(backButton!)
 
     }
+    func HLFiltersVC_viewWillAppear() {
+        self.filterButton.isHidden = true
+    }
+    func HLSortVC_viewWillAppear() {
+        self.sortButton.isHidden = true
+    }
+    func HLMapVC_viewWillAppear() {
+        self.hotelMapButton.isHidden = true
+    }
+    
+
     func popFromWaitingViewControllerToHotelSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromWaitingScreenViewControllerToHotelSearch"), object: nil)
         
@@ -6325,6 +6311,7 @@ extension TripViewController {
         self.searchSummaryLabelTopView.isHidden = true
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
             self.progressRing?.isHidden = false

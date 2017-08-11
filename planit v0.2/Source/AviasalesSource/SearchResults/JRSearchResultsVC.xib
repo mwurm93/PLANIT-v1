@@ -38,6 +38,7 @@
                 <constraint firstItem="veO-Fa-Y7M" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="fbZ-um-UUD"/>
                 <constraint firstAttribute="trailing" secondItem="veO-Fa-Y7M" secondAttribute="trailing" id="h0o-gv-FtP"/>
             </constraints>
+            <point key="canvasLocation" x="33.5" y="54.5"/>
         </view>
     </objects>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

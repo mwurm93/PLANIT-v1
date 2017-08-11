@@ -142,14 +142,14 @@ class HLCityPickerVC: ASTGroupedSearchVC {
         } else {
             item = resultsTableController.sections[indexPath.section].items[indexPath.row]
         }
-
+        
         if let groupedItem = item as? GroupedTableItem {
             groupedItem.action?()
             tableView.deselectRow(at: indexPath, animated: true)
             return
         } else if let city = item as? HDKCity {
             delegate?.cityPicker(self, didSelectCity:city)
-            HDKDefaultsSaver.addRecentSearchDestination(item)
+            HDKDefaultsSaver.addRecentSearchDestination(item)            
         } else if let hotel = item as? HDKHotel {
             delegate?.cityPicker(self, didSelectHotel:hotel)
             HDKDefaultsSaver.addRecentSearchDestination(item)
@@ -194,7 +194,8 @@ class HLCityPickerVC: ASTGroupedSearchVC {
 
     // MARK: - HLCustomPointSelectionDelegate methods
 
-    override func didSelectCustomSearchLocationPoint(_ searchLocationPoint: HDKSearchLocationPoint) {        delegate?.cityPicker(self, didSelectLocationPoint: searchLocationPoint)
+    override func didSelectCustomSearchLocationPoint(_ searchLocationPoint: HDKSearchLocationPoint) {
+        delegate?.cityPicker(self, didSelectLocationPoint: searchLocationPoint)
         goBack()
     }
 

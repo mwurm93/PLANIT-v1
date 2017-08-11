@@ -149,6 +149,10 @@ static NSString * const kSimpleSearchInfoBuilderStorageKey = @"simpleSearchInfoB
     if (searchInfo) {
         [self.viewController showWaitingScreenWithSearchInfo:searchInfo];
         [self saveSearchInfoBuilder];
+        
+        FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+        [flightTicketsAccessoryMethodPerformer saveSearchInfoWithSearchInfo:searchInfo];
+
         [[InteractionManager shared] prepareSearchHotelsInfoFrom:searchInfo];
     }
 }

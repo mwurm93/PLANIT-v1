@@ -223,6 +223,10 @@ static NSString * const kJRAirportPickerCellWithAirport = @"JRAirportPickerCellW
             self.selectionBlock(airport);
         }
         
+//        FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
+  //      [flightTicketsAccessoryMethodPerformer saveAirportWithAirport:airport];
+
+        
         [self popOrDismissBasedOnDeviceTypeWithAnimated:YES];
     }
 }

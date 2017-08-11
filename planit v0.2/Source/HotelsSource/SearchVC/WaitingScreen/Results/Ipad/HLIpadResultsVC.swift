@@ -38,7 +38,7 @@ class HLIpadResultsVC: HLCommonResultsVC {
 
         filtersContainerWidth.constant = HLIpadResultsVC.filtersViewWidth
         setInitialFiltersStateForOrientation(UIApplication.shared.statusBarOrientation)
-        sortButton.setTitleColor(JRColorScheme.mainButtonBackgroundColor(), for: .normal)
+        //sortButton.setTitleColor(JRColorScheme.mainButtonBackgroundColor(), for: .normal)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +62,7 @@ class HLIpadResultsVC: HLCommonResultsVC {
         super.presentSortVC(sortVC, animated: animated)
 
         sortVC.view.backgroundColor = UIColor.clear
-        presentPopover(sortVC, under: sortButton, distance: 0.0, contentSize: CGSize(width: 420.0, height: sortVC.contentHeight()), backgroundColor: UIColor.white, cornerRadius: 20)
+        //presentPopover(sortVC, under: sortButton, distance: 0.0, contentSize: CGSize(width: 420.0, height: sortVC.contentHeight()), backgroundColor: UIColor.white, cornerRadius: 20)
         sortVC.delegate = self
     }
 
@@ -82,11 +82,11 @@ class HLIpadResultsVC: HLCommonResultsVC {
     override func setFiltersButtonSelected(_ selected: Bool) {
         super.setFiltersButtonSelected(selected)
         if selected {
-            setButtonContentOffsets(filtersButton!)
+//            setButtonContentOffsets(filtersButton!)
         } else {
-            filtersButton.imageEdgeInsets = UIEdgeInsets.zero
-            filtersButton.titleEdgeInsets = UIEdgeInsets.zero
-            filtersButton.contentEdgeInsets = UIEdgeInsets.zero
+//            filtersButton.imageEdgeInsets = UIEdgeInsets.zero
+//            filtersButton.titleEdgeInsets = UIEdgeInsets.zero
+//            filtersButton.contentEdgeInsets = UIEdgeInsets.zero
         }
     }
 
@@ -126,7 +126,7 @@ class HLIpadResultsVC: HLCommonResultsVC {
             filtersContainer.isHidden = true
         }
         portraitFiltersShadeView.alpha = 0.0
-        filtersButton.alpha = fullScreenFiltersMode ? 0.0 : 1.0
+//        filtersButton.alpha = fullScreenFiltersMode ? 0.0 : 1.0
     }
 
     func openFiltersScreen(_ orientation: UIInterfaceOrientation) {
@@ -183,7 +183,7 @@ class HLIpadResultsVC: HLCommonResultsVC {
                 sortName += " " + distanceLocation
             }
         }
-        sortButton?.setTitle(sortName, for: UIControlState())
+//        sortButton?.setTitle(sortName, for: UIControlState())
     }
 
     fileprivate func areFiltersInFullscreenMode(_ orientation: UIInterfaceOrientation) -> Bool {

@@ -245,4 +245,16 @@ import AviasalesSDK
         return Date()
     }
 
+    func saveSearchInfo(searchInfo: JRSDKSearchInfo) {
+        let JRSDKSearchInfoToSave  = NSKeyedArchiver.archivedData(withRootObject: searchInfo)
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        SavedPreferencesForTrip["JRSDKSearchInfo"] = JRSDKSearchInfoToSave
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
+    
+    
+    
+    
+   
 }

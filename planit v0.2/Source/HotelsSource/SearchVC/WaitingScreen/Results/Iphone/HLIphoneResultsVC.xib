@@ -11,12 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HLIphoneResultsVC">
             <connections>
-                <outlet property="buttonsBottomConstraint" destination="GM6-4u-5Bm" id="96G-9A-wJs"/>
-                <outlet property="buttonsView" destination="DBP-9g-zvJ" id="xck-gP-oGo"/>
                 <outlet property="collectionView" destination="1g7-TH-BMx" id="MqS-3W-z9e"/>
-                <outlet property="filtersButton" destination="xVW-cz-NRY" id="tqH-2z-HP2"/>
-                <outlet property="mapDrawerButton" destination="4jr-G3-ee8" id="hBe-ER-Y16"/>
-                <outlet property="sortButton" destination="S9l-Ua-dam" id="Dx8-L0-aXD"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="ohV-MP-Z52"/>
             </connections>
         </placeholder>
@@ -39,86 +34,13 @@
                         <outlet property="delegate" destination="-1" id="Ay3-l0-8fe"/>
                     </connections>
                 </collectionView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DBP-9g-zvJ" userLabel="Buttons View">
-                    <rect key="frame" x="0.0" y="537" width="375" height="55"/>
-                    <subviews>
-                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVW-cz-NRY" userLabel="Filter Button">
-                            <rect key="frame" x="20" y="0.0" width="98" height="35"/>
-                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            <accessibility key="accessibilityConfiguration" identifier="HL_FILTER_BUTTON_TITLE_LABEL"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="35" id="XaN-kR-tLH"/>
-                                <constraint firstAttribute="width" constant="98" id="mTr-BD-zBf"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
-                            <state key="normal" title="Фильтры"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="JRCornerRadius">
-                                    <real key="value" value="6"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                            <connections>
-                                <action selector="showFilters" destination="-1" eventType="touchUpInside" id="YiG-0c-Z2g"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S9l-Ua-dam" userLabel="Sort Button">
-                            <rect key="frame" x="138" y="0.0" width="98" height="35"/>
-                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            <accessibility key="accessibilityConfiguration" identifier="HL_SORT_BUTTON_TITLE_LABEL" label="Filters"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="98" id="ex4-xw-OjS"/>
-                                <constraint firstAttribute="height" constant="35" id="gA1-x2-5uE"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                            <state key="normal" title="Сортировка"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="JRCornerRadius">
-                                    <real key="value" value="6"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                            <connections>
-                                <action selector="showSort" destination="-1" eventType="touchUpInside" id="Fwx-zf-cpV"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4jr-G3-ee8" userLabel="Map Button">
-                            <rect key="frame" x="256" y="0.0" width="98" height="35"/>
-                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            <accessibility key="accessibilityConfiguration" identifier="HL_SORT_BUTTON_TITLE_LABEL" label="Filters"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="98" id="QnJ-2L-gpr"/>
-                                <constraint firstAttribute="height" constant="35" id="qac-aq-Tsb"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                            <state key="normal" title="Map"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="JRCornerRadius">
-                                    <real key="value" value="6"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstItem="4jr-G3-ee8" firstAttribute="leading" secondItem="S9l-Ua-dam" secondAttribute="trailing" constant="20" id="00S-YE-aiR"/>
-                        <constraint firstItem="S9l-Ua-dam" firstAttribute="leading" secondItem="xVW-cz-NRY" secondAttribute="trailing" constant="20" id="3ts-PI-oOt"/>
-                        <constraint firstItem="xVW-cz-NRY" firstAttribute="top" secondItem="DBP-9g-zvJ" secondAttribute="top" id="VpD-L3-Tnm"/>
-                        <constraint firstItem="xVW-cz-NRY" firstAttribute="leading" secondItem="DBP-9g-zvJ" secondAttribute="leading" constant="20" id="bnz-ax-QlD"/>
-                        <constraint firstAttribute="bottom" secondItem="xVW-cz-NRY" secondAttribute="bottom" constant="20" id="fDv-xO-hko"/>
-                        <constraint firstItem="4jr-G3-ee8" firstAttribute="top" secondItem="DBP-9g-zvJ" secondAttribute="top" id="lpD-LH-ceu"/>
-                        <constraint firstItem="S9l-Ua-dam" firstAttribute="top" secondItem="DBP-9g-zvJ" secondAttribute="top" id="n4q-le-8sK"/>
-                    </constraints>
-                </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="1g7-TH-BMx" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="34h-WD-WQw"/>
                 <constraint firstAttribute="trailing" secondItem="1g7-TH-BMx" secondAttribute="trailing" id="4G4-wT-hLs"/>
                 <constraint firstItem="1g7-TH-BMx" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="68i-0r-bsa"/>
-                <constraint firstAttribute="trailing" secondItem="DBP-9g-zvJ" secondAttribute="trailing" id="6nI-C3-h50"/>
                 <constraint firstAttribute="bottom" secondItem="1g7-TH-BMx" secondAttribute="bottom" constant="65" id="FyB-xH-s4Y"/>
-                <constraint firstAttribute="bottom" secondItem="DBP-9g-zvJ" secondAttribute="bottom" constant="75" id="GM6-4u-5Bm"/>
-                <constraint firstItem="DBP-9g-zvJ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="idU-7m-Bjx"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
