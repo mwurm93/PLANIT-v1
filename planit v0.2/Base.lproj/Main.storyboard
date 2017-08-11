@@ -384,6 +384,29 @@
                                             <action selector="infoButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="hcK-Xv-5EF"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pg3-ud-ZeT">
+                                        <rect key="frame" x="320" y="17" width="45" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" backgroundImage="filter"/>
+                                        <connections>
+                                            <action selector="filterButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="fxw-lu-mAd"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pbZ-dQ-2ee">
+                                        <rect key="frame" x="274" y="17" width="45" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" backgroundImage="sort"/>
+                                        <connections>
+                                            <action selector="sortButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="Fjd-e2-Fxn"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="WWW → WWW12/30 - 12-30 (00 nights)" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Vm-Wr-hNd">
+                                        <rect key="frame" x="96" y="19" width="178" height="42"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <variation key="default">
@@ -786,6 +809,7 @@
                         <outlet property="detailedInformationSubview" destination="lCk-vD-rWU" id="ObK-hg-ROM"/>
                         <outlet property="editSwitch" destination="lO4-vI-lbw" id="TnB-qW-llZ"/>
                         <outlet property="editSwitchLabel" destination="mzu-lJ-IMg" id="NHF-gU-lW4"/>
+                        <outlet property="filterButton" destination="Pg3-ud-ZeT" id="qZe-Lz-DOr"/>
                         <outlet property="infoButton" destination="iTX-0m-nyT" id="fsv-Bu-4eH"/>
                         <outlet property="infoKeyButton_1" destination="Aob-Fq-l69" id="Auv-X7-ZSb"/>
                         <outlet property="infoKeyButton_2" destination="gU7-Dn-rsc" id="5v0-a0-5LW"/>
@@ -805,6 +829,8 @@
                         <outlet property="scrollDownButton" destination="5lv-hC-A2u" id="z8T-NK-lO8"/>
                         <outlet property="scrollUpButton" destination="Cvm-VN-7u9" id="VzC-nF-CUJ"/>
                         <outlet property="scrollView" destination="SNF-xw-05H" id="cke-8Q-0oX"/>
+                        <outlet property="searchSummaryLabelTopView" destination="6Vm-Wr-hNd" id="vXY-9v-n0L"/>
+                        <outlet property="sortButton" destination="pbZ-dQ-2ee" id="Maf-GB-TGk"/>
                         <outlet property="topView" destination="Abn-lc-U4N" id="2gS-y6-rRx"/>
                         <outlet property="tripNameTextField" destination="x3w-ID-4eS" id="DDh-uV-8le"/>
                         <outlet property="underline" destination="N54-ke-5oc" id="7nI-3U-7Sf"/>

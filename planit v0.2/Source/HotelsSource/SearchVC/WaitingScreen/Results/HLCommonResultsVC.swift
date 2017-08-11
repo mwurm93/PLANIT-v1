@@ -89,6 +89,8 @@ class HLCommonResultsVC: HLCommonVC,
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(popFromHotelResultsViewControllerToHotelSearch), name: NSNotification.Name(rawValue: "popFromHotelResultsViewControllerToHotelSearch"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelSortResultsButtonTouchedUpInside), name: NSNotification.Name(rawValue: "hotelSortResultsButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelFilterResultsButtonTouchedUpInside), name: NSNotification.Name(rawValue: "hotelFilterResultsButtonTouchedUpInside"), object: nil)
     }
     
     func popFromHotelResultsViewControllerToHotelSearch(){
@@ -252,7 +254,18 @@ class HLCommonResultsVC: HLCommonVC,
     @IBAction func showFilters() {
         showFilters(animated: true)
     }
-
+    func hotelSortResultsButtonTouchedUpInside() {
+        let sortVC = HLSortVC(nibName: "HLSortVC", bundle: nil)
+        sortVC.filter = filter
+        sortVC.sortDidApply = { [weak self] in
+            self?.sortDidApply()
+        }
+        presentSortVC(sortVC, animated: true)
+    }
+    func hotelFilterResultsButtonTouchedUpInside() {
+        showFilters(animated: true)
+    }
+    
     @IBAction func showSort() {
         let sortVC = HLSortVC(nibName: "HLSortVC", bundle: nil)
         sortVC.filter = filter

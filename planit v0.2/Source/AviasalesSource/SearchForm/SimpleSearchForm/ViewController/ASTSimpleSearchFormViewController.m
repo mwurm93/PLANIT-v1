@@ -189,7 +189,7 @@ static CGFloat const separatorRightInset = 20.0;
 
 - (void)setupSwapButton {
     self.swapButton.tintColor = [JRColorScheme searchFormTintColor];
-    self.swapButtonTopConstraint.constant = self.tableViewSectionHeaderHeight + self.tableViewRowHeight + self.swapButtonTopInsetDelta - CGRectGetHeight(self.swapButton.bounds) / 2.0;
+    self.swapButtonTopConstraint.constant = 36 + self.tableViewSectionHeaderHeight + self.tableViewRowHeight + self.swapButtonTopInsetDelta - CGRectGetHeight(self.swapButton.bounds) / 2.0;
 }
 
 #pragma makr - Update

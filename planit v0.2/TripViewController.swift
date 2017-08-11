@@ -17,6 +17,7 @@ import SafariServices
 import CSVImporter
 import UICircularProgressRing
 import TwicketSegmentedControl
+import ZKPulseView
 
 class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate, TwicketSegmentedControlDelegate, UITextViewDelegate {
 
@@ -171,11 +172,18 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var popupBackgroundFilterViewCloseButton: UIButton!
     @IBOutlet weak var editSwitch: UISwitch!
     @IBOutlet weak var editSwitchLabel: UILabel!
+    @IBOutlet weak var searchSummaryLabelTopView: UILabel!
+    @IBOutlet weak var filterButton: UIButton!
+    @IBOutlet weak var sortButton: UIButton!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.searchSummaryLabelTopView.isHidden = true
+        self.searchSummaryLabelTopView.textAlignment = .center
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
         self.popupBackgroundFilterView.isHidden = true
         self.addBackButtonPointedAtTripList()
         self.addTwicketSegmentedControl()
@@ -444,7 +452,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(flightSearchResultsSceneViewController_ViewDidAppear), name: NSNotification.Name(rawValue: "flightSearchResultsSceneViewController_ViewDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightSearchWaitingScreenViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightTicketViewViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "flightTicketViewViewController_ViewDidLoad"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(addBackButtonPointedAtTripList), name: NSNotification.Name(rawValue: "flightSearchFormViewViewController_ViewDidAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flightSearchFormViewViewController_ViewDidAppear), name: NSNotification.Name(rawValue: "flightSearchFormViewViewController_ViewDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightBookingBrowserClosed), name: NSNotification.Name(rawValue: "JRSDKFlightBrowserClosed"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightBookingBrowserClosed_FlightBooked), name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightBooked"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightBookingBrowserClosed_FlightNotBooked), name: NSNotification.Name(rawValue: "flightBookingBrowserClosed_FlightNotBooked"), object: nil)
@@ -453,7 +461,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(JRAirportPicker_ViewDidLoad), name: NSNotification.Name(rawValue: "JRAirportPicker_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(JRDatePicker_ViewDidLoad), name: NSNotification.Name(rawValue: "JRDatePicker_ViewDidLoad"), object: nil)
 
-        
         //Hotel Nav
         NotificationCenter.default.addObserver(self, selector: #selector(HLCommonResultsVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLCommonResultsVC_viewWillAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addBackButtonPointedAtTripList), name: NSNotification.Name(rawValue: "hotelSearchFormViewViewController_ViewDidAppear"), object: nil)
@@ -873,6 +880,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     func spawnContactPickerVC() {
+        
         checkContactsAccess()
     }
     func spawnMessageComposeVC() {
@@ -4208,6 +4216,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollDownButton.isHidden = true
 //        floaty?.isHidden = true
         progressRing?.isHidden = true
+        filterButton.isHidden = true
+        sortButton.isHidden = true
     }
     func assistantViewIsHiddenFalse() {
         scrollView.isHidden = false
@@ -4414,22 +4424,36 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func handleSendInvitesButton() {
         if editItineraryModeEnabled == true {
             itineraryButton2.isHidden = true
+            itineraryButton2.stopPulseEffect()
         } else {
-            var itinerarySendable = true
+            var itinerarySendable = false
+            if contacts != nil {
+                if (contacts?.count)! > 0 {
+                    itinerarySendable = true
+                    editSwitchLabel.frame.origin.x = 50
+                    editSwitch.frame.origin.x = 157
+                }
+            }
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
             
-            if ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! != 0 && destinationsForTrip.count != 0 {
+            if ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! == 0 || destinationsForTrip.count == 0 {
                 itinerarySendable = false
+                
+                editSwitchLabel.frame.origin.x = 110
+                editSwitch.frame.origin.x = 217
             }            
 
             if itinerarySendable {
                 itineraryButton2.isHidden = false
+                itineraryButton2.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.2)
+                
                 //PLANNED:             
                 //Move switch and label to the left
                 //pulse button
             } else {
                 itineraryButton2.isHidden = true
+                itineraryButton2.stopPulseEffect()
             }
 
         }
@@ -4454,6 +4478,24 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     @IBAction func infoButtonTouchedUpInside(_ sender: Any) {
         animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true, withCloseButton: true)
+    }
+    @IBAction func filterButtonTouchedUpInside(_ sender: Any) {
+        
+        getCurrentSubview()
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let currentSubview = SavedPreferencesForTrip["currentAssistantSubview"] as! NSNumber
+        
+        if currentSubview == 11 {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightFilterResultsButtonTouchedUpInside"), object: nil)
+        } else {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelFilterResultsButtonTouchedUpInside"), object: nil)
+        }
+
+    }
+    @IBAction func sortButtonTouchedUpInside(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelSortResultsButtonTouchedUpInside"), object: nil)
+
     }
 //    @IBAction func assistantButtonTouchedUpInside(_ sender: Any) {
 //        assistant()
@@ -4838,8 +4880,16 @@ extension TripViewController {
     fileprivate func checkContactsAccess() {
         switch CNContactStore.authorizationStatus(for: .contacts) {
         // Update our UI if the user has granted access to their Contacts
-        case .authorized:
-            self.showContactsPicker()
+        case .authorized:            
+            // Obtain a configured MFMessageComposeViewController
+            let addInviteesAlert = UIAlertController(title: "Great! By the way, we won't send them the itinerary until you say so!", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            let continueAction = UIAlertAction(title: "Sounds good", style: UIAlertActionStyle.default) {
+                (result : UIAlertAction) -> Void in
+                self.showContactsPicker()
+            }
+            addInviteesAlert.addAction(continueAction)
+            self.present(addInviteesAlert, animated: true, completion: nil)
+            
         // Prompt the user for access to Contacts if there is no definitive answer
         case .notDetermined :
             self.requestContactsAccess()
@@ -4981,6 +5031,7 @@ extension TripViewController {
         }
         updateProgress()
         handleAddInviteesButton()
+        handleSendInvitesButton()
         //        //Uncomment for testing on Simulator
         //        //        chatButton.isHidden = true
         //        //        subviewDoneButton.isHidden = false
@@ -4999,10 +5050,9 @@ extension TripViewController {
         // Make sure the device can send text messages
         if (messageComposer.canSendText()) {
             // Obtain a configured MFMessageComposeViewController
-            let messageComposeVC = messageComposer.configuredMessageComposeViewController()
-            
-            // Present the configured MFMessageComposeViewController instance
-            present(messageComposeVC, animated: true, completion: nil)
+                let messageComposeVC = self.messageComposer.configuredMessageComposeViewController()
+                // Present the configured MFMessageComposeViewController instance
+                self.present(messageComposeVC, animated: true, completion: nil)
         } else {
             // Let the user know if his/her device isn't able to send text messages
             let errorAlert = UIAlertController(title: "Cannot Send Text Message", message: "Your device is not able to send text messages.", preferredStyle: UIAlertControllerStyle.alert)
@@ -5072,6 +5122,7 @@ extension TripViewController {
         }
         updateProgress()
         handleAddInviteesButton()
+        handleSendInvitesButton()
         //        //Uncomment for testing on Simulator
         //        //        chatButton.isHidden = true
         //        //        subviewDoneButton.isHidden = false
@@ -5655,6 +5706,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             dismissDeleteContactsMode()
         }
         handleAddInviteesButton()
+        handleSendInvitesButton()
     }
 
     //    func leaveDeleteContactsMode(touch: UITapGestureRecognizer) {
@@ -5982,7 +6034,29 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromFlightSearchResultsSceneViewControllerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
+        
+        self.segmentedControl?.isHidden = true
+        self.searchSummaryLabelTopView.isHidden = false
+        self.filterButton.isHidden = false
+        self.sortButton.isHidden = true
+        self.progressRing?.isHidden = true
     }
+    func flightSearchFormViewViewController_ViewDidAppear() {
+        addBackButtonPointedAtTripList()
+        
+        self.segmentedControl?.isHidden = false
+        self.searchSummaryLabelTopView.isHidden = true
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+            self.progressRing?.isHidden = false
+        } else {
+            self.progressRing?.isHidden = true
+        }
+        
+    }
+
     func flightSearchWaitingScreenViewController_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
         backButton = nil
@@ -5991,6 +6065,71 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromWaitingScreenViewControllerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
+        
+        self.segmentedControl?.isHidden = true
+        self.searchSummaryLabelTopView.isHidden = false
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.progressRing?.isHidden = true
+
+        
+        //Create searchSummaryLabelTopView text
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        let numberDestinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count
+        formatter.dateFormat = "MM/dd"
+        let flightTicketsAccessoryMethodPerformer = FlightTicketsAccessoryMethodPerformer()
+        let departureDate = flightTicketsAccessoryMethodPerformer.fetchDepartureDate()
+        let departureDateAsString = formatter.string(from: departureDate as Date)
+        let returnDate = flightTicketsAccessoryMethodPerformer.fetchReturnDate()
+        let returnDateAsString = formatter.string(from: returnDate as Date)
+        var departureAirport: JRSDKAirport?
+        var arrivalAirport: JRSDKAirport?
+
+        //Prefill locations
+        if (indexOfDestinationBeingPlanned == 0) {
+            
+            if (flightTicketsAccessoryMethodPerformer.checkIfStartingPointAirportFound()) {
+                departureAirport = flightTicketsAccessoryMethodPerformer.fetchStartingPointAirport()
+            }
+            if (flightTicketsAccessoryMethodPerformer.checkIfDestinationAirportFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned)) {
+                arrivalAirport = flightTicketsAccessoryMethodPerformer.fetchDestinationAirport(indexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned)
+            }
+        }
+            // return travel back to final destination (home)
+        else if (indexOfDestinationBeingPlanned == numberDestinationsForTrip) {
+            if (flightTicketsAccessoryMethodPerformer.checkIfDifferentEndingPoint()) {
+                if (flightTicketsAccessoryMethodPerformer.checkIfDestinationAirportFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned - 1)) {
+                    departureAirport = flightTicketsAccessoryMethodPerformer.fetchDestinationAirport(indexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1)
+                }
+                if (flightTicketsAccessoryMethodPerformer.checkIfEndingPointAirportFound()) {
+                    arrivalAirport = flightTicketsAccessoryMethodPerformer.fetchEndingPointAirport()
+                }
+                
+            } else {
+                if (flightTicketsAccessoryMethodPerformer.checkIfDestinationAirportFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned - 1)) {
+                    departureAirport = flightTicketsAccessoryMethodPerformer.fetchDestinationAirport(indexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1)
+                }
+                if (flightTicketsAccessoryMethodPerformer.checkIfStartingPointAirportFound()) {
+                    
+                    arrivalAirport = flightTicketsAccessoryMethodPerformer.fetchStartingPointAirport()
+                }
+            }
+        } else {
+            if (flightTicketsAccessoryMethodPerformer.checkIfDestinationAirportFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned - 1)) {
+                departureAirport = flightTicketsAccessoryMethodPerformer.fetchDestinationAirport(indexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1)
+            }
+            if (flightTicketsAccessoryMethodPerformer.checkIfDestinationAirportFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned)) {
+                arrivalAirport = flightTicketsAccessoryMethodPerformer.fetchDestinationAirport(indexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned)
+            }
+        }
+        
+        if flightTicketsAccessoryMethodPerformer.fetchIsRoundtrip() {
+            self.searchSummaryLabelTopView.text = "\((arrivalAirport?.iata)!) ⇄ \((departureAirport?.iata)!)\n\(departureDateAsString) - \(returnDateAsString)"
+        } else {
+            self.searchSummaryLabelTopView.text = "\((arrivalAirport?.iata)!) → \((departureAirport?.iata)!)\n\(departureDateAsString)"
+
+        }
     }
     func flightTicketViewViewController_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -6000,6 +6139,8 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromTicketViewViewControllerToFlightResults), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
+        
+        self.filterButton.isHidden = true
         
     }
     func JRDatePicker_ViewDidLoad() {
@@ -6022,9 +6163,31 @@ extension TripViewController {
     }
     func popFromJRDatePickerToFlightSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromJRDatePickerToFlightSearch"), object: nil)
+        self.segmentedControl?.isHidden = false
+        self.searchSummaryLabelTopView.isHidden = true
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+            self.progressRing?.isHidden = false
+        } else {
+            self.progressRing?.isHidden = true
+        }
+        
     }
     func popFromJRAirportPickerToFlightSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromJRAirportPickerToFlightSearch"), object: nil)
+        self.segmentedControl?.isHidden = false
+        self.searchSummaryLabelTopView.isHidden = true
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+            self.progressRing?.isHidden = false
+        } else {
+            self.progressRing?.isHidden = true
+        }
+        
 
     }
     func addBackButtonPointedAtTripList() {
@@ -6069,9 +6232,27 @@ extension TripViewController {
         backButton?.addTarget(self, action: #selector(popFromHotelResultsViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         
+        self.segmentedControl?.isHidden = true
+        self.searchSummaryLabelTopView.isHidden = false
+        self.filterButton.isHidden = false
+        self.sortButton.isHidden = false
+        self.progressRing?.isHidden = true
+        
     }
     func popFromHotelResultsViewControllerToHotelSearch(){
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromHotelResultsViewControllerToHotelSearch"), object: nil)
+        
+        self.segmentedControl?.isHidden = false
+        self.searchSummaryLabelTopView.isHidden = true
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+            self.progressRing?.isHidden = false
+        } else {
+            self.progressRing?.isHidden = true
+        }
+
         
     }
     func hotelSearchWaitingScreenViewController_ViewDidLoad() {
@@ -6083,6 +6264,29 @@ extension TripViewController {
         backButton?.addTarget(self, action: #selector(popFromWaitingViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         
+        self.segmentedControl?.isHidden = true
+        self.searchSummaryLabelTopView.isHidden = false
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.progressRing?.isHidden = true
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        let numberDestinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String]).count
+        formatter.dateFormat = "MM/dd"
+
+        var hotelItemsAccessoryMethodsPerformer = HotelItemsAccessoryMethodsPerformer()
+        var checkInDate = hotelItemsAccessoryMethodsPerformer.fetchCheckInDate()
+        let checkInDateAsString = formatter.string(from: checkInDate as Date)
+        var checkOutDate = hotelItemsAccessoryMethodsPerformer.fetchCheckOutDate()
+        let checkOutDateAsString = formatter.string(from: checkOutDate as Date)
+        var city: HDKCity?
+        if hotelItemsAccessoryMethodsPerformer.checkIfCityFound(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned) {
+            city = hotelItemsAccessoryMethodsPerformer.fetchCity(indexOfDestinationBeingPlanned: indexOfDestinationBeingPlanned)
+        }
+        
+        self.searchSummaryLabelTopView.text = "\((city?.fullName)!)\n\(checkInDateAsString)\n\(checkOutDateAsString)"
+
     }
     func hotelSearchCityPicker_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -6116,6 +6320,17 @@ extension TripViewController {
     }
     func popFromWaitingViewControllerToHotelSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromWaitingScreenViewControllerToHotelSearch"), object: nil)
+        
+        self.segmentedControl?.isHidden = false
+        self.searchSummaryLabelTopView.isHidden = true
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+            self.progressRing?.isHidden = false
+        } else {
+            self.progressRing?.isHidden = true
+        }
     }
     func popFromCityPickerToHotelSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromCityPickerToHotelSearch"), object: nil)
@@ -6249,7 +6464,7 @@ extension TripViewController {
         }
         itineraryButton1?.setTitleColor(UIColor.white, for: .normal)
         itineraryButton1?.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        itineraryButton1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        itineraryButton1?.setBackgroundColor(color: UIColor.white.withAlphaComponent(0.25), forState: .normal)
         itineraryButton1?.layer.borderWidth = 1
         itineraryButton1?.layer.borderColor = UIColor.white.cgColor
         itineraryButton1?.layer.masksToBounds = true
@@ -6277,6 +6492,7 @@ extension TripViewController {
         itineraryButton2?.frame.origin.x = 225
         itineraryButton2?.frame.origin.y = 128
         itineraryButton2?.layer.cornerRadius = (itineraryButton2?.frame.height)! / 2
+        
         itineraryButton3?.setTitleColor(UIColor.white, for: .normal)
         itineraryButton3?.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         itineraryButton3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
@@ -6292,11 +6508,11 @@ extension TripViewController {
         itineraryButton3?.frame.origin.x = (bounds.size.width - (itineraryButton3?.frame.width)!) / 2
         itineraryButton3?.frame.origin.y = itineraryButton2.frame.origin.y + 35
         itineraryButton3?.layer.cornerRadius = (itineraryButton3?.frame.height)! / 2
-        if SavedPreferencesForTrip["isInitiator"] as! Int == 0 {
-            itineraryButton2?.frame.origin.y = itineraryButton1.frame.origin.y + 35
-        } else if SavedPreferencesForTrip["isInitiator"] as! Int == 1 {
-            itineraryButton2?.frame.origin.y = itineraryButton1.frame.origin.y + 55
-        }
+        //if SavedPreferencesForTrip["isInitiator"] as! Int == 0 {
+        //    itineraryButton2?.frame.origin.y = itineraryButton1.frame.origin.y + 35
+        //} else if SavedPreferencesForTrip["isInitiator"] as! Int == 1 {
+          //  itineraryButton2?.frame.origin.y = itineraryButton1.frame.origin.y + 55
+        //}
         destinationsDatesCollectionView.dataSource = self
         destinationsDatesCollectionView.delegate = self
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()

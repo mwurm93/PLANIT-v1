@@ -172,6 +172,13 @@ static const NSInteger kHotelCardIndex = 5;
                                                  name:@"popFromFlightSearchResultsSceneViewControllerToFlightSearch"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(flightFilterResultsButtonTouchedUpInside)
+                                                 name:@"flightFilterResultsButtonTouchedUpInside"
+                                               object:nil];
+
+    
+    
     self.view.layer.backgroundColor = [UIColor clearColor].CGColor;
 }
 - (void)popFromFlightSearchResultsSceneViewControllerToFlightSearch {
@@ -319,7 +326,9 @@ static const NSInteger kHotelCardIndex = 5;
 }
 - (IBAction)sortButtonTouchedUpInside:(id)sender {
 }
-
+- (void)flightFilterResultsButtonTouchedUpInside{
+    [self showFilters:_filterButton];
+}
 
 
 #pragma mark - JRFilterDelegate
