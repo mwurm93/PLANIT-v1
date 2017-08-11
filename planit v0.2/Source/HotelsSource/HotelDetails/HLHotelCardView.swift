@@ -70,7 +70,7 @@ class HLHotelCardView: UIView {
 
     var hideInfoControls: Bool = false {
         didSet {
-            self.hotelInfoView.isHidden = self.hideInfoControls
+            self.hotelInfoView.isHidden = false
         }
     }
 

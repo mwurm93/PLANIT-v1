@@ -13,6 +13,12 @@ class ExistingTripTableViewCell: UITableViewCell {
     // MARK: Outlets
     @IBOutlet weak var existingTripTableViewLabel: UILabel!
     @IBOutlet weak var existingTripTableViewImage: UIImageView!
+    @IBOutlet weak var destinationsLabel: UILabel!
+    @IBOutlet weak var tripStartDateLabel: UILabel!
+    @IBOutlet weak var toLabel: UILabel!
+    @IBOutlet weak var tripEndDateLabel: UILabel!
+    @IBOutlet weak var tripNameLabel: UILabel!
+    @IBOutlet weak var tripBackgroundView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

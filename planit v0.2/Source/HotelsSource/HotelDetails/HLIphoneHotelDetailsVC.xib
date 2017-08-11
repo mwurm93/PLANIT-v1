@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HLIphoneHotelDetailsVC" customModule="planit_v0_2" customModuleProvider="target">
             <connections>
                 <outlet property="contentTableView" destination="utj-M8-f6o" id="Xcu-LC-2Nz"/>
+                <outlet property="hotelInfoView" destination="WOo-iF-c3m" id="dCa-UN-O80"/>
                 <outlet property="hotelView" destination="PBM-cQ-fDc" id="57N-dG-HHJ"/>
                 <outlet property="photosViewHeightConstraint" destination="25P-dX-92U" id="gYl-yd-Y9N"/>
                 <outlet property="photosViewTopConstraint" destination="Tgt-kg-AV9" id="o7o-De-nKf"/>
@@ -34,6 +35,13 @@
                 </tableView>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PBM-cQ-fDc" userLabel="HotelCardView" customClass="HLHotelCardView" customModule="planit_v0_2" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="250"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WOo-iF-c3m" customClass="HLHotelInfoView" customModule="planit_v0_2" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="168" width="212" height="82"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
+                    </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="250" id="25P-dX-92U"/>

@@ -285,6 +285,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             } else {
                 spawnInstructionsQuestionView()
             }
+        
         if NewOrAddedTripFromSegue == 0 {
             addSubviewsBasedOnProgress()
 //            progressRing?.isHidden = false
@@ -1109,6 +1110,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     func alignSubviews() {
+        
         for i in 1 ... scrollContentView.subviews.count - 1 {
             let higherSubviewBottomY = scrollContentView.subviews[i - 1].frame.maxY
             let lowerSubviewTopY = scrollContentView.subviews[i].frame.minY
@@ -1196,6 +1198,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             alignSubviews()
             scrollToSubviewWithTag(tag: 33)
         }
+        if NewOrAddedTripFromSegue == 1 {
+            updateProgress()
+        } else  {
+            for subview in scrollContentView.subviews {
+                if subview != userNameQuestionView {
+                    subviewFramesDictionary[subview.tag] = subview.frame.origin
+                }
+            }
+        }
+
         increaseProgressCircle(byPercent: 10, onlyIfFirstDestination: false)
     }
     
@@ -6174,8 +6186,8 @@ extension TripViewController {
             self.backButton?.removeFromSuperview()
             backButton = nil
         }
-        let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        let backButtonImage = #imageLiteral(resourceName: "tripListIcon")
+        backButton = UIButton(frame: CGRect(x: 10,y: 25,width: 32, height: 30))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(back), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -6260,7 +6272,8 @@ extension TripViewController {
         let checkOutDate = HDKSearchInfo?.checkOutDate
         let checkOutDateAsString = formatter.string(from: checkOutDate as! Date)
         let city = HDKSearchInfo?.city
-        self.searchSummaryLabelTopView.text = "\((city?.name)!)\n\(checkInDateAsString) - \(checkOutDateAsString)"
+        let days = DateUtil.hl_daysBetweenDate(checkInDate, andOtherDate:checkOutDate)
+        self.searchSummaryLabelTopView.text = "\((city?.name)!)\n\(checkInDateAsString) - \(checkOutDateAsString) (\(days) ☾)"
 
     }
     func hotelSearchCityPicker_ViewDidLoad() {

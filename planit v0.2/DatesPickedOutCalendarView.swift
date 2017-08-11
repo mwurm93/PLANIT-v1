@@ -98,9 +98,11 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         rightDateTimeArrays = unmutableRightDateTimeArrays.mutableCopy() as! NSMutableDictionary
         // Load trip preferences and install
         if let selectedDates = SavedPreferencesForTrip["selected_dates"] as? [Date] {
-            if selectedDates.count > 0 {
-                self.calendarView.selectDates(selectedDates as [Date],triggerSelectionDelegate: false)
-                self.calendarView.scrollToDate(selectedDates[0], animateScroll: true)
+            if selectedDates != nil {
+                if selectedDates.count > 0 {
+                    self.calendarView.selectDates(selectedDates as [Date],triggerSelectionDelegate: false)
+                    self.calendarView.scrollToDate(selectedDates[0], animateScroll: true)
+                }
             } else {
                 let today = Date()
                 let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)

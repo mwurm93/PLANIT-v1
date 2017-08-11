@@ -4,10 +4,11 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
     @IBOutlet fileprivate weak var photosViewTopConstraint: NSLayoutConstraint!
     @IBOutlet fileprivate weak var photosViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var hotelInfoView: HLHotelInfoView!
 
     
     fileprivate var photosCollectionExpanded: Bool = true
-    var hotelInfoView: HLHotelInfoView?
+    //var hotelInfoView: HLHotelInfoView?
 
     // MARK: - Override methods
 
@@ -49,18 +50,22 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
         if #available(iOS 9.0, *) {
             registerForPreviewing(with: self, sourceView: view)
         }
-        addHotelInfoView()
+        //addHotelInfoView()
+        
+        
     }
 
-    func addHotelInfoView(){
+  //  func addHotelInfoView(){
 //        hotelInfoView = Bundle.main.loadNibNamed("HLHotelInfoView", owner: self, options: nil)?.first! as? HLHotelInfoView
 //        hotelInfoView?.hotel = super.variant.hotel
 //        self.view.addSubview(hotelInfoView!)
 //        
 //        let test = hotelInfoView?.frame
         
+  //  }
+    override func viewWillAppear(_ animated: Bool) {
+        self.hotelInfoView.hotel = super.variant.hotel
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
