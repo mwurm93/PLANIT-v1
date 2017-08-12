@@ -264,6 +264,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     DataContainerSingleton.sharedDataContainer.currenttrip = trip
                 }
             }
+            
+            
             super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
         }
     }

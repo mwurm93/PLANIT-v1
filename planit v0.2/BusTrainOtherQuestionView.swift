@@ -14,6 +14,8 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
     var questionLabel: UILabel?
     var button1: UIButton?
     var button2: UIButton?
+    var button3: UIButton?
+    var button4: UIButton?
     var textView: UITextView?
     
     override init(frame: CGRect) {
@@ -62,6 +64,21 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
         button2?.frame.origin.y = 350
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
+        
+        button3?.sizeToFit()
+        button3?.frame.size.height = 30
+        button3?.frame.size.width += 20
+        button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2 + 100
+        button3?.frame.origin.y = 300
+        button3?.layer.cornerRadius = (button3?.frame.height)! / 2
+
+        button4?.sizeToFit()
+        button4?.frame.size.height = 30
+        button4?.frame.size.width += 20
+        button4?.frame.origin.x = (bounds.size.width - (button4?.frame.width)!) / 2 + 100
+        button4?.frame.origin.y = 350
+        button4?.layer.cornerRadius = (button4?.frame.height)! / 2
+
     }
     
     func addViews() {
@@ -107,6 +124,37 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)
         
+        //Button3
+        button3 = UIButton(type: .custom)
+        button3?.frame = CGRect.zero
+        button3?.setTitleColor(UIColor.white, for: .normal)
+        button3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button3?.layer.borderWidth = 1
+        button3?.layer.borderColor = UIColor.white.cgColor
+        button3?.layer.masksToBounds = true
+        button3?.titleLabel?.numberOfLines = 0
+        button3?.titleLabel?.textAlignment = .center
+        button3?.setTitle("Open Wanderu", for: .normal)
+        button3?.translatesAutoresizingMaskIntoConstraints = false
+        button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button3!)
+
+        //Button4
+        button4 = UIButton(type: .custom)
+        button4?.frame = CGRect.zero
+        button4?.setTitleColor(UIColor.white, for: .normal)
+        button4?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button4?.layer.borderWidth = 1
+        button4?.layer.borderColor = UIColor.white.cgColor
+        button4?.layer.masksToBounds = true
+        button4?.titleLabel?.numberOfLines = 0
+        button4?.titleLabel?.textAlignment = .center
+        button4?.setTitle("Open Amtrak", for: .normal)
+        button4?.translatesAutoresizingMaskIntoConstraints = false
+        button4?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button4!)
+
+        
         textView = UITextView(frame: CGRect.zero)
         textView?.delegate = self
         textView?.textColor = UIColor.white
@@ -149,6 +197,29 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
             sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
             sender.removeMask(button:sender, color: UIColor.white)
+        }
+        if sender == button3 {
+            let wanderuURLString = "https://www.wanderu.com"
+            let wanderuURL = URL(string: wanderuURLString)
+            
+            if UIApplication.shared.canOpenURL(wanderuURL!) {
+                //open app
+                UIApplication.shared.open(wanderuURL!)
+            } else {
+                //redirect to safari VC because the user doesn't have app
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "openWanderuSFSafariViewer"), object: nil)
+            }
+        } else if sender == button4 {
+            let amtrakURLString = "https://www.amtrak.com"
+            let amtrakURL = URL(string: amtrakURLString)
+            
+            if UIApplication.shared.canOpenURL(amtrakURL!) {
+                //open  app
+                UIApplication.shared.open(amtrakURL!)
+            } else {
+                //redirect to safari VC because the user doesn't have app
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "openAmtrakSFSafariViewer"), object: nil)
+            }
         }
         for subview in self.subviews {
             if subview.isKind(of: UIButton.self) && subview != sender {

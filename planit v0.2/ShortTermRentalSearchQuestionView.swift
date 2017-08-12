@@ -14,6 +14,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
     var questionLabel: UILabel?
     var button1: UIButton?
     var button2: UIButton?
+    var button3: UIButton?
     var textView: UITextView?
     
     override init(frame: CGRect) {
@@ -62,6 +63,14 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
         button2?.frame.origin.y = 350
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
+        
+        button3?.sizeToFit()
+        button3?.frame.size.height = 30
+        button3?.frame.size.width += 20
+        button3?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2 + 100
+        button3?.frame.origin.y = 350
+        button3?.layer.cornerRadius = (button3?.frame.height)! / 2
+
     }
     
     func addViews() {
@@ -107,6 +116,22 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)
         
+        //Button3
+        button3 = UIButton(type: .custom)
+        button3?.frame = CGRect.zero
+        button3?.setTitleColor(UIColor.white, for: .normal)
+        button3?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button3?.layer.borderWidth = 1
+        button3?.layer.borderColor = UIColor.white.cgColor
+        button3?.layer.masksToBounds = true
+        button3?.titleLabel?.numberOfLines = 0
+        button3?.titleLabel?.textAlignment = .center
+        button3?.setTitle("Open Airbnb", for: .normal)
+        button3?.translatesAutoresizingMaskIntoConstraints = false
+        button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button3!)
+
+        
         textView = UITextView(frame: CGRect.zero)
         textView?.delegate = self
         textView?.textColor = UIColor.white
@@ -149,6 +174,18 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
             sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
         } else {
             sender.removeMask(button:sender, color: UIColor.white)
+        }
+        if sender == button3 {
+            let airbnbURLString = "https://www.airbnb.com"
+            let airbnbURL = URL(string: airbnbURLString)
+            
+            if UIApplication.shared.canOpenURL(airbnbURL!) {
+                //open Rome2rio app
+                UIApplication.shared.open(airbnbURL!)
+            } else {
+                //redirect to safari VC because the user doesn't have Rome2Rio
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "openAirbnbSFSafariViewer"), object: nil)
+            }
         }
         for subview in self.subviews {
             if subview.isKind(of: UIButton.self) && subview != sender {

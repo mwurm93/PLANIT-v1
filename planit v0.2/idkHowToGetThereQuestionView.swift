@@ -7,6 +7,7 @@
 //
 
 import UIKit
+//import SafariServices
 
 class idkHowToGetThereQuestionView: UIView {
     //Class vars
@@ -41,7 +42,7 @@ class idkHowToGetThereQuestionView: UIView {
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 370
+        button1?.frame.origin.y = 330
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
 
         linkLabel1?.sizeToFit()
@@ -49,12 +50,16 @@ class idkHowToGetThereQuestionView: UIView {
         linkLabel1?.frame.size.width += 20
         linkLabel1?.frame.origin.x = (bounds.size.width - (linkLabel1?.frame.width)!) / 2
         linkLabel1?.frame.origin.y = 210
+        linkLabel1?.layer.cornerRadius = (linkLabel1?.frame.height)! / 2
+
 
         linkLabel2?.sizeToFit()
         linkLabel2?.frame.size.height = 30
         linkLabel2?.frame.size.width += 20
-        linkLabel2?.frame.origin.x = (bounds.size.width - (linkLabel1?.frame.width)!) / 2
+        linkLabel2?.frame.origin.x = (bounds.size.width - (linkLabel2?.frame.width)!) / 2
         linkLabel2?.frame.origin.y = 260
+        linkLabel2?.layer.cornerRadius = (linkLabel2?.frame.height)! / 2
+
         
 //        linkLabel3?.sizeToFit()
 //        linkLabel3?.frame.size.height = 30
@@ -74,7 +79,7 @@ class idkHowToGetThereQuestionView: UIView {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Here are some good links for\ncomparing flying vs. driving and other modes of transportation. Let me know when you're ready to plan your travel"
+        questionLabel?.text = "Check out these resources!"
         self.addSubview(questionLabel!)
         
         //Button1
@@ -97,13 +102,14 @@ class idkHowToGetThereQuestionView: UIView {
         linkLabel1?.frame = CGRect.zero
         linkLabel1?.setTitleColor(UIColor.white, for: .normal)
         linkLabel1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        linkLabel1?.setTitleColor(UIColor.lightGray, for: .highlighted)
+        linkLabel1?.layer.borderWidth = 1
+        linkLabel1?.layer.borderColor = UIColor.white.cgColor
         linkLabel1?.layer.masksToBounds = true
         linkLabel1?.titleLabel?.numberOfLines = 0
         linkLabel1?.titleLabel?.textAlignment = .center
-        linkLabel1?.setTitle("Rome2Rio", for: .normal)
-        linkLabel1?.setTitle("Rome2Rio", for: .selected)
+        linkLabel1?.setTitle("Open Rome2Rio", for: .normal)
         linkLabel1?.translatesAutoresizingMaskIntoConstraints = false
+        linkLabel1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(linkLabel1!)
 
         //Link2
@@ -111,13 +117,14 @@ class idkHowToGetThereQuestionView: UIView {
         linkLabel2?.frame = CGRect.zero
         linkLabel2?.setTitleColor(UIColor.white, for: .normal)
         linkLabel2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        linkLabel2?.setTitleColor(UIColor.lightGray, for: .highlighted)
+        linkLabel2?.layer.borderWidth = 1
+        linkLabel2?.layer.borderColor = UIColor.white.cgColor
         linkLabel2?.layer.masksToBounds = true
         linkLabel2?.titleLabel?.numberOfLines = 0
         linkLabel2?.titleLabel?.textAlignment = .center
-        linkLabel2?.setTitle("Google Maps", for: .normal)
-        linkLabel2?.setTitle("Google Maps", for: .selected)
+        linkLabel2?.setTitle("Open Google Maps", for: .normal)
         linkLabel2?.translatesAutoresizingMaskIntoConstraints = false
+        linkLabel2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(linkLabel2!)
 //        //Link3
 //        linkLabel3 = UIButton(type: .custom)
@@ -143,6 +150,30 @@ class idkHowToGetThereQuestionView: UIView {
         } else {
             sender.removeMask(button:sender, color: UIColor.white)
         }
+    
+        if sender == linkLabel1 {
+            let rome2RioURLString = "https://www.rome2rio.com"
+            let rome2RioURL = URL(string: rome2RioURLString)
+            
+            if UIApplication.shared.canOpenURL(rome2RioURL!) {
+                //open Rome2rio app
+                UIApplication.shared.open(rome2RioURL!)
+            } else {
+                //redirect to safari VC because the user doesn't have Rome2Rio
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "openRome2RioSFSafariViewer"), object: nil)
+            }
+        } else if sender == linkLabel2 {
+            let googleMapsURLString = "comgooglemaps://"
+            let googleMapsURL = URL(string: googleMapsURLString)
+            
+            if UIApplication.shared.canOpenURL(googleMapsURL!) {
+                //open  app
+                UIApplication.shared.open(googleMapsURL!)
+            } else {
+                //redirect to safari VC because the user doesn't have app
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "openGoogleMapsSFSafariViewer"), object: nil)
+            }
+        }
         for subview in self.subviews {
             if subview.isKind(of: UIButton.self) && subview != sender {
                 (subview as! UIButton).isSelected = false
@@ -151,3 +182,18 @@ class idkHowToGetThereQuestionView: UIView {
         }
     }
 }
+
+////MARK: SFSafariViewControllerDelegate
+//extension idkHowToGetThereQuestionView: SFSafariViewControllerDelegate {
+//    func showWebsite(URL: URL) {
+//        let webVC = SFSafariViewController(url: URL)
+//        webVC.delegate = self
+//        webVC.preferredBarTintColor = UIColor(red: 25/255, green: 134/255, blue: 191/255, alpha: 1)
+//        webVC.preferredControlTintColor = UIColor.white
+//        self.present(webVC, animated: true, completion: nil)
+//    }
+//    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+//        controller.dismiss(animated: true, completion: nil)
+//    }
+//}
+

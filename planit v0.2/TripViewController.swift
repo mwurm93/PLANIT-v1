@@ -126,6 +126,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var isAssistantEnabled = true
     var doneButton: UIButton?
         //Itinerary info view
+    var timesViewed = [String : Int]()
+
     //PPN Cities
     var ppnCarRentalCities = [Dictionary<String, String>]()
     var ppnHotelCities = [Dictionary<String, String>]()
@@ -195,11 +197,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         infoKeyButton_3.setTitleColor(completeColor, for: .normal)
             //badge button
         let infoKeyButton_3_badgeButton = MIBadgeButton()
-        infoKeyButton_3_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_3.layer.frame.maxX - 5, y: infoKeyButton_3.layer.frame.minY - 5)
+        infoKeyButton_3_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_3.layer.frame.maxX - 5, y: infoKeyButton_3.layer.frame.minY + 1)
         infoKeyButton_3_badgeButton.badgeString = "!"
+        infoKeyButton_3_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         infoKeyButton_3_badgeButton.badgeTextColor = UIColor.white
         infoKeyButton_3_badgeButton.badgeBackgroundColor = UIColor.red
-        self.popupBackgroundFilterViewVisualEffectView.addSubview(infoKeyButton_3_badgeButton)
+        self.popupBackgroundFilterView.insertSubview(infoKeyButton_3_badgeButton, aboveSubview: infoKeyButton_3!)
+        
         
         //item requires action by group
         infoKeyButton_4.layer.cornerRadius = (infoKeyButton_4.frame.height) / 2
@@ -208,11 +212,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         infoKeyButton_4.setTitleColor(completeColor, for: .normal)
         //badge button
         let infoKeyButton_4_badgeButton = MIBadgeButton()
-        infoKeyButton_4_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_4.layer.frame.maxX - 5, y: infoKeyButton_4.layer.frame.minY - 5)
+        infoKeyButton_4_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_4.layer.frame.maxX - 5, y: infoKeyButton_4.layer.frame.minY + 1)
         infoKeyButton_4_badgeButton.badgeString = "!"
         infoKeyButton_4_badgeButton.badgeTextColor = UIColor.white
+        infoKeyButton_4_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         infoKeyButton_4_badgeButton.badgeBackgroundColor = UIColor.orange
-        self.popupBackgroundFilterViewVisualEffectView.addSubview(infoKeyButton_4_badgeButton)
+        self.popupBackgroundFilterView.insertSubview(infoKeyButton_4_badgeButton, aboveSubview: infoKeyButton_4!)
         
         //item complete
         infoKeyButton_5.layer.cornerRadius = (infoKeyButton_5.frame.height) / 2
@@ -221,15 +226,18 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         infoKeyButton_5.setTitleColor(completeColor, for: .normal)
         //badge button
         let infoKeyButton_5_badgeButton = MIBadgeButton()
-        infoKeyButton_5_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_5.layer.frame.maxX - 5, y: infoKeyButton_5.layer.frame.minY - 5)
-        infoKeyButton_5_badgeButton.badgeString = "!"
+        infoKeyButton_5_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_5.layer.frame.maxX - 5, y: infoKeyButton_5.layer.frame.minY + 1)
+        infoKeyButton_5_badgeButton.badgeString = "✓"
+        infoKeyButton_5_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         infoKeyButton_5_badgeButton.badgeTextColor = UIColor.white
-        infoKeyButton_5_badgeButton.badgeBackgroundColor = UIColor.orange
-        self.popupBackgroundFilterViewVisualEffectView.addSubview(infoKeyButton_5_badgeButton)
+        infoKeyButton_5_badgeButton.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+        self.popupBackgroundFilterView.insertSubview(infoKeyButton_5_badgeButton, aboveSubview: infoKeyButton_5!)
     }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         self.searchSummaryLabelTopView.isHidden = true
         self.searchSummaryLabelTopView.textAlignment = .center
@@ -239,6 +247,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.popupBackgroundFilterView.isHidden = true
         self.addTwicketSegmentedControl()
         self.addBackButtonPointedAtTripList()
+        self.setupItineraryInfoView()
+        self.drawUnderlinedLabel(label: itineraryInfoLabel, color: UIColor.white, viewToAddTo: popupBackgroundFilterView)
         
         //import PPN cities csv
         getCarRentalCities()
@@ -301,6 +311,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.view.addSubview(borderLine)
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+
+        let subviewTags = SavedPreferencesForTrip["progress"] as! [Int]
+
+        
         if let rankedPotentialTripsDictionaryFromSingleton = SavedPreferencesForTrip["rankedPotentialTripsDictionary"] as? [NSDictionary] {
             if rankedPotentialTripsDictionaryFromSingleton.count > 0 {
                 rankedPotentialTripsDictionary = rankedPotentialTripsDictionaryFromSingleton as! [Dictionary<String, AnyObject>]
@@ -327,6 +341,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //Save
         self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
+        
         scrollView.delegate = self
         scrollView.indicatorStyle = .white
         
@@ -460,6 +475,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         assistant()
         
         // MARK: Register notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(openRome2RioSFSafariViewer), name: NSNotification.Name(rawValue: "openRome2RioSFSafariViewer"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(openGoogleMapsSFSafariViewer), name: NSNotification.Name(rawValue: "openGoogleMapsSFSafariViewer"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(openAirbnbSFSafariViewer), name: NSNotification.Name(rawValue: "openAirbnbSFSafariViewer"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(openWanderuSFSafariViewer), name: NSNotification.Name(rawValue: "openWanderuSFSafariViewer"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(openAmtrakSFSafariViewer), name: NSNotification.Name(rawValue: "openAmtrakSFSafariViewer"), object: nil)
+
+        
         NotificationCenter.default.addObserver(self, selector: #selector(handleCalendarRangeSelected), name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(tripCalendarRangeSelected_backToItinerary), name: NSNotification.Name(rawValue: "tripCalendarRangeSelected_backToItinerary"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(spawnHowDoYouWantToGetThereQuestionView), name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsComplete"), object: nil)
@@ -1084,6 +1106,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         SavedPreferencesForTrip["progress"] = currentSubviewsInScrollContentView as [NSNumber]
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+        let SavedPreferencesForTripTEST = fetchSavedPreferencesForTrip()
+        let subviewTags = SavedPreferencesForTripTEST["progress"] as! [Int]
+
     }
     func getCurrentSubview() {
         var currentSubview = Int()
@@ -4468,10 +4494,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         popupBackgroundFilterView.alpha = 1
         popupBackgroundFilterView.isHidden = false
         
-        infoKeyButton_1.setTitle("Unplanned", for: .normal)
-        infoKeyButton_2.setTitle("Action required by you", for: .normal)
-        infoKeyButton_3.setTitle("Action required by group", for: .normal)
-
         if withInfoView {
             infoKeyButton_1.isHidden = false
             infoKeyButton_2.isHidden = false
@@ -5841,6 +5863,33 @@ extension TripViewController: SFSafariViewControllerDelegate {
 //            else if bookingMode == "hotel" {
 //            hotelSelectedBooked()
 //        }
+    }
+    func openRome2RioSFSafariViewer() {
+        let rome2RioURLString = "https://www.rome2rio.com"
+        let rome2RioURL = URL(string: rome2RioURLString)
+        showWebsite(URL: rome2RioURL!)
+    }
+    
+    func openGoogleMapsSFSafariViewer() {
+        let googleMapsURLString = "https://www.google.com/maps"
+        let googleMapsURL = URL(string: googleMapsURLString)
+        showWebsite(URL: googleMapsURL!)
+    }
+
+    func openAirbnbSFSafariViewer() {
+        let airbnbURLString = "https://www.airbnb.com"
+        let airbnbURL = URL(string: airbnbURLString)
+        showWebsite(URL: airbnbURL!)
+    }
+    func openWanderuSFSafariViewer() {
+        let wanderuURLString = "https://www.wanderu.com"
+        let wanderuURL = URL(string: wanderuURLString)
+        showWebsite(URL: wanderuURL!)
+    }
+    func openAmtrakSFSafariViewer() {
+        let amtrakURLString = "https://www.amtrak.com"
+        let amtrakURL = URL(string: amtrakURLString)
+        showWebsite(URL: amtrakURL!)
     }
 }
 
