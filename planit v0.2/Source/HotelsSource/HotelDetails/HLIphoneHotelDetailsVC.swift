@@ -65,6 +65,8 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
   //  }
     override func viewWillAppear(_ animated: Bool) {
         self.hotelInfoView.hotel = super.variant.hotel
+        let tripViewController = self.parent?.parent as! TripViewController
+        tripViewController.searchSummaryLabelTopView.text = super.variant.hotel.name
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

@@ -218,6 +218,9 @@ PODS:
     - libextobjc/RuntimeExtensions
   - libextobjc/RuntimeExtensions (0.4.1)
   - libextobjc/UmbrellaHeader (0.4.1)
+  - LiveGQL (1.1.0):
+    - Starscream (~> 2.0.3)
+  - MIBadgeButton-Swift (0.5)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
     - nanopb/encode (= 0.3.8)
@@ -243,6 +246,7 @@ PODS:
   - SDWebImage/Core (3.8.2)
   - Smartling.i18n (1.0.13)
   - SMCalloutView (2.1.5)
+  - Starscream (2.0.4)
   - SwiftGifOrigin (1.6.1)
   - SwiftLint (0.20.1)
   - SwiftProtobuf (0.9.901)
@@ -278,6 +282,8 @@ DEPENDENCIES:
   - JSQMessagesViewController
   - JTAppleCalendar (from `https://github.com/patchthecode/JTAppleCalendar.git`, branch `master`)
   - libextobjc (~> 0.4)
+  - LiveGQL (~> 1.1.0)
+  - MIBadgeButton-Swift (from `https://github.com/mustafaibrahim989/MIBadgeButton-Swift.git`, branch `master`)
   - NMRangeSlider
   - PasswordTextField (~> 1.0)
   - pop (~> 1.0)
@@ -298,6 +304,9 @@ EXTERNAL SOURCES:
   JTAppleCalendar:
     :branch: master
     :git: https://github.com/patchthecode/JTAppleCalendar.git
+  MIBadgeButton-Swift:
+    :branch: master
+    :git: https://github.com/mustafaibrahim989/MIBadgeButton-Swift.git
   SwiftProtobuf:
     :git: https://github.com/apple/swift-protobuf.git
     :tag: 0.9.901
@@ -306,6 +315,9 @@ CHECKOUT OPTIONS:
   JTAppleCalendar:
     :commit: 314d3930717a5c9d1f2f7e27e5116e01e153bc20
     :git: https://github.com/patchthecode/JTAppleCalendar.git
+  MIBadgeButton-Swift:
+    :commit: 3c2638d2e6e46ec2e6dd978d8ada8863df3df5e6
+    :git: https://github.com/mustafaibrahim989/MIBadgeButton-Swift.git
   SwiftProtobuf:
     :git: https://github.com/apple/swift-protobuf.git
     :tag: 0.9.901
@@ -346,6 +358,8 @@ SPEC CHECKSUMS:
   JTAppleCalendar: ae00cb5bf50954df32e2a5ca660c329227e9eccd
   KeychainSwift: 213db04dfe7244988e61f77c72a2afb2f775954a
   libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
+  LiveGQL: 8a3781a51af20769e22c7d60ef36a26f954a8ee1
+  MIBadgeButton-Swift: 9e57309b00b168d75ca8fecb45bc75124a8ffddf
   nanopb: 22bc080fa3955e2116b6ff3ee6c2cb3c15ab97cb
   NMRangeSlider: 317ded652431eb90501c8421d9cddc3930d891e6
   PasswordTextField: 1fccb24dd769cfc963f1f60cb9fece692ad40530
@@ -355,6 +369,7 @@ SPEC CHECKSUMS:
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   Smartling.i18n: 03ef7a5643965212c6ca9ed7d65385950ca4a989
   SMCalloutView: 5c0ee363dc8e7204b2fda17dfad38c93e9e23481
+  Starscream: df5974ee928b157c8eda8af8de7c620276b7dfcc
   SwiftGifOrigin: d6679d3ebe9df2e049a84bc52582635107b581f6
   SwiftLint: f60095dc173a3f3ec505bb34f5229c3dfd779a54
   SwiftProtobuf: b631e0ba39ee42cbd5f4897c6883b9839e6d9703
@@ -363,6 +378,6 @@ SPEC CHECKSUMS:
   UIColor+FlatColors: 6c699df7a575281794c688c64cee6c44fd1f93b4
   ZKPulseView: 22ea7a0ee3a7a77be46ddba8139400d5be8bdbaf
 
-PODFILE CHECKSUM: edb107d9ca81daadcc49f7ba9a11c85a97884c53
+PODFILE CHECKSUM: f42994498db999d620ef6a62af1e90b006ffcad7
 
 COCOAPODS: 1.1.1

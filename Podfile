@@ -11,6 +11,7 @@ target 'planit v0.2' do
 pod 'pop', '~> 1.0'
 pod 'SMCalloutView', '~> 2.1'
 pod 'Apollo', '~> 0.5.6'
+pod 'LiveGQL', '~> 1.1.0'
 pod 'JTAppleCalendar', :git => 'https://github.com/patchthecode/JTAppleCalendar.git', :branch => 'master'
 
 # Pods for ZLswipeableview
@@ -47,6 +48,9 @@ pod 'DrawerController', '~> 3.2'
 
 # Pod for pulsing button
 pod 'ZKPulseView', '~> 0.0.1’
+
+# badging
+pod 'MIBadgeButton-Swift', :git => 'https://github.com/mustafaibrahim989/MIBadgeButton-Swift.git', :branch => 'master'
 
 # Pods for TravelPayouts
 pod 'AviasalesSDK', '~> 3.0.0'

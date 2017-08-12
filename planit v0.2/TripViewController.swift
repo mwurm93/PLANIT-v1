@@ -18,6 +18,7 @@ import CSVImporter
 import UICircularProgressRing
 import TwicketSegmentedControl
 import ZKPulseView
+import MIBadgeButton_Swift
 
 class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate, TwicketSegmentedControlDelegate, UITextViewDelegate {
 
@@ -124,6 +125,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var detailedInformationSubviewMode = ""
     var isAssistantEnabled = true
     var doneButton: UIButton?
+        //Itinerary info view
     //PPN Cities
     var ppnCarRentalCities = [Dictionary<String, String>]()
     var ppnHotelCities = [Dictionary<String, String>]()
@@ -165,8 +167,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var travelSummaryDescriptionButton: UIButton!
     @IBOutlet weak var placetoStaySummaryDescriptionButton: UIButton!
     @IBOutlet weak var infoKeyButton_1: UIButton!
+    @IBOutlet weak var infoKeyButton_1_text: UIButton!
     @IBOutlet weak var infoKeyButton_2: UIButton!
     @IBOutlet weak var infoKeyButton_3: UIButton!
+    @IBOutlet weak var infoKeyButton_4: UIButton!
+    @IBOutlet weak var infoKeyButton_5: UIButton!
     @IBOutlet weak var infoButton: UIButton!
     @IBOutlet weak var popupBackgroundFilterViewVisualEffectView: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundFilterViewCloseButton: UIButton!
@@ -177,6 +182,51 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var sortButton: UIButton!
     @IBOutlet weak var hotelMapButton: UIButton!
     
+    func setupItineraryInfoView() {
+        //incomplete item
+        infoKeyButton_2.layer.cornerRadius = (infoKeyButton_2.frame.height) / 2
+        infoKeyButton_2.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:infoKeyButton_2.frame.height)
+        infoKeyButton_2.setTitleColor(incompleteColor, for: .normal)
+        
+        //item requires action by you
+        infoKeyButton_3.layer.cornerRadius = (infoKeyButton_3.frame.height) / 2
+        infoKeyButton_3.layer.borderWidth = 2
+        infoKeyButton_3.layer.borderColor = completeColor.cgColor
+        infoKeyButton_3.setTitleColor(completeColor, for: .normal)
+            //badge button
+        let infoKeyButton_3_badgeButton = MIBadgeButton()
+        infoKeyButton_3_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_3.layer.frame.maxX - 5, y: infoKeyButton_3.layer.frame.minY - 5)
+        infoKeyButton_3_badgeButton.badgeString = "!"
+        infoKeyButton_3_badgeButton.badgeTextColor = UIColor.white
+        infoKeyButton_3_badgeButton.badgeBackgroundColor = UIColor.red
+        self.popupBackgroundFilterViewVisualEffectView.addSubview(infoKeyButton_3_badgeButton)
+        
+        //item requires action by group
+        infoKeyButton_4.layer.cornerRadius = (infoKeyButton_4.frame.height) / 2
+        infoKeyButton_4.layer.borderWidth = 2
+        infoKeyButton_4.layer.borderColor = completeColor.cgColor
+        infoKeyButton_4.setTitleColor(completeColor, for: .normal)
+        //badge button
+        let infoKeyButton_4_badgeButton = MIBadgeButton()
+        infoKeyButton_4_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_4.layer.frame.maxX - 5, y: infoKeyButton_4.layer.frame.minY - 5)
+        infoKeyButton_4_badgeButton.badgeString = "!"
+        infoKeyButton_4_badgeButton.badgeTextColor = UIColor.white
+        infoKeyButton_4_badgeButton.badgeBackgroundColor = UIColor.orange
+        self.popupBackgroundFilterViewVisualEffectView.addSubview(infoKeyButton_4_badgeButton)
+        
+        //item complete
+        infoKeyButton_5.layer.cornerRadius = (infoKeyButton_5.frame.height) / 2
+        infoKeyButton_5.layer.borderWidth = 2
+        infoKeyButton_5.layer.borderColor = completeColor.cgColor
+        infoKeyButton_5.setTitleColor(completeColor, for: .normal)
+        //badge button
+        let infoKeyButton_5_badgeButton = MIBadgeButton()
+        infoKeyButton_5_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_5.layer.frame.maxX - 5, y: infoKeyButton_5.layer.frame.minY - 5)
+        infoKeyButton_5_badgeButton.badgeString = "!"
+        infoKeyButton_5_badgeButton.badgeTextColor = UIColor.white
+        infoKeyButton_5_badgeButton.badgeBackgroundColor = UIColor.orange
+        self.popupBackgroundFilterViewVisualEffectView.addSubview(infoKeyButton_5_badgeButton)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -187,8 +237,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.sortButton.isHidden = true
         self.hotelMapButton.isHidden = true
         self.popupBackgroundFilterView.isHidden = true
-        self.addBackButtonPointedAtTripList()
         self.addTwicketSegmentedControl()
+        self.addBackButtonPointedAtTripList()
         
         //import PPN cities csv
         getCarRentalCities()
@@ -361,19 +411,19 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
             }
             
-                //            let SavedPreferencesForTrip_2 = fetchSavedPreferencesForTrip()
-                //            timesViewed = (SavedPreferencesForTrip_2["timesViewed"] as? [String : Int])!
-                //
-                //            if timesViewed["newTrip"] == 0 {
-                //                let when = DispatchTime.now()
-                //                DispatchQueue.main.asyncAfter(deadline: when) {
-                //                    self.animateInstructionsIn()
-                //                    let currentTimesViewed = self.timesViewed["newTrip"]
-                //                    self.timesViewed["newTrip"]! = currentTimesViewed! + 1
-                //                    SavedPreferencesForTrip_2["timesViewed"] = self.timesViewed as NSDictionary
-                //                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip_2)
-                //                }
-                //            }
+                            let SavedPreferencesForTrip_2 = fetchSavedPreferencesForTrip()
+                            timesViewed = (SavedPreferencesForTrip_2["timesViewed"] as? [String : Int])!
+                
+                            if timesViewed["itinerary"] == 0 {
+                                let when = DispatchTime.now() + 1.5
+                                DispatchQueue.main.asyncAfter(deadline: when) {
+                                    self.animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true, withCloseButton: true)
+                                    let currentTimesViewed = self.timesViewed["itinerary"]
+                                    self.timesViewed["itinerary"]! = currentTimesViewed! + 1
+                                    SavedPreferencesForTrip_2["timesViewed"] = self.timesViewed as NSDictionary
+                                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip_2)
+                                }
+                            }
             
         } else {
                 //            retrieveContactsWithStore(store: addressBookStore)
@@ -4417,6 +4467,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         popupBackgroundFilterView.alpha = 1
         popupBackgroundFilterView.isHidden = false
+        
+        infoKeyButton_1.setTitle("Unplanned", for: .normal)
+        infoKeyButton_2.setTitle("Action required by you", for: .normal)
+        infoKeyButton_3.setTitle("Action required by group", for: .normal)
+
         if withInfoView {
             infoKeyButton_1.isHidden = false
             infoKeyButton_2.isHidden = false
@@ -6186,12 +6241,15 @@ extension TripViewController {
             self.backButton?.removeFromSuperview()
             backButton = nil
         }
-        let backButtonImage = #imageLiteral(resourceName: "tripListIcon")
-        backButton = UIButton(frame: CGRect(x: 10,y: 25,width: 32, height: 30))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton = UIButton(frame: CGRect(x: 10,y: 25,width: 70, height: 33))
+        backButton?.setTitle("< Trips", for: .normal)
+//        backButton?.setImage(#imageLiteral(resourceName: "backButton"), for: .normal)
+//        backButton = UIButton(frame: CGRect(x: 10,y: 25,width: 60, height: 33))
+//        backButton?.setImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(back), for: UIControlEvents.touchUpInside)
+        backButton?.setTitleColor(UIColor.white, for: .normal)
         self.topView.addSubview(backButton!)
-        
+
     }
     func handleTwicketSegmentedControl() {
         if isAssistantEnabled {
@@ -6205,7 +6263,7 @@ extension TripViewController {
     }
     func addTwicketSegmentedControl() {
         let segmentedControlTitles = ["Assistant","Itinerary","Chat"]
-        segmentedControl = TwicketSegmentedControl(frame: CGRect(x: UIScreen.main.bounds.width / 2 - 135, y: 20, width: 270, height: 40))
+        segmentedControl = TwicketSegmentedControl(frame: CGRect(x: UIScreen.main.bounds.width / 2 - 125 + 15, y: 20, width: 250, height: 40))
         segmentedControl?.setSegmentItems(segmentedControlTitles)
         segmentedControl?.delegate = self
         segmentedControl?.segmentsBackgroundColor = UIColor.clear
@@ -6229,6 +6287,19 @@ extension TripViewController {
         self.sortButton.isHidden = false
         self.hotelMapButton.isHidden = false
         self.progressRing?.isHidden = true
+        
+        //Create searchSummaryLabelTopView text
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let HDKSearchInfoAsData = SavedPreferencesForTrip["HDKSearchInfo"] as! Data
+        let HDKSearchInfo = NSKeyedUnarchiver.unarchiveObject(with: HDKSearchInfoAsData) as? HDKSearchInfo
+        let checkInDate = HDKSearchInfo?.checkInDate
+        formatter.dateFormat = "MM/dd"
+        let checkInDateAsString = formatter.string(from: checkInDate as! Date)
+        let checkOutDate = HDKSearchInfo?.checkOutDate
+        let checkOutDateAsString = formatter.string(from: checkOutDate as! Date)
+        let city = HDKSearchInfo?.city
+        let days = DateUtil.hl_daysBetweenDate(checkInDate, andOtherDate:checkOutDate)
+        self.searchSummaryLabelTopView.text = "\((city?.name)!)\n\(checkInDateAsString) - \(checkOutDateAsString) (\(days) ☾)"
         
     }
     func popFromHotelResultsViewControllerToHotelSearch(){

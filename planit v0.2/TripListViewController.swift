@@ -167,7 +167,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil {
             
             //Cell styling
-            cell.tripBackgroundView.layer.cornerRadius = 10
+            cell.tripBackgroundView.layer.cornerRadius = 5
 //            cell.tripBackgroundView.layer.borderWidth = 2
 //            cell.tripBackgroundView.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:1).cgColor
             cell.tripBackgroundView.layer.masksToBounds = true
@@ -231,12 +231,12 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                     }
                 } else {
                     cell.destinationsLabel.isHidden = false
-                    cell.destinationsLabel.text = "Destination(s) TBD"
+                    cell.destinationsLabel.text = "Destination TBD"
                     cell.tripNameLabel.text = tripName
                 }
             } else {
                 cell.destinationsLabel.isHidden = false
-                cell.destinationsLabel.text = "Destination(s) TBD"
+                cell.destinationsLabel.text = "Destination TBD"
                 cell.tripNameLabel.text = tripName
             }
 
@@ -342,7 +342,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 110
+        return 100
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
