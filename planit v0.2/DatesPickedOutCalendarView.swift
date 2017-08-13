@@ -169,9 +169,8 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         calendarView?.minimumInteritemSpacing = 2
         calendarView?.scrollingMode = .none
         calendarView?.scrollDirection = .vertical
-        
-
-        
+        calendarView?.layer.cornerRadius = 5
+        calendarView?.layer.backgroundColor = UIColor.white.withAlphaComponent(0.1).cgColor        
     }
     
 
@@ -314,6 +313,11 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         if destinationsForTrip.count == 0 {
             var datesDestinationsDictionary = [String:[Date]]()
             datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
+            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+        } else if destinationsForTrip.count == 1 && SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+            var datesDestinationsDictionary = [String:[Date]]()
+            datesDestinationsDictionary[destinationsForTrip[0]] = selectedDates as [Date]
+            //Update trip preferences in dictionary
             SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
         }
         
@@ -461,6 +465,11 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         if destinationsForTrip.count == 0 {
             var datesDestinationsDictionary = [String:[Date]]()
             datesDestinationsDictionary["destinationTBD"] = selectedDates as [Date]
+            SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
+        } else if destinationsForTrip.count == 1 && SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+            var datesDestinationsDictionary = [String:[Date]]()
+            datesDestinationsDictionary[destinationsForTrip[0]] = selectedDates as [Date]
+            //Update trip preferences in dictionary
             SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
         }
         getLengthOfSelectedAvailabilities()

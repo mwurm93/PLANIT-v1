@@ -154,7 +154,7 @@ static const NSInteger kHotelCardIndex = 5;
     _filterButton.backgroundColor = [UIColor colorWithRed:200/255 green:213/255 blue:221/255 alpha:1];
     _sortButton.backgroundColor = [UIColor colorWithRed:200/255 green:213/255 blue:221/255 alpha:1];
     
-    _tableView.bounces = NO;
+    _tableView.bounces = YES;
     
     [self setupViewController];
     if (iPad()) {

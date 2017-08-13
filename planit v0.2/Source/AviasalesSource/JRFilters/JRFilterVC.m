@@ -96,6 +96,11 @@
     self.toolbarSeparatorViewHeightConstraint.constant = JRPixel();
 
     self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, kJRFilterTableViewBottomInset, 0.0);
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(popFromJRFilterToFlightResults)
+                                                 name:@"popFromJRFilterToFlightResults"
+                                               object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -107,6 +112,10 @@
 - (void)viewWillAppear:(BOOL)animated {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"JRFilterVC_viewWillAppear"
                                                         object:self];
+}
+
+- (void)popFromJRFilterToFlightResults{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 #pragma mark - Protected methds
 

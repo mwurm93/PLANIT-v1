@@ -34,6 +34,11 @@
     [self instantiateChildViewController];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+
 - (void)applyStyle {
     self.view.backgroundColor = [UIColor clearColor];
     self.shadowView.backgroundColor = [UIColor clearColor];

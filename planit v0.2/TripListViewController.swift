@@ -320,6 +320,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             }
             destination?.NewOrAddedTripFromSegue = NewOrAddedTripForSegue
             destination?.newChannelRef = channelRef
+            destination?.isTripSpawnedFromBucketList = 0
         }
 
         

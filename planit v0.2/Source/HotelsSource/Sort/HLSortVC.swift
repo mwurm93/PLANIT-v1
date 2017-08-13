@@ -47,6 +47,11 @@ class HLSortVC: HLCommonVC, UITableViewDataSource, UITableViewDelegate, PointSel
         tableView.hl_registerNib(withName: HLDistanceSortCell.hl_reuseIdentifier())
         sortType = filter.sortType
         tableView.tableHeaderView = nil
+        
+        self.view.backgroundColor = UIColor.clear
+        self.view.layer.backgroundColor = UIColor.clear.cgColor
+        self.view.tintColor = UIColor.clear
+
     }
 
     override func viewWillAppear(_ animated: Bool) {

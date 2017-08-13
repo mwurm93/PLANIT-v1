@@ -173,6 +173,8 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         calendarView?.minimumInteritemSpacing = 2
         calendarView?.scrollingMode = .none
         calendarView?.scrollDirection = .vertical
+        calendarView?.layer.cornerRadius = 5
+        calendarView?.layer.backgroundColor = UIColor.white.withAlphaComponent(0.1).cgColor
         
         selectionColor = colorForName(colors[0])
         selectionColorTransparent = selectionColor.withAlphaComponent(0.35)

@@ -52,6 +52,9 @@
     [self setupViewController];
     [self.presenter handleViewDidLoad];
 }
+-(void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
 
 #pragma mark - Setup
 

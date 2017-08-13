@@ -52,7 +52,7 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
         }
         //addHotelInfoView()
         
-        
+
     }
 
   //  func addHotelInfoView(){
@@ -67,9 +67,14 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
         self.hotelInfoView.hotel = super.variant.hotel
         let tripViewController = self.parent?.parent as! TripViewController
         tripViewController.searchSummaryLabelTopView.text = super.variant.hotel.name
+        tripViewController.hotelMapButton.isHidden = true
+        tripViewController.filterButton.isHidden = true
+        tripViewController.sortButton.isHidden = true        
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelDetailsViewController_ViewDidAppear"), object: nil)
 
         hotelView.showGradients(animated: true)
         hotelView.showInfoControls(animated: true)

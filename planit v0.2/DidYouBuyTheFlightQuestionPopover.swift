@@ -96,7 +96,7 @@ class DidYouBuyTheFlightQuestionPopover: UIView {
     func buttonClicked(sender:UIButton) {
         sender.isSelected = !sender.isSelected
         if sender.isSelected {
-            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.blue)
+            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.black)
         } else {
             sender.removeMask(button:sender, color: UIColor.white)
         }

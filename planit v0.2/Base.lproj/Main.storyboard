@@ -192,8 +192,8 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Legal first name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yms-H7-sDx">
-                                <rect key="frame" x="17" y="293" width="343" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yms-H7-sDx">
+                                <rect key="frame" x="17" y="240" width="343" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -285,7 +285,6 @@
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="1gH-rO-U5C"/>
-                                <exclude reference="Yms-H7-sDx"/>
                                 <exclude reference="XFO-Bh-lC9"/>
                                 <exclude reference="4qA-Eb-dTM"/>
                                 <exclude reference="iqv-2J-K0Y"/>
@@ -842,6 +841,12 @@
                         <outlet property="infoKeyButton_3" destination="Gly-PJ-yuT" id="6Pq-K6-TbQ"/>
                         <outlet property="infoKeyButton_4" destination="HJ8-NK-o80" id="2bH-b6-HD4"/>
                         <outlet property="infoKeyButton_5" destination="2gx-Oy-c8A" id="lal-vM-arJ"/>
+                        <outlet property="infoKeyButton_6" destination="a0a-lx-W0T" id="xR1-y0-yf9"/>
+                        <outlet property="infoKeyButton_6_text" destination="qie-b3-X1k" id="xfO-jO-wiG"/>
+                        <outlet property="infoKeyButton_7" destination="q7i-aB-Gc6" id="bcl-Tm-R8J"/>
+                        <outlet property="infoKeyButton_7_text" destination="XQO-S6-Pmy" id="u2G-oX-9pl"/>
+                        <outlet property="infoKeyLabel_1" destination="0HC-FU-xCn" id="0Lc-8B-hiE"/>
+                        <outlet property="infoKeyLabel_2" destination="pxV-EN-LNe" id="wFO-mU-e93"/>
                         <outlet property="itineraryButton" destination="bPt-e2-WYa" id="CTF-hu-gzM"/>
                         <outlet property="itineraryButton1" destination="GWs-ib-KAp" id="OZm-xr-QAn"/>
                         <outlet property="itineraryButton2" destination="oGw-7q-25H" id="ffW-FG-itd"/>
@@ -1121,8 +1126,16 @@
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0HC-FU-xCn">
                             <rect key="frame" x="17" y="149" width="342" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <state key="normal" title="Your travelmates...select to see their details">
+                            <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
+                            <state key="normal" title="Tap your travel mates to see their details">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pxV-EN-LNe">
+                            <rect key="frame" x="17" y="290" width="342" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
+                            <state key="normal" title="Tap an item to view details or edit ">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
@@ -1140,25 +1153,25 @@
                             </state>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gU7-Dn-rsc">
-                            <rect key="frame" x="73" y="272" width="228" height="30"/>
+                            <rect key="frame" x="73" y="339" width="228" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="22"/>
                             <state key="normal" title="Item not yet planned"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gly-PJ-yuT">
-                            <rect key="frame" x="43" y="342" width="289" height="30"/>
+                            <rect key="frame" x="43" y="409" width="289" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="22"/>
                             <state key="normal" title="Item requires action by you"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HJ8-NK-o80">
-                            <rect key="frame" x="33" y="412" width="309" height="30"/>
+                            <rect key="frame" x="33" y="479" width="309" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="22"/>
                             <state key="normal" title="Item requires action by group"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2gx-Oy-c8A">
-                            <rect key="frame" x="37" y="482" width="302" height="30"/>
+                            <rect key="frame" x="37" y="549" width="302" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="22"/>
                             <state key="normal" title="Item planned and confirmed"/>
@@ -1174,7 +1187,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="55" height="55"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
-                            <inset key="titleEdgeInsets" minX="0.0" minY="15" maxX="0.0" maxY="0.0"/>
+                            <inset key="titleEdgeInsets" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="╳"/>
                             <connections>
                                 <action selector="infoViewCloseButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="9FO-9f-hqz"/>
@@ -4941,6 +4954,7 @@
                         <outlet property="pinModeButton" destination="vdu-NA-Cey" id="915-za-a9G"/>
                         <outlet property="settingsButton" destination="HCj-MB-Hsk" id="FcD-xj-WNd"/>
                         <outlet property="tripsButton" destination="UuD-nJ-HKW" id="hLe-Oe-l2G"/>
+                        <segue destination="QaX-H5-Z3p" kind="show" identifier="bucketListVCToTripVC" id="5m0-36-R99"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xhc-Kd-3pA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -19806,10 +19820,11 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="xQi-Q8-wee"/>
+        <segue reference="D0h-av-d3S"/>
         <segue reference="IrZ-E3-weH"/>
         <segue reference="t9O-2u-fWL"/>
-        <segue reference="D0h-av-d3S"/>
-        <segue reference="RAo-Nt-Dp1"/>
+        <segue reference="1VF-PM-MLD"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

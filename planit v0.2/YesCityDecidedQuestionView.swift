@@ -15,6 +15,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
     //Class vars
     var questionLabel: UILabel?
     var button: UIButton?
+    var button1: UIButton?
     //GOOGLE PLACES SEARCH
     var resultsViewController: GMSAutocompleteResultsViewController?
     var searchController: UISearchController?
@@ -55,6 +56,30 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         button?.frame.origin.y = 170
         button?.layer.cornerRadius = (button?.frame.height)! / 2
         
+        button1?.sizeToFit()
+        button1?.frame.size.height = 30
+        button1?.frame.size.width += 20
+        button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
+        button1?.frame.origin.y = 170
+        button1?.layer.cornerRadius = (button1?.frame.height)! / 2
+        button1?.isHidden = true
+
+        loadDestination()
+    }
+    
+    func loadDestination() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+
+        if destinationsForTrip.count > indexOfDestinationBeingPlanned {
+            searchController?.searchBar.text = destinationsForTrip[indexOfDestinationBeingPlanned]
+            button1?.isHidden = false
+            button?.frame.origin.y = 220
+        } else {
+            button1?.isHidden = true
+            button?.frame.origin.y = 170
+        }
     }
     
     func addViews() {
@@ -125,6 +150,20 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         button?.translatesAutoresizingMaskIntoConstraints = false
         button?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button!)
+        
+        //Button1
+        button1 = UIButton(type: .custom)
+        button1?.frame = CGRect.zero
+        button1?.setTitleColor(UIColor.white, for: .normal)
+        button1?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button1?.layer.borderWidth = 1
+        button1?.layer.borderColor = UIColor.white.cgColor
+        button1?.layer.masksToBounds = true
+        button1?.titleLabel?.textAlignment = .center
+        button1?.setTitle("Yep, that's right", for: .normal)
+        button1?.translatesAutoresizingMaskIntoConstraints = false
+        button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button1!)
     }
     
     func buttonClicked(sender:UIButton) {

@@ -78,8 +78,6 @@ static CGFloat const separatorRightInset = 20.0;
                                                object:nil];
     
     
-}
-- (void)viewWillAppear:(BOOL)animated {
     //start with  roundtrip if single destination
     FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
     NSDate *departureDate = [flightTicketsAccessoryMethodPerformer fetchDepartureDate];
@@ -150,6 +148,11 @@ static CGFloat const separatorRightInset = 20.0;
             [_presenter handleSelectAirport:nearbyAirport withMode:1];
         }
     }
+}
+- (void)viewWillAppear:(BOOL)animated {
+    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+
 }
 
 - (void)hideReturnButtonForOneWaySearch {

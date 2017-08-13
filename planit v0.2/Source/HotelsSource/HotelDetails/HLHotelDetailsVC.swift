@@ -127,6 +127,8 @@ class HLHotelDetailsCollectionView: UICollectionView {
             self?.photoIndex = index
         }
     }
+    
+    
 
     private func addNameAndStarsView() {
         let navBarView = HotelDetailsNavBarView(variant: variant)

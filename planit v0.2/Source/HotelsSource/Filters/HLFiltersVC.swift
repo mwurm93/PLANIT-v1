@@ -16,6 +16,9 @@ class HLFiltersVC: HLCommonVC, HLFilterDelegate, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.view.backgroundColor = UIColor.clear
+        self.view.layer.backgroundColor = UIColor.clear.cgColor
+        self.view.tintColor = UIColor.clear
         
         registerNibs()
         setupButtons()

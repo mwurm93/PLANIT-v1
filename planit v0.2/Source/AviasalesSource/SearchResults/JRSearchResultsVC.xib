@@ -30,13 +30,27 @@
                         <outlet property="delegate" destination="-1" id="Zmt-MV-LUo"/>
                     </connections>
                 </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MRs-mV-off">
+                    <rect key="frame" x="140" y="537" width="95" height="40"/>
+                    <color key="backgroundColor" red="1" green="0.77533121419999995" blue="0.27822016979999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="WDo-CL-HbO"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                    <state key="normal" title="Done">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottomMargin" secondItem="veO-Fa-Y7M" secondAttribute="bottom" constant="65" id="Oos-nG-9Am"/>
+                <constraint firstAttribute="bottom" secondItem="MRs-mV-off" secondAttribute="bottom" constant="90" id="XQL-hf-pdS"/>
                 <constraint firstItem="veO-Fa-Y7M" firstAttribute="top" secondItem="1" secondAttribute="top" id="agT-hb-h41"/>
                 <constraint firstItem="veO-Fa-Y7M" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="fbZ-um-UUD"/>
                 <constraint firstAttribute="trailing" secondItem="veO-Fa-Y7M" secondAttribute="trailing" id="h0o-gv-FtP"/>
+                <constraint firstItem="MRs-mV-off" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="140" id="lGJ-Qd-Ghe"/>
+                <constraint firstAttribute="trailing" secondItem="MRs-mV-off" secondAttribute="trailing" constant="140" id="qyU-yh-ew8"/>
             </constraints>
             <point key="canvasLocation" x="33.5" y="54.5"/>
         </view>

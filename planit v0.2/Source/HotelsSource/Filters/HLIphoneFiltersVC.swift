@@ -19,6 +19,11 @@ class HLIphoneFiltersVC: HLFiltersVC {
         super.viewDidLoad()
 
         addHotelsLeftView()
+        
+        self.view.backgroundColor = UIColor.clear
+        self.view.layer.backgroundColor = UIColor.clear.cgColor
+        self.view.tintColor = UIColor.clear
+
     }
 
     private func addDropButton() {

@@ -97,6 +97,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var newChannelRef: DatabaseReference?
         //Singleton
     var NewOrAddedTripFromSegue: Int?
+    var isTripSpawnedFromBucketList: Int?
         //City dict
     var rankedPotentialTripsDictionary = [Dictionary<String, Any>]()
         //Loading subviews based on progress
@@ -109,6 +110,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //    var travelItem: FloatyItem?
 //    var placeToStayItem: FloatyItem?
     var progressRing: UICircularProgressRingView?
+    var standardProgressIncrement: CGFloat = 12
     var isLoadingSubviews = true
     var totalProgress: CGFloat = 0
         //BookingMode
@@ -127,6 +129,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var doneButton: UIButton?
         //Itinerary info view
     var timesViewed = [String : Int]()
+    var infoKeyButton_3_badgeButton: MIBadgeButton?
+    var infoKeyButton_4_badgeButton: MIBadgeButton?
+    var infoKeyButton_5_badgeButton: MIBadgeButton?
+
 
     //PPN Cities
     var ppnCarRentalCities = [Dictionary<String, String>]()
@@ -170,6 +176,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var placetoStaySummaryDescriptionButton: UIButton!
     @IBOutlet weak var infoKeyButton_1: UIButton!
     @IBOutlet weak var infoKeyButton_1_text: UIButton!
+    @IBOutlet weak var infoKeyLabel_1: UIButton!
+    @IBOutlet weak var infoKeyButton_6: UIButton!
+    @IBOutlet weak var infoKeyButton_6_text: UIButton!
+    @IBOutlet weak var infoKeyButton_7: UIButton!
+    @IBOutlet weak var infoKeyButton_7_text: UIButton!
+    @IBOutlet weak var infoKeyLabel_2: UIButton!
     @IBOutlet weak var infoKeyButton_2: UIButton!
     @IBOutlet weak var infoKeyButton_3: UIButton!
     @IBOutlet weak var infoKeyButton_4: UIButton!
@@ -184,60 +196,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var sortButton: UIButton!
     @IBOutlet weak var hotelMapButton: UIButton!
     
-    func setupItineraryInfoView() {
-        //incomplete item
-        infoKeyButton_2.layer.cornerRadius = (infoKeyButton_2.frame.height) / 2
-        infoKeyButton_2.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:infoKeyButton_2.frame.height)
-        infoKeyButton_2.setTitleColor(incompleteColor, for: .normal)
-        
-        //item requires action by you
-        infoKeyButton_3.layer.cornerRadius = (infoKeyButton_3.frame.height) / 2
-        infoKeyButton_3.layer.borderWidth = 2
-        infoKeyButton_3.layer.borderColor = completeColor.cgColor
-        infoKeyButton_3.setTitleColor(completeColor, for: .normal)
-            //badge button
-        let infoKeyButton_3_badgeButton = MIBadgeButton()
-        infoKeyButton_3_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_3.layer.frame.maxX - 5, y: infoKeyButton_3.layer.frame.minY + 1)
-        infoKeyButton_3_badgeButton.badgeString = "!"
-        infoKeyButton_3_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        infoKeyButton_3_badgeButton.badgeTextColor = UIColor.white
-        infoKeyButton_3_badgeButton.badgeBackgroundColor = UIColor.red
-        self.popupBackgroundFilterView.insertSubview(infoKeyButton_3_badgeButton, aboveSubview: infoKeyButton_3!)
-        
-        
-        //item requires action by group
-        infoKeyButton_4.layer.cornerRadius = (infoKeyButton_4.frame.height) / 2
-        infoKeyButton_4.layer.borderWidth = 2
-        infoKeyButton_4.layer.borderColor = completeColor.cgColor
-        infoKeyButton_4.setTitleColor(completeColor, for: .normal)
-        //badge button
-        let infoKeyButton_4_badgeButton = MIBadgeButton()
-        infoKeyButton_4_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_4.layer.frame.maxX - 5, y: infoKeyButton_4.layer.frame.minY + 1)
-        infoKeyButton_4_badgeButton.badgeString = "!"
-        infoKeyButton_4_badgeButton.badgeTextColor = UIColor.white
-        infoKeyButton_4_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        infoKeyButton_4_badgeButton.badgeBackgroundColor = UIColor.orange
-        self.popupBackgroundFilterView.insertSubview(infoKeyButton_4_badgeButton, aboveSubview: infoKeyButton_4!)
-        
-        //item complete
-        infoKeyButton_5.layer.cornerRadius = (infoKeyButton_5.frame.height) / 2
-        infoKeyButton_5.layer.borderWidth = 2
-        infoKeyButton_5.layer.borderColor = completeColor.cgColor
-        infoKeyButton_5.setTitleColor(completeColor, for: .normal)
-        //badge button
-        let infoKeyButton_5_badgeButton = MIBadgeButton()
-        infoKeyButton_5_badgeButton.layer.frame.origin = CGPoint(x: infoKeyButton_5.layer.frame.maxX - 5, y: infoKeyButton_5.layer.frame.minY + 1)
-        infoKeyButton_5_badgeButton.badgeString = "✓"
-        infoKeyButton_5_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        infoKeyButton_5_badgeButton.badgeTextColor = UIColor.white
-        infoKeyButton_5_badgeButton.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
-        self.popupBackgroundFilterView.insertSubview(infoKeyButton_5_badgeButton, aboveSubview: infoKeyButton_5!)
-    }
-        
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         
         self.searchSummaryLabelTopView.isHidden = true
         self.searchSummaryLabelTopView.textAlignment = .center
@@ -248,7 +210,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.addTwicketSegmentedControl()
         self.addBackButtonPointedAtTripList()
         self.setupItineraryInfoView()
-        self.drawUnderlinedLabel(label: itineraryInfoLabel, color: UIColor.white, viewToAddTo: popupBackgroundFilterView)
         
         //import PPN cities csv
         getCarRentalCities()
@@ -426,19 +387,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
             }
             
-                            let SavedPreferencesForTrip_2 = fetchSavedPreferencesForTrip()
-                            timesViewed = (SavedPreferencesForTrip_2["timesViewed"] as? [String : Int])!
-                
-                            if timesViewed["itinerary"] == 0 {
-                                let when = DispatchTime.now() + 1.5
-                                DispatchQueue.main.asyncAfter(deadline: when) {
-                                    self.animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true, withCloseButton: true)
-                                    let currentTimesViewed = self.timesViewed["itinerary"]
-                                    self.timesViewed["itinerary"]! = currentTimesViewed! + 1
-                                    SavedPreferencesForTrip_2["timesViewed"] = self.timesViewed as NSDictionary
-                                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip_2)
-                                }
-                            }
             
         } else {
                 //            retrieveContactsWithStore(store: addressBookStore)
@@ -541,8 +489,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         //Hotel Nav
         NotificationCenter.default.addObserver(self, selector: #selector(HLCommonResultsVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLCommonResultsVC_viewWillAppear"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(addBackButtonPointedAtTripList), name: NSNotification.Name(rawValue: "hotelSearchFormViewViewController_ViewDidAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchFormViewViewController_ViewDidAppear), name: NSNotification.Name(rawValue: "hotelSearchFormViewViewController_ViewDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchWaitingScreenViewController_ViewDidLoad), name: NSNotification.Name(rawValue: "hotelSearchWaitingScreenViewController_ViewDidLoad"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelDetailsViewController_ViewDidAppear), name: NSNotification.Name(rawValue: "hotelDetailsViewController_ViewDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed), name: NSNotification.Name(rawValue: "HLWebBrowserClosed"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed_HotelBooked), name: NSNotification.Name(rawValue: "hotelBookingBrowserClosed_HotelBooked"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelBookingBrowserClosed_HotelNotBooked), name: NSNotification.Name(rawValue: "hotelBookingBrowserClosed_HotelNotBooked"), object: nil)
@@ -626,8 +575,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func destinationChosenUpdateDatesDestinationsDict() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
-        if destinationsForTrip.count == 1 {
-            var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        var datesDestinationsDictionary = SavedPreferencesForTrip["datesDestinationsDictionary"] as! [String:[Date]]
+        if destinationsForTrip.count == 1 && datesDestinationsDictionary.count > 0 {
             if let dateDestinationForKeyUpdate = datesDestinationsDictionary["destinationTBD"] {
                 datesDestinationsDictionary.removeValue(forKey: "destinationTBD")
                 datesDestinationsDictionary[destinationsForTrip[0]] = dateDestinationForKeyUpdate
@@ -635,6 +584,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
                 saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
             } else {
+                
                 let changedDestinationKey = Array(datesDestinationsDictionary.keys)
                 let dateDestinationForKeyUpdate = datesDestinationsDictionary[changedDestinationKey[0]]
                 datesDestinationsDictionary.removeAll()
@@ -642,7 +592,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 //Update trip preferences in dictionary
                 SavedPreferencesForTrip["datesDestinationsDictionary"] = datesDestinationsDictionary
                 saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            }
+            }            
         } else if destinationsForTrip.count > 1 {
             //SPAWN CALENDAR QUESTION VIEW TO PARSE DATES BY DESTINATION
             
@@ -947,6 +897,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         } else {
             sender.removeMask(button:sender, color: UIColor.white)
         }
+        if sender == itineraryButton2 {
+            itineraryButton2.stopPulseEffect()
+        }
         for subview in self.itineraryView.subviews {
             if subview.isKind(of: UIButton.self) && subview != sender && subview.layer.mask != nil {
                 (subview as! UIButton).isSelected = false
@@ -1210,7 +1163,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     var currentProgress = self.progressRing?.currentValue
                     if currentProgress == nil {
                         currentProgress = 0
+                    } else {
+                        if (currentProgress! + byPercent) > 99 {
+                            self.progressRing?.setProgress(value: 99, animationDuration: 1.0) {
+                            }
+                            return
+                        }
                     }
+                    
                     self.progressRing?.setProgress(value: currentProgress! + byPercent, animationDuration: 1.0) {
                     }
                 }
@@ -1218,6 +1178,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 var currentProgress = self.progressRing?.currentValue
                 if currentProgress == nil {
                     currentProgress = 0
+                } else {
+                    if (currentProgress! + byPercent) > 99 {
+                        self.progressRing?.setProgress(value: 99, animationDuration: 1.0) {
+                        }
+                        return
+                    }
                 }
                 self.progressRing?.setProgress(value: currentProgress! + byPercent, animationDuration: 1.0) {
                 }
@@ -1284,7 +1250,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
         }
 
-        increaseProgressCircle(byPercent: 10, onlyIfFirstDestination: false)
+        increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: false)
     }
     
     func spawnTripNameQuestionView() {
@@ -1309,7 +1275,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 34)
-        increaseProgressCircle(byPercent: 10, onlyIfFirstDestination: false)
+        increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: false)
     }
     
     
@@ -1356,7 +1322,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         updateHeightOfScrollView()
         updateProgress()
-        increaseProgressCircle(byPercent: 10, onlyIfFirstDestination: false)
+        increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: false)
         }
         scrollToSubviewWithTag(tag: 1)
         
@@ -1400,7 +1366,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let heightConstraint = NSLayoutConstraint(item: whereTravellingFromQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whereTravellingFromQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
             
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: false)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 0)
@@ -1429,7 +1395,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 decidedOnCityToVisitQuestionView?.questionLabel?.frame.size.height = 60
             }
         
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: false)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: false)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 2)
@@ -1447,7 +1413,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let heightConstraint = NSLayoutConstraint(item: noCityDecidedAnyIdeasQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (noCityDecidedAnyIdeasQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
             
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 3)
@@ -1468,7 +1434,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.planTripToIdeaQuestionView!.frame = CGRect(x: 0, y: (noCityDecidedAnyIdeasQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: planTripToIdeaQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (planTripToIdeaQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 4)
@@ -1493,7 +1459,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             whatTypeOfTripQuestionView?.button5?.addTarget(self, action: #selector(self.whatTypeOfTripQuestionView_foodieHavens(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: whatTypeOfTripQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (whatTypeOfTripQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 5)
@@ -1582,6 +1548,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 8)
+        let when = DispatchTime.now() + 1.4
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.updateProgress()
+        }
+
     }
     func spawnYesCityDecidedQuestionView() {
         if yesCityDecidedQuestionView == nil {
@@ -1598,11 +1569,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 self.yesCityDecidedQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
             yesCityDecidedQuestionView?.button?.addTarget(self, action: #selector(self.yesCityDecidedQuestionView_actuallyDiscoverMoreOptions(sender:)), for: UIControlEvents.touchUpInside)
+            yesCityDecidedQuestionView?.button1?.addTarget(self, action: #selector(self.destinationDecidedDestinationChosen), for: UIControlEvents.touchUpInside)
+
             let heightConstraint = NSLayoutConstraint(item: yesCityDecidedQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (yesCityDecidedQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
         }
         alignSubviews()
+        yesCityDecidedQuestionView?.loadDestination()
         scrollToSubviewWithTag(tag: 9)
     }
     func spawnHowDoYouWantToGetThereQuestionView() {
@@ -1630,7 +1604,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             howDoYouWantToGetThereQuestionView?.button6?.addTarget(self, action: #selector(self.howDoYouWantToGetThereQuestionView_skipThisIPlannedRoundTripTravel(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: howDoYouWantToGetThereQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (howDoYouWantToGetThereQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
 
         }
         alignSubviews()
@@ -1672,7 +1646,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     }
                 }
             }
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
         }
 
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -1709,7 +1683,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         
         //disable scrolling
-        //scrollView.isScrollEnabled = false
+        scrollView.isScrollEnabled = false
         
     }
     func spawnFlightResultsQuestionView() {
@@ -2030,7 +2004,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             doYouKnowWhereYouWillBeStayingQuestionView?.button3?.addTarget(self, action: #selector(self.doYouKnowWhereYouWillBeStaying_noPlanLater(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: doYouKnowWhereYouWillBeStayingQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (doYouKnowWhereYouWillBeStayingQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
         }
         
         if SavedPreferencesForTrip["assistantMode"] as! String == "placeToStay" {
@@ -2081,7 +2055,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.busTrainOtherQuestionView!.frame = CGRect(x: 0, y: (howDoYouWantToGetThereQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             let heightConstraint = NSLayoutConstraint(item: busTrainOtherQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (busTrainOtherQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 20)
@@ -2141,7 +2115,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             hotelSearchQuestionView?.searchButton?.addTarget(self, action: #selector(self.hotelSearchQuestionView_searchButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: hotelSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (hotelSearchQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
         }
         
         //TRAVELPAYOUTS
@@ -2162,6 +2136,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         alignSubviews()
         scrollToSubviewWithTag(tag: 23)
+        
+        scrollView.isScrollEnabled = false
     }
     func spawnShortTermRentalSearchQuestionView() {
         if shortTermRentalSearchQuestionView == nil {
@@ -2180,7 +2156,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             shortTermRentalSearchQuestionView?.button2?.addTarget(self, action: #selector(self.shortTermRentalSearchQuestionView_addLater(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: shortTermRentalSearchQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (shortTermRentalSearchQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 24)
@@ -2202,7 +2178,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             stayWithSomeoneIKnowQuestionView?.button2?.addTarget(self, action: #selector(self.stayWithSomeoneIKnowQuestionView_addLater(sender:)), for: UIControlEvents.touchUpInside)
             let heightConstraint = NSLayoutConstraint(item: stayWithSomeoneIKnowQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (stayWithSomeoneIKnowQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            increaseProgressCircle(byPercent: 5, onlyIfFirstDestination: true)
+            increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: true)
         }
         alignSubviews()
         scrollToSubviewWithTag(tag: 25)
@@ -3730,6 +3706,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     func comeBackToPlanHotelLater() {
+        scrollView.isScrollEnabled = true
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if SavedPreferencesForTrip["assistantMode"] as! String == "placeToStay" {
             disableAndResetAssistant_moveToItinerary()
@@ -3738,6 +3715,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
     }
     func comeBackToPlanFlightLater() {
+        scrollView.isScrollEnabled = true
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if SavedPreferencesForTrip["assistantMode"] as! String == "travel" {
             disableAndResetAssistant_moveToItinerary()
@@ -4098,7 +4076,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             if (parseDatesForMultipleDestinationsCalendarView?.frame.intersects(scrollView.bounds))! {
                 parseDatesForMultipleDestinationsCalendarView?.loadDates()
             }
-        }        
+        }
     }
 //    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
 //        
@@ -4362,6 +4340,32 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             segmentedControl?.move(to: 0)
         }
         self.view.endEditing(true)
+        
+        
+        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
+        
+        if timesViewed["itinerary"] != nil {
+            if timesViewed["itinerary"] == 0 {
+                let when = DispatchTime.now() + 1
+                DispatchQueue.main.asyncAfter(deadline: when) {
+                    self.animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true, withCloseButton: true)
+                    let currentTimesViewed = self.timesViewed["itinerary"]
+                    self.timesViewed["itinerary"]! = currentTimesViewed! + 1
+                    SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                }
+            }
+        } else {
+            let when = DispatchTime.now() + 1
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true, withCloseButton: true)
+                let currentTimesViewed = self.timesViewed["itinerary"]
+                self.timesViewed["itinerary"]! = 1
+                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            }
+        }
+
     }
     func handleAddInviteesButton(){
         let bounds = UIScreen.main.bounds
@@ -4414,10 +4418,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         handleTwicketSegmentedControl()
         
         itinerary()
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        SavedPreferencesForTrip["assistantMode"] = "disabled" as! NSString
-        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
+        let when = DispatchTime.now() + 0.3
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+            SavedPreferencesForTrip["assistantMode"] = "disabled" as! NSString
+            self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        }
         //delete all subviews in assistant
         userNameQuestionView = nil
         tripNameQuestionView = nil
@@ -4496,12 +4503,37 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         if withInfoView {
             infoKeyButton_1.isHidden = false
+            infoKeyButton_1_text.isHidden = false
             infoKeyButton_2.isHidden = false
             infoKeyButton_3.isHidden = false
+            infoKeyButton_3_badgeButton?.isHidden = false
+            infoKeyButton_4_badgeButton?.isHidden = false
+            infoKeyButton_5_badgeButton?.isHidden = false
+            infoKeyButton_4.isHidden = false
+            infoKeyButton_5.isHidden = false
+            infoKeyButton_6.isHidden = false
+            infoKeyButton_6_text.isHidden = false
+            infoKeyButton_7.isHidden = false
+            infoKeyButton_7_text.isHidden = false
+            infoKeyLabel_1.isHidden = false
+            infoKeyLabel_2.isHidden = false
+            
         } else {
             infoKeyButton_1.isHidden = true
+            infoKeyButton_1_text.isHidden = true
             infoKeyButton_2.isHidden = true
             infoKeyButton_3.isHidden = true
+            infoKeyButton_3_badgeButton?.isHidden = true
+            infoKeyButton_4_badgeButton?.isHidden = true
+            infoKeyButton_5_badgeButton?.isHidden = true
+            infoKeyButton_4.isHidden = true
+            infoKeyButton_5.isHidden = true
+            infoKeyButton_6.isHidden = true
+            infoKeyButton_6_text.isHidden = true
+            infoKeyButton_7.isHidden = true
+            infoKeyButton_7_text.isHidden = true
+            infoKeyLabel_1.isHidden = true
+            infoKeyLabel_2.isHidden = true
         }
         if withCloseButton {
             popupBackgroundFilterViewCloseButton.isHidden = false
@@ -4979,7 +5011,7 @@ extension TripViewController {
         // Update our UI if the user has granted access to their Contacts
         case .authorized:            
             // Obtain a configured MFMessageComposeViewController
-            let addInviteesAlert = UIAlertController(title: "Great! By the way, we won't send them the itinerary until you say so!", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            let addInviteesAlert = UIAlertController(title: "Great! We won't send them the itinerary until you say so!", message: "", preferredStyle: UIAlertControllerStyle.alert)
             let continueAction = UIAlertAction(title: "Sounds good", style: UIAlertActionStyle.default) {
                 (result : UIAlertAction) -> Void in
                 self.showContactsPicker()
@@ -5005,7 +5037,13 @@ extension TripViewController {
         addressBookStore.requestAccess(for: .contacts) {granted, error in
             if granted {
                 DispatchQueue.main.async {
-                    self.showContactsPicker()
+                    let addInviteesAlert = UIAlertController(title: "Great! We won't send them the itinerary until you say so!", message: "", preferredStyle: UIAlertControllerStyle.alert)
+                    let continueAction = UIAlertAction(title: "Sounds good", style: UIAlertActionStyle.default) {
+                        (result : UIAlertAction) -> Void in
+                        self.showContactsPicker()
+                    }
+                    addInviteesAlert.addAction(continueAction)
+                    self.present(addInviteesAlert, animated: true, completion: nil)
                     return
                 }
             }
@@ -5488,6 +5526,10 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     destinationsDatesCell.destinationButton.setTitleColor(completeColor, for: .normal)
                     destinationsDatesCell.destinationButton.setTitle("\(destinationsForTrip[indexPath.row - 1])\nfor \(segmentDates.count - 1) nights", for: .normal)
                     destinationsDatesCell.inBetweenDatesLine.backgroundColor = completeColor
+                } else {
+                    destinationsDatesCell.destinationButton.setTitleColor(completeColor, for: .normal)
+                    destinationsDatesCell.destinationButton.setTitle("\(destinationsForTrip[indexPath.row - 1])", for: .normal)
+                    destinationsDatesCell.travelDateButton.layer.borderWidth = 0
                 }
             }
                 
@@ -5698,6 +5740,12 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     cell.initialsLabel.textColor = UIColor.white
                 }
             }
+            turnOnItineraryEditing()
+            let when = DispatchTime.now() + 0.6
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.dismissEditItineraryMode()
+            }
+
         }
     }
 
@@ -6001,22 +6049,26 @@ extension TripViewController {
         return JRNavigationController(rootViewController: searchVC)
     }
     func flightBookingBrowserClosed() {
-        //scrollView.isScrollEnabled = true
         spawnDidYouBuyTheFlightQuestionPopover()
     }
     func spawnDidYouBuyTheFlightQuestionPopover (){
+        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+
         didYouBuyTheFlightQuestionPopover = Bundle.main.loadNibNamed("DidYouBuyTheFlightQuestionPopover", owner: self, options: nil)?.first! as? DidYouBuyTheFlightQuestionPopover
         
         let bounds = UIScreen.main.bounds
         self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
         self.didYouBuyTheFlightQuestionPopover?.layer.cornerRadius = 7
         self.view.addSubview(didYouBuyTheFlightQuestionPopover!)
-        self.view.insertSubview(popupBackgroundFilterView, belowSubview: didYouBuyTheFlightQuestionPopover!)
-        self.popupBackgroundFilterView.isHidden = false
-        self.infoKeyButton_1.isHidden = true
-        self.infoKeyButton_2.isHidden = true
-        self.infoKeyButton_3.isHidden = true
-        self.popupBackgroundFilterViewCloseButton.isHidden = true
+        
+        
+
+        //        self.view.insertSubview(popupBackgroundFilterView, belowSubview: didYouBuyTheFlightQuestionPopover!)
+//        self.popupBackgroundFilterView.isHidden = false
+//        self.infoKeyButton_1.isHidden = true
+//        self.infoKeyButton_2.isHidden = true
+//        self.infoKeyButton_3.isHidden = true
+//        self.popupBackgroundFilterViewCloseButton.isHidden = true
         let when = DispatchTime.now() + 0.6
         self.popupBackgroundFilterView.alpha = 0
         DispatchQueue.main.asyncAfter(deadline: when) {
@@ -6028,6 +6080,8 @@ extension TripViewController {
         
     }
     func flightBookingBrowserClosed_FlightBooked(){
+        scrollView.isScrollEnabled = true
+        
         UIView.animate(withDuration: 1) {
             self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
             self.popupBackgroundFilterView.alpha = 0
@@ -6042,6 +6096,8 @@ extension TripViewController {
         }
     }
     func flightBookingBrowserClosed_FlightNotBooked(){
+        scrollView.isScrollEnabled = true
+
         UIView.animate(withDuration: 1) {
             self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
             self.popupBackgroundFilterView.alpha = 0
@@ -6061,18 +6117,19 @@ extension TripViewController {
         spawnDidYouBuyTheHotelQuestionPopover()
     }
     func spawnDidYouBuyTheHotelQuestionPopover (){
+        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
         didYouBuyTheHotelQuestionView = Bundle.main.loadNibNamed("DidYouBuyTheHotelQuestionView", owner: self, options: nil)?.first! as? DidYouBuyTheHotelQuestionView
         
         let bounds = UIScreen.main.bounds
         self.didYouBuyTheHotelQuestionView!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
         self.didYouBuyTheHotelQuestionView?.layer.cornerRadius = 7
         self.view.addSubview(didYouBuyTheHotelQuestionView!)
-        self.view.insertSubview(popupBackgroundFilterView, belowSubview: didYouBuyTheHotelQuestionView!)
-        self.popupBackgroundFilterView.isHidden = false
-        self.infoKeyButton_1.isHidden = true
-        self.infoKeyButton_2.isHidden = true
-        self.infoKeyButton_3.isHidden = true
-        self.popupBackgroundFilterViewCloseButton.isHidden = true
+//        self.view.insertSubview(popupBackgroundFilterView, belowSubview: didYouBuyTheHotelQuestionView!)
+//        self.popupBackgroundFilterView.isHidden = false
+//        self.infoKeyButton_1.isHidden = true
+//        self.infoKeyButton_2.isHidden = true
+//        self.infoKeyButton_3.isHidden = true
+//        self.popupBackgroundFilterViewCloseButton.isHidden = true
         let when = DispatchTime.now() + 0.6
         self.popupBackgroundFilterView.alpha = 0
         DispatchQueue.main.asyncAfter(deadline: when) {
@@ -6084,6 +6141,8 @@ extension TripViewController {
         
     }
     func hotelBookingBrowserClosed_HotelBooked(){
+        scrollView.isScrollEnabled = true
+
         UIView.animate(withDuration: 1) {
             self.didYouBuyTheHotelQuestionView!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
             self.popupBackgroundFilterView.alpha = 0
@@ -6098,6 +6157,8 @@ extension TripViewController {
         }
     }
     func hotelBookingBrowserClosed_HotelNotBooked(){
+        scrollView.isScrollEnabled = true
+
         UIView.animate(withDuration: 1) {
             self.didYouBuyTheHotelQuestionView!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
             self.popupBackgroundFilterView.alpha = 0
@@ -6261,6 +6322,7 @@ extension TripViewController {
         self.searchSummaryLabelTopView.isHidden = true
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
             self.progressRing?.isHidden = false
@@ -6275,6 +6337,7 @@ extension TripViewController {
         self.searchSummaryLabelTopView.isHidden = true
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
             self.progressRing?.isHidden = false
@@ -6284,8 +6347,33 @@ extension TripViewController {
     }
     func JRFilterVC_viewWillAppear() {
         self.filterButton?.isHidden = true
+        
+        self.backButton?.removeFromSuperview()
+        backButton = nil
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton?.setTitle("Done", for: .normal)
+        backButton?.addTarget(self, action: #selector(popFromJRFilterToFlightResults), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
+
+        
+        
+    }
+    func popFromJRFilterToFlightResults() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromJRFilterToFlightResults"), object: nil)
+
+        self.segmentedControl?.isHidden = true
+        self.searchSummaryLabelTopView.isHidden = false
+        self.filterButton.isHidden = false
+        self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
+        self.progressRing?.isHidden = true
     }
     func addBackButtonPointedAtTripList() {
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
+
+        
         if backButton != nil {
             self.backButton?.removeFromSuperview()
             backButton = nil
@@ -6297,6 +6385,7 @@ extension TripViewController {
 //        backButton?.setImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(back), for: UIControlEvents.touchUpInside)
         backButton?.setTitleColor(UIColor.white, for: .normal)
+        
         self.topView.addSubview(backButton!)
 
     }
@@ -6320,6 +6409,21 @@ extension TripViewController {
         segmentedControl?.backgroundColor = .clear // This is important!
         
         self.topView.addSubview(segmentedControl!)
+    }
+    func hotelSearchFormViewViewController_ViewDidAppear() {
+        addBackButtonPointedAtTripList()
+        
+        self.segmentedControl?.isHidden = false
+        self.searchSummaryLabelTopView.isHidden = true
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
+            self.progressRing?.isHidden = false
+        } else {
+            self.progressRing?.isHidden = true
+        }
     }
     func HLCommonResultsVC_viewWillAppear(){
         self.backButton?.removeFromSuperview()
@@ -6350,6 +6454,11 @@ extension TripViewController {
         let days = DateUtil.hl_daysBetweenDate(checkInDate, andOtherDate:checkOutDate)
         self.searchSummaryLabelTopView.text = "\((city?.name)!)\n\(checkInDateAsString) - \(checkOutDateAsString) (\(days) ☾)"
         
+    }
+    func hotelDetailsViewController_ViewDidAppear() {
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
     }
     func popFromHotelResultsViewControllerToHotelSearch(){
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromHotelResultsViewControllerToHotelSearch"), object: nil)
@@ -6427,12 +6536,24 @@ extension TripViewController {
 
     }
     func HLFiltersVC_viewWillAppear() {
+        self.segmentedControl?.isHidden = true
+        self.searchSummaryLabelTopView.isHidden = false
         self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
     }
     func HLSortVC_viewWillAppear() {
+        self.segmentedControl?.isHidden = true
+        self.searchSummaryLabelTopView.isHidden = false
+        self.filterButton.isHidden = true
         self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
     }
     func HLMapVC_viewWillAppear() {
+        self.segmentedControl?.isHidden = true
+        self.searchSummaryLabelTopView.isHidden = false
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
         self.hotelMapButton.isHidden = true
     }
     
@@ -6656,6 +6777,56 @@ extension TripViewController {
         //        placeToStayButton.layer.shadowOpacity = 0.4
         //        placeToStayButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         //END ITINERARY viewDidLoad
+    }
+    
+    func setupItineraryInfoView() {
+        //incomplete item
+        infoKeyButton_2.layer.cornerRadius = (infoKeyButton_2.frame.height) / 2
+        infoKeyButton_2.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:infoKeyButton_2.frame.height)
+        infoKeyButton_2.setTitleColor(incompleteColor, for: .normal)
+        
+        //item requires action by you
+        infoKeyButton_3.layer.cornerRadius = (infoKeyButton_3.frame.height) / 2
+        infoKeyButton_3.layer.borderWidth = 2
+        infoKeyButton_3.layer.borderColor = completeColor.cgColor
+        infoKeyButton_3.setTitleColor(completeColor, for: .normal)
+        //badge button
+        infoKeyButton_3_badgeButton = MIBadgeButton()
+        infoKeyButton_3_badgeButton?.layer.frame.origin = CGPoint(x: infoKeyButton_3.layer.frame.maxX - 5, y: infoKeyButton_3.layer.frame.minY + 1)
+        infoKeyButton_3_badgeButton?.badgeString = "!"
+        infoKeyButton_3_badgeButton?.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        infoKeyButton_3_badgeButton?.badgeTextColor = UIColor.white
+        infoKeyButton_3_badgeButton?.badgeBackgroundColor = UIColor.red
+        self.popupBackgroundFilterView.insertSubview(infoKeyButton_3_badgeButton!, aboveSubview: infoKeyButton_3!)
+        
+        
+        //item requires action by group
+        infoKeyButton_4.layer.cornerRadius = (infoKeyButton_4.frame.height) / 2
+        infoKeyButton_4.layer.borderWidth = 2
+        infoKeyButton_4.layer.borderColor = completeColor.cgColor
+        infoKeyButton_4.setTitleColor(completeColor, for: .normal)
+        //badge button
+        infoKeyButton_4_badgeButton = MIBadgeButton()
+        infoKeyButton_4_badgeButton?.layer.frame.origin = CGPoint(x: infoKeyButton_4.layer.frame.maxX - 5, y: infoKeyButton_4.layer.frame.minY + 1)
+        infoKeyButton_4_badgeButton?.badgeString = "!"
+        infoKeyButton_4_badgeButton?.badgeTextColor = UIColor.white
+        infoKeyButton_4_badgeButton?.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        infoKeyButton_4_badgeButton?.badgeBackgroundColor = UIColor.orange
+        self.popupBackgroundFilterView.insertSubview(infoKeyButton_4_badgeButton!, aboveSubview: infoKeyButton_4!)
+        
+        //item complete
+        infoKeyButton_5.layer.cornerRadius = (infoKeyButton_5.frame.height) / 2
+        infoKeyButton_5.layer.borderWidth = 2
+        infoKeyButton_5.layer.borderColor = completeColor.cgColor
+        infoKeyButton_5.setTitleColor(completeColor, for: .normal)
+        //badge button
+        infoKeyButton_5_badgeButton = MIBadgeButton()
+        infoKeyButton_5_badgeButton?.layer.frame.origin = CGPoint(x: infoKeyButton_5.layer.frame.maxX - 5, y: infoKeyButton_5.layer.frame.minY + 1)
+        infoKeyButton_5_badgeButton?.badgeString = "✓"
+        infoKeyButton_5_badgeButton?.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        infoKeyButton_5_badgeButton?.badgeTextColor = UIColor.white
+        infoKeyButton_5_badgeButton?.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+        self.popupBackgroundFilterView.insertSubview(infoKeyButton_5_badgeButton!, aboveSubview: infoKeyButton_5!)
     }
     
     func showFinishPlanningTripAlert(title: String, message: String, okButtonTitle: String, cancelButtonTitle: String){

@@ -29,6 +29,8 @@ class HLCityPickerVC: ASTGroupedSearchVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        self.navigationController?.isNavigationBarHidden = true
+
         if initialSearchText != nil {
             searchController.searchBar.text = initialSearchText
             initialSearchText = nil

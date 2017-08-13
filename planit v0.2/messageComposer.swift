@@ -14,6 +14,8 @@ import UIKit
 
 class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
     
+    var formatter = DateFormatter()
+    
     // A wrapper function to indicate whether or not a text message can be sent from the user's device
     func canSendText() -> Bool {
         return MFMessageComposeViewController.canSendText()
@@ -25,7 +27,28 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
         let messageComposeVC = MFMessageComposeViewController()
         messageComposeVC.messageComposeDelegate = self  //  Make sure to set this property to self, so that the controller can be dismissed!
         messageComposeVC.recipients = contactPhoneNumbers as [String]?
-        messageComposeVC.body =  "Hey, I just started planning a trip for us on Planit. Check out all the different places we could go!"
+        
+        //Create text
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        let tripDates = SavedPreferencesForTrip["selected_dates"] as! [Date]
+        
+        let destinationsForMessage = destinationsForTrip.joined(separator: ", ")
+        
+        if tripDates.count > 1 {
+            let checkInDate = tripDates[0]
+            formatter.dateFormat = "MM/dd"
+            let checkInDateAsString = formatter.string(from: checkInDate)
+            let checkOutDate = tripDates[tripDates.count - 1]
+            let checkOutDateAsString = formatter.string(from: checkOutDate)
+            let numberNights = DateUtil.hl_daysBetweenDate(checkInDate, andOtherDate:checkOutDate)
+            
+            messageComposeVC.body =  "Hey, I just started planning a \(numberNights) night trip to \(destinationsForMessage) from \(checkInDate) to \(checkOutDate) on Planit. Check out the itinerary I've put together and we can finish planning it!"
+            
+        } else {
+            messageComposeVC.body =  "Hey, I just started planning a trip to \(destinationsForMessage) on Planit. Check out the itinerary I've put together and we can finish planning it!"
+        }
+        
         return messageComposeVC
     }
     

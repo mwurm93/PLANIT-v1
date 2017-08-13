@@ -8,11 +8,15 @@
 
 import UIKit
 import GooglePlaces
+import Firebase
 
 class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UISearchControllerDelegate, UISearchBarDelegate {
     
     @IBOutlet weak var backgroundView: UIImageView!
     @IBOutlet weak var backgroundBlurFilterView: UIVisualEffectView!
+    
+    //Firebase
+    private lazy var channelRef: DatabaseReference = Database.database().reference().child("channels")
     
     var theViewC: MaplyBaseViewController?
     private var selectedVectorFillDict: [String: AnyObject]?
@@ -59,6 +63,10 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     var searchController: UISearchController?
     var resultView: UITextView?
     var globeViewC: WhirlyGlobeViewController?
+    
+    //TravelPayours
+    var geoLoader: AviasalesAirportsGeoSearchPerformer!
+
 
     //MARK: Outlets
     @IBOutlet weak var bucketListButton: UIButton!
@@ -939,8 +947,148 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         theViewC?.clearAnnotations()
     }
     func bucketListButtonAnnotationClicked(sender:UIButton) {
-        //PERFORM SEGUE TO DESTINATION DECIDED FLOW
+        
+        if DataContainerSingleton.sharedDataContainer.usertrippreferences == nil || DataContainerSingleton.sharedDataContainer.usertrippreferences?.count == 0 {
+            DataContainerSingleton.sharedDataContainer.currenttrip = 0
+        } else {
+            DataContainerSingleton.sharedDataContainer.currenttrip = DataContainerSingleton.sharedDataContainer.currenttrip! + 1
+
+        }
+        
+        
+        
+        
+        //Travelpayouts airport search
+        geoLoader = AviasalesAirportsGeoSearchPerformer(delegate: self)
+        
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
+        let selectedSphere = currentSelectedShape["selectedShapeLocation"] as! MaplyCoordinate
+        let latitudeInDegrees = Double(selectedSphere.y) * 180 / Double.pi
+        let longitudeInDegrees = Double(selectedSphere.x) * 180 / Double.pi
+        
+//        if destinationsForTrip.count > destinationsForTripDictArray.count {
+            destinationsForTripDictArray.append(["latitude": latitudeInDegrees as NSNumber])
+//        }
+//        else {
+//            destinationsForTripDictArray[indexOfDestinationBeingPlanned]["latitude"] = place.coordinate.latitude as NSNumber
+//        }
+        destinationsForTripDictArray[indexOfDestinationBeingPlanned]["longitude"] = longitudeInDegrees as NSNumber
+        SavedPreferencesForTrip["destinationsForTripDictArray"] = destinationsForTripDictArray
+        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+
+        geoLoader?.searchAirportsNearLatitude(latitudeInDegrees, longitude: longitudeInDegrees)
+        
+        
+        let location = CLLocation(latitude: latitudeInDegrees, longitude: longitudeInDegrees)
+        var city: HDKCity?
+        ServiceLocator.shared.sdkFacade.loadNearbyCities(location: location, completion: {(_ nearbyCities: [HDKCity]?, _ error: Error?) -> Void in
+            if error != nil {
+                print(error?.localizedDescription)
+            }
+            let SavedPreferencesForTrip2 = self.fetchSavedPreferencesForTrip()
+            var destinationsForTripDictArray2 = SavedPreferencesForTrip2["destinationsForTripDictArray"] as! [[String:Any]]
+            let indexOfDestinationBeingPlanned2 = SavedPreferencesForTrip2["indexOfDestinationBeingPlanned"] as! Int
+            city = nearbyCities?[0]
+            let cityAsData = NSKeyedArchiver.archivedData(withRootObject: city)
+            destinationsForTripDictArray2[indexOfDestinationBeingPlanned2]["HDKCity"] = cityAsData
+            SavedPreferencesForTrip2["destinationsForTripDictArray"] = destinationsForTripDictArray2
+            self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip2)
+            
+            
+            
+            
+            
+            
+            let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+            var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+            var destinationsForTripStates = (SavedPreferencesForTrip["destinationsForTripStates"] as! [String])
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned == destinationsForTrip.count {
+                //write new destination
+                destinationsForTrip.append((city?.name)!)
+                var destinationsForTripStatesToBeAppended = city?.countryName
+//                    if destinationsForTripStatesToBeAppended == "United States" {
+//                    for stateAbbreviationDict in stateAbbreviationsDict {
+//                        if stateAbbreviationDict["State"] == place.addressComponents?[1].name {
+//                            destinationsForTripStatesToBeAppended = ((place.addressComponents?[1].name)!)
+//                        } else if stateAbbreviationDict["State"] == place.addressComponents?[2].name {
+//                            destinationsForTripStatesToBeAppended = ((place.addressComponents?[2].name)!)
+//                        }
+//                    }
+//                }
+                destinationsForTripStates.append(destinationsForTripStatesToBeAppended!)
+            }
+            //        else if indexOfDestinationBeingPlanned < destinationsForTrip.count {
+            //            //over write
+            //            destinationsForTrip[indexOfDestinationBeingPlanned] = (searchController?.searchBar.text)!
+            //            if place.addressComponents?.count == 6 {
+            //                destinationsForTripStates[indexOfDestinationBeingPlanned] = ((place.addressComponents?[5].name)!)
+            //            } else if place.addressComponents?.count == 5 {
+            //                destinationsForTripStates[indexOfDestinationBeingPlanned] = ((place.addressComponents?[4].name)!)
+            //            } else if place.addressComponents?.count == 4 {
+            //                destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[3].name)!
+            //            } else if place.addressComponents?.count == 3 {
+            //                destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[2].name)!
+            //            } else if place.addressComponents?.count == 2 {
+            //                destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[1].name)!
+            //            }
+            //            if destinationsForTripStates[indexOfDestinationBeingPlanned] == "United States" {
+            //                for stateAbbreviationDict in stateAbbreviationsDict {
+            //                    if stateAbbreviationDict["State"] == place.addressComponents?[1].name {
+            //                        destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[1].name)!
+            //                    } else if stateAbbreviationDict["State"] == place.addressComponents?[2].name {
+            //                        destinationsForTripStates[indexOfDestinationBeingPlanned] = (place.addressComponents?[2].name)!
+            //                    }
+            //                }
+            //            }
+            //
+            //        }
+            //        else if indexOfDestinationBeingPlanned > destinationsForTrip.count {
+            //            fatalError("indexOfDestinationBeingPlanned > destinationsForTrip.count in destinationsSwipedRightTableViewCell.swift")
+            //        }
+            SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
+            SavedPreferencesForTrip["destinationsForTripStates"] = destinationsForTripStates
+            
+            self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        })
+        
+        
+        self.performSegue(withIdentifier: "bucketListVCToTripVC", sender: self)
     }
+    
+    //MARK: Prepare For Segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "bucketListVCToTripVC" {
+            let destination = segue.destination as? TripViewController
+            
+//            var NewOrAddedTripForSegue = Int()
+//            
+//            let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+//            let currentTripIndex = DataContainerSingleton.sharedDataContainer.currenttrip!
+//            var numberSavedTrips: Int?
+//            if existing_trips == nil {
+//                numberSavedTrips = 0
+//                NewOrAddedTripForSegue = 1
+//            } else {
+//                numberSavedTrips = (existing_trips?.count)! - 1
+//                if currentTripIndex <= numberSavedTrips! {
+//                    NewOrAddedTripForSegue = 0
+//                } else {
+//                    let NewOrAddedTripForSegue =
+            
+//                }
+//            }
+            destination?.NewOrAddedTripFromSegue = 1
+            destination?.isTripSpawnedFromBucketList = 1
+            destination?.newChannelRef = channelRef
+        }
+        
+    }
+
     
     //MARK: Actions
     @IBAction func bucketListButtonTouchedUpInside(_ sender: Any) {
@@ -1055,3 +1203,208 @@ extension bucketListViewController: GMSAutocompleteResultsViewControllerDelegate
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
 }
+
+//Singleton saving methods
+extension bucketListViewController {
+    // MARK: SAVE TO SINGLETON
+    ////// ADD NEW TRIP VARS (NS ONLY) HERE ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    override func fetchSavedPreferencesForTrip() -> NSMutableDictionary {
+        //Determine if new or added trip
+        let isNewOrAddedTrip = determineIfNewOrAddedTrip()
+        
+        //Init preference vars for if new or added trip
+        //Trip status
+        var bookingStatus = NSNumber(value: 0)
+        var progress = [NSNumber]()
+        var lastVC = NSString()
+        var timesViewed = NSDictionary()
+        //New Trip VC
+        var tripNameValue = NSString()
+        var tripID = NSString()
+        var contacts = [NSString]()
+        var contactPhoneNumbers = [NSString]()
+        var hotelRoomsValue =  [NSNumber]()
+        var segmentLengthValue = [NSNumber]()
+        var selectedDates = [NSDate]()
+        var leftDateTimeArrays = NSDictionary()
+        var rightDateTimeArrays = NSDictionary()
+        var numberDestinations = NSNumber(value: 1)
+        var nonSpecificDates = NSDictionary()
+        var firebaseChannelKey = NSString()
+        //Budget VC DEPRICATED
+        var budgetValue = NSString()
+        var expectedRoundtripFare = NSString()
+        var expectedNightlyRate = NSString()
+        //Suggested Destination VC DEPRICATED
+        var decidedOnDestinationControlValue = NSString()
+        var decidedOnDestinationValue = NSString()
+        var suggestDestinationControlValue = NSString()
+        var suggestedDestinationValue = NSString()
+        
+        var destinationsForTrip = [NSString]()
+        var destinationsForTripStates = [NSString]()
+        var travelDictionaryArray = [NSDictionary]()
+        var placeToStayDictionaryArray = [NSDictionary]()
+        var indexOfDestinationBeingPlanned = NSNumber(value: 0)
+        var isInitiator = NSNumber(value: 1)
+        var currentAssistantSubview = NSNumber(value: 0)
+        var datesDestinationsDictionary = NSDictionary()
+        var savedFlightTickets = [NSData]()
+        var savedHotelItems = [NSData]()
+        var lastFlightOpenInBrowser = NSDictionary()
+        var lastHotelOpenInBrowser = NSDictionary()
+        var assistantMode = NSString()
+        var endingPoint = NSString()
+        var destinationsForTripDictArray = [NSDictionary]()
+        var endingPointDict = NSDictionary()
+        var startingPointDict = NSDictionary()
+        var JRSDKSearchInfo = NSData()
+        var HDKSearchInfo = NSData()
+        
+        //Activities VC
+        var selectedActivities = [NSString]()
+        //Ranking VC
+        var topTrips = [NSString]()
+        var rankedPotentialTripsDictionary = [NSDictionary]()
+        var rankedPotentialTripsDictionaryArrayIndex = NSNumber(value: 0)
+        
+        //Update preference vars if an existing trip
+        if isNewOrAddedTrip == 0 {
+            //Trip status
+            bookingStatus = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "booking_status") as? NSNumber ?? 0 as NSNumber
+            progress = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "progress") as? [NSNumber] ?? [NSNumber]()
+            lastVC = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastVC") as? NSString ?? NSString()
+            timesViewed = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "timesViewed") as? NSDictionary ?? NSDictionary()
+            //New Trip VC
+            tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? NSString ?? NSString()
+            tripID = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "tripID") as? NSString ?? NSString()
+            
+            contacts = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contacts_in_group") as? [NSString] ?? [NSString]()
+            contactPhoneNumbers = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "contact_phone_numbers") as? [NSString] ?? [NSString]()
+            hotelRoomsValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "hotel_rooms") as? [NSNumber] ?? [NSNumber]()
+            segmentLengthValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "Availability_segment_lengths") as? [NSNumber] ?? [NSNumber]()
+            selectedDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_dates") as? [NSDate] ?? [NSDate]()
+            leftDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "origin_departure_times") as? NSDictionary ?? NSDictionary()
+            rightDateTimeArrays = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "return_departure_times") as? NSDictionary ?? NSDictionary()
+            numberDestinations = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "numberDestinations") as? NSNumber ?? NSNumber()
+            nonSpecificDates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "nonSpecificDates") as? NSDictionary ?? NSDictionary()
+            firebaseChannelKey = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "firebaseChannelKey") as? NSString ?? NSString()
+            //Budget VC
+            budgetValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "budget") as? NSString ?? NSString()
+            expectedRoundtripFare = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_roundtrip_fare") as? NSString ?? NSString()
+            expectedNightlyRate = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "expected_nightly_rate") as? NSString ?? NSString()
+            //Suggested Destination VC
+            decidedOnDestinationControlValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "decided_destination_control") as? NSString ?? NSString()
+            decidedOnDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "decided_destination_value") as? NSString ?? NSString()
+            suggestDestinationControlValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggest_destination_control") as? NSString ?? NSString()
+            suggestedDestinationValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "suggested_destination") as? NSString ?? NSString()
+            
+            destinationsForTrip = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTrip") as? [NSString] ?? [NSString]()
+            destinationsForTripStates = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTripStates") as? [NSString] ?? [NSString]()
+            travelDictionaryArray = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "travelDictionaryArray") as? [NSDictionary] ?? [NSDictionary]()
+            placeToStayDictionaryArray = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "placeToStayDictionaryArray") as? [NSDictionary] ?? [NSDictionary]()
+            indexOfDestinationBeingPlanned = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "indexOfDestinationBeingPlanned") as? NSNumber ?? NSNumber()
+            isInitiator = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "isInitiator") as? NSNumber ?? NSNumber()
+            currentAssistantSubview = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "currentAssistantSubview") as? NSNumber ?? NSNumber()
+            datesDestinationsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "datesDestinationsDictionary") as? NSDictionary ?? NSDictionary()
+            savedFlightTickets = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "savedFlightTickets") as? [NSData] ?? [NSData]()
+            savedHotelItems = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "savedHotelItems") as? [NSData] ?? [NSData]()
+            lastFlightOpenInBrowser = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastFlightOpenInBrowser") as? NSDictionary ?? NSDictionary()
+            lastHotelOpenInBrowser = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "lastHotelOpenInBrowser") as? NSDictionary ?? NSDictionary()
+            assistantMode = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "assistantMode") as? NSString ?? NSString()
+            endingPoint = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "endingPoint") as? NSString ?? NSString()
+            destinationsForTripDictArray = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "destinationsForTripDictArray") as? [NSDictionary] ?? [NSDictionary]()
+            endingPointDict = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "endingPointDict") as? NSDictionary ?? NSDictionary()
+            startingPointDict = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "startingPointDict") as? NSDictionary ?? NSDictionary()
+            JRSDKSearchInfo = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "JRSDKSearchInfo") as? NSData ?? NSData()
+            HDKSearchInfo = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "HDKSearchInfo") as? NSData ?? NSData()
+            
+            //Activities VC
+            selectedActivities = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "selected_activities") as? [NSString] ?? [NSString]()
+            //Ranking VC
+            topTrips = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "top_trips") as? [NSString] ?? [NSString]()
+            rankedPotentialTripsDictionary = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionary") as? [NSDictionary] ?? [NSDictionary]()
+            rankedPotentialTripsDictionaryArrayIndex = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "rankedPotentialTripsDictionaryArrayIndex") as? NSNumber ?? NSNumber()
+            
+        }
+        
+        //SavedPreferences
+        let fetchedSavedPreferencesForTrip = ["booking_status": bookingStatus,"progress": progress, "trip_name": tripNameValue, "contacts_in_group": contacts,"contact_phone_numbers": contactPhoneNumbers, "hotel_rooms": hotelRoomsValue, "Availability_segment_lengths": segmentLengthValue,"selected_dates": selectedDates, "origin_departure_times": leftDateTimeArrays, "return_departure_times": rightDateTimeArrays, "budget": budgetValue, "expected_roundtrip_fare":expectedRoundtripFare, "expected_nightly_rate": expectedNightlyRate,"decided_destination_control":decidedOnDestinationControlValue, "decided_destination_value":decidedOnDestinationValue, "suggest_destination_control": suggestDestinationControlValue,"suggested_destination":suggestedDestinationValue, "selected_activities":selectedActivities,"top_trips":topTrips,"numberDestinations":numberDestinations,"nonSpecificDates":nonSpecificDates, "rankedPotentialTripsDictionary": rankedPotentialTripsDictionary, "tripID": tripID,"lastVC": lastVC,"firebaseChannelKey": firebaseChannelKey,"rankedPotentialTripsDictionaryArrayIndex": rankedPotentialTripsDictionaryArrayIndex, "timesViewed": timesViewed, "destinationsForTrip": destinationsForTrip,"travelDictionaryArray":travelDictionaryArray, "indexOfDestinationBeingPlanned": indexOfDestinationBeingPlanned,"isInitiator":isInitiator,"currentAssistantSubview":currentAssistantSubview,"datesDestinationsDictionary":datesDestinationsDictionary,"destinationsForTripStates":destinationsForTripStates,"savedFlightTickets":savedFlightTickets,"savedHotelItems":savedHotelItems,"lastFlightOpenInBrowser":lastFlightOpenInBrowser,"lastHotelOpenInBrowser":lastHotelOpenInBrowser,"assistantMode":assistantMode, "placeToStayDictionaryArray":placeToStayDictionaryArray,"endingPoint":endingPoint,"destinationsForTripDictArray":destinationsForTripDictArray,"startingPointDict":startingPointDict,"endingPointDict":endingPointDict,"JRSDKSearchInfo":JRSDKSearchInfo,"HDKSearchInfo":HDKSearchInfo] as NSMutableDictionary
+        
+        return fetchedSavedPreferencesForTrip
+        
+    }
+    
+    func determineIfNewOrAddedTrip() -> Int {
+        let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        let currentTripIndex = DataContainerSingleton.sharedDataContainer.currenttrip!
+        var numberSavedTrips: Int?
+        var isNewOrAddedTrip: Int?
+        if existing_trips == nil {
+            numberSavedTrips = 0
+            isNewOrAddedTrip = 1
+        }
+        else {
+            numberSavedTrips = (existing_trips?.count)! - 1
+            if currentTripIndex <= numberSavedTrips! {
+                isNewOrAddedTrip = 0
+            } else {
+                isNewOrAddedTrip = 1
+            }
+        }
+        return isNewOrAddedTrip!
+    }
+    
+    func saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: NSMutableDictionary) {
+        var existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        let currentTripIndex = DataContainerSingleton.sharedDataContainer.currenttrip!
+        
+        var numberSavedTrips: Int?
+        if DataContainerSingleton.sharedDataContainer.usertrippreferences == nil {
+            numberSavedTrips = 0
+        }
+        else {
+            numberSavedTrips = (existing_trips?.count)! - 1
+            
+        }
+        
+        //Case: first trip
+        if existing_trips == nil {
+            let firstTrip = [SavedPreferencesForTrip as NSDictionary]
+            DataContainerSingleton.sharedDataContainer.usertrippreferences = firstTrip
+        }
+            //Case: existing trip
+        else if currentTripIndex <= numberSavedTrips!   {
+            existing_trips?[currentTripIndex] = SavedPreferencesForTrip as NSDictionary
+            DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
+        }
+            //Case: added trip, but not first trip
+        else {
+            existing_trips?.append(SavedPreferencesForTrip as NSDictionary)
+            DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
+        }
+    }
+
+}
+
+extension bucketListViewController: AviasalesAirportsGeoSearchPerformerDelegate {
+    // MARK: - AviasalesAirportsGeoSearchPerformerDelegate
+    func airportsGeoSearchPerformer(_ airportsSearchPerformer: AviasalesAirportsGeoSearchPerformer!, didFound locations: [JRSDKLocation]!) {
+        let location = locations.first(where: { (location) -> Bool in return location is JRSDKAirport })
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        if let airport = location as? JRSDKAirport {
+            let airportAsData = NSKeyedArchiver.archivedData(withRootObject: airport)
+            var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
+            destinationsForTripDictArray[indexOfDestinationBeingPlanned]["JRSDKAirport"] = airportAsData
+            SavedPreferencesForTrip["destinationsForTripDictArray"] = destinationsForTripDictArray
+        } else {
+            var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
+            destinationsForTripDictArray[indexOfDestinationBeingPlanned]["JRSDKAirport"] = "noAirportFound"
+            SavedPreferencesForTrip["destinationsForTripDictArray"] = destinationsForTripDictArray
+        }
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+}
+
