@@ -484,6 +484,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(JRAirportPicker_ViewDidLoad), name: NSNotification.Name(rawValue: "JRAirportPicker_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(JRDatePicker_ViewDidLoad), name: NSNotification.Name(rawValue: "JRDatePicker_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(JRFilterVC_viewWillAppear), name: NSNotification.Name(rawValue: "JRFilterVC_viewWillAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flightSearchResultsSceneViewController_doneButtonTouchedUpInside), name: NSNotification.Name(rawValue: "flightSearchResultsSceneViewController_doneButtonTouchedUpInside"), object: nil)
+        
 
 
         
@@ -502,6 +504,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(HLFiltersVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLFiltersVC_viewWillAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(HLMapVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLMapVC_viewWillAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(HLSortVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLSortVC_viewWillAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchResultsViewController_doneButtonTouchedUpInside), name: NSNotification.Name(rawValue: "hotelSearchResultsViewController_doneButtonTouchedUpInside"), object: nil)
+
+        
+        
         
         setUpItinerary()
         
@@ -893,19 +899,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
             if sender == itineraryButton2 {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
-            }
-        } else {
-            sender.removeMask(button:sender, color: UIColor.white)
-        }
-        if sender == itineraryButton2 {
-            itineraryButton2.stopPulseEffect()
-        }
-        for subview in self.itineraryView.subviews {
-            if subview.isKind(of: UIButton.self) && subview != sender && subview.layer.mask != nil {
-                (subview as! UIButton).isSelected = false
-                (subview as! UIButton).removeMask(button: subview as! UIButton, color: UIColor.white)
+                
+                itineraryButton2.stopPulseEffect()
             }
         }
+        
     }
     
     func spawnContactPickerVC() {
@@ -4344,23 +4342,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
         
-        if timesViewed["itinerary"] != nil {
-            if timesViewed["itinerary"] == 0 {
-                let when = DispatchTime.now() + 1
-                DispatchQueue.main.asyncAfter(deadline: when) {
-                    self.animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true, withCloseButton: true)
-                    let currentTimesViewed = self.timesViewed["itinerary"]
-                    self.timesViewed["itinerary"]! = currentTimesViewed! + 1
-                    SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
-                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                }
-            }
-        } else {
+        if timesViewed["itinerary"] == nil {
             let when = DispatchTime.now() + 1
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true, withCloseButton: true)
-                let currentTimesViewed = self.timesViewed["itinerary"]
-                self.timesViewed["itinerary"]! = 1
+                self.timesViewed["itinerary"] = 1
                 SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
                 self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             }
@@ -6350,13 +6336,17 @@ extension TripViewController {
         
         self.backButton?.removeFromSuperview()
         backButton = nil
-        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 50, height: 25))
         backButton?.setTitle("Done", for: .normal)
         backButton?.addTarget(self, action: #selector(popFromJRFilterToFlightResults), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
 
-        
-        
+    }
+    func flightSearchResultsSceneViewController_doneButtonTouchedUpInside() {
+        comeBackToPlanFlightLater()
+    }
+    func hotelSearchResultsViewController_doneButtonTouchedUpInside() {
+        comeBackToPlanHotelLater()
     }
     func popFromJRFilterToFlightResults() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromJRFilterToFlightResults"), object: nil)
@@ -6721,6 +6711,8 @@ extension TripViewController {
         itineraryButton2?.setTitleColor(UIColor.white, for: .normal)
         itineraryButton2?.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         itineraryButton2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        itineraryButton2?.setBackgroundColor(color: UIColor.clear, forState: .selected)
+        itineraryButton2?.setBackgroundColor(color: UIColor.clear, forState: .highlighted)
         itineraryButton2?.layer.borderWidth = 1
         itineraryButton2?.layer.borderColor = UIColor.white.cgColor
         itineraryButton2?.layer.masksToBounds = true

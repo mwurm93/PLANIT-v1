@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JRSearchResultsVC">
             <connections>
+                <outlet property="doneButton" destination="MRs-mV-off" id="XnP-jd-1KQ"/>
                 <outlet property="tableView" destination="veO-Fa-Y7M" id="nrI-NV-iNf"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -40,6 +41,9 @@
                     <state key="normal" title="Done">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="doneButtonTouchedUpInside:" destination="-1" eventType="touchUpInside" id="jvZ-c0-xyY"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

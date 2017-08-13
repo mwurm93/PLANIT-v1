@@ -84,7 +84,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [JRColorScheme mainBackgroundColor];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.view.layer.backgroundColor = [UIColor clearColor].CGColor;
+
     
     self.cellsFactory = [[JRFilterCellsFactory alloc] initWithTableView:self.tableView withFilterMode:self.filterMode];
     

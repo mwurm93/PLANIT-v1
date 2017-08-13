@@ -103,12 +103,12 @@ import UIKit
     }
     
     private func setupComeBackToThisButton() {
-        comeBackToThisButton.tintColor = UIColor.lightGray
+        comeBackToThisButton.tintColor = UIColor.white
         comeBackToThisButton.backgroundColor = UIColor.clear
         comeBackToThisButton.layer.cornerRadius = 15
-        comeBackToThisButton.layer.borderColor = UIColor.lightGray.cgColor
+        comeBackToThisButton.layer.borderColor = UIColor.white.cgColor
         comeBackToThisButton.layer.borderWidth = 1
-        comeBackToThisButton.titleLabel?.textColor = UIColor.lightGray
+        comeBackToThisButton.titleLabel?.textColor = UIColor.white
         comeBackToThisButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
     }
 

@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HLIphoneResultsVC">
             <connections>
                 <outlet property="collectionView" destination="1g7-TH-BMx" id="MqS-3W-z9e"/>
+                <outlet property="doneButton" destination="4hg-cY-CQq" id="KME-HW-gbL"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="ohV-MP-Z52"/>
             </connections>
         </placeholder>
@@ -34,6 +35,21 @@
                         <outlet property="delegate" destination="-1" id="Ay3-l0-8fe"/>
                     </connections>
                 </collectionView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4hg-cY-CQq">
+                    <rect key="frame" x="140" y="537" width="95" height="40"/>
+                    <color key="backgroundColor" red="1" green="0.77533121419999995" blue="0.27822016979999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="UjT-0D-em6"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="Vtt-ZX-lrg"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                    <state key="normal" title="Done">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="doneButtonTouchedUpInside:" destination="-1" eventType="touchUpInside" id="cDX-LS-RZt"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
@@ -41,6 +57,10 @@
                 <constraint firstAttribute="trailing" secondItem="1g7-TH-BMx" secondAttribute="trailing" id="4G4-wT-hLs"/>
                 <constraint firstItem="1g7-TH-BMx" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="68i-0r-bsa"/>
                 <constraint firstAttribute="bottom" secondItem="1g7-TH-BMx" secondAttribute="bottom" constant="65" id="FyB-xH-s4Y"/>
+                <constraint firstItem="4hg-cY-CQq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="140" id="WTh-1S-AvS"/>
+                <constraint firstAttribute="bottom" secondItem="4hg-cY-CQq" secondAttribute="bottom" constant="90" id="XUf-ka-tDd"/>
+                <constraint firstAttribute="bottom" secondItem="4hg-cY-CQq" secondAttribute="bottom" constant="90" id="idX-p6-ZpN"/>
+                <constraint firstAttribute="trailing" secondItem="4hg-cY-CQq" secondAttribute="trailing" constant="140" id="w85-fh-w1w"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>

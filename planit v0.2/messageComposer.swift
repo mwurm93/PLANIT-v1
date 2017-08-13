@@ -33,17 +33,36 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
         let tripDates = SavedPreferencesForTrip["selected_dates"] as! [Date]
         
-        let destinationsForMessage = destinationsForTrip.joined(separator: ", ")
+        var destinationsForMessage = String()
+        if destinationsForTrip.count == 1 {
+            destinationsForMessage = destinationsForTrip[0]
+        } else if destinationsForTrip.count > 1 {
+            for i in 0 ... destinationsForTrip.count - 2 {
+                destinationsForMessage.append(destinationsForTrip[i])
+                if i + 1 == destinationsForTrip.count - 1 {
+                    destinationsForMessage.append(" and ")
+                } else {
+                    destinationsForMessage.append(", ")
+                }
+            }
+            destinationsForMessage.append(destinationsForTrip[destinationsForTrip.count - 1])
+            if destinationsForTrip.count == 2 {
+                destinationsForMessage = "\(destinationsForTrip[0]) and \(destinationsForTrip[1])"
+            }
+        }
+        
+        formatter.dateFormat = "MM/dd"
         
         if tripDates.count > 1 {
             let checkInDate = tripDates[0]
-            formatter.dateFormat = "MM/dd"
             let checkInDateAsString = formatter.string(from: checkInDate)
             let checkOutDate = tripDates[tripDates.count - 1]
             let checkOutDateAsString = formatter.string(from: checkOutDate)
             let numberNights = DateUtil.hl_daysBetweenDate(checkInDate, andOtherDate:checkOutDate)
             
-            messageComposeVC.body =  "Hey, I just started planning a \(numberNights) night trip to \(destinationsForMessage) from \(checkInDate) to \(checkOutDate) on Planit. Check out the itinerary I've put together and we can finish planning it!"
+            
+            
+            messageComposeVC.body =  "Hey, I just started planning a \(numberNights) night trip to \(destinationsForMessage) from \(checkInDateAsString) to \(checkOutDateAsString) on Planit. Check out the itinerary I've put together and we can finish planning it!"
             
         } else {
             messageComposeVC.body =  "Hey, I just started planning a trip to \(destinationsForMessage) on Planit. Check out the itinerary I've put together and we can finish planning it!"
