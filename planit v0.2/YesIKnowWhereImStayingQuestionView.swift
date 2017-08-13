@@ -97,7 +97,7 @@ class YesIKnowWhereImStayingQuestionView: UIView {
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.numberOfLines = 0
         button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("Short-term rental", for: .normal)
+        button2?.setTitle("Short-term rental, incl. Airbnb or VRBO", for: .normal)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)

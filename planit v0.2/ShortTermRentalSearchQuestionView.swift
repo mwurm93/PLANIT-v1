@@ -38,7 +38,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         
         questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 100)
         
-        textView?.frame = CGRect(x: 10, y: 130, width: bounds.size.width - 20, height: 140)
+        textView?.frame = CGRect(x: 10, y: 80, width: bounds.size.width - 20, height: 140)
         let width = 1.0
         let borderLine = UIView()
         borderLine.frame = CGRect(x: Double((textView?.frame.minX)!), y: Double((textView?.frame.maxY)!) - width, width: Double((textView?.frame.width)!), height: width)
@@ -54,20 +54,20 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 300
+        button1?.frame.origin.y = 250
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         button2?.sizeToFit()
         button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 350
+        button2?.frame.origin.y = 300
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
         button3?.sizeToFit()
         button3?.frame.size.height = 30
         button3?.frame.size.width += 20
-        button3?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2 + 100
+        button3?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
         button3?.frame.origin.y = 350
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
 
@@ -82,7 +82,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "We’re still working on short term rentals.\nShare any plans or ideas with your group?"
+        questionLabel?.text = "We’re working on short term rentals.\nShare plans or ideas with your group!"
         self.addSubview(questionLabel!)
         
         //Button1

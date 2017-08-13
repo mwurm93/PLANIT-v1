@@ -95,8 +95,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         createTripButton.setBackgroundColor(color: UIColor.blue, forState: .selected)
         createTripButton.layer.borderWidth = 1
         createTripButton.layer.borderColor = UIColor.white.cgColor
-        createTripButton.setTitle("Plan a trip", for: .normal)
-        createTripButton.setTitle("Plan a trip", for: .selected)
+        createTripButton.setTitle("Plan a trip!", for: .normal)
+        createTripButton.setTitle("Plan a trip!", for: .selected)
         createTripButton?.sizeToFit()
         createTripButton?.frame.size.height = 50
         createTripButton?.frame.size.width += 30
@@ -114,8 +114,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         addAnotherTripButton.setBackgroundColor(color: UIColor.blue, forState: .selected)
         addAnotherTripButton.layer.borderWidth = 1
         addAnotherTripButton.layer.borderColor = UIColor.white.cgColor
-        addAnotherTripButton.setTitle("Plan a trip", for: .normal)
-        addAnotherTripButton.setTitle("Plan a trip", for: .selected)
+        addAnotherTripButton.setTitle("Plan a trip!", for: .normal)
+        addAnotherTripButton.setTitle("Plan a trip!", for: .selected)
         addAnotherTripButton?.sizeToFit()
         addAnotherTripButton?.frame.size.height = 30
         addAnotherTripButton?.frame.size.width += 30

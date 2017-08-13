@@ -38,6 +38,16 @@ static CGFloat kFreeSpaceBetweenButtons = 15.0;
         [self.priceFilterView configureWithFilter:self.filter];
         self.priceFilterView.delegate = self;
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(popFromMapVCToHotelSearch)
+                                                 name:@"popFromMapVCToHotelSearch"
+                                               object:nil];
+   
+}
+
+- (void)popFromMapVCToHotelSearch{
+    [self.navigationController popViewControllerAnimated:false];
 }
 
 - (void)viewDidLayoutSubviews

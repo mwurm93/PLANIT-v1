@@ -54,10 +54,10 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="os1-n1-n4P">
-                        <rect key="frame" x="23" y="13" width="22" height="22"/>
+                        <rect key="frame" x="19" y="9" width="30" height="30"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="22" id="GCx-IW-G3Z"/>
-                            <constraint firstAttribute="height" constant="22" id="ud9-Rw-8dV"/>
+                            <constraint firstAttribute="width" constant="30" id="GCx-IW-G3Z"/>
+                            <constraint firstAttribute="height" constant="30" id="ud9-Rw-8dV"/>
                         </constraints>
                         <state key="normal" backgroundImage="emptyHeartGray"/>
                         <state key="selected" image="fullHeartRed"/>
@@ -66,15 +66,24 @@
                             <action selector="saveButtonTouchedUpInside:" destination="2" eventType="touchUpInside" id="Jz2-Nf-Csq"/>
                         </connections>
                     </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fowardButtonGray" translatesAutoresizingMaskIntoConstraints="NO" id="lti-JG-6TM">
+                        <rect key="frame" x="281" y="9" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="cui-ZM-KuK"/>
+                            <constraint firstAttribute="width" constant="30" id="zPb-Db-PiU"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstItem="Gc9-JP-YyS" firstAttribute="leading" secondItem="FsB-Es-UEH" secondAttribute="leading" constant="8" id="HfG-D7-m5X"/>
                     <constraint firstAttribute="trailing" secondItem="Gc9-JP-YyS" secondAttribute="trailing" constant="8" id="I93-rG-6fg"/>
-                    <constraint firstItem="os1-n1-n4P" firstAttribute="top" secondItem="FsB-Es-UEH" secondAttribute="topMargin" constant="5" id="IU3-9Z-tuF"/>
+                    <constraint firstItem="os1-n1-n4P" firstAttribute="top" secondItem="FsB-Es-UEH" secondAttribute="topMargin" constant="1" id="IU3-9Z-tuF"/>
                     <constraint firstAttribute="bottom" secondItem="Gc9-JP-YyS" secondAttribute="bottom" constant="0.5" id="KqB-bw-6iP"/>
-                    <constraint firstItem="os1-n1-n4P" firstAttribute="leading" secondItem="FsB-Es-UEH" secondAttribute="leadingMargin" constant="15" id="VJ1-Eu-bJ3"/>
+                    <constraint firstItem="os1-n1-n4P" firstAttribute="leading" secondItem="FsB-Es-UEH" secondAttribute="leadingMargin" constant="11" id="VJ1-Eu-bJ3"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="lti-JG-6TM" secondAttribute="trailing" constant="1" id="aCr-ep-Gsj"/>
                     <constraint firstItem="Gc9-JP-YyS" firstAttribute="top" secondItem="FsB-Es-UEH" secondAttribute="top" id="nmP-Fu-5aH"/>
+                    <constraint firstItem="lti-JG-6TM" firstAttribute="top" secondItem="FsB-Es-UEH" secondAttribute="topMargin" constant="1" id="te3-T0-Q2q"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -83,10 +92,12 @@
                 <outlet property="saveButton" destination="os1-n1-n4P" id="dtV-XZ-HUN"/>
                 <outlet property="tableView" destination="TEp-Jg-Xjf" id="zo8-Ys-5yL"/>
             </connections>
+            <point key="canvasLocation" x="34" y="53.5"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="emptyHeartGray" width="71" height="71"/>
+        <image name="fowardButtonGray" width="1600" height="1600"/>
         <image name="fullHeartRed" width="71" height="71"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -80,6 +80,12 @@
     self.searchInfo.checkInDate = checkInDate;
     self.searchInfo.checkOutDate = checkOutDate;
     [self updateControls];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(searchSpawnedFromItinerary)
+                                                 name:@"searchSpawnedFromItinerary"
+                                               object:nil];
 }
 -(void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:YES animated:NO];
@@ -93,6 +99,8 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"hotelSearchFormViewViewController_ViewDidAppear"
                                                         object:self];
+    
+    
 }
 
 - (void)updateControls
@@ -328,6 +336,10 @@
     [self updateControls];
     [self.navigationController popToRootViewControllerAnimated:NO];
     [self.tabBarController setSelectedViewController:self.navigationController];
+}
+
+- (void)searchSpawnedFromItinerary {
+    [self tryToStartSearchWithSearchInfo:self.searchInfo];
 }
 
 @end
