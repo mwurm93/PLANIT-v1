@@ -17,6 +17,7 @@ class HLIphoneResultsVC: HLCommonResultsVC {
         super.viewDidLoad()
         
         doneButton.layer.cornerRadius = 5
+        doneButton.backgroundColor = UIColor.orange
         
         self.view.backgroundColor = UIColor.clear
         self.view.layer.backgroundColor = UIColor.clear.cgColor
@@ -43,7 +44,7 @@ class HLIphoneResultsVC: HLCommonResultsVC {
     }
 
     @IBAction func doneButtonTouchedUpInside(_ sender: Any) {
-        self.navigationController?.popToRootViewController(animated: true)
+        self.navigationController?.popToRootViewController(animated: false)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelSearchResultsViewController_doneButtonTouchedUpInside"), object: nil)
     }
 }

@@ -24,6 +24,14 @@ class HLIphoneFiltersVC: HLFiltersVC {
         self.view.layer.backgroundColor = UIColor.clear.cgColor
         self.view.tintColor = UIColor.clear
 
+        let tripViewController = self.parent?.parent as! TripViewController
+        tripViewController.backButton?.removeFromSuperview()
+        
+        tripViewController.backButton = nil
+        tripViewController.backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 50, height: 25))
+        tripViewController.backButton?.setTitle("Done", for: .normal)
+        tripViewController.backButton?.addTarget(self, action: #selector(popFromHLFilterToHotelResults), for: UIControlEvents.touchUpInside)
+        tripViewController.topView.addSubview(tripViewController.backButton!)
     }
 
     private func addDropButton() {
@@ -38,6 +46,10 @@ class HLIphoneFiltersVC: HLFiltersVC {
 
     }
 
+    func popFromHLFilterToHotelResults() {
+        self.navigationController?.popViewController(animated: false)
+    }
+    
     private func addHotelsLeftView() {
         navBarView.setupConstraints()
         let limits = CGSize(width: 200.0, height: 35.0)

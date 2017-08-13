@@ -23,7 +23,7 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="BCV-Kx-yde">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="535"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Mkc-ix-Q5x"/>
                         <outlet property="delegate" destination="-1" id="VYt-WA-LkF"/>
@@ -59,6 +59,11 @@
                 <constraint firstItem="BCV-Kx-yde" firstAttribute="leading" secondItem="anH-6f-Vha" secondAttribute="leading" id="vvx-Ij-2hy"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="yaw-Be-3fg"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="297" y="350"/>
         </view>
     </objects>

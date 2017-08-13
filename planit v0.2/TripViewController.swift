@@ -127,6 +127,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var detailedInformationSubviewMode = ""
     var isAssistantEnabled = true
     var doneButton: UIButton?
+    var itineraryButton: UIButton?
         //Itinerary info view
     var timesViewed = [String : Int]()
     var infoKeyButton_3_badgeButton: MIBadgeButton?
@@ -165,7 +166,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var popupBackgroundViewDeleteContactsWithinCollectionView: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundViewDeleteContacts: UIVisualEffectView!
     @IBOutlet weak var itineraryButton1: UIButton!
-    @IBOutlet weak var itineraryButton2: UIButton!
+//    @IBOutlet weak var itineraryButton2: UIButton!
     @IBOutlet weak var itineraryButton3: UIButton!
     @IBOutlet weak var destinationsDatesCollectionView: UICollectionView!
     @IBOutlet var detailedInformationSubview: UIView!
@@ -4535,8 +4536,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func handleSendInvitesButton() {
         if editItineraryModeEnabled == true {
-            itineraryButton2.isHidden = true
-            itineraryButton2.stopPulseEffect()
+            itineraryButton2?.isHidden = true
+            itineraryButton2?.stopPulseEffect()
         } else {
             var itinerarySendable = false
             if contacts != nil {
@@ -4557,8 +4558,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }            
 
             if itinerarySendable {
-                itineraryButton2.isHidden = false
-                itineraryButton2.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.2)
+                itineraryButton2?.isHidden = false
+                itineraryButton2?.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.2)
                 
                 //PLANNED:             
                 //Move switch and label to the left
@@ -5727,6 +5728,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 }
             }
             turnOnItineraryEditing()
+            //PLANNED: Reload itinerary collection view with selected contacts' plans
             let when = DispatchTime.now() + 0.6
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.dismissEditItineraryMode()
@@ -6545,6 +6547,14 @@ extension TripViewController {
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
         self.hotelMapButton.isHidden = true
+        
+        self.backButton?.removeFromSuperview()
+        backButton = nil
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 28, height: 25))
+        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton?.addTarget(self, action: #selector(popFromWaitingViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
     }
     
 
@@ -6708,23 +6718,46 @@ extension TripViewController {
         itineraryButton1?.frame.origin.x = (bounds.size.width - (itineraryButton1?.frame.width)!) / 2
         itineraryButton1?.frame.origin.y = 492
         itineraryButton1?.layer.cornerRadius = (itineraryButton1?.frame.height)! / 2
+        
+        
+        itineraryButton2 = UIButton(type: .custom)
+        itineraryButton2?.frame = CGRect.zero
         itineraryButton2?.setTitleColor(UIColor.white, for: .normal)
-        itineraryButton2?.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         itineraryButton2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-        itineraryButton2?.setBackgroundColor(color: UIColor.clear, forState: .selected)
-        itineraryButton2?.setBackgroundColor(color: UIColor.clear, forState: .highlighted)
         itineraryButton2?.layer.borderWidth = 1
         itineraryButton2?.layer.borderColor = UIColor.white.cgColor
         itineraryButton2?.layer.masksToBounds = true
         itineraryButton2?.titleLabel?.numberOfLines = 0
         itineraryButton2?.titleLabel?.textAlignment = .center
+        itineraryButton2?.setTitle("Back to travel dates", for: .normal)
+        itineraryButton2?.translatesAutoresizingMaskIntoConstraints = false
         itineraryButton2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(itineraryButton2!)
         itineraryButton2?.sizeToFit()
         itineraryButton2?.frame.size.height = 30
         itineraryButton2?.frame.size.width += 20
         itineraryButton2?.frame.origin.x = 225
         itineraryButton2?.frame.origin.y = 128
         itineraryButton2?.layer.cornerRadius = (itineraryButton2?.frame.height)! / 2
+
+        
+//        itineraryButton2?.setTitleColor(UIColor.white, for: .normal)
+//        itineraryButton2?.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+//        itineraryButton2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+//        itineraryButton2?.setBackgroundColor(color: UIColor.clear, forState: .selected)
+//        itineraryButton2?.setBackgroundColor(color: UIColor.clear, forState: .highlighted)
+//        itineraryButton2?.layer.borderWidth = 1
+//        itineraryButton2?.layer.borderColor = UIColor.white.cgColor
+//        itineraryButton2?.layer.masksToBounds = true
+//        itineraryButton2?.titleLabel?.numberOfLines = 0
+//        itineraryButton2?.titleLabel?.textAlignment = .center
+//        itineraryButton2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+//        itineraryButton2?.sizeToFit()
+//        itineraryButton2?.frame.size.height = 30
+//        itineraryButton2?.frame.size.width += 20
+//        itineraryButton2?.frame.origin.x = 225
+//        itineraryButton2?.frame.origin.y = 128
+//        itineraryButton2?.layer.cornerRadius = (itineraryButton2?.frame.height)! / 2
         
         itineraryButton3?.setTitleColor(UIColor.white, for: .normal)
         itineraryButton3?.titleLabel?.font = UIFont.systemFont(ofSize: 18)

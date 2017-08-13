@@ -155,6 +155,7 @@ static const NSInteger kHotelCardIndex = 5;
     _filterButton.backgroundColor = [UIColor colorWithRed:200/255 green:213/255 blue:221/255 alpha:1];
     _sortButton.backgroundColor = [UIColor colorWithRed:200/255 green:213/255 blue:221/255 alpha:1];
     _doneButton.layer.cornerRadius = 5;
+    [_doneButton setBackgroundColor:[UIColor orangeColor]];
     _tableView.bounces = YES;
     
     [self setupViewController];
@@ -314,7 +315,7 @@ static const NSInteger kHotelCardIndex = 5;
 - (IBAction)doneButtonTouchedUpInside:(id)sender {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"flightSearchResultsSceneViewController_doneButtonTouchedUpInside"
                                                         object:self];
-    [self.navigationController popToRootViewControllerAnimated:true];
+    [self.navigationController popToRootViewControllerAnimated:false];
 }
 
 - (void)showFilters:(id)sender {

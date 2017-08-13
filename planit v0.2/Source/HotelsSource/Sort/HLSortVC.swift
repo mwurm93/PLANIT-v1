@@ -84,7 +84,7 @@ class HLSortVC: HLCommonVC, UITableViewDataSource, UITableViewDelegate, PointSel
         let cell = tableView.dequeueReusableCell(withIdentifier: item.cellReuseIdentifier, for: indexPath)
         if let sortCell = cell as? HLSortCell {
             sortCell.titleLabel.text = item.name
-            sortCell.backgroundColor = UIColor.clear
+            sortCell.backgroundColor = UIColor.white
             sortCell.active = (item.sortType.rawValue == filter.sortType.rawValue)
         }
         if let distanceCell = cell as? HLDistanceSortCell {
@@ -126,7 +126,7 @@ class HLSortVC: HLCommonVC, UITableViewDataSource, UITableViewDelegate, PointSel
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.row != 3 {
-            self.navigationController?.popViewController(animated: true)
+            self.navigationController?.popViewController(animated: false)
         }
     }
 }
