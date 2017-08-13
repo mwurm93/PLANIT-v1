@@ -573,7 +573,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     addedToBuckedListLabel.sizeToFit()
                     addedToBuckedListLabel.textColor = UIColor.darkGray
                     addedToBuckedListLabel.textAlignment = .center
-                    addedToBuckedListLabel.addTarget(self, action: #selector(self.removePinButtonAnnotationButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
                     
                     let destinationDecidedButtonAnnotation = UIButton(frame: CGRect(x: 0, y: addedToBuckedListLabel.frame.height + 5, width: 150, height: 20))
                     destinationDecidedButtonAnnotation.setTitle("Plan trip here", for: .normal)
@@ -590,7 +589,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                     let frameForAnnotationContentView = CGRect(x: 0, y: 0, width: destinationDecidedButtonAnnotation.frame.width, height: destinationDecidedButtonAnnotation.frame.height + addedToBuckedListLabel.frame.height + 5 )
                     let annotationContentView = UIView(frame: frameForAnnotationContentView)
                     annotationContentView.addSubview(destinationDecidedButtonAnnotation)
-                    annotationContentView.addSubview(removePinButtonAnnotation)
+                    annotationContentView.addSubview(addedToBuckedListLabel)
                     
                     a.contentView = annotationContentView
                     theViewC?.addAnnotation(a, forPoint: coord, offset: CGPoint.zero)
