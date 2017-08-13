@@ -14,7 +14,20 @@
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="InstructionsQuestionView" customModule="planit_v0_2" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="exampleItinerary" translatesAutoresizingMaskIntoConstraints="NO" id="q9l-Wp-Des">
+                    <rect key="frame" x="21" y="107" width="333" height="435"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+            </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <connections>
+                <outlet property="exampleItineraryImageView" destination="q9l-Wp-Des" id="7hV-T5-GX2"/>
+            </connections>
+            <point key="canvasLocation" x="33.5" y="53.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="exampleItinerary" width="375" height="505"/>
+    </resources>
 </document>

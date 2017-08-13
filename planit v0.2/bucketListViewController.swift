@@ -565,12 +565,46 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                 
                 var subtitle = String()
                 if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
-                    subtitle = "Added to bucket list"
+//                    subtitle = "Added to bucket list"
+                    let a = MaplyAnnotation()
+                    
+                    let addedToBuckedListLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 20))
+                    addedToBuckedListLabel.text = "Added to bucket list"
+                    addedToBuckedListLabel.sizeToFit()
+                    addedToBuckedListLabel.textColor = UIColor.darkGray
+                    addedToBuckedListLabel.textAlignment = .center
+                    addedToBuckedListLabel.addTarget(self, action: #selector(self.removePinButtonAnnotationButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
+                    
+                    let destinationDecidedButtonAnnotation = UIButton(frame: CGRect(x: 0, y: addedToBuckedListLabel.frame.height + 5, width: 150, height: 20))
+                    destinationDecidedButtonAnnotation.setTitle("Plan trip here", for: .normal)
+                    destinationDecidedButtonAnnotation.sizeToFit()
+                    destinationDecidedButtonAnnotation.setTitleColor(UIColor.white, for: .normal)
+                    destinationDecidedButtonAnnotation.setTitleColor(UIColor.lightGray, for: .highlighted)
+                    let currentSize = destinationDecidedButtonAnnotation.titleLabel?.font.pointSize
+                    destinationDecidedButtonAnnotation.titleLabel?.font = UIFont.systemFont(ofSize: currentSize! - 1.5)
+                    destinationDecidedButtonAnnotation.backgroundColor = UIColor(red: 79/255, green: 146/255, blue: 255/255, alpha: 1)
+                    destinationDecidedButtonAnnotation.layer.cornerRadius = destinationDecidedButtonAnnotation.frame.height / 2
+                    destinationDecidedButtonAnnotation.titleLabel?.textAlignment = .center
+                    destinationDecidedButtonAnnotation.addTarget(self, action: #selector(self.bucketListButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
+                    
+                    let frameForAnnotationContentView = CGRect(x: 0, y: 0, width: destinationDecidedButtonAnnotation.frame.width, height: destinationDecidedButtonAnnotation.frame.height + addedToBuckedListLabel.frame.height + 5 )
+                    let annotationContentView = UIView(frame: frameForAnnotationContentView)
+                    annotationContentView.addSubview(destinationDecidedButtonAnnotation)
+                    annotationContentView.addSubview(removePinButtonAnnotation)
+                    
+                    a.contentView = annotationContentView
+                    theViewC?.addAnnotation(a, forPoint: coord, offset: CGPoint.zero)
+                    globeViewC?.keepNorthUp = true
+                    globeViewC?.animate(toPosition: coord, onScreen: (theViewC?.view.center)!, time: 1)
+                    globeViewC?.keepNorthUp = false
+
+                    
                 } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
                     subtitle = "Already been here"
+                    addAnnotationWithTitle(title: "Pin", subtitle: subtitle, loc: coord)
                 }
                 
-                addAnnotationWithTitle(title: "Pin", subtitle: subtitle, loc: coord)
+
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
                 self.theViewC?.clearAnnotations()

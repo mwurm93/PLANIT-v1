@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import JTAppleCalendar
 import Cartography
+import SMCalloutView
 import ContactsUI
 import Contacts
 import Floaty
@@ -20,7 +21,7 @@ import TwicketSegmentedControl
 import ZKPulseView
 import MIBadgeButton_Swift
 
-class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate, TwicketSegmentedControlDelegate, UITextViewDelegate {
+class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate, TwicketSegmentedControlDelegate, UITextViewDelegate, SMCalloutViewDelegate {
 
     //MARK: Class variables
     var scrollContentViewHeight: NSLayoutConstraint?
@@ -133,6 +134,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var infoKeyButton_3_badgeButton: MIBadgeButton?
     var infoKeyButton_4_badgeButton: MIBadgeButton?
     var infoKeyButton_5_badgeButton: MIBadgeButton?
+        //SMCalloutView
+    var smCalloutView = SMCalloutView()
+    var smCalloutViewMode = "itineraryTutorial1"
 
 
     //PPN Cities
@@ -196,11 +200,98 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var sortButton: UIButton!
     @IBOutlet weak var hotelMapButton: UIButton!
+    @IBOutlet weak var focusBackgroundViewWithinTopView: UIView!
+    @IBOutlet weak var focusBackgroundViewWithinItineraryView: UIView!
+    @IBOutlet var itineraryTutorialView1: UIView!
+    @IBOutlet weak var itineraryTutorialView1_requiresActionByYou: UIButton!
+    @IBOutlet weak var itineraryTutorialView1_requiresActionByGroup: UIButton!
+    @IBOutlet weak var itineraryTutorialView1_plannedAndConfirmed: UIButton!
+    @IBOutlet var itineraryTutorialView2: UIView!
+    @IBOutlet var itineraryTutorialView3: UIView!
     
-    
+    func handleItineraryTutorial() {
+        if smCalloutViewMode == "itineraryTutorial1" {
+            smCalloutViewMode = "itineraryTutorial2"
+
+            //setup buttons
+            //item requires action by you
+            itineraryTutorialView1_requiresActionByYou.layer.cornerRadius = (itineraryTutorialView1_requiresActionByYou.frame.height) / 2
+            itineraryTutorialView1_requiresActionByYou.layer.borderWidth = 2
+            itineraryTutorialView1_requiresActionByYou.layer.borderColor = UIColor.darkGray.cgColor
+            itineraryTutorialView1_requiresActionByYou.setTitleColor(UIColor.darkGray, for: .normal)
+            //badge button
+            let itineraryTutorialView1_requiresActionByYou_badgeButton = MIBadgeButton()
+            itineraryTutorialView1_requiresActionByYou_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_requiresActionByYou.layer.frame.maxX - 5, y: itineraryTutorialView1_requiresActionByYou.layer.frame.minY + 1)
+            itineraryTutorialView1_requiresActionByYou_badgeButton.badgeString = "!"
+            itineraryTutorialView1_requiresActionByYou_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+            itineraryTutorialView1_requiresActionByYou_badgeButton.badgeTextColor = UIColor.white
+            itineraryTutorialView1_requiresActionByYou_badgeButton.badgeBackgroundColor = UIColor.red
+            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_requiresActionByYou_badgeButton, aboveSubview: itineraryTutorialView1_requiresActionByYou)
+            
+            
+            //item requires action by group
+            itineraryTutorialView1_requiresActionByGroup.layer.cornerRadius = (itineraryTutorialView1_requiresActionByGroup.frame.height) / 2
+            itineraryTutorialView1_requiresActionByGroup.layer.borderWidth = 2
+            itineraryTutorialView1_requiresActionByGroup.layer.borderColor = UIColor.darkGray.cgColor
+            itineraryTutorialView1_requiresActionByGroup.setTitleColor(UIColor.darkGray, for: .normal)
+            //badge button
+            let itineraryTutorialView1_requiresActionByGroup_badgeButton = MIBadgeButton()
+            itineraryTutorialView1_requiresActionByGroup_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_requiresActionByGroup.layer.frame.maxX - 5, y: itineraryTutorialView1_requiresActionByGroup.layer.frame.minY + 1)
+            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeString = "!"
+            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeTextColor = UIColor.white
+            itineraryTutorialView1_requiresActionByGroup_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeBackgroundColor = UIColor.orange
+            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_requiresActionByGroup_badgeButton, aboveSubview: itineraryTutorialView1_requiresActionByGroup)
+            
+            //item complete
+            itineraryTutorialView1_plannedAndConfirmed.layer.cornerRadius = (itineraryTutorialView1_plannedAndConfirmed.frame.height) / 2
+            itineraryTutorialView1_plannedAndConfirmed.layer.borderWidth = 2
+            itineraryTutorialView1_plannedAndConfirmed.layer.borderColor = UIColor.darkGray.cgColor
+            itineraryTutorialView1_plannedAndConfirmed.setTitleColor(UIColor.darkGray, for: .normal)
+            //badge button
+            let itineraryTutorialView1_plannedAndConfirmed_badgeButton = MIBadgeButton()
+            itineraryTutorialView1_plannedAndConfirmed_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_plannedAndConfirmed.layer.frame.maxX - 5, y: itineraryTutorialView1_plannedAndConfirmed.layer.frame.minY + 1)
+            itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeString = "✓"
+            itineraryTutorialView1_plannedAndConfirmed_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+            itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeTextColor = UIColor.white
+            itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_plannedAndConfirmed_badgeButton, aboveSubview: itineraryTutorialView1_plannedAndConfirmed)
+
+            
+            self.focusBackgroundViewWithinTopView.isHidden = false
+            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+            self.focusBackgroundViewWithinItineraryView.isHidden = false
+            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+            self.itineraryView.bringSubview(toFront: destinationsDatesCollectionView)
+            
+            self.smCalloutView.contentView = itineraryTutorialView1
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .down
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(242))
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+
+        } else if smCalloutViewMode == "itineraryTutorial2" {
+            
+            smCalloutViewMode = "itineraryTutorial3"
+        } else if smCalloutViewMode == "itineraryTutorial3" {
+            smCalloutViewMode = "disabled"
+        }
+//        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
+//        sortFilterFlightsCalloutTableView.reloadData()
+
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //SMCalloutView
+        self.smCalloutView.delegate = self
+        self.smCalloutView.isHidden = true
+        //Focus views
+        self.focusBackgroundViewWithinTopView.isHidden = true
+        self.focusBackgroundViewWithinItineraryView.isHidden = true
         
         self.searchSummaryLabelTopView.isHidden = true
         self.searchSummaryLabelTopView.textAlignment = .center
@@ -1242,7 +1333,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             let heightConstraint = NSLayoutConstraint(item: instructionsQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (instructionsQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))! Let's put together an itinerary like this!"
+            let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))!\nLet's build an itinerary like this!"
             instructionsQuestionView?.questionLabel1?.text = questionLabelValue
         }
         if userNameQuestionView != nil {
@@ -4351,6 +4442,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let when = DispatchTime.now() + 1
             //PLANNED: SMcalloutView
             DispatchQueue.main.asyncAfter(deadline: when) {
+                self.handleItineraryTutorial()
+                
 //                self.popupBackgroundFilterView.alpha = 0
 //                let bounds = UIScreen.main.bounds
 //                self.popupBackgroundFilterView.center = CGPoint(x: bounds.size.width / 2, y: bounds.size.height / 2)
@@ -4588,6 +4681,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     // MARK: Actions
+    @IBAction func itineraryTutorialView1_nextButtonTouchedUpInside(_ sender: Any) {
+        handleItineraryTutorial()
+    }
     @IBAction func editSwitchValueChanged(_ sender: Any) {
         if editSwitch.isOn {
             editItineraryModeEnabled = true
@@ -6094,6 +6190,7 @@ extension TripViewController {
     }
     func flightBookingBrowserClosed_FlightBooked(){
         scrollView.isScrollEnabled = true
+        self.flightResultsController?.navigationController?.popToRootViewController(animated: false)
         
         UIView.animate(withDuration: 1) {
             self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
@@ -6105,12 +6202,13 @@ extension TripViewController {
             self.didYouBuyTheFlightQuestionPopover = nil
             self.popupBackgroundFilterView.removeFromSuperview()
             self.popupBackgroundFilterView.isHidden = true
-            self.flightResultsController?.navigationController?.popToRootViewController(animated: false)
+            
             self.spawnDoYouNeedARentalCarQuestionView()
         }
     }
     func flightBookingBrowserClosed_FlightNotBooked(){
         scrollView.isScrollEnabled = true
+        self.flightResultsController?.navigationController?.popToRootViewController(animated: false)
 
         UIView.animate(withDuration: 1) {
             self.didYouBuyTheFlightQuestionPopover!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
@@ -6122,7 +6220,6 @@ extension TripViewController {
             self.didYouBuyTheFlightQuestionPopover = nil
             self.popupBackgroundFilterView.removeFromSuperview()
             self.popupBackgroundFilterView.isHidden = true
-            self.flightResultsController?.navigationController?.popToRootViewController(animated: false)
             self.spawnDoYouNeedARentalCarQuestionView()
         }
     }
@@ -6157,6 +6254,7 @@ extension TripViewController {
     }
     func hotelBookingBrowserClosed_HotelBooked(){
         scrollView.isScrollEnabled = true
+        self.hotelResultsController?.navigationController?.popToRootViewController(animated: false)
 
         UIView.animate(withDuration: 1) {
             self.didYouBuyTheHotelQuestionView!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
@@ -6168,12 +6266,12 @@ extension TripViewController {
             self.didYouBuyTheHotelQuestionView = nil
             self.popupBackgroundFilterView.removeFromSuperview()
             self.popupBackgroundFilterView.isHidden = true
-            self.hotelResultsController?.navigationController?.popToRootViewController(animated: false)
             self.spawnPlaceForGroupOrJustYouQuestionView()
         }
     }
     func hotelBookingBrowserClosed_HotelNotBooked(){
         scrollView.isScrollEnabled = true
+        self.hotelResultsController?.navigationController?.popToRootViewController(animated: false)
 
         UIView.animate(withDuration: 1) {
             self.didYouBuyTheHotelQuestionView!.frame = CGRect(x: 25, y: -240, width: 325, height: 240)
@@ -6185,7 +6283,6 @@ extension TripViewController {
             self.didYouBuyTheHotelQuestionView = nil
             self.popupBackgroundFilterView.removeFromSuperview()
             self.popupBackgroundFilterView.isHidden = true
-            self.hotelResultsController?.navigationController?.popToRootViewController(animated: false)
             self.planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
         }
     }

@@ -15,6 +15,9 @@ class InstructionsQuestionView: UIView {
     var questionLabel2: UILabel?
     var button1: UIButton?
     
+    //MARK: Outlets
+    @IBOutlet weak var exampleItineraryImageView: UIImageView!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -41,8 +44,14 @@ class InstructionsQuestionView: UIView {
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 240
+        button1?.frame.origin.y = 555
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
+        
+        exampleItineraryImageView.layer.cornerRadius = 5
+        
+        exampleItineraryImageView.layer.borderColor = UIColor.white.cgColor
+        
+        exampleItineraryImageView.layer.borderWidth = 2
     }
     
     func addViews() {
@@ -64,7 +73,7 @@ class InstructionsQuestionView: UIView {
         questionLabel2?.textColor = UIColor.white
         questionLabel2?.adjustsFontSizeToFitWidth = true
         questionLabel2?.text = " •  Select dates\n •  Choose your destination(s)\n •  Plan travel\n •  Find a place to stay\n •  Invite friends!"
-        self.addSubview(questionLabel2!)
+//        self.addSubview(questionLabel2!)
         
         //Button1
         button1 = UIButton(type: .custom)
@@ -76,7 +85,7 @@ class InstructionsQuestionView: UIView {
         button1?.layer.masksToBounds = true
         button1?.titleLabel?.numberOfLines = 0
         button1?.titleLabel?.textAlignment = .center
-        button1?.setTitle("Got it", for: .normal)
+        button1?.setTitle("Let's do it!", for: .normal)
         button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
