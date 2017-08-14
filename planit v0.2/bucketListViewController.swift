@@ -82,6 +82,9 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         //GOOGLE PLACES SEARCH
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController?.delegate = self as GMSAutocompleteResultsViewControllerDelegate
+        let filter = GMSAutocompleteFilter()
+        filter.type = .city
+        resultsViewController?.autocompleteFilter = filter
         resultsViewController?.tableCellBackgroundColor = UIColor.darkGray
         resultsViewController?.tableCellSeparatorColor = UIColor.lightGray
         resultsViewController?.primaryTextColor = UIColor.lightGray
@@ -1089,13 +1092,13 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         })
         
-        let alert = UIAlertController(title: "Let's build an itinerary with your destination!", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Let's build an itinerary and share it!", message: "", preferredStyle: UIAlertControllerStyle.alert)
         let continueAction = UIAlertAction(title: "Let's go!", style: UIAlertActionStyle.default) {
             (result : UIAlertAction) -> Void in
             self.performSegue(withIdentifier: "bucketListVCToTripVC", sender: self)
         }
         alert.addAction(continueAction)
-        self.present(addInviteesAlert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
 
     }
     
@@ -1212,13 +1215,13 @@ extension bucketListViewController: GMSAutocompleteResultsViewControllerDelegate
         if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
 //            subtitle = "Added to bucket list"
             
-            let coord: MaplyCoordinate = MaplyCoordinate(x: pinLocationSphere[0].x, y: pinLocationSphere[0].y)
+            let coord: WGCoordinate = WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))
             
             currentSelectedShape["selectedShapeLocation"] = coord as AnyObject
             let a = MaplyAnnotation()
             
             let addedToBuckedListLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 20))
-            addedToBuckedListLabel.text = "Added to bucket list"
+            addedToBuckedListLabel.text = "\(place.name) added to bucket list"
             addedToBuckedListLabel.sizeToFit()
             addedToBuckedListLabel.textColor = UIColor.darkGray
             addedToBuckedListLabel.textAlignment = .center
@@ -1249,9 +1252,10 @@ extension bucketListViewController: GMSAutocompleteResultsViewControllerDelegate
 
             } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
             subtitle = "Already been here"
+            addAnnotationWithTitle(title: "\(place.name)", subtitle: subtitle, loc: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))   )
         }
         
-                addAnnotationWithTitle(title: "\(place.name)", subtitle: subtitle, loc: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))   )
+//                addAnnotationWithTitle(title: "\(place.name)", subtitle: subtitle, loc: WGCoordinateMakeWithDegrees(Float(place.coordinate.longitude), Float(place.coordinate.latitude))   )
         
         print("Place name: \(place.name)")
         print("Place location: \(place.coordinate)")

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -54,7 +54,7 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="os1-n1-n4P">
-                        <rect key="frame" x="19" y="9" width="30" height="30"/>
+                        <rect key="frame" x="15" y="9" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="GCx-IW-G3Z"/>
                             <constraint firstAttribute="height" constant="30" id="ud9-Rw-8dV"/>
@@ -67,10 +67,10 @@
                         </connections>
                     </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fowardButtonGray" translatesAutoresizingMaskIntoConstraints="NO" id="lti-JG-6TM">
-                        <rect key="frame" x="281" y="9" width="30" height="30"/>
+                        <rect key="frame" x="286" y="14" width="20" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="30" id="cui-ZM-KuK"/>
-                            <constraint firstAttribute="width" constant="30" id="zPb-Db-PiU"/>
+                            <constraint firstAttribute="height" constant="20" id="cui-ZM-KuK"/>
+                            <constraint firstAttribute="width" constant="20" id="zPb-Db-PiU"/>
                         </constraints>
                     </imageView>
                 </subviews>
@@ -80,10 +80,10 @@
                     <constraint firstAttribute="trailing" secondItem="Gc9-JP-YyS" secondAttribute="trailing" constant="8" id="I93-rG-6fg"/>
                     <constraint firstItem="os1-n1-n4P" firstAttribute="top" secondItem="FsB-Es-UEH" secondAttribute="topMargin" constant="1" id="IU3-9Z-tuF"/>
                     <constraint firstAttribute="bottom" secondItem="Gc9-JP-YyS" secondAttribute="bottom" constant="0.5" id="KqB-bw-6iP"/>
-                    <constraint firstItem="os1-n1-n4P" firstAttribute="leading" secondItem="FsB-Es-UEH" secondAttribute="leadingMargin" constant="11" id="VJ1-Eu-bJ3"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="lti-JG-6TM" secondAttribute="trailing" constant="1" id="aCr-ep-Gsj"/>
+                    <constraint firstItem="lti-JG-6TM" firstAttribute="top" secondItem="FsB-Es-UEH" secondAttribute="topMargin" constant="6" id="QUN-V1-AbY"/>
+                    <constraint firstItem="os1-n1-n4P" firstAttribute="leading" secondItem="FsB-Es-UEH" secondAttribute="leadingMargin" constant="7" id="VJ1-Eu-bJ3"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="lti-JG-6TM" secondAttribute="trailing" constant="6" id="aCr-ep-Gsj"/>
                     <constraint firstItem="Gc9-JP-YyS" firstAttribute="top" secondItem="FsB-Es-UEH" secondAttribute="top" id="nmP-Fu-5aH"/>
-                    <constraint firstItem="lti-JG-6TM" firstAttribute="top" secondItem="FsB-Es-UEH" secondAttribute="topMargin" constant="1" id="te3-T0-Q2q"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -97,7 +97,7 @@
     </objects>
     <resources>
         <image name="emptyHeartGray" width="71" height="71"/>
-        <image name="fowardButtonGray" width="1600" height="1600"/>
+        <image name="fowardButtonGray" width="800" height="800"/>
         <image name="fullHeartRed" width="71" height="71"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
