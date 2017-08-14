@@ -5168,7 +5168,7 @@ extension TripViewController {
         // Update our UI if the user has granted access to their Contacts
         case .authorized:            
             // Obtain a configured MFMessageComposeViewController
-            let addInviteesAlert = UIAlertController(title: "Great! We won't send them the itinerary until you say so!", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            let addInviteesAlert = UIAlertController(title: "We won't send your itinerary\nuntil you say so!", message: "", preferredStyle: UIAlertControllerStyle.alert)
             let continueAction = UIAlertAction(title: "Sounds good", style: UIAlertActionStyle.default) {
                 (result : UIAlertAction) -> Void in
                 self.showContactsPicker()

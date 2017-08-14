@@ -462,7 +462,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         if let selectedObj = selectedObj as? MaplyShape {
             let a = MaplyAnnotation()
             let destinationDecidedButtonAnnotation = UIButton(frame: CGRect(x: 0, y: 0, width: 150, height: 20))
-            destinationDecidedButtonAnnotation.setTitle("Plan trip here", for: .normal)
+            destinationDecidedButtonAnnotation.setTitle("Plan trip here!", for: .normal)
             destinationDecidedButtonAnnotation.sizeToFit()
             destinationDecidedButtonAnnotation.setTitleColor(UIColor.white, for: .normal)
             destinationDecidedButtonAnnotation.setTitleColor(UIColor.lightGray, for: .highlighted)
@@ -565,38 +565,40 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                 
                 var subtitle = String()
                 if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
-                    subtitle = "Added to bucket list"
-//                    let a = MaplyAnnotation()
-//                    
-//                    let addedToBuckedListLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 20))
-//                    addedToBuckedListLabel.text = "Added to bucket list"
-//                    addedToBuckedListLabel.sizeToFit()
-//                    addedToBuckedListLabel.textColor = UIColor.darkGray
-//                    addedToBuckedListLabel.textAlignment = .center
-//                    
-//                    let destinationDecidedButtonAnnotation = UIButton(frame: CGRect(x: (addedToBuckedListLabel.frame.width / 2) - 75, y: addedToBuckedListLabel.frame.height + 5, width: 150, height: 20))
-//                    destinationDecidedButtonAnnotation.setTitle("Plan trip here", for: .normal)
-//                    destinationDecidedButtonAnnotation.sizeToFit()
-//                    destinationDecidedButtonAnnotation.frame.origin.x = (addedToBuckedListLabel.frame.width / 2) - (destinationDecidedButtonAnnotation.frame.width / 2)
-//                    destinationDecidedButtonAnnotation.setTitleColor(UIColor.white, for: .normal)
-//                    destinationDecidedButtonAnnotation.setTitleColor(UIColor.lightGray, for: .highlighted)
-//                    let currentSize = destinationDecidedButtonAnnotation.titleLabel?.font.pointSize
-//                    destinationDecidedButtonAnnotation.titleLabel?.font = UIFont.systemFont(ofSize: currentSize! - 1.5)
-//                    destinationDecidedButtonAnnotation.backgroundColor = UIColor(red: 79/255, green: 146/255, blue: 255/255, alpha: 1)
-//                    destinationDecidedButtonAnnotation.layer.cornerRadius = destinationDecidedButtonAnnotation.frame.height / 2
-//                    destinationDecidedButtonAnnotation.titleLabel?.textAlignment = .center
-//                    destinationDecidedButtonAnnotation.addTarget(self, action: #selector(self.bucketListButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
-//                    
-//                    let frameForAnnotationContentView = CGRect(x: 0, y: 0, width: addedToBuckedListLabel.frame.width, height: destinationDecidedButtonAnnotation.frame.height + addedToBuckedListLabel.frame.height + 5 )
-//                    let annotationContentView = UIView(frame: frameForAnnotationContentView)
-//                    annotationContentView.addSubview(destinationDecidedButtonAnnotation)
-//                    annotationContentView.addSubview(addedToBuckedListLabel)
-//                    
-//                    a.contentView = annotationContentView
-//                    theViewC?.addAnnotation(a, forPoint: coord, offset: CGPoint.zero)
-//                    globeViewC?.keepNorthUp = true
-//                    globeViewC?.animate(toPosition: coord, onScreen: (theViewC?.view.center)!, time: 1)
-//                    globeViewC?.keepNorthUp = false
+//                    subtitle = "Added to bucket list"
+                    
+                    currentSelectedShape["selectedShapeLocation"] = coord as AnyObject
+                    let a = MaplyAnnotation()
+
+                    let addedToBuckedListLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 20))
+                    addedToBuckedListLabel.text = "Added to bucket list"
+                    addedToBuckedListLabel.sizeToFit()
+                    addedToBuckedListLabel.textColor = UIColor.darkGray
+                    addedToBuckedListLabel.textAlignment = .center
+                    
+                    let destinationDecidedButtonAnnotation = UIButton(frame: CGRect(x: (addedToBuckedListLabel.frame.width / 2) - 75, y: addedToBuckedListLabel.frame.height + 5, width: 150, height: 20))
+                    destinationDecidedButtonAnnotation.setTitle("Plan trip here!", for: .normal)
+                    destinationDecidedButtonAnnotation.sizeToFit()
+                    destinationDecidedButtonAnnotation.frame.origin.x = (addedToBuckedListLabel.frame.width / 2) - (destinationDecidedButtonAnnotation.frame.width / 2)
+                    destinationDecidedButtonAnnotation.setTitleColor(UIColor.white, for: .normal)
+                    destinationDecidedButtonAnnotation.setTitleColor(UIColor.lightGray, for: .highlighted)
+                    let currentSize = destinationDecidedButtonAnnotation.titleLabel?.font.pointSize
+                    destinationDecidedButtonAnnotation.titleLabel?.font = UIFont.systemFont(ofSize: currentSize! - 1.5)
+                    destinationDecidedButtonAnnotation.backgroundColor = UIColor(red: 79/255, green: 146/255, blue: 255/255, alpha: 1)
+                    destinationDecidedButtonAnnotation.layer.cornerRadius = destinationDecidedButtonAnnotation.frame.height / 2
+                    destinationDecidedButtonAnnotation.titleLabel?.textAlignment = .center
+                    destinationDecidedButtonAnnotation.addTarget(self, action: #selector(self.bucketListButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
+                    
+                    let frameForAnnotationContentView = CGRect(x: 0, y: 0, width: addedToBuckedListLabel.frame.width, height: destinationDecidedButtonAnnotation.frame.height + addedToBuckedListLabel.frame.height + 5 )
+                    let annotationContentView = UIView(frame: frameForAnnotationContentView)
+                    annotationContentView.addSubview(destinationDecidedButtonAnnotation)
+                    annotationContentView.addSubview(addedToBuckedListLabel)
+                    
+                    a.contentView = annotationContentView
+                    theViewC?.addAnnotation(a, forPoint: coord, offset: CGPoint.zero)
+                    globeViewC?.keepNorthUp = true
+                    globeViewC?.animate(toPosition: coord, onScreen: (theViewC?.view.center)!, time: 1)
+                    globeViewC?.keepNorthUp = false
 
                     
                 } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
@@ -990,8 +992,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         }
         
         
-        
-        
         //Travelpayouts airport search
         geoLoader = AviasalesAirportsGeoSearchPerformer(delegate: self)
         
@@ -1089,8 +1089,14 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             self.saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         })
         
-        
-        self.performSegue(withIdentifier: "bucketListVCToTripVC", sender: self)
+        let alert = UIAlertController(title: "Let's build an itinerary with your destination!", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        let continueAction = UIAlertAction(title: "Let's go!", style: UIAlertActionStyle.default) {
+            (result : UIAlertAction) -> Void in
+            self.performSegue(withIdentifier: "bucketListVCToTripVC", sender: self)
+        }
+        alert.addAction(continueAction)
+        self.present(addInviteesAlert, animated: true, completion: nil)
+
     }
     
     //MARK: Prepare For Segue
@@ -1204,7 +1210,43 @@ extension bucketListViewController: GMSAutocompleteResultsViewControllerDelegate
         
         var subtitle = String()
         if selectionColor == UIColor(cgColor: bucketListButton.layer.backgroundColor!) {
-            subtitle = "Added to bucket list"
+//            subtitle = "Added to bucket list"
+            
+            let coord: MaplyCoordinate = MaplyCoordinate(x: pinLocationSphere[0].x, y: pinLocationSphere[0].y)
+            
+            currentSelectedShape["selectedShapeLocation"] = coord as AnyObject
+            let a = MaplyAnnotation()
+            
+            let addedToBuckedListLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 20))
+            addedToBuckedListLabel.text = "Added to bucket list"
+            addedToBuckedListLabel.sizeToFit()
+            addedToBuckedListLabel.textColor = UIColor.darkGray
+            addedToBuckedListLabel.textAlignment = .center
+            
+            let destinationDecidedButtonAnnotation = UIButton(frame: CGRect(x: (addedToBuckedListLabel.frame.width / 2) - 75, y: addedToBuckedListLabel.frame.height + 5, width: 150, height: 20))
+            destinationDecidedButtonAnnotation.setTitle("Plan trip here!", for: .normal)
+            destinationDecidedButtonAnnotation.sizeToFit()
+            destinationDecidedButtonAnnotation.frame.origin.x = (addedToBuckedListLabel.frame.width / 2) - (destinationDecidedButtonAnnotation.frame.width / 2)
+            destinationDecidedButtonAnnotation.setTitleColor(UIColor.white, for: .normal)
+            destinationDecidedButtonAnnotation.setTitleColor(UIColor.lightGray, for: .highlighted)
+            let currentSize = destinationDecidedButtonAnnotation.titleLabel?.font.pointSize
+            destinationDecidedButtonAnnotation.titleLabel?.font = UIFont.systemFont(ofSize: currentSize! - 1.5)
+            destinationDecidedButtonAnnotation.backgroundColor = UIColor(red: 79/255, green: 146/255, blue: 255/255, alpha: 1)
+            destinationDecidedButtonAnnotation.layer.cornerRadius = destinationDecidedButtonAnnotation.frame.height / 2
+            destinationDecidedButtonAnnotation.titleLabel?.textAlignment = .center
+            destinationDecidedButtonAnnotation.addTarget(self, action: #selector(self.bucketListButtonAnnotationClicked(sender:)), for: UIControlEvents.touchUpInside)
+            
+            let frameForAnnotationContentView = CGRect(x: 0, y: 0, width: addedToBuckedListLabel.frame.width, height: destinationDecidedButtonAnnotation.frame.height + addedToBuckedListLabel.frame.height + 5 )
+            let annotationContentView = UIView(frame: frameForAnnotationContentView)
+            annotationContentView.addSubview(destinationDecidedButtonAnnotation)
+            annotationContentView.addSubview(addedToBuckedListLabel)
+            
+            a.contentView = annotationContentView
+            theViewC?.addAnnotation(a, forPoint: coord, offset: CGPoint.zero)
+            globeViewC?.keepNorthUp = true
+            globeViewC?.animate(toPosition: coord, onScreen: (theViewC?.view.center)!, time: 1)
+            globeViewC?.keepNorthUp = false
+
             } else if selectionColor == UIColor(cgColor: beenThereButton.layer.backgroundColor!){
             subtitle = "Already been here"
         }
