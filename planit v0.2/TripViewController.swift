@@ -208,6 +208,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var itineraryTutorialView1_plannedAndConfirmed: UIButton!
     @IBOutlet var itineraryTutorialView2: UIView!
     @IBOutlet var itineraryTutorialView3: UIView!
+    @IBOutlet var itineraryTutorialView4: UIView!
     
     func handleItineraryTutorial() {
         if smCalloutViewMode == "itineraryTutorial1" {
@@ -256,7 +257,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeTextColor = UIColor.white
             itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
             self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_plannedAndConfirmed_badgeButton, aboveSubview: itineraryTutorialView1_plannedAndConfirmed)
-
             
             self.focusBackgroundViewWithinTopView.isHidden = false
             self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
@@ -269,16 +269,65 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .down
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(242))
+            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(232))
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
 
+            return
         } else if smCalloutViewMode == "itineraryTutorial2" {
+            self.smCalloutView.dismissCallout(animated: true)
             
+            self.smCalloutView.contentView = itineraryTutorialView2
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .down
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(230))
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+
             smCalloutViewMode = "itineraryTutorial3"
+            return
         } else if smCalloutViewMode == "itineraryTutorial3" {
-            smCalloutViewMode = "disabled"
+            self.smCalloutView.dismissCallout(animated: true)
+            
+            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+            self.itineraryView.bringSubview(toFront: editSwitch)
+            self.itineraryView.bringSubview(toFront: editSwitchLabel)
+            
+            self.smCalloutView.contentView = itineraryTutorialView3
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .up
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2 + 56, y: CGFloat(223))
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+ 
+            smCalloutViewMode = "itineraryTutorial4"
+            return
+        } else if smCalloutViewMode == "itineraryTutorial4" {
+            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+            self.itineraryView.bringSubview(toFront: contactsCollectionView)
+            self.itineraryView.bringSubview(toFront: addInviteeButton)
+            
+            self.smCalloutView.contentView = itineraryTutorialView4
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .up
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(170))
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+
+            smCalloutViewMode = "itineraryTutorial5"
+
+        } else if smCalloutViewMode == "itineraryTutorial5" {
+            self.smCalloutView.dismissCallout(animated: true)
+            
+            self.focusBackgroundViewWithinTopView.isHidden = true
+            self.focusBackgroundViewWithinItineraryView.isHidden = true
+
         }
-//        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
+            //        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
 //        sortFilterFlightsCalloutTableView.reloadData()
 
     }
@@ -4439,7 +4488,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
         
         if timesViewed["itinerary"] == nil {
-            let when = DispatchTime.now() + 1
+            let when = DispatchTime.now() + 0.3
             //PLANNED: SMcalloutView
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.handleItineraryTutorial()
