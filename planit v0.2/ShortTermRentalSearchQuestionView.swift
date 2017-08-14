@@ -83,7 +83,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "We’re working on this...\nin the meantime, share plans\nwith your group here!"
+        questionLabel?.text = "We’re working on this...\n...in the meantime, share\nplans with your group here!"
         self.addSubview(questionLabel!)
         
         //Button1

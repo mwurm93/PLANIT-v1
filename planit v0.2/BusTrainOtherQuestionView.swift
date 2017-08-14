@@ -55,7 +55,7 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 270
+        button1?.frame.origin.y = 200
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         button1?.isHidden = true
         
@@ -63,13 +63,13 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 310
+        button2?.frame.origin.y = 275
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
         button3?.sizeToFit()
         button3?.frame.size.height = 30
         button3?.frame.size.width += 20
-        button3?.frame.origin.x = (bounds.size.width / 2) - (button3?.frame.width)! - 20
+        button3?.frame.origin.x = (bounds.size.width / 2) - (button3?.frame.width)! - 10
         button3?.frame.origin.y = 350
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
 
@@ -91,7 +91,7 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "We’re working on this...\nin the meantime, share plans\nwith your group here!"
+        questionLabel?.text = "We’re working on this...\n...in the meantime, share\nplans with your group here!"
         self.addSubview(questionLabel!)
         
         //Button2
