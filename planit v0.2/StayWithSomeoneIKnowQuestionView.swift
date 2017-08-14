@@ -55,6 +55,7 @@ class StayWithSomeoneIKnowQuestionView: UIView, UITextViewDelegate {
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
         button1?.frame.origin.y = 300
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
+        button1?.isHidden = true
         
         button2?.sizeToFit()
         button2?.frame.size.height = 30
@@ -76,7 +77,7 @@ class StayWithSomeoneIKnowQuestionView: UIView, UITextViewDelegate {
         questionLabel?.text = "Share your plan with your group?"
         self.addSubview(questionLabel!)
         
-        //Button2
+        //Button1
         button1 = UIButton(type: .custom)
         button1?.frame = CGRect.zero
         button1?.setTitleColor(UIColor.white, for: .normal)
@@ -132,6 +133,12 @@ class StayWithSomeoneIKnowQuestionView: UIView, UITextViewDelegate {
         textView.contentOffset = CGPoint()
         textView.contentOffset.x = 0
         textView.contentOffset.y = -topCorrect!
+        
+        if textView.text != "" {
+            button1?.isHidden = false
+        } else {
+            button1?.isHidden = true
+        }
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

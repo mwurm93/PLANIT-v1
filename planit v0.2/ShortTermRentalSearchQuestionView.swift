@@ -36,9 +36,9 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 100)
+        questionLabel?.frame = CGRect(x: 10, y: 20, width: bounds.size.width - 20, height: 80)
         
-        textView?.frame = CGRect(x: 10, y: 80, width: bounds.size.width - 20, height: 140)
+        textView?.frame = CGRect(x: 10, y: 100, width: bounds.size.width - 20, height: 120)
         let width = 1.0
         let borderLine = UIView()
         borderLine.frame = CGRect(x: Double((textView?.frame.minX)!), y: Double((textView?.frame.maxY)!) - width, width: Double((textView?.frame.width)!), height: width)
@@ -56,6 +56,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
         button1?.frame.origin.y = 250
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
+        button1?.isHidden = true
         
         button2?.sizeToFit()
         button2?.frame.size.height = 30
@@ -67,7 +68,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         button3?.sizeToFit()
         button3?.frame.size.height = 30
         button3?.frame.size.width += 20
-        button3?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
+        button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2
         button3?.frame.origin.y = 350
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
 
@@ -82,7 +83,7 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "We’re working on short term rentals.\nShare plans or ideas with your group!"
+        questionLabel?.text = "We’re working on this...\nin the meantime, share plans\nwith your group here!"
         self.addSubview(questionLabel!)
         
         //Button1
@@ -157,6 +158,12 @@ class ShortTermRentalSearchQuestionView: UIView, UITextViewDelegate {
         textView.contentOffset = CGPoint()
         textView.contentOffset.x = 0
         textView.contentOffset.y = -topCorrect!
+        
+        if textView.text != "" {
+            button1?.isHidden = false
+        } else {
+            button1?.isHidden = true
+        }
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

@@ -37,9 +37,9 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 40, width: bounds.size.width - 20, height: 100)
+        questionLabel?.frame = CGRect(x: 10, y: 20, width: bounds.size.width - 20, height: 80)
         
-        textView?.frame = CGRect(x: 10, y: 130, width: bounds.size.width - 20, height: 140)
+        textView?.frame = CGRect(x: 10, y: 100, width: bounds.size.width - 20, height: 120)
         let width = 1.0
         let borderLine = UIView()
         borderLine.frame = CGRect(x: Double((textView?.frame.minX)!), y: Double((textView?.frame.maxY)!) - width, width: Double((textView?.frame.width)!), height: width)
@@ -55,27 +55,28 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 300
+        button1?.frame.origin.y = 270
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
+        button1?.isHidden = true
         
         button2?.sizeToFit()
         button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 350
+        button2?.frame.origin.y = 310
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
         button3?.sizeToFit()
         button3?.frame.size.height = 30
         button3?.frame.size.width += 20
-        button3?.frame.origin.x = (bounds.size.width - (button3?.frame.width)!) / 2 + 100
-        button3?.frame.origin.y = 300
+        button3?.frame.origin.x = (bounds.size.width / 2) - (button3?.frame.width)! - 20
+        button3?.frame.origin.y = 350
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
 
         button4?.sizeToFit()
         button4?.frame.size.height = 30
         button4?.frame.size.width += 20
-        button4?.frame.origin.x = (bounds.size.width - (button4?.frame.width)!) / 2 + 100
+        button4?.frame.origin.x = (bounds.size.width / 2) + 20
         button4?.frame.origin.y = 350
         button4?.layer.cornerRadius = (button4?.frame.height)! / 2
 
@@ -90,7 +91,7 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "We’re still working on integrating train and bus ticketing.\nPlease enter your travel plan to share with your group."
+        questionLabel?.text = "We’re working on this...\nin the meantime, share plans\nwith your group here!"
         self.addSubview(questionLabel!)
         
         //Button2
@@ -180,6 +181,13 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         textView.contentOffset = CGPoint()
         textView.contentOffset.x = 0
         textView.contentOffset.y = -topCorrect!
+
+        if textView.text != "" {
+            button1?.isHidden = false
+        } else {
+            button1?.isHidden = true
+        }
+
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
