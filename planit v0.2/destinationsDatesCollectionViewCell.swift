@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MIBadgeButton_Swift
 
 class destinationsDatesCollectionViewCell: UICollectionViewCell {
     
@@ -29,6 +30,12 @@ class destinationsDatesCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var travelButton: UIButton!
     @IBOutlet weak var placeToStayButton: UIButton!
     @IBOutlet weak var popupBackgroundViewEditItineraryWithinCell: UIVisualEffectView!
+    
+    @IBOutlet weak var destinationButton_badge: MIBadgeButton!
+    @IBOutlet weak var placeToStayButton_badge: MIBadgeButton!
+    @IBOutlet weak var travelDateButton_badge: MIBadgeButton!
+    @IBOutlet weak var travelButton_badge: MIBadgeButton!
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)

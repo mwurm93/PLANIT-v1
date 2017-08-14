@@ -86,7 +86,8 @@
             }
             
 			[formatter setDateFormat:@"EE"];
-			[_weekdays addObject:[[formatter stringFromDate:day] capitalizedString]];
+            NSDate *adjustedDay = [NSDate dateWithTimeInterval: +(60.0f*60.0f*24.0f) sinceDate:day];
+			[_weekdays addObject:[[formatter stringFromDate:adjustedDay] capitalizedString]];
 		}
 		if (!week) {
 			week = [[NSMutableArray alloc] init];

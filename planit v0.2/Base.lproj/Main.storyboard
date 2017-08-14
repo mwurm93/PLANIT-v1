@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bhU-Qo-H8O">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bhU-Qo-H8O">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -352,7 +352,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" image="backButton"/>
                                         <connections>
-                                            <segue destination="c7O-w7-no5" kind="show" identifier="tripVCtoTripListVC" id="D0h-av-d3S"/>
+                                            <segue destination="c7O-w7-no5" kind="show" identifier="tripVCtoTripListVC" animates="NO" id="D0h-av-d3S"/>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="51" translatesAutoresizingMaskIntoConstraints="NO" id="CE4-7f-ped">
@@ -398,9 +398,9 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pg3-ud-ZeT">
-                                        <rect key="frame" x="320" y="17" width="45" height="45"/>
+                                        <rect key="frame" x="328" y="22" width="33" height="33"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" backgroundImage="filter"/>
+                                        <state key="normal" backgroundImage="filterIcon_2"/>
                                         <connections>
                                             <action selector="filterButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="fxw-lu-mAd"/>
                                         </connections>
@@ -641,6 +641,34 @@
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <state key="normal" backgroundImage="apartmentAngledRoof"/>
                                                         </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AkE-CG-vOv" customClass="MIBadgeButton" customModule="MIBadgeButton_Swift">
+                                                            <rect key="frame" x="164" y="71" width="30" height="30"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <state key="normal">
+                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pEH-Dy-hJi" customClass="MIBadgeButton" customModule="MIBadgeButton_Swift">
+                                                            <rect key="frame" x="172" y="71" width="30" height="30"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <state key="normal">
+                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycs-RS-Y23" customClass="MIBadgeButton" customModule="MIBadgeButton_Swift">
+                                                            <rect key="frame" x="172" y="71" width="30" height="30"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <state key="normal">
+                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3GW-Fw-LLe" customClass="MIBadgeButton" customModule="MIBadgeButton_Swift">
+                                                            <rect key="frame" x="172" y="71" width="30" height="30"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <state key="normal">
+                                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
+                                                        </button>
                                                     </subviews>
                                                 </view>
                                                 <variation key="default">
@@ -661,18 +689,22 @@
                                                     <outlet property="departureAirport" destination="Ppi-lX-zq6" id="Oea-Jw-QGW"/>
                                                     <outlet property="departureTime" destination="6bZ-Lb-H7V" id="4Cz-dt-Etf"/>
                                                     <outlet property="destinationButton" destination="eIM-bF-muy" id="8RX-JY-DEM"/>
+                                                    <outlet property="destinationButton_badge" destination="AkE-CG-vOv" id="yqd-4q-8pt"/>
                                                     <outlet property="inBetweenDatesLine" destination="Beg-A7-J0Y" id="YIx-Sv-P2U"/>
                                                     <outlet property="inLabel" destination="SEv-po-6Oh" id="yvc-ET-yiB"/>
                                                     <outlet property="modeOfTransportationIcon" destination="4mL-9v-uiO" id="mbn-MF-oe4"/>
                                                     <outlet property="numberOfNightsButton" destination="eZC-lF-rhp" id="TfC-rP-UtL"/>
                                                     <outlet property="placeToStayButton" destination="MzS-FX-epM" id="oi2-dY-CS6"/>
+                                                    <outlet property="placeToStayButton_badge" destination="pEH-Dy-hJi" id="mgU-Gj-oNx"/>
                                                     <outlet property="placeToStaySummaryButton" destination="LFz-OB-hBX" id="F2C-dZ-Szs"/>
                                                     <outlet property="placeToStayTypeIcon" destination="9c8-3C-g99" id="im4-oM-MWh"/>
                                                     <outlet property="popupBackgroundViewEditItineraryWithinCell" destination="ecD-pn-FTD" id="YZM-TY-FR2"/>
                                                     <outlet property="returningAirport" destination="UIq-i6-G1n" id="Obc-JR-DM1"/>
                                                     <outlet property="returningTime" destination="nQE-GK-XEc" id="4lq-J4-eD0"/>
                                                     <outlet property="travelButton" destination="dxn-8w-08h" id="D3d-MC-3n6"/>
+                                                    <outlet property="travelButton_badge" destination="3GW-Fw-LLe" id="nmZ-IE-qGv"/>
                                                     <outlet property="travelDateButton" destination="xct-Xe-mbw" id="hvE-Mh-hOH"/>
+                                                    <outlet property="travelDateButton_badge" destination="ycs-RS-Y23" id="O5t-MH-sDw"/>
                                                     <outlet property="travelSummaryButton" destination="3EX-OX-aE7" id="qfJ-0t-22H"/>
                                                 </connections>
                                             </collectionViewCell>
@@ -1353,10 +1385,10 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oHi-LY-3K8">
-                            <rect key="frame" x="102" y="113" width="57" height="30"/>
+                            <rect key="frame" x="99" y="113" width="63" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <state key="normal" title="Next &gt;">
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <state key="normal" title="Done">
                                 <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
@@ -5134,10 +5166,10 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UuD-nJ-HKW">
-                                <rect key="frame" x="292" y="17" width="75" height="47"/>
+                                <rect key="frame" x="295" y="29" width="62" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
-                                <state key="normal" title="Trips &gt;">
+                                <state key="normal" backgroundImage="backToTripsRightFacingArrow">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -6722,7 +6754,8 @@
         <image name="airplaneTakingOff" width="128" height="128"/>
         <image name="amenites" width="179" height="169"/>
         <image name="apartmentAngledRoof" width="104" height="103"/>
-        <image name="backButton" width="800" height="800"/>
+        <image name="backButton" width="16" height="21"/>
+        <image name="backToTripsRightFacingArrow" width="129" height="51"/>
         <image name="bed icon" width="128" height="128"/>
         <image name="bermudaSubsetTopDark" width="563" height="487"/>
         <image name="bermudaSunset" width="1500" height="1125"/>
@@ -11160,6 +11193,7 @@ AAAAAAAAAAAABApgA
         <image name="emptyX" width="71" height="71"/>
         <image name="expand" width="800" height="800"/>
         <image name="filter" width="100" height="100"/>
+        <image name="filterIcon_2" width="128" height="128"/>
         <image name="imageView:4mL-9v-uiO:image" width="256" height="256">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
@@ -20022,11 +20056,11 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="xQi-Q8-wee"/>
+        <segue reference="1VF-PM-MLD"/>
+        <segue reference="5m0-36-R99"/>
         <segue reference="D0h-av-d3S"/>
         <segue reference="IrZ-E3-weH"/>
         <segue reference="t9O-2u-fWL"/>
-        <segue reference="1VF-PM-MLD"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
