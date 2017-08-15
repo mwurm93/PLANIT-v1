@@ -5239,7 +5239,6 @@
                             </state>
                             <connections>
                                 <action selector="globeTutorialView1_nextButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="qTL-VC-uaO"/>
-                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="L4c-pq-qNX"/>
                             </connections>
                         </button>
                     </subviews>
@@ -5264,7 +5263,7 @@
                                 <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
-                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="sdd-8Y-Nwa"/>
+                                <action selector="globeTutorialView2_nextButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="h7d-Pf-o8G"/>
                             </connections>
                         </button>
                     </subviews>
@@ -5289,7 +5288,7 @@
                                 <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
-                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="dJI-tl-5eE"/>
+                                <action selector="globeTutorialView3_nextButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="Gar-ZO-6S6"/>
                             </connections>
                         </button>
                     </subviews>
@@ -5314,7 +5313,7 @@
                                 <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
-                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="AQo-2a-Irt"/>
+                                <action selector="globeTutorialView4_nextButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="b4H-vb-Q2v"/>
                             </connections>
                         </button>
                     </subviews>
@@ -5339,7 +5338,7 @@
                                 <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
-                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="Pzo-SY-eHB"/>
+                                <action selector="globeTutorialView5_doneButtonTouchedUpInside:" destination="O1b-cB-8Dj" eventType="touchUpInside" id="9de-JU-PBm"/>
                             </connections>
                         </button>
                     </subviews>

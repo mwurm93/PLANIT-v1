@@ -272,7 +272,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .down
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(232))
+            calloutRect.origin = CGPoint(x: destinationsDatesCollectionView.frame.midX, y: topView.frame.height + destinationsDatesCollectionView.frame.minY)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
 
             return
@@ -284,7 +284,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .down
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(230))
+            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(295))
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
 
             smCalloutViewMode = "itineraryTutorial3"
@@ -302,7 +302,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2 + 56, y: CGFloat(223))
+            calloutRect.origin = CGPoint(x: editSwitch.frame.midX, y: topView.frame.height + editSwitch.frame.maxY)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
  
             smCalloutViewMode = "itineraryTutorial4"
@@ -312,13 +312,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
             self.itineraryView.bringSubview(toFront: contactsCollectionView)
             self.itineraryView.bringSubview(toFront: addInviteeButton)
+            self.itineraryView.bringSubview(toFront: addInviteeButton_badge)
             
             self.smCalloutView.contentView = itineraryTutorialView4
             self.smCalloutView.isHidden = false
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(170))
+            calloutRect.origin = CGPoint(x: addInviteeButton.frame.midX, y: topView.frame.height + addInviteeButton.frame.maxY)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
 
             smCalloutViewMode = "itineraryTutorial5"

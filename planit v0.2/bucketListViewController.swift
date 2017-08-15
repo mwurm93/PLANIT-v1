@@ -166,7 +166,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: (searchController?.searchBar.frame.midX)!, y: (searchController?.searchBar.frame.minY)!)
+            calloutRect.origin = CGPoint(x: (searchController?.searchBar.frame.midX)!, y: (searchController?.searchBar.frame.maxY)!)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
             
             smCalloutViewMode = "globeTutorial6"
@@ -1269,6 +1269,14 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     //MARK: Actions
     @IBAction func globeTutorialView1_nextButtonTouchedUpInside(_ sender: Any) {
         handleGlobeTutorial()
+    }
+    @IBAction func globeTutorialView2_nextButtonTouchedUpInside(_ sender: Any) {
+    }
+    @IBAction func globeTutorialView3_nextButtonTouchedUpInside(_ sender: Any) {
+    }
+    @IBAction func globeTutorialView4_nextButtonTouchedUpInside(_ sender: Any) {
+    }
+    @IBAction func globeTutorialView5_doneButtonTouchedUpInside(_ sender: Any) {
     }
     @IBAction func bucketListButtonTouchedUpInside(_ sender: Any) {
         bucketListButton.layer.borderWidth = 3
