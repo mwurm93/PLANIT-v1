@@ -23,6 +23,7 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 	[self setupNavigationBar];
 	if (iPhone()) {
         [self setDelegate:self];
@@ -33,12 +34,11 @@
 - (void)setupNavigationBar {
     self.navigationBar.barTintColor = [UIColor lightGrayColor];
     self.navigationBar.tintColor = [JRColorScheme navigationBarItemColor];
-    self.navigationBar.translucent = NO;
-    [self.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-    self.navigationBar.shadowImage = [UIImage new];
-    self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName   : [JRColorScheme navigationBarItemColor],
+    self.navigationBar.translucent = YES;
+//    [self.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+//    self.navigationBar.shadowImage = [UIImage new];
+    self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName   : [UIColor clearColor],
                                                NSFontAttributeName              : [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium]};
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
 
 }
 

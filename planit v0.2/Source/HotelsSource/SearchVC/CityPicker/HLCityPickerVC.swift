@@ -24,6 +24,8 @@ class HLCityPickerVC: ASTGroupedSearchVC {
         searchController.searchBar.becomeFirstResponder()
         resultsTableController.tableView.hl_registerNib(withName: JRAirportPickerCellWithInfo.hl_reuseIdentifier())
         resetTableContent()
+        
+        self.navigationController?.isNavigationBarHidden = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -37,6 +39,12 @@ class HLCityPickerVC: ASTGroupedSearchVC {
         }
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden = true
+    }
     override func resetTableContent() {
         super.resetTableContent()
 
@@ -55,15 +63,20 @@ class HLCityPickerVC: ASTGroupedSearchVC {
         if let recentDestinations = HDKDefaultsSaver.getRecentSearchDestinations() {
             sections.append(GroupedTableSection(title: NSLS("LOC_SEARCH_HEADER_TITLE_RECENT"), items: recentDestinations as [AnyObject]))
         }
+        self.navigationController?.isNavigationBarHidden = true
+
     }
 
     override func requestUserLocation() {
         registerForLocationManagerNotifications()
         super.requestUserLocation()
+        self.navigationController?.isNavigationBarHidden = true
     }
 
     override func nearbyCitiesDetected(_ notification: Notification!) {
         userLocationSelected()
+        self.navigationController?.isNavigationBarHidden = true
+
     }
 
     override func userLocationSelected() {
@@ -71,6 +84,8 @@ class HLCityPickerVC: ASTGroupedSearchVC {
             delegate?.cityPicker(self, didSelectLocationPoint: locationPoint)
             goBack()
         }
+        self.navigationController?.isNavigationBarHidden = true
+
     }
 
     func addLoadingItem() {
@@ -80,6 +95,7 @@ class HLCityPickerVC: ASTGroupedSearchVC {
         resultSections.append(GroupedTableSection(title: nil, items: [errorItem]))
         resultsTableController.sections = resultSections
         resultsTableController.tableView.reloadData()
+        self.navigationController?.isNavigationBarHidden = true
     }
 
     // MARK: - IBActions methods
@@ -88,6 +104,7 @@ class HLCityPickerVC: ASTGroupedSearchVC {
         if let text = searchController.searchBar.text, text.characters.count >= minimalSearchStringLength {
             self.startTimer()
         }
+        self.navigationController?.isNavigationBarHidden = true
     }
 
     // MARK: - UISearchBarDelegate
@@ -99,6 +116,7 @@ class HLCityPickerVC: ASTGroupedSearchVC {
             resultsTableController.sections = []
             resultsTableController.tableView.reloadData()
         }
+        self.navigationController?.isNavigationBarHidden = true
     }
 
     // MARK: - Autocomplete completion methods
@@ -124,6 +142,8 @@ class HLCityPickerVC: ASTGroupedSearchVC {
         }
         resultsTableController.sections = resultSections
         resultsTableController.tableView.reloadData()
+        self.navigationController?.isNavigationBarHidden = true
+
     }
 
     func citiesAutocompletionLoaderFailed(_ error: Error) {
@@ -133,6 +153,7 @@ class HLCityPickerVC: ASTGroupedSearchVC {
         resultSections.append(GroupedTableSection(title: nil, items: [errorItem]))
         resultsTableController.sections = resultSections
         resultsTableController.tableView.reloadData()
+        self.navigationController?.isNavigationBarHidden = true
     }
 
     // MARK: - UITableViewDelegate methods
@@ -163,6 +184,7 @@ class HLCityPickerVC: ASTGroupedSearchVC {
         }
 
         super.tableView(tableView, didSelectRowAt: indexPath)
+        self.navigationController?.isNavigationBarHidden = true
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -192,6 +214,7 @@ class HLCityPickerVC: ASTGroupedSearchVC {
             }
             return cell
         }
+        self.navigationController?.isNavigationBarHidden = true
     }
 
     // MARK: - HLCustomPointSelectionDelegate methods
@@ -199,6 +222,8 @@ class HLCityPickerVC: ASTGroupedSearchVC {
     override func didSelectCustomSearchLocationPoint(_ searchLocationPoint: HDKSearchLocationPoint) {
         delegate?.cityPicker(self, didSelectLocationPoint: searchLocationPoint)
         goBack()
+        self.navigationController?.isNavigationBarHidden = true
+
     }
 
     // MARK: - Private methods
@@ -219,6 +244,8 @@ class HLCityPickerVC: ASTGroupedSearchVC {
             self.addLoadingItem()
         })
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7, execute: startSearchWorkItem!)
+        self.navigationController?.isNavigationBarHidden = true
+
     }
 }
 
@@ -230,6 +257,8 @@ extension HLCityPickerVC : HLLocationManagerDelegate {
             unregisterNotificationResponse()
             goBack()
         }
+        self.navigationController?.isNavigationBarHidden = true
+
     }
 
 }

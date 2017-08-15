@@ -86,7 +86,7 @@ import UIKit
         setupComeBackToThisButton()
         setupAdultsButtons()
         setupIconsTint()
-        currentCityButton.tintColor = UIColor.white
+        currentCityButton.tintColor = UIColor(red: 198/255, green: 206/255, blue: 220/255, alpha: 1)
 
         cityTitleLabel.text = NSLS("HL_SEARCH_FORM_CITY_TITLE")
         datesTitleLabel.text = NSLS("HL_LOC_SEARCH_DATES_LABEL")
@@ -203,6 +203,7 @@ import UIKit
     @IBAction private func onGeo() {
         delegate?.selectCurrentLocation()
         updateControls()
+        currentCityButton.tintColor = UIColor.white
     }
 
     @IBAction private func selectCity() {

@@ -5866,6 +5866,14 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.destinationButton_badge.badgeString = "!"
             destinationsDatesCell.destinationButton_badge.badgeBackgroundColor = UIColor.orange
 
+            //Place to stay button
+            destinationsDatesCell.placeToStayButton.setBackgroundImage(#imageLiteral(resourceName: "apartmentAngledRoof").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+            destinationsDatesCell.placeToStayButton.tintColor = completeColor
+
+            //Place to stay badge
+            destinationsDatesCell.placeToStayButton_badge.badgeString = "!"
+            destinationsDatesCell.placeToStayButton_badge.badgeBackgroundColor = UIColor.red
+
 
             
             if destinationsForTrip.count == 0 && indexPath.row != destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 && indexPath.row != 0 && ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! == 0 {
@@ -5905,8 +5913,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             }
 
             
-            destinationsDatesCell.placeToStayButton.setBackgroundImage(#imageLiteral(resourceName: "apartmentAngledRoof").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
-            destinationsDatesCell.placeToStayButton.tintColor = completeColor
             
             
             if indexPath.row != destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 && indexPath.row != 0 {
@@ -5939,17 +5945,17 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     destinationsDatesCell.destinationButton.setTitle("Add destination", for: .normal)
                     destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 22)
                     destinationsDatesCell.travelDateButton.setTitle(startDateAsString, for: .normal)
+                    destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
                     destinationsDatesCell.travelDateButton_badge.badgeString = "!"
                     destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.orange
-                    destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
                     
                 } else {
                     destinationsDatesCell.destinationButton.setTitle("Add destination", for: .normal)
                     destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 22)
                     destinationsDatesCell.travelDateButton.setTitle("Add\ndates", for: .normal)
+                    destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 18)
                     destinationsDatesCell.travelDateButton_badge.badgeString = "!"
                     destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.red
-                    destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 18)
                 }
             } else if destinationsForTrip.count > 0 {
                 if datesDestinationsDictionary[destinationsForTrip[indexPath.row - 1]] != nil {
@@ -5959,6 +5965,9 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     
                     let leftDateAsString = formatter.string(from: leftDatesDestinations[destinationsForTrip[indexPath.row - 1]]!)
                     destinationsDatesCell.travelDateButton.setTitle(leftDateAsString, for: .normal)
+                    destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+                    destinationsDatesCell.travelDateButton_badge.badgeString = "!"
+                    destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.orange
                     
                     let tripDates = SavedPreferencesForTrip["selected_dates"] as? [Date]
                     var segmentDates = [Date]()
@@ -5974,6 +5983,11 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 } else {
                     destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
                     destinationsDatesCell.destinationButton.setTitle("\(destinationsForTrip[indexPath.row - 1])", for: .normal)
+                    
+                    destinationsDatesCell.travelDateButton.setTitle("Add\ndates", for: .normal)
+                    destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 18)
+                    destinationsDatesCell.travelDateButton_badge.badgeString = "!"
+                    destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.red
                 }
             }
 
@@ -5997,7 +6011,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.placeToStayButton.frame.origin.x = destinationsDatesCell.destinationButton.frame.maxX + 18
             destinationsDatesCell.placeToStayButton.frame.origin.y = destinationsDatesCell.destinationButton.frame.midY - destinationsDatesCell.placeToStayButton.frame.size.height / 2
             
-            destinationsDatesCell.placeToStayButton_badge.layer.frame.origin = CGPoint(x: destinationsDatesCell.placeToStayButton.layer.frame.maxX - 5, y: destinationsDatesCell.placeToStayButton.layer.frame.minY + 11)
+            destinationsDatesCell.placeToStayButton_badge.layer.frame.origin = CGPoint(x: destinationsDatesCell.placeToStayButton.layer.frame.maxX - 32, y: destinationsDatesCell.placeToStayButton.layer.frame.minY + 11)
             destinationsDatesCell.placeToStayButton_badge.isHidden = false
             
             return destinationsDatesCell

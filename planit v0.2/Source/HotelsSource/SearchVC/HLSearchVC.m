@@ -100,18 +100,23 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"hotelSearchFormViewViewController_ViewDidAppear"
                                                         object:self];
     
-    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+
 }
 
 - (void)updateControls
 {
     self.searchForm.searchInfo = self.searchInfo;
     [self updateSearchFormControls];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+
 }
 
 - (void)updateSearchFormControls
 {
     [self.searchForm updateControls];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)tryToStartSearchWithSearchInfo:(HLSearchInfo *)searchInfo
@@ -147,12 +152,14 @@
 - (HLCityPickerVC *)cityPickerVC
 {
     return [[HLCityPickerVC alloc] initWithNibName:@"ASTGroupedSearchVC" bundle:nil];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)setCityToSearchForm:(HDKCity *)city
 {
     self.searchInfo.city = city;
     [self updateControls];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 #pragma mark - Actions
@@ -166,6 +173,7 @@
         [self updateSearchFormControls];
     }
     [[HLNearbyCitiesDetector shared] detectCurrentCityWithSearchInfo:self.searchInfo];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (IBAction)showCityOrMapPicker
@@ -175,6 +183,7 @@
     } else {
         [self showCityPicker];
     }
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)showCityPickerWithText:(NSString *)searchText animated:(BOOL)animated
@@ -185,16 +194,19 @@
     pickerVC.initialSearchText = searchText;
 
     [self presentCityPicker:pickerVC animated:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)presentCityPicker:(HLCityPickerVC *)cityPickerVC animated:(BOOL)animated
 {
     [self.navigationController pushViewController:cityPickerVC animated:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)showCityPicker
 {
     [self showCityPickerWithText:nil animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)showMapPicker
@@ -205,6 +217,7 @@
     customMapPointSelectionVC.modalPresentationStyle = UIModalPresentationFormSheet;
 
     [self presentViewController:customMapPointSelectionVC animated:YES completion:nil];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 #pragma mark - HLCityPickerDelegate
@@ -214,6 +227,7 @@
     [self updateSearchCity:city];
     self.searchInfo.hotel = nil;
     [self updateControls];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)cityPicker:(HLCityPickerVC *)picker didSelectHotel:(HDKHotel *)hotel
@@ -223,6 +237,7 @@
     }
     
     self.searchInfo.hotel = hotel;
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)updateSearchCity:(HDKCity *)newCity
@@ -230,22 +245,26 @@
     
     
     self.searchInfo.city = newCity;
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)cityPicker:(HLCityPickerVC *)picker didSelectAirport:(HDKAirport *)airport
 {
     self.searchInfo.airport = airport;
     self.searchInfo.locationPoint = [[HLSearchAirportLocationPoint alloc] initWithAirport: airport];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)cityPicker:(HLCityPickerVC *)picker didSelectLocationPoint:(HDKSearchLocationPoint *)locationPoint
 {
     [self updateSearchLocationPoint:locationPoint];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)updateSearchLocationPoint:(HDKSearchLocationPoint *)locationPoint
 {
     self.searchInfo.locationPoint = locationPoint;
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 #pragma mark - HLCustomPointSelectionDelegate methods
@@ -254,6 +273,7 @@
 {
     [self.navigationController popViewControllerAnimated:true];
     self.searchInfo.locationPoint = searchLocationPoint;
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 #pragma mark - HLSearchInfoChangeDelegate methods
@@ -265,6 +285,7 @@
             [self updateControls];
         });
     }
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)cityInfoDidLoad:(NSNotification *)notification
@@ -300,6 +321,7 @@
         }
         [self updateControls];
     }
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 #pragma mark - HLSearchFormDelegate
@@ -308,6 +330,8 @@
 {
     self.searchInfo.currency = [InteractionManager shared].currency;
     [self tryToStartSearchWithSearchInfo:self.searchInfo];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+
 }
 
 - (void)showKidsPicker
