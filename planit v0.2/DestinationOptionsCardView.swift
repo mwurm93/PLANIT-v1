@@ -185,6 +185,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         }
         swipeableView.didSwipe = {view, direction, vector in
             self.countSwipes += 1
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "destinationOptionsCardViewSwiped"), object: nil)
             
             if self.totalDailySwipeAllotment - self.countSwipes > 8 {
                 self.swipeableView.numberOfActiveView = 8
@@ -599,6 +600,7 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
         }
         swipeableView.didSwipe = {view, direction, vector in
             self.countSwipes += 1
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "destinationOptionsCardViewSwiped"), object: nil)
             
             if self.moreSwipesAllotment - self.countSwipes > 8 {
                 self.swipeableView.numberOfActiveView = 8
@@ -609,6 +611,8 @@ class DestinationOptionsCardView: UIView, UIGestureRecognizerDelegate, UITableVi
                 
                 let when = DispatchTime.now() + 0.4
                 DispatchQueue.main.asyncAfter(deadline: when) {
+
+                    
                     self.questionLabel?.text = "Ready to choose\na destination?"
                     self.questionLabel?.frame.size.height = 50
                     self.questionLabel?.isHidden = false

@@ -839,6 +839,7 @@
 		FAA8F29E1E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */; };
 		FAA8F29F1E351DDE00CD7337 /* timeOfDayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */; };
 		FAA8F2A11E351DEB00CD7337 /* items.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2A01E351DEB00CD7337 /* items.plist */; };
+		FAB085931F435C54005C2938 /* badgeButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB085921F435C54005C2938 /* badgeButtonType.swift */; };
 		FABEACFC1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEACFB1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift */; };
 		FABEACFE1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */; };
 		FABEAD001EFE4D630075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEACFF1EFE4D630075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.swift */; };
@@ -1969,6 +1970,7 @@
 		FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rankedRecommendationsTableViewCell.swift; sourceTree = "<group>"; };
 		FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = timeOfDayTableViewCell.swift; sourceTree = "<group>"; };
 		FAA8F2A01E351DEB00CD7337 /* items.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = items.plist; sourceTree = "<group>"; };
+		FAB085921F435C54005C2938 /* badgeButtonType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = badgeButtonType.swift; sourceTree = "<group>"; };
 		FABEACFB1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoYouKnowWhereYouWillBeStayingQuestionView.swift; sourceTree = "<group>"; };
 		FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoYouKnowWhereYouWillBeStayingQuestionView.xib; sourceTree = "<group>"; };
 		FABEACFF1EFE4D630075EA94 /* AboutWhatTimeWillYouStartDrivingQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutWhatTimeWillYouStartDrivingQuestionView.swift; sourceTree = "<group>"; };
@@ -4580,9 +4582,10 @@
 		FAA8F2211E35194100CD7337 /* planit v0.2 */ = {
 			isa = PBXGroup;
 			children = (
+				FA14B2221EFAE5D1004E0E29 /* Extensions */,
+				FAB0858F1F435BBF005C2938 /* Enums */,
 				FA3C564B1F1C9B1E00621AC4 /* Travelpayouts */,
 				FA6897001F0FFB0B00602D17 /* CSVs */,
-				FA14B2221EFAE5D1004E0E29 /* Extensions */,
 				FAE83F691EF467790009A020 /* Scrolling Views */,
 				FAD50DD41EE9BFC40006C3AA /* Instructions */,
 				FAD50DC91EE8864F0006C3AA /* Firebase */,
@@ -4777,6 +4780,14 @@
 				FAA8F2581E351B9500CD7337 /* ActivitiesViewController.swift */,
 			);
 			name = "View Controllers (unused)";
+			sourceTree = "<group>";
+		};
+		FAB0858F1F435BBF005C2938 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				FAB085921F435C54005C2938 /* badgeButtonType.swift */,
+			);
+			name = Enums;
 			sourceTree = "<group>";
 		};
 		FAB144871F171B2C0062EBCC /* Unused */ = {
@@ -5532,6 +5543,7 @@
 				FA77D1F31EFDD9D600A37A05 /* textfieldUnderline.swift in Sources */,
 				FA2531A41F1D3B6D002BCE29 /* HLPhotoScrollCollectionCell.swift in Sources */,
 				FA2532661F1D3B6E002BCE29 /* MultipleLinesFeatureItem.swift in Sources */,
+				FAB085931F435C54005C2938 /* badgeButtonType.swift in Sources */,
 				FA2531FD1F1D3B6D002BCE29 /* GroupedTableItem.swift in Sources */,
 				FA2531401F1D3B6D002BCE29 /* UIViewController+JRAddChildViewController.m in Sources */,
 				FA2532391F1D3B6D002BCE29 /* ReviewCell.swift in Sources */,

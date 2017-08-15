@@ -91,7 +91,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     
     func handleGlobeTutorial() {
         if smCalloutViewMode == "globeTutorial1" {
-            self.view.isUserInteractionEnabled = true            
+//            self.view.isUserInteractionEnabled = false
             smCalloutViewMode = "globeTutorial2"
             
             self.focusView.isHidden = false
@@ -161,12 +161,12 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             self.view.bringSubview(toFront: focusView)
             self.view.bringSubview(toFront: (searchController?.searchBar)!)
             
-            self.smCalloutView.contentView = globeTutorialView4
+            self.smCalloutView.contentView = globeTutorialView5
             self.smCalloutView.isHidden = false
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: (searchController?.searchBar.frame.midX)!, y: (searchController?.searchBar.frame.maxY)!)
+            calloutRect.origin = CGPoint(x: ((searchController?.searchBar.frame.midX)! + 40), y: ((searchController?.searchBar.frame.maxY)! + 15))
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
             
             smCalloutViewMode = "globeTutorial6"
@@ -177,7 +177,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             
             self.focusView.isHidden = true
             
-            self.view.isUserInteractionEnabled = true
+//            self.view.isUserInteractionEnabled = true
             
         }
         //        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
@@ -200,7 +200,6 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                 self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             }
         }
-
     }
     
     override func viewDidLoad() {
@@ -1271,12 +1270,20 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         handleGlobeTutorial()
     }
     @IBAction func globeTutorialView2_nextButtonTouchedUpInside(_ sender: Any) {
+        handleGlobeTutorial()
+
     }
     @IBAction func globeTutorialView3_nextButtonTouchedUpInside(_ sender: Any) {
+        handleGlobeTutorial()
+
     }
     @IBAction func globeTutorialView4_nextButtonTouchedUpInside(_ sender: Any) {
+        handleGlobeTutorial()
+
     }
     @IBAction func globeTutorialView5_doneButtonTouchedUpInside(_ sender: Any) {
+        handleGlobeTutorial()
+
     }
     @IBAction func bucketListButtonTouchedUpInside(_ sender: Any) {
         bucketListButton.layer.borderWidth = 3

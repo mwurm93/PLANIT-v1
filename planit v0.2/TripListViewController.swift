@@ -217,10 +217,28 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
             
             //Destinations and trip name
             let destinationsForTrip = DataContainerSingleton.sharedDataContainer.usertrippreferences?[indexPath.row].object(forKey: "destinationsForTrip") as? [String]
+            var destinationsString = String()
+            
             if destinationsForTrip != nil {
                 if (destinationsForTrip?.count)! > 0 {
                     cell.destinationsLabel.isHidden = false
-                    cell.destinationsLabel.text = destinationsForTrip?.joined(separator: ", ")
+                    if destinationsForTrip?.count == 1 {
+                        cell.destinationsLabel.text = destinationsForTrip?[0]
+                    } else if (destinationsForTrip?.count)! > 1 {
+                        for i in 0 ... (destinationsForTrip?.count)! - 2 {
+                            destinationsString.append((destinationsForTrip?[i])!)
+                            if i + 1 == (destinationsForTrip?.count)! - 1 {
+                                destinationsString.append(" and ")
+                            } else {
+                                destinationsString.append(", ")
+                            }
+                        }
+                        destinationsString.append((destinationsForTrip?[(destinationsForTrip?.count)! - 1])!)
+                        if destinationsForTrip?.count == 2 {
+                            destinationsString = "\((destinationsForTrip?[0])!) and \((destinationsForTrip?[1])!)"
+                        }
+                        cell.destinationsLabel.text = destinationsString
+                    }
                     
                     cell.tripNameLabel.isHidden = false
                     if (tripName?.contains(" started "))! {

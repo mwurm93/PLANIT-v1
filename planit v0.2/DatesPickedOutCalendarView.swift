@@ -293,7 +293,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
 //                    if SavedPreferencesForTrip["assistantMode"] as! String == "dates" {
 //                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected_backToItinerary"), object: nil)
 //                    } else if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
-//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
 //                    }
 //                }
                 
@@ -585,7 +585,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
                     //              }
 
                 } else if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" {
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "tripCalendarRangeSelectedDoneButtonTouchedUpInside"), object: nil)
                 }
             }
         }

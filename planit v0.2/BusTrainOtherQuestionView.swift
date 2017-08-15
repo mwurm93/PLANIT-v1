@@ -55,7 +55,7 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 200
+        button1?.frame.origin.y = 230
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         button1?.isHidden = true
         
@@ -70,14 +70,14 @@ class BusTrainOtherQuestionView: UIView, UITextViewDelegate {
         button3?.frame.size.height = 30
         button3?.frame.size.width += 20
         button3?.frame.origin.x = (bounds.size.width / 2) - (button3?.frame.width)! - 10
-        button3?.frame.origin.y = 350
+        button3?.frame.origin.y = 320
         button3?.layer.cornerRadius = (button3?.frame.height)! / 2
 
         button4?.sizeToFit()
         button4?.frame.size.height = 30
         button4?.frame.size.width += 20
         button4?.frame.origin.x = (bounds.size.width / 2) + 20
-        button4?.frame.origin.y = 350
+        button4?.frame.origin.y = 320
         button4?.layer.cornerRadius = (button4?.frame.height)! / 2
 
     }

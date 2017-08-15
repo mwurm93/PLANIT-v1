@@ -226,6 +226,8 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
                 timesLoaded += 1
                 //Update calendar
                 calendarView.reloadDates(calendarView.selectedDates)
+                
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsDateSelected"), object: nil)
             }
         }
         
@@ -437,7 +439,9 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         tableView.reloadData()
         
         parseTripDatesByTravelDates()
-
+        
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsDateSelected"), object: nil)
     }
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         return .none
@@ -679,6 +683,8 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
         } else {
             button2?.isHidden = false
         }
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "parseDatesForMultipleDestinationsDateSelected"), object: nil)
     }
     
     // MARK: Calendar header functions
