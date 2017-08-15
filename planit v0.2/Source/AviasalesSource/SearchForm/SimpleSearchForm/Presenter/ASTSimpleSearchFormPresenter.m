@@ -61,6 +61,7 @@ static NSString * const kSimpleSearchInfoBuilderStorageKey = @"simpleSearchInfoB
     [self restoreSearchInfoBuilder];
     [self createDirectTravelSegmentBuilder];
     [self.viewController updateWithViewModel:[self buildViewModel]];
+
 }
 
 - (void)handleSelectCellViewModel:(ASTSimpleSearchFormCellViewModel *)cellViewModel {

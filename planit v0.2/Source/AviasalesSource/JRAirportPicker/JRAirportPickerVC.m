@@ -119,6 +119,7 @@ static NSString * const kJRAirportPickerCellWithAirport = @"JRAirportPickerCellW
 
 - (void)popFromJRAirportPickerToFlightSearch {
     [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void) dealloc {

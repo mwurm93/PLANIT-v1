@@ -40,6 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupViewController];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 #pragma mark - Setup 
@@ -89,6 +90,7 @@
     self.searchResults = locations;
     self.items = [self buildItems];
     [self.tableView reloadData];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 #pragma mark - UISearchResultsUpdating
@@ -136,6 +138,7 @@
     if (self.selectionBlock) {
         self.selectionBlock(self.items[indexPath.row]);
     }
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 @end

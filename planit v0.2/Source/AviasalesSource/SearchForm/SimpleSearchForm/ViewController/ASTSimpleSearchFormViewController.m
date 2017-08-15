@@ -108,6 +108,10 @@ static CGFloat const separatorRightInset = 20.0;
             //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
             JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchDestinationAirportWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned];
             [_presenter handleSelectAirport:nearbyAirport withMode:1];
+        } else if ([flightTicketsAccessoryMethodPerformer checkIfStartingPointAirportFound]) {
+            //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+            JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchStartingPointAirport];
+            [_presenter handleSelectAirport:nearbyAirport withMode:1];
         }
     }
     // return travel back to final destination (home)
@@ -116,6 +120,10 @@ static CGFloat const separatorRightInset = 20.0;
             if ([flightTicketsAccessoryMethodPerformer checkIfDestinationAirportFoundWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1]) {
                 //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
                 JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchDestinationAirportWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1];
+                [_presenter handleSelectAirport:nearbyAirport withMode:0];
+            } else if ([flightTicketsAccessoryMethodPerformer checkIfEndingPointAirportFound]) {
+                //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+                JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchEndingPointAirport];
                 [_presenter handleSelectAirport:nearbyAirport withMode:0];
             }
             if ([flightTicketsAccessoryMethodPerformer checkIfEndingPointAirportFound]) {
@@ -129,7 +137,12 @@ static CGFloat const separatorRightInset = 20.0;
                 //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
                 JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchDestinationAirportWithIndexOfDestinationBeingPlanned:indexOfDestinationBeingPlanned - 1];
                 [_presenter handleSelectAirport:nearbyAirport withMode:0];
+            } else if ([flightTicketsAccessoryMethodPerformer checkIfStartingPointAirportFound]) {
+                //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
+                JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchStartingPointAirport];
+                [_presenter handleSelectAirport:nearbyAirport withMode:0];
             }
+            
             if ([flightTicketsAccessoryMethodPerformer checkIfStartingPointAirportFound]) {
                 //JRAirportPickerMode *mode = JRAirportPickerOriginMode;
                 JRSDKAirport *nearbyAirport = [flightTicketsAccessoryMethodPerformer fetchStartingPointAirport];
@@ -219,10 +232,12 @@ static CGFloat const separatorRightInset = 20.0;
     self.viewModel = viewModel;
     [self.tableView reloadData];
     [self updatePassengersView];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)showAirportPickerWithMode:(JRAirportPickerMode)mode {
     [self showAirportPickerViewControllerWithMode:mode];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 - (void)showDatePickerWithMode:(JRDatePickerMode)mode borderDate:(NSDate *)borderDate firstDate:(NSDate *)firstDate secondDate:(NSDate *)secondDate {
     [self showDatePickerViewControllerWithMode:mode borderDate:borderDate firstDate:firstDate secondDate:secondDate];
@@ -238,6 +253,7 @@ static CGFloat const separatorRightInset = 20.0;
 
 - (void)showWaitingScreenWithSearchInfo:(JRSDKSearchInfo *)searchInfо {
     [self showWaitingScreenViewControllerWithSeachInfo:searchInfо];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 #pragma mark - ASTContainerSearchFormChildViewControllerProtocol

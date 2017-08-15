@@ -38,6 +38,8 @@
     self.navigationBar.shadowImage = [UIImage new];
     self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName   : [JRColorScheme navigationBarItemColor],
                                                NSFontAttributeName              : [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium]};
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+
 }
 
 #pragma mark UINavigationControllerDelegate
@@ -46,6 +48,8 @@
     if ([viewController isKindOfClass:[JRViewController class]]) {
         [self setNavigationBarHidden:![(JRViewController *)viewController shouldShowNavigationBar] animated:animated];
     }
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer

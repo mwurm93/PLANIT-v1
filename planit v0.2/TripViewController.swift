@@ -1739,6 +1739,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 self.scrollContentView.addSubview(yesCityDecidedQuestionView!)
                 self.yesCityDecidedQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+            if indexOfDestinationBeingPlanned > 0 {
+                self.yesCityDecidedQuestionView?.questionLabel?.text = "Where else do you want to go?"
+            }
+            
             yesCityDecidedQuestionView?.button?.addTarget(self, action: #selector(self.yesCityDecidedQuestionView_actuallyDiscoverMoreOptions(sender:)), for: UIControlEvents.touchUpInside)
             yesCityDecidedQuestionView?.button1?.addTarget(self, action: #selector(self.destinationDecidedDestinationChosen), for: UIControlEvents.touchUpInside)
 
@@ -2994,9 +3000,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 self.yesCityDecidedQuestionView?.questionLabel?.font = UIFont.boldSystemFont(ofSize: 24)
                 updateProgress()
                 scrollToSubviewWithTag(tag: 9)
-            }
-            if indexOfDestinationBeingPlanned > 0 {
-                self.yesCityDecidedQuestionView?.questionLabel?.text = "Where else do you want to go?"
             }
             
             let when = DispatchTime.now() + 1
@@ -5781,6 +5784,24 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.travelButton_badge.isHidden = false
                 destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                 
+                
+                var isRoundtripTravelPlanned = false
+                var indexOfRoundtripTravel = -1
+                if destinationsForTrip.count > 0 {
+                    for i in 0 ... destinationsForTrip.count - 1 {
+                        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+                        if i < travelDictionaryArray.count {
+                            if travelDictionaryArray[i]["isRoundtrip"] as? Bool != nil {
+                                if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
+                                    isRoundtripTravelPlanned = true
+                                    indexOfRoundtripTravel = i
+                                }
+                            }
+                        }
+                    }
+                }
+
+                
                 //PLANNED: more detailed travel planned logic
                 if travelDictionaryArray.count < indexPath.row {
                     destinationsDatesCell.travelButton_badge.badgeString = "!"
@@ -5788,6 +5809,28 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 } else {
                     destinationsDatesCell.travelButton_badge.badgeString = "✓"
                     destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+                    
+                    
+                    if isRoundtripTravelPlanned {
+                        if travelDictionaryArray[indexOfRoundtripTravel]["modeOfTransportation"] as! String == "fly" {
+                            destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                        } else if travelDictionaryArray[indexOfRoundtripTravel]["modeOfTransportation"] as! String == "drive" {
+                            destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "carIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                        } else if travelDictionaryArray[indexOfRoundtripTravel]["modeOfTransportation"] as! String == "busTrainOther" {
+                            destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "busTrainOtherIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                        }
+                        
+                    } else {
+                        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+                        if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "fly" {
+                            destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                        } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "drive" {
+                            destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "carIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                        } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "busTrainOther" {
+                            destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "busTrainOtherIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                        }
+                    }
+
                 }
                 
                 return destinationsDatesCell
@@ -5835,31 +5878,30 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.destinationButton_badge.badgeBackgroundColor = UIColor.red
             }
             
-            var isRoundtripTravelPlanned = false
-            if destinationsForTrip.count > 0 {
-                for i in 0 ... destinationsForTrip.count - 1 {
-                    var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
-                    if i < travelDictionaryArray.count {
-                        if travelDictionaryArray[i]["isRoundtrip"] as? Bool != nil {
-                            if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
-                                isRoundtripTravelPlanned = true
-                            }
-                        }
-                    }
-                }
-            }
+            
             destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
             destinationsDatesCell.travelButton.tintColor = completeColor
             destinationsDatesCell.travelButton_badge.layer.frame.origin = CGPoint(x: destinationsDatesCell.travelButton.layer.frame.maxX - 28, y: destinationsDatesCell.travelButton.layer.frame.minY + 11)
             destinationsDatesCell.travelButton_badge.isHidden = false
 
-            if travelDictionaryArray.count < indexPath.row && !isRoundtripTravelPlanned {
+            if travelDictionaryArray.count < indexPath.row {
+//                && !isRoundtripTravelPlanned {
                 destinationsDatesCell.travelButton_badge.badgeString = "!"
                 destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor.red
 
             } else {
                 destinationsDatesCell.travelButton_badge.badgeString = "✓"
                 destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+                
+                travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+                if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "fly" {
+                    destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "drive" {
+                    destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "carIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "busTrainOther" {
+                    destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "busTrainOtherIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                }
+
             }
 
             
