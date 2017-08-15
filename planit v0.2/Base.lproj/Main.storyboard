@@ -912,6 +912,7 @@
                         <outlet property="infoKeyButton_7_text" destination="XQO-S6-Pmy" id="u2G-oX-9pl"/>
                         <outlet property="infoKeyLabel_1" destination="0HC-FU-xCn" id="0Lc-8B-hiE"/>
                         <outlet property="infoKeyLabel_2" destination="pxV-EN-LNe" id="wFO-mU-e93"/>
+                        <outlet property="infoKeyTitleLabel" destination="DDd-ni-Nmk" id="MZk-Po-kzx"/>
                         <outlet property="itineraryButton" destination="bPt-e2-WYa" id="CTF-hu-gzM"/>
                         <outlet property="itineraryButton1" destination="GWs-ib-KAp" id="OZm-xr-QAn"/>
                         <outlet property="itineraryButton2" destination="oGw-7q-25H" id="ffW-FG-itd"/>
@@ -1290,7 +1291,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="How fast can you turn everything green?!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nkd-tn-RN4">
-                            <rect key="frame" x="13" y="22" width="209" height="39"/>
+                            <rect key="frame" x="37" y="22" width="161" height="39"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                             <nil key="textColor"/>

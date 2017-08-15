@@ -191,6 +191,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var infoKeyButton_3: UIButton!
     @IBOutlet weak var infoKeyButton_4: UIButton!
     @IBOutlet weak var infoKeyButton_5: UIButton!
+    @IBOutlet weak var infoKeyTitleLabel: UILabel!
     @IBOutlet weak var infoButton: UIButton!
     @IBOutlet weak var popupBackgroundFilterViewVisualEffectView: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundFilterViewCloseButton: UIButton!
@@ -4753,6 +4754,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             infoKeyButton_6_text.isHidden = false
             infoKeyButton_7.isHidden = false
             infoKeyButton_7_text.isHidden = false
+            infoKeyTitleLabel.isHidden = false
             infoKeyLabel_1.isHidden = false
             infoKeyLabel_2.isHidden = false
             
@@ -4770,6 +4772,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             infoKeyButton_6_text.isHidden = true
             infoKeyButton_7.isHidden = true
             infoKeyButton_7_text.isHidden = true
+            infoKeyTitleLabel.isHidden = true
             infoKeyLabel_1.isHidden = true
             infoKeyLabel_2.isHidden = true
         }
