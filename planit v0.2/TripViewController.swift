@@ -1050,31 +1050,36 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        placeToStayItem?.setNeedsDisplay()
 //    }
 
-    func buttonClicked(sender:UIButton) {
-        if sender == itineraryButton2 {
-            sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
-            
+    func sendInvitesButtonTouchedUpInside(sender:UIButton) {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        
+        if ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! == 0 || destinationsForTrip.count == 0 {
+            let alertController = UIAlertController(title: "Are you sure?", message: "We recommend at least proposing dates and a destination!", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Wait to send", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+            }
+            let okAction = UIAlertAction(title: "Send now!", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
+                self.itineraryButton2?.stopPulseEffect()
+            }
+            alertController.addAction(cancelAction)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+        } else {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
-            
             itineraryButton2?.stopPulseEffect()
         }
-
-        
+    }
+    
+    func buttonClicked(sender:UIButton) {
+       
         sender.isSelected = !sender.isSelected
         if sender.isSelected {
             sender.setButtonWithTransparentText(button: sender, title: sender.currentTitle as! NSString, color: UIColor.white)
-            if sender == itineraryButton2 {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
-                
-                itineraryButton2?.stopPulseEffect()
-            }
         }
-        
-        
     }
     
     func spawnContactPickerVC() {
-        
         checkContactsAccess()
     }
     func spawnMessageComposeVC() {
@@ -4790,15 +4795,17 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     editSwitch.frame.origin.x = 187
                 }
             }
-            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
             
-            if ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! == 0 || destinationsForTrip.count == 0 {
-                itinerarySendable = false
-                
-                editSwitchLabel.frame.origin.x = 110
-                editSwitch.frame.origin.x = 217
-            }            
+            //Disable sending itinerary if destination or dates not chosen
+//            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//            var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+//            
+//            if ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! == 0 || destinationsForTrip.count == 0 {
+//                itinerarySendable = false
+//                
+//                editSwitchLabel.frame.origin.x = 110
+//                editSwitch.frame.origin.x = 217
+//            }            
 
             if itinerarySendable {
                 itineraryButton2?.isHidden = false
@@ -5548,15 +5555,12 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         case .userActionRequired :
             badge.badgeString = "!"
             badge.badgeBackgroundColor = UIColor.red
-            badge.isHidden = false
         case .groupMemberActionRequired :
             badge.badgeString = "!"
             badge.badgeBackgroundColor = UIColor.orange
-            badge.isHidden = false
         case .plannedAndConfirmed :
             badge.badgeString = "✓"
             badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
-            badge.isHidden = false
         }
     }
     
@@ -5651,10 +5655,12 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.destinationButton_badge.isHidden = false
                 
                 if DataContainerSingleton.sharedDataContainer.homeAirport == nil || DataContainerSingleton.sharedDataContainer.homeAirport == "" {
-                    setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .userActionRequired)
+                    destinationsDatesCell.destinationButton_badge.badgeString = "!"
+                    destinationsDatesCell.destinationButton_badge.badgeBackgroundColor = UIColor.red
                     destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 22)
                 } else {
-                    setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .plannedAndConfirmed)
+                    destinationsDatesCell.destinationButton_badge.badgeString = "✓"
+                    destinationsDatesCell.destinationButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
                     destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
                 }
 
@@ -5728,12 +5734,14 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         formatter.dateFormat = "MMM\nd"
                         let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row - 2]]!)
                         destinationsDatesCell.travelDateButton.setTitle(rightDateAsString, for: .normal)
+                        destinationsDatesCell.travelDateButton_badge.badgeString = "!"
+                        destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.orange
                         destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-                        setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .groupMemberActionRequired)
                     }
                 } else {
                     destinationsDatesCell.travelDateButton.setTitle("Add\ndates", for: .normal)
-                    setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .userActionRequired)
+                    destinationsDatesCell.travelDateButton_badge.badgeString = "!"
+                    destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.red
                     destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 18)
 
                 }
@@ -5741,26 +5749,30 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
               
                 
                 if DataContainerSingleton.sharedDataContainer.homeAirport == nil || DataContainerSingleton.sharedDataContainer.homeAirport == "" {
-                    setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .userActionRequired)
+                    destinationsDatesCell.destinationButton_badge.badgeString = "!"
+                    destinationsDatesCell.destinationButton_badge.badgeBackgroundColor = UIColor.red
                     destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 22)
                 } else {
-                    setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .plannedAndConfirmed)
+                    destinationsDatesCell.destinationButton_badge.badgeString = "✓"
+                    destinationsDatesCell.destinationButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
                     destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
                 }
                 
                 
                 if let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date] {
                     if selectedDatesValue.count == 0 {
-                        setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .userActionRequired)
+                        destinationsDatesCell.travelDateButton_badge.badgeString = "!"
+                        destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.red
                         destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 18)
                     } else if selectedDatesValue.count != 0 {
                         let endDate = selectedDatesValue[selectedDatesValue.count - 1]
                         formatter.dateFormat = "MMM\nd"
                         let endDateAsString = formatter.string(from: endDate)
                         destinationsDatesCell.travelDateButton.setTitle(endDateAsString, for: .normal)
-                        destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-                        setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .groupMemberActionRequired)
                         
+                        destinationsDatesCell.travelDateButton_badge.badgeString = "!"
+                        destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.orange
+                        destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
                     }
                 }
 
@@ -5771,9 +5783,11 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 
                 //PLANNED: more detailed travel planned logic
                 if travelDictionaryArray.count < indexPath.row {
-                    setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .userActionRequired)
+                    destinationsDatesCell.travelButton_badge.badgeString = "!"
+                    destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor.red
                 } else {
-                    setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .plannedAndConfirmed)
+                    destinationsDatesCell.travelButton_badge.badgeString = "✓"
+                    destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
                 }
                 
                 return destinationsDatesCell
@@ -5806,7 +5820,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.destinationButton.titleLabel?.textAlignment = .center
             
             //Destination badge
-            setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .groupMemberActionRequired)
+            destinationsDatesCell.destinationButton_badge.badgeString = "!"
+            destinationsDatesCell.destinationButton_badge.badgeBackgroundColor = UIColor.orange
 
 
             
@@ -5816,7 +5831,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
 //                destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.red
             }
             if destinationsForTrip.count == 0 && indexPath.row != destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 && indexPath.row != 0 {
-                setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .userActionRequired)
+                destinationsDatesCell.destinationButton_badge.badgeString = "!"
+                destinationsDatesCell.destinationButton_badge.badgeBackgroundColor = UIColor.red
             }
             
             var isRoundtripTravelPlanned = false
@@ -5838,10 +5854,12 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.travelButton_badge.isHidden = false
 
             if travelDictionaryArray.count < indexPath.row && !isRoundtripTravelPlanned {
-                setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .userActionRequired)
+                destinationsDatesCell.travelButton_badge.badgeString = "!"
+                destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor.red
 
             } else {
-                setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .plannedAndConfirmed)
+                destinationsDatesCell.travelButton_badge.badgeString = "✓"
+                destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
             }
 
             
@@ -5879,14 +5897,16 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     destinationsDatesCell.destinationButton.setTitle("Add destination", for: .normal)
                     destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 22)
                     destinationsDatesCell.travelDateButton.setTitle(startDateAsString, for: .normal)
-                    setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .groupMemberActionRequired)
+                    destinationsDatesCell.travelDateButton_badge.badgeString = "!"
+                    destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.orange
                     destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
                     
                 } else {
                     destinationsDatesCell.destinationButton.setTitle("Add destination", for: .normal)
                     destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 22)
                     destinationsDatesCell.travelDateButton.setTitle("Add\ndates", for: .normal)
-                    setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .userActionRequired)
+                    destinationsDatesCell.travelDateButton_badge.badgeString = "!"
+                    destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.red
                     destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 18)
                 }
             } else if destinationsForTrip.count > 0 {
@@ -5925,9 +5945,11 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.destinationButton_badge.isHidden = false
             
             if placeToStayDictionaryArray.count < indexPath.row {
-                setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .userActionRequired)
+                destinationsDatesCell.placeToStayButton_badge.badgeString = "!"
+                destinationsDatesCell.placeToStayButton_badge.badgeBackgroundColor = UIColor.red
             } else {
-                setBadgeWithType(badge: destinationsDatesCell.destinationButton_badge, type: .groupMemberActionRequired)
+                destinationsDatesCell.placeToStayButton_badge.badgeString = "!"
+                destinationsDatesCell.placeToStayButton_badge.badgeBackgroundColor = UIColor.orange
                 
             }
             destinationsDatesCell.placeToStayButton.frame.origin.x = destinationsDatesCell.destinationButton.frame.maxX + 18
@@ -7090,7 +7112,7 @@ extension TripViewController {
 //        itineraryButton2?.setTitle("Send itinerary", for: .normal)
         itineraryButton2?.setBackgroundImage(#imageLiteral(resourceName: "paperPlaneIcon"), for: .normal)
 //        itineraryButton2?.translatesAutoresizingMaskIntoConstraints = false
-        itineraryButton2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        itineraryButton2?.addTarget(self, action: #selector(self.sendInvitesButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
         self.itineraryView.addSubview(itineraryButton2!)
         itineraryButton2?.frame.size.height = 45
         itineraryButton2?.frame.size.width = 45
