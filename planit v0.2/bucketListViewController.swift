@@ -76,6 +76,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     //SMCalloutView
     var smCalloutView = SMCalloutView()
     var smCalloutViewMode = "globeTutorial1"
+    var timesViewed = [String : Int]()
 
 
 
@@ -158,7 +159,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             self.smCalloutView.dismissCallout(animated: true)
             
             self.view.bringSubview(toFront: focusView)
-            self.view.bringSubview(toFront: searchController?.searchBar)
+            self.view.bringSubview(toFront: (searchController?.searchBar)!)
             
             self.smCalloutView.contentView = globeTutorialView4
             self.smCalloutView.isHidden = false
@@ -182,6 +183,24 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         //        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
         //        sortFilterFlightsCalloutTableView.reloadData()
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+
+        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
+        
+        if timesViewed["globe"] == nil {
+            let when = DispatchTime.now() + 0.3
+            //PLANNED: SMcalloutView
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.handleGlobeTutorial()
+                self.timesViewed["globe"] = 1
+                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            }
+        }
+
     }
     
     override func viewDidLoad() {
@@ -1248,6 +1267,9 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
 
     
     //MARK: Actions
+    @IBAction func globeTutorialView1_nextButtonTouchedUpInside(_ sender: Any) {
+        handleGlobeTutorial()
+    }
     @IBAction func bucketListButtonTouchedUpInside(_ sender: Any) {
         bucketListButton.layer.borderWidth = 3
         beenThereButton.layer.borderWidth = 0

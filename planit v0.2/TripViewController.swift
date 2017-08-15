@@ -4534,10 +4534,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //                self.popupBackgroundFilterView.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
 //                
 //                self.animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true, withCloseButton: true)
-//                self.timesViewed["itinerary"] = 1
-//                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
-//                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-//                
+                self.timesViewed["itinerary"] = 1
+                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//
 //                UIView.animate(withDuration: 0.5) {
 //                    self.popupBackgroundFilterView.alpha = 1
 //                    self.popupBackgroundFilterView.transform = CGAffineTransform.identity
@@ -4577,6 +4577,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             addInviteeButton_badge.badgeTextColor = UIColor.white
             addInviteeButton_badge.badgeBackgroundColor = UIColor.red
             addInviteeButton_badge.isHidden = false
+            self.itineraryView.bringSubview(toFront: addInviteeButton_badge)
 
         } else {
             contactsCollectionView.isHidden = false
