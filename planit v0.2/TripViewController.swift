@@ -192,6 +192,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var infoKeyButton_4: UIButton!
     @IBOutlet weak var infoKeyButton_5: UIButton!
     @IBOutlet weak var infoKeyTitleLabel: UILabel!
+    @IBOutlet weak var infoKeyTitleUnderline: UIView!
     @IBOutlet weak var infoButton: UIButton!
     @IBOutlet weak var popupBackgroundFilterViewVisualEffectView: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundFilterViewCloseButton: UIButton!
@@ -4755,6 +4756,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             infoKeyButton_7.isHidden = false
             infoKeyButton_7_text.isHidden = false
             infoKeyTitleLabel.isHidden = false
+            infoKeyTitleUnderline.isHidden = false
             infoKeyLabel_1.isHidden = false
             infoKeyLabel_2.isHidden = false
             
@@ -4773,6 +4775,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             infoKeyButton_7.isHidden = true
             infoKeyButton_7_text.isHidden = true
             infoKeyTitleLabel.isHidden = true
+            infoKeyTitleUnderline.isHidden = true
             infoKeyLabel_1.isHidden = true
             infoKeyLabel_2.isHidden = true
         }
@@ -7314,6 +7317,7 @@ extension TripViewController {
     }
     func travelButton_badge_TouchedUpInside(sender:UIButton) {
         travelButtonTouchedUpInside(sender:sender)
+        
     }
     func travelDateButton_badge_TouchedUpInside(sender:UIButton) {
         travelDateButtonTouchedUpInside(sender:sender)
