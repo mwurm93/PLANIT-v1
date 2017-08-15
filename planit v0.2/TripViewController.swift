@@ -5570,6 +5570,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
     }
     
+    
     //MARK: CollectionViewDataSource CellForItemAt
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == destinationsDatesCollectionView {
@@ -5581,14 +5582,14 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.travelButton_badge.badgeTextColor = UIColor.white
             destinationsDatesCell.travelDateButton_badge.badgeTextColor = UIColor.white
             destinationsDatesCell.placeToStayButton_badge.badgeTextColor = UIColor.white
-            destinationsDatesCell.placeToStayButton.tag = indexPath.row
-            destinationsDatesCell.travelButton.tag = indexPath.row
-            destinationsDatesCell.travelDateButton.tag = indexPath.row
-            destinationsDatesCell.destinationButton.tag = indexPath.row
-            destinationsDatesCell.placeToStayButton.addTarget(self, action: #selector(self.placeToStayButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
-            destinationsDatesCell.travelButton.addTarget(self, action: #selector(self.travelButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
-            destinationsDatesCell.travelDateButton.addTarget(self, action: #selector(self.travelDateButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
-            destinationsDatesCell.destinationButton.addTarget(self, action: #selector(self.destinationButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
+            destinationsDatesCell.destinationButton_badge.tag = indexPath.row
+            destinationsDatesCell.travelButton_badge.tag = indexPath.row
+            destinationsDatesCell.travelDateButton_badge.tag = indexPath.row
+            destinationsDatesCell.placeToStayButton_badge.tag = indexPath.row
+            destinationsDatesCell.destinationButton_badge.addTarget(self, action: #selector(self.destinationButton_badge_TouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
+            destinationsDatesCell.travelButton_badge.addTarget(self, action: #selector(self.travelButton_badge_TouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
+            destinationsDatesCell.travelDateButton_badge.addTarget(self, action: #selector(self.travelDateButton_badge_TouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
+            destinationsDatesCell.placeToStayButton_badge.addTarget(self, action: #selector(self.placeToStayButton_badge_TouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
 
             
             //Button textcolor, outline, tags, and Selectors
@@ -7308,6 +7309,20 @@ extension TripViewController {
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
     }
+    func placeToStayButton_badge_TouchedUpInside(sender:UIButton){
+        placeToStayButtonTouchedUpInside(sender:sender)
+    }
+    func travelButton_badge_TouchedUpInside(sender:UIButton) {
+        travelButtonTouchedUpInside(sender:sender)
+    }
+    func travelDateButton_badge_TouchedUpInside(sender:UIButton) {
+        travelDateButtonTouchedUpInside(sender:sender)
+    }
+
+    func destinationButton_badge_TouchedUpInside(sender:UIButton){
+        destinationButtonTouchedUpInside(sender:sender)
+    }
+    
     func placeToStayButtonTouchedUpInside(sender:UIButton) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let assistantMode = SavedPreferencesForTrip["assistantMode"] as! String
