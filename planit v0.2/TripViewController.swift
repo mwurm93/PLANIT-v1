@@ -209,6 +209,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet var itineraryTutorialView2: UIView!
     @IBOutlet var itineraryTutorialView3: UIView!
     @IBOutlet var itineraryTutorialView4: UIView!
+    @IBOutlet weak var addInviteeButton_badge: MIBadgeButton!
     
     func handleItineraryTutorial() {
         if smCalloutViewMode == "itineraryTutorial1" {
@@ -1394,7 +1395,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
             let heightConstraint = NSLayoutConstraint(item: instructionsQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (instructionsQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
-            let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))!\nLet's build an itinerary like this!"
+            let questionLabelValue = "Hi \(String(describing: DataContainerSingleton.sharedDataContainer.firstName!))!\nIn a just few minutes,\nyou can make an itinerary\nand share it with your friends!"
             instructionsQuestionView?.questionLabel1?.text = questionLabelValue
         }
         if userNameQuestionView != nil {
@@ -4561,14 +4562,22 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if numberOfContacts == 0 {
             contactsCollectionView.isHidden = true
             addInviteeButton.setTitle("Invite travelmates", for: .normal)
-            addInviteeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
+            addInviteeButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 22)
             addInviteeButton.frame.size.height = 30
             addInviteeButton.frame.size.width = 200
             addInviteeButton.frame.origin.x = (bounds.size.width - (addInviteeButton.frame.width)) / 2
             addInviteeButton.frame.origin.y = 70
-            addInviteeButton.setTitleColor(incompleteColor, for: .normal)
+            addInviteeButton.setTitleColor(completeColor, for: .normal)
+            addInviteeButton.layer.borderWidth = 2
+            addInviteeButton.layer.borderColor = UIColor.white.cgColor
             addInviteeButton.layer.cornerRadius = (addInviteeButton.frame.height) / 2
-            addInviteeButton.addDashedBorder(lineWidth: 2, lineColor: incompleteColor, height:addInviteeButton.frame.height)
+            addInviteeButton_badge.layer.frame.origin = CGPoint(x: addInviteeButton.layer.frame.maxX - 57, y: addInviteeButton.layer.frame.minY + 1)
+            addInviteeButton_badge.badgeString = "!"
+            addInviteeButton_badge.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+            addInviteeButton_badge.badgeTextColor = UIColor.white
+            addInviteeButton_badge.badgeBackgroundColor = UIColor.red
+            addInviteeButton_badge.isHidden = false
+
         } else {
             contactsCollectionView.isHidden = false
             if addInviteeButton.layer.sublayers != nil {
@@ -4583,12 +4592,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             addInviteeButton.setTitleColor(completeColor, for: .normal)
             addInviteeButton.frame.size.height = 47
             addInviteeButton.frame.size.width = 43
+            addInviteeButton.layer.borderWidth = 0
             if numberOfContacts < 4 {
                 addInviteeButton.frame.origin.x = CGFloat(100 + 65 * numberOfContacts)
             } else {
                 addInviteeButton.frame.origin.x = bounds.size.width - 53
             }
             addInviteeButton.frame.origin.y = 63
+
+            addInviteeButton_badge.isHidden = true
         }
     }
     func disableAndResetAssistant_moveToItinerary() {
@@ -4750,7 +4762,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 
             if itinerarySendable {
                 itineraryButton2?.isHidden = false
-                itineraryButton2?.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.2)
+                itineraryButton2?.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
                 
                 //PLANNED:             
                 //Move switch and label to the left
@@ -5564,7 +5576,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.destinationButton.frame.origin.y = 1
                 destinationsDatesCell.destinationButton.setTitleColor(completeColor, for: .normal)
                 
-                destinationsDatesCell.destinationButton_badge.layer.frame.origin = CGPoint(x: destinationsDatesCell.destinationButton.layer.frame.maxX - 27, y: destinationsDatesCell.destinationButton.layer.frame.minY + 8)
+                destinationsDatesCell.destinationButton_badge.layer.frame.origin = CGPoint(x: destinationsDatesCell.destinationButton.layer.frame.maxX - 27, y: destinationsDatesCell.destinationButton.layer.frame.minY + 11)
                 destinationsDatesCell.destinationButton_badge.isHidden = false
                 
                 if DataContainerSingleton.sharedDataContainer.homeAirport == nil || DataContainerSingleton.sharedDataContainer.homeAirport == "" {
@@ -5846,7 +5858,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             }
             destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
             destinationsDatesCell.travelButton.tintColor = completeColor
-            destinationsDatesCell.travelButton_badge.layer.frame.origin = CGPoint(x: destinationsDatesCell.travelButton.layer.frame.maxX - 28, y: destinationsDatesCell.travelButton.layer.frame.minY + 7)
+            destinationsDatesCell.travelButton_badge.layer.frame.origin = CGPoint(x: destinationsDatesCell.travelButton.layer.frame.maxX - 28, y: destinationsDatesCell.travelButton.layer.frame.minY + 11)
             destinationsDatesCell.travelButton_badge.isHidden = false
 
             if travelDictionaryArray.count < indexPath.row && !isRoundtripTravelPlanned {

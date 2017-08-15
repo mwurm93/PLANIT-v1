@@ -9,12 +9,18 @@
 import UIKit
 import GooglePlaces
 import Firebase
+import SMCalloutView
 
-class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UISearchControllerDelegate, UISearchBarDelegate {
+class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UISearchControllerDelegate, UISearchBarDelegate, SMCalloutViewDelegate {
     
     @IBOutlet weak var backgroundView: UIImageView!
     @IBOutlet weak var backgroundBlurFilterView: UIVisualEffectView!
     
+    @IBOutlet var globeTutorialView1: UIView!
+    @IBOutlet var globeTutorialView2: UIView!
+    @IBOutlet var globeTutorialView3: UIView!
+    @IBOutlet var globeTutorialView4: UIView!
+    @IBOutlet var globeTutorialView5: UIView!
     //Firebase
     private lazy var channelRef: DatabaseReference = Database.database().reference().child("channels")
     
@@ -66,6 +72,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     
     //TravelPayours
     var geoLoader: AviasalesAirportsGeoSearchPerformer!
+    
+    //SMCalloutView
+    var smCalloutView = SMCalloutView()
+    var smCalloutViewMode = "globeTutorial1"
+
 
 
     //MARK: Outlets
@@ -75,9 +86,112 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     @IBOutlet weak var pinModeButton: UIButton!
     @IBOutlet weak var tripsButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var focusView: UIView!
+    
+    func handleGlobeTutorial() {
+        if smCalloutViewMode == "globeTutorial1" {
+            self.view.isUserInteractionEnabled = true            
+            smCalloutViewMode = "globeTutorial2"
+            
+            self.focusView.isHidden = false
+            self.view.bringSubview(toFront: focusView)
+            self.view.bringSubview(toFront: bucketListButton)
+            
+            self.smCalloutView.contentView = globeTutorialView1
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .down
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: bucketListButton.frame.midX, y: bucketListButton.frame.minY)
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+            return
+        } else if smCalloutViewMode == "globeTutorial2" {
+            self.smCalloutView.dismissCallout(animated: true)
+            self.view.bringSubview(toFront: focusView)
+            self.view.bringSubview(toFront: beenThereButton)
+
+            
+            self.smCalloutView.contentView = globeTutorialView2
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .down
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: beenThereButton.frame.midX, y: beenThereButton.frame.minY)
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+            smCalloutViewMode = "globeTutorial3"
+            return
+        } else if smCalloutViewMode == "globeTutorial3" {
+            self.smCalloutView.dismissCallout(animated: true)
+            
+            self.view.bringSubview(toFront: focusView)
+            self.view.bringSubview(toFront: pinModeButton)
+            
+            self.smCalloutView.contentView = globeTutorialView3
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .down
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: pinModeButton.frame.midX, y: pinModeButton.frame.minY)
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+            smCalloutViewMode = "globeTutorial4"
+            return
+        } else if smCalloutViewMode == "globeTutorial4" {
+            self.smCalloutView.dismissCallout(animated: true)
+            
+            self.view.bringSubview(toFront: focusView)
+            self.view.bringSubview(toFront: fillModeButton)
+            
+            self.smCalloutView.contentView = globeTutorialView4
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .down
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: fillModeButton.frame.midX, y: fillModeButton.frame.minY)
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+            smCalloutViewMode = "globeTutorial5"
+            
+        } else if smCalloutViewMode == "globeTutorial5" {
+            self.smCalloutView.dismissCallout(animated: true)
+            
+            self.view.bringSubview(toFront: focusView)
+            self.view.bringSubview(toFront: searchController?.searchBar)
+            
+            self.smCalloutView.contentView = globeTutorialView4
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .up
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: (searchController?.searchBar.frame.midX)!, y: (searchController?.searchBar.frame.minY)!)
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+            smCalloutViewMode = "globeTutorial6"
+            return
+            
+        } else if smCalloutViewMode == "globeTutorial6" {
+            self.smCalloutView.dismissCallout(animated: true)
+            
+            self.focusView.isHidden = true
+            
+            self.view.isUserInteractionEnabled = true
+            
+        }
+        //        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
+        //        sortFilterFlightsCalloutTableView.reloadData()
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //SMCalloutView
+        self.smCalloutView.delegate = self
+        self.smCalloutView.isHidden = true
+        //Focus views
+        self.focusView.isHidden = true
         
         //GOOGLE PLACES SEARCH
         resultsViewController = GMSAutocompleteResultsViewController()

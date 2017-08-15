@@ -37,14 +37,14 @@ class InstructionsQuestionView: UIView {
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel1?.frame = CGRect(x: 10, y: 15, width: bounds.size.width - 20, height: 80)
+        questionLabel1?.frame = CGRect(x: 10, y: 5, width: bounds.size.width - 20, height: 140)
         questionLabel2?.frame = CGRect(x: 60, y: 90, width: bounds.size.width - 90, height: 130)
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 555
+        button1?.frame.origin.y = 515
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         exampleItineraryImageView.layer.cornerRadius = 5

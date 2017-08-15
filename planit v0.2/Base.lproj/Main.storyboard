@@ -804,6 +804,10 @@
                                             <action selector="addInviteesButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="EJu-mw-gg2"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XSi-C5-eJb" customClass="MIBadgeButton" customModule="MIBadgeButton_Swift">
+                                        <rect key="frame" x="164" y="286" width="46" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </button>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lO4-vI-lbw">
                                         <rect key="frame" x="217" y="127" width="51" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -879,6 +883,7 @@
                     <size key="freeformSize" width="375" height="667"/>
                     <connections>
                         <outlet property="addInviteeButton" destination="nqm-ND-VW4" id="chg-xg-37g"/>
+                        <outlet property="addInviteeButton_badge" destination="XSi-C5-eJb" id="Kje-tE-K5q"/>
                         <outlet property="assistantButton" destination="Ej9-23-Zsq" id="IW1-VI-wK3"/>
                         <outlet property="calendarView" destination="qF0-gF-YgE" id="KPR-dU-2Fd"/>
                         <outlet property="chatButton" destination="bkP-qf-zvF" id="rcW-kU-5q3"/>
@@ -5123,6 +5128,10 @@
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EQ3-AO-EB0">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HCj-MB-Hsk">
                                 <rect key="frame" x="16" y="28" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -5178,6 +5187,12 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="EQ3-AO-EB0" secondAttribute="bottom" id="SqQ-rC-UZV"/>
+                            <constraint firstItem="EQ3-AO-EB0" firstAttribute="leading" secondItem="WMK-sP-FeH" secondAttribute="leading" id="hjV-JJ-A6q"/>
+                            <constraint firstAttribute="trailing" secondItem="EQ3-AO-EB0" secondAttribute="trailing" id="lFe-EQ-tI5"/>
+                            <constraint firstItem="EQ3-AO-EB0" firstAttribute="top" secondItem="WMK-sP-FeH" secondAttribute="top" id="tmh-oR-bwm"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="backgroundBlurFilterView" destination="APO-Sp-SPB" id="UOO-4e-5Pk"/>
@@ -5185,12 +5200,143 @@
                         <outlet property="beenThereButton" destination="Uyj-s2-4gI" id="aJB-JA-0iu"/>
                         <outlet property="bucketListButton" destination="9Ie-ki-88j" id="yI6-I6-EWz"/>
                         <outlet property="fillModeButton" destination="Xke-GL-mzw" id="sX1-X7-Uqt"/>
+                        <outlet property="focusView" destination="EQ3-AO-EB0" id="nLH-uw-hiH"/>
+                        <outlet property="globeTutorialView1" destination="Onv-oE-hUa" id="oe4-fU-hhh"/>
+                        <outlet property="globeTutorialView2" destination="o2n-CY-5PL" id="uvZ-sI-UL9"/>
+                        <outlet property="globeTutorialView3" destination="BJl-pi-jXf" id="OxC-p7-GZ3"/>
+                        <outlet property="globeTutorialView4" destination="ILI-Wd-L9w" id="R6D-Md-mkE"/>
+                        <outlet property="globeTutorialView5" destination="vUW-gX-tyi" id="jLr-mT-KXf"/>
                         <outlet property="pinModeButton" destination="vdu-NA-Cey" id="915-za-a9G"/>
                         <outlet property="settingsButton" destination="HCj-MB-Hsk" id="FcD-xj-WNd"/>
                         <outlet property="tripsButton" destination="UuD-nJ-HKW" id="hLe-Oe-l2G"/>
                         <segue destination="QaX-H5-Z3p" kind="show" identifier="bucketListVCToTripVC" id="5m0-36-R99"/>
                     </connections>
                 </viewController>
+                <view contentMode="scaleToFill" id="Onv-oE-hUa">
+                    <rect key="frame" x="0.0" y="0.0" width="204" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Add to your bucket list..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WCW-y5-3FZ">
+                            <rect key="frame" x="4" y="0.0" width="196" height="26"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iFp-CM-W98">
+                            <rect key="frame" x="74" y="20" width="57" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Next &gt;">
+                                <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="L4c-pq-qNX"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" id="o2n-CY-5PL">
+                    <rect key="frame" x="0.0" y="0.0" width="260" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="...and mark where you've been!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZNM-7s-KW7">
+                            <rect key="frame" x="8" y="0.0" width="244" height="26"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m3O-dt-tBK">
+                            <rect key="frame" x="102" y="20" width="57" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Next &gt;">
+                                <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="sdd-8Y-Nwa"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" id="BJl-pi-jXf">
+                    <rect key="frame" x="0.0" y="0.0" width="260" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Pins to mark specific locations..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vf6-oc-04U">
+                            <rect key="frame" x="1" y="0.0" width="257" height="26"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4r1-Cs-RdG">
+                            <rect key="frame" x="102" y="20" width="57" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Next &gt;">
+                                <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="dJI-tl-5eE"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" id="ILI-Wd-L9w">
+                    <rect key="frame" x="0.0" y="0.0" width="214" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="...and fill to mark countries!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eQM-ua-mRr">
+                            <rect key="frame" x="0.0" y="0.0" width="209" height="26"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7X6-Bp-fsi">
+                            <rect key="frame" x="79" y="20" width="57" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Next &gt;">
+                                <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="AQo-2a-Irt"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" id="vUW-gX-tyi">
+                    <rect key="frame" x="0.0" y="0.0" width="273" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Search to find your favorite places!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j2K-QM-ZbH">
+                            <rect key="frame" x="-2" y="0.0" width="276" height="26"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H7t-xd-PJ0">
+                            <rect key="frame" x="107" y="20" width="57" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                            <state key="normal" title="Done">
+                                <color key="titleColor" red="0.0" green="0.18379173430000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="Pzo-SY-eHB"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xhc-Kd-3pA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2295" y="893"/>
@@ -20056,11 +20202,11 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="1VF-PM-MLD"/>
-        <segue reference="5m0-36-R99"/>
-        <segue reference="D0h-av-d3S"/>
         <segue reference="IrZ-E3-weH"/>
         <segue reference="t9O-2u-fWL"/>
+        <segue reference="1VF-PM-MLD"/>
+        <segue reference="5m0-36-R99"/>
+        <segue reference="4hW-EN-T1K"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
