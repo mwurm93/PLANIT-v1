@@ -20,6 +20,12 @@ class HotelPricesVC: HotelDetailsMoreTableVC, PeekVCProtocol, UIViewControllerPr
         contentTable.hl_registerNib(withName: HLShowMorePricesCell.hl_reuseIdentifier())
         contentTable.contentInset.top += 5
         sections = createSections()
+        self.view.backgroundColor = UIColor.clear
+        self.view.layer.backgroundColor = UIColor.clear.cgColor
+        self.view.tintColor = UIColor.clear
+        contentTable.backgroundColor = UIColor.clear
+        contentTable.layer.backgroundColor = UIColor.clear.cgColor
+        contentTable.tintColor = UIColor.clear
     }
 
     // MARK: - Private methods

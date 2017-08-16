@@ -1479,7 +1479,6 @@
                             </state>
                             <connections>
                                 <action selector="contactsTutorialView1DoneButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="Eft-v7-1uK"/>
-                                <action selector="itineraryTutorialView1_nextButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="fyh-AS-f6i"/>
                             </connections>
                         </button>
                     </subviews>
@@ -1505,7 +1504,6 @@
                             </state>
                             <connections>
                                 <action selector="contactsTutorialView2DoneButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="SJU-rp-5C7"/>
-                                <action selector="hotelFavoritesTutorialViewDoneButtonTouchedUpInside:" destination="QaX-H5-Z3p" eventType="touchUpInside" id="orp-sh-cxT"/>
                             </connections>
                         </button>
                     </subviews>

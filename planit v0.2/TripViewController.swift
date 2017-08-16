@@ -4863,8 +4863,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         focusBackgroundViewWithinTopView.isHidden = true
         focusBackgroundViewWithinItineraryView.isHidden = true
         self.itineraryView.bringSubview(toFront: addInviteeButton)
+        self.itinerary()
+        if isAssistantEnabled {
+            self.segmentedControl?.move(to: 1)
+        } else {
+            self.segmentedControl?.move(to: 0)
+        }
+
     }
     @IBAction func contactsTutorialView1DoneButtonTouchedUpInside(_ sender: Any) {
+        self.chat()
+        focusBackgroundViewWithinTopView.isHidden = true
+        focusBackgroundViewWithinItineraryView.isHidden = true
+        if isAssistantEnabled {
+            self.segmentedControl?.move(to: 2)
+        } else {
+            self.segmentedControl?.move(to: 1)
+        }
         self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
         self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
         self.topView.bringSubview(toFront: segmentedControl!)
@@ -5477,8 +5492,9 @@ extension TripViewController {
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX, y: topView.frame.height + contactsCollectionView.layer.frame.maxY)
+            calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX - 46, y: topView.frame.height + contactsCollectionView.layer.frame.maxY - 10)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
 
         }
         if sendProposalQuestionView != nil {
@@ -5489,7 +5505,11 @@ extension TripViewController {
         handleAddInviteesButton()
         handleSendInvitesButton()
         handleTwicketSegmentedControl()
-        //        //Uncomment for testing on Simulator
+        if isAssistantEnabled {
+            self.segmentedControl?.move(to: 1)
+        } else {
+            self.segmentedControl?.move(to: 0)
+        }        //        //Uncomment for testing on Simulator
         //        //        chatButton.isHidden = true
         //        //        subviewDoneButton.isHidden = false
         //
@@ -5583,8 +5603,9 @@ extension TripViewController {
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX, y: topView.frame.height + contactsCollectionView.layer.frame.maxY)
+            calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX - 46, y: topView.frame.height + contactsCollectionView.layer.frame.maxY - 10)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+
 
         }
         
@@ -5597,6 +5618,11 @@ extension TripViewController {
         handleAddInviteesButton()
         handleSendInvitesButton()
         handleTwicketSegmentedControl()
+        if isAssistantEnabled {
+            self.segmentedControl?.move(to: 1)
+        } else {
+            self.segmentedControl?.move(to: 0)
+        }
         //        //Uncomment for testing on Simulator
         //        //        chatButton.isHidden = true
         //        //        subviewDoneButton.isHidden = false
@@ -6393,6 +6419,14 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         //Delete user contact bubble if last contact deleted
         if (contacts?.count)! == 0 {
             contactsCollectionView.deleteItems(at: [indexPath,IndexPath(item:0,section:0)])
+            handleTwicketSegmentedControl()
+            if isAssistantEnabled {
+                self.segmentedControl?.move(to: 1)
+            } else {
+                self.segmentedControl?.move(to: 0)
+            }
+            //        //Uncomment for testing on Simulator
+
         } else {
             contactsCollectionView.deleteItems(at: [indexPath])
         }
@@ -6408,7 +6442,6 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
         handleAddInviteesButton()
         handleSendInvitesButton()
-        handleTwicketSegmentedControl()
     }
 
     //    func leaveDeleteContactsMode(touch: UITapGestureRecognizer) {
@@ -6819,7 +6852,9 @@ extension TripViewController {
         self.filterButton.isHidden = false
         self.sortButton.isHidden = true
         self.progressRing?.isHidden = true
+        asyncUpdateProgress()
     }
+    
     func flightSearchFormViewViewController_ViewDidAppear() {
         addBackButtonPointedAtTripList()
         asyncUpdateProgress()
@@ -6834,7 +6869,7 @@ extension TripViewController {
         } else {
             self.progressRing?.isHidden = true
         }
-        
+        asyncUpdateProgress()
     }
 
     func flightSearchWaitingScreenViewController_ViewDidLoad() {
@@ -6883,6 +6918,7 @@ extension TripViewController {
             self.searchSummaryLabelTopView.text = "\((departureAirport.iata)) → \((arrivalAirport.iata))\n\(departureDateAsString)"
 
         }
+        asyncUpdateProgress()
     }
     func flightTicketViewViewController_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -6894,7 +6930,7 @@ extension TripViewController {
         self.topView.addSubview(backButton!)
         
         self.filterButton.isHidden = true
-        
+        asyncUpdateProgress()
     }
     func JRDatePicker_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -6904,6 +6940,7 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromJRDatePickerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
+        asyncUpdateProgress()
     }
     func JRAirportPicker_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -6913,6 +6950,7 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromJRAirportPickerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
+        asyncUpdateProgress()
     }
     func popFromJRDatePickerToFlightSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromJRDatePickerToFlightSearch"), object: nil)
@@ -6952,7 +6990,7 @@ extension TripViewController {
         backButton?.setTitle("Done", for: .normal)
         backButton?.addTarget(self, action: #selector(popFromJRFilterToFlightResults), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
-
+        asyncUpdateProgress()
     }
     func flightSearchResultsSceneViewController_doneButtonTouchedUpInside() {
         comeBackToPlanFlightLater()
@@ -7057,6 +7095,7 @@ extension TripViewController {
         } else {
             self.progressRing?.isHidden = true
         }
+        asyncUpdateProgress()
     }
     func HLCommonResultsVC_viewWillAppear(){
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -7112,6 +7151,8 @@ extension TripViewController {
         let days = DateUtil.hl_daysBetweenDate(checkInDate, andOtherDate:checkOutDate)
         self.searchSummaryLabelTopView.text = "\((city?.name)!)\n\(checkInDateAsString) - \(checkOutDateAsString) (\(days) ☾)"
         
+        asyncUpdateProgress()
+        
     }
     func hotelDetailsViewController_ViewDidAppear() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -7138,6 +7179,7 @@ extension TripViewController {
         let city = HDKSearchInfo?.city
         let days = DateUtil.hl_daysBetweenDate(checkInDate, andOtherDate:checkOutDate)
         self.searchSummaryLabelTopView.text = "\((city?.name)!)\n\(checkInDateAsString) - \(checkOutDateAsString) (\(days) ☾)"
+        asyncUpdateProgress()
     }
     func popFromHotelResultsViewControllerToHotelSearch(){
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromHotelResultsViewControllerToHotelSearch"), object: nil)
@@ -7185,7 +7227,7 @@ extension TripViewController {
         let city = HDKSearchInfo?.city
         let days = DateUtil.hl_daysBetweenDate(checkInDate, andOtherDate:checkOutDate)
         self.searchSummaryLabelTopView.text = "\((city?.name)!)\n\(checkInDateAsString) - \(checkOutDateAsString) (\(days) ☾)"
-
+        asyncUpdateProgress()
     }
     func hotelSearchCityPicker_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -7195,7 +7237,7 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromCityPickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
-
+        asyncUpdateProgress()
     }
     func HLDatePicker_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -7205,7 +7247,7 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromHLDatePickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
-
+        asyncUpdateProgress()
     }
     func hotelSearchKidsPickerViewController_ViewDidLoad() {
         self.backButton?.removeFromSuperview()
@@ -7215,7 +7257,7 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromKidsPickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
-
+        asyncUpdateProgress()
     }
     func HLFiltersVC_viewWillAppear() {
         self.segmentedControl?.isHidden = true
@@ -7224,7 +7266,7 @@ extension TripViewController {
         self.sortButton.isHidden = true
         self.hotelMapButton.isHidden = true
         
-
+        asyncUpdateProgress()
     }
     func HLSortVC_viewWillAppear() {
         self.segmentedControl?.isHidden = true
@@ -7240,7 +7282,7 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromHLSortToHotelResults), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
-
+        asyncUpdateProgress()
     }
     func HLMapVC_viewWillAppear() {
         self.segmentedControl?.isHidden = true
@@ -7256,6 +7298,7 @@ extension TripViewController {
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromMapVCToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
+        asyncUpdateProgress()
     }
     func popFromHLSortToHotelResults() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromHLSortToHotelResults"), object: nil)

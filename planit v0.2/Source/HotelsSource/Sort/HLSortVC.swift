@@ -51,9 +51,13 @@ class HLSortVC: HLCommonVC, UITableViewDataSource, UITableViewDelegate, PointSel
         self.view.backgroundColor = UIColor.clear
         self.view.layer.backgroundColor = UIColor.clear.cgColor
         self.view.tintColor = UIColor.clear
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(popFromHLSortToHotelResults), name: NSNotification.Name(rawValue: "popFromHLSortToHotelResults"), object: nil)
     }
 
+    func popFromHLSortToHotelResults() {
+        self.navigationController?.popViewController(animated: false)
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
