@@ -51,8 +51,7 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
             registerForPreviewing(with: self, sourceView: view)
         }
         //addHotelInfoView()
-        
-
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelbookingBrowserClosed), name: NSNotification.Name(rawValue: "hotelbookingBrowserClosed"), object: nil)
     }
 
   //  func addHotelInfoView(){
@@ -63,6 +62,10 @@ class HLIphoneHotelDetailsVC: HLHotelDetailsVC, HLPhotoScrollVCDelegate, UIViewC
 //        let test = hotelInfoView?.frame
         
   //  }
+    
+    func hotelbookingBrowserClosed() {
+        self.navigationController?.popToRootViewController(animated: false)
+    }
     override func viewWillAppear(_ animated: Bool) {
         self.hotelInfoView.hotel = super.variant.hotel
         let tripViewController = self.parent?.parent as! TripViewController

@@ -125,7 +125,7 @@ static const CGFloat kHeaderHeight = 20.0;
     UINib *oneThumbSliderNib = [UINib nibWithNibName:@"JRFilterCellWithOneThumbSlider" bundle:AVIASALES_BUNDLE];
     [self.tableView registerNib:oneThumbSliderNib forCellReuseIdentifier:@"JRFilterCellWithOneThumbSlider"];
     
-    UINib *twoThumbSliderNib = [UINib nibWithNibName:@"JRFilterCellWithTwoThumbsSlider" bundle:AVIASALES_BUNDLE];
+    UINib *twoThumbSliderNib = [UINib nibWithNibName:@"JRFilterCellWithTwoThumbsSlider" bundle:[NSBundle mainBundle]];
     [self.tableView registerNib:twoThumbSliderNib forCellReuseIdentifier:@"JRFilterCellWithTwoThumbsSlider"];
     
     UINib *checkboxNib = [UINib nibWithNibName:@"JRFilterCheckboxCell" bundle:AVIASALES_BUNDLE];

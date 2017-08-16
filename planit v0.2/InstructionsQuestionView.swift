@@ -38,13 +38,13 @@ class InstructionsQuestionView: UIView {
         let bounds = UIScreen.main.bounds
         
         questionLabel1?.frame = CGRect(x: 10, y: 5, width: bounds.size.width - 20, height: 140)
-        questionLabel2?.frame = CGRect(x: 60, y: 90, width: bounds.size.width - 90, height: 130)
+        questionLabel2?.frame = CGRect(x: 33, y: 120, width: bounds.size.width - 60, height: 130)
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 515
+        button1?.frame.origin.y = 280
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         
         exampleItineraryImageView.layer.cornerRadius = 5
@@ -58,9 +58,9 @@ class InstructionsQuestionView: UIView {
         //Question label
         questionLabel1 = UILabel(frame: CGRect.zero)
         questionLabel1?.translatesAutoresizingMaskIntoConstraints = false
-        questionLabel1?.numberOfLines = 0
+        questionLabel1?.numberOfLines = 1
         questionLabel1?.textAlignment = .center
-        questionLabel1?.font = UIFont.boldSystemFont(ofSize: 25)
+        questionLabel1?.font = UIFont.boldSystemFont(ofSize: 32)
         questionLabel1?.textColor = UIColor.white
         questionLabel1?.adjustsFontSizeToFitWidth = true
         self.addSubview(questionLabel1!)
@@ -72,8 +72,9 @@ class InstructionsQuestionView: UIView {
         questionLabel2?.font = UIFont.boldSystemFont(ofSize: 19)
         questionLabel2?.textColor = UIColor.white
         questionLabel2?.adjustsFontSizeToFitWidth = true
-        questionLabel2?.text = " •  Select dates\n •  Choose your destination(s)\n •  Plan travel\n •  Find a place to stay\n •  Invite friends!"
-//        self.addSubview(questionLabel2!)
+//        questionLabel2?.text = " •  Select dates\n •  Choose your destination(s)\n •  Plan travel\n •  Find a place to stay\n •  Invite friends!"
+        questionLabel2?.text = " 1.  Create an itinerary\n\n 2.  Share it with your group\n\n 3.  Collaborate, finalize, and book!"
+        self.addSubview(questionLabel2!)
         
         //Button1
         button1 = UIButton(type: .custom)

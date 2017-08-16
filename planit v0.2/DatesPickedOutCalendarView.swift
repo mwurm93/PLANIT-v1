@@ -353,7 +353,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip2)
         
         //Hide done button if no dates selected
-        if selectedDates.count > 1 {
+        if selectedDates.count > 1 && (button1?.isHidden)! {
             button2?.isHidden = false
         } else {
             button2?.isHidden = true
@@ -480,7 +480,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
         //Hide done button if no dates selected
-        if selectedDates.count > 1 {
+        if selectedDates.count > 1 && (button1?.isHidden)!{
             button2?.isHidden = false
         } else {
             button2?.isHidden = true
@@ -562,7 +562,9 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
                 (subview as! UIButton).removeMask(button: subview as! UIButton, color: UIColor.white)
             }
         }
-        if sender == button2 {
+        if sender == button1 {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newTripCalendarRangeSelected_updateParseDatesCalendarView"), object: nil)
+        } else if sender == button2 {
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             let when = DispatchTime.now() + 0.15
             DispatchQueue.main.asyncAfter(deadline: when) {
