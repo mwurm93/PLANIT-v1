@@ -4883,7 +4883,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.smCalloutView.animation(withType: .stretch, presenting: true)
         self.smCalloutView.permittedArrowDirection = .up
         var calloutRect: CGRect = CGRect.zero
-        calloutRect.origin = CGPoint(x: segmentedControl?.layer.frame.maxX - 50, y: segmentedControl?.layer.frame.maxY)
+        calloutRect.origin = CGPoint(x: (segmentedControl?.layer.frame.maxX)! - 50, y: (segmentedControl?.layer.frame.maxY)!)
         self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
 
     }
@@ -6172,10 +6172,10 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         //        else if collectionView == contactsCollectionView
         let contactsCell = contactsCollectionView.dequeueReusableCell(withReuseIdentifier: "contactsCollectionPrototypeCell", for: indexPath) as! contactsCollectionViewCell
         if indexPath == IndexPath(item: 0, section: 0) {
-            contactsCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected_user")
-            contactsCell.initialsLabel.textColor = UIColor.darkGray
+            contactsCell.thumbnailImage.image = UIImage(named: "no_contact_image_user")
+//            contactsCell.initialsLabel.textColor = UIColor.darkGray
             contactsCell.thumbnailImageFilter.isHidden = true
-            contactsCell.initialsLabel.isHidden = false
+            contactsCell.initialsLabel.isHidden = true
 //            let firstInitial = "M"
 //            let secondInitial = "E"
 //            contactsCell.initialsLabel.text = firstInitial + secondInitial
@@ -6795,7 +6795,7 @@ extension TripViewController {
 //                self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
 //                self.itineraryView.bringSubview(toFront: contactsCollectionView!)
                 
-                self.smCalloutView.contentView = flightFavoritesTutorialView
+                self.smCalloutView.contentView = flightFavoriteTutorialView
                 self.smCalloutView.isHidden = false
                 self.smCalloutView.animation(withType: .stretch, presenting: true)
                 self.smCalloutView.permittedArrowDirection = .up
@@ -7074,7 +7074,7 @@ extension TripViewController {
                 
                 let bounds = UIScreen.main.bounds
 
-                self.smCalloutView.contentView = hotelFavoritesTutorialView
+                self.smCalloutView.contentView = self.hotelFavoritesTutorialView
                 self.smCalloutView.isHidden = false
                 self.smCalloutView.animation(withType: .stretch, presenting: true)
                 self.smCalloutView.permittedArrowDirection = .up
@@ -7880,6 +7880,7 @@ extension TripViewController {
 //                        let ticketVC = JRTicketVC(searchInfo: searchInfo, search: response.searchResultInfo.searchID)
                         let ticketVC = JRTicketVC(searchInfo: (ticket?.searchResultInfo.searchInfo)!, searchID: (ticket?.searchResultInfo.searchID)!)
                         ticketVC?.setTicket(ticket)
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hideJRTicketBuyButton"), object: nil)
                         
                         flightBookedOnPlanitController = JRNavigationController(rootViewController: ticketVC!)
                         flightBookedOnPlanitController?.isNavigationBarHidden = true
