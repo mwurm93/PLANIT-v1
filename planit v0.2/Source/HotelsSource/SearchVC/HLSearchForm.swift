@@ -92,6 +92,16 @@ import UIKit
         datesTitleLabel.text = NSLS("HL_LOC_SEARCH_DATES_LABEL")
         adultsTitleLabel.text = NSLS("HL_LOC_SEARCH_ADULTS_TITLE")
         kidsTitleLabel.text = NSLS("HL_LOC_SEARCH_KIDS_TITLE")
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchSpawnedFromItinerary), name: NSNotification.Name(rawValue: "hotelSearchSpawnedFromItinerary"), object: nil)
+
+    }
+    func hotelSearchSpawnedFromItinerary() {
+        let when = DispatchTime.now() + 1
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.searchButton.sendActions(for: .touchUpInside)
+        }
     }
 
     private func setupSearchButton() {
@@ -127,7 +137,7 @@ import UIKit
         let selected = UIImage(named: "searchFormButtonSelected")
         for button in [oneAdultsButton, twoAdultsButton, threeAdultsButton, fourAdultsButton, kidsButton] {
             button?.setBackgroundImage(image, for: .normal)
-            button?.tintColor = JRColorScheme.mainButtonBackgroundColor()
+            button?.tintColor = UIColor(red: 198/255, green: 206/255, blue: 220/255, alpha: 1)
             button?.setBackgroundImage(selected, for: .selected)
             button?.setTitleColor(JRColorScheme.searchFormTextColor(), for: .normal)
             button?.setTitleColor(JRColorScheme.searchFormTextColor(), for: .selected)

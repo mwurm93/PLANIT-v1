@@ -77,6 +77,12 @@ static CGFloat const separatorRightInset = 20.0;
                                                  name:@"roundtripButtonTouchedUpInside"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(flightSearchSpawnedFromItinerary)
+                                                 name:@"flightSearchSpawnedFromItinerary"
+                                               object:nil];
+
+    
     
     //start with  roundtrip if single destination
     FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
@@ -430,5 +436,7 @@ static CGFloat const separatorRightInset = 20.0;
 - (IBAction)swapButtonTapped:(UIButton *)sender {
     [self.presenter handleSwapAirports];
 }
-
+- (void)flightSearchSpawnedFromItinerary{
+    [self.presenter handleSearch];
+}
 @end

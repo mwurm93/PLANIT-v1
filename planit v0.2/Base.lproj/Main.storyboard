@@ -913,6 +913,7 @@
                         <outlet property="infoKeyLabel_1" destination="0HC-FU-xCn" id="0Lc-8B-hiE"/>
                         <outlet property="infoKeyLabel_2" destination="pxV-EN-LNe" id="wFO-mU-e93"/>
                         <outlet property="infoKeyTitleLabel" destination="DDd-ni-Nmk" id="MZk-Po-kzx"/>
+                        <outlet property="infoKeyTitleUnderline" destination="HDC-nJ-HOZ" id="a1c-as-UOd"/>
                         <outlet property="itineraryButton" destination="bPt-e2-WYa" id="CTF-hu-gzM"/>
                         <outlet property="itineraryButton1" destination="GWs-ib-KAp" id="OZm-xr-QAn"/>
                         <outlet property="itineraryButton2" destination="oGw-7q-25H" id="ffW-FG-itd"/>

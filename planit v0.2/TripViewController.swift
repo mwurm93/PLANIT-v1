@@ -4565,24 +4565,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         if timesViewed["itinerary"] == nil {
             let when = DispatchTime.now() + 0.3
-            //PLANNED: SMcalloutView
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.handleItineraryTutorial()
-                
-//                self.popupBackgroundFilterView.alpha = 0
-//                let bounds = UIScreen.main.bounds
-//                self.popupBackgroundFilterView.center = CGPoint(x: bounds.size.width / 2, y: bounds.size.height / 2)
-//                self.popupBackgroundFilterView.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
-//                
-//                self.animateInBackgroundFilterView(withInfoView: true, withBlurEffect: true, withCloseButton: true)
                 self.timesViewed["itinerary"] = 1
                 SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
                 self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-//
-//                UIView.animate(withDuration: 0.5) {
-//                    self.popupBackgroundFilterView.alpha = 1
-//                    self.popupBackgroundFilterView.transform = CGAffineTransform.identity
-//                }
             }
         }
 
@@ -4804,25 +4791,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     editSwitch.frame.origin.x = 187
                 }
             }
-            
-            //Disable sending itinerary if destination or dates not chosen
-//            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//            var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-//            
-//            if ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! == 0 || destinationsForTrip.count == 0 {
-//                itinerarySendable = false
-//                
-//                editSwitchLabel.frame.origin.x = 110
-//                editSwitch.frame.origin.x = 217
-//            }            
-
             if itinerarySendable {
                 itineraryButton2?.isHidden = false
                 itineraryButton2?.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
-                
-                //PLANNED:             
-                //Move switch and label to the left
-                //pulse button
             } else {
                 itineraryButton2?.isHidden = true
                 itineraryButton2?.stopPulseEffect()
@@ -5807,18 +5778,16 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         }
                     }
                 }
-
                 
-                //PLANNED: more detailed travel planned logic
+                //Set travel badge
                 if travelDictionaryArray.count < indexPath.row {
+                    
                     destinationsDatesCell.travelButton_badge.badgeString = "!"
                     destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor.red
                 } else {
-                    destinationsDatesCell.travelButton_badge.badgeString = "✓"
-                    destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
-                    
-                    
+   
                     if isRoundtripTravelPlanned {
+                        //set travel icon
                         if travelDictionaryArray[indexOfRoundtripTravel]["modeOfTransportation"] as! String == "fly" {
                             destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                         } else if travelDictionaryArray[indexOfRoundtripTravel]["modeOfTransportation"] as! String == "drive" {
@@ -5827,7 +5796,25 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                             destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "busTrainOtherIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                         }
                         
+                        //set badge
+                        if travelDictionaryArray[indexOfRoundtripTravel]["modeOfTransportation"] as! String == "fly" {
+                            if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexOfRoundtripTravel]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexOfRoundtripTravel]["flightNotFromPlanitDict"] != nil {
+                                destinationsDatesCell.travelButton_badge.badgeString = "✓"
+                                destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+                            } else {
+                                destinationsDatesCell.travelButton_badge.badgeString = "!"
+                                destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor.red
+                            }
+                        } else {
+                            //If mode of transportation is drive, bustrainother, or illalready be there, consider it planned and completed
+                            destinationsDatesCell.travelButton_badge.badgeString = "✓"
+                            destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+                        }
+                        
                     } else {
+                        // no roundtrip travel planned...so there is a spot in array for final return travel
+                        
+                        //set travel icon
                         var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
                         if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "fly" {
                             destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
@@ -5836,6 +5823,22 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "busTrainOther" {
                             destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "busTrainOtherIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                         }
+                        
+                        //set badge
+                        if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "fly" {
+                            if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightNotFromPlanitDict"] != nil {
+                                destinationsDatesCell.travelButton_badge.badgeString = "✓"
+                                destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+                            } else {
+                                destinationsDatesCell.travelButton_badge.badgeString = "!"
+                                destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor.red
+                            }
+                        } else {
+                            //If mode of transportation is drive, bustrainother, or illalready be there, consider it planned and completed
+                            destinationsDatesCell.travelButton_badge.badgeString = "✓"
+                            destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+                        }
+
                     }
 
                 }
@@ -5905,8 +5908,19 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor.red
 
             } else {
-                destinationsDatesCell.travelButton_badge.badgeString = "✓"
-                destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+                if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "fly" {
+                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightNotFromPlanitDict"] != nil {
+                        destinationsDatesCell.travelButton_badge.badgeString = "✓"
+                        destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+                    } else {
+                        destinationsDatesCell.travelButton_badge.badgeString = "!"
+                        destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor.red
+                    }
+                } else {
+                    //If mode of transportation is drive, bustrainother, or illalready be there, consider it planned and completed
+                    destinationsDatesCell.travelButton_badge.badgeString = "✓"
+                    destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+                }
                 
                 travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
                 if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "fly" {
@@ -6007,13 +6021,25 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.destinationButton_badge.layer.frame.origin = CGPoint(x: destinationsDatesCell.destinationButton.layer.frame.maxX - 33, y: destinationsDatesCell.destinationButton.layer.frame.minY + 10)
             destinationsDatesCell.destinationButton_badge.isHidden = false
             
+            
+            //Set place to stay badge color
             if placeToStayDictionaryArray.count < indexPath.row {
                 destinationsDatesCell.placeToStayButton_badge.badgeString = "!"
                 destinationsDatesCell.placeToStayButton_badge.badgeBackgroundColor = UIColor.red
             } else {
-                destinationsDatesCell.placeToStayButton_badge.badgeString = "!"
-                destinationsDatesCell.placeToStayButton_badge.badgeBackgroundColor = UIColor.orange
-                
+                if placeToStayDictionaryArray[indexPath.row - 1]["typeOfPlaceToStay"] as! String == "hotel" {
+                    if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["hotelBookedOnPlanit"] != nil || (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["hotelNotFromPlanitDict"] != nil {
+                        destinationsDatesCell.placeToStayButton_badge.badgeString = "!"
+                        destinationsDatesCell.placeToStayButton_badge.badgeBackgroundColor = UIColor.orange
+                    } else {
+                        destinationsDatesCell.placeToStayButton_badge.badgeString = "!"
+                        destinationsDatesCell.placeToStayButton_badge.badgeBackgroundColor = UIColor.red
+                    }
+                } else {
+                    //If type of place to stay is with someone I know of short term rental
+                    destinationsDatesCell.placeToStayButton_badge.badgeString = "!"
+                    destinationsDatesCell.placeToStayButton_badge.badgeBackgroundColor = UIColor.orange
+                }                
             }
             destinationsDatesCell.placeToStayButton.frame.origin.x = destinationsDatesCell.destinationButton.frame.maxX + 18
             destinationsDatesCell.placeToStayButton.frame.origin.y = destinationsDatesCell.destinationButton.frame.midY - destinationsDatesCell.placeToStayButton.frame.size.height / 2
@@ -7450,10 +7476,7 @@ extension TripViewController {
                             self.segmentedControl?.move(to: 0)
                             self.assistant()
                             
-                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "searchSpawnedFromItinerary"), object: nil)
-
-                            
-                            
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelSearchSpawnedFromItinerary"), object: nil)                                                    
                             
                         }
                         alertController.addAction(cancelAction)
@@ -7619,7 +7642,7 @@ extension TripViewController {
             if assistantMode == "travel" {
                 showFinishPlanningTripAlert(title: "Let's finish changing your travel!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
             }
-            if sender.tag == (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]).count && isRoundtripTravelPlanned {
+            if sender.tag == (destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1) && isRoundtripTravelPlanned {
                 detailedInformationSubviewMode = "roundTripTravelComments"
                 //Show text entered
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
@@ -7632,7 +7655,7 @@ extension TripViewController {
                 textView?.contentOffset.y = -topCorrect!
                 textView?.resignFirstResponder()
                 self.view.addSubview(detailedInformationSubview)
-
+                return
             }
             if sender.tag <= (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]).count  {
                 var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
@@ -7690,7 +7713,7 @@ extension TripViewController {
                         }
                         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
                             
-                            //SHOW SAVED Flights in Assistant
+                            //PLANNED: SHOW SAVED Flights in Assistant
                             SavedPreferencesForTrip["assistantMode"] = "travel" as! NSString
                             SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
                             self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -7701,6 +7724,11 @@ extension TripViewController {
                             self.handleTwicketSegmentedControl()
                             self.segmentedControl?.move(to: 0)
                             self.assistant()
+                            
+//                            let when = DispatchTime.now() + 0.4
+//                            DispatchQueue.main.asyncAfter(deadline: when) {
+                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightSearchSpawnedFromItinerary"), object: nil)
+//                            }
                         }
                         alertController.addAction(cancelAction)
                         alertController.addAction(okAction)

@@ -83,8 +83,8 @@
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(searchSpawnedFromItinerary)
-                                                 name:@"searchSpawnedFromItinerary"
+                                             selector:@selector(hotelSearchSpawnedFromItinerary)
+                                                 name:@"hotelSearchSpawnedFromItinerary"
                                                object:nil];
 }
 -(void)viewWillAppear:(BOOL)animated {
@@ -362,8 +362,10 @@
     [self.tabBarController setSelectedViewController:self.navigationController];
 }
 
-- (void)searchSpawnedFromItinerary {
-    [self tryToStartSearchWithSearchInfo:self.searchInfo];
+- (void)hotelSearchSpawnedFromItinerary {
+    if ([self.searchInfo readyToSearch]) {
+        [self performSearchWithSearchInfo:self.searchInfo];
+    }
 }
 
 @end
