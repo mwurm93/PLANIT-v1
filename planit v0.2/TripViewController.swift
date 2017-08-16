@@ -583,6 +583,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(openWanderuSFSafariViewer), name: NSNotification.Name(rawValue: "openWanderuSFSafariViewer"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(openAmtrakSFSafariViewer), name: NSNotification.Name(rawValue: "openAmtrakSFSafariViewer"), object: nil)
 
+        
         //Dates
         NotificationCenter.default.addObserver(self, selector: #selector(handleCalendarRangeSelected), name: NSNotification.Name(rawValue: "tripCalendarRangeSelected"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(tripCalendarRangeSelectedDoneButtonTouchedUpInside), name: NSNotification.Name(rawValue: "tripCalendarRangeSelectedDoneButtonTouchedUpInside"), object: nil)
@@ -644,7 +645,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(JRDatePicker_ViewDidLoad), name: NSNotification.Name(rawValue: "JRDatePicker_ViewDidLoad"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(JRFilterVC_viewWillAppear), name: NSNotification.Name(rawValue: "JRFilterVC_viewWillAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flightSearchResultsSceneViewController_doneButtonTouchedUpInside), name: NSNotification.Name(rawValue: "flightSearchResultsSceneViewController_doneButtonTouchedUpInside"), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnBuyBestAlert), name: NSNotification.Name(rawValue: "spawnBuyBestAlert"), object: nil)
+
 
 
         
@@ -664,6 +666,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(HLMapVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLMapVC_viewWillAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(HLSortVC_viewWillAppear), name: NSNotification.Name(rawValue: "HLSortVC_viewWillAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hotelSearchResultsViewController_doneButtonTouchedUpInside), name: NSNotification.Name(rawValue: "hotelSearchResultsViewController_doneButtonTouchedUpInside"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(spawnBookHotelAlert), name: NSNotification.Name(rawValue: "spawnBookHotelAlert"), object: nil)
 
         
         
@@ -1051,6 +1054,26 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        }
 //        placeToStayItem?.setNeedsDisplay()
 //    }
+    
+    func spawnBuyBestAlert() {
+        
+        let alertController = UIAlertController(title: "Purchase ticket", message: "You’re being redirected to one of our trusted partners for booking.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "continueBuyBest"), object: nil)
+        }
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    func spawnBookHotelAlert() {
+        
+        let alertController = UIAlertController(title: "Book place to stay", message: "You’re being redirected to one of our trusted partners for booking.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "continueBookHotel"), object: nil)
+        }
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+
 
     func sendInvitesButtonTouchedUpInside(sender:UIButton) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -4589,10 +4612,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         if numberOfContacts == 0 {
             contactsCollectionView.isHidden = true
-            addInviteeButton.setTitle("Invite travelmates", for: .normal)
+            addInviteeButton.setTitle("Invite travelers", for: .normal)
             addInviteeButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 22)
             addInviteeButton.frame.size.height = 30
-            addInviteeButton.frame.size.width = 200
+            addInviteeButton.frame.size.width = 190
             addInviteeButton.frame.origin.x = (bounds.size.width - (addInviteeButton.frame.width)) / 2
             addInviteeButton.frame.origin.y = 70
             addInviteeButton.setTitleColor(completeColor, for: .normal)
@@ -6054,13 +6077,13 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         //        else if collectionView == contactsCollectionView
         let contactsCell = contactsCollectionView.dequeueReusableCell(withReuseIdentifier: "contactsCollectionPrototypeCell", for: indexPath) as! contactsCollectionViewCell
         if indexPath == IndexPath(item: 0, section: 0) {
-            contactsCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected")
+            contactsCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected_user")
             contactsCell.initialsLabel.textColor = UIColor.darkGray
             contactsCell.thumbnailImageFilter.isHidden = true
             contactsCell.initialsLabel.isHidden = false
-            let firstInitial = "M"
-            let secondInitial = "E"
-            contactsCell.initialsLabel.text = firstInitial + secondInitial
+//            let firstInitial = "M"
+//            let secondInitial = "E"
+//            contactsCell.initialsLabel.text = firstInitial + secondInitial
             
             //Delete button
             contactsCell.deleteButton.isHidden = true
@@ -6165,15 +6188,23 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         if collectionView == contactsCollectionView {
             // Change border color to grey
             let selectedCell = contactsCollectionView.cellForItem(at: indexPath) as! contactsCollectionViewCell
+            if indexPath == IndexPath(item: 0, section: 0) {
+                selectedCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected_user")
+            } else {
             selectedCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected")
             selectedCell.initialsLabel.textColor = UIColor.darkGray
+            }
             //SET DATA MODEL TO SHOW TRAVEL AND PLACE TO STAY INFO FOR THIS CONTACT
             
             for item in 0 ... (contacts?.count)! {
                 let cell = contactsCollectionView.cellForItem(at: IndexPath(item: item, section: 0)) as! contactsCollectionViewCell
                 if cell.initialsLabel.textColor == UIColor.darkGray && IndexPath(item: item, section: 0) != indexPath {
-                    cell.thumbnailImage.image = UIImage(named: "no_contact_image")
-                    cell.initialsLabel.textColor = UIColor.white
+                    if indexPath == IndexPath(item: 0, section: 0) {
+                        cell.thumbnailImage.image = UIImage(named: "no_contact_image_user")
+                    } else {
+                        cell.thumbnailImage.image = UIImage(named: "no_contact_image")
+                        cell.initialsLabel.textColor = UIColor.white
+                    }
                 }
             }
             turnOnItineraryEditing()

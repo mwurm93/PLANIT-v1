@@ -62,10 +62,10 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
             
             
             
-            messageComposeVC.body =  "Hey, I just started planning a \(numberNights) night trip to \(destinationsForMessage) from \(checkInDateAsString) to \(checkOutDateAsString) on Planit. Check out the itinerary I've put together and we can plan travel and a place to stay!"
+            messageComposeVC.body =  "Hey, I just started planning a \(numberNights) night trip to \(destinationsForMessage) from \(checkInDateAsString) to \(checkOutDateAsString) on the Planit app. Check out the itinerary I've put together and we can plan travel and a place to stay!"
             
         } else if tripDates.count <= 1 && destinationsForMessage != "" {
-            messageComposeVC.body =  "Hey, I just started planning a trip to \(destinationsForMessage) on Planit. Check out the itinerary I've put together and we can plan travel and a place to stay!"
+            messageComposeVC.body =  "Hey, I just started planning a trip to \(destinationsForMessage) on the Planit app. Check out the itinerary I've put together and we can plan travel and a place to stay!"
         } else if tripDates.count > 1 && destinationsForMessage == "" {
             let checkInDate = tripDates[0]
             let checkInDateAsString = formatter.string(from: checkInDate)
@@ -73,9 +73,9 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
             let checkOutDateAsString = formatter.string(from: checkOutDate)
             let numberNights = DateUtil.hl_daysBetweenDate(checkInDate, andOtherDate:checkOutDate)
 
-            messageComposeVC.body =  "Hey, I just started planning a \(numberNights) night trip from \(checkInDateAsString) to \(checkOutDateAsString) on Planit. Want to help me find a destination? Then we can plan travel and a place to stay!"
+            messageComposeVC.body =  "Hey, I just started planning a \(numberNights) night trip from \(checkInDateAsString) to \(checkOutDateAsString) on the Planit app. Want to help me find a destination? Then we can plan travel and a place to stay!"
         } else {
-            messageComposeVC.body =  "Hey, I just started planning a trip on Planit. Want to help me find dates and a destination? Then we can plan travel and a place to stay!"
+            messageComposeVC.body =  "Hey, I just started planning a trip on the Planit app. Want to help me find dates and a destination? Then we can plan travel and a place to stay!"
         }
         
         return messageComposeVC

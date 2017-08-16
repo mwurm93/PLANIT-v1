@@ -96,7 +96,7 @@ CGFloat const kPriceValueFontSize = 20.0;
 
     if (_saveButton == nil) {
         _saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _saveButton.frame = CGRectMake(336, 10, 30, 30);
+        _saveButton.frame = CGRectMake(326, 10, 40, 40);
         [_saveButton addTarget:self action:@selector(handleSaveButtonTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_saveButton];
     }

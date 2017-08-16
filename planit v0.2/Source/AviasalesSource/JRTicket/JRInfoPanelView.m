@@ -53,6 +53,11 @@ static const CGFloat kAgencyInfoLabelMaxCenterConstraint = 15.0;
     self.showOtherAgenciesButton.layer.cornerRadius = 4.0;
     
     [self updateContent];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(continueBuyBest)
+                                                 name:@"continueBuyBest"
+                                               object:nil];
 }
 
 #pragma mark Public methods
@@ -164,6 +169,11 @@ static const CGFloat kAgencyInfoLabelMaxCenterConstraint = 15.0;
 #pragma mark IBAction methods
 
 - (IBAction)buyBest:(id)sender {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"spawnBuyBestAlert"
+                                                            object:self];
+}
+
+- (void) continueBuyBest{
     self.buyHandler();
     FlightTicketsAccessoryMethodPerformer *flightTicketsAccessoryMethodPerformer = [[FlightTicketsAccessoryMethodPerformer alloc] init];
     [flightTicketsAccessoryMethodPerformer saveLastOpenFlightTicketWithTicket:self.ticket];

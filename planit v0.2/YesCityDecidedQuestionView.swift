@@ -146,7 +146,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         button?.layer.borderColor = UIColor.white.cgColor
         button?.layer.masksToBounds = true
         button?.titleLabel?.textAlignment = .center
-        button?.setTitle("Help me discover somewhere!", for: .normal)
+        button?.setTitle("Discover", for: .normal)
         button?.translatesAutoresizingMaskIntoConstraints = false
         button?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button!)
