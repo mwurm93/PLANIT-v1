@@ -4822,11 +4822,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             popupBackgroundFilterViewCloseButton.isHidden = true
         }
         self.view.addSubview(popupBackgroundFilterView)
+        focusBackgroundViewWithinTopView.isHidden = true
+        focusBackgroundViewWithinItineraryView.isHidden = true
     }
     func animateOutBackgroundFilterView() {
         self.popupBackgroundFilterView.removeFromSuperview()
         popupBackgroundFilterView.isHidden = true
         popupBackgroundViewDeleteContacts.isHidden = true
+        focusBackgroundViewWithinTopView.isHidden = true
+        focusBackgroundViewWithinItineraryView.isHidden = true
+        addBackButtonPointedAtTripList()
     }
     func handleSendInvitesButton() {
         if editItineraryModeEnabled == true {
