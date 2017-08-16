@@ -4595,7 +4595,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let when = DispatchTime.now() + 0.3
             DispatchQueue.main.asyncAfter(deadline: when) {
                 
-                self.handleItineraryTutorial()                
+                self.handleItineraryTutorial()
                 
                 self.timesViewed["itinerary"] = 1
                 SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
@@ -4862,14 +4862,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.smCalloutView.dismissCallout(animated: true)
         focusBackgroundViewWithinTopView.isHidden = true
         focusBackgroundViewWithinItineraryView.isHidden = true
+        self.itineraryView.bringSubview(toFront: addInviteeButton)
     }
     @IBAction func contactsTutorialView1DoneButtonTouchedUpInside(_ sender: Any) {
-        self.smCalloutView.dismissCallout(animated: true)
-        
         self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
         self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
         self.topView.bringSubview(toFront: segmentedControl!)
-
         
         self.smCalloutView.contentView = contactsTutorialView2
         self.smCalloutView.isHidden = false
@@ -5479,7 +5477,7 @@ extension TripViewController {
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX, y: contactsCollectionView.layer.frame.maxY)
+            calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX, y: topView.frame.height + contactsCollectionView.layer.frame.maxY)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
 
         }
@@ -5585,7 +5583,7 @@ extension TripViewController {
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX, y: contactsCollectionView.layer.frame.maxY)
+            calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX, y: topView.frame.height + contactsCollectionView.layer.frame.maxY)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
 
         }
@@ -6790,6 +6788,7 @@ extension TripViewController {
 //                self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
 //                self.itineraryView.bringSubview(toFront: contactsCollectionView!)
                 
+                self.smCalloutView.tintColor = UIColor.lightGray
                 self.smCalloutView.contentView = self.flightFavoriteTutorialView
                 self.smCalloutView.isHidden = false
                 self.smCalloutView.animation(withType: .stretch, presenting: true)
@@ -7074,7 +7073,7 @@ extension TripViewController {
                 self.smCalloutView.animation(withType: .stretch, presenting: true)
                 self.smCalloutView.permittedArrowDirection = .up
                 var calloutRect: CGRect = CGRect.zero
-                calloutRect.origin = CGPoint(x: bounds.width - 25, y: CGFloat(175))
+                calloutRect.origin = CGPoint(x: bounds.width - 27, y: CGFloat(192))
                 self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
                 
                 
@@ -7224,6 +7223,8 @@ extension TripViewController {
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
         self.hotelMapButton.isHidden = true
+        
+
     }
     func HLSortVC_viewWillAppear() {
         self.segmentedControl?.isHidden = true
@@ -7231,6 +7232,15 @@ extension TripViewController {
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
         self.hotelMapButton.isHidden = true
+        
+        self.backButton?.removeFromSuperview()
+        backButton = nil
+        let backButtonImage = #imageLiteral(resourceName: "backButton")
+        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
+        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton?.addTarget(self, action: #selector(popFromHLSortToHotelResults), for: UIControlEvents.touchUpInside)
+        self.topView.addSubview(backButton!)
+
     }
     func HLMapVC_viewWillAppear() {
         self.segmentedControl?.isHidden = true
@@ -7247,6 +7257,10 @@ extension TripViewController {
         backButton?.addTarget(self, action: #selector(popFromMapVCToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
     }
+    func popFromHLSortToHotelResults() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromHLSortToHotelResults"), object: nil)
+    }
+    
     func popFromMapVCToHotelSearch() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromMapVCToHotelSearch"), object: nil)
     }

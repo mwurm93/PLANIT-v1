@@ -325,7 +325,7 @@ static const NSInteger kHotelCardIndex = 5;
     if (iPad()) {
         filtersNavigationVC.modalPresentationStyle = UIModalPresentationFormSheet;
     }
-    [self.navigationController pushViewController:filterVC animated:true];
+    [self.navigationController pushViewController:filterVC animated:false];
 //     presentViewController:filtersNavigationVC animated:YES completion:nil];
 }
 - (IBAction)filterButtonTouchedUpInside:(id)sender {
