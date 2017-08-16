@@ -212,6 +212,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet var itineraryTutorialView3: UIView!
     @IBOutlet var itineraryTutorialView4: UIView!
     @IBOutlet weak var addInviteeButton_badge: MIBadgeButton!
+    @IBOutlet var flightFavoriteTutorialView: UIView!
+    @IBOutlet var hotelFavoritesTutorialView: UIView!
+    @IBOutlet var contactsTutorialView2: UIView!
+    @IBOutlet var contactsTutorialView1: UIView!
     
     func handleItineraryTutorial() {
         if smCalloutViewMode == "itineraryTutorial1" {
@@ -361,6 +365,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.hotelMapButton.isHidden = true
         self.popupBackgroundFilterView.isHidden = true
         self.addTwicketSegmentedControl()
+        self.handleTwicketSegmentedControl()
         self.addBackButtonPointedAtTripList()
         self.setupItineraryInfoView()
         
@@ -4589,7 +4594,18 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if timesViewed["itinerary"] == nil {
             let when = DispatchTime.now() + 0.3
             DispatchQueue.main.asyncAfter(deadline: when) {
-                self.handleItineraryTutorial()
+
+                
+                self.smCalloutView.contentView = self.flightFavoriteTutorialView
+                self.smCalloutView.isHidden = false
+                self.smCalloutView.animation(withType: .stretch, presenting: true)
+                self.smCalloutView.permittedArrowDirection = .up
+                var calloutRect: CGRect = CGRect.zero
+                calloutRect.origin = CGPoint(x: CGFloat(20), y: CGFloat(100))
+                self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+                
+                
+                
                 self.timesViewed["itinerary"] = 1
                 SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
                 self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
@@ -4770,6 +4786,25 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             infoKeyLabel_1.isHidden = false
             infoKeyLabel_2.isHidden = false
             
+            infoKeyButton_1.isUserInteractionEnabled = false
+            infoKeyButton_1_text.isUserInteractionEnabled = false
+            infoKeyButton_2.isUserInteractionEnabled = false
+            infoKeyButton_3.isUserInteractionEnabled = false
+            infoKeyButton_3_badgeButton?.isUserInteractionEnabled = false
+            infoKeyButton_4_badgeButton?.isUserInteractionEnabled = false
+            infoKeyButton_5_badgeButton?.isUserInteractionEnabled = false
+            infoKeyButton_4.isUserInteractionEnabled = false
+            infoKeyButton_5.isUserInteractionEnabled = false
+            infoKeyButton_6.isUserInteractionEnabled = false
+            infoKeyButton_6_text.isUserInteractionEnabled = false
+            infoKeyButton_7.isUserInteractionEnabled = false
+            infoKeyButton_7_text.isUserInteractionEnabled = false
+            infoKeyTitleLabel.isUserInteractionEnabled = false
+            infoKeyTitleUnderline.isUserInteractionEnabled = false
+            infoKeyLabel_1.isUserInteractionEnabled = false
+            infoKeyLabel_2.isUserInteractionEnabled = false
+
+            
         } else {
             infoKeyButton_1.isHidden = true
             infoKeyButton_1_text.isHidden = true
@@ -4826,6 +4861,17 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     // MARK: Actions
+    @IBAction func filghtFavoritesTutorialViewDoneButtonTouchedUpInside(_ sender: Any) {
+        self.smCalloutView.dismissCallout(animated: true)
+    }
+    @IBAction func hotelFavoritesTutorialViewDoneButtonTouchedUpInside(_ sender: Any) {
+        self.smCalloutView.dismissCallout(animated: true)
+    }
+    @IBAction func contactsTutorialView2DoneButtonTouchedUpInside(_ sender: Any) {
+        self.smCalloutView.dismissCallout(animated: true)
+    }
+    @IBAction func contactsTutorialView1DoneButtonTouchedUpInside(_ sender: Any) {
+    }
     @IBAction func itineraryTutorialView1_nextButtonTouchedUpInside(_ sender: Any) {
         handleItineraryTutorial()
     }
@@ -5420,6 +5466,7 @@ extension TripViewController {
         updateProgress()
         handleAddInviteesButton()
         handleSendInvitesButton()
+        handleTwicketSegmentedControl()
         //        //Uncomment for testing on Simulator
         //        //        chatButton.isHidden = true
         //        //        subviewDoneButton.isHidden = false
@@ -5511,6 +5558,7 @@ extension TripViewController {
         updateProgress()
         handleAddInviteesButton()
         handleSendInvitesButton()
+        handleTwicketSegmentedControl()
         //        //Uncomment for testing on Simulator
         //        //        chatButton.isHidden = true
         //        //        subviewDoneButton.isHidden = false
@@ -6191,8 +6239,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             if indexPath == IndexPath(item: 0, section: 0) {
                 selectedCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected_user")
             } else {
-            selectedCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected")
-            selectedCell.initialsLabel.textColor = UIColor.darkGray
+                selectedCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected")
+                selectedCell.initialsLabel.textColor = UIColor.darkGray
             }
             //SET DATA MODEL TO SHOW TRAVEL AND PLACE TO STAY INFO FOR THIS CONTACT
             
@@ -6320,6 +6368,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
         handleAddInviteesButton()
         handleSendInvitesButton()
+        handleTwicketSegmentedControl()
     }
 
     //    func leaveDeleteContactsMode(touch: UITapGestureRecognizer) {
@@ -6684,6 +6733,20 @@ extension TripViewController {
     }
     
     func flightSearchResultsSceneViewController_ViewDidAppear() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
+        
+        if timesViewed["flightSearchResults"] == nil {
+            let when = DispatchTime.now() + 0.3
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                self.handleItineraryTutorial()
+                self.timesViewed["flightSearchResults"] = 1
+                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            }
+        }
+
+        
         
         self.backButton?.removeFromSuperview()
         backButton = nil
@@ -6779,7 +6842,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 33,width: 11, height: 14))
+        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromJRDatePickerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -6788,7 +6851,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 33,width: 11, height: 14))
+        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromJRAirportPickerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -6876,11 +6939,37 @@ extension TripViewController {
     }
     func handleTwicketSegmentedControl() {
         if isAssistantEnabled {
-            let segmentedControlTitles = ["Assistant","Itinerary","Chat"]
-            segmentedControl?.setSegmentItems(segmentedControlTitles)
+            if contacts != nil {
+                if (contacts?.count)! > 0 {
+                    let segmentedControlTitles = ["Assistant","Itinerary","Chat"]
+                    segmentedControl?.setSegmentItems(segmentedControlTitles)
+                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 125 + 15, y: 20, width: 250, height: 40)
+                } else {
+                    let segmentedControlTitles = ["Assistant","Itinerary"]
+                    segmentedControl?.setSegmentItems(segmentedControlTitles)
+                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 84 + 15, y: 20, width: 167, height: 40)
+                }
+            } else {
+                let segmentedControlTitles = ["Assistant","Itinerary"]
+                segmentedControl?.setSegmentItems(segmentedControlTitles)
+                segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 84 + 15, y: 20, width: 167, height: 40)
+            }
         } else {
-            let segmentedControlTitles = ["Itinerary","Chat"]
-            segmentedControl?.setSegmentItems(segmentedControlTitles)
+            if contacts != nil {
+                if (contacts?.count)! > 0 {
+                    let segmentedControlTitles = ["Itinerary","Chat"]
+                    segmentedControl?.setSegmentItems(segmentedControlTitles)
+                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 84 + 15, y: 20, width: 167, height: 40)
+                } else {
+                    let segmentedControlTitles = ["Itinerary"]
+                    segmentedControl?.setSegmentItems(segmentedControlTitles)
+                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 + 15, y: 20, width: 100, height: 40)
+                }
+            } else {
+                let segmentedControlTitles = ["Itinerary"]
+                segmentedControl?.setSegmentItems(segmentedControlTitles)
+                segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 + 15, y: 20, width: 100, height: 40)
+            }
         }
         segmentedControl?.backgroundColor = .clear // This is important!
     }
@@ -6915,7 +7004,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 33,width: 11, height: 14))
+        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromHotelResultsViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -6968,7 +7057,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 33,width: 11, height: 14))
+        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromWaitingViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -6998,7 +7087,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 33,width: 11, height: 14))
+        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromCityPickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7008,7 +7097,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 33,width: 11, height: 14))
+        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromHLDatePickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7018,7 +7107,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 33,width: 11, height: 14))
+        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromKidsPickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7048,7 +7137,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 33,width: 11, height: 14))
+        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromMapVCToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)

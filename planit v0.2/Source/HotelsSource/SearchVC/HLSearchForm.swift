@@ -169,7 +169,7 @@ import UIKit
                 kidsButton?.setTitle("", for: .normal)
                 kidsButton.isSelected = false
             }
-            searchButton.setTitle("SEARCH HOTELS", for: .normal)
+            searchButton.setTitle("SEARCH", for: .normal)
         }
     }
 

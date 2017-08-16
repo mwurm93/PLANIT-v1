@@ -58,7 +58,7 @@ class DidYouBuyTheHotelQuestionView: UIView {
             questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
             questionLabel?.textColor = UIColor.black
             questionLabel?.adjustsFontSizeToFitWidth = true
-            questionLabel?.text = "Did you book this hotel?"
+            questionLabel?.text = "Hotel booked?"
             self.addSubview(questionLabel!)
             
             //Button2
@@ -71,7 +71,7 @@ class DidYouBuyTheHotelQuestionView: UIView {
             button1?.layer.masksToBounds = true
             button1?.titleLabel?.numberOfLines = 0
             button1?.titleLabel?.textAlignment = .center
-            button1?.setTitle("Yes, booked", for: .normal)
+            button1?.setTitle("Yes", for: .normal)
             button1?.translatesAutoresizingMaskIntoConstraints = false
             button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
             self.addSubview(button1!)

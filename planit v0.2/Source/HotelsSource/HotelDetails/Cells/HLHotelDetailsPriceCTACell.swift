@@ -10,13 +10,18 @@ class HLHotelDetailsPriceCTACell: HLPriceTableViewCell {
     @IBOutlet var spaceBetweenButtonsConstraint: NSLayoutConstraint!
 
     @IBAction fileprivate func bookButtonPressed(_ sender: AnyObject) {
-        bookHandler()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "spawnBookHotelAlert"), object: nil)
+        
 //        let hotelItemsAccessoryMethodsPerformer = HotelItemsAccessoryMethodsPerformer()
 //        let hlPriceTableViewCell = self as HLPriceTableViewCell
 //        
 //        hotelItemsAccessoryMethodsPerformer.saveLastOpenHotelRoom(hotelRoom: hlPriceTableViewCell.room)
     }
+    func continueBookHotel() {
+        bookHandler()
+    }
 
+    
     @IBAction fileprivate func photoButtonPressed(_ sender: AnyObject) {
         photoHandler()
     }
@@ -33,6 +38,8 @@ class HLHotelDetailsPriceCTACell: HLPriceTableViewCell {
         photoButton.titleLabel?.font = UIFont.systemFont(ofSize: 17.0)
         photoButton.layer.borderWidth = 1
         photoButton.layer.borderColor = JRColorScheme.mainButtonBackgroundColor().cgColor
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(continueBookHotel), name: NSNotification.Name(rawValue: "continueBookHotel"), object: nil)
     }
 
     func hidePhotosButton() {
