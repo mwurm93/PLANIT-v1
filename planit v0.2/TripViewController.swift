@@ -4594,17 +4594,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if timesViewed["itinerary"] == nil {
             let when = DispatchTime.now() + 0.3
             DispatchQueue.main.asyncAfter(deadline: when) {
-
                 
-                self.smCalloutView.contentView = self.itineraryTutorialView1
-                self.smCalloutView.isHidden = false
-                self.smCalloutView.animation(withType: .stretch, presenting: true)
-                self.smCalloutView.permittedArrowDirection = .up
-                var calloutRect: CGRect = CGRect.zero
-                calloutRect.origin = CGPoint(x: CGFloat(20), y: CGFloat(100))
-                self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-                
-                
+                self.handleItineraryTutorial()                
                 
                 self.timesViewed["itinerary"] = 1
                 SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
@@ -4869,6 +4860,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     @IBAction func contactsTutorialView2DoneButtonTouchedUpInside(_ sender: Any) {
         self.smCalloutView.dismissCallout(animated: true)
+        focusBackgroundViewWithinTopView.isHidden = true
+        focusBackgroundViewWithinItineraryView.isHidden = true
     }
     @IBAction func contactsTutorialView1DoneButtonTouchedUpInside(_ sender: Any) {
         self.smCalloutView.dismissCallout(animated: true)
@@ -5481,7 +5474,7 @@ extension TripViewController {
             self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
             self.itineraryView.bringSubview(toFront: contactsCollectionView!)
             
-            self.smCalloutView.contentView = contactsTutorialView2
+            self.smCalloutView.contentView = contactsTutorialView1
             self.smCalloutView.isHidden = false
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
@@ -5587,7 +5580,7 @@ extension TripViewController {
             self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
             self.itineraryView.bringSubview(toFront: contactsCollectionView!)
             
-            self.smCalloutView.contentView = contactsTutorialView2
+            self.smCalloutView.contentView = contactsTutorialView1
             self.smCalloutView.isHidden = false
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
@@ -6296,10 +6289,10 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 let cell = contactsCollectionView.cellForItem(at: IndexPath(item: item, section: 0)) as! contactsCollectionViewCell
                 if cell.initialsLabel.textColor == UIColor.darkGray && IndexPath(item: item, section: 0) != indexPath {
                     if indexPath == IndexPath(item: 0, section: 0) {
-                        cell.thumbnailImage.image = UIImage(named: "no_contact_image_user")
+                        cell.thumbnailImage.image = UIImage(named: "no_contact_image")
                         cell.initialsLabel.textColor = UIColor.white
                     } else {
-                        cell.thumbnailImage.image = UIImage(named: "no_contact_image")
+                        cell.thumbnailImage.image = UIImage(named: "no_contact_image_user")
                         cell.initialsLabel.textColor = UIColor.white
                     }
                 }
@@ -7122,6 +7115,8 @@ extension TripViewController {
         
     }
     func hotelDetailsViewController_ViewDidAppear() {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
         self.hotelMapButton.isHidden = true
