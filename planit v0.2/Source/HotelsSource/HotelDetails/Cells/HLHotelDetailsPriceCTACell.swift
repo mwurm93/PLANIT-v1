@@ -40,8 +40,12 @@ class HLHotelDetailsPriceCTACell: HLPriceTableViewCell {
         photoButton.layer.borderColor = JRColorScheme.mainButtonBackgroundColor().cgColor
         
         NotificationCenter.default.addObserver(self, selector: #selector(continueBookHotel), name: NSNotification.Name(rawValue: "continueBookHotel"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideJRTicketBuyButton), name: NSNotification.Name(rawValue: "hideJRTicketBuyButton"), object: nil)
+        
     }
-
+    func hideJRTicketBuyButton() {
+        bookButton.isHidden = true
+    }
     func hidePhotosButton() {
         photoButtonWidthConstraint.isActive = false
         spaceBetweenButtonsConstraint.isActive = false

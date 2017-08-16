@@ -212,8 +212,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet var itineraryTutorialView3: UIView!
     @IBOutlet var itineraryTutorialView4: UIView!
     @IBOutlet weak var addInviteeButton_badge: MIBadgeButton!
-    @IBOutlet var flightFavoriteTutorialView: UIView!
     @IBOutlet var hotelFavoritesTutorialView: UIView!
+    @IBOutlet var flightFavoriteTutorialView: UIView!
     @IBOutlet var contactsTutorialView2: UIView!
     @IBOutlet var contactsTutorialView1: UIView!
     
@@ -1062,7 +1062,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     func spawnBuyBestAlert() {
         
-        let alertController = UIAlertController(title: "Purchase ticket", message: "You’re being redirected to one of our trusted partners for booking.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Purchase ticket", message: "You will be redirected to one of our trusted partners for booking.", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "continueBuyBest"), object: nil)
         }
@@ -1071,7 +1071,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     func spawnBookHotelAlert() {
         
-        let alertController = UIAlertController(title: "Book place to stay", message: "You’re being redirected to one of our trusted partners for booking.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Book place to stay", message: "You will be redirected to one of our trusted partners for booking.", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "continueBookHotel"), object: nil)
         }
@@ -4596,7 +4596,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             DispatchQueue.main.asyncAfter(deadline: when) {
 
                 
-                self.smCalloutView.contentView = self.flightFavoriteTutorialView
+                self.smCalloutView.contentView = self.itineraryTutorialView1
                 self.smCalloutView.isHidden = false
                 self.smCalloutView.animation(withType: .stretch, presenting: true)
                 self.smCalloutView.permittedArrowDirection = .up
@@ -6172,8 +6172,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         //        else if collectionView == contactsCollectionView
         let contactsCell = contactsCollectionView.dequeueReusableCell(withReuseIdentifier: "contactsCollectionPrototypeCell", for: indexPath) as! contactsCollectionViewCell
         if indexPath == IndexPath(item: 0, section: 0) {
-            contactsCell.thumbnailImage.image = UIImage(named: "no_contact_image_user")
-//            contactsCell.initialsLabel.textColor = UIColor.darkGray
+            contactsCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected_user")
+            contactsCell.initialsLabel.textColor = UIColor.darkGray
             contactsCell.thumbnailImageFilter.isHidden = true
             contactsCell.initialsLabel.isHidden = true
 //            let firstInitial = "M"
@@ -6285,6 +6285,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             let selectedCell = contactsCollectionView.cellForItem(at: indexPath) as! contactsCollectionViewCell
             if indexPath == IndexPath(item: 0, section: 0) {
                 selectedCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected_user")
+                selectedCell.initialsLabel.textColor = UIColor.darkGray
             } else {
                 selectedCell.thumbnailImage.image = UIImage(named: "no_contact_image_selected")
                 selectedCell.initialsLabel.textColor = UIColor.darkGray
@@ -6296,6 +6297,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 if cell.initialsLabel.textColor == UIColor.darkGray && IndexPath(item: item, section: 0) != indexPath {
                     if indexPath == IndexPath(item: 0, section: 0) {
                         cell.thumbnailImage.image = UIImage(named: "no_contact_image_user")
+                        cell.initialsLabel.textColor = UIColor.white
                     } else {
                         cell.thumbnailImage.image = UIImage(named: "no_contact_image")
                         cell.initialsLabel.textColor = UIColor.white
@@ -6795,7 +6797,7 @@ extension TripViewController {
 //                self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
 //                self.itineraryView.bringSubview(toFront: contactsCollectionView!)
                 
-                self.smCalloutView.contentView = flightFavoriteTutorialView
+                self.smCalloutView.contentView = self.flightFavoriteTutorialView
                 self.smCalloutView.isHidden = false
                 self.smCalloutView.animation(withType: .stretch, presenting: true)
                 self.smCalloutView.permittedArrowDirection = .up
@@ -7007,32 +7009,32 @@ extension TripViewController {
                 if (contacts?.count)! > 0 {
                     let segmentedControlTitles = ["Assistant","Itinerary","Chat"]
                     segmentedControl?.setSegmentItems(segmentedControlTitles)
-                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 125 + 15, y: 20, width: 250, height: 40)
+//                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 125 + 15, y: 20, width: 250, height: 40)
                 } else {
                     let segmentedControlTitles = ["Assistant","Itinerary"]
                     segmentedControl?.setSegmentItems(segmentedControlTitles)
-                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 84 + 15, y: 20, width: 167, height: 40)
+//                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 84 + 15, y: 20, width: 167, height: 40)
                 }
             } else {
                 let segmentedControlTitles = ["Assistant","Itinerary"]
                 segmentedControl?.setSegmentItems(segmentedControlTitles)
-                segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 84 + 15, y: 20, width: 167, height: 40)
+//                segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 84 + 15, y: 20, width: 167, height: 40)
             }
         } else {
             if contacts != nil {
                 if (contacts?.count)! > 0 {
                     let segmentedControlTitles = ["Itinerary","Chat"]
                     segmentedControl?.setSegmentItems(segmentedControlTitles)
-                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 84 + 15, y: 20, width: 167, height: 40)
+//                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 84 + 15, y: 20, width: 167, height: 40)
                 } else {
                     let segmentedControlTitles = ["Itinerary"]
                     segmentedControl?.setSegmentItems(segmentedControlTitles)
-                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 + 15, y: 20, width: 100, height: 40)
+//                    segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 + 15, y: 20, width: 100, height: 40)
                 }
             } else {
                 let segmentedControlTitles = ["Itinerary"]
                 segmentedControl?.setSegmentItems(segmentedControlTitles)
-                segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 + 15, y: 20, width: 100, height: 40)
+//                segmentedControl?.layer.frame = CGRect(x: UIScreen.main.bounds.width / 2 - 50 + 15, y: 20, width: 100, height: 40)
             }
         }
         segmentedControl?.backgroundColor = .clear // This is important!
@@ -7079,7 +7081,7 @@ extension TripViewController {
                 self.smCalloutView.animation(withType: .stretch, presenting: true)
                 self.smCalloutView.permittedArrowDirection = .up
                 var calloutRect: CGRect = CGRect.zero
-                calloutRect.origin = CGPoint(x: bounds.width - 50, y: CGFloat(115))
+                calloutRect.origin = CGPoint(x: bounds.width - 25, y: CGFloat(175))
                 self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
                 
                 
@@ -7123,6 +7125,25 @@ extension TripViewController {
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
         self.hotelMapButton.isHidden = true
+        
+        self.segmentedControl?.isHidden = true
+        self.searchSummaryLabelTopView.isHidden = false
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
+        self.progressRing?.isHidden = true
+        
+        //Create searchSummaryLabelTopView text
+        let HDKSearchInfoAsData = SavedPreferencesForTrip["HDKSearchInfo"] as! Data
+        let HDKSearchInfo = NSKeyedUnarchiver.unarchiveObject(with: HDKSearchInfoAsData) as? HDKSearchInfo
+        let checkInDate = HDKSearchInfo?.checkInDate
+        formatter.dateFormat = "MM/dd"
+        let checkInDateAsString = formatter.string(from: checkInDate as! Date)
+        let checkOutDate = HDKSearchInfo?.checkOutDate
+        let checkOutDateAsString = formatter.string(from: checkOutDate as! Date)
+        let city = HDKSearchInfo?.city
+        let days = DateUtil.hl_daysBetweenDate(checkInDate, andOtherDate:checkOutDate)
+        self.searchSummaryLabelTopView.text = "\((city?.name)!)\n\(checkInDateAsString) - \(checkOutDateAsString) (\(days) ☾)"
     }
     func popFromHotelResultsViewControllerToHotelSearch(){
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "popFromHotelResultsViewControllerToHotelSearch"), object: nil)

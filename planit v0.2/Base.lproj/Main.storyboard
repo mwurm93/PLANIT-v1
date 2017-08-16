@@ -898,7 +898,7 @@
                         <outlet property="editSwitch" destination="lO4-vI-lbw" id="TnB-qW-llZ"/>
                         <outlet property="editSwitchLabel" destination="mzu-lJ-IMg" id="NHF-gU-lW4"/>
                         <outlet property="filterButton" destination="Pg3-ud-ZeT" id="qZe-Lz-DOr"/>
-                        <outlet property="flightFavoriteTutorialView" destination="ruM-le-4Hn" id="g1M-Ja-nlt"/>
+                        <outlet property="flightFavoriteTutorialView" destination="ruM-le-4Hn" id="U3B-8y-lU1"/>
                         <outlet property="focusBackgroundViewWithinItineraryView" destination="Q0t-x5-ggY" id="Sw3-wE-E8I"/>
                         <outlet property="focusBackgroundViewWithinTopView" destination="dmv-q9-aWD" id="xeu-M4-c3A"/>
                         <outlet property="hotelFavoritesTutorialView" destination="JkF-rD-v7X" id="Z7k-9d-bRl"/>
