@@ -216,6 +216,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet var flightFavoriteTutorialView: UIView!
     @IBOutlet var contactsTutorialView2: UIView!
     @IBOutlet var contactsTutorialView1: UIView!
+    @IBOutlet var contactsTutorialView0: UIView!
     
     func handleItineraryTutorial() {
         if smCalloutViewMode == "itineraryTutorial1" {
@@ -4893,6 +4894,23 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
 
     }
+    @IBAction func contactsTutorialView0DoneButtonTouchedUpInside(_ sender: Any) {
+        //Show instructions for first contact added
+        self.focusBackgroundViewWithinTopView.isHidden = false
+        self.focusBackgroundViewWithinItineraryView.isHidden = false
+        self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+        self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+        self.itineraryView.bringSubview(toFront: contactsCollectionView!)
+        
+        self.smCalloutView.contentView = contactsTutorialView1
+        self.smCalloutView.isHidden = false
+        self.smCalloutView.animation(withType: .stretch, presenting: true)
+        self.smCalloutView.permittedArrowDirection = .up
+        var calloutRect: CGRect = CGRect.zero
+        calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX - 46, y: topView.frame.height + contactsCollectionView.layer.frame.maxY - 10)
+        self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+
+    }
     @IBAction func itineraryTutorialView1_nextButtonTouchedUpInside(_ sender: Any) {
         handleItineraryTutorial()
     }
@@ -5485,14 +5503,14 @@ extension TripViewController {
             self.focusBackgroundViewWithinItineraryView.isHidden = false
             self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
             self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
-            self.itineraryView.bringSubview(toFront: contactsCollectionView!)
+            self.itineraryView.bringSubview(toFront: itineraryButton2!)
             
-            self.smCalloutView.contentView = contactsTutorialView1
+            self.smCalloutView.contentView = contactsTutorialView0
             self.smCalloutView.isHidden = false
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX - 46, y: topView.frame.height + contactsCollectionView.layer.frame.maxY - 10)
+            calloutRect.origin = CGPoint(x: (itineraryButton2?.layer.frame.midX)!, y: topView.frame.height + (itineraryButton2?.layer.frame.maxY)! - 7)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
             
 
@@ -5596,14 +5614,14 @@ extension TripViewController {
             self.focusBackgroundViewWithinItineraryView.isHidden = false
             self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
             self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
-            self.itineraryView.bringSubview(toFront: contactsCollectionView!)
+            self.itineraryView.bringSubview(toFront: itineraryButton2!)
             
-            self.smCalloutView.contentView = contactsTutorialView1
+            self.smCalloutView.contentView = contactsTutorialView0
             self.smCalloutView.isHidden = false
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .up
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: contactsCollectionView.layer.frame.midX - 46, y: topView.frame.height + contactsCollectionView.layer.frame.maxY - 10)
+            calloutRect.origin = CGPoint(x: (itineraryButton2?.layer.frame.midX)!, y: topView.frame.height + (itineraryButton2?.layer.frame.maxY)! - 7)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
 
 
@@ -5896,7 +5914,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.travelButton_badge.layer.frame.origin = CGPoint(x: destinationsDatesCell.travelButton.layer.frame.maxX - 28, y: destinationsDatesCell.travelButton.layer.frame.minY + 11)
                 destinationsDatesCell.travelButton_badge.isHidden = false
                 destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
-                
+                destinationsDatesCell.travelButton.tintColor = completeColor
                 
                 var isRoundtripTravelPlanned = false
                 var indexOfRoundtripTravel = -1
@@ -6936,7 +6954,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
+        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromJRDatePickerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -6946,7 +6964,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
+        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromJRAirportPickerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7127,7 +7145,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
+        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromHotelResultsViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7203,7 +7221,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
+        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromWaitingViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7233,7 +7251,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
+        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromCityPickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7243,7 +7261,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
+        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromHLDatePickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7253,7 +7271,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
+        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromKidsPickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7278,7 +7296,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
+        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromHLSortToHotelResults), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7294,7 +7312,7 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 10,y: 29,width: 16, height: 21))
+        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
         backButton?.addTarget(self, action: #selector(popFromMapVCToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
