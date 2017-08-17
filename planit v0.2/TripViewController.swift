@@ -120,6 +120,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //Date formatting
     var formatter = DateFormatter()
     var backButton: UIButton?
+    var hamburgerArrowButton: Icomation?
     var segmentedControl: TwicketSegmentedControl?
         //Itinerary Detailed information subview
     var button1: UIButton?
@@ -346,6 +347,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 
     }
     
+    func hamburgerArrowButtonTouchedUpInside(sender:Icomation){
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -368,8 +374,18 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.popupBackgroundFilterView.isHidden = true
         self.addTwicketSegmentedControl()
         self.handleTwicketSegmentedControl()
-        self.addBackButtonPointedAtTripList()
         self.setupItineraryInfoView()
+//        self.addBackButtonPointedAtTripList()
+        hamburgerArrowButton = Icomation(frame: CGRect(x: 15, y: 25, width: 30, height: 30))
+        topView.addSubview(hamburgerArrowButton!)
+        hamburgerArrowButton?.type = IconType.close
+        hamburgerArrowButton?.topShape.strokeColor = UIColor.white.cgColor
+        hamburgerArrowButton?.middleShape.strokeColor = UIColor.white.cgColor
+        hamburgerArrowButton?.bottomShape.strokeColor = UIColor.white.cgColor
+        hamburgerArrowButton?.animationDuration = 1.0
+        hamburgerArrowButton?.numberOfRotations = 2
+        hamburgerArrowButton?.addTarget(self, action: #selector(self.hamburgerArrowButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
+        
         
         //import PPN cities csv
         getCarRentalCities()
@@ -6695,10 +6711,8 @@ extension TripViewController {
                 return countryAbbreviationDict["ISO3166-1-Alpha-2"]!
             }
         }
-        
         return "noCountryMatch"
     }
-
 }
 
 //Custom functions for TravelPayout Flights and Hotels Nav

@@ -27,30 +27,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
         //Set root VC
-        if DataContainerSingleton.sharedDataContainer.token == nil {
-            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let emailViewController = mainStoryboard.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
-            self.window?.rootViewController = emailViewController
-        } else {
-            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let TripListViewController = mainStoryboard.instantiateViewController(withIdentifier: "TripListViewController") as! TripListViewController
-            self.window?.rootViewController = TripListViewController
-        }
-
-//        let mainStoryboard: UIStoryboard = UIStoryboard(name: "main", bundle: nil)
-//        
-//        var centerViewController = mainStoryboard.instantiateViewControllerWithIdentifier("CenterViewController") as CenterViewController
-//        var leftViewController = mainStoryboard.instantiateViewControllerWithIdentifier("LeftSideViewController") as LeftSideViewController
-//        var rightViewController = mainStoryboard.instantiateViewControllerWithIdentifier("RightSideViewController") as RightSideViewController
-//        var leftSideNav = UINavigationController(rootViewController: leftViewController)
-//        var centerNav = UINavigationController(rootViewController: centerViewController)
-//        var rightNav = UINavigationController(rootViewController: rightViewController)
-//        centerContainer = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftSideNav,rightDrawerViewController:rightNav)
-//        centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView;
-//        centerContainer!.closeDrawerGestureModeMask = CloseDrawerGestureMode.panningCenterView;
-//        window!.rootViewController = centerContainer
-//        window!.makeKeyAndVisible()
+        
+//        if DataContainerSingleton.sharedDataContainer.token == nil {
+//            let emailViewController = mainStoryboard.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
+//            self.window?.rootViewController = emailViewController
+//        } else {
+//            let TripListViewController = mainStoryboard.instantiateViewController(withIdentifier: "TripListViewController") as! TripListViewController
+//            self.window?.rootViewController = TripListViewController
+//        }
+        
+        //Instantiate VCs from storyboard
+        let centerViewController = mainStoryboard.instantiateViewController(withIdentifier: "CenterViewController") as! CenterViewController
+        let leftViewController = mainStoryboard.instantiateViewController(withIdentifier: "LeftViewController") as! LeftViewController
+        let rightViewController = mainStoryboard.instantiateViewController(withIdentifier: "RightViewController") as! RightViewController
+        
+        //Create nav controllers
+        let leftSideNav = UINavigationController(rootViewController: leftViewController)
+        let centerNav = UINavigationController(rootViewController: centerViewController)
+        let rightNav = UINavigationController(rootViewController: rightViewController)
+        
+        //Create instance of DrawerController and set open and close gesture modes
+        centerContainer = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftSideNav,rightDrawerViewController:rightNav)
+        centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView;
+        centerContainer!.closeDrawerGestureModeMask = CloseDrawerGestureMode.panningCenterView;
+        //Set root VC
+        window!.rootViewController = centerContainer
+        window!.makeKeyAndVisible()
         
         
         
