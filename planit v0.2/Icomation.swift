@@ -27,7 +27,8 @@ class Icomation: UIButton {
         case hamburger, arrow, close
     }
     
-    fileprivate var toggleState = true
+    
+    var toggleState = true
     fileprivate var topAnimation, middleAnimation, bottomAnimation: CAAnimation!
     fileprivate var halfSideOfTriangle: CGFloat!
     fileprivate var w, h, lineWidth: CGFloat!
@@ -312,7 +313,7 @@ class Icomation: UIButton {
         toggleState = !toggleState
     }
     
-    fileprivate func close() {
+    func close() {
         let buttonType = toggleState ? IconState.close : IconState.hamburger
         
         topAnimation = groupAnimation(buttonType, y: h/4, r: CGFloat(M_PI * (3/4 + numberOfRotations)), s: 0)

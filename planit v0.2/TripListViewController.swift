@@ -12,7 +12,7 @@ import GooglePlaces
 //FIREBASEDISABLED
 //import Firebase
 
-class TripListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
+class TripListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: Outlets
     @IBOutlet weak var existingTripsTable: UITableView!

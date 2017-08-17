@@ -20,6 +20,7 @@ import UICircularProgressRing
 import TwicketSegmentedControl
 import ZKPulseView
 import MIBadgeButton_Swift
+import DrawerController
 
 class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate, UIGestureRecognizerDelegate, FloatyDelegate, TwicketSegmentedControlDelegate, UITextViewDelegate, SMCalloutViewDelegate {
 
@@ -350,6 +351,19 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func hamburgerArrowButtonTouchedUpInside(sender:Icomation){
         var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
+        self.view.endEditing(true)
+        hamburgerArrowButton?.close()
+    }
+    
+    func leftViewControllerViewWillDisappear() {
+        if hamburgerArrowButton?.toggleState == false {
+            hamburgerArrowButton?.close()
+        }
+    }
+    func leftViewControllerViewWillAppear() {
+        if hamburgerArrowButton?.toggleState == true {
+            hamburgerArrowButton?.close()
+        }
     }
     
     override func viewDidLoad() {
@@ -376,13 +390,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.handleTwicketSegmentedControl()
         self.setupItineraryInfoView()
 //        self.addBackButtonPointedAtTripList()
-        hamburgerArrowButton = Icomation(frame: CGRect(x: 15, y: 25, width: 30, height: 30))
+        hamburgerArrowButton = Icomation(frame: CGRect(x: 15, y: 28, width: 24, height: 24))
         topView.addSubview(hamburgerArrowButton!)
         hamburgerArrowButton?.type = IconType.close
         hamburgerArrowButton?.topShape.strokeColor = UIColor.white.cgColor
         hamburgerArrowButton?.middleShape.strokeColor = UIColor.white.cgColor
         hamburgerArrowButton?.bottomShape.strokeColor = UIColor.white.cgColor
-        hamburgerArrowButton?.animationDuration = 1.0
+        hamburgerArrowButton?.animationDuration = 0.7
         hamburgerArrowButton?.numberOfRotations = 2
         hamburgerArrowButton?.addTarget(self, action: #selector(self.hamburgerArrowButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
         
@@ -601,6 +615,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         assistant()
         
         // MARK: Register notifications
+        
+        
+        //Drawer
+        NotificationCenter.default.addObserver(self, selector: #selector(leftViewControllerViewWillAppear), name: NSNotification.Name(rawValue: "leftViewControllerViewWillAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(leftViewControllerViewWillDisappear), name: NSNotification.Name(rawValue: "leftViewControllerViewWillDisappear"), object: nil)
+        
+        
         //Link outs
         NotificationCenter.default.addObserver(self, selector: #selector(openRome2RioSFSafariViewer), name: NSNotification.Name(rawValue: "openRome2RioSFSafariViewer"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(openGoogleMapsSFSafariViewer), name: NSNotification.Name(rawValue: "openGoogleMapsSFSafariViewer"), object: nil)
@@ -1217,6 +1238,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollContentViewHeight?.constant = heightOfScrollView
         scrollContentView.frame.size.height = heightOfScrollView
         scrollView.contentSize.height = heightOfScrollView
+        
+        
+        let test1 = scrollContentViewHeight?.constant
+        let test2 = scrollContentView.frame.size.height
+        let test3 = scrollView.contentSize.height
+        
     }
     func scrollDownToTopSubview(){
         let tagOfTopSubview = self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].tag
@@ -1473,6 +1500,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
         }
 
+        
+        let test1 = scrollView.isHidden
+        let test2 = scrollView.frame
+        let test3 = scrollView.contentSize
+        let test4 = scrollView.contentOffset
+        
+        
         increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: false)
     }
     

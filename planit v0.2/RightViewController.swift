@@ -9,5 +9,25 @@
 import UIKit
 
 class RightViewController: UIViewController {
+
+    //MARK: Class vars
     
+    //MARK: Outlets
+    
+    //MARK: View lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.navigationController?.isNavigationBarHidden = true
+        
+        self.view.endEditing(true)
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+    
+        
+        
+    }
+
 }
