@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DrawerController
 
 class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -27,6 +28,10 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        menuTableView.dataSource = self
+        menuTableView.delegate = self
+        
 
         self.view.endEditing(true)
 
@@ -43,9 +48,9 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        reorderTripsChronologically()
-        
+        reorderTripsChronologically()        
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "leftViewControllerViewWillAppear"), object: nil)
+        self.view.endEditing(true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -79,24 +84,27 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "existingTripViewPrototypeCell", for: indexPath) as! ExistingTripTableViewCell
+        
         if indexPath.section == 0 {
-            var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "cellID")
+            cell.tripStartDateLabel.isHidden = true
+            cell.tripEndDateLabel.isHidden = true
+            cell.toLabel.isHidden = true
+            cell.destinationsLabel.isHidden = true
+            cell.tripNameLabel.isHidden = true
             
-            if cell == nil {
-                cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
-            }
+            cell.menuItemLabel.isHidden = false
+            cell.menuItemImageView.isHidden = false
             
-            cell?.textLabel?.text = "New Trip"
-            cell?.textLabel?.textColor = UIColor.white
-            cell?.textLabel?.font = UIFont.systemFont(ofSize: 15)
-            cell?.textLabel?.numberOfLines = 0
-            cell?.backgroundColor = UIColor.clear
-            
-            return cell!
+            cell.menuItemImageView.image = #imageLiteral(resourceName: "addTripIcon")
+            cell.menuItemLabel.text = "New Trip"
+
+            return cell
 
         } else if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "existingTripViewPrototypeCell", for: indexPath) as! ExistingTripTableViewCell
-            
+            cell.menuItemLabel.isHidden = true
+            cell.menuItemImageView.isHidden = true
+
             if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil {
                 
                 //Cell styling
@@ -196,40 +204,45 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             return cell
         } else if indexPath.section == 2 {
-            var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "cellID")
+            cell.tripStartDateLabel.isHidden = true
+            cell.tripEndDateLabel.isHidden = true
+            cell.toLabel.isHidden = true
+            cell.destinationsLabel.isHidden = true
+            cell.tripNameLabel.isHidden = true
             
-            if cell == nil {
-                cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
-            }
+            cell.menuItemLabel.isHidden = false
+            cell.menuItemImageView.isHidden = false
             
-            cell?.textLabel?.text = "Bucket list"
-            cell?.textLabel?.textColor = UIColor.white
-            cell?.textLabel?.font = UIFont.systemFont(ofSize: 15)
-            cell?.textLabel?.numberOfLines = 0
-            cell?.backgroundColor = UIColor.clear
+            cell.menuItemImageView.image = #imageLiteral(resourceName: "earth")
+            cell.menuItemLabel.text = "Bucket List"
             
-            return cell!
+            return cell
         }
         // else if indexPath.section == 3 {
-            var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "cellID")
-            
-            if cell == nil {
-                cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cellID")
-            }
-            
-            cell?.textLabel?.text = "Login"
-            cell?.textLabel?.textColor = UIColor.white
-            cell?.textLabel?.font = UIFont.systemFont(ofSize: 15)
-            cell?.textLabel?.numberOfLines = 0
-            cell?.backgroundColor = UIColor.clear
-            
-            return cell!
+        cell.tripStartDateLabel.isHidden = true
+        cell.tripEndDateLabel.isHidden = true
+        cell.toLabel.isHidden = true
+        cell.destinationsLabel.isHidden = true
+        cell.tripNameLabel.isHidden = true
+        
+        cell.menuItemLabel.isHidden = false
+        cell.menuItemImageView.isHidden = false
+        
+        cell.menuItemImageView.image = #imageLiteral(resourceName: "userIcon")
+        cell.menuItemLabel.text = "Login"
+        
+        return cell
     }
     
     //MARK: TableView Delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
-        case 0: break
+        case 0:
+            var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
+            var centerNavController = UINavigationController(rootViewController: centerViewController)
+            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.centerContainer!.centerViewController = centerNavController
+            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
         case 1:
             //FIREBASEDISABLED
             //        if indexPath.row > channels.count - 1 {
@@ -253,8 +266,18 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
             super.performSegue(withIdentifier: "tripListToTripViewController", sender: self)
         //        }
-        case 2: break
-        case 3: break
+        case 2:
+            var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "bucketListViewController") as! bucketListViewController
+            var centerNavController = UINavigationController(rootViewController: centerViewController)
+            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.centerContainer!.centerViewController = centerNavController
+            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+        case 3:
+            var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+            var centerNavController = UINavigationController(rootViewController: centerViewController)
+            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.centerContainer!.centerViewController = centerNavController
+            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
         default:
             break
         }

@@ -19,6 +19,8 @@ class ExistingTripTableViewCell: UITableViewCell {
     @IBOutlet weak var tripEndDateLabel: UILabel!
     @IBOutlet weak var tripNameLabel: UILabel!
     @IBOutlet weak var tripBackgroundView: UIView!
+    @IBOutlet weak var menuItemImageView: UIImageView!
+    @IBOutlet weak var menuItemLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

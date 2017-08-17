@@ -358,11 +358,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func leftViewControllerViewWillDisappear() {
         if hamburgerArrowButton?.toggleState == false {
             hamburgerArrowButton?.close()
+            self.view.endEditing(true)
         }
     }
     func leftViewControllerViewWillAppear() {
         if hamburgerArrowButton?.toggleState == true {
             hamburgerArrowButton?.close()
+            self.view.endEditing(true)
         }
     }
     
