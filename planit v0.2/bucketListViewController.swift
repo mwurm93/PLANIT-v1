@@ -21,8 +21,8 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     @IBOutlet var globeTutorialView3: UIView!
     @IBOutlet var globeTutorialView4: UIView!
     @IBOutlet var globeTutorialView5: UIView!
-    //Firebase
-    private lazy var channelRef: DatabaseReference = Database.database().reference().child("channels")
+    //FIREBASEDISABLED
+//    private lazy var channelRef: DatabaseReference = Database.database().reference().child("channels")
     
     var theViewC: MaplyBaseViewController?
     private var selectedVectorFillDict: [String: AnyObject]?
@@ -1259,8 +1259,8 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
 //            }
             destination?.NewOrAddedTripFromSegue = 1
             destination?.isTripSpawnedFromBucketList = 1
-            //REENABLE FOR FIREBASE
-            destination?.newChannelRef = channelRef
+            //FIREBASEDISABLED
+//            destination?.newChannelRef = channelRef
         }
         
     }

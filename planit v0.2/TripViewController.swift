@@ -93,9 +93,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var editItineraryModeEnabled = false
     //Messaging var
     let messageComposer = MessageComposer()
-        //Firebase channel
-    var channelsRef: DatabaseReference = Database.database().reference().child("channels")
-    var newChannelRef: DatabaseReference?
+    //FIREBASEDISABLED
+//        //Firebase channel
+//    var channelsRef: DatabaseReference = Database.database().reference().child("channels")
+//    var newChannelRef: DatabaseReference?
         //Singleton
     var NewOrAddedTripFromSegue: Int?
     var isTripSpawnedFromBucketList: Int?
@@ -533,13 +534,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     
                     //Create new firebase channel
                     if let name = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String {
-                        newChannelRef = channelsRef.childByAutoId()
-                        let channelItem = [
-                            "name": name
-                        ]
-                        newChannelRef?.setValue(channelItem)
-                        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-                        SavedPreferencesForTrip["firebaseChannelKey"] = newChannelRef?.key as! NSString
+                        //FIREBASEDISABLED
+//                        newChannelRef = channelsRef.childByAutoId()
+//                        let channelItem = [
+//                            "name": name
+//                        ]
+//                        newChannelRef?.setValue(channelItem)
+//                        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//                        SavedPreferencesForTrip["firebaseChannelKey"] = newChannelRef?.key as! NSString
                         //Save
                         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                         
@@ -578,7 +580,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
         }
         
-        addChatViewController()
+        //FIREBASEDISABLED
+//        addChatViewController()
         assistant()
         
         // MARK: Register notifications
@@ -4780,23 +4783,26 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         disableAndResetAssistant_moveToItinerary()
     }
     func chat() {
-//        UIView.animate(withDuration: 0.4) {
-//            self.underline.layer.frame = CGRect(x: 288, y: 25, width: 50, height: 51)
-//        }
-        assistantViewIsHiddenTrue()
-        itineraryView.isHidden = true
-        infoButton.isHidden = true
-        chatView.isHidden = false
-        self.view.endEditing(true)
-        chatController?.inputToolbar.contentView.textView.becomeFirstResponder()
         
-        self.segmentedControl?.isHidden = false
-        self.searchSummaryLabelTopView.isHidden = true
-        self.filterButton.isHidden = true
-        self.sortButton.isHidden = true
-        self.progressRing?.isHidden = true
-        addBackButtonPointedAtTripList()
-
+        //FIREBASEDISABLED
+//
+////        UIView.animate(withDuration: 0.4) {
+////            self.underline.layer.frame = CGRect(x: 288, y: 25, width: 50, height: 51)
+////        }
+//        assistantViewIsHiddenTrue()
+//        itineraryView.isHidden = true
+//        infoButton.isHidden = true
+//        chatView.isHidden = false
+//        self.view.endEditing(true)
+//        chatController?.inputToolbar.contentView.textView.becomeFirstResponder()
+//        
+//        self.segmentedControl?.isHidden = false
+//        self.searchSummaryLabelTopView.isHidden = true
+//        self.filterButton.isHidden = true
+//        self.sortButton.isHidden = true
+//        self.progressRing?.isHidden = true
+//        addBackButtonPointedAtTripList()
+//
     }
     func animateInBackgroundFilterView(withInfoView: Bool, withBlurEffect: Bool, withCloseButton: Bool) {
         popupBackgroundViewDeleteContacts.isHidden = true

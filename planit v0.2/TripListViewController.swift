@@ -8,7 +8,9 @@
 
 import UIKit
 import GooglePlaces
-import Firebase
+
+//FIREBASEDISABLED
+//import Firebase
 
 class TripListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
     
@@ -23,10 +25,11 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var instructionsLabel: UILabel!
     @IBOutlet weak var welcomeToPlanitLabel: UILabel!
     
-    //Firebase channels
-    private var channelRefHandle: DatabaseHandle?
-    private var channels: [Channel] = []
-    private lazy var channelRef: DatabaseReference = Database.database().reference().child("channels")
+    //FIREBASEDISABLED
+//    //Firebase channels
+//    private var channelRefHandle: DatabaseHandle?
+//    private var channels: [Channel] = []
+//    private lazy var channelRef: DatabaseReference = Database.database().reference().child("channels")
     
     //Class vars
     var formatter = DateFormatter()
@@ -42,7 +45,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
         
 //        timesViewedNonTrip = DataContainerSingleton.sharedDataContainer.timesViewedNonTrip as? [String : Int] ?? ["settings":0, "bucketList":0, "tripList":0]
         
-        observeChannels()
+        //FIREBASEDISABLED
+//        observeChannels()
         
         view.autoresizingMask = .flexibleTopMargin
         view.sizeToFit()
@@ -267,15 +271,17 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row > channels.count - 1 {
-            return
-        } else {
+        //FIREBASEDISABLED
+//        if indexPath.row > channels.count - 1 {
+//            return
+//        } else {
             let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
             let searchForTitle = cell.existingTripTableViewLabel.text
-            
-            let channel = channels[(indexPath as NSIndexPath).row]
-            channelRef = channelRef.child(channel.id)
-            
+
+        //FIREBASEDISABLED
+//            let channel = channels[(indexPath as NSIndexPath).row]
+//            channelRef = channelRef.child(channel.id)
+        
             for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
                 
                 if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
@@ -283,9 +289,10 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             
-            
-            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
-        }
+        //FIREBASEDISABLED
+//            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
+        super.performSegue(withIdentifier: "tripListToTripViewController", sender: self)
+//        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -310,7 +317,8 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             destination?.NewOrAddedTripFromSegue = NewOrAddedTripForSegue
-            destination?.newChannelRef = channelRef
+            //FIREBASEDISABLED
+//            destination?.newChannelRef = channelRef
         }
         if segue.identifier == "tripListToTripViewController" {
 //            let navVC = segue.destination as? UINavigationController
@@ -337,26 +345,29 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             destination?.NewOrAddedTripFromSegue = NewOrAddedTripForSegue
-            destination?.newChannelRef = channelRef
+            //FIREBASEDISABLED
+//            destination?.newChannelRef = channelRef
             destination?.isTripSpawnedFromBucketList = 0
         }
 
         
     }
 
-    private func observeChannels() {
-        // We can use the observe method to listen for new
-        // channels being written to the Firebase DB
-        channelRefHandle = channelRef.observe(.childAdded, with: { (snapshot) -> Void in
-            let channelData = snapshot.value as! Dictionary<String, AnyObject>
-            let id = snapshot.key
-            if let name = channelData["name"] as! String!, name.characters.count > 0 {
-                self.channels.append(Channel(id: id, name: name))
-            } else {
-                print("Error! Could not decode channel data")
-            }
-        })
-    }
+    //FIREBASEDISABLED
+
+//    private func observeChannels() {
+//        // We can use the observe method to listen for new
+//        // channels being written to the Firebase DB
+//        channelRefHandle = channelRef.observe(.childAdded, with: { (snapshot) -> Void in
+//            let channelData = snapshot.value as! Dictionary<String, AnyObject>
+//            let id = snapshot.key
+//            if let name = channelData["name"] as! String!, name.characters.count > 0 {
+//                self.channels.append(Channel(id: id, name: name))
+//            } else {
+//                print("Error! Could not decode channel data")
+//            }
+//        })
+//    }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true

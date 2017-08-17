@@ -11,7 +11,7 @@ import Apollo
 import GoogleMaps
 import GooglePlaces
 import Firebase
-//import CoreData
+import DrawerController
 
 var apollo = ApolloClient(url: URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!)
 
@@ -19,6 +19,7 @@ var apollo = ApolloClient(url: URL(string: "https://us-west-2.api.scaphold.io/gr
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
+    var centerContainer: DrawerController?
     
     class func openSettings() {
         UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
@@ -37,6 +38,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = TripListViewController
         }
 
+//        let mainStoryboard: UIStoryboard = UIStoryboard(name: "main", bundle: nil)
+//        
+//        var centerViewController = mainStoryboard.instantiateViewControllerWithIdentifier("CenterViewController") as CenterViewController
+//        var leftViewController = mainStoryboard.instantiateViewControllerWithIdentifier("LeftSideViewController") as LeftSideViewController
+//        var rightViewController = mainStoryboard.instantiateViewControllerWithIdentifier("RightSideViewController") as RightSideViewController
+//        var leftSideNav = UINavigationController(rootViewController: leftViewController)
+//        var centerNav = UINavigationController(rootViewController: centerViewController)
+//        var rightNav = UINavigationController(rootViewController: rightViewController)
+//        centerContainer = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftSideNav,rightDrawerViewController:rightNav)
+//        centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView;
+//        centerContainer!.closeDrawerGestureModeMask = CloseDrawerGestureMode.panningCenterView;
+//        window!.rootViewController = centerContainer
+//        window!.makeKeyAndVisible()
+        
+        
+        
         //Google Maps and Google Places API keys
         GMSServices.provideAPIKey("AIzaSyDBeoCYKCWap5Ivpv_zTMkH1eVORKrjX8A")
         GMSPlacesClient.provideAPIKey("AIzaSyDBeoCYKCWap5Ivpv_zTMkH1eVORKrjX8A")
@@ -44,7 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
         
-        //TopBar
+        //Status bar
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         
         //TravelPayouts
