@@ -4639,7 +4639,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             }
         }
-
+        
+        self.segmentedControl?.isHidden = false
+        self.searchSummaryLabelTopView.isHidden = true
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.progressRing?.isHidden = true
+        addBackButtonPointedAtTripList()
     }
     func handleAddInviteesButton(){
         let bounds = UIScreen.main.bounds
@@ -4783,6 +4789,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         chatView.isHidden = false
         self.view.endEditing(true)
         chatController?.inputToolbar.contentView.textView.becomeFirstResponder()
+        
+        self.segmentedControl?.isHidden = false
+        self.searchSummaryLabelTopView.isHidden = true
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.progressRing?.isHidden = true
+        addBackButtonPointedAtTripList()
+
     }
     func animateInBackgroundFilterView(withInfoView: Bool, withBlurEffect: Bool, withCloseButton: Bool) {
         popupBackgroundViewDeleteContacts.isHidden = true
@@ -4942,6 +4956,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
         self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
         self.itineraryView.bringSubview(toFront: contactsCollectionView!)
+        
         
         self.smCalloutView.contentView = contactsTutorialView1
         self.smCalloutView.isHidden = false
@@ -7918,8 +7933,16 @@ extension TripViewController {
                 if i < travelDictionaryArray.count {
                     if travelDictionaryArray[i]["isRoundtrip"] as? Bool != nil {
                         if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
-                            isRoundtripTravelPlanned = true
-                            indexOfRoundtripTravel = i
+                            if travelDictionaryArray[i]["modeOfTransportation"] as! String == "fly" {
+                                if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightNotFromPlanitDict"] != nil {
+
+                                    isRoundtripTravelPlanned = true
+                                    indexOfRoundtripTravel = i
+                                }
+                            } else {
+                                isRoundtripTravelPlanned = true
+                                indexOfRoundtripTravel = i
+                            }
                         }
                     }
                 }
@@ -8175,6 +8198,11 @@ extension TripViewController {
                     
                     self.spawnHowDoYouWantToGetThereQuestionView()
                     self.howDoYouWantToGetThereQuestionView?.questionLabel?.isHidden = false
+                    
+                    if sender.tag == (self.destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1)  {
+                        self.howDoYouWantToGetThereQuestionView?.questionLabel?.text = "How do you want to get back?"
+                        self.howDoYouWantToGetThereQuestionView?.questionLabel?.textColor = UIColor.white
+                    }
 
                     
                     self.isAssistantEnabled = true

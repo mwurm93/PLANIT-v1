@@ -1259,6 +1259,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
 //            }
             destination?.NewOrAddedTripFromSegue = 1
             destination?.isTripSpawnedFromBucketList = 1
+            //REENABLE FOR FIREBASE
             destination?.newChannelRef = channelRef
         }
         

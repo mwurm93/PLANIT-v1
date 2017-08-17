@@ -45,6 +45,7 @@ pod 'TwicketSegmentedControl'
 
 # Pod for drawer
 pod 'DrawerController', '~> 3.2'
+pod 'MMDrawerController', '~> 0.5.7'
 
 # Pod for pulsing button
 pod 'ZKPulseView', '~> 0.0.1’
