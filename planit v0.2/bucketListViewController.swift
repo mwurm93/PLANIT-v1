@@ -223,8 +223,8 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         }
     }
     override func viewWillAppear(_ animated: Bool) {
-//        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-//        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.bezelPanningCenterView
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.bezelPanningCenterView
     }
     override func viewDidLoad() {
         super.viewDidLoad()

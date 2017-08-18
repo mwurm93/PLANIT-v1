@@ -64,6 +64,9 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         DispatchQueue.main.asyncAfter(deadline: when) {
             UIApplication.shared.sendAction("resignFirstResponder", to:nil, from:nil, for:nil)
         }
+        
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -203,11 +206,14 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     } else {
                         cell.destinationsLabel.isHidden = false
                         cell.destinationsLabel.text = "Destination TBD"
+                        cell.tripNameLabel.isHidden = false
                         cell.tripNameLabel.text = tripName
+                        
                     }
                 } else {
                     cell.destinationsLabel.isHidden = false
                     cell.destinationsLabel.text = "Destination TBD"
+                    cell.tripNameLabel.isHidden = false
                     cell.tripNameLabel.text = tripName
                 }
                 
@@ -272,6 +278,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             centerViewController.navigationController?.isNavigationBarHidden = true
             appDelegate.centerContainer!.centerViewController = centerNavController
             appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+            return
         case 1:
             
             //FIREBASEDISABLED

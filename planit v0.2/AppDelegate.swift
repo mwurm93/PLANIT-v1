@@ -50,11 +50,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rightNav = UINavigationController(rootViewController: rightViewController)
         
         //Create instance of DrawerController and set open and close gesture modes
-        centerContainer = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftSideNav,rightDrawerViewController:rightNav)
-        centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.bezelPanningCenterView
+//        centerContainer = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftSideNav,rightDrawerViewController:rightNav)
+        centerContainer = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftSideNav)
+        centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
         centerContainer!.closeDrawerGestureModeMask = CloseDrawerGestureMode.panningCenterView
         centerContainer!.maximumLeftDrawerWidth = 305
-        centerContainer!.maximumRightDrawerWidth = 0
         
         //Set root VC
         window!.rootViewController = centerContainer

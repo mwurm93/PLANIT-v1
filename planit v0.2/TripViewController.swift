@@ -221,154 +221,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet var contactsTutorialView1: UIView!
     @IBOutlet var contactsTutorialView0: UIView!
     
-    func handleItineraryTutorial() {
-        if smCalloutViewMode == "itineraryTutorial1" {
-            itineraryView.isUserInteractionEnabled = false
-            
-            smCalloutViewMode = "itineraryTutorial2"
-
-            //setup buttons
-            //item requires action by you
-            itineraryTutorialView1_requiresActionByYou.layer.cornerRadius = (itineraryTutorialView1_requiresActionByYou.frame.height) / 2
-            itineraryTutorialView1_requiresActionByYou.layer.borderWidth = 2
-            itineraryTutorialView1_requiresActionByYou.layer.borderColor = UIColor.darkGray.cgColor
-            itineraryTutorialView1_requiresActionByYou.setTitleColor(UIColor.darkGray, for: .normal)
-            //badge button
-            let itineraryTutorialView1_requiresActionByYou_badgeButton = MIBadgeButton()
-            itineraryTutorialView1_requiresActionByYou_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_requiresActionByYou.layer.frame.maxX - 5, y: itineraryTutorialView1_requiresActionByYou.layer.frame.minY + 1)
-            itineraryTutorialView1_requiresActionByYou_badgeButton.badgeString = "!"
-            itineraryTutorialView1_requiresActionByYou_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-            itineraryTutorialView1_requiresActionByYou_badgeButton.badgeTextColor = UIColor.white
-            itineraryTutorialView1_requiresActionByYou_badgeButton.badgeBackgroundColor = UIColor.red
-            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_requiresActionByYou_badgeButton, aboveSubview: itineraryTutorialView1_requiresActionByYou)
-            
-            
-            //item requires action by group
-            itineraryTutorialView1_requiresActionByGroup.layer.cornerRadius = (itineraryTutorialView1_requiresActionByGroup.frame.height) / 2
-            itineraryTutorialView1_requiresActionByGroup.layer.borderWidth = 2
-            itineraryTutorialView1_requiresActionByGroup.layer.borderColor = UIColor.darkGray.cgColor
-            itineraryTutorialView1_requiresActionByGroup.setTitleColor(UIColor.darkGray, for: .normal)
-            //badge button
-            let itineraryTutorialView1_requiresActionByGroup_badgeButton = MIBadgeButton()
-            itineraryTutorialView1_requiresActionByGroup_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_requiresActionByGroup.layer.frame.maxX - 5, y: itineraryTutorialView1_requiresActionByGroup.layer.frame.minY + 1)
-            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeString = "!"
-            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeTextColor = UIColor.white
-            itineraryTutorialView1_requiresActionByGroup_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeBackgroundColor = UIColor.orange
-            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_requiresActionByGroup_badgeButton, aboveSubview: itineraryTutorialView1_requiresActionByGroup)
-            
-            //item complete
-            itineraryTutorialView1_plannedAndConfirmed.layer.cornerRadius = (itineraryTutorialView1_plannedAndConfirmed.frame.height) / 2
-            itineraryTutorialView1_plannedAndConfirmed.layer.borderWidth = 2
-            itineraryTutorialView1_plannedAndConfirmed.layer.borderColor = UIColor.darkGray.cgColor
-            itineraryTutorialView1_plannedAndConfirmed.setTitleColor(UIColor.darkGray, for: .normal)
-            //badge button
-            let itineraryTutorialView1_plannedAndConfirmed_badgeButton = MIBadgeButton()
-            itineraryTutorialView1_plannedAndConfirmed_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_plannedAndConfirmed.layer.frame.maxX - 5, y: itineraryTutorialView1_plannedAndConfirmed.layer.frame.minY + 1)
-            itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeString = "✓"
-            itineraryTutorialView1_plannedAndConfirmed_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-            itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeTextColor = UIColor.white
-            itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
-            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_plannedAndConfirmed_badgeButton, aboveSubview: itineraryTutorialView1_plannedAndConfirmed)
-            
-            self.focusBackgroundViewWithinTopView.isHidden = false
-            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
-            self.focusBackgroundViewWithinItineraryView.isHidden = false
-            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
-            self.itineraryView.bringSubview(toFront: destinationsDatesCollectionView)
-            
-            self.smCalloutView.contentView = itineraryTutorialView1
-            self.smCalloutView.isHidden = false
-            self.smCalloutView.animation(withType: .stretch, presenting: true)
-            self.smCalloutView.permittedArrowDirection = .down
-            var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: destinationsDatesCollectionView.frame.midX, y: topView.frame.height + destinationsDatesCollectionView.frame.minY)
-            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-
-            return
-        } else if smCalloutViewMode == "itineraryTutorial2" {
-            self.smCalloutView.dismissCallout(animated: true)
-            
-            self.smCalloutView.contentView = itineraryTutorialView2
-            self.smCalloutView.isHidden = false
-            self.smCalloutView.animation(withType: .stretch, presenting: true)
-            self.smCalloutView.permittedArrowDirection = .down
-            var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(295))
-            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-
-            smCalloutViewMode = "itineraryTutorial3"
-            return
-        } else if smCalloutViewMode == "itineraryTutorial3" {
-            self.smCalloutView.dismissCallout(animated: true)
-            
-            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
-            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
-            self.itineraryView.bringSubview(toFront: editSwitch)
-            self.itineraryView.bringSubview(toFront: editSwitchLabel)
-            
-            self.smCalloutView.contentView = itineraryTutorialView3
-            self.smCalloutView.isHidden = false
-            self.smCalloutView.animation(withType: .stretch, presenting: true)
-            self.smCalloutView.permittedArrowDirection = .up
-            var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: editSwitch.frame.midX, y: topView.frame.height + editSwitch.frame.maxY)
-            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
- 
-            smCalloutViewMode = "itineraryTutorial4"
-            return
-        } else if smCalloutViewMode == "itineraryTutorial4" {
-            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
-            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
-            self.itineraryView.bringSubview(toFront: contactsCollectionView)
-            self.itineraryView.bringSubview(toFront: addInviteeButton)
-            self.itineraryView.bringSubview(toFront: addInviteeButton_badge)
-            
-            self.smCalloutView.contentView = itineraryTutorialView4
-            self.smCalloutView.isHidden = false
-            self.smCalloutView.animation(withType: .stretch, presenting: true)
-            self.smCalloutView.permittedArrowDirection = .up
-            var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: addInviteeButton.frame.midX, y: topView.frame.height + addInviteeButton.frame.maxY)
-            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-
-            smCalloutViewMode = "itineraryTutorial5"
-
-        } else if smCalloutViewMode == "itineraryTutorial5" {
-            self.smCalloutView.dismissCallout(animated: true)
-            
-            self.focusBackgroundViewWithinTopView.isHidden = true
-            self.focusBackgroundViewWithinItineraryView.isHidden = true
-            
-            itineraryView.isUserInteractionEnabled = true
-
-        }
-            //        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
-//        sortFilterFlightsCalloutTableView.reloadData()
-
-    }
-    
-    func hamburgerArrowButtonTouchedUpInside(sender:Icomation){
-//        if hamburgerArrowButton?.type == IconType.close {
-            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
-            self.view.endEditing(true)
-            hamburgerArrowButton?.close()
-//        }
-    }
-    
-    func leftViewControllerViewWillDisappear() {
-        if hamburgerArrowButton?.toggleState == false {
-            hamburgerArrowButton?.close()
-            self.view.endEditing(true)
-        }
-    }
-    func leftViewControllerViewWillAppear() {
-        if hamburgerArrowButton?.toggleState == true {
-            hamburgerArrowButton?.close()
-            self.view.endEditing(true)
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -398,6 +250,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.handleTwicketSegmentedControl()
         self.setupItineraryInfoView()
         self.addUpButtonPointedUpOneSubview()
+        self.backButton?.isHidden = true
 
 //        self.addBackButtonPointedAtTripList()
         hamburgerArrowButton = Icomation(frame: CGRect(x: 15, y: 28, width: 24, height: 24))
@@ -1401,8 +1254,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //    }
     func scrollToSubviewWithTag(tag:Int){
         let topOfSubview = subviewFramesDictionary[tag]
-        UIView.animate(withDuration: 1) {
-            self.scrollView.setContentOffset(topOfSubview!, animated: false)
+        if topOfSubView != nil {
+            UIView.animate(withDuration: 1) {
+                self.scrollView.setContentOffset(topOfSubview!, animated: false)
+            }
         }
         asyncUpdateProgress()
     }
@@ -6943,6 +6798,12 @@ extension TripViewController {
     //MARK: twicketsegmentedcontroldelegate
     func didSelect(_ segmentIndex: Int) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
+        var centerNavController = UINavigationController(rootViewController: centerViewController)
+        centerViewController.navigationController?.isNavigationBarHidden = true
+
         let assistantMode = SavedPreferencesForTrip["assistantMode"] as! String
         if isAssistantEnabled {
             if segmentIndex == 0 {
@@ -6951,18 +6812,16 @@ extension TripViewController {
                 itinerary()
             } else if segmentIndex == 2 {
                 if DataContainerSingleton.sharedDataContainer.token == nil {
-                    let alertController = UIAlertController(title: "Please login or sign up", message: "In order to save your progress and chat with your group you must be signed in.", preferredStyle: .alert)
+                    let alertController = UIAlertController(title: "Please login or sign up", message: "In order to save your progress and chat with your group, you must be signed in.", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-                        if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) {
-                            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-                            return
-                        }
-                        var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
-                        var centerNavController = UINavigationController(rootViewController: centerViewController)
-                        centerViewController.navigationController?.isNavigationBarHidden = true
+//                        if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) {
+//                            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+//                            return
+//                        }
                         appDelegate.centerContainer!.centerViewController = centerNavController
                         appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse()
+                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse()
                     }
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
@@ -6976,18 +6835,16 @@ extension TripViewController {
                 itinerary()
             } else if segmentIndex == 1 {
                 if DataContainerSingleton.sharedDataContainer.token == nil {
-                    let alertController = UIAlertController(title: "Please login or sign up", message: "In order to save your progress and chat with your group you must be signed in.", preferredStyle: .alert)
+                    let alertController = UIAlertController(title: "Please login or sign up", message: "You must be signed in to save your progress and chat with your group.", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-                        if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) {
-                            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-                            return
-                        }
-                        var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
-                        var centerNavController = UINavigationController(rootViewController: centerViewController)
-                        centerViewController.navigationController?.isNavigationBarHidden = true
+//                        if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) {
+//                            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+//                            return
+//                        }
                         appDelegate.centerContainer!.centerViewController = centerNavController
                         appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse()
+                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse()
                     }
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
@@ -8688,4 +8545,158 @@ extension TripViewController {
         self.detailedInformationSubview.removeFromSuperview()
         self.detailedInformationSubview.removeAllSubviews()
     }
+}
+//MARK: Methods for Itinerary Tutorial
+extension TripViewController {
+    func handleItineraryTutorial() {
+        if smCalloutViewMode == "itineraryTutorial1" {
+            itineraryView.isUserInteractionEnabled = false
+            
+            smCalloutViewMode = "itineraryTutorial2"
+            
+            //setup buttons
+            //item requires action by you
+            itineraryTutorialView1_requiresActionByYou.layer.cornerRadius = (itineraryTutorialView1_requiresActionByYou.frame.height) / 2
+            itineraryTutorialView1_requiresActionByYou.layer.borderWidth = 2
+            itineraryTutorialView1_requiresActionByYou.layer.borderColor = UIColor.darkGray.cgColor
+            itineraryTutorialView1_requiresActionByYou.setTitleColor(UIColor.darkGray, for: .normal)
+            //badge button
+            let itineraryTutorialView1_requiresActionByYou_badgeButton = MIBadgeButton()
+            itineraryTutorialView1_requiresActionByYou_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_requiresActionByYou.layer.frame.maxX - 5, y: itineraryTutorialView1_requiresActionByYou.layer.frame.minY + 1)
+            itineraryTutorialView1_requiresActionByYou_badgeButton.badgeString = "!"
+            itineraryTutorialView1_requiresActionByYou_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+            itineraryTutorialView1_requiresActionByYou_badgeButton.badgeTextColor = UIColor.white
+            itineraryTutorialView1_requiresActionByYou_badgeButton.badgeBackgroundColor = UIColor.red
+            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_requiresActionByYou_badgeButton, aboveSubview: itineraryTutorialView1_requiresActionByYou)
+            
+            
+            //item requires action by group
+            itineraryTutorialView1_requiresActionByGroup.layer.cornerRadius = (itineraryTutorialView1_requiresActionByGroup.frame.height) / 2
+            itineraryTutorialView1_requiresActionByGroup.layer.borderWidth = 2
+            itineraryTutorialView1_requiresActionByGroup.layer.borderColor = UIColor.darkGray.cgColor
+            itineraryTutorialView1_requiresActionByGroup.setTitleColor(UIColor.darkGray, for: .normal)
+            //badge button
+            let itineraryTutorialView1_requiresActionByGroup_badgeButton = MIBadgeButton()
+            itineraryTutorialView1_requiresActionByGroup_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_requiresActionByGroup.layer.frame.maxX - 5, y: itineraryTutorialView1_requiresActionByGroup.layer.frame.minY + 1)
+            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeString = "!"
+            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeTextColor = UIColor.white
+            itineraryTutorialView1_requiresActionByGroup_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeBackgroundColor = UIColor.orange
+            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_requiresActionByGroup_badgeButton, aboveSubview: itineraryTutorialView1_requiresActionByGroup)
+            
+            //item complete
+            itineraryTutorialView1_plannedAndConfirmed.layer.cornerRadius = (itineraryTutorialView1_plannedAndConfirmed.frame.height) / 2
+            itineraryTutorialView1_plannedAndConfirmed.layer.borderWidth = 2
+            itineraryTutorialView1_plannedAndConfirmed.layer.borderColor = UIColor.darkGray.cgColor
+            itineraryTutorialView1_plannedAndConfirmed.setTitleColor(UIColor.darkGray, for: .normal)
+            //badge button
+            let itineraryTutorialView1_plannedAndConfirmed_badgeButton = MIBadgeButton()
+            itineraryTutorialView1_plannedAndConfirmed_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_plannedAndConfirmed.layer.frame.maxX - 5, y: itineraryTutorialView1_plannedAndConfirmed.layer.frame.minY + 1)
+            itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeString = "✓"
+            itineraryTutorialView1_plannedAndConfirmed_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+            itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeTextColor = UIColor.white
+            itineraryTutorialView1_plannedAndConfirmed_badgeButton.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
+            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_plannedAndConfirmed_badgeButton, aboveSubview: itineraryTutorialView1_plannedAndConfirmed)
+            
+            self.focusBackgroundViewWithinTopView.isHidden = false
+            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+            self.focusBackgroundViewWithinItineraryView.isHidden = false
+            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+            self.itineraryView.bringSubview(toFront: destinationsDatesCollectionView)
+            
+            self.smCalloutView.contentView = itineraryTutorialView1
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .down
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: destinationsDatesCollectionView.frame.midX, y: topView.frame.height + destinationsDatesCollectionView.frame.minY)
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+            return
+        } else if smCalloutViewMode == "itineraryTutorial2" {
+            self.smCalloutView.dismissCallout(animated: true)
+            
+            self.smCalloutView.contentView = itineraryTutorialView2
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .down
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(295))
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+            smCalloutViewMode = "itineraryTutorial3"
+            return
+        } else if smCalloutViewMode == "itineraryTutorial3" {
+            self.smCalloutView.dismissCallout(animated: true)
+            
+            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+            self.itineraryView.bringSubview(toFront: editSwitch)
+            self.itineraryView.bringSubview(toFront: editSwitchLabel)
+            
+            self.smCalloutView.contentView = itineraryTutorialView3
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .up
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: editSwitch.frame.midX, y: topView.frame.height + editSwitch.frame.maxY)
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+            smCalloutViewMode = "itineraryTutorial4"
+            return
+        } else if smCalloutViewMode == "itineraryTutorial4" {
+            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+            self.itineraryView.bringSubview(toFront: contactsCollectionView)
+            self.itineraryView.bringSubview(toFront: addInviteeButton)
+            self.itineraryView.bringSubview(toFront: addInviteeButton_badge)
+            
+            self.smCalloutView.contentView = itineraryTutorialView4
+            self.smCalloutView.isHidden = false
+            self.smCalloutView.animation(withType: .stretch, presenting: true)
+            self.smCalloutView.permittedArrowDirection = .up
+            var calloutRect: CGRect = CGRect.zero
+            calloutRect.origin = CGPoint(x: addInviteeButton.frame.midX, y: topView.frame.height + addInviteeButton.frame.maxY)
+            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+            
+            smCalloutViewMode = "itineraryTutorial5"
+            
+        } else if smCalloutViewMode == "itineraryTutorial5" {
+            self.smCalloutView.dismissCallout(animated: true)
+            
+            self.focusBackgroundViewWithinTopView.isHidden = true
+            self.focusBackgroundViewWithinItineraryView.isHidden = true
+            
+            itineraryView.isUserInteractionEnabled = true
+            
+        }
+        //        sortFilterFlightsCalloutTableView.frame = CGRect(x: 0, y: 121, width: 120, height: 22 * filterFirstLevelOptions.count)
+        //        sortFilterFlightsCalloutTableView.reloadData()
+        
+    }
+}
+//MARK: Methods for Drawer Controller
+extension TripViewController {
+    func hamburgerArrowButtonTouchedUpInside(sender:Icomation){
+        //        if hamburgerArrowButton?.type == IconType.close {
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
+        self.view.endEditing(true)
+        hamburgerArrowButton?.close()
+        //        }
+    }
+    
+    func leftViewControllerViewWillDisappear() {
+        if hamburgerArrowButton?.toggleState == false {
+            hamburgerArrowButton?.close()
+            self.view.endEditing(true)
+        }
+    }
+    func leftViewControllerViewWillAppear() {
+        if hamburgerArrowButton?.toggleState == true {
+            hamburgerArrowButton?.close()
+            self.view.endEditing(true)
+        }
+    }
+
 }

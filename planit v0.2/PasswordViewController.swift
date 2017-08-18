@@ -141,12 +141,12 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         } else {
             UIView.animate(withDuration: 0.5) {
                 self.createPasswordLabel.text = "Your password must be 8+ characters and contain one uppercase letter and one number"
-                self.createPasswordLabel.frame.origin.y = 360
+                self.createPasswordLabel.frame.origin.y = 355
                 self.createPasswordLabel.frame.size.height = 60
                 self.createPasswordLabel.frame.size.width = 230
                 
                 self.enterPasswordLabel.text = "Your password must be 8+ characters and contain one uppercase letter and one number"
-                self.enterPasswordLabel.frame.origin.y = 360
+                self.enterPasswordLabel.frame.origin.y = 355
                 self.enterPasswordLabel.frame.size.height = 60
                 self.enterPasswordLabel.frame.size.width = 230
                 self.Password.becomeFirstResponder()
@@ -217,8 +217,8 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         UIView.animate(withDuration: 0.4) {
             self.Password.frame.origin.y = 408
-            self.enterPasswordLabel.frame.origin.y = 363
-            self.createPasswordLabel.frame.origin.y = 363
+            self.enterPasswordLabel.frame.origin.y = 355
+            self.createPasswordLabel.frame.origin.y = 355
         }
         
         return true
