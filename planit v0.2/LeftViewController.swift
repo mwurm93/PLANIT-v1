@@ -41,21 +41,6 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.navigationController?.isNavigationBarHidden = true
         
     }
-    func updateMenuTableHeight() {
-        var tableHeight = CGFloat()
-        let userTripPreferences = DataContainerSingleton.sharedDataContainer.usertrippreferences
-        if userTripPreferences != nil {
-            let countTripsTotal = userTripPreferences?.count
-            tableHeight = CGFloat(220 + 70 * countTripsTotal!)
-        } else {
-            tableHeight = 220
-        }
-        
-        if (tableHeight + menuTableView.frame.origin.y) > UIScreen.main.bounds.height {
-            tableHeight = UIScreen.main.bounds.height - menuTableView.frame.origin.y
-        }
-        menuTableView.frame.size.height = tableHeight
-    }
     override func viewWillAppear(_ animated: Bool) {
         reorderTripsChronologically()
         menuTableView.reloadData()
@@ -70,7 +55,10 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "leftViewControllerViewWillAppear"), object: nil)
         self.view.endEditing(true)
-        UIApplication.shared.sendAction("resignFirstResponder", to:nil, from:nil, for:nil)
+        let when = DispatchTime.now() + 0.2
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            UIApplication.shared.sendAction("resignFirstResponder", to:nil, from:nil, for:nil)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -289,7 +277,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
             }
             
-            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController.isKind(of: TripViewController.self))! && startingCurrentTrip == DataContainerSingleton.sharedDataContainer.currenttrip {
+            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: TripViewController.self)) && startingCurrentTrip == DataContainerSingleton.sharedDataContainer.currenttrip {
                 appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
                 return
             }
@@ -311,7 +299,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
         //        }
         case 2:
-            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController.isKind(of: bucketListViewController.self))! {
+            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: bucketListViewController.self)) {
                 appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
                 return
             }
@@ -321,7 +309,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             appDelegate.centerContainer!.centerViewController = centerNavController
             appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
         case 3:
-            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController.isKind(of: SettingsViewController.self))! {
+            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: SettingsViewController.self)) {
                 appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
                 return
             }
@@ -380,40 +368,6 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
         return "Leave trip"
     }
-
-
-//    var menuItems:[String] = ["Main","About"];
-//    override func viewWillAppear(animated: Bool) {
-//        super.viewWillAppear(true)
-//        self.navigationController?.view.layoutSubviews()
-//    }
-
-//    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-//        var mycell = tableView.dequeueReusableCellWithIdentifier("MyCell", forIndexPath: indexPath) as MyCustomTableViewCell
-//        mycell.menuItemLabel.text = menuItems[indexPath.row]
-//        return mycell;
-//    }
-//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        switch(indexPath.row)
-//        {
-//        case 0:
-//            var centerViewController = self.storyboard?.instantiateViewControllerWithIdentifier("ViewController") as ViewController
-//            var centerNavController = UINavigationController(rootViewController: centerViewController)
-//            var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-//            appDelegate.centerContainer!.centerViewController = centerNavController
-//            appDelegate.centerContainer!.toggleDrawerSide(MMDrawerSide.Left, animated: true, completion: nil)
-//            break;
-//        case 1:
-//            var aboutViewController = self.storyboard?.instantiateViewControllerWithIdentifier("AboutViewController") as AboutViewController
-//            var aboutNavController = UINavigationController(rootViewController: aboutViewController)
-//            var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-//            appDelegate.centerContainer!.centerViewController = aboutNavController
-//            appDelegate.centerContainer!.toggleDrawerSide(MMDrawerSide.Left, animated: true, completion: nil)
-//            break;
-//        default:
-//            println("\(menuItems[indexPath.row]) is selected");
-//        }
-//    }
     
     //MARK: Custom functions
     func reorderTripsChronologically() {
@@ -458,5 +412,22 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
     }
+    
+    func updateMenuTableHeight() {
+        var tableHeight = CGFloat()
+        let userTripPreferences = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        if userTripPreferences != nil {
+            let countTripsTotal = userTripPreferences?.count
+            tableHeight = CGFloat(220 + 70 * countTripsTotal!)
+        } else {
+            tableHeight = 220
+        }
+        
+        if (tableHeight + menuTableView.frame.origin.y) > UIScreen.main.bounds.height {
+            tableHeight = UIScreen.main.bounds.height - menuTableView.frame.origin.y
+        }
+        menuTableView.frame.size.height = tableHeight
+    }
+
 
 }
