@@ -4262,10 +4262,17 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
         }
         
+//        else {
+//            hamburgerArrowButton?.isHidden = true
+//            backButton?.isHidden = false
+//
+//        }
+
+    }
+    func handleHamburgerAndBackButton(){
         if scrollView.isHidden == false {
             if instructionsQuestionView != nil {
-                if !(instructionsQuestionView?.frame.intersects(scrollView.bounds))! {
-                    hamburgerArrowButton?.isHidden = true
+                if !(instructionsQuestionView?.frame.intersects(scrollView.bounds))! {                hamburgerArrowButton?.isHidden = true
                     backButton?.isHidden = false
                 } else {
                     hamburgerArrowButton?.isHidden = false
@@ -4273,12 +4280,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 }
             }
         }
-//        else {
-//            hamburgerArrowButton?.isHidden = true
-//            backButton?.isHidden = false
-//
-//        }
-
+        
     }
     func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
         
