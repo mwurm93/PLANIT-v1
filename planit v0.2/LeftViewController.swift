@@ -83,7 +83,6 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //MARK: TableView Datasource
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
-        updateMenuTableHeight()
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
@@ -106,6 +105,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        updateMenuTableHeight()
         let cell = tableView.dequeueReusableCell(withIdentifier: "existingTripViewPrototypeCell", for: indexPath) as! ExistingTripTableViewCell
         
         if indexPath.section == 0 {
@@ -256,6 +256,8 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     //MARK: TableView Delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        
         switch indexPath.section {
         case 0:
             //Increment current trip
@@ -265,10 +267,10 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var centerNavController = UINavigationController(rootViewController: centerViewController)
             centerNavController.navigationController?.isNavigationBarHidden = true
             centerViewController.navigationController?.isNavigationBarHidden = true
-            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.centerContainer!.centerViewController = centerNavController
             appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
         case 1:
+            
             //FIREBASEDISABLED
             //        if indexPath.row > channels.count - 1 {
             //            return
@@ -280,11 +282,18 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //            let channel = channels[(indexPath as NSIndexPath).row]
             //            channelRef = channelRef.child(channel.id)
             
+            let startingCurrentTrip = DataContainerSingleton.sharedDataContainer.currenttrip
             for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {                
                 if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
                     DataContainerSingleton.sharedDataContainer.currenttrip = trip
                 }
             }
+            
+            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController.isKind(of: TripViewController.self))! && startingCurrentTrip == DataContainerSingleton.sharedDataContainer.currenttrip {
+                appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                return
+            }
+
             
             //FIREBASEDISABLED
             //            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
@@ -297,25 +306,28 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
             var centerNavController = UINavigationController(rootViewController: centerViewController)
             centerViewController.navigationController?.isNavigationBarHidden = true
-            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.centerContainer!.centerViewController = centerNavController
             appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
             
         //        }
         case 2:
+            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController.isKind(of: bucketListViewController.self))! {
+                appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                return
+            }
             var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "bucketListViewController") as! bucketListViewController
             var centerNavController = UINavigationController(rootViewController: centerViewController)
-            centerNavController.navigationController?.isNavigationBarHidden = true
             centerViewController.navigationController?.isNavigationBarHidden = true
-            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.centerContainer!.centerViewController = centerNavController
             appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
         case 3:
+            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController.isKind(of: SettingsViewController.self))! {
+                appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                return
+            }
             var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
             var centerNavController = UINavigationController(rootViewController: centerViewController)
-            centerNavController.navigationController?.isNavigationBarHidden = true
             centerViewController.navigationController?.isNavigationBarHidden = true
-            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.centerContainer!.centerViewController = centerNavController
             appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
         default:
@@ -351,6 +363,12 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     menuTableView.endUpdates()
                     
                     if (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! == 0 {
+                        var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "bucketListViewController") as! bucketListViewController
+                        var centerNavController = UINavigationController(rootViewController: centerViewController)
+                        centerNavController.navigationController?.isNavigationBarHidden = true
+                        centerViewController.navigationController?.isNavigationBarHidden = true
+                        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                        appDelegate.centerContainer!.centerViewController = centerNavController
                     }
                     //Return if delete cell trip name found
                     return

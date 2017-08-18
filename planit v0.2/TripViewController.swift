@@ -371,7 +371,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let subviewTags = SavedPreferencesForTrip["progress"] as! [Int]
+        let SavedPreferencesForTrip3 = fetchSavedPreferencesForTrip()
+        let subviewTags2 = SavedPreferencesForTrip3["progress"] as! [Int]
 
         
         self.scrollUpButton.alpha = 0
