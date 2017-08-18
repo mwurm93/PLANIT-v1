@@ -247,7 +247,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.hotelMapButton.isHidden = true
         self.popupBackgroundFilterView.isHidden = true
         self.addTwicketSegmentedControl()
-        self.handleTwicketSegmentedControl()
         self.setupItineraryInfoView()
         self.addUpButtonPointedUpOneSubview()
         self.backButton?.isHidden = true
@@ -259,8 +258,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         hamburgerArrowButton?.topShape.strokeColor = UIColor.white.cgColor
         hamburgerArrowButton?.middleShape.strokeColor = UIColor.white.cgColor
         hamburgerArrowButton?.bottomShape.strokeColor = UIColor.white.cgColor
-        hamburgerArrowButton?.animationDuration = 0.7
-        hamburgerArrowButton?.numberOfRotations = 2
+        hamburgerArrowButton?.animationDuration = 0.5
+        hamburgerArrowButton?.numberOfRotations = 1
         hamburgerArrowButton?.addTarget(self, action: #selector(self.hamburgerArrowButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
         
         
@@ -608,6 +607,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             self.disableAndResetAssistant_moveToItinerary()
         }
         
+        self.handleTwicketSegmentedControl()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -1111,10 +1111,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         scrollView.contentSize.height = heightOfScrollView
         
         
-        let test1 = scrollContentViewHeight?.constant
-        let test2 = scrollContentView.frame.size.height
-        let test3 = scrollView.contentSize.height
-        
     }
     func scrollDownToTopSubview(){
         let tagOfTopSubview = self.scrollContentView.subviews[self.scrollContentView.subviews.count - 1].tag
@@ -1254,7 +1250,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //    }
     func scrollToSubviewWithTag(tag:Int){
         let topOfSubview = subviewFramesDictionary[tag]
-        if topOfSubView != nil {
+        if topOfSubview != nil {
             UIView.animate(withDuration: 1) {
                 self.scrollView.setContentOffset(topOfSubview!, animated: false)
             }
@@ -1373,13 +1369,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
         }
 
-        
-        let test1 = scrollView.isHidden
-        let test2 = scrollView.frame
-        let test3 = scrollView.contentSize
-        let test4 = scrollView.contentOffset
-        
-        
         increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: false)
     }
     
@@ -6812,7 +6801,7 @@ extension TripViewController {
                 itinerary()
             } else if segmentIndex == 2 {
                 if DataContainerSingleton.sharedDataContainer.token == nil {
-                    let alertController = UIAlertController(title: "Please login or sign up", message: "In order to save your progress and chat with your group, you must be signed in.", preferredStyle: .alert)
+                    let alertController = UIAlertController(title: "Please login or sign up", message: "You must be signed in to save your progress and chat with your group.", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
 //                        if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) {
 //                            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
@@ -6820,8 +6809,14 @@ extension TripViewController {
 //                        }
                         appDelegate.centerContainer!.centerViewController = centerNavController
                         appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse()
-                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse()
+                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
+                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
+                        let when = DispatchTime.now() + 5
+                        DispatchQueue.main.asyncAfter(deadline: when) {
+                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.stopPulseEffect()
+                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.stopPulseEffect()
+                            
+                        }
                     }
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
@@ -6843,8 +6838,14 @@ extension TripViewController {
 //                        }
                         appDelegate.centerContainer!.centerViewController = centerNavController
                         appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse()
-                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse()
+                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
+                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
+                        let when = DispatchTime.now() + 5
+                        DispatchQueue.main.asyncAfter(deadline: when) {
+                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.stopPulseEffect()
+                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.stopPulseEffect()
+                            
+                        }
                     }
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
