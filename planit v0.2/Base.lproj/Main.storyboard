@@ -20513,11 +20513,11 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="GNg-b7-XVH"/>
         <segue reference="1VF-PM-MLD"/>
-        <segue reference="4hW-EN-T1K"/>
         <segue reference="5m0-36-R99"/>
-        <segue reference="IrZ-E3-weH"/>
         <segue reference="t9O-2u-fWL"/>
+        <segue reference="IrZ-E3-weH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

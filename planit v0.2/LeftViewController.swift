@@ -8,15 +8,16 @@
 
 import UIKit
 import DrawerController
+import Firebase
 
 class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     
     //FIREBASEDISABLED
-    //    //Firebase channels
-    //    private var channelRefHandle: DatabaseHandle?
-    //    private var channels: [Channel] = []
-    //    private lazy var channelRef: DatabaseReference = Database.database().reference().child("channels")
+    //Firebase channels
+    private var channelRefHandle: DatabaseHandle?
+    private var channels: [Channel] = []
+    private lazy var channelRef: DatabaseReference = Database.database().reference().child("channels")
     
     //MARK: Class vars
     var formatter = DateFormatter()
@@ -28,6 +29,10 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //FIREBASEDISABLED
+        observeChannels()
+
         
         menuTableView.dataSource = self
         menuTableView.delegate = self
@@ -237,13 +242,18 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.menuItemImageView.isHidden = false
         
         cell.menuItemImageView.image = #imageLiteral(resourceName: "userIcon")
-        cell.menuItemLabel.text = "Login"
+        if DataContainerSingleton.sharedDataContainer.token == nil {
+            cell.menuItemLabel.text = "Login or Sign Up"
+        } else {
+            cell.menuItemLabel.text = "Settings"
+        }
         
         return cell
     }
     
     //MARK: TableView Delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
         
         switch indexPath.section {
@@ -252,6 +262,11 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             DataContainerSingleton.sharedDataContainer.currenttrip = DataContainerSingleton.sharedDataContainer.currenttrip! + 1
 
             var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
+            centerViewController.NewOrAddedTripFromSegue = 1
+            //FIREBASEDISABLED
+            //            centerViewController?.newChannelRef = channelRef
+            centerViewController.isTripSpawnedFromBucketList = 0
+
             var centerNavController = UINavigationController(rootViewController: centerViewController)
             centerNavController.navigationController?.isNavigationBarHidden = true
             centerViewController.navigationController?.isNavigationBarHidden = true
@@ -260,44 +275,46 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         case 1:
             
             //FIREBASEDISABLED
-            //        if indexPath.row > channels.count - 1 {
-            //            return
-            //        } else {
-            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
-            let searchForTitle = cell.existingTripTableViewLabel.text
             
-            //FIREBASEDISABLED
-            //            let channel = channels[(indexPath as NSIndexPath).row]
-            //            channelRef = channelRef.child(channel.id)
-            
-            let startingCurrentTrip = DataContainerSingleton.sharedDataContainer.currenttrip
-            for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {                
-                if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
-                    DataContainerSingleton.sharedDataContainer.currenttrip = trip
-                }
-            }
-            
-            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: TripViewController.self)) && startingCurrentTrip == DataContainerSingleton.sharedDataContainer.currenttrip {
-                appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+            if DataContainerSingleton.sharedDataContainer.token != nil && indexPath.row > channels.count - 1 {
+                //PLANNED: Activity indicator
                 return
+            } else {
+                let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
+                let searchForTitle = cell.existingTripTableViewLabel.text
+                
+                //FIREBASEDISABLED
+                let channel = channels[(indexPath as NSIndexPath).row]
+                channelRef = channelRef.child(channel.id)
+                
+                let startingCurrentTrip = DataContainerSingleton.sharedDataContainer.currenttrip
+                for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+                    if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
+                        DataContainerSingleton.sharedDataContainer.currenttrip = trip
+                    }
+                }
+                
+                if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: TripViewController.self)) && startingCurrentTrip == DataContainerSingleton.sharedDataContainer.currenttrip {
+                    appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                    return
+                }
+                
+                
+                //FIREBASEDISABLED
+                //            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
+                var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
+                
+                centerViewController.NewOrAddedTripFromSegue = 0
+                //FIREBASEDISABLED
+                centerViewController.newChannelRef = channelRef
+                centerViewController.isTripSpawnedFromBucketList = 0
+                
+                var centerNavController = UINavigationController(rootViewController: centerViewController)
+                centerViewController.navigationController?.isNavigationBarHidden = true
+                appDelegate.centerContainer!.centerViewController = centerNavController
+                appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                
             }
-
-            
-            //FIREBASEDISABLED
-            //            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
-            var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
-
-            centerViewController.NewOrAddedTripFromSegue = 0
-            //FIREBASEDISABLED
-            //            centerViewController?.newChannelRef = channelRef
-            centerViewController.isTripSpawnedFromBucketList = 0
-
-            var centerNavController = UINavigationController(rootViewController: centerViewController)
-            centerViewController.navigationController?.isNavigationBarHidden = true
-            appDelegate.centerContainer!.centerViewController = centerNavController
-            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-            
-        //        }
         case 2:
             if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: bucketListViewController.self)) {
                 appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
@@ -309,15 +326,27 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             appDelegate.centerContainer!.centerViewController = centerNavController
             appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
         case 3:
-            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: SettingsViewController.self)) {
+            if DataContainerSingleton.sharedDataContainer.token == nil {
+                if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) {
+                    appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                    return
+                }
+                var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
+                var centerNavController = UINavigationController(rootViewController: centerViewController)
+                centerViewController.navigationController?.isNavigationBarHidden = true
+                appDelegate.centerContainer!.centerViewController = centerNavController
                 appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-                return
+            } else {
+                if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: SettingsViewController.self)) {
+                    appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                    return
+                }
+                var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+                var centerNavController = UINavigationController(rootViewController: centerViewController)
+                centerViewController.navigationController?.isNavigationBarHidden = true
+                appDelegate.centerContainer!.centerViewController = centerNavController
+                appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
             }
-            var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
-            var centerNavController = UINavigationController(rootViewController: centerViewController)
-            centerViewController.navigationController?.isNavigationBarHidden = true
-            appDelegate.centerContainer!.centerViewController = centerNavController
-            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
         default:
             break
         }
@@ -359,9 +388,12 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         appDelegate.centerContainer!.centerViewController = centerNavController
                     }
                     //Return if delete cell trip name found
+                    
+                    updateMenuTableHeight()
                     return
                 }
             }
+            
         }
     }
     
@@ -427,6 +459,19 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             tableHeight = UIScreen.main.bounds.height - menuTableView.frame.origin.y
         }
         menuTableView.frame.size.height = tableHeight
+    }
+    private func observeChannels() {
+        // We can use the observe method to listen for new
+        // channels being written to the Firebase DB
+        channelRefHandle = channelRef.observe(.childAdded, with: { (snapshot) -> Void in
+            let channelData = snapshot.value as! Dictionary<String, AnyObject>
+            let id = snapshot.key
+            if let name = channelData["name"] as! String!, name.characters.count > 0 {
+                self.channels.append(Channel(id: id, name: name))
+            } else {
+                print("Error! Could not decode channel data")
+            }
+        })
     }
 
 

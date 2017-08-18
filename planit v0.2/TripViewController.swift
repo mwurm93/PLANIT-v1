@@ -95,9 +95,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     //Messaging var
     let messageComposer = MessageComposer()
     //FIREBASEDISABLED
-//        //Firebase channel
-//    var channelsRef: DatabaseReference = Database.database().reference().child("channels")
-//    var newChannelRef: DatabaseReference?
+        //Firebase channel
+    var channelsRef: DatabaseReference = Database.database().reference().child("channels")
+    var newChannelRef: DatabaseReference?
         //Singleton
     var NewOrAddedTripFromSegue: Int?
     var isTripSpawnedFromBucketList: Int?
@@ -353,7 +353,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
             self.view.endEditing(true)
-//            hamburgerArrowButton?.close()
+            hamburgerArrowButton?.close()
 //        }
     }
     
@@ -402,7 +402,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        self.addBackButtonPointedAtTripList()
         hamburgerArrowButton = Icomation(frame: CGRect(x: 15, y: 28, width: 24, height: 24))
         topView.addSubview(hamburgerArrowButton!)
-        hamburgerArrowButton?.type = IconType.arrowUp
+        hamburgerArrowButton?.type = IconType.close
         hamburgerArrowButton?.topShape.strokeColor = UIColor.white.cgColor
         hamburgerArrowButton?.middleShape.strokeColor = UIColor.white.cgColor
         hamburgerArrowButton?.bottomShape.strokeColor = UIColor.white.cgColor
@@ -574,17 +574,21 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     
                     //Create new firebase channel
                     if let name = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String {
-                        //FIREBASEDISABLED
-//                        newChannelRef = channelsRef.childByAutoId()
-//                        let channelItem = [
-//                            "name": name
-//                        ]
-//                        newChannelRef?.setValue(channelItem)
-//                        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-//                        SavedPreferencesForTrip["firebaseChannelKey"] = newChannelRef?.key as! NSString
-                        //Save
-                        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                        
+                        if DataContainerSingleton.sharedDataContainer.token != nil {
+                            //                        FIREBASEDISABLED
+                            newChannelRef = channelsRef.childByAutoId()
+                            let channelItem = [
+                                "name": name
+                            ]
+                            newChannelRef?.setValue(channelItem)
+                            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                            SavedPreferencesForTrip["firebaseChannelKey"] = newChannelRef?.key as! NSString
+                            //Save
+                            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                            
+                            //FIREBASEDISABLED
+                            addChatViewController()
+                        }
                     }
             }
             
@@ -620,8 +624,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
         }
         
-        //FIREBASEDISABLED
-//        addChatViewController()
         assistant()
         
         // MARK: Register notifications
@@ -4416,13 +4418,22 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
         }
         
-        
-        if instructionsQuestionView != nil {
-            if (instructionsQuestionView?.frame.intersects(scrollView.bounds))! {
-                hamburgerArrowButton?.isHidden = false
-                backButton?.isHidden = true
+        if scrollView.isHidden == false {
+            if instructionsQuestionView != nil {
+                if !(instructionsQuestionView?.frame.intersects(scrollView.bounds))! {
+                    hamburgerArrowButton?.isHidden = true
+                    backButton?.isHidden = false
+                } else {
+                    hamburgerArrowButton?.isHidden = false
+                    backButton?.isHidden = true
+                }
             }
         }
+//        else {
+//            hamburgerArrowButton?.isHidden = true
+//            backButton?.isHidden = false
+//
+//        }
 
     }
     func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
@@ -4445,6 +4456,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //            self.scrollDownButton.alpha = 1
 //        }
     }
+    
     
     // MARK: SAVE TO SINGLETON
     ////// ADD NEW TRIP VARS (NS ONLY) HERE ///////////////////////////////////////////////////////////////////////////
@@ -4614,12 +4626,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let firstTrip = [SavedPreferencesForTrip as NSDictionary]
             DataContainerSingleton.sharedDataContainer.usertrippreferences = firstTrip
         }
-            //Case: existing trip
+        //Case: existing trip
         else if currentTripIndex <= numberSavedTrips!   {
             existing_trips?[currentTripIndex] = SavedPreferencesForTrip as NSDictionary
             DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
         }
-            //Case: added trip, but not first trip
+        //Case: added trip, but not first trip
         else {
             existing_trips?.append(SavedPreferencesForTrip as NSDictionary)
             DataContainerSingleton.sharedDataContainer.usertrippreferences = existing_trips
@@ -4724,6 +4736,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.sortButton.isHidden = true
         self.progressRing?.isHidden = true
         self.backButton?.isHidden = true
+        self.hamburgerArrowButton?.isHidden = false
     }
     func handleAddInviteesButton(){
         let bounds = UIScreen.main.bounds
@@ -4860,24 +4873,21 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func chat() {
         
         //FIREBASEDISABLED
-//
-////        UIView.animate(withDuration: 0.4) {
-////            self.underline.layer.frame = CGRect(x: 288, y: 25, width: 50, height: 51)
-////        }
-//        assistantViewIsHiddenTrue()
-//        itineraryView.isHidden = true
-//        infoButton.isHidden = true
-//        chatView.isHidden = false
-//        self.view.endEditing(true)
-//        chatController?.inputToolbar.contentView.textView.becomeFirstResponder()
-//        
-//        self.segmentedControl?.isHidden = false
-//        self.searchSummaryLabelTopView.isHidden = true
-//        self.filterButton.isHidden = true
-//        self.sortButton.isHidden = true
-//        self.progressRing?.isHidden = true
-//        self.backButton?.isHidden = true
-//
+        assistantViewIsHiddenTrue()
+        itineraryView.isHidden = true
+        infoButton.isHidden = true
+        chatView.isHidden = false
+        self.view.endEditing(true)
+        chatController?.inputToolbar.contentView.textView.becomeFirstResponder()
+        
+        self.segmentedControl?.isHidden = false
+        self.searchSummaryLabelTopView.isHidden = true
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.progressRing?.isHidden = true
+        self.backButton?.isHidden = true
+        self.hamburgerArrowButton?.isHidden = false
+
     }
     func animateInBackgroundFilterView(withInfoView: Bool, withBlurEffect: Bool, withCloseButton: Bool) {
         popupBackgroundViewDeleteContacts.isHidden = true
@@ -6940,16 +6950,55 @@ extension TripViewController {
             } else if segmentIndex == 1 {
                 itinerary()
             } else if segmentIndex == 2 {
-                chat()
+                if DataContainerSingleton.sharedDataContainer.token == nil {
+                    let alertController = UIAlertController(title: "Please login or sign up", message: "In order to save your progress and chat with your group you must be signed in.", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                        if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) {
+                            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                            return
+                        }
+                        var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
+                        var centerNavController = UINavigationController(rootViewController: centerViewController)
+                        centerViewController.navigationController?.isNavigationBarHidden = true
+                        appDelegate.centerContainer!.centerViewController = centerNavController
+                        appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                    }
+                    alertController.addAction(okAction)
+                    self.present(alertController, animated: true, completion: nil)
+
+                } else {
+                    chat()
+                }
             }
         } else {
             if segmentIndex == 0 {
                 itinerary()
             } else if segmentIndex == 1 {
-                chat()
+                if DataContainerSingleton.sharedDataContainer.token == nil {
+                    let alertController = UIAlertController(title: "Please login or sign up", message: "In order to save your progress and chat with your group you must be signed in.", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                        if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) {
+                            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                            return
+                        }
+                        var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
+                        var centerNavController = UINavigationController(rootViewController: centerViewController)
+                        centerViewController.navigationController?.isNavigationBarHidden = true
+                        appDelegate.centerContainer!.centerViewController = centerNavController
+                        appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                    }
+                    alertController.addAction(okAction)
+                    self.present(alertController, animated: true, completion: nil)
+                    
+                } else {
+                    chat()
+                }
             }
         }
     }
+
     
     func flightSearchResultsSceneViewController_ViewDidAppear() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -7002,6 +7051,7 @@ extension TripViewController {
     
     func flightSearchFormViewViewController_ViewDidAppear() {
         asyncUpdateProgress()
+        addUpButtonPointedUpOneSubview()
         
         self.segmentedControl?.isHidden = false
         self.searchSummaryLabelTopView.isHidden = true

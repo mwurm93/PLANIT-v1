@@ -10,6 +10,7 @@ import UIKit
 import GooglePlaces
 import Firebase
 import SMCalloutView
+import DrawerController
 
 class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UISearchControllerDelegate, UISearchBarDelegate, SMCalloutViewDelegate {
     
@@ -198,8 +199,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             DispatchQueue.main.asyncAfter(deadline: when) {
                 self.handleGlobeTutorial()
                 self.timesViewed["globe"] = 1
-                SavedPreferencesForTrip["timesViewed"] = self.timesViewed as NSDictionary
-                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                DataContainerSingleton.sharedDataContainer.timesViewedNonTrip = self.timesViewed as NSDictionary
             }
         }
     }
@@ -222,7 +222,10 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             self.view.endEditing(true)
         }
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+//        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+//        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.bezelPanningCenterView
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
       

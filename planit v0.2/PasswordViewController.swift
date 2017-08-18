@@ -91,8 +91,9 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
                 
                 //resign first responder and seque
                 self.Password.resignFirstResponder()
-                super.performSegue(withIdentifier: "passwordToTripList", sender: self)
                 
+                
+                self.successfulLoginOrSignUpOpenDrawer()
             })
             } else if existingUser {
                 
@@ -130,7 +131,9 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
                         
                         //resign first responder and seque
                         self.Password.resignFirstResponder()
-                        super.performSegue(withIdentifier: "passwordToTripList", sender: self)
+                        
+                        self.successfulLoginOrSignUpOpenDrawer()
+//                        super.performSegue(withIdentifier: "passwordToTripList", sender: self)
                     }
                 })
             }
@@ -138,7 +141,14 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         } else {
             UIView.animate(withDuration: 0.5) {
                 self.createPasswordLabel.text = "Your password must be 8+ characters and contain one uppercase letter and one number"
+                self.createPasswordLabel.frame.origin.y = 360
+                self.createPasswordLabel.frame.size.height = 60
+                self.createPasswordLabel.frame.size.width = 230
+                
                 self.enterPasswordLabel.text = "Your password must be 8+ characters and contain one uppercase letter and one number"
+                self.enterPasswordLabel.frame.origin.y = 360
+                self.enterPasswordLabel.frame.size.height = 60
+                self.enterPasswordLabel.frame.size.width = 230
                 self.Password.becomeFirstResponder()
             }
         }
@@ -146,25 +156,61 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    func successfulLoginOrSignUpOpenDrawer() {
+        //Firebase setup
+        Auth.auth().createUser(withEmail: DataContainerSingleton.sharedDataContainer.emailAddress!, password: DataContainerSingleton.sharedDataContainer.password!) { (user, error) in
+            
+            if error == nil {
+                print("You have successfully signed up")
+            } else {
+                print(error ?? "no error message")
+            }
+        }
+        
+        Auth.auth().signInAnonymously(completion: { (user, error) in // 2
+            if let err = error { // 3
+                print(err.localizedDescription)
+                return
+            }
+            
+        })
+        
+        self.Password.isHidden = true
+        if self.createPasswordLabel.isHidden == true {
+            self.enterPasswordLabel.text = "Login successful"
+        } else {
+            self.createPasswordLabel.text = "You're all signed up!"
+        }
+        
+        let when = DispatchTime.now() + 0.7
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            
+            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
+        }
+
+
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "passwordToTripList" {
-            Auth.auth().createUser(withEmail: DataContainerSingleton.sharedDataContainer.emailAddress!, password: DataContainerSingleton.sharedDataContainer.password!) { (user, error) in
-                
-                if error == nil {
-                    print("You have successfully signed up")
-                } else {
-                    print(error ?? "no error message")
-                }
-            }
-            
-            Auth.auth().signInAnonymously(completion: { (user, error) in // 2
-                if let err = error { // 3
-                    print(err.localizedDescription)
-                    return
-                }
-                
-            })
+//            Auth.auth().createUser(withEmail: DataContainerSingleton.sharedDataContainer.emailAddress!, password: DataContainerSingleton.sharedDataContainer.password!) { (user, error) in
+//                
+//                if error == nil {
+//                    print("You have successfully signed up")
+//                } else {
+//                    print(error ?? "no error message")
+//                }
+//            }
+//            
+//            Auth.auth().signInAnonymously(completion: { (user, error) in // 2
+//                if let err = error { // 3
+//                    print(err.localizedDescription)
+//                    return
+//                }
+//                
+//            })
         }
     }
     
