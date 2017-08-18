@@ -55,7 +55,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "leftViewControllerViewWillAppear"), object: nil)
         self.view.endEditing(true)
-        let when = DispatchTime.now() + 0.2
+        let when = DispatchTime.now() + 0.1
         DispatchQueue.main.asyncAfter(deadline: when) {
             UIApplication.shared.sendAction("resignFirstResponder", to:nil, from:nil, for:nil)
         }

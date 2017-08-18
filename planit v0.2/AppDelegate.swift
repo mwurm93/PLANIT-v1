@@ -54,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView;
         centerContainer!.closeDrawerGestureModeMask = CloseDrawerGestureMode.panningCenterView;
         centerContainer!.maximumLeftDrawerWidth = 305
+        centerContainer!.maximumRightDrawerWidth = 305
         
         //Set root VC
         window!.rootViewController = centerContainer

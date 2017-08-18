@@ -134,6 +134,10 @@ class Icomation: UIButton {
         if type == IconState.hamburger {
             r = basicAnimation("transform.rotation.z", from: to, to: 0)
         }
+        if type == IconState.close {
+            r = basicAnimation("transform.rotation.z", from: 0, to: 0)
+        }
+        
         r.setUp(animationDuration)
         return r
     }
@@ -156,13 +160,13 @@ class Icomation: UIButton {
     fileprivate func arrowLeft() {
         let buttonType = toggleState ? IconState.arrow : IconState.hamburger
         
-        let topRotation = CGFloat(-M_PI * (3/4 + numberOfRotations))
+        let topRotation = CGFloat(-Double.pi * (3/4 + numberOfRotations))
         topAnimation = groupAnimation(buttonType, x: halfSideOfTriangle - w/2, y: halfSideOfTriangle + h/4, r: topRotation)
         
-        let middleRotation = CGFloat(-M_PI * (numberOfRotations + 1))
+        let middleRotation = CGFloat(-Double.pi * (numberOfRotations + 1))
         middleAnimation = rotate(buttonType, to: middleRotation)
         
-        let bottomRotation = CGFloat(-M_PI * (5/4 + numberOfRotations))
+        let bottomRotation = CGFloat(-Double.pi * (5/4 + numberOfRotations))
         bottomAnimation = groupAnimation(buttonType, x: halfSideOfTriangle - w/2, y: -h/4 - halfSideOfTriangle, r: bottomRotation)
         
         addAnimations()
@@ -172,37 +176,37 @@ class Icomation: UIButton {
     fileprivate func smallArrowLeft() {
         let buttonType = toggleState ? IconState.arrow : IconState.hamburger
         
-        let topRotation = CGFloat(-M_PI * (3/4 + numberOfRotations))
+        let topRotation = CGFloat(-Double.pi * (3/4 + numberOfRotations))
         topAnimation = groupAnimation(buttonType, x: -halfSideOfTriangle + 1, y: (halfSideOfTriangle/2) + h/4, r: topRotation, s: 3/4)
         
-        let middleRotation = CGFloat(-M_PI * (numberOfRotations + 1))
+        let middleRotation = CGFloat(-Double.pi * (numberOfRotations + 1))
         middleAnimation = groupAnimation(buttonType, r: middleRotation)
         
-        let bottomRotation = CGFloat(-M_PI * (5/4 + numberOfRotations))
+        let bottomRotation = CGFloat(-Double.pi * (5/4 + numberOfRotations))
         bottomAnimation = groupAnimation(buttonType, x: -halfSideOfTriangle + 1, y: -h/4 - (halfSideOfTriangle/2), r: bottomRotation, s: 3/4)
         
         addAnimations()
         toggleState = !toggleState
     }
     
-    fileprivate func arrowUp() {
-        let buttonType = toggleState ? IconState.arrow : IconState.hamburger
+    func arrowUp() {
+        let buttonType = toggleState ? IconState.close : IconState.arrow
         
-        let topRotation = CGFloat(-M_PI * (3/4 + numberOfRotations))
+        let topRotation = CGFloat(-Double.pi * (3/4 + numberOfRotations))
         topAnimation = groupAnimation(buttonType, x: halfSideOfTriangle, y: 0 - halfSideOfTriangle/2, r: topRotation)
         
         var add: CGFloat!
         if numberOfRotations == 0 {
             add = 0
         } else if numberOfRotations.truncatingRemainder(dividingBy: 2) == 0 {
-            add = CGFloat(-M_PI)
+            add = CGFloat(-Double.pi)
         } else {
-            add = CGFloat(-M_PI/2)
+            add = CGFloat(-Double.pi/2)
         }
-        let middleRotation = CGFloat(add - CGFloat(M_PI/2) * CGFloat(numberOfRotations + 1))
+        let middleRotation = CGFloat(add - CGFloat(Double.pi/2) * CGFloat(numberOfRotations + 1))
         middleAnimation = rotate(buttonType, to: middleRotation)
         
-        let bottomRotation = CGFloat(-M_PI * (1/4 + numberOfRotations))
+        let bottomRotation = CGFloat(-Double.pi * (1/4 + numberOfRotations))
         bottomAnimation = groupAnimation(buttonType, x: -halfSideOfTriangle, y: -h/2 - halfSideOfTriangle/2, r: bottomRotation)
         
         addAnimations()
@@ -212,21 +216,21 @@ class Icomation: UIButton {
     fileprivate func smallArrowUp() {
         let buttonType = toggleState ? IconState.arrow : IconState.hamburger
         
-        let topRotation = CGFloat(-M_PI * (3/4 + numberOfRotations))
+        let topRotation = CGFloat(-Double.pi * (3/4 + numberOfRotations))
         topAnimation = groupAnimation(buttonType, x: halfSideOfTriangle/2, y: halfSideOfTriangle/2 - 1, r: topRotation, s: 3/4)
         
         var add: CGFloat!
         if numberOfRotations == 0 {
             add = 0
         } else if numberOfRotations.truncatingRemainder(dividingBy: 2) == 0 {
-            add = CGFloat(-M_PI)
+            add = CGFloat(-Double.pi)
         } else {
-            add = CGFloat(-M_PI/2)
+            add = CGFloat(-Double.pi/2)
         }
-        let middleRotation = CGFloat(add - CGFloat(M_PI/2) * CGFloat(numberOfRotations + 1))
+        let middleRotation = CGFloat(add - CGFloat(Double.pi/2) * CGFloat(numberOfRotations + 1))
         middleAnimation = groupAnimation(buttonType, r: middleRotation)
         
-        let bottomRotation = CGFloat(-M_PI * (1/4 + numberOfRotations))
+        let bottomRotation = CGFloat(-Double.pi * (1/4 + numberOfRotations))
         bottomAnimation = groupAnimation(buttonType, x: -halfSideOfTriangle/2, y: -w/2 + halfSideOfTriangle/2 - 1, r: bottomRotation, s: 3/4)
         
         addAnimations()
@@ -236,21 +240,21 @@ class Icomation: UIButton {
     fileprivate func arrowDown() {
         let buttonType = toggleState ? IconState.arrow : IconState.hamburger
         
-        let topRotation = CGFloat(M_PI * (3/4 + numberOfRotations))
+        let topRotation = CGFloat(Double.pi * (3/4 + numberOfRotations))
         topAnimation = groupAnimation(buttonType, x: halfSideOfTriangle, y: h/2 + halfSideOfTriangle/2 - 1, r: topRotation)
         
         var add: CGFloat!
         if numberOfRotations == 0 {
             add = 0
         } else if numberOfRotations.truncatingRemainder(dividingBy: 2) == 0 {
-            add = CGFloat(M_PI)
+            add = CGFloat(Double.pi)
         } else {
-            add = CGFloat(M_PI/2)
+            add = CGFloat(Double.pi/2)
         }
-        let middleRotation = CGFloat(add + CGFloat(M_PI/2) * CGFloat(numberOfRotations + 1))
+        let middleRotation = CGFloat(add + CGFloat(Double.pi/2) * CGFloat(numberOfRotations + 1))
         middleAnimation = rotate(buttonType, to: middleRotation)
         
-        let bottomRotation = CGFloat(M_PI * (1/4 + numberOfRotations))
+        let bottomRotation = CGFloat(Double.pi * (1/4 + numberOfRotations))
         bottomAnimation = groupAnimation(buttonType, x: -halfSideOfTriangle, y: halfSideOfTriangle/2 - 1, r: bottomRotation)
         
         addAnimations()
@@ -260,21 +264,21 @@ class Icomation: UIButton {
     fileprivate func smallArrowDown() {
         let buttonType = toggleState ? IconState.arrow : IconState.hamburger
         
-        let topRotation = CGFloat(M_PI * (1/4 + numberOfRotations))
+        let topRotation = CGFloat(Double.pi * (1/4 + numberOfRotations))
         topAnimation = groupAnimation(buttonType, x: -halfSideOfTriangle/2, y: w/2 - halfSideOfTriangle/2, r: topRotation, s: 3/4)
         
         var add: CGFloat!
         if numberOfRotations == 0 {
             add = 0
         } else if numberOfRotations.truncatingRemainder(dividingBy: 2) == 0 {
-            add = CGFloat(M_PI)
+            add = CGFloat(Double.pi)
         } else {
-            add = CGFloat(M_PI/2)
+            add = CGFloat(Double.pi/2)
         }
-        let middleRotation = CGFloat(add + CGFloat(M_PI/2) * CGFloat(numberOfRotations + 1))
+        let middleRotation = CGFloat(add + CGFloat(Double.pi/2) * CGFloat(numberOfRotations + 1))
         middleAnimation = groupAnimation(buttonType, r: middleRotation)
         
-        let bottomRotation = CGFloat(M_PI * (3/4 + numberOfRotations))
+        let bottomRotation = CGFloat(Double.pi * (3/4 + numberOfRotations))
         bottomAnimation = groupAnimation(buttonType, x: halfSideOfTriangle/2, y: -halfSideOfTriangle/2, r: bottomRotation, s: 3/4)
         
         addAnimations()
@@ -284,13 +288,13 @@ class Icomation: UIButton {
     fileprivate func arrowRight() {
         let buttonType = toggleState ? IconState.arrow : IconState.hamburger
         
-        let topRotation = CGFloat(M_PI * (3/4 + numberOfRotations))
+        let topRotation = CGFloat(Double.pi * (3/4 + numberOfRotations))
         topAnimation = groupAnimation(buttonType, x: w/2 - halfSideOfTriangle, y: halfSideOfTriangle + h/4, r: topRotation)
         
-        let middleRotation = CGFloat(M_PI * (numberOfRotations + 1))
+        let middleRotation = CGFloat(Double.pi * (numberOfRotations + 1))
         middleAnimation = rotate(buttonType, to: middleRotation)
         
-        let bottomRotation = CGFloat(M_PI * (5/4 + numberOfRotations))
+        let bottomRotation = CGFloat(Double.pi * (5/4 + numberOfRotations))
         bottomAnimation = groupAnimation(buttonType, x: w/2 - halfSideOfTriangle, y: -h/4 - halfSideOfTriangle, r: bottomRotation)
         
         addAnimations()
@@ -300,13 +304,13 @@ class Icomation: UIButton {
     fileprivate func smallArrowRight() {
         let buttonType = toggleState ? IconState.arrow : IconState.hamburger
         
-        let topRotation = CGFloat(M_PI * (3/4 + numberOfRotations))
+        let topRotation = CGFloat(Double.pi * (3/4 + numberOfRotations))
         topAnimation = groupAnimation(buttonType, x: halfSideOfTriangle - 1, y: (halfSideOfTriangle/2) + h/4, r: topRotation, s: 3/4)
         
-        let middleRotation = CGFloat(M_PI * (numberOfRotations + 1))
+        let middleRotation = CGFloat(Double.pi * (numberOfRotations + 1))
         middleAnimation = groupAnimation(buttonType, r: middleRotation)
         
-        let bottomRotation = CGFloat(M_PI * (5/4 + numberOfRotations))
+        let bottomRotation = CGFloat(Double.pi * (5/4 + numberOfRotations))
         bottomAnimation = groupAnimation(buttonType, x: halfSideOfTriangle - 1, y: (-halfSideOfTriangle/2) - h/4, r: bottomRotation, s: 3/4)
         
         addAnimations()
@@ -316,9 +320,9 @@ class Icomation: UIButton {
     func close() {
         let buttonType = toggleState ? IconState.close : IconState.hamburger
         
-        topAnimation = groupAnimation(buttonType, y: h/4, r: CGFloat(M_PI * (3/4 + numberOfRotations)), s: 0)
+        topAnimation = groupAnimation(buttonType, y: h/4, r: CGFloat(Double.pi * (3/4 + numberOfRotations)), s: 0)
         middleAnimation = shrinkToDisappear(buttonType)
-        bottomAnimation = groupAnimation(buttonType, y: -h/4, r: CGFloat(M_PI * (5/4 + numberOfRotations)), s: 0)
+        bottomAnimation = groupAnimation(buttonType, y: -h/4, r: CGFloat(Double.pi * (5/4 + numberOfRotations)), s: 0)
         
         addAnimations()
         toggleState = !toggleState
@@ -327,9 +331,9 @@ class Icomation: UIButton {
     fileprivate func smallClose() {
         let buttonType = toggleState ? IconState.close : IconState.hamburger
         
-        topAnimation = groupAnimation(buttonType, y: h/4, r: CGFloat(M_PI * (3/4 + numberOfRotations)))
+        topAnimation = groupAnimation(buttonType, y: h/4, r: CGFloat(Double.pi * (3/4 + numberOfRotations)))
         middleAnimation = shrinkToDisappear(buttonType)
-        bottomAnimation = groupAnimation(buttonType, y: -h/4, r: CGFloat(M_PI * (5/4 + numberOfRotations)))
+        bottomAnimation = groupAnimation(buttonType, y: -h/4, r: CGFloat(Double.pi * (5/4 + numberOfRotations)))
         
         addAnimations()
         toggleState = !toggleState

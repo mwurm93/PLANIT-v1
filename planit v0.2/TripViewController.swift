@@ -349,10 +349,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     func hamburgerArrowButtonTouchedUpInside(sender:Icomation){
-        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
-        self.view.endEditing(true)
-        hamburgerArrowButton?.close()
+//        if hamburgerArrowButton?.type == IconType.close {
+            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
+            self.view.endEditing(true)
+//            hamburgerArrowButton?.close()
+//        }
     }
     
     func leftViewControllerViewWillDisappear() {
@@ -395,10 +397,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.addTwicketSegmentedControl()
         self.handleTwicketSegmentedControl()
         self.setupItineraryInfoView()
+        self.addUpButtonPointedUpOneSubview()
+
 //        self.addBackButtonPointedAtTripList()
         hamburgerArrowButton = Icomation(frame: CGRect(x: 15, y: 28, width: 24, height: 24))
         topView.addSubview(hamburgerArrowButton!)
-        hamburgerArrowButton?.type = IconType.close
+        hamburgerArrowButton?.type = IconType.arrowUp
         hamburgerArrowButton?.topShape.strokeColor = UIColor.white.cgColor
         hamburgerArrowButton?.middleShape.strokeColor = UIColor.white.cgColor
         hamburgerArrowButton?.bottomShape.strokeColor = UIColor.white.cgColor
@@ -748,6 +752,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if SavedPreferencesForTrip_updatedForViewDidLoad["assistantMode"] as! String != "initialItineraryBuilding" {
             self.disableAndResetAssistant_moveToItinerary()
         }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -761,7 +766,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        if instructionsQuestionView != nil {
+            if (instructionsQuestionView?.frame.intersects(scrollView.bounds))! {
+                hamburgerArrowButton?.isHidden = false
+                backButton?.isHidden = true
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -4405,11 +4415,20 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 parseDatesForMultipleDestinationsCalendarView?.loadDates()
             }
         }
+        
+        
+        if instructionsQuestionView != nil {
+            if (instructionsQuestionView?.frame.intersects(scrollView.bounds))! {
+                hamburgerArrowButton?.isHidden = false
+                backButton?.isHidden = true
+            }
+        }
+
     }
-//    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
-//        
-//        return true
-//    }
+    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+        
+        return true
+    }
 
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
 //        UIView.animate(withDuration: 1) {
@@ -6982,7 +7001,6 @@ extension TripViewController {
     }
     
     func flightSearchFormViewViewController_ViewDidAppear() {
-        addBackButtonPointedAtTripList()
         asyncUpdateProgress()
         
         self.segmentedControl?.isHidden = false
@@ -7015,6 +7033,7 @@ extension TripViewController {
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
         self.progressRing?.isHidden = true
+
         
         //Create searchSummaryLabelTopView text
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -7134,11 +7153,29 @@ extension TripViewController {
         self.hotelMapButton.isHidden = true
         self.progressRing?.isHidden = true
     }
+    
+    func addUpButtonPointedUpOneSubview(){
+        self.filterButton.isHidden = true
+        self.sortButton.isHidden = true
+        self.hotelMapButton.isHidden = true
+        
+        if backButton != nil {
+            self.backButton?.removeFromSuperview()
+            backButton = nil
+        }
+        
+        backButton = UIButton(frame: CGRect(x: 15,y: 26,width: 27, height: 30))
+        backButton?.setBackgroundImage(#imageLiteral(resourceName: "upArrow"), for: .normal)
+        backButton?.addTarget(self, action: #selector(scrollUpOneSubview), for: UIControlEvents.touchUpInside)
+        backButton?.setTitleColor(UIColor.white, for: .normal)
+        
+        self.topView.addSubview(backButton!)
+
+    }
     func addBackButtonPointedAtTripList() {
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
         self.hotelMapButton.isHidden = true
-
         
         if backButton != nil {
             self.backButton?.removeFromSuperview()
@@ -7207,7 +7244,8 @@ extension TripViewController {
         self.topView.addSubview(segmentedControl!)
     }
     func hotelSearchFormViewViewController_ViewDidAppear() {
-        addBackButtonPointedAtTripList()
+//        addBackButtonPointedAtTripList()
+        addUpButtonPointedUpOneSubview()
         asyncUpdateProgress()
         
         self.segmentedControl?.isHidden = false
