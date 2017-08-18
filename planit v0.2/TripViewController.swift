@@ -4202,14 +4202,29 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 return false
             } else {
                 DataContainerSingleton.sharedDataContainer.firstName = textField.text
+                userNameQuestionView?.userNameQuestionTextfield?.resignFirstResponder()
                 spawnInstructionsQuestionView()
             }
         }
         
         if textField == tripNameQuestionView?.tripNameQuestionTextfield {
+                //PLANNED: ensure unique trip name
+//            let alert = UIAlertController(title: "Great work!",
+//                                          message: "Time to review your itinerary\nand invite some friends.",
+//                                          preferredStyle: .alert)
+//            let okAction = UIAlertAction(title: "Let's go", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+//                self.disableAndResetAssistant_moveToItinerary()
+//            }
+//            alert.addAction(okAction)
+//            self.present(alert, animated: true, completion: nil)
+
+            
+            
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
             SavedPreferencesForTrip["trip_name"] = textField.text
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+            tripNameQuestionView?.tripNameQuestionTextfield?.resignFirstResponder()
+            spawnDatesPickedOutCalendarView()
             return true
         }
         //Itinerary view
@@ -4262,6 +4277,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             }
         }
         
+        handleHamburgerAndBackButton()
+        
 //        else {
 //            hamburgerArrowButton?.isHidden = true
 //            backButton?.isHidden = false
@@ -4272,7 +4289,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func handleHamburgerAndBackButton(){
         if scrollView.isHidden == false {
             if instructionsQuestionView != nil {
-                if !(instructionsQuestionView?.frame.intersects(scrollView.bounds))! {                hamburgerArrowButton?.isHidden = true
+                if !(instructionsQuestionView?.frame.intersects(scrollView.bounds))! {
+                    hamburgerArrowButton?.isHidden = true
                     backButton?.isHidden = false
                 } else {
                     hamburgerArrowButton?.isHidden = false

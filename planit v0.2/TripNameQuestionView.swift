@@ -78,6 +78,7 @@ class TripNameQuestionView: UIView {
         userNameQuestionTextfieldPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         userNameQuestionTextfieldPlaceholder?.text = "Name"
         tripNameQuestionTextfield?.translatesAutoresizingMaskIntoConstraints = false
+        tripNameQuestionTextfield?.returnKeyType = .done
         self.addSubview(tripNameQuestionTextfield!)
 
         //Button

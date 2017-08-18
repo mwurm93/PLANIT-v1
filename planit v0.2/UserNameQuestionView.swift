@@ -63,6 +63,7 @@ class UserNameQuestionView: UIView {
         userNameQuestionTextfieldPlaceholder?.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         userNameQuestionTextfieldPlaceholder?.text = "Name"
         userNameQuestionTextfield?.translatesAutoresizingMaskIntoConstraints = false
+        userNameQuestionTextfield?.returnKeyType = .done
         
         self.addSubview(userNameQuestionTextfield!)
     }
