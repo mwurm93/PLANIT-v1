@@ -78,6 +78,8 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     var smCalloutViewMode = "globeTutorial1"
     var timesViewed = [String : Int]()
 
+    var hamburgerArrowButton: Icomation?
+
 
 
     //MARK: Outlets
@@ -201,9 +203,43 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             }
         }
     }
+    func hamburgerArrowButtonTouchedUpInside(sender:Icomation){
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
+        self.view.endEditing(true)
+        hamburgerArrowButton?.close()
+    }
+    
+    func leftViewControllerViewWillDisappear() {
+        if hamburgerArrowButton?.toggleState == false {
+            hamburgerArrowButton?.close()
+            self.view.endEditing(true)
+        }
+    }
+    func leftViewControllerViewWillAppear() {
+        if hamburgerArrowButton?.toggleState == true {
+            hamburgerArrowButton?.close()
+            self.view.endEditing(true)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+      
+        // MARK: Register notifications                
+        //Drawer
+        NotificationCenter.default.addObserver(self, selector: #selector(leftViewControllerViewWillAppear), name: NSNotification.Name(rawValue: "leftViewControllerViewWillAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(leftViewControllerViewWillDisappear), name: NSNotification.Name(rawValue: "leftViewControllerViewWillDisappear"), object: nil)
+        
+        hamburgerArrowButton = Icomation(frame: CGRect(x: 15, y: 28, width: 24, height: 24))
+        self.view.addSubview(hamburgerArrowButton!)
+        hamburgerArrowButton?.type = IconType.close
+        hamburgerArrowButton?.topShape.strokeColor = UIColor.white.cgColor
+        hamburgerArrowButton?.middleShape.strokeColor = UIColor.white.cgColor
+        hamburgerArrowButton?.bottomShape.strokeColor = UIColor.white.cgColor
+        hamburgerArrowButton?.animationDuration = 0.7
+        hamburgerArrowButton?.numberOfRotations = 2
+        hamburgerArrowButton?.addTarget(self, action: #selector(self.hamburgerArrowButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
         
         //SMCalloutView
         self.smCalloutView.delegate = self
@@ -245,7 +281,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView
         glassIconView?.image = glassIconView?.image?.withRenderingMode(.alwaysTemplate)
         glassIconView?.tintColor = UIColor.white
-        let subView = UIView(frame: CGRect(x: (self.view.frame.maxX - 2/3 * self.view.frame.maxX)/2 - 19, y: 20.0, width: 2/3 * self.view.frame.maxX, height: 45.0))
+        let subView = UIView(frame: CGRect(x: (self.view.frame.maxX - 2/3 * self.view.frame.maxX)/2, y: 20.0, width: 2/3 * self.view.frame.maxX, height: 45.0))
         subView.addSubview((searchController?.searchBar)!)
         view.addSubview(subView)
         searchController?.searchBar.sizeToFit()

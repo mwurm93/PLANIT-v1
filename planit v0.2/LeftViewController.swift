@@ -31,37 +31,59 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         menuTableView.dataSource = self
         menuTableView.delegate = self
-        
+        var tableHeight = CGFloat()
+        let userTripPreferences = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        updateMenuTableHeight()
 
         self.view.endEditing(true)
 
 
         self.navigationController?.isNavigationBarHidden = true
+        
+    }
+    func updateMenuTableHeight() {
+        var tableHeight = CGFloat()
+        let userTripPreferences = DataContainerSingleton.sharedDataContainer.usertrippreferences
+        if userTripPreferences != nil {
+            let countTripsTotal = userTripPreferences?.count
+            tableHeight = CGFloat(220 + 70 * countTripsTotal!)
+        } else {
+            tableHeight = 220
+        }
+        
+        if (tableHeight + menuTableView.frame.origin.y) > UIScreen.main.bounds.height {
+            tableHeight = UIScreen.main.bounds.height - menuTableView.frame.origin.y
+        }
+        menuTableView.frame.size.height = tableHeight
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        reorderTripsChronologically()
+        menuTableView.reloadData()
+        
         let firstNameValue = DataContainerSingleton.sharedDataContainer.firstName ?? ""
         if firstNameValue == "" {
             self.userNameLabel.text =  "New user"
         }
         else {
             self.userNameLabel.text =  "\(firstNameValue)"
-        }
+        }        
         
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        reorderTripsChronologically()        
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "leftViewControllerViewWillAppear"), object: nil)
         self.view.endEditing(true)
+        UIApplication.shared.sendAction("resignFirstResponder", to:nil, from:nil, for:nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "leftViewControllerViewWillDisappear"), object: nil)
+        UIApplication.shared.sendAction("resignFirstResponder", to:nil, from:nil, for:nil)
     }
 
     
     //MARK: TableView Datasource
     func numberOfSections(in tableView: UITableView) -> Int {
-            return 4
+        return 4
+        updateMenuTableHeight()
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
@@ -108,10 +130,8 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil {
                 
                 //Cell styling
-                cell.tripBackgroundView.layer.cornerRadius = 5
-                //            cell.tripBackgroundView.layer.borderWidth = 2
-                //            cell.tripBackgroundView.layer.borderColor = UIColor(red:1,green:1,blue:1,alpha:1).cgColor
-                cell.tripBackgroundView.layer.masksToBounds = true
+//                cell.tripBackgroundView.layer.cornerRadius = 5
+//                cell.tripBackgroundView.layer.masksToBounds = true
                 let tripName = DataContainerSingleton.sharedDataContainer.usertrippreferences?[indexPath.row].object(forKey: "trip_name") as? String
                 cell.tripNameLabel.adjustsFontSizeToFitWidth = true
                 cell.destinationsLabel.adjustsFontSizeToFitWidth = true
@@ -238,8 +258,13 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
+            //Increment current trip
+            DataContainerSingleton.sharedDataContainer.currenttrip = DataContainerSingleton.sharedDataContainer.currenttrip! + 1
+
             var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
             var centerNavController = UINavigationController(rootViewController: centerViewController)
+            centerNavController.navigationController?.isNavigationBarHidden = true
+            centerViewController.navigationController?.isNavigationBarHidden = true
             var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.centerContainer!.centerViewController = centerNavController
             appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
@@ -255,8 +280,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //            let channel = channels[(indexPath as NSIndexPath).row]
             //            channelRef = channelRef.child(channel.id)
             
-            for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
-                
+            for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {                
                 if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
                     DataContainerSingleton.sharedDataContainer.currenttrip = trip
                 }
@@ -264,17 +288,33 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             //FIREBASEDISABLED
             //            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
-            super.performSegue(withIdentifier: "tripListToTripViewController", sender: self)
+            var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
+
+            centerViewController.NewOrAddedTripFromSegue = 0
+            //FIREBASEDISABLED
+            //            centerViewController?.newChannelRef = channelRef
+            centerViewController.isTripSpawnedFromBucketList = 0
+
+            var centerNavController = UINavigationController(rootViewController: centerViewController)
+            centerViewController.navigationController?.isNavigationBarHidden = true
+            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.centerContainer!.centerViewController = centerNavController
+            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+            
         //        }
         case 2:
             var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "bucketListViewController") as! bucketListViewController
             var centerNavController = UINavigationController(rootViewController: centerViewController)
+            centerNavController.navigationController?.isNavigationBarHidden = true
+            centerViewController.navigationController?.isNavigationBarHidden = true
             var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.centerContainer!.centerViewController = centerNavController
             appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
         case 3:
             var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
             var centerNavController = UINavigationController(rootViewController: centerViewController)
+            centerNavController.navigationController?.isNavigationBarHidden = true
+            centerViewController.navigationController?.isNavigationBarHidden = true
             var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.centerContainer!.centerViewController = centerNavController
             appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
@@ -283,7 +323,46 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
     }
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 1 {
+            return true
+        }
+        return false
+    }
     
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            
+            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
+            let searchForTitle = cell.existingTripTableViewLabel.text
+            
+            for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+                if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
+                    
+                    //Remove from data model
+                    DataContainerSingleton.sharedDataContainer.usertrippreferences?.remove(at: trip)
+                    
+                    //Remove from table
+                    menuTableView.beginUpdates()
+                    menuTableView.deleteRows(at: [indexPath], with: .left)
+                    
+                    menuTableView.endUpdates()
+                    
+                    if (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! == 0 {
+                    }
+                    //Return if delete cell trip name found
+                    return
+                }
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "Leave trip"
+    }
+
 
 //    var menuItems:[String] = ["Main","About"];
 //    override func viewWillAppear(animated: Bool) {

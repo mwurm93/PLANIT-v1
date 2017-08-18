@@ -27,21 +27,38 @@ class CenterViewController: UIViewController {
     
     
     func setUpTripController() {
-        tripViewController = self.storyboard!.instantiateViewController(withIdentifier: "TripViewController") as? TripViewController
-        tripViewController?.willMove(toParentViewController: self)
-        self.addChildViewController(tripViewController!)
-        tripViewController?.loadView()
-        setUpTripControllerForNewTrip()
-        tripViewController?.viewDidLoad()
-        tripViewController?.view.frame = self.view.bounds
-        self.view.addSubview((tripViewController?.view)!)
-        constrain((tripViewController?.view)!, self.view) { view1, view2 in
-            view1.left == view2.left
-            view1.top == view2.top
-            view1.width == view2.width
-            view1.height == view2.height
-        }
-        tripViewController?.didMove(toParentViewController: self)
+        
+        var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
+        
+        centerViewController.NewOrAddedTripFromSegue = 1
+        //FIREBASEDISABLED
+        //            centerViewController?.newChannelRef = channelRef
+        centerViewController.isTripSpawnedFromBucketList = 0
+        
+        var centerNavController = UINavigationController(rootViewController: centerViewController)
+        centerViewController.navigationController?.isNavigationBarHidden = true
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.centerViewController = centerNavController
+//        appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+
+        
+        
+        
+//        tripViewController = self.storyboard!.instantiateViewController(withIdentifier: "TripViewController") as? TripViewController
+//        tripViewController?.willMove(toParentViewController: self)
+//        self.addChildViewController(tripViewController!)
+//        tripViewController?.loadView()
+//        setUpTripControllerForNewTrip()
+//        tripViewController?.viewDidLoad()
+//        tripViewController?.view.frame = self.view.bounds
+//        self.view.addSubview((tripViewController?.view)!)
+//        constrain((tripViewController?.view)!, self.view) { view1, view2 in
+//            view1.left == view2.left
+//            view1.top == view2.top
+//            view1.width == view2.width
+//            view1.height == view2.height
+//        }
+//        tripViewController?.didMove(toParentViewController: self)
     }
     
     func setUpTripControllerForNewTrip() {        

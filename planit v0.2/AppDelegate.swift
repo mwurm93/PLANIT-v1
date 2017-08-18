@@ -53,6 +53,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         centerContainer = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftSideNav,rightDrawerViewController:rightNav)
         centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView;
         centerContainer!.closeDrawerGestureModeMask = CloseDrawerGestureMode.panningCenterView;
+        centerContainer!.maximumLeftDrawerWidth = 305
+        
         //Set root VC
         window!.rootViewController = centerContainer
         window!.makeKeyAndVisible()

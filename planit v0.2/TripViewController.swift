@@ -371,6 +371,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let subviewTags = SavedPreferencesForTrip["progress"] as! [Int]
+
+        
         self.scrollUpButton.alpha = 0
         self.scrollDownButton.alpha = 0
 
@@ -4700,7 +4703,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.filterButton.isHidden = true
         self.sortButton.isHidden = true
         self.progressRing?.isHidden = true
-        addBackButtonPointedAtTripList()
+        self.backButton?.isHidden = true
     }
     func handleAddInviteesButton(){
         let bounds = UIScreen.main.bounds
@@ -4853,7 +4856,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        self.filterButton.isHidden = true
 //        self.sortButton.isHidden = true
 //        self.progressRing?.isHidden = true
-//        addBackButtonPointedAtTripList()
+//        self.backButton?.isHidden = true
 //
     }
     func animateInBackgroundFilterView(withInfoView: Bool, withBlurEffect: Bool, withCloseButton: Bool) {
@@ -4939,7 +4942,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         popupBackgroundViewDeleteContacts.isHidden = true
         focusBackgroundViewWithinTopView.isHidden = true
         focusBackgroundViewWithinItineraryView.isHidden = true
-        addBackButtonPointedAtTripList()
+        self.backButton?.isHidden = true
     }
     func handleSendInvitesButton() {
         if editItineraryModeEnabled == true {
