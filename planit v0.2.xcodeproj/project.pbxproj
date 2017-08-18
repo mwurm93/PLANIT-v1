@@ -4479,6 +4479,16 @@
 			name = CSVs;
 			sourceTree = "<group>";
 		};
+		FA8F08741F46D00A00628AFE /* DrawerViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FA4CD9C31F45FDF9002CDE59 /* CenterViewController.swift */,
+				FA4CD9C71F45FE29002CDE59 /* LeftViewController.swift */,
+				FA4CD9C91F45FE47002CDE59 /* RightViewController.swift */,
+			);
+			name = DrawerViewController;
+			sourceTree = "<group>";
+		};
 		FA8F0DD91F2797D9005CAC9D /* Popovers */ = {
 			isa = PBXGroup;
 			children = (
@@ -4612,6 +4622,7 @@
 				FAA8F2781E351BD400CD7337 /* App Delegate */,
 				FAA8F2571E351ABB00CD7337 /* Storyboards */,
 				FAA8F2561E351AB100CD7337 /* View Controllers */,
+				FAAE62611E3A423200A2A6B7 /* View Controllers (unused) */,
 			);
 			path = "planit v0.2";
 			sourceTree = "<group>";
@@ -4644,10 +4655,7 @@
 				FAA8F2671E351B9500CD7337 /* TripListViewController.swift */,
 				FAE83F641EF461500009A020 /* TripViewController.swift */,
 				FA97F84A1EE66A8B008358EF /* chatViewController.swift */,
-				FAAE62611E3A423200A2A6B7 /* View Controllers (unused) */,
-				FA4CD9C31F45FDF9002CDE59 /* CenterViewController.swift */,
-				FA4CD9C71F45FE29002CDE59 /* LeftViewController.swift */,
-				FA4CD9C91F45FE47002CDE59 /* RightViewController.swift */,
+				FA8F08741F46D00A00628AFE /* DrawerViewController */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";

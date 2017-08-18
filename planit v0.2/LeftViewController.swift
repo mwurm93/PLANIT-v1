@@ -266,7 +266,16 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         switch indexPath.section {
         case 0:
             //Increment current trip
-            DataContainerSingleton.sharedDataContainer.currenttrip = DataContainerSingleton.sharedDataContainer.currenttrip! + 1
+            if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil {
+                if (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! > 0 {
+                    DataContainerSingleton.sharedDataContainer.currenttrip = (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)!
+                } else {
+                    DataContainerSingleton.sharedDataContainer.currenttrip = 0
+                }
+            } else {
+                DataContainerSingleton.sharedDataContainer.currenttrip = 0
+            }
+            
 
             var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
             centerViewController.NewOrAddedTripFromSegue = 1
